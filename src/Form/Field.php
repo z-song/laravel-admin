@@ -69,12 +69,8 @@ class Field {
             Admin::css($this->css);
         }
 
-//        if(isset($this->view)) {
-//            $view = $this->view;
-//        } else {
         $class = explode('\\', get_called_class());
         $view = 'admin::form.' . strtolower(end($class));
-        //}
 
         return view($view, $this->variables());
     }

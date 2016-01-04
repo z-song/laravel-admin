@@ -6,6 +6,12 @@
             <h3 class="box-title">{{$grid->option('title')}}</h3>
 
             <div class="box-tools">
+
+                <div class="btn-group pull-left" style="margin-right: 20px">
+                    <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">新增</a>
+                    <a href="/{{$grid->resource()}}/export" class="btn btn-sm btn-primary">导出</a>
+                </div>
+
                 <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
 

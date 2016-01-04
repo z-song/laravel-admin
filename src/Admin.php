@@ -3,6 +3,7 @@
 namespace Encore\Admin;
 
 use Closure;
+use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
@@ -57,7 +58,7 @@ class Admin
      */
     public static function css($css = '')
     {
-        if(!empty($css)) {
+        if( ! empty($css)) {
             if(is_string($css)) self::$css[] = $css;
             if(is_array($css)) {
                 self::$css = array_merge(self::$css, $css);
@@ -105,8 +106,20 @@ class Admin
 
     public static function url($url)
     {
-        $prefix = '/';//'/admin/';
+        $prefix = app('router')->current()->getPrefix();
 
-        return $prefix . trim($url, '/');
+        return "/$prefix/" . trim($url, '/');
+    }
+
+    public function menu()
+    {
+        if(Config::has('admin.menu')) {
+            return Config::get('admin.menu');
+        }
+    }
+
+    public function user()
+    {
+        return auth()->user();
     }
 }

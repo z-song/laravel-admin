@@ -4,6 +4,7 @@ namespace Encore\Admin;
 use Closure;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -49,22 +50,22 @@ class Form {
 
     public function edit($id)
     {
+        $this->mode = self::MODE_EDIT;
+
         $this->build();
 
         $this->fillData($id);
-
-        $this->mode = self::MODE_EDIT;
 
         return $this;
     }
 
     public function view($id)
     {
+        $this->mode = self::MODE_VIEW;
+
         $this->build();
 
         $this->fillData($id);
-
-        $this->mode = self::MODE_VIEW;
 
         return $this;
     }
@@ -77,12 +78,16 @@ class Form {
             return back()->withInput()->withErrors($this->errors);
         }
 
-        $self       = array_filter($data, 'is_string');
+        $inserts    = array_filter($data, 'is_string');
         $relations  = array_filter($data, 'is_array');
 
-        DB::transaction(function() use ($self, $relations) {
+        DB::transaction(function() use ($inserts, $relations) {
 
-            $this->model->create($self);
+            foreach($inserts as $column => $value) {
+                $this->model->setAttribute($column, $value);
+            }
+
+            $this->model->save();
 
             foreach($relations as $name => $values) {
 
@@ -97,16 +102,18 @@ class Form {
                         $relation->attach($values);
                         break;
                     case \Illuminate\Database\Eloquent\Relations\HasOne::class :
+                        $related = $relation->getRelated();
                         foreach($values as $column => $value) {
-                            $relation->setAttribute($column, $value);
+                            $related->setAttribute($column, $value);
                         }
-                        $relation->save();
+
+                        $relation->save($related);
                         break;
                 }
             }
         });
 
-        return redirect()->back();
+        return redirect($this->resource());
     }
 
     /**
@@ -120,14 +127,20 @@ class Form {
             return back()->withInput()->withErrors($this->errors);
         }
 
-        $self       = array_filter($data, 'is_string');
-        $relations  = array_filter($data, 'is_array');
+        $model = $this->model->findOrFail($id);
 
-        $model = $this->model->find($id);
+        $updates   = array_filter($data, 'is_string');
+        $relations = array_filter($data, 'is_array');
 
-        DB::transaction(function() use ($model, $self, $relations) {
+        DB::transaction(function() use ($model, $updates, $relations) {
 
-            $model->update($self);
+            foreach($updates as $column => $value) {
+                if($this->hasColumn($model, $column)) {
+                    $model->setAttribute($column, $value);
+                }
+            }
+
+            $model->save();
 
             foreach($relations as $name => $values) {
 
@@ -148,7 +161,12 @@ class Form {
             }
         });
 
-        return redirect()->back();
+        return redirect($this->resource());
+    }
+
+    protected function hasColumn($model, $column)
+    {
+        return Schema::hasColumn($model->getTable(), $column);
     }
 
     protected function fillData($id)
@@ -229,8 +247,6 @@ class Form {
     {
         if($this->builded) return;
 
-        $this->open();
-
         call_user_func($this->builder, $this);
 
         $this->builded = true;
@@ -261,9 +277,8 @@ class Form {
     public function open($options = [])
     {
         if($this->mode == self::MODE_EDIT) {
-            $resources = app('router')->current()->parameterNames();
 
-            $attributes['action'] = Admin::url(current($resources)) . '/' . $this->id;
+            $attributes['action'] = $this->resource() . '/' . $this->id;
             $attributes['method'] = array_get($options, 'method', 'post');
             $attributes['accept-charset'] = 'UTF-8';
 
@@ -271,10 +286,8 @@ class Form {
         }
 
         if($this->mode == self::MODE_CREATE) {
-            $resource = app('router')->current()->getUri();
-            $resourceName = substr($resource, 0, strrpos($resource, '/'));
 
-            $attributes['action'] = Admin::url($resourceName);
+            $attributes['action'] = $this->resource();
             $attributes['method'] = array_get($options, 'method', 'post');
             $attributes['accept-charset'] = 'UTF-8';
         }
@@ -286,6 +299,16 @@ class Form {
         }
 
         return '<form '.join(' ', $html).'>';
+    }
+
+    public function resource()
+    {
+        $route = app('router')->current();
+        $prefix = $route->getPrefix();
+
+        $resource = trim(str_replace($prefix, '', $route->getUri()), '/') . '/';
+
+        return Admin::url(substr($resource, 0, strpos($resource, '/')));
     }
 
     public function close()

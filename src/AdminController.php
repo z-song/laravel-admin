@@ -4,6 +4,7 @@ namespace Encore\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 abstract class AdminController extends Controller
 {
@@ -41,11 +42,20 @@ abstract class AdminController extends Controller
 
     public function store()
     {
+
+
         return $this->form()->create();
     }
 
     public function create()
     {
         return $this->form()->render();
+    }
+
+    protected function variables()
+    {
+        return [
+            'menu' => config('admin.menu')
+        ];
     }
 }

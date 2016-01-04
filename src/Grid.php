@@ -203,6 +203,11 @@ class Grid {
         $this->options[$option] = strval($value);
     }
 
+    public function resource()
+    {
+        return app('router')->current()->getPath();
+    }
+
     /**
      * @param $method
      * @param $arguments

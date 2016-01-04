@@ -24,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   -->
   <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-green.min.css") }}">
 
-  {!! \Encore\Admin\Admin::css() !!}
+  {!! Admin::css() !!}
 
   <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css") }}">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -57,7 +57,6 @@ desired effect
 -->
 <body class="hold-transition skin-green">
 <div class="wrapper">
-
 
   @include('admin::partials.header')
 
@@ -105,9 +104,9 @@ desired effect
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 
-{!! \Encore\Admin\Admin::js() !!}
+{!! Admin::js() !!}
 
-{!! \Encore\Admin\Admin::script() !!}
+{!! Admin::script() !!}
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

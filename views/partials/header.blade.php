@@ -4,9 +4,9 @@
     <!-- Logo -->
     <a href="/admin" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>众</b>筹</span>
+        <span class="logo-mini"><b>{{config('admin.name')}}</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>众筹</b>100</span>
+        <span class="logo-lg"><b>{{config('admin.name')}}</b></span>
     </a>
 
     <!-- Header Navbar -->
@@ -153,15 +153,15 @@
                                 <a href="#" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a href="/admin/logout" class="btn btn-default btn-flat">Sign out</a>
+                                <a href="/{{config('admin.prefix')}}/logout" class="btn btn-default btn-flat">Sign out</a>
                             </div>
                         </li>
                     </ul>
                 </li>
                 <!-- Control Sidebar Toggle Button -->
-                <li>
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                </li>
+                {{--<li>--}}
+                    {{--<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>--}}
+                {{--</li>--}}
             </ul>
         </div>
     </nav>

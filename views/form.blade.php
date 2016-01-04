@@ -1,3 +1,4 @@
+<?php //dd($form->fields()); ?>
 @extends('admin::admin')
 
 @section('content')
@@ -18,7 +19,7 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-                <a href="/users" type="submit" class="btn btn-default">返回列表</a>
+                <a href="{{ $form->resource() }}" type="submit" class="btn btn-default">返回列表</a>
                 {!! $form->submit() !!}
             </div>
             <!-- /.box-footer -->

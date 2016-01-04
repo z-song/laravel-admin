@@ -30,33 +30,9 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <li class="header">菜单</li>
-            {{--@foreach($menu as $item)--}}
-                {{--@if(!isset($item['children']))--}}
-                {{--<li class="{!! isset($item['active']) ?'active':''; !!}"><a href="{{$item['url']}}"><i class="fa {{$item['icon']}}"></i> <span>{{$item['title']}}</span></a></li>--}}
-                {{--@else--}}
-                    {{--<li class="treeview {!! isset($item['active']) ?'active':''; !!}">--}}
-                        {{--<a href="#"><i class="fa {{$item['icon']}}"></i> <span>{{$item['title']}}</span> <i class="fa fa-angle-left pull-right"></i></a>--}}
-                        {{--<ul class="treeview-menu">--}}
-                            {{--@foreach($item['children'] as $item)--}}
-                            {{--<li class="{!! isset($item['active']) ?'active':''; !!}"><a href="{{$item['url']}}"><i class="fa {{$item['icon']}}"></i> <span>{{$item['title']}}</span></a></li>--}}
-                            {{--@endforeach--}}
-                        {{--</ul>--}}
-                    {{--</li>--}}
-                {{--@endif--}}
-            {{--@endforeach--}}
 
-            <!-- Optionally, you can add icons to the links -->
-            <li><a href="/admin"><i class="fa fa-link"></i> <span>首页</span></a></li>
-            <li><a href="/admin/users"><i class="fa fa-users"></i> <span>用户管理</span></a></li>
+            @each('admin::partials.menu', Admin::menu(), 'item')
 
-            <li class="treeview">
-                <a href="#"><i class="fa fa-link"></i> <span>项目管理</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a href="/admin/projects"><i class="fa fa-user"></i> <span>项目管理</span></a></li>
-                    <li><a href="/admin/categories"><i class="fa fa-user"></i> <span>项目分类</span></a></li>
-                    <li><a href="/admin/projects/recommend"><i class="fa fa-user"></i> <span>推荐众筹</span></a></li>
-                </ul>
-            </li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>
