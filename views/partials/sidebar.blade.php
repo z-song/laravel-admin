@@ -9,7 +9,7 @@
                 <img src="{{ asset ("/bower_components/AdminLTE/dist/img/user2-160x160.jpg")}}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>管理员</p>
+                <p>{{ Admin::user()->name }}</p>
                 <!-- Status -->
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>

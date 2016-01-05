@@ -25,7 +25,7 @@ class Date extends Field
 
         $this->js[] = "moment/locale/{$this->options['locale']}.js";
 
-        Admin::script("$('#{$this->id}').datetimepicker(". json_encode($this->options) .");");
+        $this->script = "$('#{$this->id}').datetimepicker(". json_encode($this->options) .");";
 
         return parent::render();
     }

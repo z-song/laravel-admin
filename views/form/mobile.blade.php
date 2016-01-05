@@ -8,7 +8,7 @@
 
         <div class="input-group">
             <div class="input-group-addon">
-                <i class="fa fa-mobile"></i>
+                <i class="fa fa-phone"></i>
             </div>
             <input type="text" id="{{$id}}" name="{{$name}}" value="{{ Input::old($column, $value) }}" class="form-control" data-inputmask='"mask": "+86 19999999999"' data-mask placeholder="输入{{$label}}">
         </div>

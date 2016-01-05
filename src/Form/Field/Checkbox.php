@@ -32,7 +32,7 @@ class Checkbox extends Field
     {
         $this->options['checkboxClass'] = 'icheckbox_minimal-blue';
 
-        Admin::script("$('.{$this->column}').iCheck(". json_encode($this->options) .");");
+        $this->script = "$('.{$this->column}').iCheck(". json_encode($this->options) .");";
 
         return  parent::render()->with(['values' => $this->values]);
     }

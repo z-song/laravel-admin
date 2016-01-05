@@ -3,8 +3,9 @@
 namespace Encore\Admin;
 
 use Closure;
-use Illuminate\Support\Facades\Config;
+use Encore\Admin\Facades\Auth;
 use InvalidArgumentException;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Admin
@@ -120,6 +121,6 @@ class Admin
 
     public function user()
     {
-        return auth()->user();
+        return Auth::user();
     }
 }

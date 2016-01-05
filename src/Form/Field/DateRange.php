@@ -37,7 +37,7 @@ class DateRange extends Field
         $startOptions = json_encode($this->options);
         $endOptions = json_encode($this->options + ['useCurrent' =>false]);
 
-        $script = <<<EOT
+        $this->script = <<<EOT
             $('#{$this->id['start']}').datetimepicker($startOptions);
             $('#{$this->id['end']}').datetimepicker($endOptions);
             $("#{$this->id['start']}").on("dp.change", function (e) {
@@ -49,8 +49,6 @@ class DateRange extends Field
 EOT;
 
         $this->js[] = "moment/locale/{$this->options['locale']}.js";
-
-        Admin::script($script);
 
         return parent::render();
     }

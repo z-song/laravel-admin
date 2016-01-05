@@ -17,9 +17,7 @@ class Ip extends Field
 
     public function render()
     {
-        Admin::js($this->js);
-
-        Admin::script('$("[data-mask]").inputmask();');
+        $this->script = '$("[data-mask]").inputmask();';
 
         return parent::render();
     }

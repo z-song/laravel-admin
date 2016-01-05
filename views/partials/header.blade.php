@@ -120,7 +120,7 @@
                         <!-- The user image in the navbar-->
                         <img src="{{ asset ("/bower_components/AdminLTE/dist/img/user2-160x160.jpg") }}" class="user-image" alt="User Image">
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">admin name</span>
+                        <span class="hidden-xs">{{ Admin::user()->name }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->
@@ -128,8 +128,8 @@
                             <img src="{{ asset ("/bower_components/AdminLTE/dist/img/user2-160x160.jpg") }}" class="img-circle" alt="User Image">
 
                             <p>
-                                admin name
-                                <small>Member since admin created_at</small>
+                                {{ Admin::user()->name }}
+                                <small>Member since admin {{ Admin::user()->created_at }}</small>
                             </p>
                         </li>
                         <!-- Menu Body -->
@@ -149,11 +149,11 @@
                         {{--</li>--}}
                         <!-- Menu Footer-->
                         <li class="user-footer">
-                            <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
-                            </div>
+                            {{--<div class="pull-left">--}}
+                                {{--<a href="#" class="btn btn-default btn-flat">Profile</a>--}}
+                            {{--</div>--}}
                             <div class="pull-right">
-                                <a href="/{{config('admin.prefix')}}/logout" class="btn btn-default btn-flat">Sign out</a>
+                                <a href="{{ Admin::url('logout') }}" class="btn btn-default btn-flat">登出</a>
                             </div>
                         </li>
                     </ul>

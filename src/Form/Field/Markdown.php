@@ -6,8 +6,6 @@ use Encore\Admin\Form\Field;
 
 class Markdown extends Field
 {
-    use GeneralTrait;
-
     protected $js = [
         //'bootstrap-markdown/js/markdown.js',
         'bootstrap-markdown/js/bootstrap-markdown.js'

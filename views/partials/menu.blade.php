@@ -1,6 +1,6 @@
 @if(!isset($item['children']))
     <li>
-        <a href="{{$item['url']}}"><i class="fa {{$item['icon']}}"></i>
+        <a href="{{ Admin::url($item['url']) }}"><i class="fa {{$item['icon']}}"></i>
             <span>{{$item['title']}}</span>
         </a>
     </li>

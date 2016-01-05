@@ -12,6 +12,8 @@ class Field {
 
     protected $value;
 
+    protected $original;
+
     protected $label = '';
 
     protected $column = '';
@@ -21,6 +23,12 @@ class Field {
     protected $options = [];
 
     protected $rules = '';
+
+    protected $css = [];
+
+    protected $js = [];
+
+    protected $script = '';
 
     public function __construct($column, $arguments = '')
     {
@@ -59,15 +67,26 @@ class Field {
         $this->value = Arr::get($data, $this->column);
     }
 
-    public function render()
+    public function setOriginal($data)
     {
-        if( ! empty($this->js)) {
-            Admin::js($this->js);
+        if(is_array($this->column))
+        {
+            foreach($this->column as $key => $column)
+            {
+                $this->original[$key] = Arr::get($data, $column);
+            }
+
+            return;
         }
 
-        if( ! empty($this->css)) {
-            Admin::css($this->css);
-        }
+        $this->original = Arr::get($data, $this->column);
+    }
+
+    public function render()
+    {
+        Admin::js($this->js);
+        Admin::css($this->css);
+        Admin::script($this->script);
 
         $class = explode('\\', get_called_class());
         $view = 'admin::form.' . strtolower(end($class));
@@ -97,6 +116,7 @@ class Field {
         $this->variables['value']   = $this->value;
         $this->variables['label']   = $this->label;
         $this->variables['column']  = $this->column;
+        $this->variables['field']   = $this;
 
         return $this->variables;
     }
@@ -133,7 +153,7 @@ class Field {
             $options = $options->toArray();
         }
 
-        $this->options = $options;
+        $this->options = array_merge($this->options, $options);
 
         return $this;
     }

@@ -30,6 +30,8 @@ class Form {
     const MODE_EDIT     = 'edit';
     const MODE_CREATE   = 'create';
 
+    protected $relations = [];
+
     /**
      * Form action mode, could be create|view|edit.
      *
@@ -127,28 +129,31 @@ class Form {
             return back()->withInput()->withErrors($this->errors);
         }
 
-        $model = $this->model->findOrFail($id);
+        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+
+        $this->setOldValue();
 
         $updates   = array_filter($data, 'is_string');
         $relations = array_filter($data, 'is_array');
 
-        DB::transaction(function() use ($model, $updates, $relations) {
+        DB::transaction(function() use ($updates, $relations) {
 
-            foreach($updates as $column => $value) {
-                if($this->hasColumn($model, $column)) {
-                    $model->setAttribute($column, $value);
-                }
-            }
+            $updates = $this->prepare($updates);
 
-            $model->save();
+            $this->model->update($updates);
 
             foreach($relations as $name => $values) {
 
-                if( ! method_exists($model, $name)) {
+                $values = array_combine(
+                    array_keys($values),
+                    $this->prepare([$name => $values])
+                );
+
+                if( ! method_exists($this->model, $name)) {
                     continue;
                 }
 
-                $relation = $model->$name();
+                $relation = $this->model->$name();
 
                 switch (get_class($relation)) {
                     case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class :
@@ -162,6 +167,34 @@ class Form {
         });
 
         return redirect($this->resource());
+    }
+
+    public function prepare($updates)
+    {
+        $updates = Arr::dot($updates);
+
+        foreach($updates as $column => &$value) {
+            $field = $this->fields()->first(
+                function ($index, $field) use ($column) {
+                    return $field->column() == $column;
+                }
+            );
+
+            if (!is_null($field) && method_exists($field, 'prepare')) {
+                $value = $field->prepare($value);
+            }
+        }
+
+        return $updates;
+    }
+
+    public function setOldValue()
+    {
+        $values = $this->model->toArray();
+
+        foreach($this->fields() as $field) {
+            $field->setOriginal($values);
+        }
     }
 
     protected function hasColumn($model, $column)
@@ -194,15 +227,18 @@ class Form {
                 continue;
             }
 
-            $rules[$field->label()] = $rule;
-
             $columns = $field->column();
+
             if(is_string($columns)) {
                 $data[$field->label()] = Arr::get($input, $columns);
+
+                $rules[$field->label()] = $rule;
             }
             if(is_array($columns)) {
-                foreach($columns as $column) {
-                    $data[$column] = Arr::get($input, $column);
+                foreach($columns as $key => $column) {
+                    $data[$field->label().$key] = Arr::get($input, $column);
+
+                    $rules[$field->label().$key] = $rule;
                 }
             }
         }
@@ -263,6 +299,19 @@ class Form {
 
     public function addField($field)
     {
+//        $columns = (array) $field->column();
+//
+//        foreach($columns as $column) {
+//            if(strpos($column, '.') !== false) {
+//                list($relationName, $relationColumn) = explode('.', $column);
+//                if(method_exists($this->model, $relationName) &&
+//                    (($relation = $this->model->$relationName()) instanceof Relation)
+//                ) {
+//                    $this->model->setRelation($relationName, $relation);
+//                }
+//            }
+//        }
+
         $this->fields[] = $field;
     }
 
@@ -281,6 +330,7 @@ class Form {
             $attributes['action'] = $this->resource() . '/' . $this->id;
             $attributes['method'] = array_get($options, 'method', 'post');
             $attributes['accept-charset'] = 'UTF-8';
+            $attributes['enctype'] = 'multipart/form-data';
 
             $this->hidden('_method')->value('PUT');
         }
