@@ -10,5 +10,6 @@
         <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$id}}" {{ in_array($option, (array)Input::old($column, $value))?'checked':'' }}>&nbsp;{{$label}}&nbsp;&nbsp;
         @endforeach
 
+        <input type="hidden" name="{{$name}}[]">
     </div>
 </div>

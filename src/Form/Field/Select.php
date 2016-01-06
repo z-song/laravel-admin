@@ -4,6 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
+use Illuminate\Contracts\Support\Arrayable;
 
 class Select extends Field
 {
@@ -17,8 +18,24 @@ class Select extends Field
 
     public function render()
     {
-        Admin::script("$(\"#{$this->id}\").select2();");
+        $this->script = "$(\"#{$this->id}\").select2({allowClear: true});";
 
         return parent::render()->with(['options' => $this->options]);
+    }
+
+    public function options($options = [])
+    {
+        if($options instanceof Arrayable) {
+            $options = $options->toArray();
+        }
+
+        $this->options = $options;
+
+        return $this;
+    }
+
+    public function prepare(array $value)
+    {
+        return array_filter($value);
     }
 }

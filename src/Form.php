@@ -3,6 +3,7 @@ namespace Encore\Admin;
 
 use Closure;
 
+use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -20,6 +21,11 @@ class Form {
 
     protected $builder;
 
+    /**
+     * Is this form builded
+     *
+     * @var bool
+     */
     protected $builded = false;
 
     protected $options = [
@@ -30,8 +36,6 @@ class Form {
     const MODE_EDIT     = 'edit';
     const MODE_CREATE   = 'create';
 
-    protected $relations = [];
-
     /**
      * Form action mode, could be create|view|edit.
      *
@@ -39,8 +43,22 @@ class Form {
      */
     protected $mode = 'create';
 
+    /**
+     * Collection of all fields in form.
+     *
+     * @var Collection
+     */
     protected $fields;
 
+    /**
+     * @var \Illuminate\Validation\Validator
+     */
+    protected $validator;
+
+    /**
+     * @param $model
+     * @param callable $callable
+     */
     public function __construct($model, Closure $callable)
     {
         $this->model = $model;
@@ -50,34 +68,45 @@ class Form {
         $this->builder = $callable;
     }
 
+    /**
+     * @param $id
+     * @return $this
+     */
     public function edit($id)
     {
         $this->mode = self::MODE_EDIT;
 
-        $this->build();
+        $this->buildForm();
 
-        $this->fillData($id);
+        $this->setFieldValue($id);
 
         return $this;
     }
 
+    /**
+     * @param $id
+     * @return $this
+     */
     public function view($id)
     {
         $this->mode = self::MODE_VIEW;
 
-        $this->build();
+        $this->buildForm();
 
-        $this->fillData($id);
+        $this->setFieldValue($id);
 
         return $this;
     }
 
+    /**
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function create()
     {
         $data = Input::all();
 
         if( ! $this->validate($data)) {
-            return back()->withInput()->withErrors($this->errors);
+            return back()->withInput()->withErrors($this->validator->messages());
         }
 
         $inserts    = array_filter($data, 'is_string');
@@ -85,35 +114,40 @@ class Form {
 
         DB::transaction(function() use ($inserts, $relations) {
 
-            foreach($inserts as $column => $value) {
+            $inserts = $this->prepareInsert($inserts);
+
+            foreach ($inserts as $column => $value) {
                 $this->model->setAttribute($column, $value);
             }
 
-            $this->model->save();
+            //$this->model->save();
 
-            foreach($relations as $name => $values) {
+            foreach ($relations as $name => $values) {
 
                 if( ! method_exists($this->model, $name)) {
                     continue;
                 }
 
+                $values = $this->prepareInsert([$name => $values]);
+
                 $relation = $this->model->$name();
 
                 switch (get_class($relation)) {
                     case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class :
-                        $relation->attach($values);
+                        //$relation->attach($values[$name]);
                         break;
                     case \Illuminate\Database\Eloquent\Relations\HasOne::class :
                         $related = $relation->getRelated();
-                        foreach($values as $column => $value) {
+                        foreach($values[$name] as $column => $value) {
                             $related->setAttribute($column, $value);
                         }
-
-                        $relation->save($related);
+                        //$relation->save($related);
                         break;
                 }
             }
         });
+
+        return;
 
         return redirect($this->resource());
     }
@@ -126,41 +160,41 @@ class Form {
     public function update($id, $data)
     {
         if( ! $this->validate($data)) {
-            return back()->withInput()->withErrors($this->errors);
+            return back()->withInput()->withErrors($this->validator->messages());
         }
 
         $this->model = $this->model->with($this->getRelations())->findOrFail($id);
 
-        $this->setOldValue();
+        $this->setOriginal();
 
         $updates   = array_filter($data, 'is_string');
         $relations = array_filter($data, 'is_array');
 
         DB::transaction(function() use ($updates, $relations) {
 
-            $updates = $this->prepare($updates);
+            $updates = $this->prepareUpdate($updates);
 
             $this->model->update($updates);
 
             foreach($relations as $name => $values) {
 
-                $values = array_combine(
-                    array_keys($values),
-                    $this->prepare([$name => $values])
-                );
-
                 if( ! method_exists($this->model, $name)) {
                     continue;
                 }
+
+                $prepared = $this->prepareUpdate([$name => $values]);
+
+                if(empty($prepared)) continue;
 
                 $relation = $this->model->$name();
 
                 switch (get_class($relation)) {
                     case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class :
-                        $relation->sync($values);
+
+                        $relation->sync($prepared[$name]);
                         break;
                     case \Illuminate\Database\Eloquent\Relations\HasOne::class :
-                        $relation->update($values);
+                        $relation->getRelated()->update($prepared[$name]);
                         break;
                 }
             }
@@ -169,60 +203,160 @@ class Form {
         return redirect($this->resource());
     }
 
-    public function prepare($updates)
+    /**
+     * Prepare input data for update.
+     *
+     * @param $updates
+     * @return array
+     */
+    protected function prepareUpdate($updates)
     {
-        $updates = Arr::dot($updates);
+        $prepared = [];
 
-        foreach($updates as $column => &$value) {
-            $field = $this->fields()->first(
-                function ($index, $field) use ($column) {
-                    return $field->column() == $column;
+        foreach ($this->fields() as $field) {
+
+            $columns = $field->column();
+
+            if(is_string($columns)) {
+
+                $value = Arr::get($updates, $columns);
+            } elseif (is_array($columns)) {
+                $value = [];
+                foreach ($columns as $name => $column) {
+                    if(! Arr::has($updates, $column)) {
+                        continue;
+                    }
+
+                   $value[$name] = Arr::get($updates, $column);
                 }
-            );
+            }
 
-            if (!is_null($field) && method_exists($field, 'prepare')) {
-                $value = $field->prepare($value);
+            if(empty($value)) continue;
+
+            method_exists($field, 'prepare') && $value = $field->prepare($value);
+
+            if($value != $field->original()) {
+
+                if(is_array($columns)) {
+                    foreach ($columns as $name => $column) {
+                        Arr::set($prepared, $column, $value[$name]);
+                    }
+                } else if (is_string($columns)) {
+                    Arr::set($prepared, $columns, $value);
+                }
             }
         }
 
-        return $updates;
+        return $prepared;
     }
 
-    public function setOldValue()
+    /**
+     * Prepare input data for insert.
+     *
+     * @param $inserts
+     * @return array
+     */
+    public function prepareInsert($inserts)
+    {
+        $first = current($inserts);
+
+        if (is_array($first) && Arr::isAssoc($first)) {
+            $inserts = Arr::dot($inserts);
+        }
+
+        foreach ($inserts as $column => $value) {
+
+            if(is_null($field = $this->getFieldByColumn($column))) {
+                unset($inserts[$column]);
+                continue;
+            }
+
+            if (method_exists($field, 'prepare')) {
+                $inserts[$column] = $field->prepare($value);
+            }
+        }
+
+        $prepared = [];
+
+        foreach ($inserts as $key => $value) {
+            Arr::set($prepared, $key, $value);
+        }
+
+        return $prepared;
+    }
+
+    /**
+     * Find field object by column.
+     *
+     * @param $column
+     * @return mixed
+     */
+    protected function getFieldByColumn($column)
+    {
+        return $this->fields()->first(
+            function ($index, $field) use ($column) {
+                return $field->column() == $column;
+            }
+        );
+    }
+
+    /**
+     * Set original data for each field.
+     */
+    protected function setOriginal()
     {
         $values = $this->model->toArray();
 
-        foreach($this->fields() as $field) {
+        $this->fields()->each(function($field) use ($values) {
             $field->setOriginal($values);
-        }
+        });
     }
 
+    /**
+     * Determine if model has column.
+     *
+     * @param $model
+     * @param $column
+     * @return mixed
+     */
     protected function hasColumn($model, $column)
     {
         return Schema::hasColumn($model->getTable(), $column);
     }
 
-    protected function fillData($id)
+    /**
+     * Set all fields value in form.
+     *
+     * @param $id
+     */
+    protected function setFieldValue($id)
     {
+        $this->id = $id;
+
         $relations = $this->getRelations();
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
         $data = $this->model->toArray();
 
-        foreach($this->fields() as $field) {
+        $this->fields()->each(function($field) use ($data) {
             $field->fill($data);
-        }
-
-        $this->id = $id;
+        });
     }
 
+    /**
+     * Validate input data.
+     *
+     * @param $input
+     * @return bool
+     */
     protected function validate($input)
     {
-        $this->build();
+        $this->buildForm();
 
         $data = $rules = [];
-        foreach($this->fields() as $field) {
+
+        foreach ($this->fields() as $field) {
             if( ! method_exists($field, 'rules') || ! $rule = $field->rules()) {
                 continue;
             }
@@ -231,29 +365,27 @@ class Form {
 
             if(is_string($columns)) {
                 $data[$field->label()] = Arr::get($input, $columns);
-
                 $rules[$field->label()] = $rule;
             }
-            if(is_array($columns)) {
-                foreach($columns as $key => $column) {
-                    $data[$field->label().$key] = Arr::get($input, $column);
 
+            if(is_array($columns)) {
+                foreach ($columns as $key => $column) {
+                    $data[$field->label().$key] = Arr::get($input, $column);
                     $rules[$field->label().$key] = $rule;
                 }
             }
         }
 
-        $validator = Validator::make($data, $rules);
+        $this->validator = Validator::make($data, $rules);
 
-        if ($validator->fails()) {
-            $this->errors = $validator->messages();
-
-            return false;
-        }
-
-        return true;
+        return $this->validator->passes();
     }
 
+    /**
+     * Get all relations of model from builder.
+     *
+     * @return array
+     */
     public function getRelations()
     {
         $relations = $columns = [];
@@ -279,7 +411,7 @@ class Form {
         return array_unique($relations);
     }
 
-    public function build()
+    public function buildForm()
     {
         if($this->builded) return;
 
@@ -299,20 +431,7 @@ class Form {
 
     public function addField($field)
     {
-//        $columns = (array) $field->column();
-//
-//        foreach($columns as $column) {
-//            if(strpos($column, '.') !== false) {
-//                list($relationName, $relationColumn) = explode('.', $column);
-//                if(method_exists($this->model, $relationName) &&
-//                    (($relation = $this->model->$relationName()) instanceof Relation)
-//                ) {
-//                    $this->model->setRelation($relationName, $relation);
-//                }
-//            }
-//        }
-
-        $this->fields[] = $field;
+        $this->fields->push($field);
     }
 
     /**
@@ -340,6 +459,7 @@ class Form {
             $attributes['action'] = $this->resource();
             $attributes['method'] = array_get($options, 'method', 'post');
             $attributes['accept-charset'] = 'UTF-8';
+            $attributes['enctype'] = 'multipart/form-data';
         }
 
         $attributes['class'] = array_get($options, 'class');
@@ -351,6 +471,11 @@ class Form {
         return '<form '.join(' ', $html).'>';
     }
 
+    public function close()
+    {
+        return '</form>';
+    }
+
     public function resource()
     {
         $route = app('router')->current();
@@ -359,11 +484,6 @@ class Form {
         $resource = trim(str_replace($prefix, '', $route->getUri()), '/') . '/';
 
         return Admin::url(substr($resource, 0, strpos($resource, '/')));
-    }
-
-    public function close()
-    {
-        return '</form>';
     }
 
     public function submit()
@@ -394,7 +514,7 @@ class Form {
     public function render()
     {
         if(! $this->builded) {
-            $this->build();
+            $this->buildForm();
         }
 
         return view('admin::form', ['form' => $this])->render();

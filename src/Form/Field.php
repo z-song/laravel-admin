@@ -14,21 +14,21 @@ class Field {
 
     protected $original;
 
-    protected $label = '';
+    protected $label    = '';
 
-    protected $column = '';
+    protected $column   = '';
 
     protected $variables = [];
 
-    protected $options = [];
+    protected $options  = [];
 
-    protected $rules = '';
+    protected $rules    = '';
 
-    protected $css = [];
+    protected $css      = [];
 
-    protected $js = [];
+    protected $js       = [];
 
-    protected $script = '';
+    protected $script   = '';
 
     public function __construct($column, $arguments = '')
     {
@@ -82,6 +82,11 @@ class Field {
         $this->original = Arr::get($data, $this->column);
     }
 
+    public function original()
+    {
+        return $this->original;
+    }
+
     public function render()
     {
         Admin::js($this->js);
@@ -116,7 +121,6 @@ class Field {
         $this->variables['value']   = $this->value;
         $this->variables['label']   = $this->label;
         $this->variables['column']  = $this->column;
-        $this->variables['field']   = $this;
 
         return $this->variables;
     }

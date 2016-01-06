@@ -15,6 +15,6 @@
             &nbsp;
             <span class='label label-info' id="upload-file-info-{{$id}}">{{ Input::old($column, $value) }}</span>
         </div>
-        {!! $field->preview() !!}
+        {!! $preview !!}
     </div>
 </div>

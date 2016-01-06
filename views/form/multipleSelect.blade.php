@@ -11,5 +11,6 @@
                 <option value="{{$select}}" {{  in_array($select, (array)Input::old($column, $value)) ?'selected':'' }}>{{$option}}</option>
             @endforeach
         </select>
+        <input type="hidden" name="{{$name}}[]">
     </div>
 </div>

@@ -60,12 +60,17 @@ class Image extends Field
 
         $target = $image->move($this->directory, $this->name);
 
-        $image = ImageManagerStatic::make($target);
-
-        if( ! empty($this->size)) {
+        if( ! empty($this->size))
+        {
+            $image = ImageManagerStatic::make($target);
             $image->resize($this->size['width'], $this->size['height'])->save($target);
         }
 
         return $target;
+    }
+
+    public function render()
+    {
+        return parent::render()->with(['preview' => $this->preview()]);
     }
 }

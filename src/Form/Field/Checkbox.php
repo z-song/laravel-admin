@@ -28,13 +28,23 @@ class Checkbox extends Field
         }
     }
 
+    public function setOriginal($data)
+    {
+        $relations = Arr::get($data, $this->column);
+
+        foreach($relations as $relation)
+        {
+            $this->original[] = array_pop($relation['pivot']);
+        }
+    }
+
     public function render()
     {
         $this->options['checkboxClass'] = 'icheckbox_minimal-blue';
 
         $this->script = "$('.{$this->column}').iCheck(". json_encode($this->options) .");";
 
-        return  parent::render()->with(['values' => $this->values]);
+        return parent::render()->with(['values' => $this->values]);
     }
 
     public function values($values)
@@ -42,5 +52,10 @@ class Checkbox extends Field
         $this->values = $values;
 
         return $this;
+    }
+
+    public function prepare($value)
+    {
+        return array_filter($value);
     }
 }

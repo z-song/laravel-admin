@@ -15,4 +15,14 @@ class MultipleSelect extends Select
             $this->value[] = array_pop($relation['pivot']);
         }
     }
+
+    public function setOriginal($data)
+    {
+        $relations = Arr::get($data, $this->column);
+
+        foreach($relations as $relation)
+        {
+            $this->original[] = array_pop($relation['pivot']);
+        }
+    }
 }
