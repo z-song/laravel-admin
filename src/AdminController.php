@@ -37,7 +37,9 @@ abstract class AdminController extends Controller
 
     public function destroy($id)
     {
-        return $this->form()->destroy($id);
+        if($this->form()->destroy($id)) {
+            return response()->json(['msg' => 'delete success!']);
+        }
     }
 
     public function store()

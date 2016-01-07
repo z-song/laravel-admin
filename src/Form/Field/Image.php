@@ -6,7 +6,7 @@ use Encore\Admin\Form\Field;
 use Intervention\Image\ImageManagerStatic;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Image extends Field
+class Image extends File
 {
     protected $rules = 'image';
 
@@ -17,15 +17,6 @@ class Image extends Field
     protected $size = [];
 
     protected $thumb = [];
-
-    public function move($directory, $name = null)
-    {
-        $this->directory = $directory;
-
-        $this->name = $name;
-
-        return $this;
-    }
 
     public function size($width, $height)
     {

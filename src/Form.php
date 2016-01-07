@@ -4,21 +4,36 @@ namespace Encore\Admin;
 use Closure;
 
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Form {
 
+    /**
+     * Database model id of the form entity.
+     *
+     * @var
+     */
     protected $id;
 
+    /**
+     * Eloquent model of the form.
+     *
+     * @var $model
+     */
     protected $model;
 
+    /**
+     * Form builder.
+     *
+     * @var \Closure
+     */
     protected $builder;
 
     /**
@@ -69,6 +84,8 @@ class Form {
     }
 
     /**
+     * Generate a edit form.
+     *
      * @param $id
      * @return $this
      */
@@ -99,6 +116,45 @@ class Form {
     }
 
     /**
+     * Destroy entity and remove files.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function destroy($id)
+    {
+        $this->buildForm();
+
+        $this->removeFiles($id);
+
+        return $this->model->find($id)->delete();
+    }
+
+    /**
+     * Remove files or images in record.
+     *
+     * @param $id
+     */
+    protected function removeFiles($id)
+    {
+        $data = $this->model->with($this->getRelations())
+            ->findOrFail($id)->toArray();
+
+        $this->fields()->filter(function($field) {
+
+            return $field instanceof Field\File;
+
+        })->each(function($field) use ($data) {
+
+            $field->setOriginal($data);
+
+            $field->destroy();
+        });
+    }
+
+    /**
+     * Create a new record.
+     *
      * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function create()
@@ -120,7 +176,7 @@ class Form {
                 $this->model->setAttribute($column, $value);
             }
 
-            //$this->model->save();
+            $this->model->save();
 
             foreach ($relations as $name => $values) {
 
@@ -134,20 +190,18 @@ class Form {
 
                 switch (get_class($relation)) {
                     case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class :
-                        //$relation->attach($values[$name]);
+                        $relation->attach($values[$name]);
                         break;
                     case \Illuminate\Database\Eloquent\Relations\HasOne::class :
                         $related = $relation->getRelated();
                         foreach($values[$name] as $column => $value) {
                             $related->setAttribute($column, $value);
                         }
-                        //$relation->save($related);
+                        $relation->save($related);
                         break;
                 }
             }
         });
-
-        return;
 
         return redirect($this->resource());
     }
@@ -174,7 +228,11 @@ class Form {
 
             $updates = $this->prepareUpdate($updates);
 
-            $this->model->update($updates);
+            foreach ($updates as $column => $value) {
+                $this->model->setAttribute($column, $value);
+            }
+
+            $this->model->save();
 
             foreach($relations as $name => $values) {
 
@@ -217,19 +275,7 @@ class Form {
 
             $columns = $field->column();
 
-            if(is_string($columns)) {
-
-                $value = Arr::get($updates, $columns);
-            } elseif (is_array($columns)) {
-                $value = [];
-                foreach ($columns as $name => $column) {
-                    if(! Arr::has($updates, $column)) {
-                        continue;
-                    }
-
-                   $value[$name] = Arr::get($updates, $column);
-                }
-            }
+            $value = $this->getDataByColumn($updates, $columns);
 
             if(empty($value)) continue;
 
@@ -248,6 +294,23 @@ class Form {
         }
 
         return $prepared;
+    }
+
+    protected function getDataByColumn($data, $columns)
+    {
+        if (is_string($columns)) {
+            return Arr::get($data, $columns);
+        }
+
+        if (is_array($columns)) {
+            $value = [];
+            foreach ($columns as $name => $column) {
+                if(! Arr::has($data, $column)) continue;
+                $value[$name] = Arr::get($data, $column);
+            }
+
+            return $value;
+        }
     }
 
     /**
@@ -429,11 +492,6 @@ class Form {
         $this->options = array_merge($this->options, $options);
     }
 
-    public function addField($field)
-    {
-        $this->fields->push($field);
-    }
-
     /**
      * @return Collection
      */
@@ -505,7 +563,7 @@ class Form {
 
             $element = new $className($column, array_slice($arguments, 1));
 
-            $this->addField($element);
+            $this->fields()->push($element);
 
             return $element;
         }

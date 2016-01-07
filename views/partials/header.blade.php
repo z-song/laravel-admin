@@ -153,7 +153,7 @@
                                 {{--<a href="#" class="btn btn-default btn-flat">Profile</a>--}}
                             {{--</div>--}}
                             <div class="pull-right">
-                                <a href="{{ Admin::url('logout') }}" class="btn btn-default btn-flat">登出</a>
+                                <a href="{{ Admin::url('auth/logout') }}" class="btn btn-default btn-flat">登出</a>
                             </div>
                         </li>
                     </ul>

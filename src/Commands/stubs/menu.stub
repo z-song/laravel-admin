@@ -1,0 +1,9 @@
+<?php
+
+return [
+    [
+        'title' => '首页',
+        'url'   => '/',
+        'icon'  => 'fa-bar-chart'
+    ]
+];

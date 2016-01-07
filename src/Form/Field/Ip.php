@@ -7,7 +7,7 @@ use Encore\Admin\Form\Field;
 
 class Ip extends Field
 {
-    protected $rules = 'email';
+    protected $rules = 'ip';
 
     protected $js = [
         'AdminLTE/plugins/input-mask/jquery.inputmask.js',

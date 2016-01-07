@@ -19,7 +19,7 @@ class Authenticate
     {
         if (Auth::guest() && ! $this->shouldPassThrough($request))
         {
-            return redirect()->guest(Admin::url('login'));
+            return redirect()->guest(Admin::url('auth/login'));
         }
 
         return $next($request);
@@ -34,8 +34,8 @@ class Authenticate
     protected function shouldPassThrough($request)
     {
         $excepts = [
-            Admin::url('login'),
-            Admin::url('logout'),
+            Admin::url('auth/login'),
+            Admin::url('ayth/logout'),
         ];
 
         foreach ($excepts as $except) {

@@ -1,0 +1,17 @@
+<?php
+
+Route::group([
+    'prefix'        => config('admin.prefix'),
+    'namespace'     => 'App\{namespace}\Controllers',
+    'middleware'    => 'admin.auth'
+], function(){
+
+    Route::resources([
+        'users'         => UserController::class,
+    ]);
+
+    Route::controllers([
+        'auth' => AuthController::class,
+        '/'    => HomeController::class
+    ]);
+});

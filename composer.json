@@ -6,13 +6,16 @@
     "authors": [
         {
             "name": "邹松",
-            "email": "zousong@yiban.cn"
+            "email": "zosong@126.com"
         }
     ],
     "require": {},
     "autoload": {
         "psr-4": {
             "Encore\\Admin\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     }
 }

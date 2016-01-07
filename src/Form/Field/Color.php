@@ -17,7 +17,7 @@ class Color extends Field
 
     public function render()
     {
-        $this->script = "$('.{$this->column}').colorpicker();";
+        $this->script = "$('#{$this->id}').colorpicker();";
 
         return parent::render();
     }

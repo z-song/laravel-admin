@@ -6,9 +6,9 @@
 
         @include('admin::form.error')
 
-        <div class="input-group {{$id}}">
+        <div class="input-group {{$id}}" id="{{$id}}">
             <span class="input-group-addon"><i></i></span>
-            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ Input::old($column, $value) }}" class="form-control" placeholder="输入{{$label}}">
+            <input type="text" name="{{$name}}" value="{{ Input::old($column, $value) }}" class="form-control" placeholder="输入{{$label}}">
         </div>
     </div>
 </div>

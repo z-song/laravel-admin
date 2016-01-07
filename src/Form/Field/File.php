@@ -33,4 +33,9 @@ class File extends Field
 
         return $target;
     }
+
+    public function destroy()
+    {
+        @unlink($this->original);
+    }
 }

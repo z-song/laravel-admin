@@ -31,13 +31,27 @@
   <div class="login-box-body">
     <p class="login-box-msg">登陆</p>
 
-    <form action="/{{config('admin.prefix')}}/login" method="post">
-      <div class="form-group has-feedback">
-        <input type="input" class="form-control" placeholder="账号" name="username">
+    <form action="{{ Admin::url('auth/login') }}" method="post">
+      <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
+
+        @if($errors->has('username'))
+          @foreach($errors->get('username') as $message)
+            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label></br>
+          @endforeach
+        @endif
+
+        <input type="input" class="form-control" placeholder="账号" name="username" value="{{ Input::old('username') }}">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
-      <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="密码" name="password">
+      <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
+
+        @if($errors->has('password'))
+          @foreach($errors->get('password') as $message)
+            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label></br>
+          @endforeach
+        @endif
+
+        <input type="password" class="form-control" placeholder="密码" name="password" value="{{ Input::old('username') }}">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">

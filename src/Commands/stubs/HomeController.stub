@@ -1,0 +1,17 @@
+<?php
+
+namespace App\{namespace}\Controllers;
+
+use App\Http\Controllers\Controller;
+
+class HomeController extends Controller
+{
+    protected $title = '首页';
+
+    protected $description = '概况';
+
+    public function getIndex()
+    {
+        return view('admin::index');
+    }
+}
