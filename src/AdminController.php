@@ -9,13 +9,10 @@ use Illuminate\Support\Facades\Input;
 abstract class AdminController extends Controller
 {
     abstract public function page();
-    abstract public function form();
 
     public function index()
     {
-        return $this->page()->render();
-
-        //return $this->grid();
+        return $this->page();
     }
 
     public function show($id)
@@ -26,8 +23,6 @@ abstract class AdminController extends Controller
     public function edit($id)
     {
         return $this->form()->edit($id)->render();
-
-        //return $this->form()->edit($id);
     }
 
     public function update($id, Request $request)
@@ -44,8 +39,6 @@ abstract class AdminController extends Controller
 
     public function store()
     {
-
-
         return $this->form()->create();
     }
 

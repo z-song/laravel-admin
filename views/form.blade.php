@@ -19,7 +19,7 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-                <a href="{{ $form->resource() }}" type="submit" class="btn btn-default">返回列表</a>
+                {!! $form->back() !!}
                 {!! $form->submit() !!}
             </div>
             <!-- /.box-footer -->

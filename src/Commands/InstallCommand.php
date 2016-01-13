@@ -47,9 +47,7 @@ class InstallCommand extends Command
     {
 //        $this->call('migrate');
 //
-//        $this->call('db:seed', [
-//            '--class' => \Encore\Admin\Auth\Database\AdministratorsTableSeeder::class
-//        ]);
+//        $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdministratorsTableSeeder::class]);
 
         $this->initAdminDirectory();
     }
@@ -69,7 +67,7 @@ class InstallCommand extends Command
             return;
         }
 
-        $this->laravel['files']->makeDirectory($this->directory, 0755, true, true);
+        $this->makedir('/');
         $this->line('<info>Admin directory was created:</info> ' . str_replace(base_path(), '', $this->directory));
 
         $this->createControllers();
@@ -81,17 +79,18 @@ class InstallCommand extends Command
     {
         $namespace = ucfirst(basename($this->directory));
 
-        $this->laravel['files']->makeDirectory($this->directory . '/Controllers', 0755, true, true);
+        $this->makedir('Controllers');
 
         $homeController = $this->directory . '/Controllers/HomeController.php';
 
-        $contents = $this->laravel['files']->get(__DIR__ . '/stubs/HomeController.stub');
+
+        $contents = $this->getStub('HomeController');
         $this->laravel['files']->put($homeController, str_replace('{namespace}', $namespace, $contents));
         $this->line('<info>HomeController file was created:</info> ' . str_replace(base_path(), '', $homeController));
 
         $authController = $this->directory . '/Controllers/AuthController.php';
 
-        $contents = $this->laravel['files']->get(__DIR__ . '/stubs/AuthController.stub');
+        $contents = $this->getStub('AuthController');
         $this->laravel['files']->put($authController, str_replace('{namespace}', $namespace, $contents));
         $this->line('<info>AuthController file was created:</info> ' . str_replace(base_path(), '', $authController));
     }
@@ -115,5 +114,15 @@ class InstallCommand extends Command
         $contents = $this->laravel['files']->get(__DIR__ . '/stubs/routes.stub');
         $this->laravel['files']->put($file, str_replace('{namespace}', $namespace, $contents));
         $this->line('<info>Routes file was created:</info> ' . str_replace(base_path(), '', $file));
+    }
+
+    protected function getStub($name)
+    {
+        return $this->laravel['files']->get(__DIR__ . "/stubs/$name.stub");
+    }
+
+    protected function makedir($path = '')
+    {
+        $this->laravel['files']->makeDirectory($this->directory . '/' . $path, 0755, true, true);
     }
 }

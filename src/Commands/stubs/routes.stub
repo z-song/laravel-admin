@@ -2,7 +2,7 @@
 
 Route::group([
     'prefix'        => config('admin.prefix'),
-    'namespace'     => 'App\{namespace}\Controllers',
+    'namespace'     => 'App\{{$namespace}}\Controllers',
     'middleware'    => 'admin.auth'
 ], function(){
 

@@ -38,6 +38,16 @@ class Admin
 
     /**
      * @param $model
+     * @param callable $callable
+     * @return Chart
+     */
+    public function chart(Closure $callable)
+    {
+        return new Chart($callable);
+    }
+
+    /**
+     * @param $model
      * @return mixed
      */
     public function getModel($model)
@@ -117,6 +127,11 @@ class Admin
         if(Config::has('admin.menu')) {
             return Config::get('admin.menu');
         }
+    }
+
+    public function title()
+    {
+        return config('admin.title');
     }
 
     public function user()

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{{config('admin.name')}} | 登陆</title>
+  <title>{{config('admin.title')}} | 登陆</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.5 -->
@@ -55,13 +55,13 @@
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
-        {{--<div class="col-xs-8">--}}
-          {{--<div class="checkbox icheck">--}}
-            {{--<label>--}}
-              {{--<input type="checkbox"> Remember Me--}}
-            {{--</label>--}}
-          {{--</div>--}}
-        {{--</div>--}}
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox" name="remember"> Remember Me
+            </label>
+          </div>
+        </div>
         <!-- /.col -->
         <div class="col-xs-4">
           <button type="submit" class="btn btn-primary btn-block btn-flat">登陆</button>

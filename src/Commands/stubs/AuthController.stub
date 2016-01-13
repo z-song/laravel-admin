@@ -1,9 +1,10 @@
 <?php
 
-namespace App\{namespace}\Controllers;
+namespace App\{{$namespace}}\Controllers;
 
 use Encore\Admin\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
@@ -46,12 +47,7 @@ class AuthController extends Controller
             return Redirect::intended(config('admin.prefix'));
         }
 
-        $message = new MessageBag([
-            'username' => '用户名错误',
-            'password' => '密码错误'
-        ]);
-
-        return Redirect::back()->withInput()->withErrors($message);
+        return Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
     }
 
     /**
@@ -62,5 +58,12 @@ class AuthController extends Controller
         Auth::logout();
 
         return redirect(config('admin.prefix'));
+    }
+
+    protected function getFailedLoginMessage()
+    {
+        return Lang::has('auth.failed')
+            ? Lang::get('auth.failed')
+            : 'These credentials do not match our records.';
     }
 }

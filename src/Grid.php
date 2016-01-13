@@ -34,7 +34,9 @@ class Grid {
 
     protected $builded = false;
 
-    protected $options = [];
+    protected $options = [
+        'title' => 'list'
+    ];
 
     public function __construct($model, Closure $builder)
     {

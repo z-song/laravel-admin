@@ -10,7 +10,8 @@ class AdminServiceProvider extends ServiceProvider
 {
     protected $commands = [
         'InstallCommand',
-        'MakeCommand'
+        'MakeCommand',
+        'MenuCommand'
     ];
 
     /**
@@ -44,8 +45,6 @@ class AdminServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        require __DIR__ .'/../helpers.php';
-
         $this->publishes([
             __DIR__ . '/../../config/config.php' => config_path('admin.php'),
         ], 'config');

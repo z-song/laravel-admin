@@ -2,25 +2,53 @@
 namespace Encore\Admin;
 
 use Closure;
-
+use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class Form {
 
-    /**
-     * Database model id of the form entity.
-     *
-     * @var
-     */
-    protected $id;
+/**
+ * Class Form
+ *
+ * @method Field\Text           text($column, $label = '')
+ * @method Field\Checkbox       checkbox($column, $label = '')
+ * @method Field\Radio          radio($column, $label = '')
+ * @method Field\Select         select($column, $label = '')
+ * @method Field\MultipleSelect multipleSelect($column, $label = '')
+ * @method Field\Textarea       textarea($column, $label = '')
+ * @method Field\Hidden         hidden($column, $label = '')
+ *
+ * @method Field\Id             id($column, $label = '')
+ * @method Field\Ip             ip($column, $label = '')
+ * @method Field\Url            url($column, $label = '')
+ * @method Field\Color          color($column, $label = '')
+ * @method Field\Email          email($column, $label = '')
+ * @method Field\Mobile         mobile($column, $label = '')
+ * @method Field\Slider         slider($column, $label = '')
+ * @method Field\Map            map($latitude, $longitude, $label = '')
+ *
+ * @method Field\Editor         editor($column, $label = '')
+ * @method Field\Markdown       markdown($column, $label = '')
+ *
+ * @method Field\File           file($column, $label = '')
+ * @method Field\Image          image($column, $label = '')
+ *
+ * @method Field\Date           date($column, $label = '')
+ * @method Field\Datetime       datetime($column, $label = '')
+ * @method Field\Time           time($column, $label = '')
+ * @method Field\DateRange      dateRange($start, $end, $label = '')
+ * @method Field\DateTimeRange  dateTimeRange($start, $end, $label = '')
+ * @method Field\TimeRange      timeRange($start, $end, $label = '')
+ * @method Field\Options        options(array $options)
+ *
+ * @package Encore\Admin
+ */
+class Form {
 
     /**
      * Eloquent model of the form.
@@ -30,57 +58,26 @@ class Form {
     protected $model;
 
     /**
-     * Form builder.
-     *
-     * @var \Closure
-     */
-    protected $builder;
-
-    /**
-     * Is this form builded
-     *
-     * @var bool
-     */
-    protected $builded = false;
-
-    protected $options = [
-        'title' => ''
-    ];
-
-    const MODE_VIEW     = 'view';
-    const MODE_EDIT     = 'edit';
-    const MODE_CREATE   = 'create';
-
-    /**
-     * Form action mode, could be create|view|edit.
-     *
-     * @var string
-     */
-    protected $mode = 'create';
-
-    /**
-     * Collection of all fields in form.
-     *
-     * @var Collection
-     */
-    protected $fields;
-
-    /**
      * @var \Illuminate\Validation\Validator
      */
     protected $validator;
 
     /**
-     * @param $model
-     * @param callable $callable
+     * @var Builder
      */
-    public function __construct($model, Closure $callable)
+    protected $builder;
+
+    /**
+     * @param \$model
+     * @param \Closure $callback
+     */
+    public function __construct($model, Closure $callback)
     {
         $this->model = $model;
 
-        $this->fields = new Collection();
+        $this->builder = new Builder($this);
 
-        $this->builder = $callable;
+        $callback($this);
     }
 
     /**
@@ -91,9 +88,8 @@ class Form {
      */
     public function edit($id)
     {
-        $this->mode = self::MODE_EDIT;
-
-        $this->buildForm();
+        $this->builder->setMode(Builder::MODE_EDIT);
+        $this->builder->setResourceId($id);
 
         $this->setFieldValue($id);
 
@@ -106,9 +102,8 @@ class Form {
      */
     public function view($id)
     {
-        $this->mode = self::MODE_VIEW;
-
-        $this->buildForm();
+        $this->builder->setMode(Builder::MODE_VIEW);
+        $this->builder->setResourceId($id);
 
         $this->setFieldValue($id);
 
@@ -116,16 +111,14 @@ class Form {
     }
 
     /**
-     * Destroy entity and remove files.
+     * Destroy data entity and remove files.
      *
      * @param $id
      * @return mixed
      */
     public function destroy($id)
     {
-        $this->buildForm();
-
-        $this->removeFiles($id);
+        $this->deleteFilesAndImages($id);
 
         return $this->model->find($id)->delete();
     }
@@ -135,12 +128,12 @@ class Form {
      *
      * @param $id
      */
-    protected function removeFiles($id)
+    protected function deleteFilesAndImages($id)
     {
         $data = $this->model->with($this->getRelations())
             ->findOrFail($id)->toArray();
 
-        $this->fields()->filter(function($field) {
+        $this->builder->fields()->filter(function($field) {
 
             return $field instanceof Field\File;
 
@@ -219,7 +212,7 @@ class Form {
 
         $this->model = $this->model->with($this->getRelations())->findOrFail($id);
 
-        $this->setOriginal();
+        $this->setFieldOriginalValue();
 
         $updates   = array_filter($data, 'is_string');
         $relations = array_filter($data, 'is_array');
@@ -271,11 +264,11 @@ class Form {
     {
         $prepared = [];
 
-        foreach ($this->fields() as $field) {
+        foreach ($this->builder->fields() as $field) {
 
             $columns = $field->column();
 
-            $value = $this->getDataByColumn($updates, $columns);
+            $value = static::getDataByColumn($updates, $columns);
 
             if(empty($value)) continue;
 
@@ -294,23 +287,6 @@ class Form {
         }
 
         return $prepared;
-    }
-
-    protected function getDataByColumn($data, $columns)
-    {
-        if (is_string($columns)) {
-            return Arr::get($data, $columns);
-        }
-
-        if (is_array($columns)) {
-            $value = [];
-            foreach ($columns as $name => $column) {
-                if(! Arr::has($data, $column)) continue;
-                $value[$name] = Arr::get($data, $column);
-            }
-
-            return $value;
-        }
     }
 
     /**
@@ -349,6 +325,28 @@ class Form {
     }
 
     /**
+     * @param array $data
+     * @param string|array $columns
+     * @return array|mixed
+     */
+    protected static function getDataByColumn($data, $columns)
+    {
+        if (is_string($columns)) {
+            return Arr::get($data, $columns);
+        }
+
+        if (is_array($columns)) {
+            $value = [];
+            foreach ($columns as $name => $column) {
+                if(! Arr::has($data, $column)) continue;
+                $value[$name] = Arr::get($data, $column);
+            }
+
+            return $value;
+        }
+    }
+
+    /**
      * Find field object by column.
      *
      * @param $column
@@ -356,7 +354,7 @@ class Form {
      */
     protected function getFieldByColumn($column)
     {
-        return $this->fields()->first(
+        return $this->builder->fields()->first(
             function ($index, $field) use ($column) {
                 return $field->column() == $column;
             }
@@ -365,44 +363,33 @@ class Form {
 
     /**
      * Set original data for each field.
+     *
+     * @return void
      */
-    protected function setOriginal()
+    protected function setFieldOriginalValue()
     {
         $values = $this->model->toArray();
 
-        $this->fields()->each(function($field) use ($values) {
+        $this->builder->fields()->each(function($field) use ($values) {
             $field->setOriginal($values);
         });
-    }
-
-    /**
-     * Determine if model has column.
-     *
-     * @param $model
-     * @param $column
-     * @return mixed
-     */
-    protected function hasColumn($model, $column)
-    {
-        return Schema::hasColumn($model->getTable(), $column);
     }
 
     /**
      * Set all fields value in form.
      *
      * @param $id
+     * @return void
      */
     protected function setFieldValue($id)
     {
-        $this->id = $id;
-
         $relations = $this->getRelations();
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
         $data = $this->model->toArray();
 
-        $this->fields()->each(function($field) use ($data) {
+        $this->builder->fields()->each(function($field) use ($data) {
             $field->fill($data);
         });
     }
@@ -415,11 +402,9 @@ class Form {
      */
     protected function validate($input)
     {
-        $this->buildForm();
-
         $data = $rules = [];
 
-        foreach ($this->fields() as $field) {
+        foreach ($this->builder->fields() as $field) {
             if( ! method_exists($field, 'rules') || ! $rule = $field->rules()) {
                 continue;
             }
@@ -445,7 +430,7 @@ class Form {
     }
 
     /**
-     * Get all relations of model from builder.
+     * Get all relations of model from callable.
      *
      * @return array
      */
@@ -453,7 +438,7 @@ class Form {
     {
         $relations = $columns = [];
 
-        foreach($this->fields as $field) {
+        foreach($this->builder->fields() as $field) {
             $columns[] = $field->column();
         }
 
@@ -474,66 +459,11 @@ class Form {
         return array_unique($relations);
     }
 
-    public function buildForm()
-    {
-        if($this->builded) return;
-
-        call_user_func($this->builder, $this);
-
-        $this->builded = true;
-    }
-
-    public function options($options = [])
-    {
-        if(empty($options)) {
-            return $this->options;
-        }
-
-        $this->options = array_merge($this->options, $options);
-    }
-
     /**
-     * @return Collection
+     * Get current resource route url.
+     *
+     * @return string
      */
-    public function fields()
-    {
-        return $this->fields;
-    }
-
-    public function open($options = [])
-    {
-        if($this->mode == self::MODE_EDIT) {
-
-            $attributes['action'] = $this->resource() . '/' . $this->id;
-            $attributes['method'] = array_get($options, 'method', 'post');
-            $attributes['accept-charset'] = 'UTF-8';
-            $attributes['enctype'] = 'multipart/form-data';
-
-            $this->hidden('_method')->value('PUT');
-        }
-
-        if($this->mode == self::MODE_CREATE) {
-
-            $attributes['action'] = $this->resource();
-            $attributes['method'] = array_get($options, 'method', 'post');
-            $attributes['accept-charset'] = 'UTF-8';
-            $attributes['enctype'] = 'multipart/form-data';
-        }
-
-        $attributes['class'] = array_get($options, 'class');
-
-        foreach($attributes as $name => $value) {
-            $html[] = "$name=\"$value\"";
-        }
-
-        return '<form '.join(' ', $html).'>';
-    }
-
-    public function close()
-    {
-        return '</form>';
-    }
-
     public function resource()
     {
         $route = app('router')->current();
@@ -544,15 +474,13 @@ class Form {
         return Admin::url(substr($resource, 0, strpos($resource, '/')));
     }
 
-    public function submit()
-    {
-        if($this->mode == self::MODE_VIEW) {
-            return;
-        }
-
-        return '<button type="submit" class="btn btn-info pull-right">提交</button>';
-    }
-
+    /**
+     * Generate a Field object and add to form builder if Field exists.
+     *
+     * @param string $method
+     * @param array $arguments
+     * @return \Encore\Admin\Field
+     */
     public function __call($method, $arguments)
     {
         $className = __NAMESPACE__ . '\\Form\\Field\\' . ucfirst($method);
@@ -563,21 +491,27 @@ class Form {
 
             $element = new $className($column, array_slice($arguments, 1));
 
-            $this->fields()->push($element);
+            $this->builder->fields()->push($element);
 
             return $element;
         }
     }
 
+    /**
+     * Render the form contents.
+     *
+     * @return string
+     */
     public function render()
     {
-        if(! $this->builded) {
-            $this->buildForm();
-        }
-
-        return view('admin::form', ['form' => $this])->render();
+        return $this->builder->build();
     }
 
+    /**
+     * Render the contents of the form when casting to string.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->render();

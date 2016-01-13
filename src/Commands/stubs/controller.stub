@@ -1,0 +1,38 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyModelNamespace;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\AdminController;
+use Encore\Admin\Form;
+use Encore\Admin\Grid;
+
+class DummyClass extends AdminController
+{
+    protected $title = 'Manage';
+
+    protected $description = 'Optional description';
+
+    public function page()
+    {
+        return Admin::grid(DummyModel::class, function(Grid $grid){
+
+            $grid->id('ID');
+
+            $grid->created_at();
+            $grid->updated_at();
+        });
+    }
+
+    public function form()
+    {
+        return Admin::form(DummyModel::class, function(Form $form){
+
+            $form->id('id', 'ID');
+
+            $form->dateTime('created_at')->readOnly();
+            $form->dateTime('updated_at')->readOnly();
+        });
+    }
+}

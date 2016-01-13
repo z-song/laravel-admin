@@ -30,6 +30,8 @@ class Field {
 
     protected $script   = '';
 
+    protected $attributes = [];
+
     public function __construct($column, $arguments = '')
     {
         $this->column = $column;
@@ -121,6 +123,7 @@ class Field {
         $this->variables['value']   = $this->value;
         $this->variables['label']   = $this->label;
         $this->variables['column']  = $this->column;
+        $this->variables['attributes']  = $this->formatAttributes();
 
         return $this->variables;
     }
@@ -169,5 +172,21 @@ class Field {
         }
 
         $this->rules = $rules;
+    }
+
+    public function readOnly()
+    {
+        $this->attributes['disabled'] = true;
+    }
+
+    protected function formatAttributes()
+    {
+        $html = [];
+
+        foreach($this->attributes as $name => $value) {
+            $html[] = "$name=\"$value\"";
+        }
+
+        return join(' ', $html);
     }
 }

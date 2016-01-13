@@ -1,14 +1,14 @@
 <?php
 
-namespace App\{namespace}\Controllers;
+namespace App\{{$namespace}}\Controllers;
 
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
-    protected $title = '首页';
+    protected $title = 'Home';
 
-    protected $description = '概况';
+    protected $description = 'Description...';
 
     public function getIndex()
     {
