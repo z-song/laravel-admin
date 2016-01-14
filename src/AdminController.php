@@ -4,15 +4,25 @@ namespace Encore\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+use Illuminate\View\View;
 
 abstract class AdminController extends Controller
 {
+    protected $title = 'Manage';
+
+    protected $description = 'Optional description';
+
     abstract public function page();
 
     public function index()
     {
-        return $this->page();
+        $page = $this->page();
+
+        if($page instanceof View) {
+            $page->with($this->variables());
+        }
+
+        return $page;
     }
 
     public function show($id)
@@ -50,7 +60,8 @@ abstract class AdminController extends Controller
     protected function variables()
     {
         return [
-            'menu' => config('admin.menu')
+            'title' => $this->title,
+            'description' => $this->description
         ];
     }
 }

@@ -59,27 +59,47 @@ class Builder
         $this->options = array_merge($this->options, $options);
     }
 
+    /**
+     * Determine if form fields has files.
+     *
+     * @return bool
+     */
+    public function hasFile()
+    {
+        foreach($this->fields() as $field) {
+            if($field instanceof Field\File) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Open up a new HTML form.
+     *
+     * @param array $options
+     * @return string
+     */
     public function open($options = [])
     {
         if($this->mode == self::MODE_EDIT) {
-
             $attributes['action'] = $this->form->resource() . '/' . $this->id;
-            $attributes['method'] = array_get($options, 'method', 'post');
-            $attributes['accept-charset'] = 'UTF-8';
-            $attributes['enctype'] = 'multipart/form-data';
-
             $this->form->hidden('_method')->value('PUT');
         }
 
         if($this->mode == self::MODE_CREATE) {
-
             $attributes['action'] = $this->form->resource();
-            $attributes['method'] = array_get($options, 'method', 'post');
-            $attributes['accept-charset'] = 'UTF-8';
-            $attributes['enctype'] = 'multipart/form-data';
         }
 
+        $attributes['method'] = array_get($options, 'method', 'post');
+        $attributes['accept-charset'] = 'UTF-8';
+
         $attributes['class'] = array_get($options, 'class');
+
+        if($this->hasFile()) {
+            $attributes['enctype'] = 'multipart/form-data';
+        }
 
         foreach($attributes as $name => $value) {
             $html[] = "$name=\"$value\"";
@@ -88,8 +108,16 @@ class Builder
         return '<form '.join(' ', $html).'>';
     }
 
+    /**
+     * Close the current form.
+     *
+     * @return string
+     */
     public function close()
     {
+        $this->form = null;
+        $this->fields = null;
+
         return '</form>';
     }
 

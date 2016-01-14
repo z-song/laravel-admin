@@ -1,6 +1,6 @@
 <?php
 
-namespace App\{{$namespace}}\Controllers;
+namespace DummyNamespace;
 
 use Encore\Admin\Facades\Auth;
 use Illuminate\Http\Request;

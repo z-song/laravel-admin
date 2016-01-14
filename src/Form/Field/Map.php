@@ -16,9 +16,8 @@ class Map extends Field
         $this->column['lat']  = $column;
         $this->column['lng']  = $arguments[0];
 
-        $this->label = isset($arguments[1]) ? $arguments[1] : ucfirst($column);
-
-        $this->setId();
+        $this->label  = $this->formatLabel($arguments);
+        $this->id     = $this->formatId($this->column);
     }
 
     public function render()

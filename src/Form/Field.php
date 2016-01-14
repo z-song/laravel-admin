@@ -32,26 +32,45 @@ class Field {
 
     protected $attributes = [];
 
-    public function __construct($column, $arguments = '')
+    public function __construct($column, $arguments = [])
     {
         $this->column = $column;
-
-        $this->label  = isset($arguments[0]) ? $arguments[0] : ucfirst($column);
-
-        $this->setId();
+        $this->label  = $this->formatLabel($arguments);
+        $this->id     = $this->formatId($column);
     }
 
-    public function setId()
+    /**
+     * Format the label value.
+     *
+     * @param array $arguments
+     * @return string
+     */
+    public function formatLabel($arguments = [])
     {
-        if(is_array($this->column)) {
+        $label = isset($arguments[0]) ? $arguments[0] : $this->column;
 
-            foreach($this->column as $key => $column) {
-                $this->id[$key] = str_replace('.', '_', $column);
+        return join(' ', explode('.', $label));
+    }
+
+    /**
+     * Format the field element id.
+     *
+     * @param string|array $columns
+     * @return string|array
+     */
+    public function formatId($columns)
+    {
+        if(is_array($columns)) {
+            $id = [];
+            foreach($columns as $key => $column) {
+                $id[$key] = str_replace('.', '_', $column);
             }
 
         } else {
-            $this->id = str_replace('.', '_', $this->column);
+            $id = str_replace('.', '_', $columns);
         }
+
+        return $id;
     }
 
     public function fill($data)
@@ -84,11 +103,6 @@ class Field {
         $this->original = Arr::get($data, $this->column);
     }
 
-    public function original()
-    {
-        return $this->original;
-    }
-
     public function render()
     {
         Admin::js($this->js);
@@ -99,21 +113,6 @@ class Field {
         $view = 'admin::form.' . strtolower(end($class));
 
         return view($view, $this->variables());
-    }
-
-    public function value($value)
-    {
-        $this->value = $value;
-    }
-
-    public function column()
-    {
-        return $this->column;
-    }
-
-    public function label()
-    {
-        return $this->label;
     }
 
     protected function variables()
@@ -172,6 +171,26 @@ class Field {
         }
 
         $this->rules = $rules;
+    }
+
+    public function value($value)
+    {
+        $this->value = $value;
+    }
+
+    public function column()
+    {
+        return $this->column;
+    }
+
+    public function label()
+    {
+        return $this->label;
+    }
+
+    public function original()
+    {
+        return $this->original;
     }
 
     public function readOnly()

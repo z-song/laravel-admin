@@ -4,7 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
 
-class Email extends Field
+class Url extends Field
 {
-    protected $rules = 'email';
+    protected $rules = 'url';
 }

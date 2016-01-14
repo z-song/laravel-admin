@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-
 /**
  * Class Form
  *

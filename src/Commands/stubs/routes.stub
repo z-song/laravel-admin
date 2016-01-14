@@ -2,7 +2,7 @@
 
 Route::group([
     'prefix'        => config('admin.prefix'),
-    'namespace'     => 'App\{{$namespace}}\Controllers',
+    'namespace'     => 'DummyNamespace',
     'middleware'    => 'admin.auth'
 ], function(){
 

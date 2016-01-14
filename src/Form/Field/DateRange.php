@@ -23,11 +23,10 @@ class DateRange extends Field
         $this->column['start']  = $column;
         $this->column['end']    = $arguments[0];
 
-        $this->label = isset($arguments[1]) ? $arguments[1] : ucfirst($column);
+        $this->label  = $this->formatLabel($arguments);
+        $this->id     = $this->formatId($this->column);
 
         $this->options(['format' => $this->format]);
-
-        $this->setId();
     }
 
     public function render()

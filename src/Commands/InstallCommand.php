@@ -77,7 +77,7 @@ class InstallCommand extends Command
 
     protected function createControllers()
     {
-        $namespace = ucfirst(basename($this->directory));
+        $namespace = 'App\\' . ucfirst(basename($this->directory)) . '\\Controllers';
 
         $this->makedir('Controllers');
 
@@ -85,13 +85,13 @@ class InstallCommand extends Command
 
 
         $contents = $this->getStub('HomeController');
-        $this->laravel['files']->put($homeController, str_replace('{namespace}', $namespace, $contents));
+        $this->laravel['files']->put($homeController, str_replace('DummyNamespace', $namespace, $contents));
         $this->line('<info>HomeController file was created:</info> ' . str_replace(base_path(), '', $homeController));
 
         $authController = $this->directory . '/Controllers/AuthController.php';
 
         $contents = $this->getStub('AuthController');
-        $this->laravel['files']->put($authController, str_replace('{namespace}', $namespace, $contents));
+        $this->laravel['files']->put($authController, str_replace('DummyNamespace', $namespace, $contents));
         $this->line('<info>AuthController file was created:</info> ' . str_replace(base_path(), '', $authController));
     }
 
@@ -107,12 +107,12 @@ class InstallCommand extends Command
 
     protected function createRoutesFile()
     {
-        $namespace = ucfirst(basename($this->directory));
+        $namespace = 'App\\' . ucfirst(basename($this->directory)) . '\\Controllers';
 
         $file = $this->directory . '/routes.php';
 
         $contents = $this->laravel['files']->get(__DIR__ . '/stubs/routes.stub');
-        $this->laravel['files']->put($file, str_replace('{namespace}', $namespace, $contents));
+        $this->laravel['files']->put($file, str_replace('DummyNamespace', $namespace, $contents));
         $this->line('<info>Routes file was created:</info> ' . str_replace(base_path(), '', $file));
     }
 

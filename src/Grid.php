@@ -34,6 +34,8 @@ class Grid {
 
     protected $builded = false;
 
+    protected $viewVariables = [];
+
     protected $options = [
         'title' => 'list'
     ];
@@ -240,11 +242,18 @@ class Grid {
             $this->build();
         }
 
-        return view('admin::grid', ['grid' => $this])->render();
+        return view('admin::grid', ['grid' => $this])->with($this->viewVariables)->render();
     }
 
     public function __toString()
     {
         return $this->render();
+    }
+
+    public function with($variables = [])
+    {
+        $this->viewVariables = $variables;
+
+        return $this;
     }
 }

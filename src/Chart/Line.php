@@ -17,6 +17,9 @@ class Line
         $this->options = $options;
     }
 
+    /**
+     * @return string
+     */
     public function render()
     {
         $data = json_encode($this->data);
