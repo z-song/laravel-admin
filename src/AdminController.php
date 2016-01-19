@@ -4,7 +4,6 @@ namespace Encore\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 abstract class AdminController extends Controller
 {
@@ -18,7 +17,7 @@ abstract class AdminController extends Controller
     {
         $page = $this->page();
 
-        if($page instanceof View) {
+        if($page instanceof Grid) {
             $page->with($this->variables());
         }
 

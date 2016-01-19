@@ -7,8 +7,10 @@ use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Column;
 use Illuminate\Support\Str;
+
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use Encore\Admin\Pagination\AdminThreePresenter;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -37,10 +39,16 @@ class Grid {
     protected $viewVariables = [];
 
     protected $options = [
-        'title' => 'list'
+        'title' => 'List'
     ];
 
-    public function __construct($model, Closure $builder)
+    /**
+     * Create a new grid instance.
+     *
+     * @param Eloquent $model
+     * @param callable $builder
+     */
+    public function __construct(Eloquent $model, Closure $builder)
     {
         $this->model    = new Model($model);
         $this->columns  = new Collection();
@@ -49,11 +57,13 @@ class Grid {
         $this->builder = $builder;
     }
 
-    protected function getTable()
-    {
-        return $this->model->getTable();
-    }
-
+    /**
+     * Add column to Grid.
+     *
+     * @param string $name
+     * @param string $label
+     * @return Column
+     */
     public function column($name, $label = '')
     {
         if(strpos($name, '.') !== false) {
@@ -74,6 +84,8 @@ class Grid {
     }
 
     /**
+     * Batch add column to grid.
+     *
      * @example
      * 1.$grid->columns(['name' => 'Name', 'email' => 'Email' ...]);
      * 2.$grid->columns('name', 'email' ...)
@@ -100,6 +112,13 @@ class Grid {
         }
     }
 
+    /**
+     * Add column to grid.
+     *
+     * @param string $column
+     * @param string $label
+     * @return Column
+     */
     protected function addColumn($column = '', $label = '')
     {
         $label = $label ?: Str::upper($column);
@@ -148,11 +167,20 @@ class Grid {
         return $this;
     }
 
+    /**
+     * Render grid actions for each data item.
+     *
+     * @param $id
+     * @return mixed
+     */
     public function renderActions($id)
     {
         return $this->actions->render($id);
     }
 
+    /**
+     * Build
+     */
     public function build()
     {
         if($this->builded) return;
@@ -193,11 +221,23 @@ class Grid {
         $this->rowsCallable = $callable;
     }
 
-    public function title($title)
+    /**
+     * Set the grid title.
+     *
+     * @param string $title
+     */
+    public function title($title = '')
     {
         $this->option('title', $title);
     }
 
+    /**
+     * Set grid option or get grid option.
+     *
+     * @param string $option
+     * @param string $value
+     * @return mixed
+     */
     public function option($option, $value = '')
     {
         if(empty($value)) {
@@ -207,6 +247,9 @@ class Grid {
         $this->options[$option] = strval($value);
     }
 
+    /**
+     * @return mixed
+     */
     public function resource()
     {
         return app('router')->current()->getPath();

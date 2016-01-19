@@ -64,6 +64,18 @@ class Admin
     }
 
     /**
+     * Get namespace of controllers.
+     *
+     * @return string
+     */
+    public function controllerNamespace()
+    {
+        $directory = config('admin.directory');
+
+        return 'App\\' . ucfirst(basename($directory)) . '\\Controllers';
+    }
+
+    /**
      * @param string $css
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */

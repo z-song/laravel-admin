@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Commands;
 
+use Encore\Admin\Facades\Admin;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 
 class InstallCommand extends Command
 {
@@ -70,59 +70,89 @@ class InstallCommand extends Command
         $this->makedir('/');
         $this->line('<info>Admin directory was created:</info> ' . str_replace(base_path(), '', $this->directory));
 
-        $this->createControllers();
+        $this->makedir('Controllers');
+
+        $this->createHomeController();
+        $this->createAuthController();
+
         $this->createMenuFile();
         $this->createRoutesFile();
     }
 
-    protected function createControllers()
+    /**
+     * Create HomeController.
+     *
+     * @return void
+     */
+    public function createHomeController()
     {
-        $namespace = 'App\\' . ucfirst(basename($this->directory)) . '\\Controllers';
-
-        $this->makedir('Controllers');
-
         $homeController = $this->directory . '/Controllers/HomeController.php';
-
-
         $contents = $this->getStub('HomeController');
-        $this->laravel['files']->put($homeController, str_replace('DummyNamespace', $namespace, $contents));
+
+        $this->laravel['files']->put($homeController, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
         $this->line('<info>HomeController file was created:</info> ' . str_replace(base_path(), '', $homeController));
+    }
 
+    /**
+     * Create AuthController.
+     *
+     * @return void
+     */
+    public function createAuthController()
+    {
         $authController = $this->directory . '/Controllers/AuthController.php';
-
         $contents = $this->getStub('AuthController');
-        $this->laravel['files']->put($authController, str_replace('DummyNamespace', $namespace, $contents));
+
+        $this->laravel['files']->put($authController, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
         $this->line('<info>AuthController file was created:</info> ' . str_replace(base_path(), '', $authController));
     }
 
+    /**
+     * Create menu file.
+     *
+     * @return void
+     */
     protected function createMenuFile()
     {
         $file = $this->directory . '/menu.php';
 
-        $contents = $this->laravel['files']->get(__DIR__ . '/stubs/menu.stub');
+        $contents = $this->getStub('menu');
         $this->laravel['files']->put($file, $contents);
         $this->line('<info>Menu file was created:</info> ' . str_replace(base_path(), '', $file));
-
     }
 
+    /**
+     * Create routes file.
+     *
+     * @return void
+     */
     protected function createRoutesFile()
     {
-        $namespace = 'App\\' . ucfirst(basename($this->directory)) . '\\Controllers';
-
         $file = $this->directory . '/routes.php';
 
-        $contents = $this->laravel['files']->get(__DIR__ . '/stubs/routes.stub');
-        $this->laravel['files']->put($file, str_replace('DummyNamespace', $namespace, $contents));
+        $contents = $this->getStub('routes');
+        $this->laravel['files']->put($file, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
         $this->line('<info>Routes file was created:</info> ' . str_replace(base_path(), '', $file));
     }
 
+    /**
+     * Get stub contents.
+     *
+     * @param $name
+     * @return string
+     */
     protected function getStub($name)
     {
         return $this->laravel['files']->get(__DIR__ . "/stubs/$name.stub");
     }
 
+    /**
+     * Make new directory.
+     *
+     * @param string $path
+     */
     protected function makedir($path = '')
     {
-        $this->laravel['files']->makeDirectory($this->directory . '/' . $path, 0755, true, true);
+        $this->laravel['files']->makeDirectory("{$this->directory}/$path", 0755, true, true);
     }
 }
