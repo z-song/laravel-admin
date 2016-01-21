@@ -67,8 +67,8 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-          {{$title}}
-        <small>{{$description}}</small>
+          {{$title or "title"}}
+        <small>{{$description or "description"}}</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>

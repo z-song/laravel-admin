@@ -17,8 +17,6 @@ class Column {
 
     protected $valueWrapper;
 
-    protected $dataSet = [];
-
     protected $relation = false;
 
     protected $relationColumn;
@@ -59,6 +57,11 @@ class Column {
         return $this;
     }
 
+    public function isRelation()
+    {
+        return (bool) $this->relation;
+    }
+
     public function map($data)
     {
         foreach($data as &$item) {
@@ -77,11 +80,6 @@ class Column {
     public function sortable()
     {
         $this->sortable = true;
-    }
-
-    public function isRelation()
-    {
-        return (bool) $this->relation;
     }
 
     public function __call($method, $arguments)

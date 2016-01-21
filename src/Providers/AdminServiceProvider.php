@@ -3,11 +3,15 @@
 namespace Encore\Admin\Providers;
 
 use Encore\Admin\Auth\AuthManager;
+use Encore\Admin\Routing\Router;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
 class AdminServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array
+     */
     protected $commands = [
         'InstallCommand',
         'MakeCommand',
@@ -23,6 +27,36 @@ class AdminServiceProvider extends ServiceProvider
         'admin.auth' => \Encore\Admin\Middleware\Authenticate::class,
     ];
 
+    /**
+     * Boot the service provider.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->publishes([__DIR__ . '/../../config/config.php' => config_path('admin.php'), ], 'config');
+
+        $this->publishes([__DIR__ . '/../../migrations/' => base_path('/database/migrations'), ], 'migrations');
+
+        if (file_exists($routes = admin_path('routes.php')))
+        {
+            require $routes;
+
+            $this->app['admin.router']->register();
+        }
+
+        if (file_exists($menu = admin_path('menu.php')))
+        {
+            $menu = require $menu;
+            config(['admin.menu' => $menu]);
+        }
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
     public function register()
     {
         $this->loadViewsFrom(__DIR__ .'/../../views', 'admin');
@@ -38,33 +72,45 @@ class AdminServiceProvider extends ServiceProvider
             return new AuthManager($app);
         });
 
+        $this->setupClassAliases();
         $this->registerRouteMiddleware();
-
         $this->registerCommands();
+
+        $this->registerRouter();
     }
 
-    public function boot()
+    /**
+     * Setup the class aliases.
+     *
+     * @return void
+     */
+    protected function setupClassAliases()
     {
-        $this->publishes([
-            __DIR__ . '/../../config/config.php' => config_path('admin.php'),
-        ], 'config');
+        $aliases = [
+//            'admin.grid'    => \Encore\Admin\Grid::class,
+//            'admin.form'    => \Encore\Admin\Form::class,
+//            'admin.chart'   => \Encore\Admin\Chart::class,
 
-        $this->publishes([
-            __DIR__ . '/../../migrations/' => base_path('/database/migrations'),
-        ], 'migrations');
-        
-        if (file_exists($routes = admin_path('routes.php')))
-        {
-            require $routes;
-        }
+            'admin.router'  => \Encore\Admin\Routing\Router::class,
+        ];
 
-        if (file_exists($menu = admin_path('menu.php')))
-        {
-            $menu = require $menu;
-            config(['admin.menu' => $menu]);
+        foreach ($aliases as $key => $alias) {
+            $this->app->alias($key, $alias);
         }
     }
 
+    public function registerRouter()
+    {
+        $this->app->singleton('admin.router', function($app) {
+            return new Router($app['router']);
+        });
+    }
+
+    /**
+     * Register the route middleware.
+     *
+     * @return void
+     */
     protected function registerRouteMiddleware()
     {
         foreach ($this->routeMiddleware as $key => $middleware) {
@@ -72,6 +118,11 @@ class AdminServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Register the commands.
+     *
+     * @return void
+     */
     protected function registerCommands()
     {
         foreach ($this->commands as $command)

@@ -118,7 +118,7 @@ class Field {
     protected function variables()
     {
         $this->variables['id']      = $this->id;
-        $this->variables['name']    = $this->fieldName($this->column);
+        $this->variables['name']    = $this->formatName($this->column);
         $this->variables['value']   = $this->value;
         $this->variables['label']   = $this->label;
         $this->variables['column']  = $this->column;
@@ -127,7 +127,7 @@ class Field {
         return $this->variables;
     }
 
-    public function fieldName($column)
+    protected function formatName($column)
     {
         if(is_string($column)) {
 
@@ -146,7 +146,7 @@ class Field {
         if(is_array($this->column)) {
             $names = [];
             foreach($this->column as $key => $name) {
-                $names[$key] = $this->fieldName($name);
+                $names[$key] = $this->formatName($name);
             }
 
             return $names;

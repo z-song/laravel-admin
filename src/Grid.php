@@ -7,7 +7,6 @@ use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Column;
 use Illuminate\Support\Str;
-
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model as Eloquent;
@@ -16,31 +15,82 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Grid {
 
+    /**
+     * The grid data model instance.
+     *
+     * @var \Encore\Admin\Grid\Model
+     */
     protected $model;
 
+    /**
+     * Collection of all grid columns.
+     *
+     * @var \Illuminate\Support\Collection
+     */
     protected $columns;
 
+    /**
+     * Collection of all data rows.
+     *
+     * @var \Illuminate\Support\Collection
+     */
     protected $rows;
 
-    protected $cells;
+    /**
+     * Rows callable fucntion.
+     *
+     * @var \Closure
+     */
+    protected $rowsCallback;
 
-    protected $rowsCallable;
-
+    /**
+     * All column names of the grid.
+     *
+     * @var array
+     */
     public $columnNames = [];
 
+    /**
+     * Action instance of grid.
+     *
+     * @var \Encore\Admin\Grid\Action
+     */
     protected $actions;
 
-    protected $paginator;
-
+    /**
+     * Grid builder.
+     *
+     * @var \Closure
+     */
     protected $builder;
 
+    /**
+     * Mark if the grid is builded.
+     *
+     * @var bool
+     */
     protected $builded = false;
 
-    protected $viewVariables = [];
+    /**
+     * All variables in grid view.
+     *
+     * @var array
+     */
+    protected $variables = [];
 
-    protected $options = [
-        'title' => 'List'
-    ];
+    /**
+     * Title of the grid.
+     *
+     * @var string
+     */
+    protected $title = 'List';
+
+    /**
+     * The grid Filter.
+     *
+     * @var \Encore\Admin\Filter
+     */
+    protected $filter;
 
     /**
      * Create a new grid instance.
@@ -53,8 +103,9 @@ class Grid {
         $this->model    = new Model($model);
         $this->columns  = new Collection();
         $this->rows     = new Collection();
+        $this->builder  = $builder;
 
-        $this->builder = $builder;
+        $this->setupFilter();
     }
 
     /**
@@ -69,7 +120,7 @@ class Grid {
         if(strpos($name, '.') !== false) {
             list($relation, $relationColumn) = explode('.', $name);
 
-            $relation = $this->getModel()->$relation();
+            $relation = $this->model()->eloquent()->$relation();
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
         }
@@ -137,22 +188,25 @@ class Grid {
     }
 
     /**
-     * Get eloquent model.
+     * Paginate the grid.
      *
-     * @return mixed
+     * @param int $perPage
+     * @return void
      */
-    protected function getModel()
+    public function paginate($perPage = null)
     {
-        return $this->model->getModel();
+        $this->model()->paginate($perPage);
     }
 
     /**
+     * Get the grid paginator.
+     *
      * @return mixed
      */
-    public function pageRender()
+    public function paginator()
     {
-        return $this->getModel()->render(
-            new AdminThreePresenter($this->getModel())
+        return $this->model()->eloquent()->render(
+            new AdminThreePresenter($this->model()->eloquent())
         );
     }
 
@@ -179,7 +233,9 @@ class Grid {
     }
 
     /**
-     * Build
+     * Build the grid.
+     *
+     * @return void
      */
     public function build()
     {
@@ -187,68 +243,116 @@ class Grid {
 
         call_user_func($this->builder, $this);
 
+        $this->model()->addConditions($this->filter->conditions());
+
         $data  = $this->model()->buildData();
 
-        $names = &$this->columnNames;
-
-        $this->columns->map(function($column) use (&$data, &$names) {
+        $this->columns->map(function($column) use (&$data) {
             $data = $column->map($data);
 
-            $names[] = $column->getName();
+            $this->columnNames[] = $column->getName();
         });
 
-        $this->rows = collect($data)->map(function($val, $key){
-            return new Row($key, $val);
-        });
+        $this->buildRows($data);
 
-        if($this->rowsCallable) {
-            $this->rows->map($this->rowsCallable);
-        }
-
-        if(is_null($this->actions)) {
-            $this->actions();
-        }
+        $this->buildActions();
 
         $this->builded = true;
     }
 
+    /**
+     * Build the grid rows.
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function buildRows(array $data)
+    {
+        $this->rows = collect($data)->map(function($val, $key){
+            return new Row($key, $val);
+        });
+
+        if($this->rowsCallback) {
+            $this->rows->map($this->rowsCallback);
+        }
+    }
+
+    /**
+     * Build grid action if grid action is null.
+     *
+     * @return void
+     */
+    protected function buildActions()
+    {
+        if(is_null($this->actions)) {
+            $this->actions();
+        }
+    }
+
+    /**
+     * Set grid row callback function.
+     *
+     * @param callable $callable
+     * @return Collection
+     */
     public function rows(Closure $callable = null)
     {
         if(is_null($callable)) {
             return $this->rows;
         }
 
-        $this->rowsCallable = $callable;
+        $this->rowsCallback = $callable;
+    }
+
+    /**
+     * Setup grid filter.
+     *
+     * @return void
+     */
+    protected function setupFilter()
+    {
+        $this->filter = new Filter($this->model());
+    }
+
+    /**
+     * Set the grid filter.
+     *
+     * @param callable $callback
+     */
+    public function filter(Closure $callback)
+    {
+        call_user_func($callback, $this->filter);
+    }
+
+    /**
+     * Render the grid filter
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function renderFilter()
+    {
+        return $this->filter->render();
     }
 
     /**
      * Set the grid title.
      *
      * @param string $title
+     * @return string
      */
     public function title($title = '')
     {
-        $this->option('title', $title);
-    }
-
-    /**
-     * Set grid option or get grid option.
-     *
-     * @param string $option
-     * @param string $value
-     * @return mixed
-     */
-    public function option($option, $value = '')
-    {
-        if(empty($value)) {
-            return $this->options[$option];
+        if(func_num_args() == 0) {
+            return $this->title;
         }
 
-        $this->options[$option] = strval($value);
+        $this->title = $title;
     }
 
     /**
-     * @return mixed
+     * Get current resource uri.
+     *
+     * @return string
      */
     public function resource()
     {
@@ -256,20 +360,59 @@ class Grid {
     }
 
     /**
+     * Add variables to grid view.
+     *
+     * @param array $variables
+     * @return $this
+     */
+    public function with($variables = [])
+    {
+        $this->variables = $variables;
+
+        return $this;
+    }
+
+    /**
+     * Get all variables will used in grid view.
+     *
+     * @return array
+     */
+    protected function variables()
+    {
+        $this->variables['grid'] = $this;
+
+        return $this->variables;
+    }
+
+    /**
+     * Get the string contents of the grid view.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $this->build();
+
+        return view('admin::grid', $this->variables())->render();
+    }
+
+    /**
+     * Dynamically add columns to the grid view.
+     *
      * @param $method
      * @param $arguments
      * @return $this|Column
      */
     public function __call($method, $arguments)
     {
-        if(Schema::hasColumn($this->getModel()->getTable(), $method))
+        if(Schema::hasColumn($this->model()->getTable(), $method))
         {
             $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
             return $this->addColumn($method, $label);
         }
 
-        $relation = $this->getModel()->$method();
+        $relation = $this->model()->eloquent()->$method();
 
         if($relation instanceof Relation) {
 
@@ -279,24 +422,13 @@ class Grid {
         }
     }
 
-    public function render()
-    {
-        if(! $this->builded) {
-            $this->build();
-        }
-
-        return view('admin::grid', ['grid' => $this])->with($this->viewVariables)->render();
-    }
-
+    /**
+     * Get the string contents of the grid view.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->render();
-    }
-
-    public function with($variables = [])
-    {
-        $this->viewVariables = $variables;
-
-        return $this;
     }
 }

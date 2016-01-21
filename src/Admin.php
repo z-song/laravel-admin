@@ -81,11 +81,8 @@ class Admin
      */
     public static function css($css = '')
     {
-        if( ! empty($css)) {
-            if(is_string($css)) self::$css[] = $css;
-            if(is_array($css)) {
-                self::$css = array_merge(self::$css, $css);
-            }
+        if(! empty($css)) {
+            self::$css = array_merge(self::$css, (array) $css);
 
             return ;
         }
@@ -100,10 +97,7 @@ class Admin
     public static function js($js = '')
     {
         if( ! empty($js)) {
-            if(is_string($js)) self::$js[] = $js;
-            if(is_array($js)) {
-                self::$js = array_merge(self::$js, $js);
-            }
+            self::$js = array_merge(self::$js, (array) $js);
 
             return;
         }
@@ -118,8 +112,7 @@ class Admin
     public static function script($script = '')
     {
         if( ! empty($script)) {
-            if(is_string($script)) self::$script[] = $script;
-            if(is_array($script)) self::$script = $script;
+            self::$script = array_merge(self::$script, (array) $script);
 
             return;
         }
@@ -141,6 +134,11 @@ class Admin
         }
     }
 
+    /**
+     * Get admin title.
+     *
+     * @return Config
+     */
     public function title()
     {
         return config('admin.title');

@@ -21,7 +21,7 @@ abstract class AdminController extends Controller
             $page->with($this->variables());
         }
 
-        return $page;
+        return $page->render();
     }
 
     public function show($id)
