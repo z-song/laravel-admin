@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Filter;
 
-class Like extends AbstractFilter
+class Lt extends AbstractFilter
 {
     public function condition($inputs)
     {
@@ -10,6 +10,6 @@ class Like extends AbstractFilter
 
         $this->value = $inputs[$this->column];
 
-        return $this->buildCondition($this->column, 'like', "%{$this->value}%");
+        return $this->buildCondition($this->column, '<=', $this->value);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Filter;
 
-class Is extends AbstractFiled
+class Is extends AbstractFilter
 {
 
 }

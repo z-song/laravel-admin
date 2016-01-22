@@ -2,17 +2,29 @@
 
 namespace Encore\Admin;
 
-use Encore\Admin\Filter\Is;
-use Encore\Admin\Filter\Like;
+use ReflectionClass;
 use Encore\Admin\Grid\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Input;
+use Encore\Admin\Filter\AbstractFilter;
 
+/**
+ * Class Filter
+ *
+ * @method Filter     is($column, $label = '')
+ * @method Filter     like($column, $label = '')
+ * @method Filter     gt($column, $label = '')
+ * @method Filter     lt($column, $label = '')
+ * @method Filter     between($column, $label = '')
+ *
+ * @package Encore\Admin
+ */
 class Filter
 {
     protected $model;
 
-    protected $fields = [];
+    protected $filters = [];
+
+    protected $allows = ['is', 'like', 'gt', 'lt', 'between'];
 
     public function __construct(Model $model)
     {
@@ -20,70 +32,79 @@ class Filter
 
         $this->is($this->model->getKeyName());
     }
-    
-    public function is($column, $label = '')
-    {
-        $this->addField(new Is($column, $label));
-
-        return $this;
-    }
-
-    public function like($column, $label = '')
-    {
-        $this->addField(new Like($column, $label));
-
-        return $this;
-    }
-
-    public function between($column, $label = '')
-    {
-
-    }
-
-    public function gt($column, $label = '')
-    {
-
-    }
-
-    public function lt($column, $label = '')
-    {
-
-    }
-
-    protected function addField($field)
-    {
-        $this->fields[] = $field;
-    }
-
-    protected function fields()
-    {
-        return $this->fields;
-    }
 
     /**
-     * Get all conditions of the filter fields.
+     * Get all conditions of the filters.
      *
      * @return array
      */
     public function conditions()
     {
         $inputs = array_filter(Input::all());
-        $inputs = Arr::dot($inputs);
 
         $conditions = [];
 
-        foreach($this->fields() as $field) {
-            $conditions[] = $field->condition($inputs);
+        foreach($this->filters() as $filter) {
+            $conditions[] = $filter->condition($inputs);
         }
 
         return array_filter($conditions);
     }
 
-    public function render()
+    /**
+     * Add a filter to grid.
+     *
+     * @param AbstractFilter $filter
+     * @return void
+     */
+    protected function addFilter(AbstractFilter $filter)
     {
-        return view('admin::filter')->with(['fields' => $this->fields()]);
+        return $this->filters[] = $filter;
     }
 
+    /**
+     * Get all filters.
+     *
+     * @return array
+     */
+    protected function filters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * Get the string contents of the filter view.
+     *
+     * @return \Illuminate\View\View|string
+     */
+    public function render()
+    {
+        return view('admin::filter')->with(['filters' => $this->filters()]);
+    }
+
+    /**
+     * Generate a filter object and add to grid.
+     *
+     * @param string    $method
+     * @param array     $arguments
+     * @return $this
+     */
+    public function __call($method, $arguments)
+    {
+        if(in_array($method, $this->allows)) {
+
+            $className = '\\Encore\\Admin\\Filter\\'.ucfirst($method);
+            $reflection = new ReflectionClass($className);
+
+            return $this->addFilter($reflection->newInstanceArgs($arguments));
+        }
+    }
+
+    /**
+     * Get the string contents of the filter view.
+     *
+     * @return \Illuminate\View\View|string
+     */
     public function __toString()
     {
         return $this->render();

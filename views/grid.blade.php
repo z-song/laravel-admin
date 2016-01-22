@@ -6,13 +6,11 @@
             <h3 class="box-title">{{$grid->title()}}</h3>
 
             <div class="box-tools">
-
-                <div class="btn-group pull-right" style="margin-left: 10px">
+                {!! $grid->renderFilter() !!}
+                <div class="btn-group pull-right" style="margin-right: 10px">
                     <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">新增</a>
                     <a href="/{{$grid->resource()}}/export" class="btn btn-sm btn-primary">导出</a>
                 </div>
-
-                {!! $grid->renderFilter() !!}
 
             </div>
         </div>

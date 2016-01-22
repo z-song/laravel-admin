@@ -2,8 +2,8 @@
     <form action="" method="get">
         <fieldset>
 
-            @foreach($fields as $field)
-                {!! $field->render() !!}
+            @foreach($filters as $filter)
+                {!! $filter->render() !!}
             @endforeach
 
             <div class="input-group input-group-sm">
