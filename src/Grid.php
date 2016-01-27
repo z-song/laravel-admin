@@ -243,9 +243,7 @@ class Grid {
 
         call_user_func($this->builder, $this);
 
-        $this->model()->addConditions($this->filter->conditions());
-
-        $data  = $this->model()->buildData();
+        $data = $this->filter->execute();
 
         $this->columns->map(function($column) use (&$data) {
             $data = $column->map($data);

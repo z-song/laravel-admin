@@ -2,13 +2,15 @@
 
 namespace Encore\Admin\Filter;
 
-use Encore\Admin\Filter\Field\Text;
 use Illuminate\Support\Arr;
-use Encore\Admin\Filter\Field\Date;
+use Encore\Admin\Filter\Field\Text;
 use Encore\Admin\Filter\Field\Select;
+use Encore\Admin\Filter\Field\DateTime;
 
 abstract class AbstractFilter
 {
+    protected $id;
+
     protected $label;
 
     protected $value;
@@ -23,15 +25,27 @@ abstract class AbstractFilter
     {
         $this->column = $column;
         $this->label  = $this->formatLabel($label);
+        $this->id     = $this->formatId($column);
 
         $this->setupField();
     }
 
+    /**
+     * Setup field
+     *
+     * @return void
+     */
     public function setupField()
     {
         $this->field = new Text();
     }
 
+    /**
+     * Format label.
+     *
+     * @param string $label
+     * @return string
+     */
     protected function formatLabel($label)
     {
         if(empty($label)) {
@@ -41,6 +55,12 @@ abstract class AbstractFilter
         return str_replace('.', ' ', $label);
     }
 
+    /**
+     * Format name.
+     *
+     * @param string $column
+     * @return string
+     */
     protected function formatName($column)
     {
         $columns = explode('.', $column);
@@ -55,11 +75,38 @@ abstract class AbstractFilter
         return $name;
     }
 
+    /**
+     * Format id.
+     *
+     * @param $columns
+     * @return array|string
+     */
+    public function formatId($columns)
+    {
+        if(is_array($columns)) {
+            $id = [];
+            foreach($columns as $key => $column) {
+                $id[$key] = str_replace('.', '_', $column);
+            }
+
+        } else {
+            $id = str_replace('.', '_', $columns);
+        }
+
+        return $id;
+    }
+
+    /**
+     * Get query condition from filter.
+     *
+     * @param array $inputs
+     * @return array|mixed|null
+     */
     public function condition($inputs)
     {
         $value = Arr::get($inputs, $this->column);
 
-        if(is_null($value)) {
+        if(empty($value)) {
             return null;
         }
 
@@ -73,9 +120,9 @@ abstract class AbstractFilter
         $this->setField(new Select($options));
     }
 
-    public function date()
+    public function datetime()
     {
-        $this->setField(new Date());
+        $this->setField(new DateTime($this));
     }
 
     protected function setField($field)
@@ -88,11 +135,17 @@ abstract class AbstractFilter
         return $this->field;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     protected function buildCondition()
     {
         $column = explode('.', $this->column);
 
         if(count($column) == 1) {
+
             return [$this->query => func_get_args()];
         }
 
@@ -110,16 +163,30 @@ abstract class AbstractFilter
         }]];
     }
 
+    protected function fieldVars()
+    {
+        $vars = [];
+
+        foreach($this->field() as $field) {
+            if(method_exists($field, 'variables')) {
+                $vars += $field->variables();
+            }
+        }
+
+        return $vars;
+    }
+
     protected function variables()
     {
         $variables = [
+            'id'    => $this->id,
             'name'  => $this->formatName($this->column),
             'label' => $this->label,
             'value' => $this->value,
             'field' => $this->field(),
         ];
 
-        return array_merge($variables, $this->field()->variables());
+        return array_merge($variables, $this->fieldVars());
     }
 
     public function render()

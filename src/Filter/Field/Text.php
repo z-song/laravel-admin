@@ -9,8 +9,13 @@ class Text
         return [];
     }
 
-    public function __toString()
+    public function name()
     {
         return 'text';
+    }
+
+    public function __toString()
+    {
+        return view('admin::filter.text');
     }
 }

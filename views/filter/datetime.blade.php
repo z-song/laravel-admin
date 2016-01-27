@@ -1,0 +1,1 @@
+<input type="text" class="form-control" id="{{$id}}" placeholder="{{$label}}" name="{{$name}}" value="{{ Input::get($name, $value) }}">

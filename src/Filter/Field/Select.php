@@ -22,8 +22,13 @@ class Select
         return ['options' => $this->options];
     }
 
-    public function __toString()
+    public function name()
     {
         return 'select';
+    }
+
+    public function __toString()
+    {
+        return view('admin::filter.select');
     }
 }

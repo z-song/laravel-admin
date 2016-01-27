@@ -2,10 +2,33 @@
 
 namespace Encore\Admin\Filter;
 
+
+
 use Illuminate\Support\Arr;
+use Encore\Admin\Filter\Field\Text;
+use Encore\Admin\Filter\Field\DateTime;
 
 class Between extends AbstractFilter
 {
+    protected $field = [];
+
+    /**
+     * Setup field
+     *
+     * @return void
+     */
+    public function setupField()
+    {
+        $this->field['start'] = new Text();
+        $this->field['end'] = new Text();
+    }
+
+    public function datetime()
+    {
+        $this->field['start'] = new DateTime($this);
+        $this->field['end'] = new DateTime($this);
+    }
+
     protected function formatName($column)
     {
         $columns = explode('.', $column);

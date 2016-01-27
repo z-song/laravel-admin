@@ -28,9 +28,9 @@ class Filter
 
     public function __construct(Model $model)
     {
-        $this->model = $model->eloquent();
+        $this->model = $model;
 
-        $this->is($this->model->getKeyName());
+        //$this->is($this->model->eloquent()->getKeyName());
     }
 
     /**
@@ -70,6 +70,18 @@ class Filter
     protected function filters()
     {
         return $this->filters;
+    }
+
+    /**
+     * Execute the filter with conditions.
+     *
+     * @return array
+     */
+    public function execute()
+    {
+        $this->model->addConditions($this->conditions());
+
+        return $this->model->buildData();
     }
 
     /**

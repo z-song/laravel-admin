@@ -244,7 +244,12 @@ class Form {
                         $relation->sync($prepared[$name]);
                         break;
                     case \Illuminate\Database\Eloquent\Relations\HasOne::class :
-                        $relation->getRelated()->update($prepared[$name]);
+
+                        foreach($prepared[$name] as $column => $value) {
+                            $this->model->$name->setAttribute($column, $value);
+                        }
+
+                        $this->model->$name->save();
                         break;
                 }
             }
