@@ -19,7 +19,7 @@
             <table class="table table-hover">
                 <tr>
                     @foreach($grid->columns() as $column)
-                    <th>{{$column->getLabel()}}</th>
+                    <th>{{$column->getLabel()}}{!!$column->sorter()!!}</th>
                     @endforeach
                     <th>操作</th>
                 </tr>

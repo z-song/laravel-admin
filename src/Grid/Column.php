@@ -82,6 +82,13 @@ class Column {
         $this->sortable = true;
     }
 
+    public function sorter()
+    {
+        if($this->sortable) {
+            return '<a class="fa fa-fw fa-sort" href="?_sort=id,desc"></a>';
+        }
+    }
+
     public function __call($method, $arguments)
     {
         if($this->isRelation()) {
