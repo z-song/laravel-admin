@@ -55,7 +55,7 @@ class Filter
      * Add a filter to grid.
      *
      * @param AbstractFilter $filter
-     * @return void
+     * @return AbstractFilter
      */
     protected function addFilter(AbstractFilter $filter)
     {

@@ -13,9 +13,4 @@ class Text
     {
         return 'text';
     }
-
-    public function __toString()
-    {
-        return view('admin::filter.text');
-    }
 }

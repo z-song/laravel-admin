@@ -47,9 +47,4 @@ class DateTime
     {
         return 'datetime';
     }
-
-    public function __toString()
-    {
-        return view('admin::filter.datetime');
-    }
 }

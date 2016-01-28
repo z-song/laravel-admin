@@ -26,9 +26,4 @@ class Select
     {
         return 'select';
     }
-
-    public function __toString()
-    {
-        return view('admin::filter.select');
-    }
 }

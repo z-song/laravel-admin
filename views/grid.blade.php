@@ -9,7 +9,7 @@
                 {!! $grid->renderFilter() !!}
                 <div class="btn-group pull-right" style="margin-right: 10px">
                     <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">新增</a>
-                    <a href="/{{$grid->resource()}}/export" class="btn btn-sm btn-primary">导出</a>
+                    {{--<a href="/{{$grid->resource()}}/export" class="btn btn-sm btn-primary">导出</a>--}}
                 </div>
 
             </div>

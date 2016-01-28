@@ -49,7 +49,7 @@ class Field {
     {
         $label = isset($arguments[0]) ? $arguments[0] : $this->column;
 
-        return join(' ', explode('.', $label));
+        return str_replace(['.', '_'], ' ', ucfirst($label));
     }
 
     /**

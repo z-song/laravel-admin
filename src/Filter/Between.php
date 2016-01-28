@@ -2,51 +2,48 @@
 
 namespace Encore\Admin\Filter;
 
-
-
+use Encore\Admin\Admin;
 use Illuminate\Support\Arr;
-use Encore\Admin\Filter\Field\Text;
-use Encore\Admin\Filter\Field\DateTime;
 
 class Between extends AbstractFilter
 {
-    protected $field = [];
+    protected $view = null;
 
     /**
-     * Setup field
+     * Format id.
      *
-     * @return void
+     * @param string $column
+     * @return array|string
      */
-    public function setupField()
+    public function formatId($column)
     {
-        $this->field['start'] = new Text();
-        $this->field['end'] = new Text();
+        $id = str_replace('.', '_', $column);
+
+        return ['start' => "{$id}_start", 'end' => "{$id}_end"];
     }
 
-    public function datetime()
-    {
-        $this->field['start'] = new DateTime($this);
-        $this->field['end'] = new DateTime($this);
-    }
-
+    /**
+     * Format two field names of this filter.
+     *
+     * @param string $column
+     * @return array
+     */
     protected function formatName($column)
     {
         $columns = explode('.', $column);
 
         if(count($columns) == 1) {
-            return [
-                'start' => $columns[0]['start'],
-                'end' => $columns[0]['end']
-            ];
+            $name = $columns[0];
+        } else {
+
+            $name = array_shift($columns);
+
+            foreach($columns as $column) {
+                $name .= "[$column]";
+            }
         }
 
-        $name = array_shift($columns);
-
-        foreach($columns as $column) {
-            $name .= "[$column]";
-        }
-
-        return ['start' => $name.'[start]', 'end' => $name.'[end]'];
+        return ['start' => "{$name}[start]", 'end' => "{$name}[end]"];
     }
 
     public function condition($inputs)
@@ -74,5 +71,56 @@ class Between extends AbstractFilter
         $this->query = 'whereBetween';
 
         return $this->buildCondition($this->column, $this->value);
+    }
+
+    public function datetime()
+    {
+        $this->view = 'admin::filter.betweenDatetime';
+
+        $this->prepareForDatetime();
+    }
+
+    protected function prepareForDatetime()
+    {
+        $css = [
+            'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
+        ];
+
+        $js = [
+            'moment/min/moment.min.js',
+            'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+        ];
+
+        $options['format'] = 'YYYY-MM-DD HH:mm:ss';
+        $options['locale'] = 'zh-cn';
+
+        $startOptions = json_encode($options);
+        $endOptions = json_encode($options + ['useCurrent' =>false]);
+
+        $script = <<<EOT
+            $('#{$this->id['start']}').datetimepicker($startOptions);
+            $('#{$this->id['end']}').datetimepicker($endOptions);
+            $("#{$this->id['start']}").on("dp.change", function (e) {
+                $('#{$this->id['end']}').data("DateTimePicker").minDate(e.date);
+            });
+            $("#{$this->id['end']}").on("dp.change", function (e) {
+                $('#{$this->id['start']}').data("DateTimePicker").maxDate(e.date);
+            });
+EOT;
+
+        $js[] = "moment/locale/{$options['locale']}.js";
+
+        Admin::js($js);
+        Admin::css($css);
+        Admin::script($script);
+    }
+
+    public function render()
+    {
+        if(isset($this->view)) {
+            return view($this->view, $this->variables());
+        }
+
+        return parent::render();
     }
 }

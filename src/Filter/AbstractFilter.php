@@ -83,17 +83,7 @@ abstract class AbstractFilter
      */
     public function formatId($columns)
     {
-        if(is_array($columns)) {
-            $id = [];
-            foreach($columns as $key => $column) {
-                $id[$key] = str_replace('.', '_', $column);
-            }
-
-        } else {
-            $id = str_replace('.', '_', $columns);
-        }
-
-        return $id;
+        return str_replace('.', '_', $columns);
     }
 
     /**
@@ -165,15 +155,11 @@ abstract class AbstractFilter
 
     protected function fieldVars()
     {
-        $vars = [];
-
-        foreach($this->field() as $field) {
-            if(method_exists($field, 'variables')) {
-                $vars += $field->variables();
-            }
+        if(method_exists($this->field(), 'variables')) {
+            return $this->field()->variables();
         }
 
-        return $vars;
+        return [];
     }
 
     protected function variables()
