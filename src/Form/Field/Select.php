@@ -33,9 +33,4 @@ class Select extends Field
 
         return $this;
     }
-
-    public function prepare(array $value)
-    {
-        return array_filter($value);
-    }
 }

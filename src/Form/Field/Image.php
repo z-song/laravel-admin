@@ -51,6 +51,8 @@ class Image extends File
 
         $target = $image->move($this->directory, $this->name);
 
+        $this->destroy();
+
         if( ! empty($this->size))
         {
             $image = ImageManagerStatic::make($target);

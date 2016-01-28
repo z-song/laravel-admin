@@ -25,4 +25,9 @@ class MultipleSelect extends Select
             $this->original[] = array_pop($relation['pivot']);
         }
     }
+
+    public function prepare(array $value)
+    {
+        return array_filter($value);
+    }
 }

@@ -5,6 +5,8 @@ namespace Encore\Admin\Grid;
 use Illuminate\Support\Arr;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Str;
 
 class Model
 {
@@ -21,6 +23,8 @@ class Model
      * @var array
      */
     protected $queries = [];
+
+    protected $sort;
 
     /**
      * Create a new grid model instance.
@@ -82,6 +86,7 @@ class Model
             return $this->model;
         }
 
+        $this->setSort();
         $this->setPaginate();
 
         foreach($this->queries as $method => $arguments)
@@ -102,6 +107,31 @@ class Model
         $paginate = Arr::pull($this->queries, 'paginate');
 
         $this->queries['paginate'] = empty($paginate) ? [20] : $paginate;
+    }
+
+    /**
+     * Set the grid sort.
+     *
+     * @return void
+     */
+    protected function setSort()
+    {
+        $this->sort = Input::get('_sort', []);
+        if(! is_array($this->sort)) return;
+
+        if(empty($this->sort['column']) || empty($this->sort['type'])) return;
+
+        if(Str::contains($this->sort['column'], '.')) {
+            list($relationName, $relationColumn) = explode('.', $this->sort['column']);
+
+            if(isset($this->queries['with']) && in_array($relationName, $this->queries['with'])) {
+                $this->queries['with'][$relationName] = function($relation) use ($relationColumn) {
+                    $relation->orderBy($relationColumn, 'desc');
+                };
+            }
+        }
+
+        $this->queries['orderBy'] = [$this->sort['column'], $this->sort['type']];
     }
 
     public function __call($method, $arguments)

@@ -6,6 +6,7 @@ use Encore\Admin\Grid\Action;
 use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Column;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
@@ -118,9 +119,9 @@ class Grid {
     public function column($name, $label = '')
     {
         if(strpos($name, '.') !== false) {
-            list($relation, $relationColumn) = explode('.', $name);
+            list($relationName, $relationColumn) = explode('.', $name);
 
-            $relation = $this->model()->eloquent()->$relation();
+            $relation = $this->model()->eloquent()->$relationName();
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
         }
@@ -128,6 +129,7 @@ class Grid {
         $column = $this->addColumn($name, $label);
 
         if($relation instanceof Relation) {
+            $this->model()->with($relationName);
             $column->setRelation($relation, $relationColumn);
         }
 
@@ -172,7 +174,7 @@ class Grid {
      */
     protected function addColumn($column = '', $label = '')
     {
-        $label = $label ?: Str::upper($column);
+        //$label = $label ?: Str::upper($column);
 
         return $this->columns[] = new Column($column, $label);
     }
@@ -205,7 +207,9 @@ class Grid {
      */
     public function paginator()
     {
-        return $this->model()->eloquent()->render(
+        $query = Input::all();
+
+        return $this->model()->eloquent()->appends($query)->render(
             new AdminThreePresenter($this->model()->eloquent())
         );
     }
