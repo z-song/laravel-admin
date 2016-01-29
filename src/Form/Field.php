@@ -47,9 +47,9 @@ class Field {
      */
     public function formatLabel($arguments = [])
     {
-        $label = isset($arguments[0]) ? $arguments[0] : $this->column;
+        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($this->column);
 
-        return str_replace(['.', '_'], ' ', ucfirst($label));
+        return str_replace(['.', '_'], ' ', $label);
     }
 
     /**

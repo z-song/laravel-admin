@@ -2,6 +2,6 @@
     @if(strpos($j, 'http') !== false)
         <script src="{{ $j }}"></script>
     @else
-        <script src="{{ asset ("/bower_components/$j") }}"></script>
+        <script src="{{ asset ("/packages/admin/$j") }}"></script>
     @endif
 @endforeach

@@ -11,9 +11,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.5 -->
-  <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/bootstrap/css/bootstrap.min.css") }}">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset("/bower_components/font-awesome/css/font-awesome.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("/packages/admin/font-awesome/css/font-awesome.min.css") }}">
   <!-- Ionicons -->
   {{--<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">--}}
   <!-- Theme style -->
@@ -22,11 +22,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect.
   -->
-  <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-green.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/skins/" . config('admin.skin') .".min.css") }}">
 
   {!! Admin::css() !!}
 
-  <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -55,7 +55,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-green">
+<body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
 <div class="wrapper">
 
   @include('admin::partials.header')
@@ -98,11 +98,11 @@ desired effect
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 2.1.4 -->
-<script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
 <!-- Bootstrap 3.3.5 -->
-<script src="{{ asset ("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/AdminLTE/dist/js/app.min.js") }}"></script>
 
 {!! Admin::js() !!}
 

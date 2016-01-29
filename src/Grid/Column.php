@@ -114,9 +114,10 @@ class Column {
             $icon .= "-amount-{$this->sort['type']}";
         }
 
-        app('request')->merge(['_sort' => ['column' => $this->name, 'type' => $type]]);
+        $query = app('request')->all();
+        $query = array_merge($query, ['_sort' => ['column' => $this->name, 'type' => $type]]);
 
-        $url = Url::current() . '?' . http_build_query(app('request')->all());
+        $url = Url::current() . '?' . http_build_query($query);
 
         return "<a class=\"fa fa-fw $icon\" href=\"$url\"></a>";
     }

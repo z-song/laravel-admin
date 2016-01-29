@@ -2,11 +2,13 @@
 
 namespace Encore\Admin\Grid;
 
+
 use Illuminate\Support\Arr;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Model
 {
@@ -24,6 +26,11 @@ class Model
      */
     protected $queries = [];
 
+    /**
+     * Sort parameters of the model.
+     *
+     * @var array
+     */
     protected $sort;
 
     /**
@@ -122,16 +129,43 @@ class Model
         if(empty($this->sort['column']) || empty($this->sort['type'])) return;
 
         if(Str::contains($this->sort['column'], '.')) {
-            list($relationName, $relationColumn) = explode('.', $this->sort['column']);
 
-            if(isset($this->queries['with']) && in_array($relationName, $this->queries['with'])) {
-                $this->queries['with'][$relationName] = function($relation) use ($relationColumn) {
-                    $relation->orderBy($relationColumn, 'desc');
-                };
-            }
+            $this->setRelationSort($this->sort['column']);
+
+        } else {
+            $this->queries['orderBy'] = [$this->sort['column'], $this->sort['type']];
         }
+    }
 
-        $this->queries['orderBy'] = [$this->sort['column'], $this->sort['type']];
+    /**
+     * Set relation sort.
+     *
+     * @param string  $column
+     * @return void
+     */
+    protected function setRelationSort($column)
+    {
+        list($relationName, $relationColumn) = explode('.', $column);
+
+        if(isset($this->queries['with']) && in_array($relationName, $this->queries['with'])) {
+
+            $relation = $this->model->$relationName();
+
+            $this->queries['join'] = $this->joinParameters($relation);
+
+            $this->queries['orderBy'] = [$relation->getRelated()->getTable() . '.'. $relationColumn, $this->sort['type']];
+        }
+    }
+
+    /**
+     * Build join parameters.
+     *
+     * @param Relation $relation
+     * @return array
+     */
+    protected function joinParameters(Relation $relation)
+    {
+        return [$relation->getRelated()->getTable(), $relation->getQualifiedParentKeyName(), '=', $relation->getForeignKey()];
     }
 
     public function __call($method, $arguments)
