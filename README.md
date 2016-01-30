@@ -104,7 +104,6 @@ $router->resources([
 `Admin\Grid`用来构建基于bootstarp table的数据列表，在控制器中：
 
 ```php
-
 return Admin::grid(User::class, function(Grid $grid){
 
     $grid->id('ID')->sortable();
