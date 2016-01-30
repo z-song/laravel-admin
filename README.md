@@ -158,7 +158,7 @@ return Admin::grid(User::class, function(Grid $grid){
 
 `Admin\Form`用来构建数据Form，在控制器中：
 
-```
+```php
 return Admin::form(User::class, function(Form $form){
 
     $form->options(['title' => '用户修改']);
