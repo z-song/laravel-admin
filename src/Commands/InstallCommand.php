@@ -33,9 +33,9 @@ class InstallCommand extends Command
      */
     public function fire()
     {
-        $this->call('vendor:publish', ['--provider' => \Encore\Admin\Providers\AdminServiceProvider::class]);
-
         $this->publishDatabase();
+
+        $this->initAdminDirectory();
     }
 
     /**
@@ -48,8 +48,6 @@ class InstallCommand extends Command
         $this->call('migrate', ['--path' => __DIR__  . '/../../migrations/2016_01_04_173148_create_administrators_table.php']);
 
         $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdministratorsTableSeeder::class]);
-
-        $this->initAdminDirectory();
     }
 
     /**

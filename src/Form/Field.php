@@ -73,6 +73,12 @@ class Field {
         return $id;
     }
 
+    /**
+     * Fill data to the field.
+     *
+     * @param $data
+     * @return void
+     */
     public function fill($data)
     {
         if(is_array($this->column))
@@ -88,6 +94,11 @@ class Field {
         $this->value = Arr::get($data, $this->column);
     }
 
+    /**
+     * Set original value to the field.
+     *
+     * @param $data
+     */
     public function setOriginal($data)
     {
         if(is_array($this->column))
@@ -103,6 +114,11 @@ class Field {
         $this->original = Arr::get($data, $this->column);
     }
 
+    /**
+     * Render this filed.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render()
     {
         Admin::js($this->js);
@@ -115,6 +131,11 @@ class Field {
         return view($view, $this->variables());
     }
 
+    /**
+     * Get the view variables of this field.
+     *
+     * @return array
+     */
     protected function variables()
     {
         $this->variables['id']      = $this->id;
@@ -127,6 +148,12 @@ class Field {
         return $this->variables;
     }
 
+    /**
+     * Format the name of the field.
+     *
+     * @param string $column
+     * @return array|mixed|string
+     */
     protected function formatName($column)
     {
         if(is_string($column)) {
@@ -153,6 +180,12 @@ class Field {
         }
     }
 
+    /**
+     * Set the field options.
+     *
+     * @param array $options
+     * @return $this
+     */
     public function options($options = [])
     {
         if($options instanceof Arrayable) {
@@ -164,6 +197,12 @@ class Field {
         return $this;
     }
 
+    /**
+     * Get or set rules.
+     *
+     * @param null $rules
+     * @return string
+     */
     public function rules($rules = null)
     {
         if(is_null($rules)) {
@@ -173,31 +212,60 @@ class Field {
         $this->rules = $rules;
     }
 
+    /**
+     * Set value of the field.
+     *
+     * @param $value
+     * @return void
+     */
     public function value($value)
     {
         $this->value = $value;
     }
 
+    /**
+     * Get column of the field.
+     *
+     * @return string
+     */
     public function column()
     {
         return $this->column;
     }
 
+    /**
+     * Get label of the field.
+     *
+     * @return string
+     */
     public function label()
     {
         return $this->label;
     }
 
+    /**
+     * Get original value of the field.
+     *
+     * @return mixed
+     */
     public function original()
     {
         return $this->original;
     }
 
+    /**
+     * Set the field as readonly mode.
+     */
     public function readOnly()
     {
         $this->attributes['disabled'] = true;
     }
 
+    /**
+     * Format the field attributes.
+     *
+     * @return string
+     */
     protected function formatAttributes()
     {
         $html = [];

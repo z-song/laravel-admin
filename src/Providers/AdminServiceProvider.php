@@ -37,8 +37,6 @@ class AdminServiceProvider extends ServiceProvider
         $this->publishes([__DIR__ . '/../../config/admin.php' => config_path('admin.php'), ], 'config');
         $this->publishes([__DIR__ . '/../../assets' => public_path('packages/admin'), ], 'assets');
 
-        //$this->publishes([__DIR__ . '/../../migrations/' => base_path('/database/migrations'), ], 'migrations');
-
         if (file_exists($routes = admin_path('routes.php')))
         {
             require $routes;

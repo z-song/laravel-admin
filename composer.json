@@ -1,5 +1,5 @@
 {
-    "name": "encore/admin",
+    "name": "encore/laravel-admin",
     "description": "laravel admin",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "chart", "form"],
@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "illuminate/support": "~5.0"
     },
     "autoload": {
         "psr-4": {
