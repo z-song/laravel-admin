@@ -1,9 +1,10 @@
 <?php
 
-namespace Encore\Admin;
+namespace Encore\Admin\Controllers;
 
-use App\Http\Controllers\Controller;
+use Encore\Admin\Grid;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 abstract class AdminController extends Controller
 {

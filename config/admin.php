@@ -2,20 +2,41 @@
 
 return [
 
-    'name'      => 'admin',
-
-    'directory' => app_path('Admin2'),
-
     'prefix'    => 'admin',
 
-    'auth'      => [
-        'model'     => Encore\Admin\Auth\Database\Administrator::class
+    'directory' => app_path('Admin'),
+
+    'title'  => '后台管理',
+
+    'auth' => [
+        'model' => \Encore\Admin\Auth\Database\Administrator::class
     ],
 
-    'upload'    => [
+    'upload'  => [
+        'image'  => base_path('public/upload/image'),
+        'file'   => base_path('public/upload/file'),
+    ],
 
-        'image'     => public_path('upload/images'),
+    /*
+    |---------------------------------------------------------|
+    | SKINS         | skin-blue                               |
+    |               | skin-black                              |
+    |               | skin-purple                             |
+    |               | skin-yellow                             |
+    |               | skin-red                                |
+    |               | skin-green                              |
+    |---------------------------------------------------------|
+     */
+    'skin'    => 'skin-green',
 
-        'file'      => public_path('upload/files'),
-    ]
+    /*
+    |---------------------------------------------------------|
+    |LAYOUT OPTIONS | fixed                                   |
+    |               | layout-boxed                            |
+    |               | layout-top-nav                          |
+    |               | sidebar-collapse                        |
+    |               | sidebar-mini                            |
+    |---------------------------------------------------------|
+     */
+    'layout'  => [],
 ];

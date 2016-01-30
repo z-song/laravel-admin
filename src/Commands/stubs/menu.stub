@@ -5,5 +5,10 @@ return [
         'title' => '首页',
         'url'   => '/',
         'icon'  => 'fa-bar-chart'
-    ]
+    ],
+    [
+        'title' => '管理员',
+        'url'   => '/administrators',
+        'icon'  => 'fa-tasks'
+    ],
 ];

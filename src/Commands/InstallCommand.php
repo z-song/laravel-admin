@@ -33,7 +33,7 @@ class InstallCommand extends Command
      */
     public function fire()
     {
-        //$this->call('vendor:publish', ['--provider' => \Encore\Admin\Providers\AdminServiceProvider::class]);
+        $this->call('vendor:publish', ['--provider' => \Encore\Admin\Providers\AdminServiceProvider::class]);
 
         $this->publishDatabase();
     }
@@ -45,9 +45,9 @@ class InstallCommand extends Command
      */
     public function publishDatabase()
     {
-//        $this->call('migrate');
-//
-//        $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdministratorsTableSeeder::class]);
+        $this->call('migrate', ['--path' => __DIR__  . '/../../migrations/2016_01_04_173148_create_administrators_table.php']);
+
+        $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdministratorsTableSeeder::class]);
 
         $this->initAdminDirectory();
     }
@@ -74,6 +74,7 @@ class InstallCommand extends Command
 
         $this->createHomeController();
         $this->createAuthController();
+        $this->createAdministratorController();
 
         $this->createMenuFile();
         $this->createRoutesFile();
@@ -105,6 +106,20 @@ class InstallCommand extends Command
 
         $this->laravel['files']->put($authController, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
         $this->line('<info>AuthController file was created:</info> ' . str_replace(base_path(), '', $authController));
+    }
+
+    /**
+     * Create AdministratorController.
+     *
+     * @return void
+     */
+    public function createAdministratorController()
+    {
+        $controller = $this->directory . '/Controllers/AdministratorController.php';
+        $contents = $this->getStub('AdministratorController');
+
+        $this->laravel['files']->put($controller, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
+        $this->line('<info>AdministratorController file was created:</info> ' . str_replace(base_path(), '', $controller));
     }
 
     /**

@@ -38,7 +38,7 @@ class Router
         $this->router = $router;
 
         $this->prepareAttributes();
-        $this->setAuthRoute();
+        $this->setAdminRoutes();
     }
 
     /**
@@ -60,9 +60,10 @@ class Router
      *
      * @return void
      */
-    protected function setAuthRoute()
+    protected function setAdminRoutes()
     {
         $this->routes['controllers'][] = [['auth' => 'AuthController']];
+        $this->routes['resources'][] = [['administrators' => 'AdministratorController']];
     }
 
     /**

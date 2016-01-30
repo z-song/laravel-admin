@@ -1,17 +1,11 @@
 <?php
 
-Route::group([
-    'prefix'        => config('admin.prefix'),
-    'namespace'     => 'DummyNamespace',
-    'middleware'    => 'admin.auth'
-], function(){
+$router = app('admin.router');
 
-    Route::resources([
-        'users'         => UserController::class,
-    ]);
-
-    Route::controllers([
-        'auth' => AuthController::class,
-        '/'    => HomeController::class
-    ]);
+$router->get('/', function() {
+    return view('admin::index');
 });
+
+$router->resources([
+    'administrators' => AdministratorController::class
+]);

@@ -4,21 +4,23 @@ namespace DummyNamespace;
 
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use DummyModelNamespace;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Auth\Database\Administrator;
 
-class DummyClass extends AdminController
+class AdministratorController extends AdminController
 {
-    protected $title = 'Manage';
+    protected $title = 'Administrator';
 
-    protected $description = 'Optional description';
+    protected $description = 'Administrator';
 
     public function page()
     {
-        return Admin::grid(DummyModel::class, function(Grid $grid){
+        return Admin::grid(Administrator::class, function(Grid $grid){
 
             $grid->id('ID')->sortable();
+            $grid->username();
+            $grid->name();
 
             $grid->created_at();
             $grid->updated_at();
@@ -27,9 +29,12 @@ class DummyClass extends AdminController
 
     public function form()
     {
-        return Admin::form(DummyModel::class, function(Form $form){
+        return Admin::form(Administrator::class, function(Form $form){
 
             $form->id('id', 'ID');
+
+            $form->text('username');
+            $form->text('name');
 
             $form->dateTime('created_at')->readOnly();
             $form->dateTime('updated_at')->readOnly();
