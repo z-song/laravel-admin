@@ -20,12 +20,13 @@ composer require encore/laravel-admin
 然后把`ServiceProvider`加入`config/app.php`中：
 
 ```
-Encore\Dbconsole\Providers\LaravelServiceProvider::class
+Encore\Admin\Providers\AdminServiceProvider::class
 ```
 
 运行以下命令完成安装：
 
 ```
+php artisan vendor:publish
 php artisan admin:install
 ```
 
@@ -152,3 +153,46 @@ return Admin::grid(User::class, function(Grid $grid){
 });
 
 ```
+
+###Admin\Form
+
+`Admin\Form`用来构建数据Form，在控制器中：
+
+```
+return Admin::form(User::class, function(Form $form){
+
+    $form->options(['title' => '用户修改']);
+    
+    $form->id('id', 'ID');
+    $form->text('name', '用户名')->rules('required');
+    $form->email('email', '邮箱')->rules('required|email');
+    $form->url('profile.homepage', '个人主页');
+
+    $form->ip('profile.last_login_ip', '上次登录ip');
+    $form->datetime('profile.last_login_at', '上次登录时间');
+    $form->color('profile.color', '颜色');
+
+    $form->image('profile.avatar', '头像')/*->size(300, 300)*/;
+    $form->file('profile.document', '文档')->rules('mimes:doc,docx,xlsx');
+    $form->mobile('profile.mobile', '手机号');
+    $form->text('profile.address', '地址');
+    $form->date('profile.birthday', '生日');
+    $form->radio('profile.gender', '性别')->values(['m' => '女', 'f'=> '男']);
+
+    $form->map('profile.lat', 'profile.lng', '位置');
+    $form->slider('profile.age', '年龄')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => '岁']);
+
+    $form->datetime('created_at', '创建时间');
+    $form->datetime('updated_at', '更新时间');
+
+    $form->datetimeRange('profile.created_at', 'profile.updated_at', '时间线');
+
+    $form->multipleSelect('friends', '好友')->options(User::all()->lists('name', 'id'));
+    $form->checkbox('roles', '角色')->values(Role::all()->lists('display_name', 'id'));
+    
+});
+```
+
+#License
+
+[WTFPL](http://www.wtfpl.net/)
