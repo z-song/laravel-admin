@@ -66,7 +66,7 @@ class AdminServiceProvider extends ServiceProvider
             $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
         });
 
-        $this->app->bindShared('admin.auth', function($app)
+        $this->app->singleton('admin.auth', function($app)
         {
             return new AuthManager($app);
         });

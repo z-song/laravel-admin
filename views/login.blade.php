@@ -40,7 +40,7 @@
           @endforeach
         @endif
 
-        <input type="input" class="form-control" placeholder="账号" name="username" value="{{ Input::old('username') }}">
+        <input type="input" class="form-control" placeholder="账号" name="username" value="{{ old('username') }}">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
@@ -51,19 +51,20 @@
           @endforeach
         @endif
 
-        <input type="password" class="form-control" placeholder="密码" name="password" value="{{ Input::old('username') }}">
+        <input type="password" class="form-control" placeholder="密码" name="password" value="{{ old('username') }}">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">
             <label>
-              <input type="checkbox" name="remember"> Remember Me
+              <input type="checkbox" name="remember"> 记住我
             </label>
           </div>
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <button type="submit" class="btn btn-primary btn-block btn-flat">登陆</button>
         </div>
         <!-- /.col -->

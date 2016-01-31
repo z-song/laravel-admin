@@ -473,7 +473,7 @@ class Form {
         $route = app('router')->current();
         $prefix = $route->getPrefix();
 
-        $resource = trim(str_replace($prefix, '', $route->getUri()), '/') . '/';
+        $resource = trim(preg_replace("/$prefix/", '', $route->getUri(), 1), '/') . '/';
 
         return Admin::url(substr($resource, 0, strpos($resource, '/')));
     }

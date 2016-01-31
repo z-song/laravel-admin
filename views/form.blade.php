@@ -18,6 +18,7 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 {!! $form->back() !!}
                 {!! $form->submit() !!}
             </div>

@@ -8,7 +8,7 @@
 
         <select class="form-control " style="width: 100%;" id="{{$id}}" name="{{$name}}">
             @foreach($options as $select => $option)
-                <option value="{{$select}}" {{ $select == Input::old($column, $value) ?'selected':'' }}>{{$option}}</option>
+                <option value="{{$select}}" {{ $select == old($column, $value) ?'selected':'' }}>{{$option}}</option>
             @endforeach
         </select>
     </div>

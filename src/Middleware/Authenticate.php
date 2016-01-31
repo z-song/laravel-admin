@@ -35,7 +35,7 @@ class Authenticate
     {
         $excepts = [
             Admin::url('auth/login'),
-            Admin::url('ayth/logout'),
+            Admin::url('auth/logout'),
         ];
 
         foreach ($excepts as $except) {

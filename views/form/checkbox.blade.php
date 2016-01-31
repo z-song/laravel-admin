@@ -7,7 +7,7 @@
         @include('admin::form.error')
 
         @foreach($values as $option => $label)
-        <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$id}}" {{ in_array($option, (array)Input::old($column, $value))?'checked':'' }}>&nbsp;{{$label}}&nbsp;&nbsp;
+        <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$id}}" {{ in_array($option, (array)old($column, $value))?'checked':'' }}>&nbsp;{{$label}}&nbsp;&nbsp;
         @endforeach
 
         <input type="hidden" name="{{$name}}[]">

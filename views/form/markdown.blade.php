@@ -6,6 +6,6 @@
 
         @include('admin::form.error')
 
-        <textarea id="{{$id}}" name="{{$name}}" class="form-control" data-provide="markdown" >{{Input::old($column, $value)}}</textarea>
+        <textarea id="{{$id}}" name="{{$name}}" class="form-control" data-provide="markdown" >{{ old($column, $value) }}</textarea>
     </div>
 </div>

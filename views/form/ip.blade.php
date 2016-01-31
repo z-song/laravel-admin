@@ -10,7 +10,7 @@
             <div class="input-group-addon">
                 <i class="fa fa-laptop"></i>
             </div>
-            <input type="text" id="{{$id}}" name="{{$name}}" value="{{Input::old($column, $value)}}"  class="form-control" data-inputmask="'alias': 'ip'" data-mask placeholder="输入{{$label}}">
+            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}"  class="form-control" data-inputmask="'alias': 'ip'" data-mask placeholder="输入{{$label}}">
         </div>
     </div>
 </div>
