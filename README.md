@@ -14,7 +14,11 @@
 # 安装
 
 ```
-composer require encore/laravel-admin
+//laravel 5.1
+composer require encore/laravel-admin "1.1.*"
+
+//laravel 5.2
+composer require encore/laravel-admin "1.2.*"
 ```
 
 然后把`ServiceProvider`加入`config/app.php`中：
