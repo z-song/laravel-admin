@@ -1,26 +1,27 @@
 {
-    "name": "encore/laravel-admin",
-    "description": "laravel admin",
-    "type": "library",
-    "keywords": ["laravel", "admin", "grid", "chart", "form"],
-    "homepage": "https://github.com/z-song/laravel-admin",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "zsong",
-            "email": "zosong@126.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "~5.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Encore\\Admin\\": "src/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+  "name": "encore/laravel-admin",
+  "description": "laravel admin",
+  "type": "library",
+  "keywords": ["laravel", "admin", "grid", "chart", "form"],
+  "homepage": "https://github.com/z-song/laravel-admin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "zsong",
+      "email": "zosong@126.com"
     }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "illuminate/support": "~5.0",
+    "intervention/image" : "~2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Encore\\Admin\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  }
 }

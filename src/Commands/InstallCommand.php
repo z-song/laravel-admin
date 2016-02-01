@@ -45,7 +45,7 @@ class InstallCommand extends Command
      */
     public function publishDatabase()
     {
-        $this->call('migrate', ['--path' => __DIR__  . '/../../migrations/2016_01_04_173148_create_administrators_table.php']);
+        $this->call('migrate', ['--path' => str_replace(base_path(), '', __DIR__) . '/../../migrations/']);
 
         $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdministratorsTableSeeder::class]);
     }

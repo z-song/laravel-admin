@@ -8,20 +8,21 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-            {!! $form->open(['class' => "form-horizontal"]) !!}
-            <div class="box-body">
+        {!! $form->open(['class' => "form-horizontal"]) !!}
+        <div class="box-body">
 
-                @foreach($form->fields() as $field)
-                    {!! $field->render() !!}
-                @endforeach
+            @foreach($form->fields() as $field)
+                {!! $field->render() !!}
+            @endforeach
 
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-                {!! $form->back() !!}
-                {!! $form->submit() !!}
-            </div>
-            <!-- /.box-footer -->
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            {!! $form->back() !!}
+            {!! $form->submit() !!}
+        </div>
+        <!-- /.box-footer -->
         {!! $form->close() !!}
     </div>
     <!-- /.box -->
