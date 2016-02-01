@@ -14,6 +14,8 @@ class Field {
 
     protected $original;
 
+    protected $default;
+
     protected $label    = '';
 
     protected $column   = '';
@@ -40,112 +42,27 @@ class Field {
     }
 
     /**
+     * Format the field element id.
+     *
+     * @param string|array $column
+     * @return string|array
+     */
+    protected function formatId($column)
+    {
+        return str_replace('.', '_', $column);
+    }
+
+    /**
      * Format the label value.
      *
      * @param array $arguments
      * @return string
      */
-    public function formatLabel($arguments = [])
+    protected function formatLabel($arguments = [])
     {
         $label = isset($arguments[0]) ? $arguments[0] : ucfirst($this->column);
 
         return str_replace(['.', '_'], ' ', $label);
-    }
-
-    /**
-     * Format the field element id.
-     *
-     * @param string|array $columns
-     * @return string|array
-     */
-    public function formatId($columns)
-    {
-        if(is_array($columns)) {
-            $id = [];
-            foreach($columns as $key => $column) {
-                $id[$key] = str_replace('.', '_', $column);
-            }
-
-        } else {
-            $id = str_replace('.', '_', $columns);
-        }
-
-        return $id;
-    }
-
-    /**
-     * Fill data to the field.
-     *
-     * @param $data
-     * @return void
-     */
-    public function fill($data)
-    {
-        if(is_array($this->column))
-        {
-            foreach($this->column as $key => $column)
-            {
-                $this->value[$key] = Arr::get($data, $column);
-            }
-
-            return;
-        }
-
-        $this->value = Arr::get($data, $this->column);
-    }
-
-    /**
-     * Set original value to the field.
-     *
-     * @param $data
-     */
-    public function setOriginal($data)
-    {
-        if(is_array($this->column))
-        {
-            foreach($this->column as $key => $column)
-            {
-                $this->original[$key] = Arr::get($data, $column);
-            }
-
-            return;
-        }
-
-        $this->original = Arr::get($data, $this->column);
-    }
-
-    /**
-     * Render this filed.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function render()
-    {
-        Admin::js($this->js);
-        Admin::css($this->css);
-        Admin::script($this->script);
-
-        $class = explode('\\', get_called_class());
-        $view = 'admin::form.' . strtolower(end($class));
-
-        return view($view, $this->variables());
-    }
-
-    /**
-     * Get the view variables of this field.
-     *
-     * @return array
-     */
-    protected function variables()
-    {
-        $this->variables['id']      = $this->id;
-        $this->variables['name']    = $this->formatName($this->column);
-        $this->variables['value']   = $this->value;
-        $this->variables['label']   = $this->label;
-        $this->variables['column']  = $this->column;
-        $this->variables['attributes']  = $this->formatAttributes();
-
-        return $this->variables;
     }
 
     /**
@@ -181,6 +98,48 @@ class Field {
     }
 
     /**
+     * Fill data to the field.
+     *
+     * @param $data
+     * @return void
+     */
+    public function fill($data)
+    {
+        if(is_array($this->column))
+        {
+            foreach($this->column as $key => $column)
+            {
+                $this->value[$key] = Arr::get($data, $column);
+            }
+
+            return;
+        }
+
+        $this->value = Arr::get($data, $this->column);
+    }
+
+    /**
+     * Set original value to the field.
+     *
+     * @param $data
+     * @return void
+     */
+    public function setOriginal($data)
+    {
+        if(is_array($this->column))
+        {
+            foreach($this->column as $key => $column)
+            {
+                $this->original[$key] = Arr::get($data, $column);
+            }
+
+            return;
+        }
+
+        $this->original = Arr::get($data, $this->column);
+    }
+
+    /**
      * Set the field options.
      *
      * @param array $options
@@ -209,17 +168,23 @@ class Field {
             return $this->rules;
         }
 
-        $this->rules = $rules;
+        $rules = array_filter(explode('|', "{$this->rules}|$rules"));
+
+        $this->rules = join('|', $rules);
     }
 
     /**
-     * Set value of the field.
+     * Set or get value of the field.
      *
-     * @param $value
-     * @return void
+     * @param null $value
+     * @return mixed
      */
-    public function value($value)
+    public function value($value = null)
     {
+        if(is_null($value)) {
+            return is_null($this->value) ? $this->default : $this->value;
+        }
+
         $this->value = $value;
     }
 
@@ -275,5 +240,56 @@ class Field {
         }
 
         return join(' ', $html);
+    }
+
+    /**
+     * Get the view variables of this field.
+     *
+     * @return array
+     */
+    protected function variables()
+    {
+        $this->variables['id']      = $this->id;
+        $this->variables['name']    = $this->formatName($this->column);
+        $this->variables['value']   = $this->value();
+        $this->variables['label']   = $this->label;
+        $this->variables['column']  = $this->column;
+        $this->variables['attributes']  = $this->formatAttributes();
+
+        return $this->variables;
+    }
+
+    /**
+     * Get view of this field.
+     *
+     * @return string
+     */
+    public function getView()
+    {
+        $class = explode('\\', get_called_class());
+
+        return 'admin::form.' . strtolower(end($class));
+    }
+
+    /**
+     * Render this filed.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function render()
+    {
+        Admin::js($this->js);
+        Admin::css($this->css);
+        Admin::script($this->script);
+
+        return view($this->getView(), $this->variables());
+    }
+
+    public function __call($method, $arguments)
+    {
+        if($method === 'default') {
+            $this->default = $arguments[0];
+            return;
+        }
     }
 }

@@ -1,14 +1,50 @@
 <?php
 
 return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Menu items
+    |--------------------------------------------------------------------------
+    |
+    | title: item title.
+    | url: item url.
+    | icon: item icon, see https://fortawesome.github.io/Font-Awesome/icons/
+    | children: subitems
+    |
+    */
+
     [
-        'title' => '首页',
+        'title' => 'Index',
         'url'   => '/',
         'icon'  => 'fa-bar-chart'
     ],
     [
-        'title' => '管理员',
-        'url'   => '/administrators',
-        'icon'  => 'fa-tasks'
+        'title' => 'Admin',
+        'url'   => 'administrators',
+        'icon'  => 'fa-tasks',
     ],
+
+
+    /*[
+        'title' => 'User',
+        'icon'  => 'fa-users',
+        'children' => [
+            [
+                'title' => 'Users',
+                'url'   => 'users',
+                'icon'  => 'fa-user',
+            ],
+            [
+                'title' => 'Profiles',
+                'url'   => 'user/profiles',
+                'icon'  => 'fa-user',
+            ],
+            [
+                'title' => 'Comments',
+                'url'   => 'user/comments',
+                'icon'  => 'fa-comments',
+            ],
+        ]
+    ]*/
 ];

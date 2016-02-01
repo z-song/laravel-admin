@@ -22,6 +22,7 @@ class DateRange extends Field
         $this->column['start']  = $column;
         $this->column['end']    = $arguments[0];
 
+        array_shift($arguments);
         $this->label  = $this->formatLabel($arguments);
         $this->id     = $this->formatId($this->column);
 
