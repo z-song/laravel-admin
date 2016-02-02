@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
 
 class Date extends Field
@@ -14,7 +13,7 @@ class Date extends Field
     ];
 
     protected $js = [
-        'moment/min/moment.min.js',
+        'moment/min/moment-with-locales.min.js',
         'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
     ];
 
@@ -22,8 +21,6 @@ class Date extends Field
     {
         $this->options['format'] = $this->format;
         $this->options['locale'] = 'zh-cn';
-
-        $this->js[] = "moment/locale/{$this->options['locale']}.js";
 
         $this->script = "$('#{$this->id}').datetimepicker(". json_encode($this->options) .");";
 

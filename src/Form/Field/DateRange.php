@@ -13,7 +13,7 @@ class DateRange extends Field
     ];
 
     protected $js = [
-        'moment/min/moment.min.js',
+        'moment/min/moment-with-locales.min.js',
         'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
     ];
 
@@ -46,8 +46,6 @@ class DateRange extends Field
                 $('#{$this->id['start']}').data("DateTimePicker").maxDate(e.date);
             });
 EOT;
-
-        $this->js[] = "moment/locale/{$this->options['locale']}.js";
 
         return parent::render();
     }
