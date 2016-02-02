@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\GeneralTrait;
 
@@ -16,7 +15,7 @@ class Mobile extends Field
 
     public function render()
     {
-        Admin::script('$("[data-mask]").inputmask();');
+        $this->script = '$("[data-mask]").inputmask();';
 
         return parent::render();
     }
