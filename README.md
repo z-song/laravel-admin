@@ -2,7 +2,7 @@
 
 `laravel-admin`是一个能帮助你快速搭建后台的工具，简单的几步操作，就能构建出功能强大的后台。
 
-`laravel-admin`基于以下开源工具：
+`laravel-admin`基于以下开源工具或服务：
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
@@ -10,11 +10,22 @@
 + [Datetimepicker](http://eonasdan.github.io/bootstrap-datetimepicker/)
 + [font-awesome](http://fontawesome.io)
 + [moment](http://momentjs.com/)
++ [Tencent map](http://lbs.qq.com/)
+
+#Screenshot
+
+![grid](https://cloud.githubusercontent.com/assets/1479100/12708148/6c4aa9fe-c8d7-11e5-94e4-c8105375a564.png)
+
+![form](https://cloud.githubusercontent.com/assets/1479100/12708198/fc6725a8-c8d7-11e5-876f-5c4f00ded0ff.png)
 
 # 安装
 
 ```
-composer require encore/laravel-admin
+//laravel 5.1
+composer require encore/laravel-admin "1.1.*"
+
+//laravel 5.2
+composer require encore/laravel-admin "1.2.*"
 ```
 
 然后把`ServiceProvider`加入`config/app.php`中：
@@ -146,7 +157,7 @@ return Admin::grid(User::class, function(Grid $grid){
         // sql: ... WHERE `user.email` = $email;
         $filter->is('emial', '名字');
         
-        // sql: ... WHERE `user.created_at` BETWEEN $email AND $end;
+        // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
         $filter->between('created_at', '创建时间')->datetime();
     });
 });
@@ -165,20 +176,29 @@ return Admin::form(User::class, function(Form $form){
     $form->id('id', 'ID');
     $form->text('name', '用户名')->rules('required');
     $form->email('email', '邮箱')->rules('required|email');
+    
+    $form->password('password', '密码')->rules('required');
+    
+    // has one relation, user has one profile
     $form->url('profile.homepage', '个人主页');
 
     $form->ip('profile.last_login_ip', '上次登录ip');
     $form->datetime('profile.last_login_at', '上次登录时间');
-    $form->color('profile.color', '颜色');
+    
+    // 添加默认值
+    $form->color('profile.color', '颜色')->default('#a34af4');
 
     $form->image('profile.avatar', '头像')/*->size(300, 300)*/;
     $form->file('profile.document', '文档')->rules('mimes:doc,docx,xlsx');
     $form->mobile('profile.mobile', '手机号');
     $form->text('profile.address', '地址');
     $form->date('profile.birthday', '生日');
-    $form->radio('profile.gender', '性别')->values(['m' => '女', 'f'=> '男']);
+    $form->radio('profile.gender', '性别')->values(['m' => '女', 'f'=> '男'])->default('m');
 
+    // see http://lbs.qq.com/
     $form->map('profile.lat', 'profile.lng', '位置');
+    
+    // see http://ionden.com/a/plugins/ion.rangeSlider/en.html
     $form->slider('profile.age', '年龄')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => '岁']);
 
     $form->datetime('created_at', '创建时间');
@@ -186,9 +206,16 @@ return Admin::form(User::class, function(Form $form){
 
     $form->datetimeRange('profile.created_at', 'profile.updated_at', '时间线');
 
+    // belongs to many relation
     $form->multipleSelect('friends', '好友')->options(User::all()->lists('name', 'id'));
+    
+    // belongs to many relation
     $form->checkbox('roles', '角色')->values(Role::all()->lists('display_name', 'id'));
     
+    // 添加保存回调函数
+    $form->saving(function($form) {
+        $form->password = bcrypt($form->password);
+    });
 });
 ```
 
