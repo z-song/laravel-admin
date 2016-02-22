@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class Form
@@ -217,7 +218,9 @@ class Form {
             $callback($this);
         }
 
-        $this->updates = array_filter($this->inputs, 'is_string');
+        $this->updates = array_filter($this->inputs, function($val) {
+            return is_string($val) or ($val instanceof UploadedFile);
+        });
         $this->relations = array_filter($this->inputs, 'is_array');
     }
 
