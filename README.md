@@ -1,6 +1,6 @@
 # laravel-admin
 
-`laravel-admin`是一个能帮助你快速搭建后台的工具，简单的几步操作，就能构建出功能强大的后台。
+`laravel-admin`是一个能帮助你快速搭建后台的工具，简单的几步操作，就能构建出功能丰富的后台。
 
 `laravel-admin`基于以下开源工具或服务：
 
@@ -118,7 +118,7 @@ $router->resources([
 return Admin::grid(User::class, function(Grid $grid){
 
     $grid->id('ID')->sortable();
-    
+
     //使用动态方法
     $grid->name('用户名');
     //或者使用column()方法：$grid->column('name', '用户名');
@@ -140,10 +140,19 @@ return Admin::grid(User::class, function(Grid $grid){
     
     $grid->created_at();
     $grid->updated_at();
-    
+
+    //设置查询条件: SELECT * FROM `user` WHERE id > 20 ORDER BY updated_at DESC;
+    $grid->model()->where('id', '>', '20')->orderBy('updated_at', 'desc');
+
+    //设置每页显示条数
+    $grid->paginate(15);
+
+    //设置action,show edit delete对应显示 编辑 删除
+    $grid->actions('show|edit|delete');
+
     //添加行回调函数
     $grid->rows(function($row){
-      if($row->id <=10) {
+      if($row->id <= 10) {
         $row->style('color:red');
       }
     });

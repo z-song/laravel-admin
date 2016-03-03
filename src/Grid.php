@@ -128,7 +128,7 @@ class Grid {
 
         $column = $this->addColumn($name, $label);
 
-        if($relation instanceof Relation) {
+        if(isset($relation) && $relation instanceof Relation) {
             $this->model()->with($relationName);
             $column->setRelation($relation, $relationColumn);
         }
