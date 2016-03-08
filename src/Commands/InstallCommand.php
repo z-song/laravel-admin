@@ -76,6 +76,8 @@ class InstallCommand extends Command
 
         $this->createMenuFile();
         $this->createRoutesFile();
+
+        $this->copyLanguageFiles();
     }
 
     /**
@@ -146,6 +148,16 @@ class InstallCommand extends Command
         $contents = $this->getStub('routes');
         $this->laravel['files']->put($file, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
         $this->line('<info>Routes file was created:</info> ' . str_replace(base_path(), '', $file));
+    }
+
+    /**
+     * Copy language files to admin directory.
+     *
+     * @return void
+     */
+    protected function copyLanguageFiles()
+    {
+        $this->laravel['files']->copyDirectory(__DIR__ . '/../../lang/',"{$this->directory}/lang/");
     }
 
     /**

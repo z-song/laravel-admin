@@ -87,7 +87,7 @@ class Between extends AbstractFilter
         ];
 
         $js = [
-            'moment/min/moment.min.js',
+            'moment/min/moment-with-locales.min.js',
             'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
         ];
 
@@ -108,7 +108,7 @@ class Between extends AbstractFilter
             });
 EOT;
 
-        $js[] = "moment/locale/{$options['locale']}.js";
+        //$js[] = "moment/locale/{$options['locale']}.js";
 
         Admin::js($js);
         Admin::css($css);

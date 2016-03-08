@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Facades\Lang;
 
 class Action {
 
@@ -37,13 +38,14 @@ class Action {
     {
         $this->path = app('router')->current()->getPath();
 
+        $confirm = Lang::get('admin::lang.delete_confirm');
+        $token = csrf_token();
         $script = <<<SCRIPT
             $('._delete').click(function() {
                 var id = $(this).data('id');
-                if(confirm("确认删除！")) {
-                    $.post('/{$this->path}/' + id, {_method:'delete'}, function(data){
-                        console.log(data);
-                        //location.reload(true);
+                if(confirm("{$confirm}")) {
+                    $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+                        location.reload(true);
                     });
                 }
             });

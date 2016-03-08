@@ -9,11 +9,11 @@
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-file"></i></span>
             <a class='btn btn-default btn-flat' href='javascript:;'>
-                选择文件...
-                <input type="file" id="{{$id}}" name="{{$name}}" value="{{ Input::old($column, $value) }}" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info-{{$id}}").html($(this).val());'>
+                {{ Lang::get('admin::lang.choose_file') }}...
+                <input type="file" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info-{{$id}}").html($(this).val());'>
             </a>
             &nbsp;
-            <span class='label label-info' id="upload-file-info-{{$id}}">{{ Input::old($column, $value) }}</span>
+            <span class='label label-info' id="upload-file-info-{{$id}}">{{ old($column, $value) }}</span>
         </div>
     </div>
 </div>

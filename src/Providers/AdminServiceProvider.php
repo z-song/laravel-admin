@@ -13,9 +13,10 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
-        'InstallCommand',
         'MakeCommand',
-        'MenuCommand'
+        'MenuCommand',
+        'InstallCommand',
+        'UninstallCommand',
     ];
 
     /**
@@ -34,6 +35,9 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadViewsFrom(__DIR__ .'/../../views', 'admin');
+        $this->loadTranslationsFrom(admin_path('lang/'), 'admin');
+
         $this->publishes([__DIR__ . '/../../config/admin.php' => config_path('admin.php'), ], 'config');
         $this->publishes([__DIR__ . '/../../assets' => public_path('packages/admin'), ], 'assets');
 
@@ -58,8 +62,6 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->loadViewsFrom(__DIR__ .'/../../views', 'admin');
-
         $this->app->booting(function () {
             $loader  =  AliasLoader::getInstance();
 

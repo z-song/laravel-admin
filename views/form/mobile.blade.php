@@ -10,7 +10,7 @@
             <div class="input-group-addon">
                 <i class="fa fa-phone"></i>
             </div>
-            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ Input::old($column, $value) }}" class="form-control" data-inputmask='"mask": "19999999999"' data-mask placeholder="输入{{$label}}">
+            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" data-inputmask='"mask": "19999999999"' data-mask placeholder="{{ Lang::get('admin::lang.input') }} {{$label}}">
         </div>
     </div>
 </div>

@@ -6,7 +6,7 @@ return [
 
     'directory' => app_path('Admin'),
 
-    'title'  => '后台管理',
+    'title'  => 'Admin',
 
     'auth' => [
         'model' => \Encore\Admin\Auth\Database\Administrator::class
