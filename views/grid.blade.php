@@ -8,8 +8,8 @@
             <div class="box-tools">
                 {!! $grid->renderFilter() !!}
                 <div class="btn-group pull-right" style="margin-right: 10px">
-                    <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">新增</a>
-                    {{--<a href="/{{$grid->resource()}}/export" class="btn btn-sm btn-primary">导出</a>--}}
+                    <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">{{ Lang::get('admin::lang.new') }}</a>
+                    {{--<a href="/{{$grid->resource()}}/export" class="btn btn-sm btn-primary">{{ Lang::get('admin::lang.export') }}</a>--}}
                 </div>
 
             </div>
@@ -21,7 +21,7 @@
                     @foreach($grid->columns() as $column)
                     <th>{{$column->getLabel()}}{!!$column->sorter()!!}</th>
                     @endforeach
-                    <th>操作</th>
+                    <th>{{ Lang::get('admin::lang.action') }}</th>
                 </tr>
 
                 @foreach($grid->rows() as $row)

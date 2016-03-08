@@ -67,13 +67,13 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-          {{$title or "title"}}
-        <small>{{$description or "description"}}</small>
+          {{ $title or Lang::get('admin::lang.title') }}
+        <small>{{ $description or Lang::get('admin::lang.description') }}</small>
       </h1>
-      <ol class="breadcrumb">
+      <!--<ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
         <li class="active">Here</li>
-      </ol>
+      </ol>-->
     </section>
 
     <!-- Main content -->

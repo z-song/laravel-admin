@@ -5,6 +5,7 @@ namespace Encore\Admin\Form;
 use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Lang;
 
 class Builder
 {
@@ -14,7 +15,7 @@ class Builder
 
     protected $fields;
 
-    protected $options = ['title' => 'edit'];
+    protected $options = ['title' => 'Edit'];
 
     const MODE_VIEW     = 'view';
     const MODE_EDIT     = 'edit';
@@ -57,6 +58,21 @@ class Builder
         }
 
         $this->options = array_merge($this->options, $options);
+    }
+
+    public function title()
+    {
+        if($this->mode == static::MODE_CREATE) {
+            return Lang::get('admin::lang.create');
+        }
+
+        if($this->mode == static::MODE_EDIT) {
+            return Lang::get('admin::lang.edit');
+        }
+
+        if($this->mode == static::MODE_VIEW) {
+            return Lang::get('admin::lang.view');
+        }
     }
 
     /**
@@ -127,12 +143,12 @@ class Builder
             return;
         }
 
-        return '<button type="submit" class="btn btn-info pull-right">提交</button>';
+        return '<button type="submit" class="btn btn-info pull-right">'.Lang::get('admin::lang.submit').'</button>';
     }
 
     public function back()
     {
-        return '<a href="'.$this->form->resource().'" class="btn btn-default">返回列表</a>';
+        return '<a href="'.$this->form->resource().'" class="btn btn-default">'.Lang::get('admin::lang.back_to_list').'</a>';
     }
 
     public function build()

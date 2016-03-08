@@ -1,8 +1,8 @@
 # laravel-admin
 
-`laravel-admin`是一个能帮助你快速搭建后台的工具，简单的几步操作，就能构建出功能丰富的后台。
+`laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
 
-`laravel-admin`基于以下开源工具或服务：
+`laravel-admin` based on these packages and services:
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
@@ -12,13 +12,15 @@
 + [moment](http://momentjs.com/)
 + [Tencent map](http://lbs.qq.com/)
 
+Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
+
 #Screenshot
 
 ![grid](https://cloud.githubusercontent.com/assets/1479100/12708148/6c4aa9fe-c8d7-11e5-94e4-c8105375a564.png)
 
 ![form](https://cloud.githubusercontent.com/assets/1479100/12708198/fc6725a8-c8d7-11e5-876f-5c4f00ded0ff.png)
 
-# 安装
+# Installation
 
 ```
 //laravel 5.1
@@ -28,26 +30,26 @@ composer require encore/laravel-admin "1.1.*"
 composer require encore/laravel-admin "1.2.*"
 ```
 
-然后把`ServiceProvider`加入`config/app.php`中：
+Add `ServiceProvider` to `config/app.php`:
 
 ```
 Encore\Admin\Providers\AdminServiceProvider::class
 ```
 
-运行以下命令完成安装：
+Then run these commands to finish installation:
 
 ```
 php artisan vendor:publish
 php artisan admin:install
 ```
 
-打开`http://localhost/admin/`访问后台，使用默认用户名`admin`和密码`admin`登陆。
+Open `http://localhost/admin/` in your browser,and use username `admin` and password `admin` to login.
 
-#使用
+#Usage
 
-默认安装目录为`app/Admin`。
+The install path defaults to `app/Admin`.
 
-该目录下的`routes.php`是路由文件，用来配置后台路由:
+Use `routes.php` under `app/Admin` to manage admin routes.
 
 ```php
 <?php
@@ -63,111 +65,113 @@ $router->resources([
 ]);
 ```
 
-`menu.php`用来配置左侧菜单：
+Use `menu.php` to configure the menus in left sidebar：
 ```php
 <?php
 
 return [
     [
-        'title' => '首页',
+        'title' => 'Index',
         'url'   => '/',
         'icon'  => 'fa-bar-chart'
     ],
     [
-        'title' => '管理员',
+        'title' => 'Administrators',
         'url'   => '/administrators',
         'icon'  => 'fa-tasks'
     ],
 ];
 ```
 
-`controllers`目录是控制器目录，用来存放控制器文件。
+`controllers/` is controller directory where to store admin controllers.
 
-###创建控制器
+Language strings are stored in files within the `lang/` directory, and it will use `app.locale` configuration.
 
-如果要创建`User`模型的数据管理控制器，可使用以下命令：
+###Create controllers
+
+If you want to create a resource controller with `User` model,you can use this command:
 ```
 php artisan admin:make UserController --model=\\App\\User
 ```
 
-该命令会在`app\Admin\controllers`目录下面创建`UserController`文件，然后在routes.php加入：
+It will create `UserController.php` under `app/Admin/controllers`,add a resource in `routes.php`：
 ```php
 $router->resources([
-    'users'           => UserController::class，  //加入这一行
+    'users'           => UserController::class，  //add this line
     'administrators'  => AdministratorController::class
 ]);
 ```
 
-最后在menu.php中加入访问入口：
+At last add access in `menu.php`:
 
 ```php
   [
-    'title' => '用户管理',
+    'title' => 'Users',
     'url'   => '/users',
     'icon'  => 'fa-user'
   ],
 ```
 
-然后就能在左侧菜单中看到`users`资源的访问链接了。
+So you can see the `users` resource link in the left sidebar menu.
 
 ###Admin\Grid
 
-`Admin\Grid`用来构建基于bootstarp table的数据列表，在控制器中：
+`Admin\Grid` is a data grid builder based on `bootstrap table`,in the controller:
 
 ```php
 return Admin::grid(User::class, function(Grid $grid){
 
     $grid->id('ID')->sortable();
 
-    //使用动态方法
-    $grid->name('用户名');
-    //或者使用column()方法：$grid->column('name', '用户名');
+    //use dynamic method.
+    $grid->name();
+    //or use column() method: $grid->column('name');
     
-    //批量添加字段
+    //add mulitiple columns.
     $grid->columns('email', 'username' ...);
     
-    //关联模型数据
-    $grid->column('profile.mobile', '手机');
-    //或者使用：$grid->profile()->mobile('手机');
+    //use related column (hasOne relation).
+    $grid->column('profile.mobile', 'Mobile');
+    //or use $grid->profile()->mobile('Mobile');
     
-    //控制输出显示内容
-    $grid->column('profile.mobile', '手机')->value(function($mobile) {
+    //use a callback function to display column value.
+    $grid->column('profile.mobile', 'Mobile')->value(function($mobile) {
       return "+86 $mobile";
     });
     
-    //使用sortable()添加可排序字段
-    $grid->column('profile.age', '年龄')->sortable();
+    //use sortable() method to make the column sortable.
+    $grid->column('profile.age', 'Age')->sortable();
     
     $grid->created_at();
     $grid->updated_at();
 
-    //设置查询条件: SELECT * FROM `user` WHERE id > 20 ORDER BY updated_at DESC;
+    //set query conditions: SELECT * FROM `user` WHERE id > 20 ORDER BY updated_at DESC;
     $grid->model()->where('id', '>', '20')->orderBy('updated_at', 'desc');
 
-    //设置每页显示条数
+    //set 15 items per-page.
     $grid->paginate(15);
 
-    //设置action,show edit delete对应显示 编辑 删除
+    //set actions (show,edit,delete).
     $grid->actions('show|edit|delete');
 
-    //添加行回调函数
+    //add row callback function.
     $grid->rows(function($row){
       if($row->id <= 10) {
         $row->style('color:red');
       }
     });
     
-    //添加数据列表过滤器
+    //add data grid filters.
     $grid->filter(function($filter){
     
         // sql: ... WHERE `user.name` LIKE "%$name%";
-        $filter->like('name', '名字');
+        $filter->like('name', 'name');
         
         // sql: ... WHERE `user.email` = $email;
-        $filter->is('emial', '名字');
+        $filter->is('emial', 'Email');
         
         // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-        $filter->between('created_at', '创建时间')->datetime();
+        $filter->between('created_at', 'Created Time')->datetime();
     });
 });
 
@@ -175,53 +179,53 @@ return Admin::grid(User::class, function(Grid $grid){
 
 ###Admin\Form
 
-`Admin\Form`用来构建数据Form，在控制器中：
+`Admin\Form` is a data form builder, in your controller：
 
 ```php
 return Admin::form(User::class, function(Form $form){
 
-    $form->options(['title' => '用户修改']);
+    $form->options(['title' => 'Edit user']);
     
     $form->id('id', 'ID');
-    $form->text('name', '用户名')->rules('required');
-    $form->email('email', '邮箱')->rules('required|email');
+    $form->text('name')->rules('required');
+    $form->email('email')->rules('required|email');
     
-    $form->password('password', '密码')->rules('required');
+    $form->password('password')->rules('required');
     
     // has one relation, user has one profile
-    $form->url('profile.homepage', '个人主页');
+    $form->url('profile.homepage', 'Home page');
 
-    $form->ip('profile.last_login_ip', '上次登录ip');
-    $form->datetime('profile.last_login_at', '上次登录时间');
+    $form->ip('profile.last_login_ip', 'Last login ip');
+    $form->datetime('profile.last_login_at', 'Last login time');
     
-    // 添加默认值
-    $form->color('profile.color', '颜色')->default('#a34af4');
+    // Add default value.
+    $form->color('profile.color', 'Color')->default('#a34af4');
 
-    $form->image('profile.avatar', '头像')/*->size(300, 300)*/;
-    $form->file('profile.document', '文档')->rules('mimes:doc,docx,xlsx');
-    $form->mobile('profile.mobile', '手机号');
-    $form->text('profile.address', '地址');
-    $form->date('profile.birthday', '生日');
-    $form->radio('profile.gender', '性别')->values(['m' => '女', 'f'=> '男'])->default('m');
+    $form->image('profile.avatar')/*->size(300, 300)*/;
+    $form->file('profile.document')->rules('mimes:doc,docx,xlsx');
+    $form->mobile('profile.mobile');
+    $form->text('profile.address');
+    $form->date('profile.birthday');
+    $form->radio('profile.gender')->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
 
     // see http://lbs.qq.com/
-    $form->map('profile.lat', 'profile.lng', '位置');
+    $form->map('profile.lat', 'profile.lng', 'Position');
     
     // see http://ionden.com/a/plugins/ion.rangeSlider/en.html
-    $form->slider('profile.age', '年龄')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => '岁']);
+    $form->slider('profile.age', 'Age')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => 'years old']);
 
-    $form->datetime('created_at', '创建时间');
-    $form->datetime('updated_at', '更新时间');
+    $form->datetime('created_at', 'Create time');
+    $form->datetime('updated_at', 'Update time');
 
-    $form->datetimeRange('profile.created_at', 'profile.updated_at', '时间线');
+    $form->datetimeRange('profile.created_at', 'profile.updated_at', 'Time line');
 
     // belongs to many relation
-    $form->multipleSelect('friends', '好友')->options(User::all()->lists('name', 'id'));
+    $form->multipleSelect('friends')->options(User::all()->lists('name', 'id'));
     
     // belongs to many relation
-    $form->checkbox('roles', '角色')->values(Role::all()->lists('display_name', 'id'));
+    $form->checkbox('roles')->values(Role::all()->lists('display_name', 'id'));
     
-    // 添加保存回调函数
+    // Add saving callback function.
     $form->saving(function($form) {
         $form->password = bcrypt($form->password);
     });
