@@ -109,18 +109,6 @@ class Form {
     }
 
     /**
-     * @param Field $field
-     *
-     * @return $this
-     */
-    public function field(Field $field)
-    {
-        $this->builder->fields()->push($field);
-
-        return $this;
-    }
-    
-    /**
      * Generate a edit form.
      *
      * @param $id
