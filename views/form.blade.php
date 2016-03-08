@@ -4,7 +4,7 @@
     <!-- Horizontal Form -->
     <div class="box box-info">
         <div class="box-header with-border">
-            <h3 class="box-title">{{$form->options()['title']}}</h3>
+            <h3 class="box-title">{{ $form->title() }}</h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->

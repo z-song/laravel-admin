@@ -7,9 +7,9 @@ return [
     | Menu items
     |--------------------------------------------------------------------------
     |
-    | title: item title.
-    | url: item url.
-    | icon: item icon, see https://fortawesome.github.io/Font-Awesome/icons/
+    | title:    item title.
+    | url:      item url.
+    | icon:     item icon, see https://fortawesome.github.io/Font-Awesome/icons/
     | children: subitems
     |
     */
