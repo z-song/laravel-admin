@@ -226,8 +226,11 @@ return Admin::form(User::class, function(Form $form){
     $form->checkbox('roles')->values(Role::all()->lists('display_name', 'id'));
     
     // Add saving callback function.
-    $form->saving(function($form) {
-        $form->password = bcrypt($form->password);
+    $form->saving(function(Form $form) {
+        if($form->password && $form->model()->password != $form->password)
+        {
+            $form->password = bcrypt($form->password);
+        }
     });
 });
 ```

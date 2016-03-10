@@ -40,8 +40,11 @@ class AdministratorController extends AdminController
             $form->dateTime('created_at')->readOnly();
             $form->dateTime('updated_at')->readOnly();
 
-            $form->saving(function($form) {
-                $form->password = bcrypt($form->password);
+            $form->saving(function(Form $form) {
+                if($form->password && $form->model()->password != $form->password)
+                {
+                    $form->password = bcrypt($form->password);
+                }
             });
         });
     }
