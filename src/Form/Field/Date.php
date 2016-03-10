@@ -20,7 +20,7 @@ class Date extends Field
     public function render()
     {
         $this->options['format'] = $this->format;
-        $this->options['locale'] = 'zh-cn';
+        $this->options['locale'] = config('app.locale');
 
         $this->script = "$('#{$this->id}').datetimepicker(". json_encode($this->options) .");";
 
