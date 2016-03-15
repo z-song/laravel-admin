@@ -92,7 +92,7 @@ class Between extends AbstractFilter
         ];
 
         $options['format'] = 'YYYY-MM-DD HH:mm:ss';
-        $options['locale'] = 'zh-cn';
+        $options['locale'] = config('app.locale');
 
         $startOptions = json_encode($options);
         $endOptions = json_encode($options + ['useCurrent' =>false]);

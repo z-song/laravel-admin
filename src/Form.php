@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -75,6 +76,13 @@ class Form {
     protected $saving;
 
     /**
+     * Saved callback.
+     *
+     * @var Closure
+     */
+    protected $saved;
+
+    /**
      * Data for save to current model from input.
      *
      * @var array
@@ -106,6 +114,28 @@ class Form {
         $this->builder = new Builder($this);
 
         $callback($this);
+    }
+
+    /**
+     * @param Field $field
+     *
+     * @return $this
+     */
+    public function pushField(Field $field)
+    {
+        $field->setForm($this);
+
+        $this->builder->fields()->push($field);
+
+        return $this;
+    }
+
+    /**
+     * @return Model
+     */
+    public function model()
+    {
+        return $this->model;
     }
 
     /**
@@ -201,6 +231,8 @@ class Form {
             $this->saveRelation($this->relations);
         });
 
+        $this->complete($this->saved);
+
         return redirect($this->resource());
     }
 
@@ -222,6 +254,17 @@ class Form {
             return is_string($val) or ($val instanceof UploadedFile);
         });
         $this->relations = array_filter($this->inputs, 'is_array');
+    }
+
+    /**
+     * Callback after saving a Model
+     * @param Closure|null $callback
+     */
+    protected function complete(Closure $callback = null)
+    {
+        if($callback instanceof Closure) {
+            $callback($this);
+        }
     }
 
     /**
@@ -287,6 +330,8 @@ class Form {
 
             $this->updateRelation($this->relations);
         });
+
+        $this->complete($this->saved);
 
         return redirect($this->resource());
     }
@@ -407,6 +452,17 @@ class Form {
     public function saving(Closure $callback)
     {
         $this->saving = $callback;
+    }
+
+    /**
+     * Set saved callback.
+     *
+     * @param callable $callback
+     * @return void
+     */
+    public function saved(Closure $callback)
+    {
+        $this->saved = $callback;
     }
 
     /**
@@ -629,7 +685,7 @@ class Form {
 
             $element = new $className($column, array_slice($arguments, 1));
 
-            $this->builder->fields()->push($element);
+            $this->pushField($element);
 
             return $element;
         }

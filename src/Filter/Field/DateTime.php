@@ -27,7 +27,7 @@ class DateTime
     public function prepare()
     {
         $options['format'] = 'YYYY-MM-DD HH:mm:ss';
-        $options['locale'] = 'zh-cn';
+        $options['locale'] = config('app.locale');
 
         $this->js[] = "moment/locale/{$options['locale']}.js";
 
