@@ -122,7 +122,9 @@ class Admin
 
     public static function url($url)
     {
-        $prefix = app('router')->current()->getPrefix();
+        //$prefix = app('router')->current()->getPrefix();
+
+        $prefix = config('admin.prefix');
 
         return "/$prefix/" . trim($url, '/');
     }

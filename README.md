@@ -24,10 +24,10 @@ Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd
 
 ```
 //laravel 5.1
-composer require encore/laravel-admin "1.1.*"
+composer require encore/laravel-admin "1.1.x-dev"
 
 //laravel 5.2
-composer require encore/laravel-admin "1.2.*"
+composer require encore/laravel-admin "dev-master"
 ```
 
 Add `ServiceProvider` to `config/app.php`:
