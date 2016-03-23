@@ -8,6 +8,7 @@
 + [AdminLTE](https://almsaeedstudio.com/)
 + [Bootstrap Markdown](http://toopay.github.io/bootstrap-markdown/)
 + [Datetimepicker](http://eonasdan.github.io/bootstrap-datetimepicker/)
++ [CodeMirror](https://codemirror.net/)
 + [font-awesome](http://fontawesome.io)
 + [moment](http://momentjs.com/)
 + [Tencent map](http://lbs.qq.com/)
@@ -200,6 +201,9 @@ return Admin::form(User::class, function(Form $form){
     
     // Add default value.
     $form->color('profile.color', 'Color')->default('#a34af4');
+
+    // Code editor based on code mirror see https://codemirror.net/
+    $form->code('code')->lang('ruby');
 
     $form->image('profile.avatar')/*->size(300, 300)*/;
     $form->file('profile.document')->rules('mimes:doc,docx,xlsx');
