@@ -4,40 +4,28 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
 
-class Code extends Field
+class Json extends Field
 {
     protected $js = [
         'codemirror/lib/codemirror.js',
-        'codemirror/mode/clike/clike.js',
+        'codemirror/mode/javascript/javascript.js',
+        'codemirror/addon/edit/matchbrackets.js',
     ];
 
     protected $css = [
         'codemirror/lib/codemirror.css',
     ];
 
-    protected $mode = '';
-
-    public function lang($lang = 'php')
-    {
-        $this->mode = "text/x-$lang";
-
-        $this->js[] = "codemirror/mode/$lang/$lang.js";
-    }
-
     public function render()
     {
-        if(empty($this->mode)) $this->lang();
-
         $this->script = <<<EOT
 
 var editor = CodeMirror.fromTextArea(document.getElementById("{$this->id}"), {
     lineNumbers: true,
-    mode: "{$this->mode}",
-    extraKeys: {
-        "Tab": function(cm){
-            cm.replaceSelection("    " , "end");
-        }
-     }
+    mode: "application/ld+json",
+    lineWrapping: true,
+    matchBrackets: true,
+    autoCloseBrackets: true,
 });
 
 EOT;

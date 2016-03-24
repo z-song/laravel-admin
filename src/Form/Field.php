@@ -63,7 +63,9 @@ class Field {
      */
     protected function formatLabel($arguments = [])
     {
-        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($this->column);
+        $column = is_array($this->column) ? current($this->column) : $this->column;
+
+        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($column);
 
         return str_replace(['.', '_'], ' ', $label);
     }
@@ -304,7 +306,7 @@ class Field {
     {
         if($method === 'default') {
             $this->default = $arguments[0];
-            return;
+            return $this;
         }
     }
 }

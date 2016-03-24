@@ -6,6 +6,8 @@
 
         @include('admin::form.error')
 
-        <textarea class="form-control" id="{{$id}}" name="{{$name}}" placeholder="{{ Lang::get('admin::lang.input') }} {{$label}}">{{ old($column, $value) }}</textarea>
+        <div class="input-group">
+            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" placeholder="0">
+        </div>
     </div>
 </div>

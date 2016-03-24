@@ -46,6 +46,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\DateTimeRange  dateTimeRange($start, $end, $label = '')
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Options        options(array $options)
+ * @method Field\Number         number($column, $label = '')
+ * @method Field\Money          money($column, $label = '')
+ * @method Field\Json           json($column, $label = '')
+ * @method Field\Code           code($column, $label = '')
  *
  * @package Encore\Admin
  */

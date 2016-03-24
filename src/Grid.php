@@ -94,6 +94,13 @@ class Grid {
     protected $filter;
 
     /**
+     * Resource path of the grid.
+     *
+     * @var
+     */
+    protected $resourcePath;
+
+    /**
      * Create a new grid instance.
      *
      * @param Eloquent $model
@@ -233,6 +240,8 @@ class Grid {
      */
     public function renderActions($id)
     {
+        $this->actions->setGrid($this);
+
         return $this->actions->render($id);
     }
 
@@ -354,10 +363,21 @@ class Grid {
     /**
      * Get current resource uri.
      *
+     * @param string $path
      * @return string
      */
-    public function resource()
+    public function resource($path = null)
     {
+        if( ! empty($path)) {
+            $this->resourcePath = $path;
+
+            return $this;
+        }
+
+        if( ! empty($this->resourcePath)) {
+            return $this->resourcePath;
+        }
+
         return app('router')->current()->getPath();
     }
 
