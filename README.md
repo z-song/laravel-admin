@@ -11,6 +11,7 @@
 + [CodeMirror](https://codemirror.net/)
 + [font-awesome](http://fontawesome.io)
 + [moment](http://momentjs.com/)
++  [Google map](https://www.google.com/maps)
 + [Tencent map](http://lbs.qq.com/)
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
@@ -127,22 +128,22 @@ return Admin::grid(User::class, function(Grid $grid){
     //use dynamic method.
     $grid->name();
     //or use column() method: $grid->column('name');
-    
+
     //add mulitiple columns.
     $grid->columns('email', 'username' ...);
-    
+
     //use related column (hasOne relation).
     $grid->column('profile.mobile', 'Mobile');
     //or use $grid->profile()->mobile('Mobile');
-    
+
     //use a callback function to display column value.
     $grid->column('profile.mobile', 'Mobile')->value(function($mobile) {
       return "+86 $mobile";
     });
-    
+
     //use sortable() method to make the column sortable.
     $grid->column('profile.age', 'Age')->sortable();
-    
+
     $grid->created_at();
     $grid->updated_at();
 
@@ -161,16 +162,16 @@ return Admin::grid(User::class, function(Grid $grid){
         $row->style('color:red');
       }
     });
-    
+
     //add data grid filters.
     $grid->filter(function($filter){
-    
+
         // sql: ... WHERE `user.name` LIKE "%$name%";
         $filter->like('name', 'name');
-        
+
         // sql: ... WHERE `user.email` = $email;
         $filter->is('emial', 'Email');
-        
+
         // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
         $filter->between('created_at', 'Created Time')->datetime();
     });
@@ -186,49 +187,71 @@ return Admin::grid(User::class, function(Grid $grid){
 return Admin::form(User::class, function(Form $form){
 
     $form->options(['title' => 'Edit user']);
-    
+
+    // $form->field(columnName [, columnName ], labelName = '');
+
     $form->id('id', 'ID');
     $form->text('name')->rules('required');
     $form->email('email')->rules('required|email');
-    
+
     $form->password('password')->rules('required');
-    
-    // has one relation, user has one profile
+
+    // related column (hasOne relation).
     $form->url('profile.homepage', 'Home page');
 
-    $form->ip('profile.last_login_ip', 'Last login ip');
-    $form->datetime('profile.last_login_at', 'Last login time');
-    
-    // Add default value.
-    $form->color('profile.color', 'Color')->default('#a34af4');
+    $form->ip('last_login_ip', 'Last login ip');
+    $form->datetime('last_login_at', 'Last login time');
+
+    // All fields can set a default value.
+    $form->color('color', 'Color')->default('#a34af4');
 
     // Code editor based on code mirror see https://codemirror.net/
     $form->code('code')->lang('ruby');
+    $form->json('json');
 
-    $form->image('profile.avatar')/*->size(300, 300)*/;
-    $form->file('profile.document')->rules('mimes:doc,docx,xlsx');
-    $form->mobile('profile.mobile');
-    $form->text('profile.address');
-    $form->date('profile.birthday');
-    $form->radio('profile.gender')->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
+    $form->money('price')->symbol('￥');
+    $form->number('count');
 
-    // see http://lbs.qq.com/
-    $form->map('profile.lat', 'profile.lng', 'Position');
-    
-    // see http://ionden.com/a/plugins/ion.rangeSlider/en.html
-    $form->slider('profile.age', 'Age')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => 'years old']);
+    $form->image('avatar')/*->size(300, 300)*/;
+    $form->file('document')->rules('mimes:doc,docx,xlsx');
+    $form->mobile('mobile')->format('999 9999 9999');
+    $form->text('address');
+    $form->date('birthday');
+    $form->radio('gender')->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
+
+    // use Google map or Tencent map.
+    $form->map('latitude', 'longitude', 'Position');
+
+    // options see http://ionden.com/a/plugins/ion.rangeSlider/en.html.
+    $form->slider('age', 'Age')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => 'years old']);
 
     $form->datetime('created_at', 'Create time');
     $form->datetime('updated_at', 'Update time');
 
-    $form->datetimeRange('profile.created_at', 'profile.updated_at', 'Time line');
+    $form->datetimeRange('created_at', 'profile.updated_at', 'Time line');
 
-    // belongs to many relation
+    // belongs to many relation.
     $form->multipleSelect('friends')->options(User::all()->lists('name', 'id'));
-    
-    // belongs to many relation
+
+    // belongs to many relation.
     $form->checkbox('roles')->values(Role::all()->lists('display_name', 'id'));
-    
+
+    // has many relation, show as a list.
+    $form->hasMany('comments', function(Grid $grid) {
+
+        // set resource path for items.
+        $grid->resource('admin/article-comments');
+
+        $grid->id('ID');
+        $grid->author()->value(function($authorId){
+            return User::find($authorId)->name;
+        });
+        $grid->email();
+        $grid->content()->value(function($content) {
+            return mb_strimwidth($content, 0, 40, '...');
+        });
+    });
+
     // Add saving callback function.
     $form->saving(function(Form $form) {
         if($form->password && $form->model()->password != $form->password)
