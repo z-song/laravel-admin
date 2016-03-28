@@ -63,10 +63,12 @@ abstract class AbstractFilter
     {
         $columns = explode('.', $column);
 
-        if(count($columns) == 1) return $columns[0];
+        if (count($columns) == 1) {
+            return $columns[0];
+        }
 
         $name = array_shift($columns);
-        foreach($columns as $column) {
+        foreach ($columns as $column) {
             $name .= "[$column]";
         }
 
@@ -94,7 +96,7 @@ abstract class AbstractFilter
     {
         $value = Arr::get($inputs, $this->column);
 
-        if(empty($value)) {
+        if (empty($value)) {
             return null;
         }
 
@@ -132,7 +134,7 @@ abstract class AbstractFilter
     {
         $column = explode('.', $this->column);
 
-        if(count($column) == 1) {
+        if (count($column) == 1) {
 
             return [$this->query => func_get_args()];
         }
@@ -146,14 +148,14 @@ abstract class AbstractFilter
 
         list($relation, $args[0]) = explode('.', $this->column);
 
-        return ['whereHas' => [$relation, function($relation) use($args) {
+        return ['whereHas' => [$relation, function ($relation) use ($args) {
             call_user_func_array([$relation, $this->query], $args);
         }]];
     }
 
     protected function fieldVars()
     {
-        if(method_exists($this->field(), 'variables')) {
+        if (method_exists($this->field(), 'variables')) {
             return $this->field()->variables();
         }
 

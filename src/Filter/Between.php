@@ -32,13 +32,13 @@ class Between extends AbstractFilter
     {
         $columns = explode('.', $column);
 
-        if(count($columns) == 1) {
+        if (count($columns) == 1) {
             $name = $columns[0];
         } else {
 
             $name = array_shift($columns);
 
-            foreach($columns as $column) {
+            foreach ($columns as $column) {
                 $name .= "[$column]";
             }
         }
@@ -48,23 +48,25 @@ class Between extends AbstractFilter
 
     public function condition($inputs)
     {
-        if(! Arr::has($inputs, $this->column)) {
+        if (! Arr::has($inputs, $this->column)) {
             return null;
         }
 
         $this->value = Arr::get($inputs, $this->column);
 
-        $value = array_filter($this->value, function($val) {
+        $value = array_filter($this->value, function ($val) {
             return $val !== '';
         });
 
-        if(empty($value)) return null;
+        if (empty($value)) {
+            return null;
+        }
 
-        if(! isset($value['start'])) {
+        if (! isset($value['start'])) {
             return $this->buildCondition($this->column, '<=', $value['end']);
         }
 
-        if(! isset($value['end'])) {
+        if (! isset($value['end'])) {
             return $this->buildCondition($this->column, '>=', $value['start']);
         }
 
@@ -117,7 +119,7 @@ EOT;
 
     public function render()
     {
-        if(isset($this->view)) {
+        if (isset($this->view)) {
             return view($this->view, $this->variables());
         }
 

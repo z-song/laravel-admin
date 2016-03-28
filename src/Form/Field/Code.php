@@ -26,7 +26,9 @@ class Code extends Field
 
     public function render()
     {
-        if(empty($this->mode)) $this->lang();
+        if (empty($this->mode)) {
+            $this->lang();
+        }
 
         $this->script = <<<EOT
 

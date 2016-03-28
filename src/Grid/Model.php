@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Grid;
 
-
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
@@ -71,8 +70,7 @@ class Model
      */
     public function addConditions(array $conditions)
     {
-        foreach($conditions as $condition)
-        {
+        foreach ($conditions as $condition) {
             call_user_func_array([$this, key($condition)], current($condition));
         }
     }
@@ -89,15 +87,14 @@ class Model
 
     protected function get()
     {
-        if($this->model instanceof Paginator) {
+        if ($this->model instanceof Paginator) {
             return $this->model;
         }
 
         $this->setSort();
         $this->setPaginate();
 
-        foreach($this->queries as $method => $arguments)
-        {
+        foreach ($this->queries as $method => $arguments) {
             $this->model = call_user_func_array([$this->model, $method], $arguments);
         }
 
@@ -124,11 +121,15 @@ class Model
     protected function setSort()
     {
         $this->sort = Input::get('_sort', []);
-        if(! is_array($this->sort)) return;
+        if (! is_array($this->sort)) {
+            return;
+        }
 
-        if(empty($this->sort['column']) || empty($this->sort['type'])) return;
+        if (empty($this->sort['column']) || empty($this->sort['type'])) {
+            return;
+        }
 
-        if(Str::contains($this->sort['column'], '.')) {
+        if (Str::contains($this->sort['column'], '.')) {
 
             $this->setRelationSort($this->sort['column']);
 
@@ -147,13 +148,16 @@ class Model
     {
         list($relationName, $relationColumn) = explode('.', $column);
 
-        if(isset($this->queries['with']) && in_array($relationName, $this->queries['with'])) {
+        if (isset($this->queries['with']) && in_array($relationName, $this->queries['with'])) {
 
             $relation = $this->model->$relationName();
 
             $this->queries['join'] = $this->joinParameters($relation);
 
-            $this->queries['orderBy'] = [$relation->getRelated()->getTable() . '.'. $relationColumn, $this->sort['type']];
+            $this->queries['orderBy'] = [
+                $relation->getRelated()->getTable() . '.'. $relationColumn,
+                $this->sort['type']
+            ];
         }
     }
 
@@ -165,7 +169,12 @@ class Model
      */
     protected function joinParameters(Relation $relation)
     {
-        return [$relation->getRelated()->getTable(), $relation->getQualifiedParentKeyName(), '=', $relation->getForeignKey()];
+        return [
+            $relation->getRelated()->getTable(),
+            $relation->getQualifiedParentKeyName(),
+            '=',
+            $relation->getForeignKey()
+        ];
     }
 
     public function __call($method, $arguments)

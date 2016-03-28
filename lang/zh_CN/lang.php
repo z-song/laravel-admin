@@ -7,6 +7,7 @@ return [
     'password'      => '密码',
     'remember_me'   => '记住我',
 
+    'list'          => '列表',
     'new'           => '新增',
     'create'        => '创建',
     'delete'        => '删除',

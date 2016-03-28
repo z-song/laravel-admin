@@ -73,10 +73,10 @@ class Router
      */
     public function register()
     {
-        $this->router->group($this->attributes, function($router)
-        {
-            foreach($this->routes as $method => $arguments) {
-                foreach($arguments as $argument) {
+        $this->router->group($this->attributes, function ($router) {
+        
+            foreach ($this->routes as $method => $arguments) {
+                foreach ($arguments as $argument) {
                     call_user_func_array([$router, $method], $argument);
                 }
             }
@@ -91,7 +91,7 @@ class Router
      */
     public function __call($method, $arguments)
     {
-        if(method_exists($this->router, $method)) {
+        if (method_exists($this->router, $method)) {
             $this->routes[$method][] = $arguments;
         }
     }

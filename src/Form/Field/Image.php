@@ -34,15 +34,21 @@ class Image extends File
 
     public function preview($width = null, $height = null)
     {
-        if ( ! file_exists($this->value)) return '';
+        if (! file_exists($this->value)) {
+            return '';
+        }
 
-        return '<br><img src="' . ImageManagerStatic::make($this->value)->encode('data-url').'" class="pull-left img-responsive">';
+        return '<br><img src="' .
+            ImageManagerStatic::make($this->value)->encode('data-url') .
+            '" class="pull-left img-responsive">';
 
     }
 
     public function prepare(UploadedFile $image = null)
     {
-        if(is_null($image)) return $this->original;
+        if (is_null($image)) {
+            return $this->original;
+        }
 
         $this->directory = $this->directory ?
             $this->directory : config('admin.upload.image');
@@ -53,8 +59,7 @@ class Image extends File
 
         $this->destroy();
 
-        if( ! empty($this->size))
-        {
+        if (! empty($this->size)) {
             $image = ImageManagerStatic::make($target);
             $image->resize($this->size['width'], $this->size['height'])->save($target);
         }

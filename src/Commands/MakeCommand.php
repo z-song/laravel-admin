@@ -29,7 +29,7 @@ class MakeCommand extends GeneratorCommand
      */
     public function handle()
     {
-        if(! $this->modelExists()) {
+        if (! $this->modelExists()) {
             $this->error("Model does not exists !");
 
             return false;
@@ -49,7 +49,7 @@ class MakeCommand extends GeneratorCommand
     {
         $model = $this->option('model');
 
-        if(empty($model)) {
+        if (empty($model)) {
             return true;
         }
 
@@ -81,7 +81,7 @@ class MakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        if($this->option('model')) {
+        if ($this->option('model')) {
             return __DIR__.'/stubs/controller.stub';
         }
 
@@ -123,7 +123,8 @@ class MakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['model', null, InputOption::VALUE_REQUIRED, 'The eloquent model that should be use as controller data source.'],
+            ['model', null, InputOption::VALUE_REQUIRED,
+                'The eloquent model that should be use as controller data source.'],
         ];
     }
 }

@@ -18,7 +18,7 @@ abstract class AdminController extends Controller
     {
         $page = $this->page();
 
-        if($page instanceof Grid) {
+        if ($page instanceof Grid) {
             $page->with($this->variables());
         }
 
@@ -42,7 +42,7 @@ abstract class AdminController extends Controller
 
     public function destroy($id)
     {
-        if($this->form()->destroy($id)) {
+        if ($this->form()->destroy($id)) {
             return response()->json(['msg' => 'delete success!']);
         }
     }

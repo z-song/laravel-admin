@@ -52,11 +52,11 @@ class Admin
      */
     public function getModel($model)
     {
-        if($model instanceof EloquentModel) {
+        if ($model instanceof EloquentModel) {
             return $model;
         }
 
-        if(is_string($model) && class_exists($model)) {
+        if (is_string($model) && class_exists($model)) {
             return $this->getModel(new $model);
         }
 
@@ -81,7 +81,7 @@ class Admin
      */
     public static function css($css = '')
     {
-        if(! empty($css)) {
+        if (! empty($css)) {
             self::$css = array_merge(self::$css, (array) $css);
 
             return ;
@@ -96,7 +96,7 @@ class Admin
      */
     public static function js($js = '')
     {
-        if( ! empty($js)) {
+        if (! empty($js)) {
             self::$js = array_merge(self::$js, (array) $js);
 
             return;
@@ -111,7 +111,7 @@ class Admin
      */
     public static function script($script = '')
     {
-        if( ! empty($script)) {
+        if (! empty($script)) {
             self::$script = array_merge(self::$script, (array) $script);
 
             return;
@@ -131,7 +131,7 @@ class Admin
 
     public function menu()
     {
-        if(Config::has('admin.menu')) {
+        if (Config::has('admin.menu')) {
             return Config::get('admin.menu');
         }
     }

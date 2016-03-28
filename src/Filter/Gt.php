@@ -6,7 +6,9 @@ class Gt extends AbstractFilter
 {
     public function condition($inputs)
     {
-        if(! isset($inputs[$this->column])) return;
+        if (! isset($inputs[$this->column])) {
+            return;
+        }
 
         $this->value = $inputs[$this->column];
 

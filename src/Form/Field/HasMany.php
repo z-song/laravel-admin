@@ -27,7 +27,7 @@ class HasMany extends Field
 
         $relation = call_user_func([$model, $this->relationName]);
 
-        if( ! $relation instanceof Relation) {
+        if (! $relation instanceof Relation) {
             throw new \Exception('hasMany field must be a HasMany relation.');
         }
 

@@ -59,7 +59,7 @@ class InstallCommand extends Command
     {
         $this->directory = config('admin.directory');
 
-        if(is_dir($this->directory)) {
+        if (is_dir($this->directory)) {
             $this->line("<error>{$this->directory} directory already exists !</error> ");
 
             return;
@@ -90,7 +90,10 @@ class InstallCommand extends Command
         $homeController = $this->directory . '/Controllers/HomeController.php';
         $contents = $this->getStub('HomeController');
 
-        $this->laravel['files']->put($homeController, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
+        $this->laravel['files']->put(
+            $homeController,
+            str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
+        );
         $this->line('<info>HomeController file was created:</info> ' . str_replace(base_path(), '', $homeController));
     }
 
@@ -104,7 +107,10 @@ class InstallCommand extends Command
         $authController = $this->directory . '/Controllers/AuthController.php';
         $contents = $this->getStub('AuthController');
 
-        $this->laravel['files']->put($authController, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
+        $this->laravel['files']->put(
+            $authController,
+            str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
+        );
         $this->line('<info>AuthController file was created:</info> ' . str_replace(base_path(), '', $authController));
     }
 
@@ -118,8 +124,13 @@ class InstallCommand extends Command
         $controller = $this->directory . '/Controllers/AdministratorController.php';
         $contents = $this->getStub('AdministratorController');
 
-        $this->laravel['files']->put($controller, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
-        $this->line('<info>AdministratorController file was created:</info> ' . str_replace(base_path(), '', $controller));
+        $this->laravel['files']->put(
+            $controller,
+            str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
+        );
+        $this->line(
+            '<info>AdministratorController file was created:</info> ' . str_replace(base_path(), '', $controller)
+        );
     }
 
     /**
@@ -157,7 +168,7 @@ class InstallCommand extends Command
      */
     protected function copyLanguageFiles()
     {
-        $this->laravel['files']->copyDirectory(__DIR__ . '/../../lang/',"{$this->directory}/lang/");
+        $this->laravel['files']->copyDirectory(__DIR__ . '/../../lang/', "{$this->directory}/lang/");
     }
 
     /**

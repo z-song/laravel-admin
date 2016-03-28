@@ -53,7 +53,7 @@ class Builder
 
     public function options($options = [])
     {
-        if(empty($options)) {
+        if (empty($options)) {
             return $this->options;
         }
 
@@ -62,15 +62,15 @@ class Builder
 
     public function title()
     {
-        if($this->mode == static::MODE_CREATE) {
+        if ($this->mode == static::MODE_CREATE) {
             return Lang::get('admin::lang.create');
         }
 
-        if($this->mode == static::MODE_EDIT) {
+        if ($this->mode == static::MODE_EDIT) {
             return Lang::get('admin::lang.edit');
         }
 
-        if($this->mode == static::MODE_VIEW) {
+        if ($this->mode == static::MODE_VIEW) {
             return Lang::get('admin::lang.view');
         }
     }
@@ -82,8 +82,8 @@ class Builder
      */
     public function hasFile()
     {
-        foreach($this->fields() as $field) {
-            if($field instanceof Field\File) {
+        foreach ($this->fields() as $field) {
+            if ($field instanceof Field\File) {
                 return true;
             }
         }
@@ -99,12 +99,12 @@ class Builder
      */
     public function open($options = [])
     {
-        if($this->mode == self::MODE_EDIT) {
+        if ($this->mode == self::MODE_EDIT) {
             $attributes['action'] = $this->form->resource() . '/' . $this->id;
             $this->form->hidden('_method')->value('PUT');
         }
 
-        if($this->mode == self::MODE_CREATE) {
+        if ($this->mode == self::MODE_CREATE) {
             $attributes['action'] = $this->form->resource();
         }
 
@@ -113,11 +113,11 @@ class Builder
 
         $attributes['class'] = array_get($options, 'class');
 
-        if($this->hasFile()) {
+        if ($this->hasFile()) {
             $attributes['enctype'] = 'multipart/form-data';
         }
 
-        foreach($attributes as $name => $value) {
+        foreach ($attributes as $name => $value) {
             $html[] = "$name=\"$value\"";
         }
 
@@ -139,7 +139,7 @@ class Builder
 
     public function submit()
     {
-        if($this->mode == self::MODE_VIEW) {
+        if ($this->mode == self::MODE_VIEW) {
             return;
         }
 
@@ -148,7 +148,8 @@ class Builder
 
     public function back()
     {
-        return '<a href="'.$this->form->resource().'" class="btn btn-default">'.Lang::get('admin::lang.back_to_list').'</a>';
+        return '<a href="'.$this->form->resource().'" class="btn btn-default">'.
+            Lang::get('admin::lang.back_to_list').'</a>';
     }
 
     public function build()

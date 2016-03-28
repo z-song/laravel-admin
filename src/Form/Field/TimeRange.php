@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
-class TimeRange  extends DateRange
+class TimeRange extends DateRange
 {
     protected $format = 'HH:mm:ss';
 }

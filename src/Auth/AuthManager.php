@@ -29,7 +29,9 @@ class AuthManager extends Manager
 
         if (isset($this->customProviderCreators[$config['driver']])) {
             return call_user_func(
-                $this->customProviderCreators[$config['driver']], $this->app, $config
+                $this->customProviderCreators[$config['driver']],
+                $this->app,
+                $config
             );
         }
 
@@ -39,7 +41,9 @@ class AuthManager extends Manager
             case 'eloquent':
                 return $this->createEloquentProvider($config);
             default:
-                throw new InvalidArgumentException("Authentication user provider [{$config['driver']}] is not defined.");
+                throw new InvalidArgumentException(
+                    "Authentication user provider [{$config['driver']}] is not defined."
+                );
         }
     }
 }

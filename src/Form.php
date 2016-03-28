@@ -53,7 +53,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @package Encore\Admin
  */
-class Form {
+class Form
+{
 
     /**
      * Eloquent model of the form.
@@ -195,11 +196,11 @@ class Form {
         $data = $this->model->with($this->getRelations())
             ->findOrFail($id)->toArray();
 
-        $this->builder->fields()->filter(function($field) {
+        $this->builder->fields()->filter(function ($field) {
 
             return $field instanceof Field\File;
 
-        })->each(function($field) use ($data) {
+        })->each(function ($field) use ($data) {
 
             $field->setOriginal($data);
 
@@ -216,13 +217,13 @@ class Form {
     {
         $data = Input::all();
 
-        if( ! $this->validate($data)) {
+        if (! $this->validate($data)) {
             return back()->withInput()->withErrors($this->validator->messages());
         }
 
         $this->prepare($data, $this->saving);
 
-        DB::transaction(function() {
+        DB::transaction(function () {
 
             $inserts = $this->prepareInsert($this->updates);
 
@@ -250,11 +251,11 @@ class Form {
     {
         $this->inputs = $data;
 
-        if($callback instanceof Closure) {
+        if ($callback instanceof Closure) {
             $callback($this);
         }
 
-        $this->updates = array_filter($this->inputs, function($val) {
+        $this->updates = array_filter($this->inputs, function ($val) {
             return is_string($val) or ($val instanceof UploadedFile);
         });
         $this->relations = array_filter($this->inputs, 'is_array');
@@ -266,7 +267,7 @@ class Form {
      */
     protected function complete(Closure $callback = null)
     {
-        if($callback instanceof Closure) {
+        if ($callback instanceof Closure) {
             $callback($this);
         }
     }
@@ -281,7 +282,7 @@ class Form {
     {
         foreach ($relations as $name => $values) {
 
-            if( ! method_exists($this->model, $name)) {
+            if (! method_exists($this->model, $name)) {
                 continue;
             }
 
@@ -290,12 +291,12 @@ class Form {
             $relation = $this->model->$name();
 
             switch (get_class($relation)) {
-                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class :
+                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
                     $relation->attach($values[$name]);
                     break;
-                case \Illuminate\Database\Eloquent\Relations\HasOne::class :
+                case \Illuminate\Database\Eloquent\Relations\HasOne::class:
                     $related = $relation->getRelated();
-                    foreach($values[$name] as $column => $value) {
+                    foreach ($values[$name] as $column => $value) {
                         $related->setAttribute($column, $value);
                     }
 
@@ -312,7 +313,7 @@ class Form {
      */
     public function update($id, $data)
     {
-        if( ! $this->validate($data)) {
+        if (! $this->validate($data)) {
             return back()->withInput()->withErrors($this->validator->messages());
         }
 
@@ -322,7 +323,7 @@ class Form {
 
         $this->prepare($data, $this->saving);
 
-        DB::transaction(function() {
+        DB::transaction(function () {
 
             $updates = $this->prepareUpdate($this->updates);
 
@@ -348,26 +349,26 @@ class Form {
      */
     protected function updateRelation($relations)
     {
-        foreach($relations as $name => $values) {
+        foreach ($relations as $name => $values) {
 
-            if( ! method_exists($this->model, $name)) {
+            if (! method_exists($this->model, $name)) {
                 continue;
             }
 
             $prepared = $this->prepareUpdate([$name => $values]);
 
-            if(empty($prepared)) continue;
+            if (empty($prepared)) {
+                continue;
+            }
 
             $relation = $this->model->$name();
 
             switch (get_class($relation)) {
-                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class :
-
+                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
                     $relation->sync($prepared[$name]);
                     break;
-                case \Illuminate\Database\Eloquent\Relations\HasOne::class :
-
-                    foreach($prepared[$name] as $column => $value) {
+                case \Illuminate\Database\Eloquent\Relations\HasOne::class:
+                    foreach ($prepared[$name] as $column => $value) {
                         $this->model->$name->setAttribute($column, $value);
                     }
 
@@ -393,17 +394,19 @@ class Form {
 
             $value = static::getDataByColumn($updates, $columns);
 
-            if(empty($value)) continue;
+            if (empty($value)) {
+                continue;
+            }
 
             method_exists($field, 'prepare') && $value = $field->prepare($value);
 
-            if($value != $field->original()) {
+            if ($value != $field->original()) {
 
-                if(is_array($columns)) {
+                if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
                         Arr::set($prepared, $column, $value[$name]);
                     }
-                } else if (is_string($columns)) {
+                } elseif (is_string($columns)) {
                     Arr::set($prepared, $columns, $value);
                 }
             }
@@ -428,7 +431,7 @@ class Form {
 
         foreach ($inserts as $column => $value) {
 
-            if(is_null($field = $this->getFieldByColumn($column))) {
+            if (is_null($field = $this->getFieldByColumn($column))) {
                 unset($inserts[$column]);
                 continue;
             }
@@ -483,7 +486,9 @@ class Form {
         if (is_array($columns)) {
             $value = [];
             foreach ($columns as $name => $column) {
-                if(! Arr::has($data, $column)) continue;
+                if (! Arr::has($data, $column)) {
+                    continue;
+                }
                 $value[$name] = Arr::get($data, $column);
             }
 
@@ -502,7 +507,7 @@ class Form {
         return $this->builder->fields()->first(
             function ($index, $field) use ($column) {
 
-                if(is_array($field->column())) {
+                if (is_array($field->column())) {
                     return in_array($column, $field->column());
                 }
 
@@ -520,7 +525,7 @@ class Form {
     {
         $values = $this->model->toArray();
 
-        $this->builder->fields()->each(function($field) use ($values) {
+        $this->builder->fields()->each(function ($field) use ($values) {
             $field->setOriginal($values);
         });
     }
@@ -539,7 +544,7 @@ class Form {
 
         $data = $this->model->toArray();
 
-        $this->builder->fields()->each(function($field) use ($data) {
+        $this->builder->fields()->each(function ($field) use ($data) {
             $field->fill($data);
         });
     }
@@ -555,18 +560,18 @@ class Form {
         $data = $rules = [];
 
         foreach ($this->builder->fields() as $field) {
-            if( ! method_exists($field, 'rules') || ! $rule = $field->rules()) {
+            if (! method_exists($field, 'rules') || ! $rule = $field->rules()) {
                 continue;
             }
 
             $columns = $field->column();
 
-            if(is_string($columns)) {
+            if (is_string($columns)) {
                 $data[$field->label()] = Arr::get($input, $columns);
                 $rules[$field->label()] = $rule;
             }
 
-            if(is_array($columns)) {
+            if (is_array($columns)) {
                 foreach ($columns as $key => $column) {
                     $data[$field->label().$key] = Arr::get($input, $column);
                     $rules[$field->label().$key] = $rule;
@@ -588,20 +593,20 @@ class Form {
     {
         $relations = $columns = [];
 
-        foreach($this->builder->fields() as $field) {
+        foreach ($this->builder->fields() as $field) {
             $columns[] = $field->column();
         }
 
-        foreach(Arr::flatten($columns) as $column) {
-            if(Str::contains($column, '.')) {
+        foreach (Arr::flatten($columns) as $column) {
+            if (Str::contains($column, '.')) {
                 list($relation) = explode('.', $column);
 
-                if(method_exists($this->model, $relation) &&
+                if (method_exists($this->model, $relation) &&
                     $this->model->$relation() instanceof Relation
                 ) {
                     $relations[] = $relation;
                 }
-            } elseif(method_exists($this->model, $column)) {
+            } elseif (method_exists($this->model, $column)) {
                 $relations[] = $column;
             }
         }
@@ -643,7 +648,7 @@ class Form {
      */
     public function input($key, $value = null)
     {
-        if(is_null($value)) {
+        if (is_null($value)) {
             return Arr::get($this->inputs, $key);
         }
 
@@ -683,7 +688,7 @@ class Form {
     {
         $className = __NAMESPACE__ . '\\Form\\Field\\' . ucfirst($method);
 
-        if(class_exists($className)) {
+        if (class_exists($className)) {
 
             $column = $arguments[0];
 

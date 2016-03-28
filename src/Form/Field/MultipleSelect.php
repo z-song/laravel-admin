@@ -10,8 +10,7 @@ class MultipleSelect extends Select
     {
         $relations = Arr::get($data, $this->column);
 
-        foreach($relations as $relation)
-        {
+        foreach ($relations as $relation) {
             $this->value[] = array_pop($relation['pivot']);
         }
     }
@@ -20,8 +19,7 @@ class MultipleSelect extends Select
     {
         $relations = Arr::get($data, $this->column);
 
-        foreach($relations as $relation)
-        {
+        foreach ($relations as $relation) {
             $this->original[] = array_pop($relation['pivot']);
         }
     }

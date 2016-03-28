@@ -24,7 +24,7 @@ class Select extends Field
 
     public function options($options = [])
     {
-        if($options instanceof Arrayable) {
+        if ($options instanceof Arrayable) {
             $options = $options->toArray();
         }
 

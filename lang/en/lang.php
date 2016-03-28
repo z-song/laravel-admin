@@ -7,6 +7,7 @@ return [
     'password'      => 'Password',
     'remember_me'   => 'Remember me',
 
+    'list'          => 'List',
     'new'           => 'New',
     'create'        => 'Create',
     'delete'        => 'Delete',

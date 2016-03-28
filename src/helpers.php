@@ -1,6 +1,6 @@
 <?php
 
-if ( ! function_exists('admin_path')) {
+if (! function_exists('admin_path')) {
 
     /**
      * Get admin path.
@@ -14,7 +14,7 @@ if ( ! function_exists('admin_path')) {
     }
 }
 
-if ( ! function_exists('admin_url')) {
+if (! function_exists('admin_url')) {
     /**
      * Get admin url.
      *

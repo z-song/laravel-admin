@@ -4,7 +4,8 @@ namespace Encore\Admin\Grid;
 
 use Illuminate\Support\Arr;
 
-class Row {
+class Row
+{
 
     protected $number;
 
@@ -21,10 +22,10 @@ class Row {
 
     public function attrs(array $attrs = [])
     {
-        if(empty($attrs)) {
+        if (empty($attrs)) {
 
             $attrArr = [];
-            foreach($this->attributes as $name => $val) {
+            foreach ($this->attributes as $name => $val) {
                 $attrArr[] = "$name=\"$val\"";
             }
 
@@ -36,13 +37,13 @@ class Row {
 
     public function style($style)
     {
-        if(is_array($style)) {
-            $style = join('', array_map(function($key, $val) {
+        if (is_array($style)) {
+            $style = join('', array_map(function ($key, $val) {
                 return "$key:$val";
             }, array_keys($style), array_values($style)));
         }
 
-        if(is_string($style)) {
+        if (is_string($style)) {
             $this->attributes['style'] = $style;
         }
     }

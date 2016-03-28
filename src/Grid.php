@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Encore\Admin\Pagination\AdminThreePresenter;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class Grid {
+class Grid
+{
 
     /**
      * The grid data model instance.
@@ -125,7 +126,7 @@ class Grid {
      */
     public function column($name, $label = '')
     {
-        if(strpos($name, '.') !== false) {
+        if (strpos($name, '.') !== false) {
             list($relationName, $relationColumn) = explode('.', $name);
 
             $relation = $this->model()->eloquent()->$relationName();
@@ -135,7 +136,7 @@ class Grid {
 
         $column = $this->addColumn($name, $label);
 
-        if(isset($relation) && $relation instanceof Relation) {
+        if (isset($relation) && $relation instanceof Relation) {
             $this->model()->with($relationName);
             $column->setRelation($relation, $relationColumn);
         }
@@ -155,19 +156,19 @@ class Grid {
      */
     public function columns($columns = [])
     {
-        if(func_num_args() == 0) {
+        if (func_num_args() == 0) {
             return $this->columns;
         }
 
-        if(func_num_args() == 1 && is_array($columns)) {
-            foreach($columns as $column => $label) {
+        if (func_num_args() == 1 && is_array($columns)) {
+            foreach ($columns as $column => $label) {
                 $this->column($column, $label);
             }
 
             return;
         }
 
-        foreach(func_get_args() as $column) {
+        foreach (func_get_args() as $column) {
             $this->column($column);
         }
     }
@@ -252,13 +253,15 @@ class Grid {
      */
     public function build()
     {
-        if($this->builded) return;
+        if ($this->builded) {
+            return;
+        }
 
         call_user_func($this->builder, $this);
 
         $data = $this->filter->execute();
 
-        $this->columns->map(function($column) use (&$data) {
+        $this->columns->map(function ($column) use (&$data) {
             $data = $column->map($data);
 
             $this->columnNames[] = $column->getName();
@@ -279,11 +282,11 @@ class Grid {
      */
     protected function buildRows(array $data)
     {
-        $this->rows = collect($data)->map(function($val, $key){
+        $this->rows = collect($data)->map(function ($val, $key) {
             return new Row($key, $val);
         });
 
-        if($this->rowsCallback) {
+        if ($this->rowsCallback) {
             $this->rows->map($this->rowsCallback);
         }
     }
@@ -295,7 +298,7 @@ class Grid {
      */
     protected function buildActions()
     {
-        if(is_null($this->actions)) {
+        if (is_null($this->actions)) {
             $this->actions();
         }
     }
@@ -308,7 +311,7 @@ class Grid {
      */
     public function rows(Closure $callable = null)
     {
-        if(is_null($callable)) {
+        if (is_null($callable)) {
             return $this->rows;
         }
 
@@ -353,7 +356,7 @@ class Grid {
      */
     public function title($title = '')
     {
-        if(func_num_args() == 0) {
+        if (func_num_args() == 0) {
             return $this->title;
         }
 
@@ -368,13 +371,13 @@ class Grid {
      */
     public function resource($path = null)
     {
-        if( ! empty($path)) {
+        if (! empty($path)) {
             $this->resourcePath = $path;
 
             return $this;
         }
 
-        if( ! empty($this->resourcePath)) {
+        if (! empty($this->resourcePath)) {
             return $this->resourcePath;
         }
 
@@ -427,8 +430,7 @@ class Grid {
      */
     public function __call($method, $arguments)
     {
-        if(Schema::hasColumn($this->model()->getTable(), $method))
-        {
+        if (Schema::hasColumn($this->model()->getTable(), $method)) {
             $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
             return $this->addColumn($method, $label);
@@ -436,7 +438,7 @@ class Grid {
 
         $relation = $this->model()->eloquent()->$method();
 
-        if($relation instanceof Relation) {
+        if ($relation instanceof Relation) {
 
             $this->model()->with($method);
 

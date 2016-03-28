@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Grid;
 
-
 class Cell
 {
     protected $row;

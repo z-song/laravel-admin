@@ -44,7 +44,7 @@ class Filter
 
         $conditions = [];
 
-        foreach($this->filters() as $filter) {
+        foreach ($this->filters() as $filter) {
             $conditions[] = $filter->condition($inputs);
         }
 
@@ -103,7 +103,7 @@ class Filter
      */
     public function __call($method, $arguments)
     {
-        if(in_array($method, $this->allows)) {
+        if (in_array($method, $this->allows)) {
 
             $className = '\\Encore\\Admin\\Filter\\'.ucfirst($method);
             $reflection = new ReflectionClass($className);

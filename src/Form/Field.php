@@ -7,7 +7,8 @@ use Encore\Admin\Form;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Support\Arrayable;
 
-class Field {
+class Field
+{
 
     protected $id;
 
@@ -78,23 +79,25 @@ class Field {
      */
     protected function formatName($column)
     {
-        if(is_string($column)) {
+        if (is_string($column)) {
 
             $name = explode('.', $column);
 
-            if(count($name) == 1) return $name[0];
+            if (count($name) == 1) {
+                return $name[0];
+            }
 
             $html = array_shift($name);
-            foreach($name as $piece) {
+            foreach ($name as $piece) {
                 $html .= "[$piece]";
             }
 
             return $html;
         }
 
-        if(is_array($this->column)) {
+        if (is_array($this->column)) {
             $names = [];
-            foreach($this->column as $key => $name) {
+            foreach ($this->column as $key => $name) {
                 $names[$key] = $this->formatName($name);
             }
 
@@ -110,10 +113,8 @@ class Field {
      */
     public function fill($data)
     {
-        if(is_array($this->column))
-        {
-            foreach($this->column as $key => $column)
-            {
+        if (is_array($this->column)) {
+            foreach ($this->column as $key => $column) {
                 $this->value[$key] = Arr::get($data, $column);
             }
 
@@ -131,10 +132,8 @@ class Field {
      */
     public function setOriginal($data)
     {
-        if(is_array($this->column))
-        {
-            foreach($this->column as $key => $column)
-            {
+        if (is_array($this->column)) {
+            foreach ($this->column as $key => $column) {
                 $this->original[$key] = Arr::get($data, $column);
             }
 
@@ -164,7 +163,7 @@ class Field {
      */
     public function options($options = [])
     {
-        if($options instanceof Arrayable) {
+        if ($options instanceof Arrayable) {
             $options = $options->toArray();
         }
 
@@ -181,7 +180,7 @@ class Field {
      */
     public function rules($rules = null)
     {
-        if(is_null($rules)) {
+        if (is_null($rules)) {
             return $this->rules;
         }
 
@@ -198,7 +197,7 @@ class Field {
      */
     public function value($value = null)
     {
-        if(is_null($value)) {
+        if (is_null($value)) {
             return is_null($this->value) ? $this->default : $this->value;
         }
 
@@ -252,7 +251,7 @@ class Field {
     {
         $html = [];
 
-        foreach($this->attributes as $name => $value) {
+        foreach ($this->attributes as $name => $value) {
             $html[] = "$name=\"$value\"";
         }
 
@@ -304,7 +303,7 @@ class Field {
 
     public function __call($method, $arguments)
     {
-        if($method === 'default') {
+        if ($method === 'default') {
             $this->default = $arguments[0];
             return $this;
         }

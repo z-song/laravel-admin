@@ -22,7 +22,9 @@ class File extends Field
 
     public function prepare(UploadedFile $file = null)
     {
-        if(is_null($file)) return $this->original;
+        if (is_null($file)) {
+            return $this->original;
+        }
 
         $this->directory = $this->directory ?
             $this->directory : config('admin.upload.file');

@@ -41,15 +41,13 @@ class AdminServiceProvider extends ServiceProvider
         $this->publishes([__DIR__ . '/../../config/admin.php' => config_path('admin.php'), ], 'config');
         $this->publishes([__DIR__ . '/../../assets' => public_path('packages/admin'), ], 'assets');
 
-        if (file_exists($routes = admin_path('routes.php')))
-        {
+        if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
 
             $this->app['admin.router']->register();
         }
 
-        if (file_exists($menu = admin_path('menu.php')))
-        {
+        if (file_exists($menu = admin_path('menu.php'))) {
             $menu = require $menu;
             config(['admin.menu' => $menu]);
         }
@@ -68,8 +66,8 @@ class AdminServiceProvider extends ServiceProvider
             $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
         });
 
-        $this->app->singleton('admin.auth', function($app)
-        {
+        $this->app->singleton('admin.auth', function ($app) {
+        
             return new AuthManager($app);
         });
 
@@ -102,7 +100,7 @@ class AdminServiceProvider extends ServiceProvider
 
     public function registerRouter()
     {
-        $this->app->singleton('admin.router', function($app) {
+        $this->app->singleton('admin.router', function ($app) {
             return new Router($app['router']);
         });
     }
@@ -126,8 +124,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected function registerCommands()
     {
-        foreach ($this->commands as $command)
-        {
+        foreach ($this->commands as $command) {
             $this->commands('Encore\Admin\Commands\\' . $command);
         }
     }

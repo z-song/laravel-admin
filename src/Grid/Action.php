@@ -6,7 +6,8 @@ use Encore\Admin\Admin;
 use Encore\Admin\Grid;
 use Illuminate\Support\Facades\Lang;
 
-class Action {
+class Action
+{
 
     const SHOW      = 'show';
     const EDIT      = 'edit';
@@ -19,9 +20,9 @@ class Action {
     ];
 
     protected $actionViews = [
-        self::SHOW      => '<a href="/{path}/{id}"><i class="fa fa-eye"></i></a> ',
-        self::EDIT      => '<a href="/{path}/{id}/edit"><i class="fa fa-edit"></i></a> ',
-        self::DELETE    => '<a href="javascript:void(0);" data-id="{id}" class="_delete"><i class="fa fa-trash"></i></a> ',
+        self::SHOW   => '<a href="/{path}/{id}"><i class="fa fa-eye"></i></a> ',
+        self::EDIT   => '<a href="/{path}/{id}/edit"><i class="fa fa-edit"></i></a> ',
+        self::DELETE => '<a href="javascript:void(0);" data-id="{id}" class="_delete"><i class="fa fa-trash"></i></a> ',
     ];
 
     protected $grid = null;
@@ -69,11 +70,10 @@ SCRIPT;
 
         $html = '';
 
-        foreach($this->actions as $action) {
+        foreach ($this->actions as $action) {
             $html .= str_replace(['{path}', '{id}'], [$this->path, $id], $this->actionViews[$action]);
         }
 
         return $html;
     }
-
 }

@@ -6,7 +6,8 @@ use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 
-class Column {
+class Column
+{
 
     protected $name;
 
@@ -74,11 +75,10 @@ class Column {
 
     public function map($data)
     {
-        foreach($data as &$item) {
+        foreach ($data as &$item) {
             $value = Arr::get($item, $this->name);
 
-            if($this->hasValueWrapper())
-            {
+            if ($this->hasValueWrapper()) {
                 $value = call_user_func($this->valueWrapper, $value);
                 Arr::set($item, $this->name, $value);
             }
@@ -104,12 +104,14 @@ class Column {
      */
     public function sorter()
     {
-        if(! $this->sortable) return;
+        if (! $this->sortable) {
+            return;
+        }
 
         $icon = 'fa-sort';
         $type = 'desc';
 
-        if($this->isSorted()) {
+        if ($this->isSorted()) {
             $type = $this->sort['type'] == 'desc' ? 'asc' : 'desc';
             $icon .= "-amount-{$this->sort['type']}";
         }
@@ -131,7 +133,9 @@ class Column {
     {
         $this->sort = app('request')->get('_sort');
 
-        if(empty($this->sort)) return false;
+        if (empty($this->sort)) {
+            return false;
+        }
 
         return isset($this->sort['column']) && $this->sort['column'] == $this->name;
     }
@@ -143,7 +147,7 @@ class Column {
      */
     public function __call($method, $arguments)
     {
-        if($this->isRelation()) {
+        if ($this->isRelation()) {
             $this->name = "{$this->relation}.$method";
             $this->label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 

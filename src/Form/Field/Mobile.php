@@ -19,11 +19,11 @@ class Mobile extends Field
 
     public function render()
     {
-        if(empty($this->format)) $this->format();
+        if (empty($this->format)) {
+            $this->format();
+        }
 
-        $options = json_encode([
-            'mask' => $this->format
-        ]);
+        $options = json_encode(['mask' => $this->format]);
 
         $this->script = <<<EOT
 
