@@ -50,6 +50,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Money          money($column, $label = '')
  * @method Field\Json           json($column, $label = '')
  * @method Field\Code           code($column, $label = '')
+ * @method Field\HasMany        hasMany($relationName, $callback)
  *
  * @package Encore\Admin
  */
@@ -264,6 +265,7 @@ class Form
     /**
      * Callback after saving a Model
      * @param Closure|null $callback
+     * @return void
      */
     protected function complete(Closure $callback = null)
     {
