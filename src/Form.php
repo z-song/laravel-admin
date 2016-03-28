@@ -145,6 +145,14 @@ class Form
     }
 
     /**
+     * @return Builder
+     */
+    public function builder()
+    {
+        return $this->builder;
+    }
+
+    /**
      * Generate a edit form.
      *
      * @param $id
@@ -688,9 +696,7 @@ class Form
      */
     public function __call($method, $arguments)
     {
-        $className = __NAMESPACE__ . '\\Form\\Field\\' . ucfirst($method);
-
-        if (class_exists($className)) {
+        if($className = static::findFieldClass($method)) {
 
             $column = $arguments[0];
 
@@ -700,6 +706,21 @@ class Form
 
             return $element;
         }
+    }
+
+    public static function findFieldClass($method)
+    {
+        $className = __NAMESPACE__ . '\\Form\\Field\\' . ucfirst($method);
+
+        if (class_exists($className)) {
+            return $className;
+        }
+
+        if($method == 'switch') {
+            return __NAMESPACE__ . '\\Form\\Field\\SwitchField';
+        }
+
+        return false;
     }
 
     /**

@@ -9,7 +9,6 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Field
 {
-
     protected $id;
 
     protected $value;

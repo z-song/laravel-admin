@@ -6,6 +6,10 @@ use Encore\Admin\Grid;
 use Encore\Admin\Form\Field;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 
+/**
+ * Class HasMany
+ * @package Encore\Admin\Form\Field
+ */
 class HasMany extends Field
 {
     protected $relationName = null;
@@ -23,6 +27,10 @@ class HasMany extends Field
 
     public function render()
     {
+        if ($this->form->builder()->isMode('create')) {
+            return ;
+        }
+
         $model = $this->form->model();
 
         $relation = call_user_func([$model, $this->relationName]);
