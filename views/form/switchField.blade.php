@@ -5,7 +5,9 @@
     <div class="col-sm-6">
 
         @include('admin::form.error')
-        <input type="file" id="{{$id}}" name="{{$name}}" />
-        <input type="hidden" id="{{$id}}_action" name="{{$name}}_action" value="0"/>
+
+        <input type="checkbox" id="{{$id}}_checkbox" {{ $value == 'on' ? 'checked' : '' }}/>
+        <input type="hidden" id="{{$id}}" name="{{$name}}" class="" value="{{ old($column, $value) }}">
+
     </div>
 </div>

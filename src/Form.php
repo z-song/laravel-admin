@@ -51,6 +51,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Json           json($column, $label = '')
  * @method Field\Code           code($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
+ * @method Field\SwitchField    switch($column, $label = '')
  *
  * @package Encore\Admin
  */
@@ -142,6 +143,14 @@ class Form
     public function model()
     {
         return $this->model;
+    }
+
+    /**
+     * @return Builder
+     */
+    public function builder()
+    {
+        return $this->builder;
     }
 
     /**
@@ -396,7 +405,7 @@ class Form
 
             $value = static::getDataByColumn($updates, $columns);
 
-            if (empty($value)) {
+            if (empty($value) && ! $field instanceof \Encore\Admin\Form\Field\File) {
                 continue;
             }
 
@@ -688,9 +697,7 @@ class Form
      */
     public function __call($method, $arguments)
     {
-        $className = __NAMESPACE__ . '\\Form\\Field\\' . ucfirst($method);
-
-        if (class_exists($className)) {
+        if ($className = static::findFieldClass($method)) {
 
             $column = $arguments[0];
 
@@ -700,6 +707,21 @@ class Form
 
             return $element;
         }
+    }
+
+    public static function findFieldClass($method)
+    {
+        $className = __NAMESPACE__ . '\\Form\\Field\\' . ucfirst($method);
+
+        if (class_exists($className)) {
+            return $className;
+        }
+
+        if ($method == 'switch') {
+            return __NAMESPACE__ . '\\Form\\Field\\SwitchField';
+        }
+
+        return false;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
+use Illuminate\Support\Facades\Input;
 use Intervention\Image\ImageManagerStatic;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -10,13 +11,7 @@ class Image extends File
 {
     protected $rules = 'image';
 
-    protected $directory = '';
-
-    protected $name = null;
-
     protected $size = [];
-
-    protected $thumb = [];
 
     public function size($width, $height)
     {
@@ -25,35 +20,25 @@ class Image extends File
         return $this;
     }
 
-    public function thumb($width, $height)
-    {
-        $this->thumb[] = ['width' => $width, 'height' => $height];
-
-        return $this;
-    }
-
-    public function preview($width = null, $height = null)
-    {
-        if (! file_exists($this->value)) {
-            return '';
-        }
-
-        return '<br><img src="' .
-            ImageManagerStatic::make($this->value)->encode('data-url') .
-            '" class="pull-left img-responsive">';
-
-    }
-
     public function prepare(UploadedFile $image = null)
     {
         if (is_null($image)) {
+
+            $action = Input::get($this->id . '_action');
+
+            if ($action == static::ACTION_REMOVE) {
+                $this->destroy();
+
+                return '';
+            }
+
             return $this->original;
         }
 
         $this->directory = $this->directory ?
             $this->directory : config('admin.upload.image');
 
-        $this->name = $this->name ? $this->name : md5(uniqid());
+        $this->name = $this->name ? $this->name : $image->getClientOriginalName();
 
         $target = $image->move($this->directory, $this->name);
 
@@ -64,11 +49,18 @@ class Image extends File
             $image->resize($this->size['width'], $this->size['height'])->save($target);
         }
 
-        return $target;
+        return trim(str_replace(public_path(), '', $target->__toString()), '/');
+    }
+
+    protected function preview()
+    {
+        return '<img src="/' . $this->value . '" class="file-preview-image">';
     }
 
     public function render()
     {
-        return parent::render()->with(['preview' => $this->preview()]);
+        $this->options(['allowedFileTypes' => ['image']]);
+
+        return parent::render();
     }
 }

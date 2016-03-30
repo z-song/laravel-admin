@@ -7,6 +7,10 @@ use Encore\Admin\Form\Field;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
 
+/**
+ * Class Builder
+ * @package Encore\Admin\Form
+ */
 class Builder
 {
     protected $id;
@@ -17,6 +21,9 @@ class Builder
 
     protected $options = ['title' => 'Edit'];
 
+    /**
+     * Modes constants
+     */
     const MODE_VIEW     = 'view';
     const MODE_EDIT     = 'edit';
     const MODE_CREATE   = 'create';
@@ -28,7 +35,6 @@ class Builder
      */
     protected $mode = 'create';
 
-
     public function __construct(Form $form)
     {
         $this->form = $form;
@@ -36,16 +42,44 @@ class Builder
         $this->fields = new Collection();
     }
 
+    /**
+     * Set the builder mode.
+     *
+     * @param string $mode
+     * @return void
+     */
     public function setMode($mode = 'create')
     {
         $this->mode = $mode;
     }
 
+    /**
+     * Returns builder is $mode.
+     *
+     * @param $mode
+     * @return bool
+     */
+    public function isMode($mode)
+    {
+        return $this->mode == $mode;
+    }
+
+    /**
+     * Set resource Id.
+     *
+     * @param $id
+     * @return void
+     */
     public function setResourceId($id)
     {
         $this->id = $id;
     }
 
+    /**
+     * Get fields of this builder.
+     *
+     * @return Collection
+     */
     public function fields()
     {
         return $this->fields;
