@@ -5,16 +5,7 @@
     <div class="col-sm-6">
 
         @include('admin::form.error')
-
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-image"></i></span>
-            <a class='btn btn-default btn-flat' href='javascript:;'>
-                {{ Lang::get('admin::lang.choose_image') }}...
-                <input type="file" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40"  onchange='$("#upload-file-info-{{$id}}").html($(this).val());'>
-            </a>
-            &nbsp;
-            <span class='label label-info' id="upload-file-info-{{$id}}">{{ old($column, $value) }}</span>
-        </div>
-        {!! $preview !!}
+        <input type="file" id="{{$id}}" name="{{$name}}" />
+        <input type="hidden" id="{{$id}}_action" name="{{$name}}_action" value="0"/>
     </div>
 </div>

@@ -11,8 +11,9 @@
 + [CodeMirror](https://codemirror.net/)
 + [font-awesome](http://fontawesome.io)
 + [moment](http://momentjs.com/)
-+  [Google map](https://www.google.com/maps)
++ [Google map](https://www.google.com/maps)
 + [Tencent map](http://lbs.qq.com/)
++ [bootstrap-fileinput](https://github.com/kartik-v/bootstrap-fileinput)
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
@@ -125,45 +126,45 @@ return Admin::grid(User::class, function(Grid $grid){
 
     $grid->id('ID')->sortable();
 
-    //use dynamic method.
+    //Use dynamic method.
     $grid->name();
     //or use column() method: $grid->column('name');
 
-    //add mulitiple columns.
+    //Add mulitiple columns.
     $grid->columns('email', 'username' ...);
 
-    //use related column (hasOne relation).
+    //Use related column (hasOne relation).
     $grid->column('profile.mobile', 'Mobile');
     //or use $grid->profile()->mobile('Mobile');
 
-    //use a callback function to display column value.
+    //Use a callback function to display column value.
     $grid->column('profile.mobile', 'Mobile')->value(function($mobile) {
       return "+86 $mobile";
     });
 
-    //use sortable() method to make the column sortable.
+    //Use sortable() method to make the column sortable.
     $grid->column('profile.age', 'Age')->sortable();
 
     $grid->created_at();
     $grid->updated_at();
 
-    //set query conditions: SELECT * FROM `user` WHERE id > 20 ORDER BY updated_at DESC;
+    //Set query conditions: SELECT * FROM `user` WHERE id > 20 ORDER BY updated_at DESC;
     $grid->model()->where('id', '>', '20')->orderBy('updated_at', 'desc');
 
-    //set 15 items per-page.
+    //Set 15 items per-page.
     $grid->paginate(15);
 
-    //set actions (show,edit,delete).
+    //Set actions (show,edit,delete).
     $grid->actions('show|edit|delete');
 
-    //add row callback function.
+    //Add row callback function.
     $grid->rows(function($row){
       if($row->id <= 10) {
         $row->style('color:red');
       }
     });
 
-    //add data grid filters.
+    //Add data grid filters.
     $grid->filter(function($filter){
 
         // sql: ... WHERE `user.name` LIKE "%$name%";
@@ -196,16 +197,16 @@ return Admin::form(User::class, function(Form $form){
 
     $form->password('password')->rules('required');
 
-    // related column (hasOne relation).
+    //Related column (hasOne relation).
     $form->url('profile.homepage', 'Home page');
 
     $form->ip('last_login_ip', 'Last login ip');
     $form->datetime('last_login_at', 'Last login time');
 
-    // All fields can set a default value.
+    //All fields can set a default value.
     $form->color('color', 'Color')->default('#a34af4');
 
-    // Code editor based on code mirror see https://codemirror.net/
+    //Code editor based on code mirror see https://codemirror.net/
     $form->code('code')->lang('ruby');
     $form->json('json');
 
@@ -219,10 +220,10 @@ return Admin::form(User::class, function(Form $form){
     $form->date('birthday');
     $form->radio('gender')->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
 
-    // use Google map or Tencent map.
+    //Use Google map or Tencent map.
     $form->map('latitude', 'longitude', 'Position');
 
-    // options see http://ionden.com/a/plugins/ion.rangeSlider/en.html.
+    //Options see http://ionden.com/a/plugins/ion.rangeSlider/en.html.
     $form->slider('age', 'Age')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => 'years old']);
 
     $form->datetime('created_at', 'Create time');
@@ -230,16 +231,18 @@ return Admin::form(User::class, function(Form $form){
 
     $form->datetimeRange('created_at', 'profile.updated_at', 'Time line');
 
-    // belongs to many relation.
+    //Belongs to many relation.
     $form->multipleSelect('friends')->options(User::all()->lists('name', 'id'));
 
-    // belongs to many relation.
+    //Belongs to many relation.
     $form->checkbox('roles')->values(Role::all()->lists('display_name', 'id'));
+    
+    $form->switch('open')->states(['on' => 1, 'off' => 0]);
 
-    // has many relation, show as a list.
+    //Has many relation, show as a list.
     $form->hasMany('comments', function(Grid $grid) {
 
-        // set resource path for items.
+        // Set resource path for items.
         $grid->resource('admin/article-comments');
 
         $grid->id('ID');

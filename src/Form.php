@@ -51,6 +51,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Json           json($column, $label = '')
  * @method Field\Code           code($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
+ * @method Field\SwitchField    switch($column, $label = '')
  *
  * @package Encore\Admin
  */
@@ -404,7 +405,7 @@ class Form
 
             $value = static::getDataByColumn($updates, $columns);
 
-            if (empty($value)) {
+            if (empty($value) && ! $field instanceof \Encore\Admin\Form\Field\File) {
                 continue;
             }
 
@@ -696,7 +697,7 @@ class Form
      */
     public function __call($method, $arguments)
     {
-        if($className = static::findFieldClass($method)) {
+        if ($className = static::findFieldClass($method)) {
 
             $column = $arguments[0];
 
@@ -716,7 +717,7 @@ class Form
             return $className;
         }
 
-        if($method == 'switch') {
+        if ($method == 'switch') {
             return __NAMESPACE__ . '\\Form\\Field\\SwitchField';
         }
 
