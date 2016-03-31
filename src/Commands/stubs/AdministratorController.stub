@@ -16,7 +16,7 @@ class AdministratorController extends AdminController
 
     public function page()
     {
-        return Admin::grid(Administrator::class, function(Grid $grid){
+        return Admin::grid(Administrator::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
             $grid->username();
@@ -29,7 +29,7 @@ class AdministratorController extends AdminController
 
     public function form()
     {
-        return Admin::form(Administrator::class, function(Form $form){
+        return Admin::form(Administrator::class, function (Form $form) {
 
             $form->id('id', 'ID');
 
@@ -40,9 +40,8 @@ class AdministratorController extends AdminController
             $form->dateTime('created_at')->readOnly();
             $form->dateTime('updated_at')->readOnly();
 
-            $form->saving(function(Form $form) {
-                if($form->password && $form->model()->password != $form->password)
-                {
+            $form->saving(function (Form $form) {
+                if($form->password && $form->model()->password != $form->password) {
                     $form->password = bcrypt($form->password);
                 }
             });

@@ -17,8 +17,7 @@ class AuthController extends Controller
      */
     public function getLogin()
     {
-        if ( ! Auth::guest())
-        {
+        if (! Auth::guest()) {
             return redirect(config('admin.prefix'));
         }
 
@@ -37,13 +36,11 @@ class AuthController extends Controller
             'username' => 'required', 'password' => 'required',
         ]);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return Redirect::back()->withInput()->withErrors($validator);
         }
 
-        if (Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
             return Redirect::intended(config('admin.prefix'));
         }
 
