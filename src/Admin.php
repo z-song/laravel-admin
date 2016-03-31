@@ -46,6 +46,11 @@ class Admin
         return new Chart($callable);
     }
 
+    public function dashboard(Closure $callable)
+    {
+        return new Dashboard($callable);
+    }
+
     /**
      * @param $model
      * @return mixed

@@ -27,4 +27,6 @@ return [
     'choose'        => 'Choose',
     'choose_file'   => 'Choose file',
     'choose_image'  => 'Choose image',
+
+    'more'          => 'More',
 ];

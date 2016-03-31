@@ -27,4 +27,6 @@ return [
     'choose'        => '选择',
     'choose_file'   => '选择文件',
     'choose_image'  => '选择图片',
+
+    'more'          => '更多',
 ];

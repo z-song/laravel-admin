@@ -17,7 +17,7 @@ class DummyClass extends AdminController
 
     public function page()
     {
-        return Admin::grid(DummyModel::class, function(Grid $grid){
+        return Admin::grid(DummyModel::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
 
@@ -28,7 +28,7 @@ class DummyClass extends AdminController
 
     public function form()
     {
-        return Admin::form(DummyModel::class, function(Form $form){
+        return Admin::form(DummyModel::class, function (Form $form) {
 
             $form->id('id', 'ID');
 

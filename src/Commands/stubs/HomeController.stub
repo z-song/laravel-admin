@@ -1,17 +1,24 @@
 <?php
 
-namespace DummyNamespace;
+namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use Encore\Admin\Facades\Admin;
 
 class HomeController extends Controller
 {
-    protected $title = 'Home';
-
-    protected $description = 'Description...';
-
-    public function getIndex()
+    public function dashboard()
     {
-        return view('admin::index');
+        return Admin::dashboard(function ($dashboard) {
+
+            $dashboard->infoBox()
+                //    title        icon     color   url             info
+                ->add('New Users', 'users', 'aqua', '/admin/users', '1024')
+                ->add('New Orders', 'shopping-cart', 'green', '/admin/orders', '150%')
+                ->add('Movies', 'film', 'yellow', '/admin/movies', '2786')
+                ->add('Documents', 'file', 'red', '/admin/files', '698726');
+
+            $dashboard->table();
+        });
     }
 }
