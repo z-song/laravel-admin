@@ -51,7 +51,7 @@ class Router
         $this->attributes = [
             'prefix'        => config('admin.prefix'),
             'namespace'     => Admin::controllerNamespace(),
-            'middleware'    => ['web', 'admin.auth']
+            'middleware'    => ['web', 'admin.auth', 'admin.pjax']
         ];
     }
 

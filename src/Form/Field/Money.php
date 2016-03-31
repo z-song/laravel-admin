@@ -19,6 +19,11 @@ class Money extends Field
         return $this;
     }
 
+    public function prepare($value)
+    {
+        return (float) str_replace(',', '', $value);
+    }
+
     public function render()
     {
         $this->script = <<<EOT

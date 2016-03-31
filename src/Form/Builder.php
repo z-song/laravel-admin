@@ -182,8 +182,8 @@ class Builder
 
     public function back()
     {
-        return '<a href="'.$this->form->resource().'" class="btn btn-default">'.
-            Lang::get('admin::lang.back_to_list').'</a>';
+        return '<a href="'.$this->form->resource().'" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;'.
+            Lang::get('admin::lang.list').'</a>';
     }
 
     public function build()

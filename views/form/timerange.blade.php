@@ -6,12 +6,21 @@
 
         @include('admin::form.error')
 
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-            <input type="text" id="{{$id['start']}}" name="{{$name['start']}}" value="{{ old($column['start'], $value['start']) }}" class="form-control">
+        <div class="row" style="width: 370px">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" id="{{$id['start']}}" name="{{$name['start']}}" value="{{ old($column['start'], $value['start']) }}" class="form-control" style="width: 150px">
+                </div>
+            </div>
 
-            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-            <input type="text" id="{{$id['end']}}" name="{{$name['end']}}" value="{{ old($column['end'], $value['end']) }}" class="form-control">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" id="{{$id['end']}}" name="{{$name['end']}}" value="{{ old($column['end'], $value['end']) }}" class="form-control" style="width: 150px">
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
