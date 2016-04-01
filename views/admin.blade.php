@@ -27,67 +27,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
 
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
   <!-- REQUIRED JS SCRIPTS -->
   <script src="{{ asset ("/packages/admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/AdminLTE/dist/js/app.min.js") }}"></script>
   <script src="{{ asset ("/packages/admin/jquery-pjax/jquery.pjax.js") }}"></script>
 
-  <script src="{{ asset ("/packages/admin/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
-  <script src="{{ asset ("/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js") }}"></script>
-  <script src="{{ asset ("/packages/admin/bootstrap-fileinput/js/fileinput.min.js") }}"></script>
-  <script src="{{ asset ("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js") }}"></script>
-  <script src="{{ asset ("/packages/admin/moment/min/moment-with-locales.min.js") }}"></script>
-  <script src="{{ asset ("/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-  <script src="http://map.qq.com/api/js?v=2.exp"></script>
-  <script src="{{ asset ("/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js") }}"></script>
-  <script src="{{ asset ("/packages/admin/number-input/bootstrap-number-input.js") }}"></script>
-  <script src="{{ asset ("/packages/admin/AdminLTE/plugins/iCheck/icheck.min.js") }}"></script>
-  <script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
-  <script src="https://cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>
-
-  <script>
-
-    $(document).pjax('a', '#pjax-container')
-
-    $(document).on("pjax:popstate", function() {
-
-      $(document).one("pjax:end", function(event) {
-        $(event.target).find("script[data-exec-on-popstate]").each(function() {
-          $.globalEval(this.text || this.textContent || this.innerHTML || '');
-        })
-      });
-    });
-
-  </script>
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
 </head>
-<!--
-BODY TAG OPTIONS:
-=================
-Apply one or more of the following classes to get the
-desired effect
-|---------------------------------------------------------|
-| SKINS         | skin-blue                               |
-|               | skin-black                              |
-|               | skin-purple                             |
-|               | skin-yellow                             |
-|               | skin-red                                |
-|               | skin-green                              |
-|---------------------------------------------------------|
-|LAYOUT OPTIONS | fixed                                   |
-|               | layout-boxed                            |
-|               | layout-top-nav                          |
-|               | sidebar-collapse                        |
-|               | sidebar-mini                            |
-|---------------------------------------------------------|
--->
+
 <body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
 <div class="wrapper">
 
@@ -103,10 +55,7 @@ desired effect
           {{ $title or Lang::get('admin::lang.title') }}
         <small>{{ $description or Lang::get('admin::lang.description') }}</small>
       </h1>
-      <!--<ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
-      </ol>-->
+
     </section>
 
     <!-- Main content -->
@@ -128,7 +77,38 @@ desired effect
   @include('admin::partials.control-sidebar')
 
 </div>
+
 <!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<script src="{{ asset ("/packages/admin/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/bootstrap-fileinput/js/fileinput.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/moment/min/moment-with-locales.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/number-input/bootstrap-number-input.js") }}"></script>
+<script src="{{ asset ("/packages/admin/AdminLTE/plugins/iCheck/icheck.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
+<script src="https://cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>
+
+{!! Admin::js() !!}
+
+<script>
+
+  $(document).pjax('a', '#pjax-container')
+
+  $(document).on("pjax:popstate", function() {
+
+    $(document).one("pjax:end", function(event) {
+      $(event.target).find("script[data-exec-on-popstate]").each(function() {
+        $.globalEval(this.text || this.textContent || this.innerHTML || '');
+      })
+    });
+  });
+
+</script>
 
 </body>
 </html>

@@ -101,11 +101,19 @@ class Admin
      */
     public static function js($js = '')
     {
-        if (! empty($js)) {
-            self::$js = array_merge(self::$js, (array) $js);
+        static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
 
-            return;
+        if (config('app.locale') == 'zh_CN') {
+            static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
         }
+
+        //static::$js['codemirror'] =
+
+//        if (! empty($js)) {
+//            self::$js = array_merge(self::$js, (array) $js);
+//
+//            return;
+//        }
 
         return view('admin::partials.js', ['js' => array_unique(self::$js)]);
     }

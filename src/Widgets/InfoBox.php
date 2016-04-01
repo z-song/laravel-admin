@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Widgets;
 
-class InfoBox
+class InfoBox extends Widget
 {
     protected $attributes = [];
 
@@ -35,11 +35,6 @@ class InfoBox
      */
     public function render()
     {
-        return view('admin::widgets.box')->with(['boxes' => $this->attributes])->render();
-    }
-
-    public function __toString()
-    {
-        return $this->render();
+        return view('admin::widgets.infoBox')->with(['boxes' => $this->attributes])->render();
     }
 }

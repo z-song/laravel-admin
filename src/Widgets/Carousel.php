@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Widgets;
 
-class Carousel
+class Carousel extends Widget
 {
     protected $items;
 
@@ -24,10 +24,5 @@ class Carousel
     public function render()
     {
         return view('admin::widgets.carousel', ['items' => $this->items, 'title' => $this->title])->render();
-    }
-
-    public function __toString()
-    {
-        return $this->render();
     }
 }
