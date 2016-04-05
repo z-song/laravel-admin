@@ -2,7 +2,9 @@
 
 namespace Encore\Admin\Widgets;
 
-class InfoBox extends Widget
+use Illuminate\Contracts\Support\Renderable;
+
+class InfoBox extends Widget implements Renderable
 {
     protected $attributes = [];
 

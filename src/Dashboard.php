@@ -20,7 +20,7 @@ class Dashboard
         return $this->infoBox = new InfoBox();
     }
 
-    protected $left;
+    protected $left = [];
 
     public function left(Closure $callback)
     {
@@ -29,7 +29,7 @@ class Dashboard
         $callback($this->left);
     }
 
-    protected $right;
+    protected $right = [];
 
     public function right(Closure $callback)
     {
@@ -38,7 +38,7 @@ class Dashboard
         $callback($this->right);
     }
 
-    protected $bottom;
+    protected $bottom = [];
 
     public function bottom(Closure $callback)
     {

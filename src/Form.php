@@ -52,6 +52,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Code           code($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
  * @method Field\SwitchField    switch($column, $label = '')
+ * @method Field\Display        display($column, $label = '')
  *
  * @package Encore\Admin
  */

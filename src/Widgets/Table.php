@@ -2,7 +2,9 @@
 
 namespace Encore\Admin\Widgets;
 
-class Table extends Widget
+use Illuminate\Contracts\Support\Renderable;
+
+class Table extends Widget implements Renderable
 {
     /**
      * @return string

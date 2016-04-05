@@ -4,7 +4,7 @@ namespace Encore\Admin\Widgets;
 
 use Illuminate\Contracts\Support\Renderable;
 
-class Box extends Widget
+class Box extends Widget implements Renderable
 {
     protected $attributes = [
         'class'     => [],
@@ -30,9 +30,9 @@ class Box extends Widget
     {
         if ($content instanceof Renderable) {
             $this->attributes['content'] = $content->render();
+        } else {
+            $this->attributes['content'] = (string) $content;
         }
-
-        $this->attributes['content'] = (string) $content;
 
         return $this;
     }
@@ -63,7 +63,7 @@ class Box extends Widget
         }
 
         $styles = array_map(function ($style) {
-           return 'box-' . $style;
+            return 'box-' . $style;
         }, $styles);
 
         $this->attributes['class'] = array_merge($this->attributes['class'], $styles);

@@ -89,7 +89,8 @@ class PjaxMiddleware
     protected function setUriHeader(Response $response, Request $request)
     {
         $response->header(
-            'X-PJAX-URL', $request->getRequestUri()
+            'X-PJAX-URL',
+            $request->getRequestUri()
         );
     }
 }

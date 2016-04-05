@@ -2,7 +2,9 @@
 
 namespace Encore\Admin\Widgets;
 
-class Carousel extends Widget
+use Illuminate\Contracts\Support\Renderable;
+
+class Carousel extends Widget implements Renderable
 {
     protected $items;
 
