@@ -4,6 +4,7 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Facades\Auth;
+use Encore\Admin\Layout\Content;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
@@ -49,6 +50,11 @@ class Admin
     public function dashboard(Closure $callable)
     {
         return new Dashboard($callable);
+    }
+
+    public function content(Closure $callable)
+    {
+        return new Content($callable);
     }
 
     /**

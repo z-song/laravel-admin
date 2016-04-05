@@ -4,7 +4,6 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Widgets\InfoBox;
-use Encore\Admin\Widgets\Table;
 
 class Dashboard
 {
@@ -45,11 +44,6 @@ class Dashboard
         $this->bottom = collect();
 
         $callback($this->bottom);
-    }
-
-    public function table()
-    {
-        return $this->widgets['table'] = new Table();
     }
 
     protected function variables()
