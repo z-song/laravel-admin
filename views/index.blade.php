@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html>
 <head>
     <meta charset="utf-8">
@@ -24,6 +20,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset("/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/iCheck/all.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css") }}">
 
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
 
@@ -47,16 +45,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     @include('admin::partials.sidebar')
 
-            <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" id="pjax-container">
-        <!-- Content Header (Page header) -->
         @yield('content')
-
         {!! Admin::script() !!}
-
-                <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
 
     @include('admin::partials.footer')
 
@@ -79,6 +71,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
 <script src="https://cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>
 <script src={{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}></script>
+<script src={{ asset ("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js") }}></script>
 
 {!! Admin::js() !!}
 

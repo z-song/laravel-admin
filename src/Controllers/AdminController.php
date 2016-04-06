@@ -2,42 +2,20 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Grid;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-abstract class AdminController extends Controller
+class AdminController extends Controller
 {
-    protected $title = 'Manage';
-
-    protected $description = 'Optional description';
-
-    abstract public function page();
-
-    public function index()
-    {
-        $page = $this->page();
-
-        if ($page instanceof Grid) {
-            $page->with($this->variables());
-        }
-
-        return $page->render();
-    }
-
     public function show($id)
     {
+        return redirect($this->edit($id));
+
         return $this->form()->view($id);
     }
 
-    public function edit($id)
+    public function update($id)
     {
-        return $this->form()->edit($id)->render();
-    }
-
-    public function update($id, Request $request)
-    {
-        return $this->form()->update($id, $request->all());
+        return $this->form()->update($id);
     }
 
     public function destroy($id)
@@ -49,19 +27,11 @@ abstract class AdminController extends Controller
 
     public function store()
     {
-        return $this->form()->create();
+        return $this->form()->store();
     }
 
     public function create()
     {
-        return $this->form()->render();
-    }
-
-    protected function variables()
-    {
-        return [
-            'title' => $this->title,
-            'description' => $this->description
-        ];
+        return $this->form();
     }
 }

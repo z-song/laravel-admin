@@ -4,7 +4,7 @@
         <div class="box box-solid box-info no-margin">
             <!-- /.box-header -->
             <div class="box-body">
-                {{ $value }}&nbsp;
+                {!! $value !!}&nbsp;
             </div><!-- /.box-body -->
         </div>
 

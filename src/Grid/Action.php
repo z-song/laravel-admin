@@ -3,49 +3,50 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Grid;
 use Illuminate\Support\Facades\Lang;
 
 class Action
 {
-
-    const SHOW      = 'show';
+    //const SHOW      = 'show';
     const EDIT      = 'edit';
     const DELETE    = 'delete';
 
-    protected $actions = [
-        self::SHOW,
-        self::EDIT,
-        self::DELETE
-    ];
+    protected $defaultActions = [self::EDIT, self::DELETE];
 
-    protected $actionViews = [
-        self::SHOW   => '<a href="/{path}/{id}"><i class="fa fa-eye"></i></a> ',
+    protected $customActions = [];
+
+    protected $defaultActionViews = [
+        //self::SHOW   => '<a href="/{path}/{id}"><i class="fa fa-eye"></i></a> ',
         self::EDIT   => '<a href="/{path}/{id}/edit"><i class="fa fa-edit"></i></a> ',
         self::DELETE => '<a href="javascript:void(0);" data-id="{id}" class="_delete"><i class="fa fa-trash"></i></a> ',
     ];
 
-    protected $grid = null;
+    protected $row;
 
     protected $path = '';
 
-    public function __construct($actions = 'show|edit|delete')
+    public function __construct($actions = 'edit|delete')
     {
         $actions = explode('|', $actions);
 
-        $this->actions = array_intersect($actions, $this->actions);
-
-        //$this->initScript();
+        $this->defaultActions = array_intersect($actions, $this->defaultActions);
     }
 
-    public function setGrid(Grid $grid)
+    public function setRow(Row $row)
     {
-        $this->grid = $grid;
+        $this->row = $row;
+    }
+
+    public function add(\Closure $callback)
+    {
+        $this->customActions[] = $callback($this->row);
+
+        //return $this;
     }
 
     public function initScript()
     {
-        $this->path = $this->grid->resource(); //app('router')->current()->getPath();
+        $this->path = app('router')->current()->getPath();
 
         $confirm = Lang::get('admin::lang.delete_confirm');
         $token = csrf_token();
@@ -64,16 +65,25 @@ SCRIPT;
 
     }
 
-    public function render($id)
+    public function render()
     {
         $this->initScript();
 
-        $html = '';
+        $actionEntities = $this->customActions;
 
-        foreach ($this->actions as $action) {
-            $html .= str_replace(['{path}', '{id}'], [$this->path, $id], $this->actionViews[$action]);
+        foreach ($this->defaultActions as $action) {
+            $actionEntities[] = str_replace(
+                ['{path}', '{id}'],
+                [$this->path, $this->row->id],
+                $this->defaultActionViews[$action]
+            );
         }
 
-        return $html;
+        return join(' ', $actionEntities);
+    }
+
+    public function __toString()
+    {
+        return $this->render();
     }
 }

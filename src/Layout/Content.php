@@ -41,6 +41,11 @@ class Content implements Renderable
         return $this;
     }
 
+    public function body($content)
+    {
+        return $this->row($content);
+    }
+
     protected function addRow(Row $row)
     {
         $this->rows[] = $row;

@@ -48,4 +48,3 @@ class Tab extends Widget implements Renderable
         return view('admin::widgets.tab', $this->attributes)->render();
     }
 }
-

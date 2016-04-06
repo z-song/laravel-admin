@@ -44,14 +44,16 @@ class Box extends Widget implements Renderable
 
     public function collapsable()
     {
-        $this->attributes['tools'][] = '<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
+        $this->attributes['tools'][] =
+            '<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
 
         return $this;
     }
 
     public function removable()
     {
-        $this->attributes['tools'][] = '<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>';
+        $this->attributes['tools'][] =
+            '<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>';
 
         return $this;
     }

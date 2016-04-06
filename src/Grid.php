@@ -3,11 +3,12 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Grid\Action;
+use Encore\Admin\Grid\Exporter;
+use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Column;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model as Eloquent;
@@ -16,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Grid
 {
-
     /**
      * The grid data model instance.
      *
@@ -53,13 +53,6 @@ class Grid
     public $columnNames = [];
 
     /**
-     * Action instance of grid.
-     *
-     * @var \Encore\Admin\Grid\Action
-     */
-    protected $actions;
-
-    /**
      * Grid builder.
      *
      * @var \Closure
@@ -79,13 +72,6 @@ class Grid
      * @var array
      */
     protected $variables = [];
-
-    /**
-     * Title of the grid.
-     *
-     * @var string
-     */
-    protected $title = 'List';
 
     /**
      * The grid Filter.
@@ -115,6 +101,7 @@ class Grid
         $this->builder  = $builder;
 
         $this->setupFilter();
+        $this->setupExporter();
     }
 
     /**
@@ -223,30 +210,6 @@ class Grid
     }
 
     /**
-     * @param string $actions
-     * @return $this
-     */
-    public function actions($actions = 'show|edit|delete')
-    {
-        $this->actions = new Action($actions);
-
-        return $this;
-    }
-
-    /**
-     * Render grid actions for each data item.
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function renderActions($id)
-    {
-        $this->actions->setGrid($this);
-
-        return $this->actions->render($id);
-    }
-
-    /**
      * Build the grid.
      *
      * @return void
@@ -269,8 +232,6 @@ class Grid
 
         $this->buildRows($data);
 
-        $this->buildActions();
-
         $this->builded = true;
     }
 
@@ -288,18 +249,6 @@ class Grid
 
         if ($this->rowsCallback) {
             $this->rows->map($this->rowsCallback);
-        }
-    }
-
-    /**
-     * Build grid action if grid action is null.
-     *
-     * @return void
-     */
-    protected function buildActions()
-    {
-        if (is_null($this->actions)) {
-            $this->actions();
         }
     }
 
@@ -329,6 +278,16 @@ class Grid
     }
 
     /**
+     * Setup grid exporter.
+     *
+     * @return void
+     */
+    protected function setupExporter()
+    {
+        $this->exporter = new Exporter($this);
+    }
+
+    /**
      * Set the grid filter.
      *
      * @param callable $callback
@@ -346,21 +305,6 @@ class Grid
     public function renderFilter()
     {
         return $this->filter->render();
-    }
-
-    /**
-     * Set the grid title.
-     *
-     * @param string $title
-     * @return string
-     */
-    public function title($title = '')
-    {
-        if (func_num_args() == 0) {
-            return $this->title;
-        }
-
-        $this->title = $title;
     }
 
     /**

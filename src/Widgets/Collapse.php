@@ -23,4 +23,3 @@ class Collapse extends Widget implements Renderable
         return view('admin::widgets.collapse', ['items' => $this->items])->render();
     }
 }
-

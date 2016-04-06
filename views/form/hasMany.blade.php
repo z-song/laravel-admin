@@ -17,7 +17,7 @@
                         <td>{!! $row->column($name) !!}</td>
                     @endforeach
                     <td>
-                        {!! $grid->renderActions($row->id) !!}
+                        {!! $row->actions() !!}
                     </td>
                 </tr>
             @endforeach

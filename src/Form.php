@@ -220,11 +220,11 @@ class Form
     }
 
     /**
-     * Create a new record.
+     * Store a new record.
      *
      * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function create()
+    public function store()
     {
         $data = Input::all();
 
@@ -320,11 +320,12 @@ class Form
 
     /**
      * @param $id
-     * @param $data
      * @return $this|\Illuminate\Http\RedirectResponse
      */
-    public function update($id, $data)
+    public function update($id)
     {
+        $data = Input::all();
+
         if (! $this->validate($data)) {
             return back()->withInput()->withErrors($this->validator->messages());
         }
@@ -648,7 +649,7 @@ class Form
      */
     public function render()
     {
-        return $this->builder->build();
+        return $this->builder->render();
     }
 
     /**

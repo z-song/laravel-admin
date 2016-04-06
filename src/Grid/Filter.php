@@ -1,9 +1,8 @@
 <?php
 
-namespace Encore\Admin;
+namespace Encore\Admin\Grid;
 
 use ReflectionClass;
-use Encore\Admin\Grid\Model;
 use Illuminate\Support\Facades\Input;
 use Encore\Admin\Filter\AbstractFilter;
 

@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Collection;
@@ -180,19 +181,36 @@ class Builder
         return '<button type="submit" class="btn btn-info pull-right">'.Lang::get('admin::lang.submit').'</button>';
     }
 
-    public function back()
+    public function render()
     {
-        return '<a href="'.$this->form->resource().'" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;'.
-            Lang::get('admin::lang.list').'</a>';
-    }
+        $confirm = Lang::get('admin::lang.delete_confirm');
+        $token = csrf_token();
 
-    public function build()
-    {
-        return view('admin::form', ['form' => $this])->render();
+        $script = <<<SCRIPT
+            $('._delete').click(function() {
+                var id = $(this).data('id');
+                if(confirm('{$confirm}')) {
+                    $.post('{$this->form->resource()}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+                        Window.location.href = '/{$this->form->resource()}/';
+                        return false;
+                    });
+                }
+            });
+SCRIPT;
+
+        Admin::script($script);
+
+        $vars = [
+            'id'       => $this->id,
+            'form'     => $this,
+            'resource' => $this->form->resource(),
+        ];
+
+        return view('admin::form', $vars)->render();
     }
 
     public function __toString()
     {
-        return $this->build();
+        return $this->render();
     }
 }

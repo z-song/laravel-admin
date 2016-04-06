@@ -52,4 +52,3 @@ class Column implements Buildable
         echo "</div>";
     }
 }
-
