@@ -47,7 +47,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Options        options(array $options)
  * @method Field\Number         number($column, $label = '')
- * @method Field\Money          money($column, $label = '')
+ * @method Field\Currency       currency($column, $label = '')
  * @method Field\Json           json($column, $label = '')
  * @method Field\Code           code($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)

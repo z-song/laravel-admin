@@ -14,7 +14,7 @@ class Chart extends Widget implements Renderable
 
     protected $options = [];
 
-    protected $data;
+    protected $data = [];
 
     public function __construct($data = [])
     {

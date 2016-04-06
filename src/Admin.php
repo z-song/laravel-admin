@@ -47,11 +47,6 @@ class Admin
         return new Chart($callable);
     }
 
-    public function dashboard(Closure $callable)
-    {
-        return new Dashboard($callable);
-    }
-
     public function content(Closure $callable)
     {
         return new Content($callable);

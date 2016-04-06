@@ -6,9 +6,9 @@ class PolarArea extends Pie
 {
     public function script()
     {
-        $data = $this->fillColor($this->data);
+        $this->data = $this->fillColor($this->data);
 
-        $data = json_encode($data);
+        $data = json_encode($this->data);
 
         $options = json_encode($this->options);
 

@@ -12,6 +12,8 @@ class Bar extends Chart
     {
         $this->data['labels'] = $labels;
 
+        $this->data['datasets'] = [];
+
         $this->add($data);
     }
 

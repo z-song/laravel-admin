@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Widgets\Chart;
 
+use Encore\Admin\Admin;
 use Illuminate\Support\Arr;
 
 class Pie extends Chart
@@ -56,9 +57,9 @@ class Pie extends Chart
 
     public function script()
     {
-        $data = $this->fillColor($this->data);
+        $this->data = $this->fillColor($this->data);
 
-        $data = json_encode($data);
+        $data = json_encode($this->data);
 
         $options = json_encode($this->options);
 
@@ -71,5 +72,14 @@ class Pie extends Chart
 })();
 EOT;
 
+    }
+
+    public function render()
+    {
+        $this->elementId = $this->makeElementId();
+
+        Admin::script($this->script());
+
+        return view('admin::widgets.chart.pie', ['id' => $this->elementId, 'data' => $this->data])->render();
     }
 }

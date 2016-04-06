@@ -51,7 +51,6 @@ class Content implements Renderable
         ob_start();
 
         foreach ($this->rows as $row) {
-
             $row->build();
         }
 
@@ -67,7 +66,13 @@ class Content implements Renderable
      */
     public function render()
     {
-        return $this->build();
+        $items = [
+            'header' => $this->header,
+            'description' => $this->description,
+            'content' => $this->build()
+        ];
+
+        return view('admin::content', $items)->render();
     }
 
     public function __toString()

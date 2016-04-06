@@ -1,13 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: encore
- * Date: 16/4/5
- * Time: 下午3:57
- */
 
 namespace Encore\Admin\Layout;
 
+use Illuminate\Contracts\Support\Renderable;
 
 class Column implements Buildable
 {
@@ -15,15 +10,15 @@ class Column implements Buildable
 
     protected $contents = [];
 
-    public function __construct($width, $content)
+    public function __construct($content, $width = 12)
     {
-        $this->width = $width;
-
         if ($content instanceof \Closure) {
             call_user_func($content, $this);
         } else {
             $this->append($content);
         }
+
+        $this->width = $width;
     }
 
     public function append($content)
@@ -33,16 +28,28 @@ class Column implements Buildable
 
     public function build()
     {
-        foreach ($this->contents as $content) {
+        $this->startColumn();
 
+        foreach ($this->contents as $content) {
+            if ($content instanceof Renderable) {
+                echo $content->render();
+            } else {
+                echo (string) $content;
+            }
         }
 
-        return $this->wrapper('hi');
+        $this->endColumn();
     }
 
-    public function wrapper($content)
+
+    protected function startColumn()
     {
-        return "<div class=\"col-md-{$this->width}\">$content</div>";
+        echo "<div class=\"col-md-{$this->width}\">";
+    }
+
+    protected function endColumn()
+    {
+        echo "</div>";
     }
 }
 

@@ -19,9 +19,9 @@ class InfoBox extends Widget implements Renderable
      *
      * @return InfoBox
      */
-    public function add($name, $icon, $color, $link, $info)
+    public function __construct($name, $icon, $color, $link, $info)
     {
-        $this->attributes[] = [
+        $this->attributes = [
             'name'  => $name,
             'icon'  => $icon,
             'color' => $color,
@@ -37,6 +37,6 @@ class InfoBox extends Widget implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.infoBox')->with(['boxes' => $this->attributes])->render();
+        return view('admin::widgets.infoBox', $this->attributes)->render();
     }
 }

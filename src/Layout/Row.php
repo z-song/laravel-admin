@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Layout;
 
-use Illuminate\Contracts\Support\Renderable;
-
 class Row implements Buildable
 {
     protected $columns = [];
@@ -11,18 +9,18 @@ class Row implements Buildable
     public function __construct($content = '')
     {
         if (! empty($content)) {
-            $this->addColumn($content);
+            $this->column(12, $content);
         }
     }
 
     public function column($width, $content)
     {
-        $column = new Column($width, $content);
+        $column = new Column($content, $width);
 
         $this->addColumn($column);
     }
 
-    protected function addColumn($column)
+    protected function addColumn(Column $column)
     {
         $this->columns[] = $column;
     }
@@ -32,14 +30,7 @@ class Row implements Buildable
         $this->startRow();
 
         foreach ($this->columns as $column) {
-
-            if ($column instanceof Column) {
-                $column->build();
-            } elseif ($column instanceof Renderable) {
-                echo $column->render();
-            } else {
-                echo (string) $column;
-            }
+            $column->build();
         }
 
         $this->endRow();

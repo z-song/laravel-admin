@@ -4,7 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
 
-class Money extends Field
+class Currency extends Field
 {
     protected $js = [
         'AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
