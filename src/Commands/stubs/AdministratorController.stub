@@ -5,16 +5,33 @@ namespace DummyNamespace;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Auth\Database\Administrator;
 
 class AdministratorController extends AdminController
 {
-    protected $title = 'Administrator';
+    public function index()
+    {
+        return Admin::content(function (Content $content) {
 
-    protected $description = 'Administrator';
+            $content->header('Administrators');
+            $content->description('list');
+            $content->body($this->grid());
+        });
+    }
 
-    public function page()
+    public function edit($id)
+    {
+        return Admin::content(function (Content $content) use ($id) {
+
+            $content->header('Administrators');
+            $content->description('edit');
+            $content->body($this->form()->edit($id));
+        });
+    }
+
+    public function grid()
     {
         return Admin::grid(Administrator::class, function (Grid $grid) {
 
@@ -41,7 +58,7 @@ class AdministratorController extends AdminController
             $form->dateTime('updated_at')->readOnly();
 
             $form->saving(function (Form $form) {
-                if($form->password && $form->model()->password != $form->password) {
+                if ($form->password && $form->model()->password != $form->password) {
                     $form->password = bcrypt($form->password);
                 }
             });

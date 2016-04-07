@@ -1,16 +1,13 @@
-@foreach($boxes as $box)
-<div class="col-lg-3 col-xs-6">
-    <!-- small box -->
-    <div class="small-box bg-{{ $box['color'] }}">
-        <div class="inner">
-            <h3>{{ $box['info'] }}</h3>
-
-            <p>{{ $box['name'] }}</p>
-        </div>
-        <div class="icon">
-            <i class="fa fa-{{ $box['icon'] }}"></i>
-        </div>
-        <a href="{{ $box['link'] }}" class="small-box-footer">{{ \Illuminate\Support\Facades\Lang::get('admin::lang.more') }}&nbsp;<i class="fa fa-arrow-circle-right"></i></a>
-    </div>
+<div class="box {!! join($class, ' ') !!}">
+    <div class="box-header with-border">
+        <h3 class="box-title">{{ $title }}</h3>
+        <div class="box-tools pull-right">
+            @foreach($tools as $tool)
+                {!! $tool !!}
+                @endforeach
+        </div><!-- /.box-tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body" style="display: block;">
+        {!! $content !!}
+    </div><!-- /.box-body -->
 </div>
-@endforeach

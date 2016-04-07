@@ -2,7 +2,9 @@
 
 namespace Encore\Admin\Widgets;
 
-class InfoBox
+use Illuminate\Contracts\Support\Renderable;
+
+class InfoBox extends Widget implements Renderable
 {
     protected $attributes = [];
 
@@ -17,9 +19,9 @@ class InfoBox
      *
      * @return InfoBox
      */
-    public function add($name, $icon, $color, $link, $info)
+    public function __construct($name, $icon, $color, $link, $info)
     {
-        $this->attributes[] = [
+        $this->attributes = [
             'name'  => $name,
             'icon'  => $icon,
             'color' => $color,
@@ -35,11 +37,6 @@ class InfoBox
      */
     public function render()
     {
-        return view('admin::widgets.box')->with(['boxes' => $this->attributes])->render();
-    }
-
-    public function __toString()
-    {
-        return $this->render();
+        return view('admin::widgets.infoBox', $this->attributes)->render();
     }
 }

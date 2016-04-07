@@ -26,6 +26,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected $routeMiddleware = [
         'admin.auth' => \Encore\Admin\Middleware\Authenticate::class,
+        'admin.pjax' => \Encore\Admin\Middleware\PjaxMiddleware::class,
     ];
 
     /**

@@ -6,17 +6,5 @@ use Encore\Admin\AdminController;
 
 class DummyClass extends AdminController
 {
-    protected $title = 'Manage';
 
-    protected $description = 'Optional description';
-
-    public function page()
-    {
-        //
-    }
-
-    public function form()
-    {
-        //
-    }
 }

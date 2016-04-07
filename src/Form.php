@@ -47,11 +47,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Options        options(array $options)
  * @method Field\Number         number($column, $label = '')
- * @method Field\Money          money($column, $label = '')
+ * @method Field\Currency       currency($column, $label = '')
  * @method Field\Json           json($column, $label = '')
  * @method Field\Code           code($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
  * @method Field\SwitchField    switch($column, $label = '')
+ * @method Field\Display        display($column, $label = '')
  *
  * @package Encore\Admin
  */
@@ -219,11 +220,11 @@ class Form
     }
 
     /**
-     * Create a new record.
+     * Store a new record.
      *
      * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function create()
+    public function store()
     {
         $data = Input::all();
 
@@ -319,11 +320,12 @@ class Form
 
     /**
      * @param $id
-     * @param $data
      * @return $this|\Illuminate\Http\RedirectResponse
      */
-    public function update($id, $data)
+    public function update($id)
     {
+        $data = Input::all();
+
         if (! $this->validate($data)) {
             return back()->withInput()->withErrors($this->validator->messages());
         }
@@ -647,7 +649,7 @@ class Form
      */
     public function render()
     {
-        return $this->builder->build();
+        return $this->builder->render();
     }
 
     /**

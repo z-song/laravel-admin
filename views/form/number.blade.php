@@ -7,7 +7,7 @@
         @include('admin::form.error')
 
         <div class="input-group">
-            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" placeholder="0">
+            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" placeholder="0" style="width: 100px" />
         </div>
     </div>
 </div>

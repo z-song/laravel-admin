@@ -4,6 +4,7 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Facades\Auth;
+use Encore\Admin\Layout\Content;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
@@ -18,7 +19,7 @@ class Admin
 
     /**
      * @param $model
-     * @param callable $callable
+     * @param Closure $callable
      * @return Grid
      */
     public function grid($model, Closure $callable)
@@ -28,7 +29,7 @@ class Admin
 
     /**
      * @param $model
-     * @param callable $callable
+     * @param Closure $callable
      * @return Form
      */
     public function form($model, Closure $callable)
@@ -37,18 +38,12 @@ class Admin
     }
 
     /**
-     * @param $model
-     * @param callable $callable
-     * @return Chart
+     * @param Closure $callable
+     * @return Content
      */
-    public function chart(Closure $callable)
+    public function content(Closure $callable)
     {
-        return new Chart($callable);
-    }
-
-    public function dashboard(Closure $callable)
-    {
-        return new Dashboard($callable);
+        return new Content($callable);
     }
 
     /**
@@ -101,11 +96,19 @@ class Admin
      */
     public static function js($js = '')
     {
-        if (! empty($js)) {
-            self::$js = array_merge(self::$js, (array) $js);
+        static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
 
-            return;
+        if (config('app.locale') == 'zh_CN') {
+            static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
         }
+
+        //static::$js['codemirror'] =
+
+//        if (! empty($js)) {
+//            self::$js = array_merge(self::$js, (array) $js);
+//
+//            return;
+//        }
 
         return view('admin::partials.js', ['js' => array_unique(self::$js)]);
     }

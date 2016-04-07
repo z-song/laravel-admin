@@ -6,12 +6,13 @@ use Illuminate\Support\Arr;
 
 class Row
 {
-
     protected $number;
 
     protected $data;
 
     protected $attributes = [];
+
+    protected $actions;
 
     public function __construct($number, $data)
     {
@@ -46,6 +47,19 @@ class Row
         if (is_string($style)) {
             $this->attributes['style'] = $style;
         }
+    }
+
+    public function actions($actions = 'edit|delete')
+    {
+        if (! is_null($this->actions)) {
+            return $this->actions;
+        }
+
+        $this->actions = new Action($actions);
+
+        $this->actions->setRow($this);
+
+        return $this->actions;
     }
 
     public function cells()

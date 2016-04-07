@@ -8,7 +8,7 @@
 
         <div class="input-group">
             <span class="input-group-addon">{{$symbol}}</span>
-            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control"  style="width:30%" placeholder="{{ Lang::get('admin::lang.input') }} {{$label}}">
+            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" placeholder="{{ Lang::get('admin::lang.input') }} {{$label}}" style="width: 120px" />
         </div>
     </div>
 </div>
