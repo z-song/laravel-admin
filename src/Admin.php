@@ -19,7 +19,7 @@ class Admin
 
     /**
      * @param $model
-     * @param callable $callable
+     * @param Closure $callable
      * @return Grid
      */
     public function grid($model, Closure $callable)
@@ -29,7 +29,7 @@ class Admin
 
     /**
      * @param $model
-     * @param callable $callable
+     * @param Closure $callable
      * @return Form
      */
     public function form($model, Closure $callable)
@@ -38,15 +38,9 @@ class Admin
     }
 
     /**
-     * @param $model
-     * @param callable $callable
-     * @return Chart
+     * @param Closure $callable
+     * @return Content
      */
-    public function chart(Closure $callable)
-    {
-        return new Chart($callable);
-    }
-
     public function content(Closure $callable)
     {
         return new Content($callable);

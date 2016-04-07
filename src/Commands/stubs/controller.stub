@@ -7,15 +7,32 @@ use DummyModelNamespace;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Controllers\AdminController;
 
 class DummyClass extends AdminController
 {
-    protected $title = 'Manage';
+    public function index()
+    {
+        return Admin::content(function (Content $content) {
 
-    protected $description = 'Optional description';
+            $content->header('Administrators');
+            $content->description('list');
+            $content->body($this->grid());
+        });
+    }
 
-    public function page()
+    public function edit($id)
+    {
+        return Admin::content(function (Content $content) use ($id) {
+
+            $content->header('Administrators');
+            $content->description('edit');
+            $content->body($this->form()->edit($id));
+        });
+    }
+
+    public function grid()
     {
         return Admin::grid(DummyModel::class, function (Grid $grid) {
 
@@ -30,10 +47,10 @@ class DummyClass extends AdminController
     {
         return Admin::form(DummyModel::class, function (Form $form) {
 
-            $form->id('id', 'ID');
+            $form->display('id', 'ID');
 
-            $form->dateTime('created_at')->readOnly();
-            $form->dateTime('updated_at')->readOnly();
+            $form->display('created_at', 'Created At');
+            $form->display('updated_at', 'Updated At');
         });
     }
 }

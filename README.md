@@ -14,6 +14,7 @@
 + [Google map](https://www.google.com/maps)
 + [Tencent map](http://lbs.qq.com/)
 + [bootstrap-fileinput](https://github.com/kartik-v/bootstrap-fileinput)
++ [jquery-pjax](https://github.com/defunkt/jquery-pjax)
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
@@ -187,11 +188,9 @@ return Admin::grid(User::class, function(Grid $grid){
 ```php
 return Admin::form(User::class, function(Form $form){
 
-    $form->options(['title' => 'Edit user']);
-
     // $form->field(columnName [, columnName ], labelName = '');
 
-    $form->id('id', 'ID');
+    $form->display('id', 'ID');
     $form->text('name')->rules('required');
     $form->email('email')->rules('required|email');
 
@@ -210,7 +209,7 @@ return Admin::form(User::class, function(Form $form){
     $form->code('code')->lang('ruby');
     $form->json('json');
 
-    $form->money('price')->symbol('￥');
+    $form->currency('price')->symbol('￥');
     $form->number('count');
 
     $form->image('avatar')/*->size(300, 300)*/;
@@ -226,8 +225,8 @@ return Admin::form(User::class, function(Form $form){
     //Options see http://ionden.com/a/plugins/ion.rangeSlider/en.html.
     $form->slider('age', 'Age')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => 'years old']);
 
-    $form->datetime('created_at', 'Create time');
-    $form->datetime('updated_at', 'Update time');
+    $form->display('created_at', 'Create time');
+    $form->display('updated_at', 'Update time');
 
     $form->datetimeRange('created_at', 'profile.updated_at', 'Time line');
 
