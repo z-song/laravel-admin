@@ -55,7 +55,7 @@ class Action
                 var id = $(this).data('id');
                 if(confirm("{$confirm}")) {
                     $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
-                        location.reload(true);
+                        $.pjax.reload('#pjax-container');
                     });
                 }
             });
