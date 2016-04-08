@@ -3,7 +3,6 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Facades\Input;
 use Intervention\Image\ImageManagerStatic;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -11,45 +10,45 @@ class Image extends File
 {
     protected $rules = 'image';
 
-    protected $size = [];
-
-    public function size($width, $height)
-    {
-        $this->size = ['width' => $width, 'height' => $height];
-
-        return $this;
-    }
+    protected $calls = [];
 
     public function prepare(UploadedFile $image = null)
     {
         if (is_null($image)) {
-
-            $action = Input::get($this->id . '_action');
-
-            if ($action == static::ACTION_REMOVE) {
-                $this->destroy();
-
+            if ($this->isDeleteRequest()) {
                 return '';
             }
 
             return $this->original;
         }
 
-        $this->directory = $this->directory ?
-            $this->directory : config('admin.upload.image');
+        $this->directory = $this->directory ? $this->directory : config('admin.upload.image');
 
         $this->name = $this->name ? $this->name : $image->getClientOriginalName();
 
-        $target = $image->move($this->directory, $this->name);
+        $target = $this->uploadAndDeleteOriginal($image);
 
-        $this->destroy();
-
-        if (! empty($this->size)) {
-            $image = ImageManagerStatic::make($target);
-            $image->resize($this->size['width'], $this->size['height'])->save($target);
-        }
+        $target = $this->executeCalls($target);
 
         return trim(str_replace(public_path(), '', $target->__toString()), '/');
+    }
+
+    /**
+     * @param $target
+     * @return mixed
+     */
+    public function executeCalls($target)
+    {
+        if (! empty($this->calls)) {
+
+            $image = ImageManagerStatic::make($target);
+
+            foreach ($this->calls as $call) {
+                call_user_func_array([$image, $call['method']], $call['arguments'])->save($target);
+            }
+        }
+
+        return $target;
     }
 
     protected function preview()
@@ -62,5 +61,15 @@ class Image extends File
         $this->options(['allowedFileTypes' => ['image']]);
 
         return parent::render();
+    }
+
+    public function __call($method, $arguments)
+    {
+        $this->calls[] = [
+            'method' => $method,
+            'arguments' => $arguments
+        ];
+
+        return $this;
     }
 }
