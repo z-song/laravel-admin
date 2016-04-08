@@ -8,9 +8,7 @@ class AdminController extends Controller
 {
     public function show($id)
     {
-        return redirect($this->edit($id));
-
-        return $this->form()->view($id);
+        return $this->edit($id);
     }
 
     public function update($id)
@@ -28,10 +26,5 @@ class AdminController extends Controller
     public function store()
     {
         return $this->form()->store();
-    }
-
-    public function create()
-    {
-        return $this->form();
     }
 }
