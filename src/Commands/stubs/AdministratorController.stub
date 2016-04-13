@@ -11,26 +11,60 @@ use Encore\Admin\Auth\Database\Administrator;
 
 class AdministratorController extends AdminController
 {
+    /**
+     * Index interface.
+     *
+     * @return Content
+     */
     public function index()
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('Administrators');
+            $content->header('Administrator');
             $content->description('list');
+
             $content->body($this->grid());
         });
     }
 
+    /**
+     * Edit interface.
+     *
+     * @param $id
+     * @return Content
+     */
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('Administrators');
-            $content->description('edit');
+            $content->header('Administrator');
+            $content->description('Edit Administrator');
+
             $content->body($this->form()->edit($id));
         });
     }
 
+    /**
+     * Create interface.
+     *
+     * @return Content
+     */
+    public function create()
+    {
+        return Admin::content(function (Content $content) {
+
+            $content->header('Administrator');
+            $content->description('Create Administrator');
+
+            $content->body($this->form());
+        });
+    }
+
+    /**
+     * Make a grid builder.
+     *
+     * @return Grid
+     */
     public function grid()
     {
         return Admin::grid(Administrator::class, function (Grid $grid) {
@@ -44,18 +78,23 @@ class AdministratorController extends AdminController
         });
     }
 
+    /**
+     * Make a form builder.
+     *
+     * @return Form
+     */
     public function form()
     {
         return Admin::form(Administrator::class, function (Form $form) {
 
-            $form->id('id', 'ID');
+            $form->display('id', 'ID');
 
             $form->text('username');
             $form->text('name');
             $form->password('password');
 
-            $form->dateTime('created_at')->readOnly();
-            $form->dateTime('updated_at')->readOnly();
+            $form->display('created_at', 'Created At');
+            $form->display('updated_at', 'Updated At');
 
             $form->saving(function (Form $form) {
                 if ($form->password && $form->model()->password != $form->password) {

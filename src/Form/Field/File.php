@@ -33,6 +33,15 @@ class File extends Field
         parent::__construct($column, $arguments);
     }
 
+    protected function initOptions()
+    {
+        $this->options = [
+            'overwriteInitial'  => true,
+            'showUpload'        => false,
+            'language'          => config('app.locale')
+        ];
+    }
+
     public function move($directory, $name = null)
     {
         $this->directory = $directory;
@@ -45,12 +54,7 @@ class File extends Field
     public function prepare(UploadedFile $file = null)
     {
         if (is_null($file)) {
-
-            $action = Input::get($this->id . '_action');
-
-            if ($action == static::ACTION_REMOVE) {
-                $this->destroy();
-
+            if ($this->isDeleteRequest()) {
                 return '';
             }
 
@@ -62,16 +66,28 @@ class File extends Field
 
         $this->name = $this->name ? $this->name : $file->getClientOriginalName();
 
-        $target = $file->move($this->directory, $this->name);
-
-        $this->destroy();
+        $target = $this->uploadAndDeleteOriginal($file);
 
         return trim(str_replace(public_path(), '', $target->__toString()), '/');
     }
 
+    /**
+     * @param $file
+     * @return mixed
+     */
+    protected function uploadAndDeleteOriginal($file)
+    {
+        $this->renameIfExists($file);
+
+        $target = $file->move($this->directory, $this->name);
+
+        $this->destroy();
+
+        return $target;
+    }
+
     protected function preview()
     {
-
         $fileName = basename($this->value);
 
         return <<<EOT
@@ -84,15 +100,6 @@ class File extends Field
     <div class="file-footer-caption" title="realm_demo.realm">{$fileName}</div>
 </div></div>
 EOT;
-    }
-
-    protected function initOptions()
-    {
-        $this->options = [
-            'overwriteInitial'  => true,
-            'showUpload'        => false,
-            'language'          => config('app.locale')
-        ];
     }
 
     public function options($options = [])
@@ -124,6 +131,35 @@ $("#{$this->id}").on('filecleared', function(event) {
 
 EOT;
         return parent::render();
+    }
+
+    /**
+     * If is delete request then delete original image.
+     *
+     * @return bool
+     */
+    public function isDeleteRequest()
+    {
+        $action = Input::get($this->id . '_action');
+
+        if ($action == static::ACTION_REMOVE) {
+            $this->destroy();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $file
+     * @return void
+     */
+    public function renameIfExists($file)
+    {
+        if (file_exists("$this->directory/$this->name")) {
+            $this->name = md5(uniqid()) . '.' . $file->guessExtension();
+        }
     }
 
     public function destroy()

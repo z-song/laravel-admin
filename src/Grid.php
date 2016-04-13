@@ -2,12 +2,14 @@
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Exception\Handle;
 use Encore\Admin\Grid\Action;
 use Encore\Admin\Grid\Exporter;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Column;
+use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
@@ -360,7 +362,12 @@ class Grid
      */
     public function render()
     {
-        $this->build();
+        try {
+            $this->build();
+        } catch (\Exception $e) {
+
+            return with(new Handle($e))->render();
+        }
 
         return view('admin::grid', $this->variables())->render();
     }
