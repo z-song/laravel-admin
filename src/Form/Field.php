@@ -7,6 +7,11 @@ use Encore\Admin\Form;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * Class Field
+ * @package Encore\Admin\Form
+ * @method Field default($value) set field default value
+ */
 class Field
 {
     protected $id;

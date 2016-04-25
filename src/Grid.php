@@ -89,6 +89,8 @@ class Grid
      */
     protected $resourcePath;
 
+    protected $keyName = 'id';
+
     /**
      * Create a new grid instance.
      *
@@ -97,6 +99,7 @@ class Grid
      */
     public function __construct(Eloquent $model, Closure $builder)
     {
+        $this->keyName  = $model->getKeyName();
         $this->model    = new Model($model);
         $this->columns  = new Collection();
         $this->rows     = new Collection();
@@ -176,6 +179,11 @@ class Grid
         return $this->columns[] = new Column($column, $label);
     }
 
+    public function blank($label)
+    {
+        return $this->addColumn('blank', $label);
+    }
+
     /**
      * Get Grid model.
      *
@@ -246,7 +254,12 @@ class Grid
     protected function buildRows(array $data)
     {
         $this->rows = collect($data)->map(function ($val, $key) {
-            return new Row($key, $val);
+
+            $row = new Row($key, $val);
+
+            $row->setKeyName($this->keyName);
+
+            return $row;
         });
 
         if ($this->rowsCallback) {
@@ -330,6 +343,16 @@ class Grid
         return app('router')->current()->getPath();
     }
 
+    public function pathOfCreate()
+    {
+        $path = $query = '';
+
+        extract(parse_url($this->resource()));
+
+        return '/' . trim($path, '/') . '/create' . $query;
+
+    }
+
     /**
      * Add variables to grid view.
      *
@@ -363,6 +386,7 @@ class Grid
     public function render()
     {
         try {
+
             $this->build();
         } catch (\Exception $e) {
 
@@ -381,6 +405,12 @@ class Grid
      */
     public function __call($method, $arguments)
     {
+        if ($this->model()->eloquent() instanceof \Jenssegers\Mongodb\Eloquent\Model) {
+            $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
+
+            return $this->addColumn($method, $label);
+        }
+
         if (Schema::hasColumn($this->model()->getTable(), $method)) {
             $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 

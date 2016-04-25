@@ -187,7 +187,7 @@ class Builder
         $token = csrf_token();
 
         $script = <<<SCRIPT
-            $('._delete').click(function() {
+            $('.item_delete').click(function() {
                 var id = $(this).data('id');
                 if(confirm('{$confirm}')) {
                     $.post('{$this->form->resource()}/' + id, {_method:'delete','_token':'{$token}'}, function(data){

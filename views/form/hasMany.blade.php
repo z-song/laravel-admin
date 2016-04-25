@@ -25,7 +25,7 @@
 
         <div class="btn-group pull-left" style="margin-right: 10px">
             <a href="/{{$grid->resource()}}" class="btn btn-sm btn-primary">{{ Lang::get('admin::lang.list') }}</a>
-            <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">{{ Lang::get('admin::lang.new') }}</a>
+            <a href="{{$grid->pathOfCreate()}}" class="btn btn-sm btn-success">{{ Lang::get('admin::lang.new') }}</a>
         </div>
     </div>
 </div>

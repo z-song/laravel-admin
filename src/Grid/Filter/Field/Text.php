@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Filter\Field;
+namespace Encore\Admin\Grid\Filter\Field;
 
 class Text
 {

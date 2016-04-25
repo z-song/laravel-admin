@@ -2,15 +2,16 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Form\Field;
-use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
+use Jenssegers\Mongodb\Relations\EmbedsMany as Relation;
 
 /**
- * Class HasMany
+ * Class EmbedsMany
  * @package Encore\Admin\Form\Field
  */
-class HasMany extends Field
+class EmbedsMany extends Field
 {
     protected $relationName = null;
 
@@ -36,13 +37,13 @@ class HasMany extends Field
         $relation = call_user_func([$model, $this->relationName]);
 
         if (! $relation instanceof Relation) {
-            throw new \Exception('hasMany field must be a HasMany relation.');
+            throw new \Exception('embedsMany field must be a EmbedsMany relation.');
         }
 
-        $grid = new Grid($relation->getRelated(), $this->builder);
+        $form = new Form($relation->getRelated(), $this->builder);
 
-        $grid->build();
+        $form->build();
 
-        return parent::render()->with(['grid' => $grid]);
+        return parent::render()->with(['form' => $form->builder()])->render();
     }
 }
