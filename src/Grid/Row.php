@@ -14,11 +14,35 @@ class Row
 
     protected $actions;
 
+    protected $keyName = 'id';
+
+    protected $path;
+
     public function __construct($number, $data)
     {
         $this->number = $number;
 
         $this->data = $data;
+    }
+
+    public function setKeyName($keyName)
+    {
+        $this->keyName = $keyName;
+    }
+
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    public function id()
+    {
+        return $this->__get($this->keyName);
     }
 
     public function attrs(array $attrs = [])
@@ -72,8 +96,18 @@ class Row
         return $this->data[$attr] ?: null;
     }
 
-    public function column($name)
+    public function column($name, $value = null)
     {
-        return Arr::get($this->data, $name);
+        if (is_null($value)) {
+            return Arr::get($this->data, $name);
+        }
+
+        if (is_callable($value)) {
+            $value = $value($this->column($name));
+        }
+
+        Arr::set($this->data, $name, $value);
+
+        return $this;
     }
 }

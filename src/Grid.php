@@ -3,13 +3,11 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Exception\Handle;
-use Encore\Admin\Grid\Action;
 use Encore\Admin\Grid\Exporter;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Column;
-use Encore\Admin\Layout\Content;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
@@ -90,6 +88,27 @@ class Grid
     protected $resourcePath;
 
     /**
+     * Default primary key name.
+     *
+     * @var string
+     */
+    protected $keyName = 'id';
+
+    /**
+     * Allow batch allow.
+     *
+     * @var bool
+     */
+    protected $allowBatchDeletion = true;
+
+    /**
+     * Allow actions.
+     *
+     * @var bool
+     */
+    protected $allowActions = true;
+
+    /**
      * Create a new grid instance.
      *
      * @param Eloquent $model
@@ -97,6 +116,7 @@ class Grid
      */
     public function __construct(Eloquent $model, Closure $builder)
     {
+        $this->keyName  = $model->getKeyName();
         $this->model    = new Model($model);
         $this->columns  = new Collection();
         $this->rows     = new Collection();
@@ -246,7 +266,13 @@ class Grid
     protected function buildRows(array $data)
     {
         $this->rows = collect($data)->map(function ($val, $key) {
-            return new Row($key, $val);
+
+            $row = new Row($key, $val);
+
+            $row->setKeyName($this->keyName);
+            $row->setPath($this->resource());
+
+            return $row;
         });
 
         if ($this->rowsCallback) {
@@ -287,6 +313,42 @@ class Grid
     protected function setupExporter()
     {
         $this->exporter = new Exporter($this);
+    }
+
+    /**
+     * If allow batch delete.
+     *
+     * @return bool
+     */
+    public function allowBatchDeletion()
+    {
+        return $this->allowBatchDeletion;
+    }
+
+    /**
+     * Disable batch deletion.
+     */
+    public function disableBatchDeletion()
+    {
+        $this->allowBatchDeletion = false;
+    }
+
+    /**
+     * If allow actions.
+     *
+     * @return bool
+     */
+    public function allowActions()
+    {
+        return $this->allowActions;
+    }
+
+    /**
+     * Disable all actions.
+     */
+    public function disableActions()
+    {
+        $this->allowActions = false;
     }
 
     /**
@@ -381,7 +443,8 @@ class Grid
      */
     public function __call($method, $arguments)
     {
-        if (Schema::hasColumn($this->model()->getTable(), $method)) {
+        $connection = $this->model()->eloquent()->getConnectionName();
+        if (Schema::connection($connection)->hasColumn($this->model()->getTable(), $method)) {
             $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
             return $this->addColumn($method, $label);

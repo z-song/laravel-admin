@@ -15,25 +15,35 @@
     <div class="box-body table-responsive no-padding">
         <table class="table table-hover">
             <tr>
+                <th><input type="checkbox" class="grid-select-all"></th>
                 @foreach($grid->columns() as $column)
                 <th>{{$column->getLabel()}}{!! $column->sorter() !!}</th>
                 @endforeach
-                <th>{{ Lang::get('admin::lang.action') }}</th>
+                @if($grid->allowActions())
+                    <th>{{ Lang::get('admin::lang.action') }}</th>
+                @endif
             </tr>
 
             @foreach($grid->rows() as $row)
             <tr {!! $row->attrs() !!}>
+                <td><input type="checkbox" class="grid-item" data-id="{{ $row->id() }}"></td>
                 @foreach($grid->columnNames as $name)
                 <td>{!! $row->column($name) !!}</td>
                 @endforeach
-                <td>
-                    {!! $row->actions() !!}
-                </td>
+                @if($grid->allowActions())
+                    <td>
+                        {!! $row->actions() !!}
+                    </td>
+                @endif
             </tr>
             @endforeach
         </table>
     </div>
     <div class="box-footer clearfix">
+        @if($grid->allowBatchDeletion())
+            <a class="btn btn-sm btn-danger batch-delete">批量删除</a>
+        @endif
+
         {!! $grid->paginator() !!}
     </div>
     <!-- /.box-body -->

@@ -59,6 +59,31 @@ class Action
                     });
                 }
             });
+
+            $('.grid-select-all').change(function() {
+                if (this.checked) {
+                    $('.grid-item').prop("checked", true);
+                } else {
+                    $('.grid-item').prop("checked", false);
+                }
+            });
+
+            $('.batch-delete').on('click', function() {
+                var selected = [];
+                $('.grid-item:checked').each(function(){
+                    selected.push($(this).data('id'));
+                });
+
+                if (selected.length == 0) {
+                    return;
+                }
+
+                if(confirm("{$confirm}")) {
+                    $.post('/{$this->path}/' + selected.join(), {_method:'delete','_token':'{$token}'}, function(data){
+                        $.pjax.reload('#pjax-container');
+                    });
+                }
+            });
 SCRIPT;
 
         Admin::script($script);

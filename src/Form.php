@@ -4,6 +4,7 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Exception\Handle;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -53,12 +54,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\HasMany        hasMany($relationName, $callback)
  * @method Field\SwitchField    switch($column, $label = '')
  * @method Field\Display        display($column, $label = '')
+ * @method Field\Rate           rate($column, $label = '')
+ * @method Field\Divide         divide()
  *
  * @package Encore\Admin
  */
 class Form
 {
-
     /**
      * Eloquent model of the form.
      *
@@ -111,6 +113,8 @@ class Form
      */
     protected $inputs = [];
 
+    protected $callable;
+
     /**
      * @param \$model
      * @param \Closure $callback
@@ -121,7 +125,17 @@ class Form
 
         $this->builder = new Builder($this);
 
+        $this->callable = $callback;
+
         $callback($this);
+    }
+
+    /**
+     * Set up the form.
+     */
+    protected function setUp()
+    {
+        call_user_func($this->callable, $this);
     }
 
     /**
@@ -192,9 +206,14 @@ class Form
      */
     public function destroy($id)
     {
-        $this->deleteFilesAndImages($id);
+        $ids = explode(',', $id);
 
-        return $this->model->find($id)->delete();
+        foreach ($ids as $id) {
+            $this->deleteFilesAndImages($id);
+            $this->model->find($id)->delete();
+        }
+
+        return true;
     }
 
     /**
@@ -649,7 +668,12 @@ class Form
      */
     public function render()
     {
-        return $this->builder->render();
+        try {
+            return $this->builder->render();
+        } catch (\Exception $e) {
+
+            return with(new Handle($e))->render();
+        }
     }
 
     /**
@@ -701,7 +725,7 @@ class Form
     {
         if ($className = static::findFieldClass($method)) {
 
-            $column = $arguments[0];
+            $column = array_get($arguments, 0, '');
 
             $element = new $className($column, array_slice($arguments, 1));
 
