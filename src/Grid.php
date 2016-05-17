@@ -76,7 +76,7 @@ class Grid
     /**
      * The grid Filter.
      *
-     * @var \Encore\Admin\Filter
+     * @var \Encore\Admin\Grid\Filter
      */
     protected $filter;
 

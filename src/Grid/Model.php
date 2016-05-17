@@ -177,6 +177,19 @@ class Model
         ];
     }
 
+    /**
+     * Add relation.
+     *
+     * @param $relation
+     * @return $this
+     */
+    public function with($relation)
+    {
+        $this->queries['with'][] = $relation;
+
+        return $this;
+    }
+
     public function __call($method, $arguments)
     {
         $this->queries[$method] = $arguments;
