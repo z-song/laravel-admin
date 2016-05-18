@@ -41,7 +41,7 @@
     </div>
     <div class="box-footer clearfix">
         @if($grid->allowBatchDeletion())
-            <a class="btn btn-sm btn-danger batch-delete">批量删除</a>
+            <a class="btn btn-sm btn-danger batch-delete">{{ Lang::get('admin::lang.batch_delete') }}</a>
         @endif
 
         {!! $grid->paginator() !!}

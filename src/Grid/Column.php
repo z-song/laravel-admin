@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\URL;
 
 class Column
 {
-
     protected $name;
 
     protected $label;
+
+    protected $original;
 
     protected $sortable = false;
 
@@ -20,6 +21,8 @@ class Column
     protected $attributes = [];
 
     protected $valueWrapper;
+
+    protected $htmlWrappers = [];
 
     protected $relation = false;
 
@@ -32,11 +35,22 @@ class Column
         $this->label =  $this->formatLabel($label);
     }
 
+    /**
+     * Get name of this column.
+     *
+     * @return mixed
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * Format label.
+     *
+     * @param $label
+     * @return mixed
+     */
     protected function formatLabel($label)
     {
         $label = $label ?: ucfirst($this->name);
@@ -44,11 +58,22 @@ class Column
         return str_replace(['.', '_'], ' ', $label);
     }
 
+    /**
+     * Get label of the column.
+     *
+     * @return mixed
+     */
     public function getLabel()
     {
         return $this->label;
     }
 
+    /**
+     * Add a value wrapper.
+     *
+     * @param callable $callable
+     * @return $this
+     */
     public function value(Closure $callable)
     {
         $this->valueWrapper = $callable;
@@ -56,11 +81,22 @@ class Column
         return $this;
     }
 
-    public function hasValueWrapper()
+    /**
+     * If has a value wrapper.
+     *
+     * @return bool
+     */
+    protected function hasValueWrapper()
     {
         return (bool) $this->valueWrapper;
     }
 
+    /**
+     * Set relation.
+     *
+     * @param $relation
+     * @return $this
+     */
     public function setRelation($relation)
     {
         $this->relation = $relation;
@@ -68,7 +104,12 @@ class Column
         return $this;
     }
 
-    public function isRelation()
+    /**
+     * If this column is relation column.
+     *
+     * @return bool
+     */
+    protected function isRelation()
     {
         return (bool) $this->relation;
     }
@@ -76,10 +117,15 @@ class Column
     public function map($data)
     {
         foreach ($data as &$item) {
-            $value = Arr::get($item, $this->name);
+            $this->original = $value = Arr::get($item, $this->name);
 
             if ($this->hasValueWrapper()) {
                 $value = call_user_func($this->valueWrapper, $value);
+                Arr::set($item, $this->name, $value);
+            }
+
+            if ($this->hasHtmlWrapper()) {
+                $value = $this->htmlWrap($value);
                 Arr::set($item, $this->name, $value);
             }
         }
@@ -90,11 +136,177 @@ class Column
     /**
      * Mark this column as sortable.
      *
-     * @return void
+     * @return Column
      */
     public function sortable()
     {
         $this->sortable = true;
+
+        return $this;
+    }
+
+    /**
+     * Wrap value with badge.
+     *
+     * @param string $style
+     * @return $this
+     */
+    public function badge($style = 'red')
+    {
+        $wrapper = "<span class='badge bg-{$style}'>{value}</span>";
+
+        $this->htmlWrapper($wrapper);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value with label.
+     *
+     * @param string $style
+     * @return $this
+     */
+    public function label($style = 'success')
+    {
+        $wrapper = "<span class='label label-{$style}'>{value}</span>";
+
+        $this->htmlWrapper($wrapper);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value as a link.
+     *
+     * @param $href
+     * @param string $target
+     * @return $this
+     */
+    public function link($href = '', $target = '_blank')
+    {
+        if (empty($href)) {
+            $href = '{$value}';
+        }
+
+        $wrapper = "<a href='$href' target='$target'>{value}</a>";
+
+        $this->htmlWrapper($wrapper);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value as a button.
+     *
+     * @param string $style
+     * @return $this
+     */
+    public function button($style = 'default')
+    {
+        if (is_array($style)) {
+            $style = array_map(function ($style) {
+                return 'btn-'.$style;
+            }, $style);
+
+            $style = join(' ', $style);
+        } elseif (is_string($style)) {
+            $style = 'btn-'.$style;
+        }
+
+        $wrapper = "<span class='btn $style'>{value}</span>";
+
+        $this->htmlWrapper($wrapper);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value as a progressbar.
+     *
+     * @param string $style
+     * @param string $size
+     * @param int $max
+     * @return $this
+     */
+    public function progressBar($style = 'primary', $size = 'sm', $max = 100)
+    {
+        if (is_array($style)) {
+
+            $style = array_map(function ($style) {
+                return 'progress-bar-'.$style;
+            }, $style);
+
+            $style = join(' ', $style);
+        } elseif (is_string($style)) {
+            $style = 'progress-bar-'.$style;
+        }
+
+        $wrapper = <<<EOT
+
+<div class="progress progress-$size">
+    <div class="progress-bar $style" role="progressbar" aria-valuenow="{value}" aria-valuemin="0" aria-valuemax="$max" style="width: {value}%">
+      <span class="sr-only">{value}</span>
+    </div>
+</div>
+
+EOT;
+
+        $this->htmlWrapper($wrapper);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value as a image.
+     *
+     * @param int $width
+     * @param int $height
+     * @return $this
+     */
+    public function image($width = 200, $height = 200)
+    {
+        $wrapper = "<img src='/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class=\'img\' />";
+
+        $this->htmlWrapper($wrapper);
+
+        return $this;
+    }
+
+    /**
+     * Set html wrapper.
+     *
+     * @param $wrapper
+     */
+    protected function htmlWrapper($wrapper)
+    {
+        $this->htmlWrappers[] = $wrapper;
+    }
+
+    /**
+     * If column has html wrapper.
+     *
+     * @return bool
+     */
+    protected function hasHtmlWrapper()
+    {
+        return ! empty($this->htmlWrappers);
+    }
+
+    /**
+     * Wrap value with wrapper.
+     *
+     * @param $value
+     * @return mixed
+     */
+    protected function htmlWrap($value)
+    {
+        foreach ($this->htmlWrappers as $wrapper) {
+            $value = str_replace('{value}', $value, $wrapper);
+        }
+
+        $value = str_replace('{$value}', $this->original, $value);
+
+        return $value;
     }
 
     /**
@@ -129,7 +341,7 @@ class Column
      *
      * @return bool
      */
-    public function isSorted()
+    protected function isSorted()
     {
         $this->sort = app('request')->get('_sort');
 

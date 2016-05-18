@@ -84,6 +84,28 @@ return [
         'url'   => '/administrators',
         'icon'  => 'fa-tasks'
     ],
+    [
+        'title' => 'Multilevel',
+        'icon'  => 'fa-circle-o',
+        'children' => [
+            [
+                'title' => 'Level One',
+                'url'   => '/',
+                'icon'  => 'fa-circle-o'
+            ],
+            [
+                'title' => 'Level One',
+                'icon'  => 'fa-circle-o',
+                'children' => [
+                    [
+                        'title' => 'Level Two',
+                        'url'   => '/',
+                        'icon'  => 'fa-circle-o'
+                    ]
+                ]
+            ],
+        ]
+    ],
 ];
 ```
 
@@ -145,9 +167,15 @@ return Admin::grid(User::class, function(Grid $grid){
 
     //Use sortable() method to make the column sortable.
     $grid->column('profile.age', 'Age')->sortable();
+    
+    // 
+    $grid->column('progress')->progressBar(['danger', 'striped'], 'xs');
 
-    $grid->created_at();
-    $grid->updated_at();
+    //Wrapper value with a badge.
+    $grid->created_at()->badge('danger');
+    
+    //Wrapper value with a label.
+    $grid->updated_at()->label('success');
 
     //Set query conditions: SELECT * FROM `user` WHERE id > 20 ORDER BY updated_at DESC;
     $grid->model()->where('id', '>', '20')->orderBy('updated_at', 'desc');
@@ -155,15 +183,33 @@ return Admin::grid(User::class, function(Grid $grid){
     //Set 15 items per-page.
     $grid->paginate(15);
 
-    //Set actions (show,edit,delete).
-    $grid->actions('show|edit|delete');
+    //Set actions (edit,delete).
+    $grid->actions('edit|delete');
 
     //Add row callback function.
     $grid->rows(function($row){
-      if($row->id <= 10) {
-        $row->style('color:red');
-      }
+        if($row->id <= 10) {
+            $row->style('color:red');
+        }
+      
+        //Disable delete action for specify row.
+        if($row->id % 3) {
+            $row->action('edit');
+        }
+        
+        //Add custom action for specify row.
+        if($row->id % 2) {
+            $row->actions()->add(function ($row) {
+                return "<a class=\"btn btn-xs btn-danger\">btn</a>";
+            });
+        }
     });
+    
+    //Disable batch deletion.
+    $grid->disableBatchDeletion();
+    
+    //Disable all actions.
+    $grid->disableActions();
 
     //Add data grid filters.
     $grid->filter(function($filter){
@@ -211,8 +257,11 @@ return Admin::form(User::class, function(Form $form){
 
     $form->currency('price')->symbol('￥');
     $form->number('count');
-
-    $form->image('avatar')/*->size(300, 300)*/;
+    $form->rate('rate');
+    
+    //You can use all Intervention Image api in image field (see http://image.intervention.io/getting_started/introduction)
+    $form->image('avatar')->crop(int $width, int $height, [int $x, int $y]);
+    
     $form->file('document')->rules('mimes:doc,docx,xlsx');
     $form->mobile('mobile')->format('999 9999 9999');
     $form->text('address');
@@ -237,6 +286,9 @@ return Admin::form(User::class, function(Form $form){
     $form->checkbox('roles')->values(Role::all()->lists('display_name', 'id'));
     
     $form->switch('open')->states(['on' => 1, 'off' => 0]);
+    
+    //Add a divide line.
+    $form->divide();
 
     //Has many relation, show as a list.
     $form->hasMany('comments', function(Grid $grid) {

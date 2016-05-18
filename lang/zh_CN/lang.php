@@ -14,6 +14,7 @@ return [
     'edit'          => '编辑',
     'view'          => '查看',
     'export'        => '导出',
+    'batch_delete'  => '批量删除',
 
     'action'        => '操作',
     'title'         => '标题',
