@@ -6,6 +6,7 @@ use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Input;
 
 class Field
 {
@@ -197,6 +198,11 @@ class Field
     public function value($value = null)
     {
         if (is_null($value)) {
+
+            if (is_null($this->default)) {
+                $this->default = Input::get($this->column);
+            }
+
             return is_null($this->value) ? $this->default : $this->value;
         }
 
