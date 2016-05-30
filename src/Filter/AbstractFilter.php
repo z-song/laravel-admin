@@ -96,7 +96,7 @@ abstract class AbstractFilter
     {
         $value = Arr::get($inputs, $this->column);
 
-        if (empty($value)) {
+        if (! isset($value)) {
             return null;
         }
 
@@ -105,11 +105,19 @@ abstract class AbstractFilter
         return $this->buildCondition($this->column, $this->value);
     }
 
+    /**
+     * Select filter.
+     *
+     * @param array $options
+     */
     public function select($options = [])
     {
         $this->setField(new Select($options));
     }
 
+    /**
+     * Datetime filter.
+     */
     public function datetime()
     {
         $this->setField(new DateTime($this));
