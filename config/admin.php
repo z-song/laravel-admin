@@ -9,14 +9,9 @@ return [
     'title'  => 'Admin',
 
     'auth' => [
-        'guard'  => [
-            'driver' => 'session',
-            'provider' => 'admin',
-        ],
-        'provider' => [
-            'driver' => 'eloquent',
-            'model' => \Encore\Admin\Auth\Database\Administrator::class,
-        ],
+        'driver' => 'session',
+        'provider' =>'',
+        'model'  => Encore\Admin\Auth\Database\Administrator::class,
     ],
 
     'upload'  => [

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<div class="form-group {!! !$errors->has($label) ?: 'has-error' !!}">
-=======
 <div class="form-group {!! !$errors->has($label) ?: 'has-error' !!} {{$class}}">
->>>>>>> master
 
     <label for="{{$id}}" class="col-sm-2 control-label">{{$label}}</label>
 

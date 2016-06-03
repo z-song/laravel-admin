@@ -115,11 +115,6 @@ class Form
 
     protected $callable;
 
-<<<<<<< HEAD
-    //protected $setted =
-
-=======
->>>>>>> master
     /**
      * @param \$model
      * @param \Closure $callback
@@ -730,11 +725,7 @@ class Form
     {
         if ($className = static::findFieldClass($method)) {
 
-<<<<<<< HEAD
             $column = array_get($arguments, 0, '');//[0];
-=======
-            $column = array_get($arguments, 0, '');
->>>>>>> master
 
             $element = new $className($column, array_slice($arguments, 1));
 

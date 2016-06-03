@@ -33,17 +33,16 @@ class Model
     protected $sort;
 
     /**
-<<<<<<< HEAD
      * @var array
      */
     protected $data = [];
-=======
+
+    /*
      * 20 items per page as default.
      *
      * @var int
      */
     protected $perPage = 20;
->>>>>>> master
 
     /**
      * Create a new grid model instance.

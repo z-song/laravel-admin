@@ -31,10 +31,6 @@ class Row
      */
     protected $actions;
 
-<<<<<<< HEAD
-    protected $keyName = 'id';
-
-=======
     /**
      * The primary key name.
      *
@@ -55,7 +51,6 @@ class Row
      * @param $number
      * @param $data
      */
->>>>>>> master
     public function __construct($number, $data)
     {
         $this->number = $number;
@@ -63,21 +58,16 @@ class Row
         $this->data = $data;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Set primary key name.
      *
      * @param $keyName
      */
->>>>>>> master
     public function setKeyName($keyName)
     {
         $this->keyName = $keyName;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Set action path.
      *
@@ -103,14 +93,11 @@ class Row
      *
      * @return null
      */
->>>>>>> master
     public function id()
     {
         return $this->__get($this->keyName);
     }
 
-<<<<<<< HEAD
-=======
     /**
      *
      * Set attributes of this row.
@@ -118,7 +105,6 @@ class Row
      * @param array $attrs
      * @return string
      */
->>>>>>> master
     public function attrs(array $attrs = [])
     {
         if (empty($attrs)) {
@@ -192,12 +178,6 @@ class Row
         return $this->data[$attr] ?: null;
     }
 
-<<<<<<< HEAD
-    public function column($name, $value = null)
-    {
-        if (is_null($value)) {
-            return Arr::get($this->data, $name);
-=======
     /**
      * Get or set value of column in this row.
      *
@@ -209,18 +189,13 @@ class Row
     {
         if (is_null($value)) {
             return array_get($this->data, $name);
->>>>>>> master
         }
 
         if (is_callable($value)) {
             $value = $value($this->column($name));
         }
 
-<<<<<<< HEAD
-        Arr::set($this->data, $name, $value);
-=======
         array_set($this->data, $name, $value);
->>>>>>> master
 
         return $this;
     }

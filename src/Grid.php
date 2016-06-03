@@ -87,8 +87,6 @@ class Grid
      */
     protected $resourcePath;
 
-    protected $keyName = 'id';
-
     /**
      * Default primary key name.
      *
@@ -277,10 +275,7 @@ class Grid
             $row = new Row($key, $val);
 
             $row->setKeyName($this->keyName);
-<<<<<<< HEAD
-=======
             $row->setPath($this->resource());
->>>>>>> master
 
             return $row;
         });
@@ -464,18 +459,14 @@ class Grid
      */
     public function __call($method, $arguments)
     {
-<<<<<<< HEAD
         if ($this->model()->eloquent() instanceof \Jenssegers\Mongodb\Eloquent\Model) {
             $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
             return $this->addColumn($method, $label);
         }
 
-        if (Schema::hasColumn($this->model()->getTable(), $method)) {
-=======
         $connection = $this->model()->eloquent()->getConnectionName();
         if (Schema::connection($connection)->hasColumn($this->model()->getTable(), $method)) {
->>>>>>> master
             $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
             return $this->addColumn($method, $label);
