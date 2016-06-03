@@ -14,6 +14,7 @@ return [
     'edit'          => 'Edit',
     'view'          => 'View',
     'export'        => 'Export',
+    'batch_delete'  => 'Batch delete',
 
     'action'        => 'Action',
     'title'         => 'Title',

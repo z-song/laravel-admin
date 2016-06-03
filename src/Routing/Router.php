@@ -62,8 +62,15 @@ class Router
      */
     protected function setAdminRoutes()
     {
-        $this->routes['controllers'][] = [['auth' => 'AuthController']];
-        $this->routes['resources'][] = [['administrators' => 'AdministratorController']];
+        $this->resources([
+            'auth/users' => 'Auth\UserController',
+            'auth/roles' => 'Auth\RoleController',
+            'auth/permissions' => 'Auth\PermissionController'
+        ]);
+
+        $this->controllers([
+            'auth' => 'AuthController'
+        ]);
     }
 
     /**

@@ -54,12 +54,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\HasMany        hasMany($relationName, $callback)
  * @method Field\SwitchField    switch($column, $label = '')
  * @method Field\Display        display($column, $label = '')
+ * @method Field\Rate           rate($column, $label = '')
+ * @method Field\Divide         divide()
  *
  * @package Encore\Admin
  */
 class Form
 {
-
     /**
      * Eloquent model of the form.
      *
@@ -114,8 +115,11 @@ class Form
 
     protected $callable;
 
+<<<<<<< HEAD
     //protected $setted =
 
+=======
+>>>>>>> master
     /**
      * @param \$model
      * @param \Closure $callback
@@ -207,9 +211,14 @@ class Form
      */
     public function destroy($id)
     {
-        $this->deleteFilesAndImages($id);
+        $ids = explode(',', $id);
 
-        return $this->model->find($id)->delete();
+        foreach ($ids as $id) {
+            $this->deleteFilesAndImages($id);
+            $this->model->find($id)->delete();
+        }
+
+        return true;
     }
 
     /**
@@ -721,7 +730,11 @@ class Form
     {
         if ($className = static::findFieldClass($method)) {
 
+<<<<<<< HEAD
             $column = array_get($arguments, 0, '');//[0];
+=======
+            $column = array_get($arguments, 0, '');
+>>>>>>> master
 
             $element = new $className($column, array_slice($arguments, 1));
 

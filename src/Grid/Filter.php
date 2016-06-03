@@ -19,10 +19,19 @@ use Encore\Admin\Grid\Filter\AbstractFilter;
  */
 class Filter
 {
+    /**
+     * @var
+     */
     protected $model;
 
+    /**
+     * @var array
+     */
     protected $filters = [];
 
+    /**
+     * @var array
+     */
     protected $allows = ['is', 'like', 'gt', 'lt', 'between'];
 
     public function __construct(Model $model)
@@ -39,7 +48,9 @@ class Filter
      */
     public function conditions()
     {
-        $inputs = array_filter(Input::all());
+        $inputs = array_filter(Input::all(), function ($input) {
+            return $input !== '';
+        });
 
         $conditions = [];
 

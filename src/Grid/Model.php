@@ -33,9 +33,17 @@ class Model
     protected $sort;
 
     /**
+<<<<<<< HEAD
      * @var array
      */
     protected $data = [];
+=======
+     * 20 items per page as default.
+     *
+     * @var int
+     */
+    protected $perPage = 20;
+>>>>>>> master
 
     /**
      * Create a new grid model instance.
@@ -45,6 +53,8 @@ class Model
     public function __construct(EloquentModel $model)
     {
         $this->model = $model;
+
+        $this->queries = collect();
     }
 
     /**
@@ -103,9 +113,9 @@ class Model
         $this->setSort();
         $this->setPaginate();
 
-        foreach ($this->queries as $method => $arguments) {
-            $this->model = call_user_func_array([$this->model, $method], $arguments);
-        }
+        $this->queries->each(function ($query) {
+            $this->model = call_user_func_array([$this->model, $query['method']], $query['arguments']);
+        });
 
         return $this->model;
     }
@@ -117,9 +127,29 @@ class Model
      */
     protected function setPaginate()
     {
-        $paginate = Arr::pull($this->queries, 'paginate');
+        $paginate = $this->findQueryByMethod('paginate')->first();
 
-        $this->queries['paginate'] = empty($paginate) ? [20] : $paginate;
+        $this->queries = $this->queries->reject(function ($query) {
+            return $query['method'] == 'paginate';
+        });
+
+        $this->queries->push([
+            'method' => 'paginate',
+            'arguments' => is_null($paginate) ? [$this->perPage] : $paginate['arguments']
+        ]);
+    }
+
+    /**
+     * Find query by method name.
+     *
+     * @param $method
+     * @return static
+     */
+    protected function findQueryByMethod($method)
+    {
+        return $this->queries->filter(function ($query) use ($method) {
+            return $query['method'] == $method;
+        });
     }
 
     /**
@@ -143,7 +173,10 @@ class Model
             $this->setRelationSort($this->sort['column']);
 
         } else {
-            $this->queries['orderBy'] = [$this->sort['column'], $this->sort['type']];
+            $this->queries->push([
+                'method' => 'orderBy',
+                'arguments' => [$this->sort['column'], $this->sort['type']]
+            ]);
         }
     }
 
@@ -157,16 +190,23 @@ class Model
     {
         list($relationName, $relationColumn) = explode('.', $column);
 
-        if (isset($this->queries['with']) && in_array($relationName, $this->queries['with'])) {
-
+        if ($this->queries->contains(function ($key, $query) use ($relationName) {
+            return $query['method'] == 'with' && in_array($relationName, $query['arguments']);
+        })) {
             $relation = $this->model->$relationName();
 
-            $this->queries['join'] = $this->joinParameters($relation);
+            $this->queries->push([
+                'method' => 'join',
+                'arguments' => $this->joinParameters($relation)
+            ]);
 
-            $this->queries['orderBy'] = [
-                $relation->getRelated()->getTable() . '.'. $relationColumn,
-                $this->sort['type']
-            ];
+            $this->queries->push([
+                'method' => 'orderBy',
+                'arguments' => [
+                    $relation->getRelated()->getTable() . '.'. $relationColumn,
+                    $this->sort['type']
+                ]
+            ]);
         }
     }
 
@@ -188,7 +228,10 @@ class Model
 
     public function __call($method, $arguments)
     {
-        $this->queries[$method] = $arguments;
+        $this->queries->push([
+            'method' => $method,
+            'arguments' => $arguments
+        ]);
 
         return $this;
     }
