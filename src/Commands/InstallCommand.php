@@ -77,7 +77,7 @@ class InstallCommand extends Command
         $this->createMenuFile();
         $this->createRoutesFile();
 
-        $this->copyLanguageFiles();
+        //$this->copyLanguageFiles();
     }
 
     /**

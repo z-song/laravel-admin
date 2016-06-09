@@ -13,6 +13,7 @@ return [
     'delete'        => '删除',
     'edit'          => '编辑',
     'view'          => '查看',
+    'reset'         => '撤销',
     'export'        => '导出',
     'batch_delete'  => '批量删除',
 

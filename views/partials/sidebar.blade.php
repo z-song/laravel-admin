@@ -29,7 +29,7 @@
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-            <li class="header">{{ Lang::get('admin::lang.menu') }}</li>
+            <li class="header">{{ trans('admin::lang.menu') }}</li>
 
             @each('admin::partials.menu', Admin::menu(), 'item')
 

@@ -276,6 +276,7 @@ class Field
         $this->variables['label']   = $this->label;
         $this->variables['column']  = $this->column;
         $this->variables['attributes']  = $this->formatAttributes();
+        $this->variables['placeholder'] = trans('admin::lang.input') . " $this->label";
 
         return $this->variables;
     }
