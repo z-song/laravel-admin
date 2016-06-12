@@ -62,15 +62,21 @@ class Router
      */
     protected function setAdminRoutes()
     {
-        $this->resources([
-            'auth/users' => 'Auth\UserController',
-            'auth/roles' => 'Auth\RoleController',
-            'auth/permissions' => 'Auth\PermissionController'
-        ]);
+        $attributes = $this->attributes;
+        $attributes['namespace'] = 'Encore\Admin\Controllers';
 
-        $this->controllers([
-            'auth' => 'AuthController'
-        ]);
+        $this->router->group($attributes, function ($router) {
+
+            $router->resources([
+                'auth/users' => 'UserController',
+                'auth/roles' => 'RoleController',
+                'auth/permissions' => 'PermissionController'
+            ]);
+
+            $router->controllers([
+                'auth' => 'AuthController'
+            ]);
+        });
     }
 
     /**

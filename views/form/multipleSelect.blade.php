@@ -6,7 +6,7 @@
 
         @include('admin::form.error')
 
-        <select class="form-control" id="{{$id}}" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ Lang::get('admin::lang.choose') }}{{$label}}">
+        <select class="form-control" id="{{$id}}" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ trans('admin::lang.choose') }}{{$label}}">
             @foreach($options as $select => $option)
                 <option value="{{$select}}" {{  in_array($select, (array)old($column, $value)) ?'selected':'' }}>{{$option}}</option>
             @endforeach

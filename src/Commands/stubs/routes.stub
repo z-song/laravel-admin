@@ -3,7 +3,3 @@
 $router = app('admin.router');
 
 $router->get('/', 'HomeController@index');
-
-$router->resources([
-    'administrators' => AdministratorController::class
-]);

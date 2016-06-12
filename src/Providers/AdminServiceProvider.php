@@ -37,10 +37,10 @@ class AdminServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ .'/../../views', 'admin');
-        $this->loadTranslationsFrom(admin_path('lang/'), 'admin');
+        $this->loadTranslationsFrom(__DIR__ .'/../../lang/', 'admin');
 
-        $this->publishes([__DIR__ . '/../../config/admin.php' => config_path('admin.php'), ], 'config');
-        $this->publishes([__DIR__ . '/../../assets' => public_path('packages/admin'), ], 'assets');
+        $this->publishes([__DIR__ . '/../../config/admin.php' => config_path('admin.php'), ], 'laravel-admin');
+        $this->publishes([__DIR__ . '/../../assets' => public_path('packages/admin'), ], 'laravel-admin');
 
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;

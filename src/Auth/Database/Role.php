@@ -29,7 +29,7 @@ class Role extends Model
     {
         $pivotTable = config('admin.database.role_users_table');
 
-        return $this->belongsToMany(Administrator::class, $pivotTable);
+        return $this->belongsToMany(Administrator::class, $pivotTable, 'role_id', 'user_id');
     }
 
     /**
@@ -41,7 +41,7 @@ class Role extends Model
     {
         $pivotTable = config('admin.database.role_permissions_table');
 
-        return $this->belongsToMany(Permission::class, $pivotTable);
+        return $this->belongsToMany(Permission::class, $pivotTable, 'role_id', 'permission_id');
     }
 
     /**

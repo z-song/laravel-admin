@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: song
- * Email: zousong@yiban.cn
- * Date: 16/5/26
- * Time: 下午4:14
- */
 
 namespace Encore\Admin\Auth;
 

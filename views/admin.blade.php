@@ -52,8 +52,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-          {{ $title or Lang::get('admin::lang.title') }}
-        <small>{{ $description or Lang::get('admin::lang.description') }}</small>
+          {{ $title or trans('admin::lang.title') }}
+        <small>{{ $description or trans('admin::lang.description') }}</small>
       </h1>
 
     </section>

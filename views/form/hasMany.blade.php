@@ -8,7 +8,7 @@
                 @foreach($grid->columns() as $column)
                     <th>{{$column->getLabel()}}{!!$column->sorter()!!}</th>
                 @endforeach
-                <th>{{ Lang::get('admin::lang.action') }}</th>
+                <th>{{ trans('admin::lang.action') }}</th>
             </tr>
 
             @foreach($grid->rows() as $row)
@@ -24,8 +24,8 @@
         </table>
 
         <div class="btn-group pull-left" style="margin-right: 10px">
-            <a href="/{{$grid->resource()}}" class="btn btn-sm btn-primary">{{ Lang::get('admin::lang.list') }}</a>
-            <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">{{ Lang::get('admin::lang.new') }}</a>
+            <a href="/{{$grid->resource()}}" class="btn btn-sm btn-primary">{{ trans('admin::lang.list') }}</a>
+            <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">{{ trans('admin::lang.new') }}</a>
         </div>
     </div>
 </div>

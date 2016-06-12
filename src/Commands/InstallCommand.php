@@ -47,7 +47,7 @@ class InstallCommand extends Command
     {
         $this->call('migrate', ['--path' => str_replace(base_path(), '', __DIR__) . '/../../migrations/']);
 
-        $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdministratorsTableSeeder::class]);
+        $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdminTablesSeeder::class]);
     }
 
     /**
@@ -65,19 +65,19 @@ class InstallCommand extends Command
             return;
         }
 
-        $this->makedir('/');
+        $this->makeDir('/');
         $this->line('<info>Admin directory was created:</info> ' . str_replace(base_path(), '', $this->directory));
 
-        $this->makedir('Controllers');
+        $this->makeDir('Controllers');
 
         $this->createHomeController();
-        $this->createAuthController();
-        $this->createAdministratorController();
+        //$this->createAuthController();
+        //$this->createAdministratorController();
 
         $this->createMenuFile();
         $this->createRoutesFile();
 
-        $this->copyLanguageFiles();
+        //$this->copyLanguageFiles();
     }
 
     /**
@@ -187,7 +187,7 @@ class InstallCommand extends Command
      *
      * @param string $path
      */
-    protected function makedir($path = '')
+    protected function makeDir($path = '')
     {
         $this->laravel['files']->makeDirectory("{$this->directory}/$path", 0755, true, true);
     }

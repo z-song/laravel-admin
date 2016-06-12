@@ -33,7 +33,7 @@ class Administrator extends Model implements AuthenticatableContract
     {
         $pivotTable = config('admin.database.role_users_table');
 
-        return $this->belongsToMany(Role::class, $pivotTable);
+        return $this->belongsToMany(Role::class, $pivotTable, 'user_id', 'role_id');
     }
 
     /**

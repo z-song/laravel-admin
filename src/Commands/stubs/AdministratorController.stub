@@ -2,6 +2,7 @@
 
 namespace DummyNamespace;
 
+use Encore\Admin\Auth\Database\Role;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -92,6 +93,8 @@ class AdministratorController extends AdminController
             $form->text('username');
             $form->text('name');
             $form->password('password');
+
+            $form->multipleSelect('roles')->options(Role::all()->pluck('name', 'id'));
 
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');

@@ -20,31 +20,24 @@ return [
         'icon'  => 'fa-bar-chart'
     ],
     [
-        'title' => 'Admin',
-        'url'   => 'administrators',
+        'title' => 'Auth',
         'icon'  => 'fa-tasks',
-    ],
-
-
-    /*[
-        'title' => 'User',
-        'icon'  => 'fa-users',
         'children' => [
-            [
-                'title' => 'Users',
-                'url'   => 'users',
-                'icon'  => 'fa-user',
-            ],
-            [
-                'title' => 'Profiles',
-                'url'   => 'user/profiles',
-                'icon'  => 'fa-user',
-            ],
-            [
-                'title' => 'Comments',
-                'url'   => 'user/comments',
-                'icon'  => 'fa-comments',
-            ],
-        ]
-    ]*/
+                [
+                    'title' => 'Users',
+                    'url'   => 'auth/users',
+                    'icon'  => 'fa-user',
+                ],
+                [
+                    'title' => 'Roles',
+                    'url'   => 'auth/roles',
+                    'icon'  => 'fa-user',
+                ],
+                [
+                    'title' => 'Permissions',
+                    'url'   => 'auth/permissions',
+                    'icon'  => 'fa-user',
+                ],
+            ]
+    ],
 ];

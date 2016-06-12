@@ -13,6 +13,7 @@ return [
     'delete'        => 'Delete',
     'edit'          => 'Edit',
     'view'          => 'View',
+    'reset'         => 'Reset',
     'export'        => 'Export',
     'batch_delete'  => 'Batch delete',
 
