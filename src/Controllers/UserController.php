@@ -6,11 +6,14 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Auth\Database\Administrator;
+use Illuminate\Routing\Controller;
 use Encore\Admin\Auth\Database\Role;
+use Encore\Admin\Auth\Database\Administrator;
 
-class UserController extends AdminController
+class UserController extends Controller
 {
+    use AdminController;
+
     /**
      * Index interface.
      *

@@ -1,10 +1,9 @@
 # laravel-admin
 
-`laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
+`laravel-admin` 是一个可以快速帮你构建后台管理的工具，使用很少的代码就实现功能完善的后台管理功能。
 
-[中文文档](/docs/zh.md)
 
-`laravel-admin` based on these packages and services:
+`laravel-admin` 基于以下组件或者服务:
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
@@ -20,38 +19,38 @@
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
-#Screenshot
+#截图
 
 ![grid](https://cloud.githubusercontent.com/assets/1479100/12708148/6c4aa9fe-c8d7-11e5-94e4-c8105375a564.png)
 
 ![form](https://cloud.githubusercontent.com/assets/1479100/12708198/fc6725a8-c8d7-11e5-876f-5c4f00ded0ff.png)
 
-# Installation
+# 安装
 
 ```
 composer require encore/laravel-admin "dev-master"
 ```
 
-Add `ServiceProvider` to `config/app.php`:
+在`config/app.php`加入`ServiceProvider`:
 
 ```
 Encore\Admin\Providers\AdminServiceProvider::class
 ```
 
-Then run these commands to finish installation:
+然后运行下面的命令完成安装：
 
 ```
 php artisan vendor:publish
 php artisan admin:install
 ```
 
-Open `http://localhost/admin/` in your browser,and use username `admin` and password `admin` to login.
+最后在浏览器打开 `http://localhost/admin/` ,使用用户名 `admin` 和密码 `admin`登陆.
 
-#Usage
+#使用
 
-The install path defaults to `app/Admin`.
+后台文件的默认安装地址在`app/Admin`，安装地址可以在`config/admin.php`中修改.
 
-Use `routes.php` under `app/Admin` to manage admin routes.
+使用`app/Admin`目录下的`routes.php`来管理后台路由，使用方法和laravel框架的路由一样.
 
 ```php
 <?php
@@ -63,11 +62,11 @@ $router->get('/', function() {
 });
 
 $router->resources([
-    'administrators' => AdministratorController::class
+    'articles' => ArticleController::class
 ]);
 ```
 
-Use `menu.php` to configure the menus in left sidebar：
+`app/Admin`目录下的`menu.php`文件用来管理后台左侧边菜单：
 ```php
 <?php
 
@@ -107,26 +106,26 @@ return [
 ];
 ```
 
-`controllers/` is controller directory where to store admin controllers.
+`app/Admin`目录下的`controllers/`目录用来存放后台路由器文件.
 
-Language strings are stored in files within the `lang/` directory, and it will use `app.locale` configuration.
+###使用示例
 
-###Create controllers
-
-If you want to create a resource controller with `User` model,you can use this command:
+如果你想要创建一个基于`App/User`模型相关的管理界面，先创建一个路由器：
 ```
 php artisan admin:make UserController --model=\\App\\User
 ```
 
-It will create `UserController.php` under `app/Admin/controllers`,add a resource in `routes.php`：
+上面的命令会在`app/Admin/controllers`创建控制器`UserController.php`
+
+然后在`app/Admin/routes.php`文件添加路由配置：
+
 ```php
 $router->resources([
-    'users'           => UserController::class，  //add this line
-    'administrators'  => AdministratorController::class
+    'users' => UserController::class，  //添加这一行
 ]);
 ```
 
-At last add access in `menu.php`:
+最后在`app/Admin/menu.php`中加上入口
 
 ```php
   [
@@ -136,7 +135,9 @@ At last add access in `menu.php`:
   ],
 ```
 
-So you can see the `users` resource link in the left sidebar menu.
+然后在左侧边栏就能看到入口了。
+
+打开`app/Admin/controllers/UserController.php`文件，里面已经默认包含了CURD相关方法，
 
 ###Admin\Grid
 

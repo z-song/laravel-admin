@@ -6,10 +6,13 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
+use Illuminate\Routing\Controller;
 use Encore\Admin\Auth\Database\Permission;
 
-class PermissionController extends AdminController
+class PermissionController extends Controller
 {
+    use AdminController;
+
     /**
      * Index interface.
      *
@@ -19,8 +22,8 @@ class PermissionController extends AdminController
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('权限管理');
-            $content->description('权限列表');
+            $content->header('Permission manage');
+            $content->description('Permissions');
             $content->body($this->grid()->render());
         });
     }
@@ -35,8 +38,8 @@ class PermissionController extends AdminController
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('编辑权限');
-            $content->description('编辑权限');
+            $content->header('Edit permission');
+            $content->description('Edit permission');
             $content->body($this->form()->edit($id));
         });
     }
@@ -50,8 +53,8 @@ class PermissionController extends AdminController
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('添加权限');
-            $content->description('添加权限');
+            $content->header('Add permission');
+            $content->description('Add permission');
             $content->body($this->form());
         });
     }
