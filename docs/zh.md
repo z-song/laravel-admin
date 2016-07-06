@@ -40,7 +40,7 @@ Encore\Admin\Providers\AdminServiceProvider::class
 然后运行下面的命令完成安装：
 
 ```
-php artisan vendor:publish
+php artisan vendor:publish --tag=laravel-admin
 php artisan admin:install
 ```
 
@@ -122,9 +122,7 @@ $router->resources([
 
 然后在左侧边栏就能看到入口了。
 
-打开`app/Admin/controllers/UserController.php`文件，里面已经默认包含了CURD相关方法，
-`index()`显示列表页，`create()`用来显示创建页，`edit()`是编辑页，另外的两个方法`grid()`用来创建数据表格
-`form()`用来创建form表单，我们的主要工作就是在`grid()`和`form()`两个方法中编写穿件数据表格和form表单的代码。
+打开`app/Admin/controllers/UserController.php`文件，里面已经默认包含了CURD相关方法，`index()`显示列表页，`create()`用来显示创建页，`edit()`是编辑页，另外的两个方法`grid()`用来创建数据表格，`form()`用来创建form表单，我们的主要工作就是在`grid()`和`form()`两个方法中编写穿件数据表格和form表单的代码。
 
 ###创建数据表格
 
@@ -276,85 +274,85 @@ $form->text($column, [$label]);
 ####select
 单选框，并设置选项:
 ```
-$form->select($column, [$label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+$form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
 ####multipleSelect
 多选框，并设置选项:
 ```
-$form->multipleSelect($column, [$label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+$form->multipleSelect($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
 ####textarea
 文本输入框:
 ```
-$form->textarea($column, [$label]);
+$form->textarea($column[, $label]);
 ```
 
 ####radio
 `radio`选择：
 ```
-$form->radio($column, [$label])->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
+$form->radio($column[, $label])->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
 ```
 
 ####checkbox
 `values()`方法用来设置选择项:
 ```
-$form->checkbox($column, [$label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+$form->checkbox($column[, $label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
 ####email
 填写email格式文本：
 ```
-$form->email($column, [$label]);
+$form->email($column[, $label]);
 ```
 
 ####password
 密码输入框：
 ```
-$form->password($column, [$label]);
+$form->password($column[, $label]);
 ```
 
 ####url
 填写合法的url文本：
 ```
-$form->url($column, [$label]);
+$form->url($column[, $label]);
 ```
 
 ####ip
 填写合法的ip地址：
 ```
-$form->ip($column, [$label]);
+$form->ip($column[, $label]);
 ```
 
 ####mobile
 电话号码输入框，并设置格式：
 ```
-$form->mobile($column, [$label])->format('999 9999 9999');
+$form->mobile($column[, $label])->format('999 9999 9999');
 ```
 
 ####color
 颜色选择：
 ```
-$form->color($column, [$label])->default('#ccc');
+$form->color($column[, $label])->default('#ccc');
 ```
 
 ####time
 时间输入框：
 ```
-$form->time($column, [$label]);
+$form->time($column[, $label]);
 ```
 
 ####date
 日期输入框：
 ```
-$form->date($column, [$label]);
+$form->date($column[, $label]);
 ```
 
 ####datetime
 日期时间输入框：
 ```
-$form->datetime($column, [$label]);
+$form->datetime($column[, $label]);
 ```
 
 ####timeRange
@@ -378,31 +376,31 @@ $form->datetimeRange($startDateTime, $endDateTime, 'DateTime Range');
 ####currency
 货币输入框，并设置单位符号：
 ```
-$form->currency($column, [$label])->symbol('￥');
+$form->currency($column[, $label])->symbol('￥');
 ```
 
 ####number
 输入数字：
 ```
-$form->number($column, [$label]);
+$form->number($column[, $label]);
 ```
 
 ####rate
 输入比例：
 ```
-$form->rate($column, [$label]);
+$form->rate($column[, $label]);
 ```
 
 ####image
 图片上传，可以使用压缩、裁切、添加水印等各种方法，请参考[intervention](http://image.intervention.io/getting_started/introduction)：
 ```
-$form->image($column, [$label])->crop(int $width, int $height, [int $x, int $y]);
+$form->image($column[, $label])->crop(int $width, int $height, [int $x, int $y]);
 ```
 
 ####file
 文件上传，并设置上传文件类型:
 ```
-$form->file($column, [$label])->rules('mimes:doc,docx,xlsx');
+$form->file($column[, $label])->rules('mimes:doc,docx,xlsx');
 ```
 
 ####map
@@ -414,13 +412,13 @@ $form->map($latitude, $longitude, $label);
 ####slider
 滑动选择控件,可以用来数字类型字段的选择，比如年龄：
 ```
-$form->slider($column, [$label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
+$form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
 ```
 
 ####editor
 富文本编辑框:
 ```
-$form->textarea($column, [$label]);
+$form->textarea($column[, $label]);
 ```
 
 ####hidden
@@ -432,13 +430,13 @@ $form->hidden($column);
 ####switch
 开关，`on`和`off`对用开关的两个值:
 ```
-$form->switch($column, [$label])->states(['on' => 1, 'off' => 0]);
+$form->switch($column[, $label])->states(['on' => 1, 'off' => 0]);
 ```
 
 ####display
 只显示字段：
 ```
-$form->display($column, [$label]);
+$form->display($column[, $label]);
 ```
 
 ####divide
@@ -456,6 +454,28 @@ $form->saving(function(Form $form) {
         $form->password = bcrypt($form->password);
     }
 });
+```
+
+###权限控制
+
+`laravel-admin`已经内置了`RBAC`权限控制模块，展开左侧边栏的`Auth`，下面有用户、权限、角色三项的管理面板，权限控制的使用如下：
+```
+use Encore\Admin\Auth\Permission;
+
+class UserController extends Controller
+{
+    public function __construct()
+    {
+        // 检查权限，有user权限的角色可以访问
+        Permission::check('user');
+        
+        // 'editor', 'developer'两个角色可以访问
+        Permission::allow(['editor', 'developer']);
+        
+        // 'editor', 'developer'两个角色禁止访问
+        Permission::deny(['editor', 'developer']);
+    }
+}
 ```
 
 #License
