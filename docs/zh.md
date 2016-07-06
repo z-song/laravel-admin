@@ -21,7 +21,7 @@ Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd
 
 #截图
 
-![grid](https://cloud.githubusercontent.com/assets/1479100/12708148/6c4aa9fe-c8d7-11e5-94e4-c8105375a564.png)
+![grid](https://cloud.githubusercontent.com/assets/1479100/16609399/894e0832-4386-11e6-8709-1cc7ce429e7c.png)
 
 ![form](https://cloud.githubusercontent.com/assets/1479100/12708198/fc6725a8-c8d7-11e5-876f-5c4f00ded0ff.png)
 
