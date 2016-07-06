@@ -108,7 +108,7 @@ return [
 
 `app/Admin`目录下的`controllers/`目录用来存放后台路由器文件.
 
-###使用示例
+##使用示例
 
 如果你想要创建一个基于`App/User`模型相关的管理界面，先创建一个路由器：
 ```
@@ -138,180 +138,315 @@ $router->resources([
 然后在左侧边栏就能看到入口了。
 
 打开`app/Admin/controllers/UserController.php`文件，里面已经默认包含了CURD相关方法，
+`index()`显示列表页，`create()`用来显示创建页，`edit()`是编辑页，另外的两个方法`grid()`用来创建数据表格
+`form()`用来创建form表单，我们的主要工作就是在`grid()`和`form()`两个方法中编写穿件数据表格和form表单的代码。
 
-###Admin\Grid
+###创建数据表格
 
-`Admin\Grid` is a data grid builder based on `bootstrap table`,in the controller:
+在`grid()`方法中使用`Encore\Admin\Admin::grid()`方法来创建数据表格容器，数据表格的内容都是在容器中定义的
 
-```php
-return Admin::grid(User::class, function(Grid $grid){
+```
+use App\User;
 
-    $grid->id('ID')->sortable();
+protected function grid()
+{
+    return Admin::grid(User::class, function (Grid $grid) {
 
-    //Use dynamic method.
-    $grid->name();
-    //or use column() method: $grid->column('name');
+        $grid->id('ID')->sortable();
+        $grid->name();
+        $grid->email();
 
-    //Add mulitiple columns.
-    $grid->columns('email', 'username' ...);
-
-    //Use related column (hasOne relation).
-    $grid->column('profile.mobile', 'Mobile');
-    //or use $grid->profile()->mobile('Mobile');
-
-    //Use a callback function to display column value.
-    $grid->column('profile.mobile', 'Mobile')->value(function($mobile) {
-      return "+86 $mobile";
+        $grid->created_at();
+        $grid->updated_at();
     });
+}
 
-    //Use sortable() method to make the column sortable.
-    $grid->column('profile.age', 'Age')->sortable();
+```
+
+使用`$grid->{字段名}([$label]);`为数据表格添加一列数据，该列数据使用`User`模型中`{字段名}`的数据填充。
+
+也可以使用以下方式添加数据列：
+
+```
+
+//添加一列
+$grid->column('字段名', '列title');
+
+//添加多列
+$grid->columns('email', 'username' ...);
+```
+
+如果需要改变该列数据的显示内容，可以使用以下方式:
+
+```
+$grid->name()->value(function ($name) {
+    return "<span class='label'>$name</span>";
+});
+
+$grid->email()->value(function ($email) {
+    return "mailto:$email";
+});
+```
+
+数据表格默认开启了批量删除操作，如果要关闭改功能可以使用：
+
+```
+$grid->disableBatchDeletion();
+```
+
+如果需要添加数据条件：
+```
+$grid->model()->where('id', '>', '20')->orderBy('updated_at', 'desc');
+```
+
+每页表格默认显示20条数据，修改为每页15条：
+```
+$grid->paginate(15);
+```
+
+使用以下方式来控制行操作：
+```
+//开启编辑和删除操作
+$grid->actions('edit|delete');
+
+//关闭所有操作
+$grid->disableActions();
+```
+
+
+
+使用以下方式来控制行：
+```
+$grid->rows(function($row){
+
+    //id小于10的行添加style
+    if($row->id < 10) {
+        $row->style('color:red');
+    }
+  
+    //指定列只开启编辑操作
+    if($row->id % 3) {
+        $row->action('edit');
+    }
     
-    // 
-    $grid->column('progress')->progressBar(['danger', 'striped'], 'xs');
+    //指定列添加自定义操作按钮
+    if($row->id % 2) {
+        $row->actions()->add(function ($row) {
+            return "<a class=\"btn btn-xs btn-danger\">btn</a>";
+        });
+    }
+});
+```
 
-    //Wrapper value with a badge.
-    $grid->created_at()->badge('danger');
-    
-    //Wrapper value with a label.
-    $grid->updated_at()->label('success');
+查询过滤器
 
-    //Set query conditions: SELECT * FROM `user` WHERE id > 20 ORDER BY updated_at DESC;
-    $grid->model()->where('id', '>', '20')->orderBy('updated_at', 'desc');
+```
 
-    //Set 15 items per-page.
-    $grid->paginate(15);
+//Add data grid filters.
+$grid->filter(function($filter){
 
-    //Set actions (edit,delete).
-    $grid->actions('edit|delete');
+    // sql: ... WHERE `user.name` LIKE "%$name%";
+    $filter->like('name', 'name');
 
-    //Add row callback function.
-    $grid->rows(function($row){
-        if($row->id <= 10) {
-            $row->style('color:red');
-        }
-      
-        //Disable delete action for specify row.
-        if($row->id % 3) {
-            $row->action('edit');
-        }
-        
-        //Add custom action for specify row.
-        if($row->id % 2) {
-            $row->actions()->add(function ($row) {
-                return "<a class=\"btn btn-xs btn-danger\">btn</a>";
-            });
-        }
-    });
-    
-    //Disable batch deletion.
-    $grid->disableBatchDeletion();
-    
-    //Disable all actions.
-    $grid->disableActions();
+    // sql: ... WHERE `user.email` = $email;
+    $filter->is('emial', 'Email');
 
-    //Add data grid filters.
-    $grid->filter(function($filter){
-
-        // sql: ... WHERE `user.name` LIKE "%$name%";
-        $filter->like('name', 'name');
-
-        // sql: ... WHERE `user.email` = $email;
-        $filter->is('emial', 'Email');
-
-        // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-        $filter->between('created_at', 'Created Time')->datetime();
-    });
+    // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
+    $filter->between('created_at', 'Created Time')->datetime();
 });
 
 ```
 
-###Admin\Form
+###创建数据表单
 
-`Admin\Form` is a data form builder, in your controller：
+在`form()`方法中使用`Encore\Admin\Admin::form()`方法来创建数据表单容器，数据表单的内容都是在容器中定义的
 
-```php
-return Admin::form(User::class, function(Form $form){
+```
+use App\User;
 
-    // $form->field(columnName [, columnName ], labelName = '');
+protected function form()
+{
+    return Admin::form(User::class, function (Form $form) {
 
-    $form->display('id', 'ID');
-    $form->text('name')->rules('required');
-    $form->email('email')->rules('required|email');
-
-    $form->password('password')->rules('required');
-
-    //Related column (hasOne relation).
-    $form->url('profile.homepage', 'Home page');
-
-    $form->ip('last_login_ip', 'Last login ip');
-    $form->datetime('last_login_at', 'Last login time');
-
-    //All fields can set a default value.
-    $form->color('color', 'Color')->default('#a34af4');
-
-    //Code editor based on code mirror see https://codemirror.net/
-    $form->code('code')->lang('ruby');
-    $form->json('json');
-
-    $form->currency('price')->symbol('￥');
-    $form->number('count');
-    $form->rate('rate');
-    
-    //You can use all Intervention Image api in image field (see http://image.intervention.io/getting_started/introduction)
-    $form->image('avatar')->crop(int $width, int $height, [int $x, int $y]);
-    
-    $form->file('document')->rules('mimes:doc,docx,xlsx');
-    $form->mobile('mobile')->format('999 9999 9999');
-    $form->text('address');
-    $form->date('birthday');
-    $form->radio('gender')->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
-
-    //Use Google map or Tencent map.
-    $form->map('latitude', 'longitude', 'Position');
-
-    //Options see http://ionden.com/a/plugins/ion.rangeSlider/en.html.
-    $form->slider('age', 'Age')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => 'years old']);
-
-    $form->display('created_at', 'Create time');
-    $form->display('updated_at', 'Update time');
-
-    $form->datetimeRange('created_at', 'profile.updated_at', 'Time line');
-
-    //Belongs to many relation.
-    $form->multipleSelect('friends')->options(User::all()->lists('name', 'id'));
-
-    //Belongs to many relation.
-    $form->checkbox('roles')->values(Role::all()->lists('display_name', 'id'));
-    
-    $form->switch('open')->states(['on' => 1, 'off' => 0]);
-    
-    //Add a divide line.
-    $form->divide();
-
-    //Has many relation, show as a list.
-    $form->hasMany('comments', function(Grid $grid) {
-
-        // Set resource path for items.
-        $grid->resource('admin/article-comments');
-
-        $grid->id('ID');
-        $grid->author()->value(function($authorId){
-            return User::find($authorId)->name;
-        });
-        $grid->email();
-        $grid->content()->value(function($content) {
-            return mb_strimwidth($content, 0, 40, '...');
-        });
+        $form->display('id', 'ID');
+        $form->text('name');
+        $form->email('email');
+        $form->display('created_at', 'Created At');
+        $form->display('updated_at', 'Updated At');
     });
+}
 
-    // Add saving callback function.
-    $form->saving(function(Form $form) {
-        if($form->password && $form->model()->password != $form->password)
-        {
-            $form->password = bcrypt($form->password);
-        }
-    });
+```
+
+`$form`对象内置了大量创建表单元素的方法，下面是具体使用方法：
+
+只显示字段：
+
+```
+$form->display($column, [$label]);
+```
+
+`text`输入框：
+
+```
+$form->text($column, [$label]);
+```
+
+`radio`选择：
+
+```
+$form->radio($column, [$label])->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
+```
+
+`checkbox`,`values()`方法用来设置选择项:
+```
+$form->checkbox($column, [$label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+```
+
+`email`输入框，填写email格式文本：
+
+```
+$form->email($column, [$label]);
+```
+
+`password`输入框：
+
+```
+$form->password($column, [$label]);
+```
+
+`url`输入框，只能填写合法的url文本：
+
+```
+$form->url($column, [$label]);
+```
+
+`ip`输入框，只能填写合法的ip：
+
+```
+$form->ip($column, [$label]);
+```
+
+电话号码输入框，并设置格式：
+```
+$form->mobile($column, [$label])->format('999 9999 9999');
+```
+
+`color`输入框，颜色选择：
+
+```
+$form->color($column, [$label]);
+```
+
+`time`输入框，时间输入框：
+
+```
+$form->time($column, [$label]);
+```
+
+`date`输入框，日期输入框：
+
+```
+$form->date($column, [$label]);
+```
+
+`datetime`输入框，日期时间输入框：
+
+```
+$form->datetime($column, [$label]);
+```
+
+`currency`输入框，货币输入框，并设置单位符号：
+```
+$form->currency($column, [$label])->symbol('￥');
+```
+
+`number`输入框，输入数字：
+```
+$form->number($column, [$label]);
+```
+
+`rate`输入框，输入比例：
+```
+$form->rate($column, [$label]);
+```
+
+`number`输入框，输入数字：
+```
+$form->number($column, [$label]);
+```
+
+`number`输入框，输入数字：
+```
+$form->number($column, [$label]);
+```
+
+图片上传，可以使用压缩、裁切、添加水印等各种方法，请参考[intervention](http://image.intervention.io/getting_started/introduction)：
+```
+$form->image($column, [$label])->crop(int $width, int $height, [int $x, int $y]);
+```
+
+文件上传，并设置上传文件类型:
+
+```
+$form->file($column, [$label])->rules('mimes:doc,docx,xlsx');
+```
+
+地图空间，用来选择经纬度,`$latitude`, `$longitude`为经纬度字段，laravel的`locale`设置为`zh_CN`的时候使用腾讯地图，否则使用Google地图：
+
+```
+$form->map($latitude, $longitude, $label);
+```
+
+滑动选择控件,可以用来数字类型字段的选择，比如年龄：
+
+```
+$form->slider($column, [$label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
+```
+
+时间范围选择，`$startTime`、`$endTime`为开始和结束时间字段:
+```
+$form->timeRange($startTime, $endTime, 'Time Range');
+```
+
+日期范围选择，`$startDate`、`$endDate`为开始和结束日期字段:
+```
+$form->dateRange($startDate, $endDate, 'Date Range');
+```
+
+时间日期范围选择，`$startDateTime`、`$endDateTime`为开始和结束时间日期:
+```
+$form->datetimeRange($startDateTime, $endDateTime, 'DateTime Range');
+```
+
+时间范围选择，`$startTime`、`$endTime`为开始和结束时间:
+```
+$form->datetimeRange($startTime, $endTime, 'Time Range');
+```
+
+多选框，并设置选项:
+```
+$form->multipleSelect($column, [$label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+```
+
+开关，`on`和`off`对用开关的两个值:
+```
+$form->switch($column, [$label])->states(['on' => 1, 'off' => 0]);
+```
+
+添加一条分割线:
+```
+$form->divide();
+```
+
+保存数据的时候添加回调，保存数据之前可以对提交数据做一些操作：
+
+```
+$form->saving(function(Form $form) {
+    if($form->password && $form->model()->password != $form->password)
+    {
+        $form->password = bcrypt($form->password);
+    }
 });
 ```
 
