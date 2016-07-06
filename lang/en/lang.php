@@ -31,4 +31,5 @@ return [
     'choose_image'  => 'Choose image',
 
     'more'          => 'More',
+    'deny'          => 'Permission denied',
 ];

@@ -31,4 +31,5 @@ return [
     'choose_image'  => '选择图片',
 
     'more'          => '更多',
+    'deny'          => '无权访问',
 ];

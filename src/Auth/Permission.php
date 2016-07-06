@@ -3,6 +3,7 @@
 namespace Encore\Admin\Auth;
 
 use Encore\Admin\Exception\Handle;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Facades\Auth;
 
 class Permission
@@ -48,12 +49,13 @@ class Permission
      *
      * @param \Exception $e
      */
-    protected static function error(\Exception $e = null)
+    protected static function error()
     {
-        if (is_null($e)) {
-            $e = new \Exception('无权访问');
-        }
+        $content = Admin::content(function ($content) {
+            $content->body(view('admin::deny'));
+        });
 
-        response(new Handle($e))->send();
+        response($content)->send();
+        exit;
     }
 }
