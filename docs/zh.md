@@ -77,11 +77,6 @@ return [
         'icon'  => 'fa-bar-chart'
     ],
     [
-        'title' => 'Administrators',
-        'url'   => '/administrators',
-        'icon'  => 'fa-tasks'
-    ],
-    [
         'title' => 'Multilevel',
         'icon'  => 'fa-circle-o',
         'children' => [
@@ -90,17 +85,7 @@ return [
                 'url'   => '/',
                 'icon'  => 'fa-circle-o'
             ],
-            [
-                'title' => 'Level One',
-                'icon'  => 'fa-circle-o',
-                'children' => [
-                    [
-                        'title' => 'Level Two',
-                        'url'   => '/',
-                        'icon'  => 'fa-circle-o'
-                    ]
-                ]
-            ],
+            ...
         ]
     ],
 ];
@@ -280,160 +265,183 @@ protected function form()
 
 `$form`对象内置了大量创建表单元素的方法，下面是具体使用方法：
 
-只显示字段：
+####text
 
-```
-$form->display($column, [$label]);
-```
-
-`text`输入框：
+文本输入框：
 
 ```
 $form->text($column, [$label]);
 ```
 
-`radio`选择：
-
+####select
+单选框，并设置选项:
 ```
-$form->radio($column, [$label])->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
-```
-
-`checkbox`,`values()`方法用来设置选择项:
-```
-$form->checkbox($column, [$label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+$form->select($column, [$label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
-`email`输入框，填写email格式文本：
-
-```
-$form->email($column, [$label]);
-```
-
-`password`输入框：
-
-```
-$form->password($column, [$label]);
-```
-
-`url`输入框，只能填写合法的url文本：
-
-```
-$form->url($column, [$label]);
-```
-
-`ip`输入框，只能填写合法的ip：
-
-```
-$form->ip($column, [$label]);
-```
-
-电话号码输入框，并设置格式：
-```
-$form->mobile($column, [$label])->format('999 9999 9999');
-```
-
-`color`输入框，颜色选择：
-
-```
-$form->color($column, [$label]);
-```
-
-`time`输入框，时间输入框：
-
-```
-$form->time($column, [$label]);
-```
-
-`date`输入框，日期输入框：
-
-```
-$form->date($column, [$label]);
-```
-
-`datetime`输入框，日期时间输入框：
-
-```
-$form->datetime($column, [$label]);
-```
-
-`currency`输入框，货币输入框，并设置单位符号：
-```
-$form->currency($column, [$label])->symbol('￥');
-```
-
-`number`输入框，输入数字：
-```
-$form->number($column, [$label]);
-```
-
-`rate`输入框，输入比例：
-```
-$form->rate($column, [$label]);
-```
-
-`number`输入框，输入数字：
-```
-$form->number($column, [$label]);
-```
-
-`number`输入框，输入数字：
-```
-$form->number($column, [$label]);
-```
-
-图片上传，可以使用压缩、裁切、添加水印等各种方法，请参考[intervention](http://image.intervention.io/getting_started/introduction)：
-```
-$form->image($column, [$label])->crop(int $width, int $height, [int $x, int $y]);
-```
-
-文件上传，并设置上传文件类型:
-
-```
-$form->file($column, [$label])->rules('mimes:doc,docx,xlsx');
-```
-
-地图空间，用来选择经纬度,`$latitude`, `$longitude`为经纬度字段，laravel的`locale`设置为`zh_CN`的时候使用腾讯地图，否则使用Google地图：
-
-```
-$form->map($latitude, $longitude, $label);
-```
-
-滑动选择控件,可以用来数字类型字段的选择，比如年龄：
-
-```
-$form->slider($column, [$label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
-```
-
-时间范围选择，`$startTime`、`$endTime`为开始和结束时间字段:
-```
-$form->timeRange($startTime, $endTime, 'Time Range');
-```
-
-日期范围选择，`$startDate`、`$endDate`为开始和结束日期字段:
-```
-$form->dateRange($startDate, $endDate, 'Date Range');
-```
-
-时间日期范围选择，`$startDateTime`、`$endDateTime`为开始和结束时间日期:
-```
-$form->datetimeRange($startDateTime, $endDateTime, 'DateTime Range');
-```
-
-时间范围选择，`$startTime`、`$endTime`为开始和结束时间:
-```
-$form->datetimeRange($startTime, $endTime, 'Time Range');
-```
-
+####multipleSelect
 多选框，并设置选项:
 ```
 $form->multipleSelect($column, [$label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
+####textarea
+文本输入框:
+```
+$form->textarea($column, [$label]);
+```
+
+####radio
+`radio`选择：
+```
+$form->radio($column, [$label])->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
+```
+
+####checkbox
+`values()`方法用来设置选择项:
+```
+$form->checkbox($column, [$label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+```
+
+####email
+填写email格式文本：
+```
+$form->email($column, [$label]);
+```
+
+####password
+密码输入框：
+```
+$form->password($column, [$label]);
+```
+
+####url
+填写合法的url文本：
+```
+$form->url($column, [$label]);
+```
+
+####ip
+填写合法的ip地址：
+```
+$form->ip($column, [$label]);
+```
+
+####mobile
+电话号码输入框，并设置格式：
+```
+$form->mobile($column, [$label])->format('999 9999 9999');
+```
+
+####color
+颜色选择：
+```
+$form->color($column, [$label])->default('#ccc');
+```
+
+####time
+时间输入框：
+```
+$form->time($column, [$label]);
+```
+
+####date
+日期输入框：
+```
+$form->date($column, [$label]);
+```
+
+####datetime
+日期时间输入框：
+```
+$form->datetime($column, [$label]);
+```
+
+####timeRange
+时间范围选择，`$startTime`、`$endTime`为开始和结束时间字段:
+```
+$form->timeRange($startTime, $endTime, 'Time Range');
+```
+
+####dateRange
+日期范围选择，`$startDate`、`$endDate`为开始和结束日期字段:
+```
+$form->dateRange($startDate, $endDate, 'Date Range');
+```
+
+####datetimeRange
+时间日期范围选择，`$startDateTime`、`$endDateTime`为开始和结束时间日期:
+```
+$form->datetimeRange($startDateTime, $endDateTime, 'DateTime Range');
+```
+
+####currency
+货币输入框，并设置单位符号：
+```
+$form->currency($column, [$label])->symbol('￥');
+```
+
+####number
+输入数字：
+```
+$form->number($column, [$label]);
+```
+
+####rate
+输入比例：
+```
+$form->rate($column, [$label]);
+```
+
+####image
+图片上传，可以使用压缩、裁切、添加水印等各种方法，请参考[intervention](http://image.intervention.io/getting_started/introduction)：
+```
+$form->image($column, [$label])->crop(int $width, int $height, [int $x, int $y]);
+```
+
+####file
+文件上传，并设置上传文件类型:
+```
+$form->file($column, [$label])->rules('mimes:doc,docx,xlsx');
+```
+
+####map
+地图控件，用来选择经纬度,`$latitude`, `$longitude`为经纬度字段，laravel的`locale`设置为`zh_CN`的时候使用腾讯地图，否则使用Google地图：
+```
+$form->map($latitude, $longitude, $label);
+```
+
+####slider
+滑动选择控件,可以用来数字类型字段的选择，比如年龄：
+```
+$form->slider($column, [$label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
+```
+
+####editor
+富文本编辑框:
+```
+$form->textarea($column, [$label]);
+```
+
+####hidden
+隐藏域:
+```
+$form->hidden($column);
+```
+
+####switch
 开关，`on`和`off`对用开关的两个值:
 ```
 $form->switch($column, [$label])->states(['on' => 1, 'off' => 0]);
 ```
 
+####display
+只显示字段：
+```
+$form->display($column, [$label]);
+```
+
+####divide
 添加一条分割线:
 ```
 $form->divide();
