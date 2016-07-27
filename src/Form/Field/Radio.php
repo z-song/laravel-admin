@@ -8,14 +8,6 @@ class Radio extends Field
 {
     protected $values;
 
-    protected $css = [
-        'AdminLTE/plugins/iCheck/all.css'
-    ];
-
-    protected $js = [
-        'AdminLTE/plugins/iCheck/icheck.min.js'
-    ];
-
     public function render()
     {
         $this->options['radioClass'] = 'iradio_minimal-blue';

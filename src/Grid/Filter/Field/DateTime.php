@@ -6,15 +6,6 @@ use Encore\Admin\Admin;
 
 class DateTime
 {
-    protected $css = [
-        'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
-    ];
-
-    protected $js = [
-        'moment/min/moment-with-locales.min.js',
-        'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
-    ];
-
     protected $filter;
 
     public function __construct($filter)
@@ -31,8 +22,6 @@ class DateTime
 
         $script = "$('#{$this->filter->getId()}').datetimepicker(". json_encode($options) .");";
 
-        Admin::js($this->js);
-        Admin::css($this->css);
         Admin::script($script);
     }
 

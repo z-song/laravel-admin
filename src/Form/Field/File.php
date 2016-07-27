@@ -11,15 +11,6 @@ class File extends Field
     const ACTION_KEEP   = 0;
     const ACTION_REMOVE = 1;
 
-    protected $js = [
-        'bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
-        'bootstrap-fileinput/js/fileinput.min.js'
-    ];
-
-    protected $css = [
-        'bootstrap-fileinput/css/fileinput.min.css'
-    ];
-
     protected $directory = '';
 
     protected $name = null;

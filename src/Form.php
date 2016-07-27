@@ -35,7 +35,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Map            map($latitude, $longitude, $label = '')
  *
  * @method Field\Editor         editor($column, $label = '')
- * @method Field\Markdown       markdown($column, $label = '')
  *
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
@@ -50,7 +49,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Number         number($column, $label = '')
  * @method Field\Currency       currency($column, $label = '')
  * @method Field\Json           json($column, $label = '')
- * @method Field\Code           code($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
  * @method Field\SwitchField    switch($column, $label = '')
  * @method Field\Display        display($column, $label = '')
@@ -113,6 +111,9 @@ class Form
      */
     protected $inputs = [];
 
+    /**
+     * @var callable
+     */
     protected $callable;
 
     /**

@@ -84,15 +84,6 @@ class Between extends AbstractFilter
 
     protected function prepareForDatetime()
     {
-        $css = [
-            'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
-        ];
-
-        $js = [
-            'moment/min/moment-with-locales.min.js',
-            'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
-        ];
-
         $options['format'] = 'YYYY-MM-DD HH:mm:ss';
         $options['locale'] = config('app.locale');
 
@@ -110,8 +101,6 @@ class Between extends AbstractFilter
             });
 EOT;
 
-        Admin::js($js);
-        Admin::css($css);
         Admin::script($script);
     }
 

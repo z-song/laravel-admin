@@ -12,15 +12,6 @@ class Slider extends Field
         'hasGrid' => true,
     ];
 
-    protected $css = [
-        'AdminLTE/plugins/ionslider/ion.rangeSlider.css',
-        'AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css',
-    ];
-
-    protected $js = [
-        'AdminLTE/plugins/ionslider/ion.rangeSlider.min.js',
-    ];
-
     public function render()
     {
         $option = json_encode($this->options);

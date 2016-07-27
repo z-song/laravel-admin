@@ -8,15 +8,6 @@ class Date extends Field
 {
     protected $format = 'YYYY-MM-DD';
 
-    protected $css = [
-        'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
-    ];
-
-    protected $js = [
-        'moment/min/moment-with-locales.min.js',
-        'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
-    ];
-
     public function render()
     {
         $this->options['format'] = $this->format;

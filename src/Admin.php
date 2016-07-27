@@ -79,39 +79,30 @@ class Admin
      * @param string $css
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
-    public static function css($css = '')
-    {
-        if (! empty($css)) {
-            self::$css = array_merge(self::$css, (array) $css);
-
-            return ;
-        }
-
-        return view('admin::partials.css', ['css' => array_unique(self::$css)]);
-    }
+//    public static function css($css = '')
+//    {
+//        if (! empty($css)) {
+//            self::$css = array_merge(self::$css, (array) $css);
+//
+//            return ;
+//        }
+//
+//        return view('admin::partials.css', ['css' => array_unique(self::$css)]);
+//    }
 
     /**
-     * @param string $js
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
-    public static function js($js = '')
-    {
-        static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
-
-        if (config('app.locale') == 'zh_CN') {
-            static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
-        }
-
-        //static::$js['codemirror'] =
-
-//        if (! empty($js)) {
-//            self::$js = array_merge(self::$js, (array) $js);
+//    public static function js()
+//    {
+//        static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
 //
-//            return;
+//        if (config('app.locale') == 'zh_CN') {
+//            static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
 //        }
-
-        return view('admin::partials.js', ['js' => array_unique(self::$js)]);
-    }
+//
+//        return view('admin::partials.js', ['js' => array_unique(self::$js)]);
+//    }
 
     /**
      * @param string $script

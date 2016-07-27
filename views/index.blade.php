@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/codemirror/lib/codemirror.css") }}">
 
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
 
@@ -73,7 +74,15 @@
 <script src={{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}></script>
 <script src={{ asset ("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js") }}></script>
 
-{!! Admin::js() !!}
+<script src={{ asset ("/packages/admin/codemirror/lib/codemirror.js") }}></script>
+<script src={{ asset ("/packages/admin/codemirror/mode/javascript/javascript.js") }}></script>
+<script src={{ asset ("/packages/admin/codemirror/addon/edit/matchbrackets.js") }}></script>
+
+@if(config('app.locale') == 'zh_CN')
+<script src={{ asset ("http://map.qq.com/api/js?v=2.exp") }}></script>
+@else
+<script src={{ asset ("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false") }}></script>
+@endif
 
 <script>
 

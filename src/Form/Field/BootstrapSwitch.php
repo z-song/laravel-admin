@@ -8,14 +8,6 @@ class BootstrapSwitch extends Field
 {
     protected $values;
 
-    protected $css = [
-        'bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'
-    ];
-
-    protected $js = [
-        'bootstrap-switch/dist/js/bootstrap-switch.min.js'
-    ];
-
     public function render()
     {
         $this->script = "$('.{$this->id}').bootstrapSwitch();";

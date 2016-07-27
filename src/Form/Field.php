@@ -304,8 +304,6 @@ class Field
      */
     public function render()
     {
-        Admin::js($this->js);
-        Admin::css($this->css);
         Admin::script($this->script);
 
         return view($this->getView(), $this->variables());

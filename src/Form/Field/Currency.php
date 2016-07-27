@@ -6,10 +6,6 @@ use Encore\Admin\Form\Field;
 
 class Currency extends Field
 {
-    protected $js = [
-        'AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
-    ];
-
     protected $symbol = '$';
 
     public function symbol($symbol)

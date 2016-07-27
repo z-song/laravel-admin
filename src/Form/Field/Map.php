@@ -29,8 +29,6 @@ class Map extends Field
 
     public function useGoogleMap()
     {
-        $this->js = ['https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'];
-
         $this->script = <<<EOT
         function initGoogleMap(name) {
             var lat = $('#{$this->id['lat']}');
@@ -69,8 +67,6 @@ EOT;
 
     public function useTencentMap()
     {
-        $this->js = ['http://map.qq.com/api/js?v=2.exp'];
-
         $this->script =  <<<EOT
         function initTencentMap(name) {
             var lat = $('#{$this->id['lat']}');

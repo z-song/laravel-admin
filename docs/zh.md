@@ -421,6 +421,12 @@ $form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1
 $form->textarea($column[, $label]);
 ```
 
+####json
+json编辑框:
+```
+$form->json($column[, $label]);
+```
+
 ####hidden
 隐藏域:
 ```

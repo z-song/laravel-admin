@@ -9,14 +9,6 @@ class Checkbox extends Field
 {
     protected $values;
 
-    protected $css = [
-        'AdminLTE/plugins/iCheck/all.css'
-    ];
-
-    protected $js = [
-        'AdminLTE/plugins/iCheck/icheck.min.js'
-    ];
-
     public function fill($data)
     {
         $relations = Arr::get($data, $this->column);

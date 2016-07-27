@@ -6,10 +6,6 @@ use Encore\Admin\Form\Field;
 
 class Number extends Field
 {
-    protected $js = [
-        'number-input/bootstrap-number-input.js',
-    ];
-
     public function render()
     {
         $this->default(0);

@@ -1,4 +1,4 @@
-@extends('admin::admin')
+@extends('admin::index')
 
 @section('content')
     {!! $tree !!}

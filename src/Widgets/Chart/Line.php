@@ -25,8 +25,6 @@ class Line extends Chart
 
     public function script()
     {
-        $data = json_encode($this->data);
-
         $options = json_encode($this->options);
 
         return <<<EOT
