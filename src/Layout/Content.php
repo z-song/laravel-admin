@@ -11,6 +11,9 @@ class Content implements Renderable
 
     protected $description = '';
 
+    /**
+     * @var Row[]
+     */
     protected $rows = [];
 
     public function __construct(\Closure $callback)

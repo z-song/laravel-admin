@@ -100,24 +100,29 @@ class Row
 
     /**
      *
-     * Set attributes of this row.
+     * Get attributes in html format.
      *
-     * @param array $attrs
      * @return string
      */
-    public function attrs(array $attrs = [])
+    public function getHtmlAttributes()
     {
-        if (empty($attrs)) {
-
-            $attrArr = [];
-            foreach ($this->attributes as $name => $val) {
-                $attrArr[] = "$name=\"$val\"";
-            }
-
-            return join(' ', $attrArr);
+        $attrArr = [];
+        foreach ($this->attributes as $name => $val) {
+            $attrArr[] = "$name=\"$val\"";
         }
 
-        $this->attributes = $attrs;
+        return join(' ', $attrArr);
+    }
+
+    /**
+     * Set attributes.
+     *
+     * @param array $attributes
+     * @return null
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
     }
 
     /**

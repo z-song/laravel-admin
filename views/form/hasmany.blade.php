@@ -12,7 +12,7 @@
             </tr>
 
             @foreach($grid->rows() as $row)
-                <tr {!! $row->attrs() !!}>
+                <tr {!! $row->getHtmlAttributes() !!}>
                     @foreach($grid->columnNames as $name)
                         <td>{!! $row->column($name) !!}</td>
                     @endforeach

@@ -113,7 +113,7 @@ class Admin
         if (! empty($script)) {
             self::$script = array_merge(self::$script, (array) $script);
 
-            return;
+            return null;
         }
 
         return view('admin::partials.script', ['script' => array_unique(self::$script)]);
@@ -123,16 +123,14 @@ class Admin
     {
         //$prefix = app('router')->current()->getPrefix();
 
-        $prefix = config('admin.prefix');
+        $prefix = (string) config('admin.prefix');
 
         return "/$prefix/" . trim($url, '/');
     }
 
     public function menu()
     {
-        if (Config::has('admin.menu')) {
-            return Config::get('admin.menu');
-        }
+        return config('admin.menu', []);
     }
 
     /**

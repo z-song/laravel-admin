@@ -29,7 +29,7 @@ class EmbedsMany extends Field
     public function render()
     {
         if ($this->form->builder()->isMode('create')) {
-            return ;
+            return null;
         }
 
         $model = $this->form->model();

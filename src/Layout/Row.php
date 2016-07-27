@@ -4,6 +4,9 @@ namespace Encore\Admin\Layout;
 
 class Row implements Buildable
 {
+    /**
+     * @var Column[]
+     */
     protected $columns = [];
 
     public function __construct($content = '')

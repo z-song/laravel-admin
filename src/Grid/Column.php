@@ -316,7 +316,7 @@ EOT;
     public function sorter()
     {
         if (! $this->sortable) {
-            return;
+            return null;
         }
 
         $icon = 'fa-sort';

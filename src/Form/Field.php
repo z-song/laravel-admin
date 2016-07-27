@@ -40,6 +40,9 @@ class Field
 
     protected $attributes = [];
 
+    /**
+     * @var Form
+     */
     protected $form = null;
 
     public function __construct($column, $arguments = [])
@@ -107,6 +110,8 @@ class Field
 
             return $names;
         }
+
+        return '';
     }
 
     /**
@@ -191,6 +196,8 @@ class Field
         $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
         $this->rules = join('|', $rules);
+
+        return null;
     }
 
     /**
@@ -211,6 +218,8 @@ class Field
         }
 
         $this->value = $value;
+
+        return null;
     }
 
     /**
@@ -314,5 +323,7 @@ class Field
             $this->default = $arguments[0];
             return $this;
         }
+
+        return null;
     }
 }

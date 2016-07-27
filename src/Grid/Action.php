@@ -3,7 +3,6 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Admin;
-use Illuminate\Support\Facades\Lang;
 
 class Action
 {
@@ -21,6 +20,9 @@ class Action
         self::DELETE => '<a href="javascript:void(0);" data-id="{id}" class="_delete"><i class="fa fa-trash"></i></a> ',
     ];
 
+    /**
+     * @var Row
+     */
     protected $row;
 
     protected $path = '';
@@ -48,7 +50,7 @@ class Action
     {
         $this->path = app('router')->current()->getPath();
 
-        $confirm = Lang::get('admin::lang.delete_confirm');
+        $confirm = trans('admin::lang.delete_confirm');
         $token = csrf_token();
         $script = <<<SCRIPT
             $('._delete').click(function() {

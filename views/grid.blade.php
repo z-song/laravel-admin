@@ -25,7 +25,7 @@
             </tr>
 
             @foreach($grid->rows() as $row)
-            <tr {!! $row->attrs() !!}>
+            <tr {!! $row->getHtmlAttributes() !!}>
                 <td><input type="checkbox" class="grid-item" data-id="{{ $row->id() }}"></td>
                 @foreach($grid->columnNames as $name)
                 <td>{!! $row->column($name) !!}</td>

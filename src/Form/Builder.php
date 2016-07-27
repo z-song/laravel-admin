@@ -6,7 +6,6 @@ use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Lang;
 
 /**
  * Class Builder
@@ -93,21 +92,28 @@ class Builder
         }
 
         $this->options = array_merge($this->options, $options);
+
+        return null;
     }
 
+    /**
+     * @return string
+     */
     public function title()
     {
         if ($this->mode == static::MODE_CREATE) {
-            return Lang::get('admin::lang.create');
+            return trans('admin::lang.create');
         }
 
         if ($this->mode == static::MODE_EDIT) {
-            return Lang::get('admin::lang.edit');
+            return trans('admin::lang.edit');
         }
 
         if ($this->mode == static::MODE_VIEW) {
-            return Lang::get('admin::lang.view');
+            return trans('admin::lang.view');
         }
+
+        return '';
     }
 
     /**
@@ -152,6 +158,7 @@ class Builder
             $attributes['enctype'] = 'multipart/form-data';
         }
 
+        $html = '';
         foreach ($attributes as $name => $value) {
             $html[] = "$name=\"$value\"";
         }
@@ -175,15 +182,15 @@ class Builder
     public function submit()
     {
         if ($this->mode == self::MODE_VIEW) {
-            return;
+            return null;
         }
 
-        return '<button type="submit" class="btn btn-info pull-right">'.Lang::get('admin::lang.submit').'</button>';
+        return '<button type="submit" class="btn btn-info pull-right">'.trans('admin::lang.submit').'</button>';
     }
 
     public function render()
     {
-        $confirm = Lang::get('admin::lang.delete_confirm');
+        $confirm = trans('admin::lang.delete_confirm');
         $token = csrf_token();
 
         $script = <<<SCRIPT

@@ -7,7 +7,7 @@ class Lt extends AbstractFilter
     public function condition($inputs)
     {
         if (! isset($inputs[$this->column])) {
-            return;
+            return null;
         }
 
         $this->value = $inputs[$this->column];

@@ -45,7 +45,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\DateRange      dateRange($start, $end, $label = '')
  * @method Field\DateTimeRange  dateTimeRange($start, $end, $label = '')
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
- * @method Field\Options        options(array $options)
  * @method Field\Number         number($column, $label = '')
  * @method Field\Currency       currency($column, $label = '')
  * @method Field\Json           json($column, $label = '')
@@ -231,11 +230,11 @@ class Form
 
             return $field instanceof Field\File;
 
-        })->each(function ($field) use ($data) {
+        })->each(function (File $file) use ($data) {
 
-            $field->setOriginal($data);
+            $file->setOriginal($data);
 
-            $field->destroy();
+            $file->destroy();
         });
     }
 
@@ -541,7 +540,7 @@ class Form
     protected function getFieldByColumn($column)
     {
         return $this->builder->fields()->first(
-            function ($index, $field) use ($column) {
+            function ($index, Field $field) use ($column) {
 
                 if (is_array($field->column())) {
                     return in_array($column, $field->column());
@@ -561,7 +560,7 @@ class Form
     {
         $values = $this->model->toArray();
 
-        $this->builder->fields()->each(function ($field) use ($values) {
+        $this->builder->fields()->each(function (Field $field) use ($values) {
             $field->setOriginal($values);
         });
     }
@@ -580,7 +579,7 @@ class Form
 
         $data = $this->model->toArray();
 
-        $this->builder->fields()->each(function ($field) use ($data) {
+        $this->builder->fields()->each(function (Field $field) use ($data) {
             $field->fill($data);
         });
     }
@@ -723,7 +722,7 @@ class Form
      *
      * @param string $method
      * @param array $arguments
-     * @return \Encore\Admin\Field
+     * @return Field|void
      */
     public function __call($method, $arguments)
     {

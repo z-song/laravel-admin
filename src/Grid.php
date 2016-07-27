@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Encore\Admin\Pagination\AdminThreePresenter;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Grid
 {
@@ -109,6 +110,11 @@ class Grid
     protected $allowActions = true;
 
     /**
+     * @var Exporter
+     */
+    protected $exporter;
+
+    /**
      * Create a new grid instance.
      *
      * @param Eloquent $model
@@ -135,6 +141,8 @@ class Grid
      */
     public function column($name, $label = '')
     {
+        $relationName = $relationColumn = '';
+
         if (strpos($name, '.') !== false) {
             list($relationName, $relationColumn) = explode('.', $name);
 
@@ -174,12 +182,14 @@ class Grid
                 $this->column($column, $label);
             }
 
-            return;
+            return null;
         }
 
         foreach (func_get_args() as $column) {
             $this->column($column);
         }
+
+        return null;
     }
 
     /**
@@ -251,7 +261,7 @@ class Grid
 
         $data = $this->filter->execute();
 
-        $this->columns->map(function ($column) use (&$data) {
+        $this->columns->map(function (Column $column) use (&$data) {
             $data = $column->map($data);
 
             $this->columnNames[] = $column->getName();
@@ -289,7 +299,7 @@ class Grid
      * Set grid row callback function.
      *
      * @param callable $callable
-     * @return Collection
+     * @return Collection|void
      */
     public function rows(Closure $callable = null)
     {
@@ -298,6 +308,8 @@ class Grid
         }
 
         $this->rowsCallback = $callable;
+
+        return null;
     }
 
     /**
@@ -459,7 +471,7 @@ class Grid
      */
     public function __call($method, $arguments)
     {
-        if ($this->model()->eloquent() instanceof \Jenssegers\Mongodb\Eloquent\Model) {
+        if ($this->model()->eloquent() instanceof MongodbModel) {
             $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
             return $this->addColumn($method, $label);

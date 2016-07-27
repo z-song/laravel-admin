@@ -6,6 +6,9 @@ use Encore\Admin\Admin;
 
 class DateTime
 {
+    /**
+     * @var \Encore\Admin\Grid\Filter\AbstractFilter
+     */
     protected $filter;
 
     public function __construct($filter)

@@ -75,7 +75,7 @@ class Filter
     /**
      * Get all filters.
      *
-     * @return array
+     * @return AbstractFilter[]
      */
     protected function filters()
     {
@@ -120,6 +120,8 @@ class Filter
 
             return $this->addFilter($reflection->newInstanceArgs($arguments));
         }
+
+        return null;
     }
 
     /**

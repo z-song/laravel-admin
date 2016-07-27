@@ -66,7 +66,7 @@ class File extends Field
      * @param $file
      * @return mixed
      */
-    protected function uploadAndDeleteOriginal($file)
+    protected function uploadAndDeleteOriginal(UploadedFile $file)
     {
         $this->renameIfExists($file);
 
@@ -146,7 +146,7 @@ EOT;
      * @param $file
      * @return void
      */
-    public function renameIfExists($file)
+    public function renameIfExists(UploadedFile $file)
     {
         if (file_exists("$this->directory/$this->name")) {
             $this->name = md5(uniqid()) . '.' . $file->guessExtension();
