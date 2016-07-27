@@ -3,7 +3,6 @@
 namespace Encore\Admin\Grid\Filter;
 
 use Encore\Admin\Admin;
-use Illuminate\Support\Arr;
 
 class Between extends AbstractFilter
 {
@@ -48,11 +47,11 @@ class Between extends AbstractFilter
 
     public function condition($inputs)
     {
-        if (! Arr::has($inputs, $this->column)) {
+        if (! array_has($inputs, $this->column)) {
             return null;
         }
 
-        $this->value = Arr::get($inputs, $this->column);
+        $this->value = array_get($inputs, $this->column);
 
         $value = array_filter($this->value, function ($val) {
             return $val !== '';

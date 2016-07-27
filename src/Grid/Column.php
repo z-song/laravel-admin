@@ -3,7 +3,6 @@
 namespace Encore\Admin\Grid;
 
 use Closure;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 
 class Column
@@ -117,16 +116,16 @@ class Column
     public function map($data)
     {
         foreach ($data as &$item) {
-            $this->original = $value = Arr::get($item, $this->name);
+            $this->original = $value = array_get($item, $this->name);
 
             if ($this->hasValueWrapper()) {
                 $value = call_user_func($this->valueWrapper, $value);
-                Arr::set($item, $this->name, $value);
+                array_set($item, $this->name, $value);
             }
 
             if ($this->hasHtmlWrapper()) {
                 $value = $this->htmlWrap($value);
-                Arr::set($item, $this->name, $value);
+                array_set($item, $this->name, $value);
             }
         }
 

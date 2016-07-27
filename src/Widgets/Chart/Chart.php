@@ -6,7 +6,6 @@ use Encore\Admin\Admin;
 use Encore\Admin\Widgets\Widget;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Arr;
 
 class Chart extends Widget implements Renderable
 {

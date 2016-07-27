@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Grid\Filter;
 
-use Illuminate\Support\Arr;
 use Encore\Admin\Grid\Filter\Field\Text;
 use Encore\Admin\Grid\Filter\Field\Select;
 use Encore\Admin\Grid\Filter\Field\DateTime;
@@ -94,7 +93,7 @@ abstract class AbstractFilter
      */
     public function condition($inputs)
     {
-        $value = Arr::get($inputs, $this->column);
+        $value = array_get($inputs, $this->column);
 
         if (! isset($value)) {
             return null;

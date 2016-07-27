@@ -4,8 +4,8 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Form\Field\File;
 use Encore\Admin\Exception\Handle;
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -289,6 +289,7 @@ class Form
         $this->updates = array_filter($this->inputs, function ($val) {
             return is_string($val) or ($val instanceof UploadedFile);
         });
+
         $this->relations = array_filter($this->inputs, 'is_array');
     }
 
@@ -427,20 +428,22 @@ class Form
 
             $value = static::getDataByColumn($updates, $columns);
 
-            if (empty($value) && ! $field instanceof \Encore\Admin\Form\Field\File) {
+            if ($value !== "" && empty($value) && ! $field instanceof File) {
                 continue;
             }
 
-            method_exists($field, 'prepare') && $value = $field->prepare($value);
+            if (method_exists($field, 'prepare')) {
+                $value = $field->prepare($value);
+            }
 
             if ($value != $field->original()) {
 
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
-                        Arr::set($prepared, $column, $value[$name]);
+                        array_set($prepared, $column, $value[$name]);
                     }
                 } elseif (is_string($columns)) {
-                    Arr::set($prepared, $columns, $value);
+                    array_set($prepared, $columns, $value);
                 }
             }
         }
@@ -459,7 +462,7 @@ class Form
         $first = current($inserts);
 
         if (is_array($first) && Arr::isAssoc($first)) {
-            $inserts = Arr::dot($inserts);
+            $inserts = array_dot($inserts);
         }
 
         foreach ($inserts as $column => $value) {
@@ -477,7 +480,7 @@ class Form
         $prepared = [];
 
         foreach ($inserts as $key => $value) {
-            Arr::set($prepared, $key, $value);
+            array_set($prepared, $key, $value);
         }
 
         return $prepared;
@@ -513,16 +516,16 @@ class Form
     protected static function getDataByColumn($data, $columns)
     {
         if (is_string($columns)) {
-            return Arr::get($data, $columns);
+            return array_get($data, $columns);
         }
 
         if (is_array($columns)) {
             $value = [];
             foreach ($columns as $name => $column) {
-                if (! Arr::has($data, $column)) {
+                if (! array_has($data, $column)) {
                     continue;
                 }
-                $value[$name] = Arr::get($data, $column);
+                $value[$name] = array_get($data, $column);
             }
 
             return $value;
@@ -600,13 +603,13 @@ class Form
             $columns = $field->column();
 
             if (is_string($columns)) {
-                $data[$field->label()] = Arr::get($input, $columns);
+                $data[$field->label()] = array_get($input, $columns);
                 $rules[$field->label()] = $rule;
             }
 
             if (is_array($columns)) {
                 foreach ($columns as $key => $column) {
-                    $data[$field->label().$key] = Arr::get($input, $column);
+                    $data[$field->label().$key] = array_get($input, $column);
                     $rules[$field->label().$key] = $rule;
                 }
             }
@@ -630,8 +633,8 @@ class Form
             $columns[] = $field->column();
         }
 
-        foreach (Arr::flatten($columns) as $column) {
-            if (Str::contains($column, '.')) {
+        foreach (array_flatten($columns) as $column) {
+            if (str_contains($column, '.')) {
                 list($relation) = explode('.', $column);
 
                 if (method_exists($this->model, $relation) &&
@@ -687,10 +690,10 @@ class Form
     public function input($key, $value = null)
     {
         if (is_null($value)) {
-            return Arr::get($this->inputs, $key);
+            return array_get($this->inputs, $key);
         }
 
-        return Arr::set($this->inputs, $key, $value);
+        return array_set($this->inputs, $key, $value);
     }
 
     /**

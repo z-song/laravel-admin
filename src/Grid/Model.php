@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Grid;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -167,7 +165,7 @@ class Model
             return;
         }
 
-        if (Str::contains($this->sort['column'], '.')) {
+        if (str_contains($this->sort['column'], '.')) {
 
             $this->setRelationSort($this->sort['column']);
 

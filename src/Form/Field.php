@@ -4,7 +4,6 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
-use Illuminate\Support\Arr;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Input;
 
@@ -120,13 +119,13 @@ class Field
     {
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
-                $this->value[$key] = Arr::get($data, $column);
+                $this->value[$key] = array_get($data, $column);
             }
 
             return;
         }
 
-        $this->value = Arr::get($data, $this->column);
+        $this->value = array_get($data, $this->column);
     }
 
     /**
@@ -139,13 +138,13 @@ class Field
     {
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
-                $this->original[$key] = Arr::get($data, $column);
+                $this->original[$key] = array_get($data, $column);
             }
 
             return;
         }
 
-        $this->original = Arr::get($data, $this->column);
+        $this->original = array_get($data, $this->column);
     }
 
     /**
