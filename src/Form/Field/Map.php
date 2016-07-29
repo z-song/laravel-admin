@@ -8,15 +8,15 @@ class Map extends Field
 {
     public function __construct($column, $arguments)
     {
-        $this->column['lat']  = $column;
-        $this->column['lng']  = $arguments[0];
+        $this->column['lat'] = $column;
+        $this->column['lng'] = $arguments[0];
 
         array_shift($arguments);
 
-        $this->label  = $this->formatLabel($arguments);
-        $this->id     = $this->formatId($this->column);
+        $this->label = $this->formatLabel($arguments);
+        $this->id = $this->formatId($this->column);
 
-        /**
+        /*
          * Google map is blocked in mainland China
          * people in China can use Tencent map instead(;
          */
@@ -67,7 +67,7 @@ EOT;
 
     public function useTencentMap()
     {
-        $this->script =  <<<EOT
+        $this->script = <<<EOT
         function initTencentMap(name) {
             var lat = $('#{$this->id['lat']}');
             var lng = $('#{$this->id['lng']}');

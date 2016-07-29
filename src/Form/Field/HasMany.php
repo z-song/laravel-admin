@@ -2,13 +2,12 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Grid;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Grid;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 
 /**
- * Class HasMany
- * @package Encore\Admin\Form\Field
+ * Class HasMany.
  */
 class HasMany extends Field
 {
@@ -28,14 +27,14 @@ class HasMany extends Field
     public function render()
     {
         if ($this->form->builder()->isMode('create')) {
-            return null;
+            return;
         }
 
         $model = $this->form->model();
 
         $relation = call_user_func([$model, $this->relationName]);
 
-        if (! $relation instanceof Relation) {
+        if (!$relation instanceof Relation) {
             throw new \Exception('hasMany field must be a HasMany relation.');
         }
 

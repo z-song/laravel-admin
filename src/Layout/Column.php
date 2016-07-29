@@ -41,7 +41,6 @@ class Column implements Buildable
         $this->endColumn();
     }
 
-
     protected function startColumn()
     {
         echo "<div class=\"col-md-{$this->width}\">";
@@ -49,6 +48,6 @@ class Column implements Buildable
 
     protected function endColumn()
     {
-        echo "</div>";
+        echo '</div>';
     }
 }

@@ -1,21 +1,22 @@
 <?php
+
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Exception\Handle;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
-use Encore\Admin\Exception\Handle;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Class Form
+ * Class Form.
  *
  * @method Field\Text           text($column, $label = '')
  * @method Field\Checkbox       checkbox($column, $label = '')
@@ -24,7 +25,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\MultipleSelect multipleSelect($column, $label = '')
  * @method Field\Textarea       textarea($column, $label = '')
  * @method Field\Hidden         hidden($column, $label = '')
- *
  * @method Field\Id             id($column, $label = '')
  * @method Field\Ip             ip($column, $label = '')
  * @method Field\Url            url($column, $label = '')
@@ -33,12 +33,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\Map            map($latitude, $longitude, $label = '')
- *
  * @method Field\Editor         editor($column, $label = '')
- *
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
- *
  * @method Field\Date           date($column, $label = '')
  * @method Field\Datetime       datetime($column, $label = '')
  * @method Field\Time           time($column, $label = '')
@@ -53,15 +50,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
  * @method Field\Divide         divide()
- *
- * @package Encore\Admin
  */
 class Form
 {
     /**
      * Eloquent model of the form.
      *
-     * @var $model
+     * @var
      */
     protected $model;
 
@@ -172,6 +167,7 @@ class Form
      * Generate a edit form.
      *
      * @param $id
+     *
      * @return $this
      */
     public function edit($id)
@@ -186,6 +182,7 @@ class Form
 
     /**
      * @param $id
+     *
      * @return $this
      */
     public function view($id)
@@ -202,6 +199,7 @@ class Form
      * Destroy data entity and remove files.
      *
      * @param $id
+     *
      * @return mixed
      */
     public function destroy($id)
@@ -227,11 +225,8 @@ class Form
             ->findOrFail($id)->toArray();
 
         $this->builder->fields()->filter(function ($field) {
-
             return $field instanceof Field\File;
-
         })->each(function (File $file) use ($data) {
-
             $file->setOriginal($data);
 
             $file->destroy();
@@ -247,14 +242,13 @@ class Form
     {
         $data = Input::all();
 
-        if (! $this->validate($data)) {
+        if (!$this->validate($data)) {
             return back()->withInput()->withErrors($this->validator->messages());
         }
 
         $this->prepare($data, $this->saving);
 
         DB::transaction(function () {
-
             $inserts = $this->prepareInsert($this->updates);
 
             foreach ($inserts as $column => $value) {
@@ -274,7 +268,7 @@ class Form
     /**
      * Prepare input data for insert or update.
      *
-     * @param array $data
+     * @param array    $data
      * @param callable $callback
      */
     protected function prepare($data = [], Closure $callback = null)
@@ -293,8 +287,10 @@ class Form
     }
 
     /**
-     * Callback after saving a Model
+     * Callback after saving a Model.
+     *
      * @param Closure|null $callback
+     *
      * @return void
      */
     protected function complete(Closure $callback = null)
@@ -308,13 +304,13 @@ class Form
      * Save relations data.
      *
      * @param array $relations
+     *
      * @return void
      */
     protected function saveRelation($relations)
     {
         foreach ($relations as $name => $values) {
-
-            if (! method_exists($this->model, $name)) {
+            if (!method_exists($this->model, $name)) {
                 continue;
             }
 
@@ -340,13 +336,14 @@ class Form
 
     /**
      * @param $id
+     *
      * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
         $data = Input::all();
 
-        if (! $this->validate($data)) {
+        if (!$this->validate($data)) {
             return back()->withInput()->withErrors($this->validator->messages());
         }
 
@@ -357,7 +354,6 @@ class Form
         $this->prepare($data, $this->saving);
 
         DB::transaction(function () {
-
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
@@ -378,13 +374,13 @@ class Form
      * Update relation data.
      *
      * @param array $relations
+     *
      * @return void
      */
     protected function updateRelation($relations)
     {
         foreach ($relations as $name => $values) {
-
-            if (! method_exists($this->model, $name)) {
+            if (!method_exists($this->model, $name)) {
                 continue;
             }
 
@@ -415,6 +411,7 @@ class Form
      * Prepare input data for update.
      *
      * @param $updates
+     *
      * @return array
      */
     protected function prepareUpdate($updates)
@@ -422,12 +419,11 @@ class Form
         $prepared = [];
 
         foreach ($this->builder->fields() as $field) {
-
             $columns = $field->column();
 
             $value = static::getDataByColumn($updates, $columns);
 
-            if ($value !== "" && empty($value) && ! $field instanceof File) {
+            if ($value !== '' && empty($value) && !$field instanceof File) {
                 continue;
             }
 
@@ -436,7 +432,6 @@ class Form
             }
 
             if ($value != $field->original()) {
-
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
                         array_set($prepared, $column, $value[$name]);
@@ -454,6 +449,7 @@ class Form
      * Prepare input data for insert.
      *
      * @param $inserts
+     *
      * @return array
      */
     protected function prepareInsert($inserts)
@@ -465,7 +461,6 @@ class Form
         }
 
         foreach ($inserts as $column => $value) {
-
             if (is_null($field = $this->getFieldByColumn($column))) {
                 unset($inserts[$column]);
                 continue;
@@ -489,6 +484,7 @@ class Form
      * Set saving callback.
      *
      * @param callable $callback
+     *
      * @return void
      */
     public function saving(Closure $callback)
@@ -500,6 +496,7 @@ class Form
      * Set saved callback.
      *
      * @param callable $callback
+     *
      * @return void
      */
     public function saved(Closure $callback)
@@ -508,8 +505,9 @@ class Form
     }
 
     /**
-     * @param array $data
+     * @param array        $data
      * @param string|array $columns
+     *
      * @return array|mixed
      */
     protected static function getDataByColumn($data, $columns)
@@ -521,7 +519,7 @@ class Form
         if (is_array($columns)) {
             $value = [];
             foreach ($columns as $name => $column) {
-                if (! array_has($data, $column)) {
+                if (!array_has($data, $column)) {
                     continue;
                 }
                 $value[$name] = array_get($data, $column);
@@ -535,13 +533,13 @@ class Form
      * Find field object by column.
      *
      * @param $column
+     *
      * @return mixed
      */
     protected function getFieldByColumn($column)
     {
         return $this->builder->fields()->first(
             function ($index, Field $field) use ($column) {
-
                 if (is_array($field->column())) {
                     return in_array($column, $field->column());
                 }
@@ -569,6 +567,7 @@ class Form
      * Set all fields value in form.
      *
      * @param $id
+     *
      * @return void
      */
     protected function setFieldValue($id)
@@ -588,6 +587,7 @@ class Form
      * Validate input data.
      *
      * @param $input
+     *
      * @return bool
      */
     protected function validate($input)
@@ -595,7 +595,7 @@ class Form
         $data = $rules = [];
 
         foreach ($this->builder->fields() as $field) {
-            if (! method_exists($field, 'rules') || ! $rule = $field->rules()) {
+            if (!method_exists($field, 'rules') || !$rule = $field->rules()) {
                 continue;
             }
 
@@ -659,9 +659,9 @@ class Form
         $route = app('router')->current();
         $prefix = $route->getPrefix();
 
-        $resource = trim(preg_replace("#$prefix#", '', $route->getUri(), 1), '/') . '/';
+        $resource = trim(preg_replace("#$prefix#", '', $route->getUri(), 1), '/').'/';
 
-        return "/$prefix/" . substr($resource, 0, strpos($resource, '/'));
+        return "/$prefix/".substr($resource, 0, strpos($resource, '/'));
     }
 
     /**
@@ -674,7 +674,6 @@ class Form
         try {
             return $this->builder->render();
         } catch (\Exception $e) {
-
             return with(new Handle($e))->render();
         }
     }
@@ -683,7 +682,8 @@ class Form
      * Get or set input data.
      *
      * @param string $key
-     * @param null $value
+     * @param null   $value
+     *
      * @return array|mixed
      */
     public function input($key, $value = null)
@@ -699,6 +699,7 @@ class Form
      * Getter.
      *
      * @param string $name
+     *
      * @return array|mixed
      */
     public function __get($name)
@@ -721,14 +722,14 @@ class Form
      * Generate a Field object and add to form builder if Field exists.
      *
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return Field|void
      */
     public function __call($method, $arguments)
     {
         if ($className = static::findFieldClass($method)) {
-
-            $column = array_get($arguments, 0, '');//[0];
+            $column = array_get($arguments, 0, ''); //[0];
 
             $element = new $className($column, array_slice($arguments, 1));
 
@@ -740,14 +741,14 @@ class Form
 
     public static function findFieldClass($method)
     {
-        $className = __NAMESPACE__ . '\\Form\\Field\\' . ucfirst($method);
+        $className = __NAMESPACE__.'\\Form\\Field\\'.ucfirst($method);
 
         if (class_exists($className)) {
             return $className;
         }
 
         if ($method == 'switch') {
-            return __NAMESPACE__ . '\\Form\\Field\\SwitchField';
+            return __NAMESPACE__.'\\Form\\Field\\SwitchField';
         }
 
         return false;

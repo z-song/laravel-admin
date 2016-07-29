@@ -1,19 +1,20 @@
 <?php
+
 namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Exception\Handle;
+use Encore\Admin\Grid\Column;
 use Encore\Admin\Grid\Exporter;
 use Encore\Admin\Grid\Filter;
-use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Model;
-use Encore\Admin\Grid\Column;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Encore\Admin\Grid\Row;
 use Encore\Admin\Pagination\AdminThreePresenter;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Schema;
 use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Grid
@@ -122,11 +123,11 @@ class Grid
      */
     public function __construct(Eloquent $model, Closure $builder)
     {
-        $this->keyName  = $model->getKeyName();
-        $this->model    = new Model($model);
-        $this->columns  = new Collection();
-        $this->rows     = new Collection();
-        $this->builder  = $builder;
+        $this->keyName = $model->getKeyName();
+        $this->model = new Model($model);
+        $this->columns = new Collection();
+        $this->rows = new Collection();
+        $this->builder = $builder;
 
         $this->setupFilter();
         $this->setupExporter();
@@ -137,6 +138,7 @@ class Grid
      *
      * @param string $name
      * @param string $label
+     *
      * @return Column
      */
     public function column($name, $label = '')
@@ -169,6 +171,7 @@ class Grid
      * 2.$grid->columns('name', 'email' ...)
      *
      * @param array $columns
+     *
      * @return Collection|void
      */
     public function columns($columns = [])
@@ -182,14 +185,12 @@ class Grid
                 $this->column($column, $label);
             }
 
-            return null;
+            return;
         }
 
         foreach (func_get_args() as $column) {
             $this->column($column);
         }
-
-        return null;
     }
 
     /**
@@ -197,6 +198,7 @@ class Grid
      *
      * @param string $column
      * @param string $label
+     *
      * @return Column
      */
     protected function addColumn($column = '', $label = '')
@@ -225,6 +227,7 @@ class Grid
      * Paginate the grid.
      *
      * @param int $perPage
+     *
      * @return void
      */
     public function paginate($perPage = null)
@@ -276,12 +279,12 @@ class Grid
      * Build the grid rows.
      *
      * @param array $data
+     *
      * @return void
      */
     protected function buildRows(array $data)
     {
         $this->rows = collect($data)->map(function ($val, $key) {
-
             $row = new Row($key, $val);
 
             $row->setKeyName($this->keyName);
@@ -299,6 +302,7 @@ class Grid
      * Set grid row callback function.
      *
      * @param callable $callable
+     *
      * @return Collection|void
      */
     public function rows(Closure $callable = null)
@@ -308,8 +312,6 @@ class Grid
         }
 
         $this->rowsCallback = $callable;
-
-        return null;
     }
 
     /**
@@ -379,7 +381,7 @@ class Grid
     }
 
     /**
-     * Render the grid filter
+     * Render the grid filter.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -392,17 +394,18 @@ class Grid
      * Get current resource uri.
      *
      * @param string $path
+     *
      * @return string
      */
     public function resource($path = null)
     {
-        if (! empty($path)) {
+        if (!empty($path)) {
             $this->resourcePath = $path;
 
             return $this;
         }
 
-        if (! empty($this->resourcePath)) {
+        if (!empty($this->resourcePath)) {
             return $this->resourcePath;
         }
 
@@ -415,14 +418,14 @@ class Grid
 
         extract(parse_url($this->resource()));
 
-        return '/' . trim($path, '/') . '/create' . $query;
-
+        return '/'.trim($path, '/').'/create'.$query;
     }
 
     /**
      * Add variables to grid view.
      *
      * @param array $variables
+     *
      * @return $this
      */
     public function with($variables = [])
@@ -452,10 +455,8 @@ class Grid
     public function render()
     {
         try {
-
             $this->build();
         } catch (\Exception $e) {
-
             return with(new Handle($e))->render();
         }
 
@@ -467,6 +468,7 @@ class Grid
      *
      * @param $method
      * @param $arguments
+     *
      * @return $this|Column
      */
     public function __call($method, $arguments)
@@ -487,7 +489,6 @@ class Grid
         $relation = $this->model()->eloquent()->$method();
 
         if ($relation instanceof Relation) {
-
             $this->model()->with($method);
 
             return $this->addColumn()->setRelation($method);

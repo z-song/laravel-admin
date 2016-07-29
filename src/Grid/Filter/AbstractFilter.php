@@ -2,9 +2,9 @@
 
 namespace Encore\Admin\Grid\Filter;
 
-use Encore\Admin\Grid\Filter\Field\Text;
-use Encore\Admin\Grid\Filter\Field\Select;
 use Encore\Admin\Grid\Filter\Field\DateTime;
+use Encore\Admin\Grid\Filter\Field\Select;
+use Encore\Admin\Grid\Filter\Field\Text;
 
 abstract class AbstractFilter
 {
@@ -23,14 +23,14 @@ abstract class AbstractFilter
     public function __construct($column, $label = '')
     {
         $this->column = $column;
-        $this->label  = $this->formatLabel($label);
-        $this->id     = $this->formatId($column);
+        $this->label = $this->formatLabel($label);
+        $this->id = $this->formatId($column);
 
         $this->setupField();
     }
 
     /**
-     * Setup field
+     * Setup field.
      *
      * @return void
      */
@@ -43,6 +43,7 @@ abstract class AbstractFilter
      * Format label.
      *
      * @param string $label
+     *
      * @return string
      */
     protected function formatLabel($label)
@@ -56,6 +57,7 @@ abstract class AbstractFilter
      * Format name.
      *
      * @param string $column
+     *
      * @return string
      */
     protected function formatName($column)
@@ -78,6 +80,7 @@ abstract class AbstractFilter
      * Format id.
      *
      * @param $columns
+     *
      * @return array|string
      */
     public function formatId($columns)
@@ -89,14 +92,15 @@ abstract class AbstractFilter
      * Get query condition from filter.
      *
      * @param array $inputs
+     *
      * @return array|mixed|null
      */
     public function condition($inputs)
     {
         $value = array_get($inputs, $this->column);
 
-        if (! isset($value)) {
-            return null;
+        if (!isset($value)) {
+            return;
         }
 
         $this->value = $value;
@@ -142,7 +146,6 @@ abstract class AbstractFilter
         $column = explode('.', $this->column);
 
         if (count($column) == 1) {
-
             return [$this->query => func_get_args()];
         }
 
@@ -185,7 +188,7 @@ abstract class AbstractFilter
     public function render()
     {
         $class = explode('\\', get_called_class());
-        $view = 'admin::filter.' . strtolower(end($class));
+        $view = 'admin::filter.'.strtolower(end($class));
 
         return view($view, $this->variables());
     }

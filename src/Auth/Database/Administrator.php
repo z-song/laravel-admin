@@ -3,8 +3,8 @@
 namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Model;
 
 class Administrator extends Model implements AuthenticatableContract
 {
@@ -15,7 +15,7 @@ class Administrator extends Model implements AuthenticatableContract
     /**
      * Create a new Eloquent model instance.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -40,6 +40,7 @@ class Administrator extends Model implements AuthenticatableContract
      * Check if user has permission.
      *
      * @param $permission
+     *
      * @return bool
      */
     public function can($permission)
@@ -57,17 +58,19 @@ class Administrator extends Model implements AuthenticatableContract
      * Check if user has no permission.
      *
      * @param $permission
+     *
      * @return bool
      */
     public function cannot($permission)
     {
-        return ! $this->can($permission);
+        return !$this->can($permission);
     }
 
     /**
      * Check if user is $roles.
      *
      * @param $roles
+     *
      * @return mixed
      */
     public function isRole($roles)

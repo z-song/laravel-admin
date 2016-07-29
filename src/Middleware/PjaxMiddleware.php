@@ -12,15 +12,16 @@ class PjaxMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  Request $request
-     * @param  Closure $next
+     * @param Request $request
+     * @param Closure $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         $response = $next($request);
 
-        if (! $request->pjax() || $response->isRedirection()) {
+        if (!$request->pjax() || $response->isRedirection()) {
             return $response;
         }
 
@@ -33,8 +34,9 @@ class PjaxMiddleware
     /**
      * Prepare the PJAX-specific response content.
      *
-     * @param  Response $response
-     * @param  string   $container
+     * @param Response $response
+     * @param string   $container
+     *
      * @return $this
      */
     protected function filterResponse(Response $response, $container)
@@ -42,7 +44,7 @@ class PjaxMiddleware
         $crawler = new Crawler($response->getContent());
 
         $response->setContent(
-            $this->makeTitle($crawler) .
+            $this->makeTitle($crawler).
             $this->fetchContents($crawler, $container)
         );
 
@@ -52,7 +54,8 @@ class PjaxMiddleware
     /**
      * Prepare an HTML title tag.
      *
-     * @param  Crawler $crawler
+     * @param Crawler $crawler
+     *
      * @return string
      */
     protected function makeTitle($crawler)
@@ -65,15 +68,16 @@ class PjaxMiddleware
     /**
      * Fetch the PJAX-specific HTML from the response.
      *
-     * @param  Crawler $crawler
-     * @param  string  $container
+     * @param Crawler $crawler
+     * @param string  $container
+     *
      * @return string
      */
     protected function fetchContents($crawler, $container)
     {
         $content = $crawler->filter($container);
 
-        if (! $content->count()) {
+        if (!$content->count()) {
             abort(422);
         }
 

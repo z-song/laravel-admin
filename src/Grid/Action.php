@@ -7,8 +7,8 @@ use Encore\Admin\Admin;
 class Action
 {
     //const SHOW      = 'show';
-    const EDIT      = 'edit';
-    const DELETE    = 'delete';
+    const EDIT = 'edit';
+    const DELETE = 'delete';
 
     protected $defaultActions = [self::EDIT, self::DELETE];
 
@@ -89,7 +89,6 @@ class Action
 SCRIPT;
 
         Admin::script($script);
-
     }
 
     public function render()
@@ -106,7 +105,7 @@ SCRIPT;
             );
         }
 
-        return join(' ', $actionEntities);
+        return implode(' ', $actionEntities);
     }
 
     public function __toString()

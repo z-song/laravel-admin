@@ -45,7 +45,7 @@ class Bar extends Chart
         '#00c0ef', '#3c8dbc', '#0073b7',
         '#39cccc', '#ff851b', '#01ff70',
         '#605ca8', '#f012be', '#777',
-        '#001f3f', '#d2d6de'
+        '#001f3f', '#d2d6de',
     ];
 
     protected function fillColor($data)
@@ -58,7 +58,7 @@ class Bar extends Chart
 
         return $data;
     }
-    
+
     public function script()
     {
         $data = $this->fillColor($this->data);
@@ -76,6 +76,5 @@ class Bar extends Chart
 
 })();
 EOT;
-
     }
 }

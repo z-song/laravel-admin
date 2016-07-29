@@ -19,7 +19,7 @@ class Carousel extends Widget implements Renderable
     {
         $this->title = $title;
     }
-    
+
     /**
      * @return string
      */

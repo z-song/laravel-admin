@@ -2,20 +2,18 @@
 
 namespace Encore\Admin\Grid;
 
-use ReflectionClass;
-use Illuminate\Support\Facades\Input;
 use Encore\Admin\Grid\Filter\AbstractFilter;
+use Illuminate\Support\Facades\Input;
+use ReflectionClass;
 
 /**
- * Class Filter
+ * Class Filter.
  *
  * @method Filter     is($column, $label = '')
  * @method Filter     like($column, $label = '')
  * @method Filter     gt($column, $label = '')
  * @method Filter     lt($column, $label = '')
  * @method Filter     between($column, $label = '')
- *
- * @package Encore\Admin
  */
 class Filter
 {
@@ -65,6 +63,7 @@ class Filter
      * Add a filter to grid.
      *
      * @param AbstractFilter $filter
+     *
      * @return AbstractFilter
      */
     protected function addFilter(AbstractFilter $filter)
@@ -107,21 +106,19 @@ class Filter
     /**
      * Generate a filter object and add to grid.
      *
-     * @param string    $method
-     * @param array     $arguments
+     * @param string $method
+     * @param array  $arguments
+     *
      * @return $this
      */
     public function __call($method, $arguments)
     {
         if (in_array($method, $this->allows)) {
-
             $className = '\\Encore\\Admin\\Grid\\Filter\\'.ucfirst($method);
             $reflection = new ReflectionClass($className);
 
             return $this->addFilter($reflection->newInstanceArgs($arguments));
         }
-
-        return null;
     }
 
     /**

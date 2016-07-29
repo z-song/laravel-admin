@@ -11,7 +11,7 @@ class Role extends Model
     /**
      * Create a new Eloquent model instance.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -48,6 +48,7 @@ class Role extends Model
      * Check user has permission.
      *
      * @param $permission
+     *
      * @return bool
      */
     public function can($permission)
@@ -59,10 +60,11 @@ class Role extends Model
      * Check user has no permission.
      *
      * @param $permission
+     *
      * @return bool
      */
     public function cannot($permission)
     {
-        return ! $this->can($permission);
+        return !$this->can($permission);
     }
 }

@@ -10,12 +10,12 @@ class DateRange extends Field
 
     public function __construct($column, $arguments)
     {
-        $this->column['start']  = $column;
-        $this->column['end']    = $arguments[0];
+        $this->column['start'] = $column;
+        $this->column['end'] = $arguments[0];
 
         array_shift($arguments);
-        $this->label  = $this->formatLabel($arguments);
-        $this->id     = $this->formatId($this->column);
+        $this->label = $this->formatLabel($arguments);
+        $this->id = $this->formatId($this->column);
 
         $this->options(['format' => $this->format]);
     }
@@ -25,7 +25,7 @@ class DateRange extends Field
         $this->options['locale'] = config('app.locale');
 
         $startOptions = json_encode($this->options);
-        $endOptions = json_encode($this->options + ['useCurrent' =>false]);
+        $endOptions = json_encode($this->options + ['useCurrent' => false]);
 
         $this->script = <<<EOT
             $('#{$this->id['start']}').datetimepicker($startOptions);

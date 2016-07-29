@@ -6,6 +6,7 @@ class Row
 {
     /**
      * Row number.
+     *
      * @var
      */
     protected $number;
@@ -46,7 +47,7 @@ class Row
     protected $path;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param $number
      * @param $data
@@ -99,7 +100,6 @@ class Row
     }
 
     /**
-     *
      * Get attributes in html format.
      *
      * @return string
@@ -111,13 +111,14 @@ class Row
             $attrArr[] = "$name=\"$val\"";
         }
 
-        return join(' ', $attrArr);
+        return implode(' ', $attrArr);
     }
 
     /**
      * Set attributes.
      *
      * @param array $attributes
+     *
      * @return null
      */
     public function setAttributes(array $attributes)
@@ -133,7 +134,7 @@ class Row
     public function style($style)
     {
         if (is_array($style)) {
-            $style = join('', array_map(function ($key, $val) {
+            $style = implode('', array_map(function ($key, $val) {
                 return "$key:$val";
             }, array_keys($style), array_values($style)));
         }
@@ -147,11 +148,12 @@ class Row
      * Set or Get actions.
      *
      * @param string $actions
+     *
      * @return Action
      */
     public function actions($actions = 'edit|delete')
     {
-        if (! is_null($this->actions)) {
+        if (!is_null($this->actions)) {
             return $this->actions;
         }
 
@@ -176,6 +178,7 @@ class Row
      * Getter.
      *
      * @param $attr
+     *
      * @return null
      */
     public function __get($attr)
@@ -188,6 +191,7 @@ class Row
      *
      * @param $name
      * @param null $value
+     *
      * @return $this|mixed
      */
     public function column($name, $value = null)

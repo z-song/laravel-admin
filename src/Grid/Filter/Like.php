@@ -6,7 +6,7 @@ class Like extends AbstractFilter
 {
     public function condition($inputs)
     {
-        if (! isset($inputs[$this->column])) {
+        if (!isset($inputs[$this->column])) {
             return;
         }
 

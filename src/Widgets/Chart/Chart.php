@@ -22,14 +22,14 @@ class Chart extends Widget implements Renderable
 
     public function makeElementId()
     {
-        return 'chart_' . uniqid();
+        return 'chart_'.uniqid();
     }
 
     public static function color($color = '')
     {
         $colors = ['#dd4b39', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
 
-        return $color ? $color :  $colors[array_rand($colors)];
+        return $color ? $color : $colors[array_rand($colors)];
 
         //sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }

@@ -12,7 +12,7 @@ class Radio extends Field
     {
         $this->options['radioClass'] = 'iradio_minimal-blue';
 
-        $this->script = "$('.{$this->id}').iCheck(". json_encode($this->options) .");";
+        $this->script = "$('.{$this->id}').iCheck(".json_encode($this->options).');';
 
         return parent::render()->with(['values' => $this->values]);
     }

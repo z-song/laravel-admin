@@ -43,6 +43,7 @@ var editor = CodeMirror.fromTextArea(document.getElementById("{$this->id}"), {
 });
 
 EOT;
+
         return parent::render();
     }
 }

@@ -31,7 +31,7 @@ class Column
     {
         $this->name = $name;
 
-        $this->label =  $this->formatLabel($label);
+        $this->label = $this->formatLabel($label);
     }
 
     /**
@@ -48,6 +48,7 @@ class Column
      * Format label.
      *
      * @param $label
+     *
      * @return mixed
      */
     protected function formatLabel($label)
@@ -71,6 +72,7 @@ class Column
      * Add a value wrapper.
      *
      * @param callable $callable
+     *
      * @return $this
      */
     public function value(Closure $callable)
@@ -94,6 +96,7 @@ class Column
      * Set relation.
      *
      * @param $relation
+     *
      * @return $this
      */
     public function setRelation($relation)
@@ -148,6 +151,7 @@ class Column
      * Wrap value with badge.
      *
      * @param string $style
+     *
      * @return $this
      */
     public function badge($style = 'red')
@@ -163,6 +167,7 @@ class Column
      * Wrap value with label.
      *
      * @param string $style
+     *
      * @return $this
      */
     public function label($style = 'success')
@@ -179,6 +184,7 @@ class Column
      *
      * @param $href
      * @param string $target
+     *
      * @return $this
      */
     public function link($href = '', $target = '_blank')
@@ -198,6 +204,7 @@ class Column
      * Wrap value as a button.
      *
      * @param string $style
+     *
      * @return $this
      */
     public function button($style = 'default')
@@ -207,7 +214,7 @@ class Column
                 return 'btn-'.$style;
             }, $style);
 
-            $style = join(' ', $style);
+            $style = implode(' ', $style);
         } elseif (is_string($style)) {
             $style = 'btn-'.$style;
         }
@@ -224,18 +231,18 @@ class Column
      *
      * @param string $style
      * @param string $size
-     * @param int $max
+     * @param int    $max
+     *
      * @return $this
      */
     public function progressBar($style = 'primary', $size = 'sm', $max = 100)
     {
         if (is_array($style)) {
-
             $style = array_map(function ($style) {
                 return 'progress-bar-'.$style;
             }, $style);
 
-            $style = join(' ', $style);
+            $style = implode(' ', $style);
         } elseif (is_string($style)) {
             $style = 'progress-bar-'.$style;
         }
@@ -260,6 +267,7 @@ EOT;
      *
      * @param int $width
      * @param int $height
+     *
      * @return $this
      */
     public function image($width = 200, $height = 200)
@@ -288,13 +296,14 @@ EOT;
      */
     protected function hasHtmlWrapper()
     {
-        return ! empty($this->htmlWrappers);
+        return !empty($this->htmlWrappers);
     }
 
     /**
      * Wrap value with wrapper.
      *
      * @param $value
+     *
      * @return mixed
      */
     protected function htmlWrap($value)
@@ -315,8 +324,8 @@ EOT;
      */
     public function sorter()
     {
-        if (! $this->sortable) {
-            return null;
+        if (!$this->sortable) {
+            return;
         }
 
         $icon = 'fa-sort';
@@ -330,7 +339,7 @@ EOT;
         $query = app('request')->all();
         $query = array_merge($query, ['_sort' => ['column' => $this->name, 'type' => $type]]);
 
-        $url = Url::current() . '?' . http_build_query($query);
+        $url = Url::current().'?'.http_build_query($query);
 
         return "<a class=\"fa fa-fw $icon\" href=\"$url\"></a>";
     }
@@ -352,8 +361,9 @@ EOT;
     }
 
     /**
-     * @param string  $method
-     * @param array   $arguments
+     * @param string $method
+     * @param array  $arguments
+     *
      * @return $this
      */
     public function __call($method, $arguments)

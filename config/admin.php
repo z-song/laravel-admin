@@ -9,9 +9,9 @@ return [
     'title'  => 'Admin',
 
     'auth' => [
-        'driver' => 'session',
-        'provider' =>'',
-        'model'  => Encore\Admin\Auth\Database\Administrator::class,
+        'driver'   => 'session',
+        'provider' => '',
+        'model'    => Encore\Admin\Auth\Database\Administrator::class,
     ],
 
     'upload'  => [
@@ -30,7 +30,7 @@ return [
         'permissions_model' => Encore\Admin\Auth\Database\Permission::class,
 
         'role_users_table'       => 'role_administrators',
-        'role_permissions_table' => 'role_permissions'
+        'role_permissions_table' => 'role_permissions',
     ],
 
     /*

@@ -51,7 +51,7 @@ class Router
         $this->attributes = [
             'prefix'        => config('admin.prefix'),
             'namespace'     => Admin::controllerNamespace(),
-            'middleware'    => ['web', 'admin.auth', 'admin.pjax']
+            'middleware'    => ['web', 'admin.auth', 'admin.pjax'],
         ];
     }
 
@@ -66,15 +66,14 @@ class Router
         $attributes['namespace'] = 'Encore\Admin\Controllers';
 
         $this->router->group($attributes, function ($router) {
-
             $router->resources([
-                'auth/users' => 'UserController',
-                'auth/roles' => 'RoleController',
-                'auth/permissions' => 'PermissionController'
+                'auth/users'       => 'UserController',
+                'auth/roles'       => 'RoleController',
+                'auth/permissions' => 'PermissionController',
             ]);
 
             $router->controllers([
-                'auth' => 'AuthController'
+                'auth' => 'AuthController',
             ]);
         });
     }
@@ -87,7 +86,6 @@ class Router
     public function register()
     {
         $this->router->group($this->attributes, function ($router) {
-        
             foreach ($this->routes as $method => $arguments) {
                 foreach ($arguments as $argument) {
                     call_user_func_array([$router, $method], $argument);

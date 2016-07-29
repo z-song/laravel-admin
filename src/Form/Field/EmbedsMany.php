@@ -3,13 +3,11 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
 use Encore\Admin\Form\Field;
 use Jenssegers\Mongodb\Relations\EmbedsMany as Relation;
 
 /**
- * Class EmbedsMany
- * @package Encore\Admin\Form\Field
+ * Class EmbedsMany.
  */
 class EmbedsMany extends Field
 {
@@ -29,14 +27,14 @@ class EmbedsMany extends Field
     public function render()
     {
         if ($this->form->builder()->isMode('create')) {
-            return null;
+            return;
         }
 
         $model = $this->form->model();
 
         $relation = call_user_func([$model, $this->relationName]);
 
-        if (! $relation instanceof Relation) {
+        if (!$relation instanceof Relation) {
             throw new \Exception('embedsMany field must be a EmbedsMany relation.');
         }
 

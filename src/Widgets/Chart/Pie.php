@@ -30,7 +30,7 @@ class Pie extends Chart
             'label'     => $label,
             'value'     => $value,
             'color'     => $color,
-            'highlight' => $highlight
+            'highlight' => $highlight,
         ];
 
         return $this;
@@ -41,7 +41,7 @@ class Pie extends Chart
         '#00c0ef', '#3c8dbc', '#0073b7',
         '#39cccc', '#ff851b', '#01ff70',
         '#605ca8', '#f012be', '#777',
-        '#001f3f', '#d2d6de'
+        '#001f3f', '#d2d6de',
     ];
 
     protected function fillColor($data)
@@ -71,7 +71,6 @@ class Pie extends Chart
 
 })();
 EOT;
-
     }
 
     public function render()

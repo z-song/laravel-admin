@@ -6,5 +6,4 @@ use Encore\Admin\Form\Field;
 
 class Id extends Field
 {
-
 }

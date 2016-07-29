@@ -45,7 +45,7 @@ class InstallCommand extends Command
      */
     public function publishDatabase()
     {
-        $this->call('migrate', ['--path' => str_replace(base_path(), '', __DIR__) . '/../../migrations/']);
+        $this->call('migrate', ['--path' => str_replace(base_path(), '', __DIR__).'/../../migrations/']);
 
         $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdminTablesSeeder::class]);
     }
@@ -66,7 +66,7 @@ class InstallCommand extends Command
         }
 
         $this->makeDir('/');
-        $this->line('<info>Admin directory was created:</info> ' . str_replace(base_path(), '', $this->directory));
+        $this->line('<info>Admin directory was created:</info> '.str_replace(base_path(), '', $this->directory));
 
         $this->makeDir('Controllers');
 
@@ -87,14 +87,14 @@ class InstallCommand extends Command
      */
     public function createHomeController()
     {
-        $homeController = $this->directory . '/Controllers/HomeController.php';
+        $homeController = $this->directory.'/Controllers/HomeController.php';
         $contents = $this->getStub('HomeController');
 
         $this->laravel['files']->put(
             $homeController,
             str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
         );
-        $this->line('<info>HomeController file was created:</info> ' . str_replace(base_path(), '', $homeController));
+        $this->line('<info>HomeController file was created:</info> '.str_replace(base_path(), '', $homeController));
     }
 
     /**
@@ -104,14 +104,14 @@ class InstallCommand extends Command
      */
     public function createAuthController()
     {
-        $authController = $this->directory . '/Controllers/AuthController.php';
+        $authController = $this->directory.'/Controllers/AuthController.php';
         $contents = $this->getStub('AuthController');
 
         $this->laravel['files']->put(
             $authController,
             str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
         );
-        $this->line('<info>AuthController file was created:</info> ' . str_replace(base_path(), '', $authController));
+        $this->line('<info>AuthController file was created:</info> '.str_replace(base_path(), '', $authController));
     }
 
     /**
@@ -121,7 +121,7 @@ class InstallCommand extends Command
      */
     public function createAdministratorController()
     {
-        $controller = $this->directory . '/Controllers/AdministratorController.php';
+        $controller = $this->directory.'/Controllers/AdministratorController.php';
         $contents = $this->getStub('AdministratorController');
 
         $this->laravel['files']->put(
@@ -129,7 +129,7 @@ class InstallCommand extends Command
             str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
         );
         $this->line(
-            '<info>AdministratorController file was created:</info> ' . str_replace(base_path(), '', $controller)
+            '<info>AdministratorController file was created:</info> '.str_replace(base_path(), '', $controller)
         );
     }
 
@@ -140,11 +140,11 @@ class InstallCommand extends Command
      */
     protected function createMenuFile()
     {
-        $file = $this->directory . '/menu.php';
+        $file = $this->directory.'/menu.php';
 
         $contents = $this->getStub('menu');
         $this->laravel['files']->put($file, $contents);
-        $this->line('<info>Menu file was created:</info> ' . str_replace(base_path(), '', $file));
+        $this->line('<info>Menu file was created:</info> '.str_replace(base_path(), '', $file));
     }
 
     /**
@@ -154,11 +154,11 @@ class InstallCommand extends Command
      */
     protected function createRoutesFile()
     {
-        $file = $this->directory . '/routes.php';
+        $file = $this->directory.'/routes.php';
 
         $contents = $this->getStub('routes');
         $this->laravel['files']->put($file, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
-        $this->line('<info>Routes file was created:</info> ' . str_replace(base_path(), '', $file));
+        $this->line('<info>Routes file was created:</info> '.str_replace(base_path(), '', $file));
     }
 
     /**
@@ -168,18 +168,19 @@ class InstallCommand extends Command
      */
     protected function copyLanguageFiles()
     {
-        $this->laravel['files']->copyDirectory(__DIR__ . '/../../lang/', "{$this->directory}/lang/");
+        $this->laravel['files']->copyDirectory(__DIR__.'/../../lang/', "{$this->directory}/lang/");
     }
 
     /**
      * Get stub contents.
      *
      * @param $name
+     *
      * @return string
      */
     protected function getStub($name)
     {
-        return $this->laravel['files']->get(__DIR__ . "/stubs/$name.stub");
+        return $this->laravel['files']->get(__DIR__."/stubs/$name.stub");
     }
 
     /**

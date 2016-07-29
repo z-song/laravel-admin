@@ -1,4 +1,6 @@
-<?php namespace Encore\Admin\Auth;
+<?php
+
+namespace Encore\Admin\Auth;
 
 use Illuminate\Auth\AuthManager as Manager;
 use Illuminate\Auth\EloquentUserProvider;
@@ -8,7 +10,8 @@ class AuthManager extends Manager
     /**
      * Get the guard configuration.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return array
      */
     protected function getConfig($name)
@@ -19,7 +22,8 @@ class AuthManager extends Manager
     /**
      * Create the user provider implementation for the driver.
      *
-     * @param  string  $provider
+     * @param string $provider
+     *
      * @return \Illuminate\Contracts\Auth\UserProvider
      */
     public function createUserProvider($provider)

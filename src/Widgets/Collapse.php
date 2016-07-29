@@ -11,13 +11,13 @@ class Collapse extends Widget implements Renderable
     public function add($title, $content)
     {
         $this->items[] = [
-            'title' => $title,
+            'title'   => $title,
             'content' => $content,
         ];
 
         return $this;
     }
-    
+
     public function render()
     {
         return view('admin::widgets.collapse', ['items' => $this->items])->render();
