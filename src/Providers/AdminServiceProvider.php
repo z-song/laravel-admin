@@ -36,11 +36,11 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__ .'/../../views', 'admin');
-        $this->loadTranslationsFrom(__DIR__ .'/../../lang/', 'admin');
+        $this->loadViewsFrom(__DIR__.'/../../views', 'admin');
+        $this->loadTranslationsFrom(__DIR__.'/../../lang/', 'admin');
 
-        $this->publishes([__DIR__ . '/../../config/admin.php' => config_path('admin.php'), ], 'laravel-admin');
-        $this->publishes([__DIR__ . '/../../assets' => public_path('packages/admin'), ], 'laravel-admin');
+        $this->publishes([__DIR__.'/../../config/admin.php' => config_path('admin.php')], 'laravel-admin');
+        $this->publishes([__DIR__.'/../../assets' => public_path('packages/admin')], 'laravel-admin');
 
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
@@ -62,13 +62,12 @@ class AdminServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->booting(function () {
-            $loader  =  AliasLoader::getInstance();
+            $loader = AliasLoader::getInstance();
 
             $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
         });
 
         $this->app->singleton('admin.auth', function ($app) {
-        
             return new AuthManager($app);
         });
 
@@ -126,7 +125,7 @@ class AdminServiceProvider extends ServiceProvider
     protected function registerCommands()
     {
         foreach ($this->commands as $command) {
-            $this->commands('Encore\Admin\Commands\\' . $command);
+            $this->commands('Encore\Admin\Commands\\'.$command);
         }
     }
 }

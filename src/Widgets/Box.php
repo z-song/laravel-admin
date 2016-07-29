@@ -10,7 +10,7 @@ class Box extends Widget implements Renderable
         'class'     => [],
         'tools'     => [],
         'title'     => 'Box header',
-        'content'   => 'here is the box content.'
+        'content'   => 'here is the box content.',
     ];
 
     protected $tools = [];
@@ -57,7 +57,7 @@ class Box extends Widget implements Renderable
 
         return $this;
     }
-    
+
     public function style($styles)
     {
         if (is_string($styles)) {
@@ -65,21 +65,21 @@ class Box extends Widget implements Renderable
         }
 
         $styles = array_map(function ($style) {
-            return 'box-' . $style;
+            return 'box-'.$style;
         }, $styles);
 
         $this->attributes['class'] = array_merge($this->attributes['class'], $styles);
 
         return $this;
     }
-    
+
     public function solid()
     {
         $this->attributes['class'][] = 'box-solid';
 
         return $this;
     }
-    
+
     public function render()
     {
         return view('admin::widgets.box', $this->attributes)->render();

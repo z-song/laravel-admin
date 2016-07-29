@@ -5,9 +5,9 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Facades\Auth;
 use Encore\Admin\Layout\Content;
-use InvalidArgumentException;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Support\Facades\Config;
+use InvalidArgumentException;
 
 class Admin
 {
@@ -20,6 +20,7 @@ class Admin
     /**
      * @param $model
      * @param Closure $callable
+     *
      * @return Grid
      */
     public function grid($model, Closure $callable)
@@ -30,6 +31,7 @@ class Admin
     /**
      * @param $model
      * @param Closure $callable
+     *
      * @return Form
      */
     public function form($model, Closure $callable)
@@ -39,6 +41,7 @@ class Admin
 
     /**
      * @param Closure $callable
+     *
      * @return Content
      */
     public function content(Closure $callable)
@@ -48,6 +51,7 @@ class Admin
 
     /**
      * @param $model
+     *
      * @return mixed
      */
     public function getModel($model)
@@ -57,7 +61,7 @@ class Admin
         }
 
         if (is_string($model) && class_exists($model)) {
-            return $this->getModel(new $model);
+            return $this->getModel(new $model());
         }
 
         throw new InvalidArgumentException("$model is not a valid model");
@@ -72,11 +76,12 @@ class Admin
     {
         $directory = config('admin.directory');
 
-        return 'App\\' . ucfirst(basename($directory)) . '\\Controllers';
+        return 'App\\'.ucfirst(basename($directory)).'\\Controllers';
     }
 
     /**
      * @param string $css
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
 //    public static function css($css = '')
@@ -106,14 +111,15 @@ class Admin
 
     /**
      * @param string $script
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
     public static function script($script = '')
     {
-        if (! empty($script)) {
+        if (!empty($script)) {
             self::$script = array_merge(self::$script, (array) $script);
 
-            return null;
+            return;
         }
 
         return view('admin::partials.script', ['script' => array_unique(self::$script)]);
@@ -125,7 +131,7 @@ class Admin
 
         $prefix = (string) config('admin.prefix');
 
-        return "/$prefix/" . trim($url, '/');
+        return "/$prefix/".trim($url, '/');
     }
 
     public function menu()

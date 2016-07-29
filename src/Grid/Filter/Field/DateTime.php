@@ -23,7 +23,7 @@ class DateTime
         $options['format'] = 'YYYY-MM-DD HH:mm:ss';
         $options['locale'] = config('app.locale');
 
-        $script = "$('#{$this->filter->getId()}').datetimepicker(". json_encode($options) .");";
+        $script = "$('#{$this->filter->getId()}').datetimepicker(".json_encode($options).');';
 
         Admin::script($script);
     }

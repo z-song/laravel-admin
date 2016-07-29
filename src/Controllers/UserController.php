@@ -2,13 +2,13 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Auth\Database\Role;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
-use Encore\Admin\Auth\Database\Role;
-use Encore\Admin\Auth\Database\Administrator;
 
 class UserController extends Controller
 {
@@ -22,7 +22,6 @@ class UserController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-
             $content->header('Administrator');
             $content->description('list');
             $content->body($this->grid()->render());
@@ -33,12 +32,12 @@ class UserController extends Controller
      * Edit interface.
      *
      * @param $id
+     *
      * @return Content
      */
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-
             $content->header('Administrator');
             $content->description('Edit');
             $content->body($this->form()->edit($id));
@@ -53,7 +52,6 @@ class UserController extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-
             $content->header('Administrator');
             $content->description('Create');
             $content->body($this->form());
@@ -68,7 +66,6 @@ class UserController extends Controller
     protected function grid()
     {
         return Admin::grid(Administrator::class, function (Grid $grid) {
-
             $grid->id('ID')->sortable();
             $grid->username();
             $grid->name();
@@ -86,7 +83,6 @@ class UserController extends Controller
     public function form()
     {
         return Admin::form(Administrator::class, function (Form $form) {
-
             $form->display('id', 'ID');
 
             $form->text('username');

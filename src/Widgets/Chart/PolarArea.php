@@ -21,6 +21,5 @@ class PolarArea extends Pie
 })();
 
 EOT;
-
     }
 }

@@ -2,12 +2,12 @@
 
 namespace Encore\Admin\Controllers;
 
+use App\Http\Controllers\Controller;
 use Encore\Admin\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -16,7 +16,7 @@ class AuthController extends Controller
      */
     public function getLogin()
     {
-        if (! Auth::guest()) {
+        if (!Auth::guest()) {
             return redirect(config('admin.prefix'));
         }
 
@@ -25,6 +25,7 @@ class AuthController extends Controller
 
     /**
      * @param Request $request
+     *
      * @return mixed
      */
     public function postLogin(Request $request)

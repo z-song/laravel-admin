@@ -29,8 +29,8 @@ class MakeCommand extends GeneratorCommand
      */
     public function handle()
     {
-        if (! $this->modelExists()) {
-            $this->error("Model does not exists !");
+        if (!$this->modelExists()) {
+            $this->error('Model does not exists !');
 
             return false;
         }
@@ -59,8 +59,9 @@ class MakeCommand extends GeneratorCommand
     /**
      * Replace the class name for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param string $stub
+     * @param string $name
+     *
      * @return string
      */
     protected function replaceClass($stub, $name)
@@ -91,7 +92,8 @@ class MakeCommand extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
+     *
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
@@ -124,7 +126,7 @@ class MakeCommand extends GeneratorCommand
     {
         return [
             ['model', null, InputOption::VALUE_REQUIRED,
-                'The eloquent model that should be use as controller data source.'],
+                'The eloquent model that should be use as controller data source.', ],
         ];
     }
 }

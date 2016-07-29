@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
 {
-    const ACTION_KEEP   = 0;
+    const ACTION_KEEP = 0;
     const ACTION_REMOVE = 1;
 
     protected $directory = '';
@@ -29,7 +29,7 @@ class File extends Field
         $this->options = [
             'overwriteInitial'  => true,
             'showUpload'        => false,
-            'language'          => config('app.locale')
+            'language'          => config('app.locale'),
         ];
     }
 
@@ -64,6 +64,7 @@ class File extends Field
 
     /**
      * @param $file
+     *
      * @return mixed
      */
     protected function uploadAndDeleteOriginal(UploadedFile $file)
@@ -102,11 +103,11 @@ EOT;
 
     public function render()
     {
-        $this->js[] = 'bootstrap-fileinput/js/fileinput_locale_' . config('app.locale') . '.js';
+        $this->js[] = 'bootstrap-fileinput/js/fileinput_locale_'.config('app.locale').'.js';
 
         $this->options['initialCaption'] = basename($this->value);
 
-        if (! empty($this->value)) {
+        if (!empty($this->value)) {
             $this->options['initialPreview'] = $this->preview();
         }
 
@@ -121,6 +122,7 @@ $("#{$this->id}").on('filecleared', function(event) {
 });
 
 EOT;
+
         return parent::render();
     }
 
@@ -131,7 +133,7 @@ EOT;
      */
     public function isDeleteRequest()
     {
-        $action = Input::get($this->id . '_action');
+        $action = Input::get($this->id.'_action');
 
         if ($action == static::ACTION_REMOVE) {
             $this->destroy();
@@ -144,12 +146,13 @@ EOT;
 
     /**
      * @param $file
+     *
      * @return void
      */
     public function renameIfExists(UploadedFile $file)
     {
         if (file_exists("$this->directory/$this->name")) {
-            $this->name = md5(uniqid()) . '.' . $file->guessExtension();
+            $this->name = md5(uniqid()).'.'.$file->guessExtension();
         }
     }
 

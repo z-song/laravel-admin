@@ -2,10 +2,10 @@
 
 namespace Encore\Admin\Grid;
 
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Model
 {
@@ -65,7 +65,7 @@ class Model
     }
 
     /**
-     * Build
+     * Build.
      *
      * @return array
      */
@@ -82,6 +82,7 @@ class Model
      * Add conditions to grid model.
      *
      * @param array $conditions
+     *
      * @return void
      */
     public function addConditions(array $conditions)
@@ -131,8 +132,8 @@ class Model
         });
 
         $this->queries->push([
-            'method' => 'paginate',
-            'arguments' => is_null($paginate) ? [$this->perPage] : $paginate['arguments']
+            'method'    => 'paginate',
+            'arguments' => is_null($paginate) ? [$this->perPage] : $paginate['arguments'],
         ]);
     }
 
@@ -140,6 +141,7 @@ class Model
      * Find query by method name.
      *
      * @param $method
+     *
      * @return static
      */
     protected function findQueryByMethod($method)
@@ -157,7 +159,7 @@ class Model
     protected function setSort()
     {
         $this->sort = Input::get('_sort', []);
-        if (! is_array($this->sort)) {
+        if (!is_array($this->sort)) {
             return;
         }
 
@@ -166,13 +168,11 @@ class Model
         }
 
         if (str_contains($this->sort['column'], '.')) {
-
             $this->setRelationSort($this->sort['column']);
-
         } else {
             $this->queries->push([
-                'method' => 'orderBy',
-                'arguments' => [$this->sort['column'], $this->sort['type']]
+                'method'    => 'orderBy',
+                'arguments' => [$this->sort['column'], $this->sort['type']],
             ]);
         }
     }
@@ -180,7 +180,8 @@ class Model
     /**
      * Set relation sort.
      *
-     * @param string  $column
+     * @param string $column
+     *
      * @return void
      */
     protected function setRelationSort($column)
@@ -193,16 +194,16 @@ class Model
             $relation = $this->model->$relationName();
 
             $this->queries->push([
-                'method' => 'join',
-                'arguments' => $this->joinParameters($relation)
+                'method'    => 'join',
+                'arguments' => $this->joinParameters($relation),
             ]);
 
             $this->queries->push([
-                'method' => 'orderBy',
+                'method'    => 'orderBy',
                 'arguments' => [
-                    $relation->getRelated()->getTable() . '.'. $relationColumn,
-                    $this->sort['type']
-                ]
+                    $relation->getRelated()->getTable().'.'.$relationColumn,
+                    $this->sort['type'],
+                ],
             ]);
         }
     }
@@ -211,6 +212,7 @@ class Model
      * Build join parameters.
      *
      * @param Relation $relation
+     *
      * @return array
      */
     protected function joinParameters(Relation $relation)
@@ -219,15 +221,15 @@ class Model
             $relation->getRelated()->getTable(),
             $relation->getQualifiedParentKeyName(),
             '=',
-            $relation->getForeignKey()
+            $relation->getForeignKey(),
         ];
     }
 
     public function __call($method, $arguments)
     {
         $this->queries->push([
-            'method' => $method,
-            'arguments' => $arguments
+            'method'    => $method,
+            'arguments' => $arguments,
         ]);
 
         return $this;

@@ -11,7 +11,7 @@ class Row implements Buildable
 
     public function __construct($content = '')
     {
-        if (! empty($content)) {
+        if (!empty($content)) {
             $this->column(12, $content);
         }
     }
@@ -41,11 +41,11 @@ class Row implements Buildable
 
     protected function startRow()
     {
-        echo "<div class=\"row\">";
+        echo '<div class="row">';
     }
 
     protected function endRow()
     {
-        echo "</div>";
+        echo '</div>';
     }
 }

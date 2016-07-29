@@ -4,12 +4,10 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
-use Encore\Admin\Form\Field;
 use Illuminate\Support\Collection;
 
 /**
- * Class Builder
- * @package Encore\Admin\Form
+ * Class Builder.
  */
 class Builder
 {
@@ -22,11 +20,11 @@ class Builder
     protected $options = ['title' => 'Edit'];
 
     /**
-     * Modes constants
+     * Modes constants.
      */
-    const MODE_VIEW     = 'view';
-    const MODE_EDIT     = 'edit';
-    const MODE_CREATE   = 'create';
+    const MODE_VIEW = 'view';
+    const MODE_EDIT = 'edit';
+    const MODE_CREATE = 'create';
 
     /**
      * Form action mode, could be create|view|edit.
@@ -46,6 +44,7 @@ class Builder
      * Set the builder mode.
      *
      * @param string $mode
+     *
      * @return void
      */
     public function setMode($mode = 'create')
@@ -57,6 +56,7 @@ class Builder
      * Returns builder is $mode.
      *
      * @param $mode
+     *
      * @return bool
      */
     public function isMode($mode)
@@ -68,6 +68,7 @@ class Builder
      * Set resource Id.
      *
      * @param $id
+     *
      * @return void
      */
     public function setResourceId($id)
@@ -92,8 +93,6 @@ class Builder
         }
 
         $this->options = array_merge($this->options, $options);
-
-        return null;
     }
 
     /**
@@ -136,12 +135,13 @@ class Builder
      * Open up a new HTML form.
      *
      * @param array $options
+     *
      * @return string
      */
     public function open($options = [])
     {
         if ($this->mode == self::MODE_EDIT) {
-            $attributes['action'] = $this->form->resource() . '/' . $this->id;
+            $attributes['action'] = $this->form->resource().'/'.$this->id;
             $this->form->hidden('_method')->value('PUT');
         }
 
@@ -163,7 +163,7 @@ class Builder
             $html[] = "$name=\"$value\"";
         }
 
-        return '<form '.join(' ', $html).'>';
+        return '<form '.implode(' ', $html).'>';
     }
 
     /**
@@ -182,7 +182,7 @@ class Builder
     public function submit()
     {
         if ($this->mode == self::MODE_VIEW) {
-            return null;
+            return;
         }
 
         return '<button type="submit" class="btn btn-info pull-right">'.trans('admin::lang.submit').'</button>';

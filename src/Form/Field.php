@@ -8,8 +8,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Input;
 
 /**
- * Class Field
- * @package Encore\Admin\Form
+ * Class Field.
+ *
  * @method Field default($value) set field default value
  */
 class Field
@@ -22,21 +22,21 @@ class Field
 
     protected $default;
 
-    protected $label    = '';
+    protected $label = '';
 
-    protected $column   = '';
+    protected $column = '';
 
     protected $variables = [];
 
-    protected $options  = [];
+    protected $options = [];
 
-    protected $rules    = '';
+    protected $rules = '';
 
-    protected $css      = [];
+    protected $css = [];
 
-    protected $js       = [];
+    protected $js = [];
 
-    protected $script   = '';
+    protected $script = '';
 
     protected $attributes = [];
 
@@ -48,14 +48,15 @@ class Field
     public function __construct($column, $arguments = [])
     {
         $this->column = $column;
-        $this->label  = $this->formatLabel($arguments);
-        $this->id     = $this->formatId($column);
+        $this->label = $this->formatLabel($arguments);
+        $this->id = $this->formatId($column);
     }
 
     /**
      * Format the field element id.
      *
      * @param string|array $column
+     *
      * @return string|array
      */
     protected function formatId($column)
@@ -67,6 +68,7 @@ class Field
      * Format the label value.
      *
      * @param array $arguments
+     *
      * @return string
      */
     protected function formatLabel($arguments = [])
@@ -82,12 +84,12 @@ class Field
      * Format the name of the field.
      *
      * @param string $column
+     *
      * @return array|mixed|string
      */
     protected function formatName($column)
     {
         if (is_string($column)) {
-
             $name = explode('.', $column);
 
             if (count($name) == 1) {
@@ -118,6 +120,7 @@ class Field
      * Fill data to the field.
      *
      * @param $data
+     *
      * @return void
      */
     public function fill($data)
@@ -137,6 +140,7 @@ class Field
      * Set original value to the field.
      *
      * @param $data
+     *
      * @return void
      */
     public function setOriginal($data)
@@ -168,6 +172,7 @@ class Field
      * Set the field options.
      *
      * @param array $options
+     *
      * @return $this
      */
     public function options($options = [])
@@ -185,6 +190,7 @@ class Field
      * Get or set rules.
      *
      * @param null $rules
+     *
      * @return string
      */
     public function rules($rules = null)
@@ -195,21 +201,19 @@ class Field
 
         $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
-        $this->rules = join('|', $rules);
-
-        return null;
+        $this->rules = implode('|', $rules);
     }
 
     /**
      * Set or get value of the field.
      *
      * @param null $value
+     *
      * @return mixed
      */
     public function value($value = null)
     {
         if (is_null($value)) {
-
             if (is_null($this->default)) {
                 $this->default = Input::get($this->column);
             }
@@ -218,8 +222,6 @@ class Field
         }
 
         $this->value = $value;
-
-        return null;
     }
 
     /**
@@ -273,7 +275,7 @@ class Field
             $html[] = "$name=\"$value\"";
         }
 
-        return join(' ', $html);
+        return implode(' ', $html);
     }
 
     /**
@@ -283,12 +285,12 @@ class Field
      */
     protected function variables()
     {
-        $this->variables['id']      = $this->id;
-        $this->variables['name']    = $this->formatName($this->column);
-        $this->variables['value']   = $this->value();
-        $this->variables['label']   = $this->label;
-        $this->variables['column']  = $this->column;
-        $this->variables['attributes']  = $this->formatAttributes();
+        $this->variables['id'] = $this->id;
+        $this->variables['name'] = $this->formatName($this->column);
+        $this->variables['value'] = $this->value();
+        $this->variables['label'] = $this->label;
+        $this->variables['column'] = $this->column;
+        $this->variables['attributes'] = $this->formatAttributes();
 
         return $this->variables;
     }
@@ -302,7 +304,7 @@ class Field
     {
         $class = explode('\\', get_called_class());
 
-        return 'admin::form.' . strtolower(end($class));
+        return 'admin::form.'.strtolower(end($class));
     }
 
     /**
@@ -321,9 +323,8 @@ class Field
     {
         if ($method === 'default') {
             $this->default = $arguments[0];
+
             return $this;
         }
-
-        return null;
     }
 }

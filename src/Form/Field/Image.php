@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
 use Intervention\Image\ImageManagerStatic;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -35,12 +34,12 @@ class Image extends File
 
     /**
      * @param $target
+     *
      * @return mixed
      */
     public function executeCalls($target)
     {
-        if (! empty($this->calls)) {
-
+        if (!empty($this->calls)) {
             $image = ImageManagerStatic::make($target);
 
             foreach ($this->calls as $call) {
@@ -53,7 +52,7 @@ class Image extends File
 
     protected function preview()
     {
-        return '<img src="/' . $this->value . '" class="file-preview-image">';
+        return '<img src="/'.$this->value.'" class="file-preview-image">';
     }
 
     public function render()
@@ -66,8 +65,8 @@ class Image extends File
     public function __call($method, $arguments)
     {
         $this->calls[] = [
-            'method' => $method,
-            'arguments' => $arguments
+            'method'    => $method,
+            'arguments' => $arguments,
         ];
 
         return $this;

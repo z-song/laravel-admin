@@ -21,7 +21,6 @@ class MenuCommand extends Command
      */
     protected $description = 'Show the admin menu.';
 
-
     /**
      * Execute the console command.
      *
@@ -31,6 +30,6 @@ class MenuCommand extends Command
     {
         $menu = Admin::menu();
 
-        echo json_encode($menu, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE), "\r\n";
+        echo json_encode($menu, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), "\r\n";
     }
 }

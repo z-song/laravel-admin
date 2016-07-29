@@ -5,7 +5,7 @@ namespace Encore\Admin\Widgets\Chart;
 class Doughnut extends Pie
 {
     protected $options = [
-        'animateScale' => true
+        'animateScale' => true,
     ];
 
     public function script()
@@ -24,6 +24,5 @@ class Doughnut extends Pie
 
 })();
 EOT;
-
     }
 }

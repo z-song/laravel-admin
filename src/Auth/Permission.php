@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Auth;
 
-use Encore\Admin\Exception\Handle;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Facades\Auth;
 
@@ -27,7 +26,7 @@ class Permission
      */
     public static function allow($roles)
     {
-        if (! Auth::user()->isRole($roles)) {
+        if (!Auth::user()->isRole($roles)) {
             static::error();
         }
     }

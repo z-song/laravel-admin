@@ -6,7 +6,7 @@ use Encore\Admin\Form\Field;
 
 class SwitchField extends Field
 {
-    const STATE_ON  = 1;
+    const STATE_ON = 1;
     const STATE_OFF = 0;
 
     protected $states = [];
@@ -33,8 +33,6 @@ class SwitchField extends Field
         if (isset($this->states[$value])) {
             return $this->states[$value];
         }
-
-        return null;
     }
 
     public function render()

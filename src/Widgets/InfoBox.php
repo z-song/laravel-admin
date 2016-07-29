@@ -26,7 +26,7 @@ class InfoBox extends Widget implements Renderable
             'icon'  => $icon,
             'color' => $color,
             'link'  => $link,
-            'info'  => $info
+            'info'  => $info,
         ];
 
         return $this;

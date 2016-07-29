@@ -24,6 +24,5 @@ class Button extends Field
         });
 
 EOT;
-
     }
 }

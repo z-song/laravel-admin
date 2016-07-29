@@ -57,7 +57,7 @@ class Table extends Widget implements Renderable
         $vars = [
             'headers' => $this->headers,
             'rows'    => $this->rows,
-            'style'   => $this->style
+            'style'   => $this->style,
         ];
 
         return view('admin::widgets.table', $vars)->render();
