@@ -80,7 +80,8 @@ return [
     [
         'title' => 'Administrators',
         'url'   => '/administrators',
-        'icon'  => 'fa-tasks'
+        'icon'  => 'fa-tasks',
+        'roles' => ['administrator'], // Roles can see this item.
     ],
     [
         'title' => 'Multilevel',

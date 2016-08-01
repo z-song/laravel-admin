@@ -83,7 +83,8 @@ return [
             [
                 'title' => 'Level One',
                 'url'   => '/',
-                'icon'  => 'fa-circle-o'
+                'icon'  => 'fa-circle-o',
+                'roles' => ['administrator', 'editor'],
             ],
             ...
         ]
@@ -116,9 +117,12 @@ $router->resources([
   [
     'title' => 'Users',
     'url'   => '/users',
-    'icon'  => 'fa-user'
+    'icon'  => 'fa-user',
+    'roles' => ['administrator', 'editor']
   ],
 ```
+
+`title`为显示文字，`url`为跳转url，`icon`是菜单项的icon，使用请参考[Font Awesome](http://fontawesome.io/icons/)，`roles`表示能显示此菜单项的角色，不填表示所有角色可见。
 
 然后在左侧边栏就能看到入口了。
 
