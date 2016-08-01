@@ -1,8 +1,10 @@
 <?php
 
 return [
+    'online'        => 'Online',
     'login'         => 'Login',
     'logout'        => 'Logout',
+    'name'          => 'Name',
     'username'      => 'Username',
     'password'      => 'Password',
     'remember_me'   => 'Remember me',
@@ -32,4 +34,12 @@ return [
 
     'more'          => 'More',
     'deny'          => 'Permission denied',
+
+    'administrator' => 'Administrator',
+    'roles'         => 'Roles',
+    'permissions'   => 'Permissions',
+    'slug'          => 'Slug',
+
+    'created_at'    => 'Created At',
+    'updated_at'    => 'Updated At',
 ];

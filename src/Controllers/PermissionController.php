@@ -21,8 +21,8 @@ class PermissionController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header('Permission manage');
-            $content->description('Permissions');
+            $content->header(trans('admin::lang.permissions'));
+            $content->description(trans('admin::lang.list'));
             $content->body($this->grid()->render());
         });
     }
@@ -37,8 +37,8 @@ class PermissionController extends Controller
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-            $content->header('Edit permission');
-            $content->description('Edit permission');
+            $content->header(trans('admin::lang.permissions'));
+            $content->description(trans('admin::lang.edit'));
             $content->body($this->form()->edit($id));
         });
     }
@@ -51,8 +51,8 @@ class PermissionController extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header('Add permission');
-            $content->description('Add permission');
+            $content->header(trans('admin::lang.permissions'));
+            $content->description(trans('admin::lang.create'));
             $content->body($this->form());
         });
     }
@@ -66,11 +66,11 @@ class PermissionController extends Controller
     {
         return Admin::grid(Permission::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
-            $grid->slug();
-            $grid->name();
+            $grid->slug(trans('admin::lang.slug'));
+            $grid->name(trans('admin::lang.name'));
 
-            $grid->created_at();
-            $grid->updated_at();
+            $grid->created_at(trans('admin::lang.created_at'));
+            $grid->updated_at(trans('admin::lang.updated_at'));
         });
     }
 
@@ -84,11 +84,11 @@ class PermissionController extends Controller
         return Admin::form(Permission::class, function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->text('slug');
-            $form->text('name');
+            $form->text('slug', trans('admin::lang.slug'));
+            $form->text('name', trans('admin::lang.name'));
 
-            $form->display('created_at', 'Created At');
-            $form->display('updated_at', 'Updated At');
+            $form->display('created_at', trans('admin::lang.created_at'));
+            $form->display('updated_at', trans('admin::lang.updated_at'));
         });
     }
 }

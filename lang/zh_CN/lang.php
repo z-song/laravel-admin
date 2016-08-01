@@ -1,8 +1,10 @@
 <?php
 
 return [
+    'online'        => '在线',
     'login'         => '登陆',
     'logout'        => '登出',
+    'name'          => '名称',
     'username'      => '用户名',
     'password'      => '密码',
     'remember_me'   => '记住我',
@@ -32,4 +34,12 @@ return [
 
     'more'          => '更多',
     'deny'          => '无权访问',
+
+    'administrator' => '管理员',
+    'roles'         => '角色',
+    'permissions'   => '权限',
+    'slug'          => '标识',
+
+    'created_at'    => '创建时间',
+    'updated_at'    => '更新时间',
 ];
