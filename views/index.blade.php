@@ -71,22 +71,22 @@
 <script src="{{ asset ("/packages/admin/AdminLTE/plugins/iCheck/icheck.min.js") }}"></script>
 <script src="{{ asset ("/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js") }}"></script>
 <script src="https://cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>
-<script src={{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}></script>
-<script src={{ asset ("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js") }}></script>
+<script src="{{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js") }}"></script>
 
-<script src={{ asset ("/packages/admin/codemirror/lib/codemirror.js") }}></script>
-<script src={{ asset ("/packages/admin/codemirror/mode/javascript/javascript.js") }}></script>
-<script src={{ asset ("/packages/admin/codemirror/addon/edit/matchbrackets.js") }}></script>
+<script src="{{ asset ("/packages/admin/codemirror/lib/codemirror.js") }}"></script>
+<script src="{{ asset ("/packages/admin/codemirror/mode/javascript/javascript.js") }}"></script>
+<script src="{{ asset ("/packages/admin/codemirror/addon/edit/matchbrackets.js") }}"></script>
 
 @if(config('app.locale') == 'zh_CN')
-<script src={{ asset ("http://map.qq.com/api/js?v=2.exp") }}></script>
+<script src="{{ asset ("http://map.qq.com/api/js?v=2.exp") }}"></script>
 @else
-<script src={{ asset ("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false") }}></script>
+<script src="{{ asset ("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false") }}"></script>
 @endif
 
 <script>
 
-    $(document).pjax('a', '#pjax-container')
+    $(document).pjax('a:not(a[target="_blank"])', '#pjax-container');
 
     $(document).on("pjax:popstate", function() {
 

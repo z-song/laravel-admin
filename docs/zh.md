@@ -422,7 +422,7 @@ $form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1
 ####editor
 富文本编辑框:
 ```
-$form->textarea($column[, $label]);
+$form->editor($column[, $label]);
 ```
 
 ####json
