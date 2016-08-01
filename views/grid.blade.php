@@ -44,6 +44,8 @@
             <a class="btn btn-sm btn-danger batch-delete">{{ trans('admin::lang.batch_delete') }}</a>
         @endif
 
+            <a class="btn btn-sm btn-primary grid-refresh"><i class="fa fa-refresh"></i></a>
+
         {!! $grid->paginator() !!}
     </div>
     <!-- /.box-body -->
