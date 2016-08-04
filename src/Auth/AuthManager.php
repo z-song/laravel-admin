@@ -20,13 +20,11 @@ class AuthManager extends Manager
     }
 
     /**
-     * Create the user provider implementation for the driver.
+     * Create an instance of the Eloquent user provider.
      *
-     * @param string $provider
-     *
-     * @return \Illuminate\Contracts\Auth\UserProvider
+     * @return \Illuminate\Auth\EloquentUserProvider
      */
-    public function createUserProvider($provider)
+    protected function createEloquentProvider()
     {
         $config = config('admin.auth');
 
