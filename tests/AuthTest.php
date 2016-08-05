@@ -2,6 +2,11 @@
 
 class AuthTest extends TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+    }
+
     public function testLoginPage()
     {
         $this->visit('admin/auth/login')
