@@ -15,10 +15,8 @@ sudo: false
 services:
   - mysql
 
-before_install:
-  - mysql -e "create database IF NOT EXISTS `laravel-admin`;"
-
 before_script:
+  - mysql -e 'create database laravel_admin;'
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
 
