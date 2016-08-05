@@ -41,6 +41,11 @@ class TestCase extends LaravelTestCase
         $this->migrate();
 
         $this->artisan('admin:install');
+
+        if (file_exists($routes = admin_path('routes.php'))) {
+            require $routes;
+            $this->app['admin.router']->register();
+        }
     }
 
     public function tearDown()
