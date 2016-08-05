@@ -16,7 +16,7 @@ services:
   - mysql
 
 before_install:
-  - mysql -e "create database IF NOT EXISTS `laravel-admin`;" -uroot
+  - mysql -e "create database IF NOT EXISTS `laravel-admin`;"
 
 before_script:
   - travis_retry composer self-update
