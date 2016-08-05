@@ -1,12 +1,13 @@
 # laravel-admin
 
 [![Build Status](https://travis-ci.org/z-song/laravel-admin.svg?branch=master)](https://travis-ci.org/z-song/laravel-admin)
+[![StyleCI](https://styleci.io/repos/48796179/shield)](https://styleci.io/repos/48796179)
 
-`laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
+`laravel-admin` 是一个可以快速帮你构建后台管理的工具，使用很少的代码就实现功能完善的后台管理功能。
 
-[中文文档](/docs/zh.md)
+[English](/docs/en.md)
 
-`laravel-admin` based on these packages and services:
+`laravel-admin` 基于以下组件或者服务:
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
@@ -22,38 +23,38 @@
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
-#Screenshot
+#截图
 
-![grid](https://cloud.githubusercontent.com/assets/1479100/12708148/6c4aa9fe-c8d7-11e5-94e4-c8105375a564.png)
+![grid](https://cloud.githubusercontent.com/assets/1479100/16609399/894e0832-4386-11e6-8709-1cc7ce429e7c.png)
 
 ![form](https://cloud.githubusercontent.com/assets/1479100/12708198/fc6725a8-c8d7-11e5-876f-5c4f00ded0ff.png)
 
-# Installation
+# 安装
 
 ```
 composer require encore/laravel-admin "dev-master"
 ```
 
-Add `ServiceProvider` to `config/app.php`:
+在`config/app.php`加入`ServiceProvider`:
 
 ```
 Encore\Admin\Providers\AdminServiceProvider::class
 ```
 
-Then run these commands to finish installation:
+然后运行下面的命令完成安装：
 
 ```
-php artisan vendor:publish
+php artisan vendor:publish --tag=laravel-admin
 php artisan admin:install
 ```
 
-Open `http://localhost/admin/` in your browser,and use username `admin` and password `admin` to login.
+最后在浏览器打开 `http://localhost/admin/` ,使用用户名 `admin` 和密码 `admin`登陆.
 
-#Usage
+#使用
 
-The install path defaults to `app/Admin`.
+后台文件的默认安装地址在`app/Admin`，安装地址可以在`config/admin.php`中修改.
 
-Use `routes.php` under `app/Admin` to manage admin routes.
+使用`app/Admin`目录下的`routes.php`来管理后台路由，使用方法和laravel框架的路由一样.
 
 ```php
 <?php
@@ -65,11 +66,11 @@ $router->get('/', function() {
 });
 
 $router->resources([
-    'administrators' => AdministratorController::class
+    'articles' => ArticleController::class
 ]);
 ```
 
-Use `menu.php` to configure the menus in left sidebar：
+`app/Admin`目录下的`menu.php`文件用来管理后台左侧边菜单：
 ```php
 <?php
 
@@ -80,241 +81,415 @@ return [
         'icon'  => 'fa-bar-chart'
     ],
     [
-        'title' => 'Administrators',
-        'url'   => '/administrators',
-        'icon'  => 'fa-tasks',
-        'roles' => ['administrator'], // Roles can see this item.
-    ],
-    [
         'title' => 'Multilevel',
         'icon'  => 'fa-circle-o',
         'children' => [
             [
                 'title' => 'Level One',
                 'url'   => '/',
-                'icon'  => 'fa-circle-o'
-            ],
-            [
-                'title' => 'Level One',
                 'icon'  => 'fa-circle-o',
-                'children' => [
-                    [
-                        'title' => 'Level Two',
-                        'url'   => '/',
-                        'icon'  => 'fa-circle-o'
-                    ]
-                ]
+                'roles' => ['administrator', 'editor'],
             ],
+            ...
         ]
     ],
 ];
 ```
 
-`controllers/` is controller directory where to store admin controllers.
+`app/Admin`目录下的`controllers/`目录用来存放后台路由器文件.
 
-Language strings are stored in files within the `lang/` directory, and it will use `app.locale` configuration.
+##使用示例
 
-###Create controllers
-
-If you want to create a resource controller with `User` model,you can use this command:
+如果你想要创建一个基于`App/User`模型相关的管理界面，先创建一个路由器：
 ```
 php artisan admin:make UserController --model=\\App\\User
 ```
 
-It will create `UserController.php` under `app/Admin/controllers`,add a resource in `routes.php`：
+上面的命令会在`app/Admin/controllers`创建控制器`UserController.php`
+
+然后在`app/Admin/routes.php`文件添加路由配置：
+
 ```php
 $router->resources([
-    'users'           => UserController::class，  //add this line
-    'administrators'  => AdministratorController::class
+    'users' => UserController::class，  //添加这一行
 ]);
 ```
 
-At last add access in `menu.php`:
+最后在`app/Admin/menu.php`中加上入口
 
 ```php
   [
     'title' => 'Users',
     'url'   => '/users',
-    'icon'  => 'fa-user'
+    'icon'  => 'fa-user',
+    'roles' => ['administrator', 'editor']
   ],
 ```
 
-So you can see the `users` resource link in the left sidebar menu.
+`title`为显示文字，`url`为跳转url，`icon`是菜单项的icon，使用请参考[Font Awesome](http://fontawesome.io/icons/)，`roles`表示能显示此菜单项的角色，不填表示所有角色可见。
 
-###Admin\Grid
+然后在左侧边栏就能看到入口了。
 
-`Admin\Grid` is a data grid builder based on `bootstrap table`,in the controller:
+打开`app/Admin/controllers/UserController.php`文件，里面已经默认包含了CURD相关方法，`index()`显示列表页，`create()`用来显示创建页，`edit()`是编辑页，另外的两个方法`grid()`用来创建数据表格，`form()`用来创建form表单，我们的主要工作就是在`grid()`和`form()`两个方法中编写穿件数据表格和form表单的代码。
 
-```php
-return Admin::grid(User::class, function(Grid $grid){
+###创建数据表格
 
-    $grid->id('ID')->sortable();
+在`grid()`方法中使用`Encore\Admin\Admin::grid()`方法来创建数据表格容器，数据表格的内容都是在容器中定义的
 
-    //Use dynamic method.
-    $grid->name();
-    //or use column() method: $grid->column('name');
+```
+use App\User;
 
-    //Add mulitiple columns.
-    $grid->columns('email', 'username' ...);
+protected function grid()
+{
+    return Admin::grid(User::class, function (Grid $grid) {
 
-    //Use related column (hasOne relation).
-    $grid->column('profile.mobile', 'Mobile');
-    //or use $grid->profile()->mobile('Mobile');
+        $grid->id('ID')->sortable();
+        $grid->name();
+        $grid->email();
 
-    //Use a callback function to display column value.
-    $grid->column('profile.mobile', 'Mobile')->value(function($mobile) {
-      return "+86 $mobile";
+        $grid->created_at();
+        $grid->updated_at();
     });
+}
 
-    //Use sortable() method to make the column sortable.
-    $grid->column('profile.age', 'Age')->sortable();
+```
+
+使用`$grid->{字段名}([$label]);`为数据表格添加一列数据，该列数据使用`User`模型中`{字段名}`的数据填充。
+
+也可以使用以下方式添加数据列：
+
+```
+
+//添加一列
+$grid->column('字段名', '列title');
+
+//添加多列
+$grid->columns('email', 'username' ...);
+```
+
+如果需要改变该列数据的显示内容，可以使用以下方式:
+
+```
+$grid->name()->value(function ($name) {
+    return "<span class='label'>$name</span>";
+});
+
+$grid->email()->value(function ($email) {
+    return "mailto:$email";
+});
+```
+
+数据表格默认开启了批量删除操作，如果要关闭改功能可以使用：
+
+```
+$grid->disableBatchDeletion();
+```
+
+如果需要添加数据条件：
+```
+$grid->model()->where('id', '>', '20')->orderBy('updated_at', 'desc');
+```
+
+每页表格默认显示20条数据，修改为每页15条：
+```
+$grid->paginate(15);
+```
+
+使用以下方式来控制行操作：
+```
+//开启编辑和删除操作
+$grid->actions('edit|delete');
+
+//关闭所有操作
+$grid->disableActions();
+```
+
+
+
+使用以下方式来控制行：
+```
+$grid->rows(function($row){
+
+    //id小于10的行添加style
+    if($row->id < 10) {
+        $row->style('color:red');
+    }
+  
+    //指定列只开启编辑操作
+    if($row->id % 3) {
+        $row->action('edit');
+    }
     
-    // 
-    $grid->column('progress')->progressBar(['danger', 'striped'], 'xs');
+    //指定列添加自定义操作按钮
+    if($row->id % 2) {
+        $row->actions()->add(function ($row) {
+            return "<a class=\"btn btn-xs btn-danger\">btn</a>";
+        });
+    }
+});
+```
 
-    //Wrapper value with a badge.
-    $grid->created_at()->badge('danger');
-    
-    //Wrapper value with a label.
-    $grid->updated_at()->label('success');
+查询过滤器
 
-    //Set query conditions: SELECT * FROM `user` WHERE id > 20 ORDER BY updated_at DESC;
-    $grid->model()->where('id', '>', '20')->orderBy('updated_at', 'desc');
+```
 
-    //Set 15 items per-page.
-    $grid->paginate(15);
+//Add data grid filters.
+$grid->filter(function($filter){
 
-    //Set actions (edit,delete).
-    $grid->actions('edit|delete');
+    // sql: ... WHERE `user.name` LIKE "%$name%";
+    $filter->like('name', 'name');
 
-    //Add row callback function.
-    $grid->rows(function($row){
-        if($row->id <= 10) {
-            $row->style('color:red');
-        }
-      
-        //Disable delete action for specify row.
-        if($row->id % 3) {
-            $row->action('edit');
-        }
-        
-        //Add custom action for specify row.
-        if($row->id % 2) {
-            $row->actions()->add(function ($row) {
-                return "<a class=\"btn btn-xs btn-danger\">btn</a>";
-            });
-        }
-    });
-    
-    //Disable batch deletion.
-    $grid->disableBatchDeletion();
-    
-    //Disable all actions.
-    $grid->disableActions();
+    // sql: ... WHERE `user.email` = $email;
+    $filter->is('emial', 'Email');
 
-    //Add data grid filters.
-    $grid->filter(function($filter){
-
-        // sql: ... WHERE `user.name` LIKE "%$name%";
-        $filter->like('name', 'name');
-
-        // sql: ... WHERE `user.email` = $email;
-        $filter->is('emial', 'Email');
-
-        // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-        $filter->between('created_at', 'Created Time')->datetime();
-    });
+    // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
+    $filter->between('created_at', 'Created Time')->datetime();
 });
 
 ```
 
-###Admin\Form
+###创建数据表单
 
-`Admin\Form` is a data form builder, in your controller：
+在`form()`方法中使用`Encore\Admin\Admin::form()`方法来创建数据表单容器，数据表单的内容都是在容器中定义的
 
-```php
-return Admin::form(User::class, function(Form $form){
+```
+use App\User;
 
-    // $form->field(columnName [, columnName ], labelName = '');
+protected function form()
+{
+    return Admin::form(User::class, function (Form $form) {
 
-    $form->display('id', 'ID');
-    $form->text('name')->rules('required');
-    $form->email('email')->rules('required|email');
-
-    $form->password('password')->rules('required');
-
-    //Related column (hasOne relation).
-    $form->url('profile.homepage', 'Home page');
-
-    $form->ip('last_login_ip', 'Last login ip');
-    $form->datetime('last_login_at', 'Last login time');
-
-    //All fields can set a default value.
-    $form->color('color', 'Color')->default('#a34af4');
-
-    //Code editor based on code mirror see https://codemirror.net/
-    $form->code('code')->lang('ruby');
-    $form->json('json');
-
-    $form->currency('price')->symbol('￥');
-    $form->number('count');
-    $form->rate('rate');
-    
-    //You can use all Intervention Image api in image field (see http://image.intervention.io/getting_started/introduction)
-    $form->image('avatar')->crop(int $width, int $height, [int $x, int $y]);
-    
-    $form->file('document')->rules('mimes:doc,docx,xlsx');
-    $form->mobile('mobile')->format('999 9999 9999');
-    $form->text('address');
-    $form->date('birthday');
-    $form->radio('gender')->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
-
-    //Use Google map or Tencent map.
-    $form->map('latitude', 'longitude', 'Position');
-
-    //Options see http://ionden.com/a/plugins/ion.rangeSlider/en.html.
-    $form->slider('age', 'Age')->options(['max' => 50, 'min' => 20, 'step' => 1, 'postfix' => 'years old']);
-
-    $form->display('created_at', 'Create time');
-    $form->display('updated_at', 'Update time');
-
-    $form->datetimeRange('created_at', 'profile.updated_at', 'Time line');
-
-    //Belongs to many relation.
-    $form->multipleSelect('friends')->options(User::all()->lists('name', 'id'));
-
-    //Belongs to many relation.
-    $form->checkbox('roles')->values(Role::all()->lists('display_name', 'id'));
-    
-    $form->switch('open')->states(['on' => 1, 'off' => 0]);
-    
-    //Add a divide line.
-    $form->divide();
-
-    //Has many relation, show as a list.
-    $form->hasMany('comments', function(Grid $grid) {
-
-        // Set resource path for items.
-        $grid->resource('admin/article-comments');
-
-        $grid->id('ID');
-        $grid->author()->value(function($authorId){
-            return User::find($authorId)->name;
-        });
-        $grid->email();
-        $grid->content()->value(function($content) {
-            return mb_strimwidth($content, 0, 40, '...');
-        });
+        $form->display('id', 'ID');
+        $form->text('name');
+        $form->email('email');
+        $form->display('created_at', 'Created At');
+        $form->display('updated_at', 'Updated At');
     });
+}
 
-    // Add saving callback function.
-    $form->saving(function(Form $form) {
-        if($form->password && $form->model()->password != $form->password)
-        {
-            $form->password = bcrypt($form->password);
-        }
-    });
+```
+
+`$form`对象内置了大量创建表单元素的方法，下面是具体使用方法：
+
+####text
+
+文本输入框：
+
+```
+$form->text($column, [$label]);
+```
+
+####select
+单选框，并设置选项:
+```
+$form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+```
+
+####multipleSelect
+多选框，并设置选项:
+```
+$form->multipleSelect($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+```
+
+####textarea
+文本输入框:
+```
+$form->textarea($column[, $label]);
+```
+
+####radio
+`radio`选择：
+```
+$form->radio($column[, $label])->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
+```
+
+####checkbox
+`values()`方法用来设置选择项:
+```
+$form->checkbox($column[, $label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+```
+
+####email
+填写email格式文本：
+```
+$form->email($column[, $label]);
+```
+
+####password
+密码输入框：
+```
+$form->password($column[, $label]);
+```
+
+####url
+填写合法的url文本：
+```
+$form->url($column[, $label]);
+```
+
+####ip
+填写合法的ip地址：
+```
+$form->ip($column[, $label]);
+```
+
+####mobile
+电话号码输入框，并设置格式：
+```
+$form->mobile($column[, $label])->format('999 9999 9999');
+```
+
+####color
+颜色选择：
+```
+$form->color($column[, $label])->default('#ccc');
+```
+
+####time
+时间输入框：
+```
+$form->time($column[, $label]);
+```
+
+####date
+日期输入框：
+```
+$form->date($column[, $label]);
+```
+
+####datetime
+日期时间输入框：
+```
+$form->datetime($column[, $label]);
+```
+
+####timeRange
+时间范围选择，`$startTime`、`$endTime`为开始和结束时间字段:
+```
+$form->timeRange($startTime, $endTime, 'Time Range');
+```
+
+####dateRange
+日期范围选择，`$startDate`、`$endDate`为开始和结束日期字段:
+```
+$form->dateRange($startDate, $endDate, 'Date Range');
+```
+
+####datetimeRange
+时间日期范围选择，`$startDateTime`、`$endDateTime`为开始和结束时间日期:
+```
+$form->datetimeRange($startDateTime, $endDateTime, 'DateTime Range');
+```
+
+####currency
+货币输入框，并设置单位符号：
+```
+$form->currency($column[, $label])->symbol('￥');
+```
+
+####number
+输入数字：
+```
+$form->number($column[, $label]);
+```
+
+####rate
+输入比例：
+```
+$form->rate($column[, $label]);
+```
+
+####image
+图片上传，可以使用压缩、裁切、添加水印等各种方法，请参考[intervention](http://image.intervention.io/getting_started/introduction)：
+```
+$form->image($column[, $label])->crop(int $width, int $height, [int $x, int $y]);
+```
+
+####file
+文件上传，并设置上传文件类型:
+```
+$form->file($column[, $label])->rules('mimes:doc,docx,xlsx');
+```
+
+####map
+地图控件，用来选择经纬度,`$latitude`, `$longitude`为经纬度字段，laravel的`locale`设置为`zh_CN`的时候使用腾讯地图，否则使用Google地图：
+```
+$form->map($latitude, $longitude, $label);
+```
+
+####slider
+滑动选择控件,可以用来数字类型字段的选择，比如年龄：
+```
+$form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
+```
+
+####editor
+富文本编辑框:
+```
+$form->editor($column[, $label]);
+```
+
+####json
+json编辑框:
+```
+$form->json($column[, $label]);
+```
+
+####hidden
+隐藏域:
+```
+$form->hidden($column);
+```
+
+####switch
+开关，`on`和`off`对用开关的两个值:
+```
+$form->switch($column[, $label])->states(['on' => 1, 'off' => 0]);
+```
+
+####display
+只显示字段：
+```
+$form->display($column[, $label]);
+```
+
+####divide
+添加一条分割线:
+```
+$form->divide();
+```
+
+保存数据的时候添加回调，保存数据之前可以对提交数据做一些操作：
+
+```
+$form->saving(function(Form $form) {
+    if($form->password && $form->model()->password != $form->password)
+    {
+        $form->password = bcrypt($form->password);
+    }
 });
+```
+
+###权限控制
+
+`laravel-admin`已经内置了`RBAC`权限控制模块，展开左侧边栏的`Auth`，下面有用户、权限、角色三项的管理面板，权限控制的使用如下：
+```
+use Encore\Admin\Auth\Permission;
+
+class UserController extends Controller
+{
+    public function __construct()
+    {
+        // 检查权限，有user权限的角色可以访问
+        Permission::check('user');
+        
+        // 'editor', 'developer'两个角色可以访问
+        Permission::allow(['editor', 'developer']);
+        
+        // 'editor', 'developer'两个角色禁止访问
+        Permission::deny(['editor', 'developer']);
+    }
+}
 ```
 
 #License

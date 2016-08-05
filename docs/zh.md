@@ -1,5 +1,8 @@
 # laravel-admin
 
+[![Build Status](https://travis-ci.org/z-song/laravel-admin.svg?branch=master)](https://travis-ci.org/z-song/laravel-admin)
+[![StyleCI](https://styleci.io/repos/48796179/shield)](https://styleci.io/repos/48796179)
+
 `laravel-admin` 是一个可以快速帮你构建后台管理的工具，使用很少的代码就实现功能完善的后台管理功能。
 
 
