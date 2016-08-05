@@ -3,9 +3,9 @@
 namespace Encore\Admin;
 
 use Closure;
-use Encore\Admin\Facades\Auth;
 use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 

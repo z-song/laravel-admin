@@ -3,7 +3,7 @@
 namespace Encore\Admin\Auth;
 
 use Encore\Admin\Facades\Admin;
-use Encore\Admin\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 
 class Permission
 {

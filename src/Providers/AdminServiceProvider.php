@@ -65,10 +65,8 @@ class AdminServiceProvider extends ServiceProvider
             $loader = AliasLoader::getInstance();
 
             $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
-        });
 
-        $this->app->singleton('admin.auth', function ($app) {
-            return new AuthManager($app);
+            $this->setupAuth();
         });
 
         $this->setupClassAliases();
@@ -76,6 +74,23 @@ class AdminServiceProvider extends ServiceProvider
         $this->registerCommands();
 
         $this->registerRouter();
+    }
+
+    /**
+     * Setup auth configuration.
+     *
+     * @return void
+     */
+    protected function setupAuth()
+    {
+        config([
+            'auth.guards.admin.driver' => 'session',
+            'auth.guards.admin.provider' => 'admin',
+            'auth.providers.admin.driver' => 'eloquent',
+            'auth.providers.admin.model' => 'Encore\Admin\Auth\Database\Administrator',
+        ]);
+
+        auth()->shouldUse('admin');
     }
 
     /**

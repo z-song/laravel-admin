@@ -4,7 +4,7 @@ namespace Encore\Admin\Middleware;
 
 use Closure;
 use Encore\Admin\Admin;
-use Encore\Admin\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate
 {
