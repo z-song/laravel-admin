@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Providers;
 
-use Encore\Admin\Auth\AuthManager;
 use Encore\Admin\Routing\Router;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
@@ -84,10 +83,10 @@ class AdminServiceProvider extends ServiceProvider
     protected function setupAuth()
     {
         config([
-            'auth.guards.admin.driver' => 'session',
-            'auth.guards.admin.provider' => 'admin',
+            'auth.guards.admin.driver'    => 'session',
+            'auth.guards.admin.provider'  => 'admin',
             'auth.providers.admin.driver' => 'eloquent',
-            'auth.providers.admin.model' => 'Encore\Admin\Auth\Database\Administrator',
+            'auth.providers.admin.model'  => 'Encore\Admin\Auth\Database\Administrator',
         ]);
 
         auth()->shouldUse('admin');

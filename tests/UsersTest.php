@@ -25,8 +25,8 @@ class UsersTest extends TestCase
     {
         $user = [
             'username' => 'Test',
-            'name' => 'Name',
-            'password' => '123456'
+            'name'     => 'Name',
+            'password' => '123456',
         ];
 
         $this->be($this->user);
@@ -50,7 +50,7 @@ class UsersTest extends TestCase
     {
         $this->be($this->user);
 
-        $this->visit('admin/auth/users/'. $this->user->id .'/edit')
+        $this->visit('admin/auth/users/'.$this->user->id.'/edit')
             ->see('Create')
             ->submitForm('Submit', ['name' => 'test'])
             ->seePageIs('admin/auth/users')
@@ -63,7 +63,7 @@ class UsersTest extends TestCase
 
         $this->be($this->user);
 
-        $this->visit('admin/auth/users/'. $this->user->id .'/edit')
+        $this->visit('admin/auth/users/'.$this->user->id.'/edit')
             ->see('Create')
             ->submitForm('Submit', ['password' => $password])
             ->seePageIs('admin/auth/users')

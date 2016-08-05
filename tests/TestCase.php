@@ -28,7 +28,7 @@ class TestCase extends LaravelTestCase
     {
         parent::setUp();
 
-        $this->app['config']->set('database.default','mysql');
+        $this->app['config']->set('database.default', 'mysql');
         $this->app['config']->set('database.connections.mysql.host', 'localhost');
         $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
         $this->app['config']->set('database.connections.mysql.username', 'root');
@@ -56,21 +56,21 @@ class TestCase extends LaravelTestCase
     }
 
     /**
-     * run package database migrations
+     * run package database migrations.
      *
      * @return void
      */
     public function migrate()
     {
         foreach ($this->getMigrations() as $migration) {
-            (new $migration)->up();
+            (new $migration())->up();
         }
     }
 
     public function rollback()
     {
         foreach ($this->getMigrations() as $migration) {
-            (new $migration)->down();
+            (new $migration())->down();
         }
     }
 
@@ -81,8 +81,7 @@ class TestCase extends LaravelTestCase
         $fileSystem = new Filesystem();
         $classFinder = new ClassFinder();
 
-        foreach($fileSystem->files(__DIR__ . "/../migrations") as $file)
-        {
+        foreach ($fileSystem->files(__DIR__.'/../migrations') as $file) {
             $fileSystem->requireOnce($file);
             $migrations[] = $classFinder->findClass($file);
         }

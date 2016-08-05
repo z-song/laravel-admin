@@ -14,7 +14,6 @@ class RolesTest extends TestCase
         $this->user = Administrator::first();
     }
 
-
     public function testRolesIndex()
     {
         $this->be($this->user);
