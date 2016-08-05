@@ -1,5 +1,7 @@
 # laravel-admin
 
+[![Build Status](https://travis-ci.org/z-song/laravel-admin.svg?branch=master)](https://travis-ci.org/z-song/laravel-admin)
+
 `laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
 
 [中文文档](/docs/zh.md)
