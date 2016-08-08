@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 
 /**
- * Class Admin
- * @package Encore\Admin
+ * Class Admin.
  */
 class Admin
 {
