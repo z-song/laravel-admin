@@ -88,8 +88,6 @@ class AdminServiceProvider extends ServiceProvider
             'auth.providers.admin.driver' => 'eloquent',
             'auth.providers.admin.model'  => 'Encore\Admin\Auth\Database\Administrator',
         ]);
-
-        auth()->shouldUse('admin');
     }
 
     /**
@@ -100,10 +98,6 @@ class AdminServiceProvider extends ServiceProvider
     protected function setupClassAliases()
     {
         $aliases = [
-//            'admin.grid'    => \Encore\Admin\Grid::class,
-//            'admin.form'    => \Encore\Admin\Form::class,
-//            'admin.chart'   => \Encore\Admin\Chart::class,
-
             'admin.router'  => \Encore\Admin\Routing\Router::class,
         ];
 
@@ -112,6 +106,11 @@ class AdminServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Register admin routes.
+     *
+     * @return void
+     */
     public function registerRouter()
     {
         $this->app->singleton('admin.router', function ($app) {

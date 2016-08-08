@@ -23,7 +23,7 @@ class AuthTest extends TestCase
             ->see('login')
             ->submitForm('Login', $credentials)
             ->see('dashboard')
-            ->seeCredentials($credentials)
+            ->seeCredentials($credentials, 'admin')
             ->seeIsAuthenticated('admin')
             ->seePageIs('admin');
     }

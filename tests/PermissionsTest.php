@@ -12,20 +12,17 @@ class PermissionsTest extends TestCase
         parent::setUp();
 
         $this->user = Administrator::first();
+        $this->be($this->user, 'admin');
     }
 
     public function testPermissionsIndex()
     {
-        $this->be($this->user);
-
         $this->visit('admin/auth/permissions')
             ->see('Permissions');
     }
 
     public function testAddAndDeletePermission()
     {
-        $this->be($this->user);
-
         $this->visit('admin/auth/permissions/create')
             ->see('Permissions')
             ->submitForm('Submit', ['slug' => 'can-edit', 'name' => 'Can edit'])
@@ -40,8 +37,6 @@ class PermissionsTest extends TestCase
 
     public function testEditPermission()
     {
-        $this->be($this->user);
-
         $this->visit('admin/auth/permissions/create')
             ->see('Permissions')
             ->submitForm('Submit', ['slug' => 'can-edit', 'name' => 'Can edit'])

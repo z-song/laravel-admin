@@ -16,7 +16,7 @@ class AuthController extends Controller
      */
     public function getLogin()
     {
-        if (!Auth::guest()) {
+        if (!Auth::guard('admin')->guest()) {
             return redirect(config('admin.prefix'));
         }
 
@@ -40,7 +40,7 @@ class AuthController extends Controller
             return Redirect::back()->withInput()->withErrors($validator);
         }
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::guard('admin')->attempt($credentials)) {
             return Redirect::intended(config('admin.prefix'));
         }
 
@@ -52,7 +52,7 @@ class AuthController extends Controller
      */
     public function getLogout()
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
 
         return redirect(config('admin.prefix'));
     }

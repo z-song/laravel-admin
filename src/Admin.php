@@ -9,12 +9,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 
+/**
+ * Class Admin
+ * @package Encore\Admin
+ */
 class Admin
 {
-    public static $css = [];
-
-    public static $js = [];
-
+    /**
+     * @var array
+     */
     public static $script = [];
 
     /**
@@ -80,36 +83,6 @@ class Admin
     }
 
     /**
-     * @param string $css
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
-     */
-//    public static function css($css = '')
-//    {
-//        if (! empty($css)) {
-//            self::$css = array_merge(self::$css, (array) $css);
-//
-//            return ;
-//        }
-//
-//        return view('admin::partials.css', ['css' => array_unique(self::$css)]);
-//    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
-     */
-//    public static function js()
-//    {
-//        static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
-//
-//        if (config('app.locale') == 'zh_CN') {
-//            static::$js['map'] = "http://map.qq.com/api/js?v=2.exp";
-//        }
-//
-//        return view('admin::partials.js', ['js' => array_unique(self::$js)]);
-//    }
-
-    /**
      * @param string $script
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
@@ -127,8 +100,6 @@ class Admin
 
     public static function url($url)
     {
-        //$prefix = app('router')->current()->getPrefix();
-
         $prefix = (string) config('admin.prefix');
 
         return "/$prefix/".trim($url, '/');
@@ -149,8 +120,11 @@ class Admin
         return config('admin.title');
     }
 
+    /**
+     * @return mixed
+     */
     public function user()
     {
-        return Auth::user();
+        return Auth::guard('admin')->user();
     }
 }

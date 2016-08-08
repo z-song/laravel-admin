@@ -11,12 +11,12 @@ class UsersTest extends TestCase
         parent::setUp();
 
         $this->user = Administrator::first();
+
+        $this->be($this->user, 'admin');
     }
 
     public function testUsersIndexPage()
     {
-        $this->be($this->user);
-
         $this->visit('admin/auth/users')
             ->see('Administrator');
     }
@@ -28,8 +28,6 @@ class UsersTest extends TestCase
             'name'     => 'Name',
             'password' => '123456',
         ];
-
-        $this->be($this->user);
 
         $this->visit('admin/auth/users/create')
             ->see('Create')
@@ -48,8 +46,6 @@ class UsersTest extends TestCase
 
     public function testUpdateUser()
     {
-        $this->be($this->user);
-
         $this->visit('admin/auth/users/'.$this->user->id.'/edit')
             ->see('Create')
             ->submitForm('Submit', ['name' => 'test'])
@@ -60,8 +56,6 @@ class UsersTest extends TestCase
     public function testResetPassword()
     {
         $password = 'odjwyufkglte';
-
-        $this->be($this->user);
 
         $this->visit('admin/auth/users/'.$this->user->id.'/edit')
             ->see('Create')

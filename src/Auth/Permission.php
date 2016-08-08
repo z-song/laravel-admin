@@ -14,7 +14,7 @@ class Permission
      */
     public static function check($permission)
     {
-        if (Auth::user()->cannot($permission)) {
+        if (Auth::guard('admin')->user()->cannot($permission)) {
             static::error();
         }
     }
@@ -26,7 +26,7 @@ class Permission
      */
     public static function allow($roles)
     {
-        if (!Auth::user()->isRole($roles)) {
+        if (!Auth::guard('admin')->user()->isRole($roles)) {
             static::error();
         }
     }
@@ -38,7 +38,7 @@ class Permission
      */
     public static function deny($roles)
     {
-        if (Auth::user()->isRole($roles)) {
+        if (Auth::guard('admin')->user()->isRole($roles)) {
             static::error();
         }
     }
