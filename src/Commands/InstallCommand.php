@@ -71,6 +71,7 @@ class InstallCommand extends Command
         $this->makeDir('Controllers');
 
         $this->createHomeController();
+        $this->createExampleController();
         //$this->createAuthController();
         //$this->createAdministratorController();
 
@@ -95,6 +96,23 @@ class InstallCommand extends Command
             str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
         );
         $this->line('<info>HomeController file was created:</info> '.str_replace(base_path(), '', $homeController));
+    }
+
+    /**
+     * Create HomeController.
+     *
+     * @return void
+     */
+    public function createExampleController()
+    {
+        $exampleController = $this->directory.'/Controllers/ExampleController.php';
+        $contents = $this->getStub('ExampleController');
+
+        $this->laravel['files']->put(
+            $exampleController,
+            str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
+        );
+        $this->line('<info>ExampleController file was created:</info> '.str_replace(base_path(), '', $exampleController));
     }
 
     /**
