@@ -244,9 +244,7 @@ class Grid
     {
         $query = Input::all();
 
-        return $this->model()->eloquent()->appends($query)->render(
-            new AdminThreePresenter($this->model()->eloquent())
-        );
+        return $this->model()->eloquent()->appends($query)->render('admin::pagination');
     }
 
     /**
