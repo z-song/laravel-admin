@@ -12,14 +12,12 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "~5.0",
+        "php": ">=5.5.9",
+        "laravel/framework": "~5.2",
         "intervention/image" : "~2.3"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
-        "phpspec/phpspec": "~2.1",
-        "laracasts/testdummy": "~2.0",
         "laravel/laravel": "~5.2",
         "symfony/css-selector": "2.8.*|3.0.*",
         "symfony/dom-crawler": "2.8.*|3.0.*"
