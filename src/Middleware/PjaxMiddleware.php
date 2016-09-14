@@ -81,7 +81,7 @@ class PjaxMiddleware
             abort(422);
         }
 
-        return $content->html();
+        return html_entity_decode($content->html());
     }
 
     /**
