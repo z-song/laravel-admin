@@ -193,12 +193,18 @@ class Builder
         $confirm = trans('admin::lang.delete_confirm');
         $token = csrf_token();
 
+        $location = '/' . trim($this->form->resource(), '/');
+
         $script = <<<SCRIPT
             $('.item_delete').click(function() {
                 var id = $(this).data('id');
                 if(confirm('{$confirm}')) {
                     $.post('{$this->form->resource()}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
-                        Window.location.href = '/{$this->form->resource()}/';
+                        $.pjax({
+                            timeout: 2000,
+                            url: '$location',
+                            container: '#pjax-container'
+                          });
                         return false;
                     });
                 }
