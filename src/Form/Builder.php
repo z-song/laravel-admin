@@ -193,7 +193,7 @@ class Builder
         $confirm = trans('admin::lang.delete_confirm');
         $token = csrf_token();
 
-        $location = '/' . trim($this->form->resource(), '/');
+        $location = '/'.trim($this->form->resource(), '/');
 
         $script = <<<SCRIPT
             $('.item_delete').click(function() {
