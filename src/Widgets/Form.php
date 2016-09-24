@@ -91,6 +91,7 @@ class Form implements Renderable
      * Action uri of the form.
      *
      * @param string $action
+     *
      * @return $this
      */
     public function action($action)
@@ -104,6 +105,7 @@ class Form implements Renderable
      * Method of the form.
      *
      * @param string $method
+     *
      * @return $this
      */
     public function method($method = 'POST')
@@ -117,11 +119,12 @@ class Form implements Renderable
      * Find field class with given name.
      *
      * @param string $method
+     *
      * @return bool|string
      */
     public static function findFieldClass($method)
     {
-        $className = "\\Encore\\Admin\\Form\\Field\\".ucfirst($method);
+        $className = '\\Encore\\Admin\\Form\\Field\\'.ucfirst($method);
 
         if (class_exists($className)) {
             return $className;
@@ -138,6 +141,7 @@ class Form implements Renderable
      * Add a form field to form.
      *
      * @param Field $field
+     *
      * @return $this
      */
     protected function pushField(Field &$field)
@@ -184,8 +188,6 @@ class Form implements Renderable
 
             return $element;
         }
-
-        return null;
     }
 
     /**
