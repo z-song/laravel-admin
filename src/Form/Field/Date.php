@@ -8,6 +8,13 @@ class Date extends Field
 {
     protected $format = 'YYYY-MM-DD';
 
+    public function format($format)
+    {
+        $this->format = $format;
+
+        return $this;
+    }
+
     public function render()
     {
         $this->options['format'] = $this->format;
