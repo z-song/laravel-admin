@@ -3,6 +3,7 @@ laravel-admin
 
 [![Build Status](https://travis-ci.org/z-song/laravel-admin.svg?branch=master)](https://travis-ci.org/z-song/laravel-admin)
 [![StyleCI](https://styleci.io/repos/48796179/shield)](https://styleci.io/repos/48796179)
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?maxAge=2592000)]()
 
 `laravel-admin` 是一个可以快速帮你构建后台管理的工具，它提供的页面组件和表单元素等功能，能帮助你使用很少的代码就实现功能完善的后台管理功能。
 
