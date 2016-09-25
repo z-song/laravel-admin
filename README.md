@@ -20,7 +20,14 @@ laravel-admin
 ------------
 
 ```
+Laravel 5.2
 composer require encore/laravel-admin "dev-master"
+
+Laravel 5.3
+composer require encore/laravel-admin "1.3.x-dev"
+
+Laravel 5.1
+composer require encore/laravel-admin "1.1.x-dev"
 ```
 
 在`config/app.php`加入`ServiceProvider`:
@@ -92,25 +99,7 @@ CREATE TABLE `users` (
 
 ### 1.添加路由器
 ```php
-<<<<<<< Updated upstream
-  [
-    'title' => 'Users',
-    'url'   => '/users',
-    'icon'  => 'fa-user',
-    'roles' => ['administrator', 'editor']
-  ],
-```
-
-`title`为显示文字，`url`为跳转url，`icon`是菜单项的icon，使用请参考[Font Awesome](http://fontawesome.io/icons/)，`roles`表示能显示此菜单项的角色，不填表示所有角色可见。
-
-然后在左侧边栏就能看到入口了。
-
-打开`app/Admin/controllers/UserController.php`文件，里面已经默认包含了CURD相关方法，`index()`显示列表页，`create()`用来显示创建页，`edit()`是编辑页，另外的两个方法`grid()`用来创建数据表格，`form()`用来创建form表单，我们的主要工作就是在`grid()`和`form()`两个方法中编写穿件数据表格和form表单的代码。
-
-###创建数据表格
-=======
 <?php
->>>>>>> Stashed changes
 
 namespace App\Admin\Controllers;
 
