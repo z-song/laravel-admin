@@ -60,7 +60,7 @@ php artisan admin:install
   - [表单](/docs/zh/form.md)
   - [盒子](/docs/zh/box.md)
   - [信息盒子](/docs/zh/info-box.md)
-  - [选项卡](/docs/zh/box.md)
+  - [选项卡](/docs/zh/tab.md)
   - [滑动相册](/docs/zh/carousel.md)
   - [折叠容器](/docs/zh/collapse.md)
   - 数据图表 TODO

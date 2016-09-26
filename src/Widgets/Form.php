@@ -255,7 +255,7 @@ class Form implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.form', $this->getVariables());
+        return view('admin::widgets.form', $this->getVariables())->render();
     }
 
     /**
