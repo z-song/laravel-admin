@@ -12,7 +12,6 @@ use InvalidArgumentException;
 /**
  * Class Admin.
  */
-
 class Admin
 {
     /**
