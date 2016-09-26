@@ -83,10 +83,10 @@ class Form implements Renderable
     protected function initFormAttributes()
     {
         $this->attributes = [
-            'method'        => 'POST',
-            'action'        => '',
-            'class'         => 'form-horizontal',
-            'accept-charset'=> 'UTF-8',
+            'method'         => 'POST',
+            'action'         => '',
+            'class'          => 'form-horizontal',
+            'accept-charset' => 'UTF-8',
         ];
     }
 
@@ -118,7 +118,8 @@ class Form implements Renderable
      * Add form attributes.
      *
      * @param string|array $attr
-     * @param string $value
+     * @param string       $value
+     *
      * @return $this
      */
     public function attribute($attr, $value = '')
@@ -191,6 +192,7 @@ class Form implements Renderable
      * Format form attributes form array to html.
      *
      * @param array $attributes
+     *
      * @return string
      */
     public function formatAttribute($attributes = [])
@@ -206,7 +208,7 @@ class Form implements Renderable
             $html[] = "$key=\"$val\"";
         }
 
-        return join(' ', $html) ?: '';
+        return implode(' ', $html) ?: '';
     }
 
     /**
