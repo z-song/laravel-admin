@@ -1,4 +1,4 @@
-<form action="{{ $action }}" method="{{ $method }}" accept-charset="UTF-8" class="form-horizontal">
+<form {!! $attributes !!}>
     <div class="box-body">
 
         @foreach($fields as $field)
