@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 
+/**
+ * Class Admin.
+ */
+
 class Admin
 {
     /**

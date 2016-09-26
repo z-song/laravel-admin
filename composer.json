@@ -29,5 +29,10 @@
         "files": [
             "src/helpers.php"
         ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
     }
 }
