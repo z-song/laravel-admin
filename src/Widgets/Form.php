@@ -45,11 +45,6 @@ use Illuminate\Contracts\Support\Renderable;
 class Form implements Renderable
 {
     /**
-     * @var string
-     */
-    protected $id = '';
-
-    /**
      * @var Field[]
      */
     protected $fields = [];
@@ -79,8 +74,6 @@ class Form implements Renderable
             $this->data = $data;
         }
 
-        $this->id = 'form_id_'.uniqid();
-
         $this->initFormAttributes();
     }
 
@@ -106,9 +99,7 @@ class Form implements Renderable
      */
     public function action($action)
     {
-        $this->attributes['action'] = $action;
-
-        return $this;
+        return $this->attribute('action', $action);
     }
 
     /**
@@ -120,7 +111,25 @@ class Form implements Renderable
      */
     public function method($method = 'POST')
     {
-        $this->attributes['method'] = strtoupper($method);
+        return $this->attribute('method', strtoupper($method));
+    }
+
+    /**
+     * Add form attributes.
+     *
+     * @param string|array $attr
+     * @param string $value
+     * @return $this
+     */
+    public function attribute($attr, $value = '')
+    {
+        if (is_array($attr)) {
+            foreach ($attr as $key => $value) {
+                $this->attribute($key, $value);
+            }
+        } else {
+            $this->attributes[$attr] = $value;
+        }
 
         return $this;
     }
@@ -227,7 +236,7 @@ class Form implements Renderable
     public function __call($method, $arguments)
     {
         if ($className = static::findFieldClass($method)) {
-            $name = array_get($arguments, 0, ''); //[0];
+            $name = array_get($arguments, 0, '');
 
             $element = new $className($name, array_slice($arguments, 1));
 
