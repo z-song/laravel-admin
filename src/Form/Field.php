@@ -316,7 +316,7 @@ class Field
     {
         Admin::script($this->script);
 
-        return view($this->getView(), $this->variables());
+        return view($this->getView(), $this->variables())->render();
     }
 
     public function __call($method, $arguments)
