@@ -8,6 +8,10 @@ class MultipleSelect extends Select
     {
         $relations = array_get($data, $this->column);
 
+        if (!is_array($relations)) {
+            return;
+        }
+
         foreach ($relations as $relation) {
             $this->value[] = array_pop($relation['pivot']);
         }
