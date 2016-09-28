@@ -85,8 +85,8 @@ class RoleController extends Controller
         return Admin::form(Role::class, function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->text('slug', trans('admin::lang.slug'));
-            $form->text('name', trans('admin::lang.name'));
+            $form->text('slug', trans('admin::lang.slug'))->rules('required');
+            $form->text('name', trans('admin::lang.name'))->rules('required');
             $form->multipleSelect('permissions', trans('admin::lang.permissions'))->options(Permission::all()->pluck('name', 'id'));
 
             $form->display('created_at', trans('admin::lang.created_at'));
