@@ -84,8 +84,8 @@ class PermissionController extends Controller
         return Admin::form(Permission::class, function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->text('slug', trans('admin::lang.slug'));
-            $form->text('name', trans('admin::lang.name'));
+            $form->text('slug', trans('admin::lang.slug'))->rules('required');
+            $form->text('name', trans('admin::lang.name'))->rules('required');
 
             $form->display('created_at', trans('admin::lang.created_at'));
             $form->display('updated_at', trans('admin::lang.updated_at'));

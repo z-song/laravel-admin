@@ -50,6 +50,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
  * @method Field\Divide         divide()
+ * @method Field\Password       password($column, $label = '')
  */
 class Form
 {
