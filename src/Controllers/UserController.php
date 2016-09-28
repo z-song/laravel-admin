@@ -85,9 +85,9 @@ class UserController extends Controller
         return Admin::form(Administrator::class, function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->text('username', trans('admin::lang.username'));
-            $form->text('name', trans('admin::lang.name'));
-            $form->password('password', trans('admin::lang.password'));
+            $form->text('username', trans('admin::lang.username'))->rules('required');
+            $form->text('name', trans('admin::lang.name'))->rules('required');
+            $form->password('password', trans('admin::lang.password'))->rules('required');
 
             $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
 
