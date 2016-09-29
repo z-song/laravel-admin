@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/codemirror/lib/codemirror.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/nestable/nestable.css") }}">
 
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
 
@@ -77,6 +78,7 @@
 <script src="{{ asset ("/packages/admin/codemirror/lib/codemirror.js") }}"></script>
 <script src="{{ asset ("/packages/admin/codemirror/mode/javascript/javascript.js") }}"></script>
 <script src="{{ asset ("/packages/admin/codemirror/addon/edit/matchbrackets.js") }}"></script>
+<script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
 
 @if(config('app.locale') == 'zh_CN')
 <script src="{{ asset ("http://map.qq.com/api/js?v=2.exp") }}"></script>
