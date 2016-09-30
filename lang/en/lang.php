@@ -18,6 +18,8 @@ return [
     'reset'         => 'Reset',
     'export'        => 'Export',
     'batch_delete'  => 'Batch delete',
+    'save'          => 'Save',
+    'refresh'       => 'Refresh',
 
     'action'         => 'Action',
     'title'          => 'Title',

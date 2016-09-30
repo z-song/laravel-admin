@@ -42,6 +42,18 @@ class Admin
     }
 
     /**
+     * Build a tree.
+     *
+     * @param $model
+     *
+     * @return Tree
+     */
+    public function tree($model)
+    {
+        return new Tree($this->getModel($model));
+    }
+
+    /**
      * @param Closure $callable
      *
      * @return Content
