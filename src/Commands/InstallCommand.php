@@ -75,7 +75,7 @@ class InstallCommand extends Command
         //$this->createAuthController();
         //$this->createAdministratorController();
 
-        $this->createMenuFile();
+        //$this->createMenuFile();
         $this->createRoutesFile();
 
         //$this->copyLanguageFiles();

@@ -46,4 +46,8 @@ return [
     'updated_at'    => 'Updated At',
 
     'alert'         => 'Alert',
+
+    'parent_id'     => 'Parent ID',
+    'icon'          => 'Icon',
+    'uri'           => 'URI',
 ];

@@ -46,4 +46,8 @@ return [
     'updated_at'    => '更新时间',
 
     'alert'         => '注意',
+
+    'parent_id'     => '父ID',
+    'icon'          => '图标',
+    'uri'           => '路径',
 ];

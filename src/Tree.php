@@ -3,11 +3,11 @@
 namespace Encore\Admin;
 
 use Encore\Admin\Facades\Admin as AdminManager;
-use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class Tree
+class Tree implements Renderable
 {
     protected $items = [];
 
@@ -25,23 +25,24 @@ class Tree
         $this->elementId .= uniqid();
     }
 
-    public function buildItems()
-    {
-        if ($this->model) {
-            $this->items = $this->model->toTree();
-        }
-    }
-
+    /**
+     * Variables in tree template.
+     *
+     * @return array
+     */
     public function variables()
     {
-        $this->buildItems();
-
         return [
-            'items' => $this->items,
+            'items' => $this->model->toTree(),
             'id'    => $this->elementId,
         ];
     }
 
+    /**
+     * Build tree grid scripts.
+     *
+     * @return void
+     */
     protected function buildupScript()
     {
         $confirm = trans('admin::lang.delete_confirm');
@@ -75,11 +76,16 @@ class Tree
 SCRIPT;
     }
 
+    /**
+     * Render a tree.
+     *
+     * @return \Illuminate\Http\JsonResponse|string
+     */
     public function render()
     {
         if (Request::capture()->has('_tree')) {
             return response()->json([
-                'status' => $this->buildTree(Request::capture()->get('_tree')),
+                'status' => $this->saveTree(Request::capture()->get('_tree')),
             ]);
         }
 
@@ -92,7 +98,13 @@ SCRIPT;
         return view('admin::tree', $this->variables())->render();
     }
 
-    public function buildTree($serialize)
+    /**
+     * Build menu tree presented by array.
+     *
+     * @param string $serialize
+     * @return bool
+     */
+    public function saveTree($serialize)
     {
         $tree = json_decode($serialize, true);
 
@@ -100,7 +112,7 @@ SCRIPT;
             throw new \InvalidArgumentException(json_last_error_msg());
         }
 
-        $this->model->buildTree($tree);
+        $this->model->saveTree($tree);
 
         return true;
     }
