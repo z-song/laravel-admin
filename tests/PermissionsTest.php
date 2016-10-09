@@ -2,17 +2,15 @@
 
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Auth\Database\Permission;
+use Encore\Admin\Facades\Auth;
 
 class PermissionsTest extends TestCase
 {
-    protected $user;
-
     public function setUp()
     {
         parent::setUp();
 
-        $this->user = Administrator::first();
-        $this->be($this->user, 'admin');
+        Auth::login(Administrator::first());
     }
 
     public function testPermissionsIndex()
@@ -30,7 +28,10 @@ class PermissionsTest extends TestCase
             ->seeInDatabase('permissions', ['slug' => 'can-edit'])
             ->seeInDatabase('permissions', ['name' => 'Can edit'])
             ->assertEquals(1, Permission::count());
+    }
 
+    public function testDeletePermission()
+    {
         $this->delete('admin/auth/permissions/1')
             ->assertEquals(0, Permission::count());
     }
