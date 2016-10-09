@@ -102,6 +102,7 @@ SCRIPT;
      * Build menu tree presented by array.
      *
      * @param string $serialize
+     *
      * @return bool
      */
     public function saveTree($serialize)

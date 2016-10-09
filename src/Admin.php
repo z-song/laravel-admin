@@ -114,6 +114,7 @@ class Admin
      * Admin url.
      *
      * @param $url
+     *
      * @return string
      */
     public static function url($url)

@@ -86,6 +86,7 @@ class Administrator extends Model implements AuthenticatableContract
      * If visible for roles.
      *
      * @param $roles
+     *
      * @return bool
      */
     public function visible($roles)
