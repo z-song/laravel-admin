@@ -6,7 +6,6 @@ use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Auth\Database\Role;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Callout;
@@ -65,6 +64,7 @@ class MenuController extends Controller
 
     /**
      * @param $id
+     *
      * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function update($id)
@@ -74,6 +74,7 @@ class MenuController extends Controller
 
     /**
      * @param $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
@@ -92,7 +93,7 @@ class MenuController extends Controller
     }
 
     /**
-     * Make a tree builder
+     * Make a tree builder.
      *
      * @return Tree
      */

@@ -46,7 +46,8 @@ class Menu extends Model
      * Format data to tree like array.
      *
      * @param array $elements
-     * @param int $parentId
+     * @param int   $parentId
+     *
      * @return array
      */
     public static function toTree(array $elements = [], $parentId = 0)
@@ -76,6 +77,7 @@ class Menu extends Model
      * Set the order of branches in the tree.
      *
      * @param array $order
+     *
      * @return void
      */
     protected static function setBranchOrder(array $order)
@@ -91,7 +93,7 @@ class Menu extends Model
      * Save a tree from a tree like array.
      *
      * @param array $tree
-     * @param int $parentId
+     * @param int   $parentId
      */
     public static function saveTree($tree = [], $parentId = 0)
     {
@@ -115,9 +117,10 @@ class Menu extends Model
     /**
      * Build options of select field in form.
      *
-     * @param array $elements
-     * @param int $parentId
+     * @param array  $elements
+     * @param int    $parentId
      * @param string $prefix
+     *
      * @return array
      */
     public static function buildSelectOptions(array $elements = [], $parentId = 0, $prefix = '')
@@ -149,8 +152,9 @@ class Menu extends Model
     /**
      * Delete current item and its children.
      *
-     * @return bool|null
      * @throws \Exception
+     *
+     * @return bool|null
      */
     public function delete()
     {
