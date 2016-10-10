@@ -5,15 +5,11 @@ use Encore\Admin\Auth\Database\Role;
 
 class RolesTest extends TestCase
 {
-    protected $user;
-
     public function setUp()
     {
         parent::setUp();
 
-        $this->user = Administrator::first();
-
-        $this->be($this->user, 'admin');
+        $this->be(Administrator::first(), 'admin');
     }
 
     public function testRolesIndex()

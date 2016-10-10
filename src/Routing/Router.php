@@ -70,6 +70,7 @@ class Router
                 'auth/users'       => 'UserController',
                 'auth/roles'       => 'RoleController',
                 'auth/permissions' => 'PermissionController',
+                'auth/menu'        => 'MenuController',
             ]);
 
             $router->get('auth/login', 'AuthController@getLogin');

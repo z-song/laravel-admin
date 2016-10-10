@@ -18,6 +18,8 @@ return [
     'reset'         => '撤销',
     'export'        => '导出',
     'batch_delete'  => '批量删除',
+    'save'          => '保存',
+    'refresh'       => '刷新',
 
     'action'         => '操作',
     'title'          => '标题',
@@ -44,4 +46,8 @@ return [
     'updated_at'    => '更新时间',
 
     'alert'         => '注意',
+
+    'parent_id'     => '父ID',
+    'icon'          => '图标',
+    'uri'           => '路径',
 ];

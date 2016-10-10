@@ -29,8 +29,12 @@ return [
         'permissions_table' => 'permissions',
         'permissions_model' => Encore\Admin\Auth\Database\Permission::class,
 
+        'menu_table'  => 'menu',
+        'menu_model'  => Encore\Admin\Auth\Database\Menu::class,
+
         'role_users_table'       => 'role_administrators',
         'role_permissions_table' => 'role_permissions',
+        'role_menu_table'        => 'role_menu',
     ],
 
     /*

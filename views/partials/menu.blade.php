@@ -1,7 +1,7 @@
-@if(!isset($item['roles']) || (isset($item['roles']) && Admin::user()->isRole($item['roles'])))
+@if(Admin::user()->visible($item['roles']))
     @if(!isset($item['children']))
         <li>
-            <a href="{{ Admin::url($item['url']) }}"><i class="fa {{$item['icon']}}"></i>
+            <a href="{{ Admin::url($item['uri']) }}"><i class="fa {{$item['icon']}}"></i>
                 <span>{{$item['title']}}</span>
             </a>
         </li>
