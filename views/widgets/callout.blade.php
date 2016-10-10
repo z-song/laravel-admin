@@ -2,5 +2,5 @@
     @if(isset($title))
     <h4>{{ $title }}</h4>
     @endif
-    {{ $content }}
+    {!! $content !!}
 </div>

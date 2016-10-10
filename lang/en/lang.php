@@ -18,6 +18,8 @@ return [
     'reset'         => 'Reset',
     'export'        => 'Export',
     'batch_delete'  => 'Batch delete',
+    'save'          => 'Save',
+    'refresh'       => 'Refresh',
 
     'action'         => 'Action',
     'title'          => 'Title',
@@ -44,4 +46,8 @@ return [
     'updated_at'    => 'Updated At',
 
     'alert'         => 'Alert',
+
+    'parent_id'     => 'Parent ID',
+    'icon'          => 'Icon',
+    'uri'           => 'URI',
 ];

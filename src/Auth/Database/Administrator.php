@@ -81,4 +81,26 @@ class Administrator extends Model implements AuthenticatableContract
 
         return $this->roles()->whereIn('slug', $roles)->exists();
     }
+
+    /**
+     * If visible for roles.
+     *
+     * @param $roles
+     *
+     * @return bool
+     */
+    public function visible($roles)
+    {
+        if (empty($roles)) {
+            return true;
+        }
+
+        $roles = array_column($roles, 'slug');
+
+        if ($this->isRole($roles) || $this->isRole('administrator')) {
+            return true;
+        }
+
+        return false;
+    }
 }

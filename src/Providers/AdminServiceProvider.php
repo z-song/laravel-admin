@@ -46,11 +46,6 @@ class AdminServiceProvider extends ServiceProvider
 
             $this->app['admin.router']->register();
         }
-
-        if (file_exists($menu = admin_path('menu.php'))) {
-            $menu = require $menu;
-            config(['admin.menu' => $menu]);
-        }
     }
 
     /**

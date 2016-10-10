@@ -3,6 +3,7 @@
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Layout\Content;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,18 @@ class Admin
     public function form($model, Closure $callable)
     {
         return new Form($this->getModel($model), $callable);
+    }
+
+    /**
+     * Build a tree.
+     *
+     * @param $model
+     *
+     * @return Tree
+     */
+    public function tree($model)
+    {
+        return new Tree($this->getModel($model));
     }
 
     /**
@@ -97,6 +110,13 @@ class Admin
         return view('admin::partials.script', ['script' => array_unique(self::$script)]);
     }
 
+    /**
+     * Admin url.
+     *
+     * @param $url
+     *
+     * @return string
+     */
     public static function url($url)
     {
         $prefix = (string) config('admin.prefix');
@@ -104,9 +124,14 @@ class Admin
         return "/$prefix/".trim($url, '/');
     }
 
+    /**
+     * Left sider-bar menu.
+     *
+     * @return array
+     */
     public function menu()
     {
-        return config('admin.menu', []);
+        return Menu::toTree();
     }
 
     /**
