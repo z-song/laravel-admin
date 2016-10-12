@@ -35,7 +35,7 @@ class MenuTest extends TestCase
             ->see('Tips')
             ->submitForm('Submit', $item)
             ->seePageIs('admin/auth/menu')
-            ->seeInDatabase('menu', $item)
+            ->seeInDatabase(config('admin.database.menu_table'), $item)
             ->assertEquals(7, Menu::count());
 
         $this->setExpectedException(Illuminate\Foundation\Testing\HttpException::class);
@@ -57,7 +57,7 @@ class MenuTest extends TestCase
             ->see('Menu')
             ->submitForm('Submit', ['title' => 'blablabla'])
             ->seePageIs('admin/auth/menu')
-            ->seeInDatabase('menu', ['title' => 'blablabla'])
+            ->seeInDatabase(config('admin.database.menu_table'), ['title' => 'blablabla'])
             ->assertEquals(6, Menu::count());
     }
 }
