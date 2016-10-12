@@ -20,21 +20,21 @@ return [
     ],
 
     'database' => [
-        'users_table' => 'administrators',
+        'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Auth\Database\Administrator::class,
 
-        'roles_table' => 'roles',
+        'roles_table' => 'admin_roles',
         'roles_model' => Encore\Admin\Auth\Database\Role::class,
 
-        'permissions_table' => 'permissions',
+        'permissions_table' => 'admin_permissions',
         'permissions_model' => Encore\Admin\Auth\Database\Permission::class,
 
-        'menu_table'  => 'menu',
+        'menu_table'  => 'admin_menu',
         'menu_model'  => Encore\Admin\Auth\Database\Menu::class,
 
-        'role_users_table'       => 'role_administrators',
-        'role_permissions_table' => 'role_permissions',
-        'role_menu_table'        => 'role_menu',
+        'role_users_table'       => 'admin_role_users',
+        'role_permissions_table' => 'admin_role_permissions',
+        'role_menu_table'        => 'admin_role_menu',
     ],
 
     /*
