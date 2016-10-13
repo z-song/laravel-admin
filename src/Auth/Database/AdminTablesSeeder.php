@@ -29,7 +29,7 @@ class AdminTablesSeeder extends Seeder
         ]);
 
         // add role to user.
-        Administrator::first()->roles()->save(Role::first());
+        Administrator::first()->roles()->sync(Role::first()->toArray());
 
         // add default menus.
         Menu::truncate();
