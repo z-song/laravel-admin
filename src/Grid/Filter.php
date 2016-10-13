@@ -36,6 +36,7 @@ class Filter
     {
         $this->model = $model;
 
+
 //        $this->is($this->model->eloquent()->getKeyName());
     }
 
