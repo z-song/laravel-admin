@@ -603,12 +603,20 @@ class Form
             $columns = $field->column();
 
             if (is_string($columns)) {
+
+                if (!array_key_exists($columns, $input)) {
+                    continue;
+                }
+
                 $data[$field->label()] = array_get($input, $columns);
                 $rules[$field->label()] = $rule;
             }
 
             if (is_array($columns)) {
                 foreach ($columns as $key => $column) {
+                    if (!array_key_exists($column, $input)) {
+                        continue;
+                    }
                     $data[$field->label().$key] = array_get($input, $column);
                     $rules[$field->label().$key] = $rule;
                 }
