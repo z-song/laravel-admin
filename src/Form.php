@@ -603,7 +603,6 @@ class Form
             $columns = $field->column();
 
             if (is_string($columns)) {
-
                 if (!array_key_exists($columns, $input)) {
                     continue;
                 }
