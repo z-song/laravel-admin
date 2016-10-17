@@ -45,7 +45,7 @@ class RolesTest extends TestCase
         $this->assertEquals(1, Role::count());
 
         $this->delete('admin/auth/roles/1')
-            ->assertEquals(0, Role::count());
+            ->assertEquals(1, Role::count());
     }
 
     public function testEditRole()
