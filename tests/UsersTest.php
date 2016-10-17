@@ -34,7 +34,7 @@ class UsersTest extends TestCase
             ->see('Create')
             ->submitForm('Submit', $user)
             ->seePageIs('admin/auth/users')
-            ->seeInDatabase('administrators', ['username' => 'Test']);
+            ->seeInDatabase(config('admin.database.users_table'), ['username' => 'Test']);
 
         $this->visit('admin/auth/logout')
             //->dontSeeIsAuthenticated('admin')
@@ -51,7 +51,7 @@ class UsersTest extends TestCase
             ->see('Create')
             ->submitForm('Submit', ['name' => 'test'])
             ->seePageIs('admin/auth/users')
-            ->seeInDatabase('administrators', ['name' => 'test']);
+            ->seeInDatabase(config('admin.database.users_table'), ['name' => 'test']);
     }
 
     public function testResetPassword()

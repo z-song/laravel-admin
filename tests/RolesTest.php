@@ -6,8 +6,6 @@ use Encore\Admin\Facades\Auth;
 
 class RolesTest extends TestCase
 {
-    protected $user;
-
     public function setUp()
     {
         parent::setUp();
@@ -28,17 +26,26 @@ class RolesTest extends TestCase
             ->see('Roles')
             ->submitForm('Submit', ['slug' => 'developer', 'name' => 'Developer...'])
             ->seePageIs('admin/auth/roles')
-            ->seeInDatabase('roles', ['slug' => 'developer'])
-            ->seeInDatabase('roles', ['name' => 'Developer...'])
+            ->seeInDatabase(config('admin.database.roles_table'), ['slug' => 'developer'])
+            ->seeInDatabase(config('admin.database.roles_table'), ['name' => 'Developer...'])
             ->assertEquals(2, Role::count());
+    }
+
+    public function testAddRoleToUser()
+    {
+        $this->visit('admin/auth/users/1/edit')
+            ->see('Edit')
+            ->submitForm('Submit', ['roles' => [2]])
+            ->seePageIs('admin/auth/users')
+            ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 1, 'role_id' => 2]);
     }
 
     public function testDeleteRole()
     {
-        //$this->assertEquals(1, Role::count());
+        $this->assertEquals(1, Role::count());
 
         $this->delete('admin/auth/roles/1')
-            ->assertEquals(1, Role::count());
+            ->assertEquals(0, Role::count());
     }
 
     public function testEditRole()
@@ -47,7 +54,7 @@ class RolesTest extends TestCase
             ->see('Roles')
             ->submitForm('Submit', ['name' => 'blablabla'])
             ->seePageIs('admin/auth/roles')
-            ->seeInDatabase('roles', ['name' => 'blablabla'])
+            ->seeInDatabase(config('admin.database.roles_table'), ['name' => 'blablabla'])
             ->assertEquals(1, Role::count());
     }
 }

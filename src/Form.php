@@ -321,6 +321,7 @@ class Form
 
             switch (get_class($relation)) {
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
+                case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
                     $relation->attach($values[$name]);
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
@@ -395,6 +396,7 @@ class Form
 
             switch (get_class($relation)) {
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
+                case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
                     $relation->sync($prepared[$name]);
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
@@ -603,12 +605,19 @@ class Form
             $columns = $field->column();
 
             if (is_string($columns)) {
+                if (!array_key_exists($columns, $input)) {
+                    continue;
+                }
+
                 $data[$field->label()] = array_get($input, $columns);
                 $rules[$field->label()] = $rule;
             }
 
             if (is_array($columns)) {
                 foreach ($columns as $key => $column) {
+                    if (!array_key_exists($column, $input)) {
+                        continue;
+                    }
                     $data[$field->label().$key] = array_get($input, $column);
                     $rules[$field->label().$key] = $rule;
                 }

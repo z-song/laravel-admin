@@ -5,8 +5,6 @@ use Encore\Admin\Facades\Auth;
 
 class IndexTest extends TestCase
 {
-    protected $user;
-
     public function setUp()
     {
         parent::setUp();
