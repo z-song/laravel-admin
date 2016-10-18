@@ -265,14 +265,17 @@ EOT;
     /**
      * Wrap value as a image.
      *
+     * @param string $server
      * @param int $width
      * @param int $height
      *
      * @return $this
      */
-    public function image($width = 200, $height = 200)
+    public function image($server = '', $width = 200, $height = 200)
     {
-        $wrapper = "<img src='/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class=\'img\' />";
+        $server = $server ?: config('admin.upload.host');
+
+        $wrapper = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class=\'img\' />";
 
         $this->htmlWrapper($wrapper);
 
