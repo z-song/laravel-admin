@@ -15,8 +15,15 @@ return [
     ],
 
     'upload'  => [
-        'image'  => base_path('public/upload/image'),
-        'file'   => base_path('public/upload/file'),
+
+        'disk' => 'admin',
+
+        'directory'  => [
+            'image'  => 'image',
+            'file'   => 'file',
+        ],
+
+        'host' => 'http://localhost:8000/upload/',
     ],
 
     'database' => [

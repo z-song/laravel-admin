@@ -11,6 +11,11 @@ class Image extends File
 
     protected $calls = [];
 
+    public function defaultStorePath()
+    {
+        return config('admin.upload.directory.image');
+    }
+
     public function prepare(UploadedFile $image = null)
     {
         if (is_null($image)) {
@@ -21,15 +26,15 @@ class Image extends File
             return $this->original;
         }
 
-        $this->directory = $this->directory ? $this->directory : config('admin.upload.image');
+        $this->directory = $this->directory ?: $this->defaultStorePath();
 
-        $this->name = $this->name ? $this->name : $image->getClientOriginalName();
+        $this->name = $this->name ?: $image->getClientOriginalName();
 
         $target = $this->uploadAndDeleteOriginal($image);
 
         $target = $this->executeCalls($target);
 
-        return trim(str_replace(public_path(), '', $target->__toString()), '/');
+        return $target;
     }
 
     /**
@@ -52,7 +57,7 @@ class Image extends File
 
     protected function preview()
     {
-        return '<img src="/'.$this->value.'" class="file-preview-image">';
+        return '<img src="'.$this->objectUrl($this->value).'" class="file-preview-image">';
     }
 
     public function render()

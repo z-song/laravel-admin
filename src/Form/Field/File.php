@@ -4,6 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
@@ -17,9 +18,12 @@ class File extends Field
 
     protected $options = [];
 
+    protected $storage = '';
+
     public function __construct($column, $arguments = [])
     {
         $this->initOptions();
+        $this->initStorage();
 
         parent::__construct($column, $arguments);
     }
@@ -31,6 +35,16 @@ class File extends Field
             'showUpload'        => false,
             'language'          => config('app.locale'),
         ];
+    }
+
+    protected function initStorage()
+    {
+        $this->storage = Storage::disk(config('admin.upload.disk'));
+    }
+
+    public function defaultStorePath()
+    {
+        return config('admin.upload.directory.file');
     }
 
     public function move($directory, $name = null)
@@ -52,14 +66,11 @@ class File extends Field
             return $this->original;
         }
 
-        $this->directory = $this->directory ?
-            $this->directory : config('admin.upload.file');
+        $this->directory = $this->directory ?: $this->defaultStorePath();
 
-        $this->name = $this->name ? $this->name : $file->getClientOriginalName();
+        $this->name = $this->name ?: $file->getClientOriginalName();
 
-        $target = $this->uploadAndDeleteOriginal($file);
-
-        return trim(str_replace(public_path(), '', $target->__toString()), '/');
+        return $this->uploadAndDeleteOriginal($file);
     }
 
     /**
@@ -71,7 +82,9 @@ class File extends Field
     {
         $this->renameIfExists($file);
 
-        $target = $file->move($this->directory, $this->name);
+        $target = $this->directory.'/'.$this->name;
+
+        $this->storage->put($target, file_get_contents($file->getRealPath()));
 
         $this->destroy();
 
@@ -85,11 +98,11 @@ class File extends Field
         return <<<EOT
 <div class="file-preview-other-frame">
    <div class="file-preview-other">
-   <span class="file-icon-4x"><i class="glyphicon glyphicon-file"></i></span>
+   <span class="file-icon-4x"><i class="fa fa-file"></i></span>
 </div>
    </div>
    <div class="file-preview-other-footer"><div class="file-thumbnail-footer">
-    <div class="file-footer-caption" title="realm_demo.realm">{$fileName}</div>
+    <div class="file-footer-caption">{$fileName}</div>
 </div></div>
 EOT;
     }
@@ -99,6 +112,11 @@ EOT;
         $this->options = array_merge($this->options, $options);
 
         return $this;
+    }
+
+    public function objectUrl($path)
+    {
+        return trim(config('admin.upload.host'), '/') .'/'. trim($path, '/');
     }
 
     public function render()
@@ -151,13 +169,13 @@ EOT;
      */
     public function renameIfExists(UploadedFile $file)
     {
-        if (file_exists("$this->directory/$this->name")) {
+        if ($this->storage->exists("$this->directory/$this->name")) {
             $this->name = md5(uniqid()).'.'.$file->guessExtension();
         }
     }
 
     public function destroy()
     {
-        @unlink($this->original);
+        $this->storage->delete($this->original);
     }
 }
