@@ -18,7 +18,7 @@ CREATE TABLE `movies` (
 
 ```
 
-对应的数据模型为`App\Models\Movie`，下面的代码可以生成`users`的数据表单：
+对应的数据模型为`App\Models\Movie`，下面的代码可以生成`movies`的数据表单：
 
 ```php
 
@@ -80,9 +80,47 @@ $form->text($column, [$label])->rules('required|min:10');
 $form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
+或者通过ajax加载option选项
+```php
+$form->select($column[, $label])->options('/admin/demo/options');
+```
+
+url `/admin/demo/options`返回json格式：
+```
+[
+    {
+        "id": 1,
+        "text": "hello"
+    },
+    {
+        "id": 2,
+        "text": "world"
+    },
+]
+```
+
 #### 多选框
 ```php
 $form->multipleSelect($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+```
+
+或者通过ajax加载option选项
+```php
+$form->multipleSelect($column[, $label])->options('/admin/demo/options');
+```
+
+url `/admin/demo/options`返回json格式：
+```
+[
+    {
+        "id": 1,
+        "text": "hello"
+    },
+    {
+        "id": 2,
+        "text": "world"
+    },
+]
 ```
 
 #### textarea输入框:
