@@ -31,17 +31,18 @@ class Select extends Field
     }
 
     /**
-     * Load options from remote
+     * Load options from remote.
      *
      * @param string $url
-     * @param array $parameters
-     * @param array $options
+     * @param array  $parameters
+     * @param array  $options
+     *
      * @return $this
      */
     protected function loadOptionsFromRemote($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters)
+            'url' => $url.'?'.http_build_query($parameters),
         ];
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
