@@ -116,7 +116,7 @@ EOT;
 
     public function objectUrl($path)
     {
-        return trim(config('admin.upload.host'), '/') .'/'. trim($path, '/');
+        return trim(config('admin.upload.host'), '/').'/'.trim($path, '/');
     }
 
     public function render()
