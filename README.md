@@ -251,6 +251,11 @@ $router->resource('users', UserController::class);
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
+交流
+------------
+QQ群:278455482
+
+
 License
 ------------
 `laravel-admin` is licensed under [The MIT License (MIT)](LICENSE).

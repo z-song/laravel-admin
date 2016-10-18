@@ -183,7 +183,7 @@ class Row
      */
     public function __get($attr)
     {
-        return $this->data[$attr] ?: null;
+        return array_get($this->data, $attr);
     }
 
     /**
