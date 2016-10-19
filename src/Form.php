@@ -424,9 +424,9 @@ class Form
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
-            $value = static::getDataByColumn($updates, $columns);
+            $value = $this->getDataByColumn($updates, $columns);
 
-            if ($value !== '' && empty($value) && !$field instanceof File) {
+            if ($value !== '' && $value !== '0' && !$field instanceof File && empty($value)) {
                 continue;
             }
 
@@ -513,7 +513,7 @@ class Form
      *
      * @return array|mixed
      */
-    protected static function getDataByColumn($data, $columns)
+    protected function getDataByColumn($data, $columns)
     {
         if (is_string($columns)) {
             return array_get($data, $columns);
