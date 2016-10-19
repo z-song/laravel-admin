@@ -74,9 +74,6 @@ php artisan admin:install
 
 `app/Admin/routes.php`文件用来配置后台路由，详细使用请阅读[路由配置](/docs/zh/router.md)。
 
-`app/Admin/menu.php`文件用来配置后台左侧菜单栏，详细使用请阅读[菜单栏配置](/docs/zh/menu.md)。
-
-
 `app/Admin/Controllers`目录用来存放后台路由器文件，该目录下的`HomeController.php`文件是后台首页的显示控制器，`ExampleController.php`为实例文件。
 
 快速开始
