@@ -217,7 +217,7 @@ $router->resource('users', UserController::class);
 
 ### 3.添加左侧菜单栏连接
 
-打开`http://localhost:8000/admin/auth/menu`,对应的menu
+打开`http://localhost:8000/admin/auth/menu`,添加对应的menu
 
 然后就能在后台管理页面的左侧边栏看到用户管理页面的链接入口了。
 
