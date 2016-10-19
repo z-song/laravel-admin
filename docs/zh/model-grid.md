@@ -172,3 +172,71 @@ $grid->filter(function($filter){
     $filter->between('created_at', 'Created Time')->datetime();
 });
 ```
+
+## 关联模型
+
+下面两张表通过`profiles.user_id`字段做一对一关联
+
+```sql
+
+CREATE TABLE `users` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `profiles` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`age` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`gender` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+
+对应的数据模分别为:
+
+```php
+
+class User extends Model
+{
+    public function profile()
+    {
+        $this->hasOne(Profile::class);
+    }
+}
+
+class Profile extends Model
+{
+
+}
+
+```
+
+通过下面的代码可以关联在一个grid里面:
+
+```php
+Admin::grid(User::class, function (Grid $grid) {
+
+    $grid->id('ID')->sortable();
+
+    $grid->name();
+    $grid->email();
+    
+    $grid->column('profile.age');
+    $grid->column('profile.gender');
+
+    //or
+    $grid->profile()->age();
+    $grid->profile()->gender();
+
+    $grid->created_at();
+    $grid->updated_at();
+});
+
+```
