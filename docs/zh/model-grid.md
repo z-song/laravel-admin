@@ -148,6 +148,11 @@ $grid->rows(function($row){
     if($row->id % 3) {
         $row->action('edit');
     }
+    
+    // 添加自定义操作按钮
+    $row->actions()->add(function ($row) {
+        return "<a href='/url/{$row->id}'><i class='fa fa-eye'></i></a>";
+    });
 
     //指定列添加自定义操作按钮
     if($row->id % 2) {
