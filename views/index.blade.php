@@ -88,7 +88,10 @@
 
 <script>
 
-    $(document).pjax('a:not(a[target="_blank"])', '#pjax-container');
+    $(document).pjax('a:not(a[target="_blank"])', {
+        timeout: 5000,
+        container: '#pjax-container'
+    });
 
     $(document).on("pjax:popstate", function() {
 
