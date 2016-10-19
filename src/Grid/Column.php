@@ -266,8 +266,8 @@ EOT;
      * Wrap value as a image.
      *
      * @param string $server
-     * @param int $width
-     * @param int $height
+     * @param int    $width
+     * @param int    $height
      *
      * @return $this
      */
