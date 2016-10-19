@@ -70,8 +70,23 @@ class UserController extends Controller
             $grid->username(trans('admin::lang.username'));
             $grid->name(trans('admin::lang.name'));
 
+            $grid->roles(trans('admin::lang.roles'))->value(function ($roles) {
+
+                $roles = array_map(function ($role) {
+                    return "<span class='label label-success'>{$role['name']}</span>";
+                }, $roles);
+
+                return join('&nbsp;', $roles);
+            });
+
             $grid->created_at(trans('admin::lang.created_at'));
             $grid->updated_at(trans('admin::lang.updated_at'));
+
+            $grid->rows(function($row){
+                if($row->id == 1) {
+                    $row->actions('edit');
+                }
+            });
         });
     }
 
