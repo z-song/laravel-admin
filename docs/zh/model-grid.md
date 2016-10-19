@@ -175,7 +175,9 @@ $grid->filter(function($filter){
 
 ## 关联模型
 
-下面两张表通过`profiles.user_id`字段做一对一关联
+
+### 一对一
+`users`表和`profiles`表通过`profiles.user_id`字段生成一对一关联
 
 ```sql
 
@@ -213,7 +215,7 @@ class User extends Model
 
 class Profile extends Model
 {
-
+    $this->hasOne(User::class);
 }
 
 ```
@@ -234,6 +236,165 @@ Admin::grid(User::class, function (Grid $grid) {
     //or
     $grid->profile()->age();
     $grid->profile()->gender();
+
+    $grid->created_at();
+    $grid->updated_at();
+});
+
+```
+
+### 一对多
+
+`posts`表和`comments`表通过`comments.post_id`字段生成一对多关联
+
+```sql
+
+CREATE TABLE `posts` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `comments` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`post_id` int(10) unsigned NOT NULL,
+`content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+
+对应的数据模分别为:
+
+```php
+
+class Post extends Model
+{
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+}
+
+class Comment extends Model
+{
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+}
+
+```
+
+通过下面的代码可以让两个模型在grid里面互相关联:
+
+```php
+
+return Admin::grid(Post::class, function (Grid $grid) {
+    $grid->id('id')->sortable();
+    $grid->title();
+    $grid->content();
+
+    $grid->comments('评论数')->value(function ($comments) {
+        $count = count($comments);
+        return "<span class='label label-warning'>{$count}</span>";
+    });
+
+    $grid->created_at();
+    $grid->updated_at();
+});
+
+
+return Admin::grid(Comment::class, function (Grid $grid) {
+    $grid->id('id');
+    $grid->post()->title();
+    $grid->content();
+
+    $grid->created_at()->sortable();
+    $grid->updated_at();
+});
+
+```
+
+### 多对多
+
+`users`和`roles`表通过中间表`role_users`产生多对多关系
+
+```sql
+
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(190) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_username_unique` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+CREATE TABLE `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_name_unique` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+CREATE TABLE `role_users` (
+  `role_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  KEY `role_users_role_id_user_id_index` (`role_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+```
+
+对应的数据模分别为:
+
+```php
+
+class User extends Model
+{
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+}
+
+class Role extends Model
+{
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+}
+
+```
+
+通过下面的代码可以让两个模型在grid里面互相关联:
+
+
+```php
+return Admin::grid(User::class, function (Grid $grid) {
+    $grid->id('ID')->sortable();
+    $grid->username();
+    $grid->name();
+
+    $grid->roles()->value(function ($roles) {
+
+        $roles = array_map(function ($role) {
+            return "<span class='label label-success'>{$role['name']}</span>";
+        }, $roles);
+
+        return join('&nbsp;', $roles);
+    });
 
     $grid->created_at();
     $grid->updated_at();
