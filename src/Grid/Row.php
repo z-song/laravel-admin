@@ -197,7 +197,10 @@ class Row
     public function column($name, $value = null)
     {
         if (is_null($value)) {
-            return array_get($this->data, $name);
+
+            $column = array_get($this->data, $name);
+
+            return is_string($column) ? $column : var_export($column, true);
         }
 
         if (is_callable($value)) {
