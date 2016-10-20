@@ -73,8 +73,8 @@ class RoleController extends Controller
             $grid->created_at(trans('admin::lang.created_at'));
             $grid->updated_at(trans('admin::lang.updated_at'));
 
-            $grid->rows(function($row){
-                if($row->slug == 'administrator') {
+            $grid->rows(function ($row) {
+                if ($row->slug == 'administrator') {
                     $row->actions('edit');
                 }
             });
