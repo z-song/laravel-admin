@@ -2,6 +2,8 @@
 
 return [
 
+    'name'  => 'Laravel-admin',
+
     'prefix'    => 'admin',
 
     'directory' => app_path('Admin'),

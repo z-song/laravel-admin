@@ -5,6 +5,7 @@ namespace Encore\Admin\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\DomCrawler\Crawler;
 
 class PjaxMiddleware
@@ -21,7 +22,7 @@ class PjaxMiddleware
     {
         $response = $next($request);
 
-        if (!$request->pjax() || $response->isRedirection()) {
+        if (!$request->pjax() || $response->isRedirection() || Auth::guard('admin')->guest()) {
             return $response;
         }
 
@@ -41,6 +42,17 @@ class PjaxMiddleware
      */
     protected function filterResponse(Response $response, $container)
     {
+        if (!$response->isSuccessful()) {
+
+            $crawler = new Crawler($response->getContent());
+
+            $response->setContent(
+                $this->fetchContents($crawler, '.exception_message')
+            );
+
+            return $this;
+        }
+
         $crawler = new Crawler($response->getContent());
 
         $response->setContent(
