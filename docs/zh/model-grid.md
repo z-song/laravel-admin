@@ -122,6 +122,11 @@ $grid->email()->value(function ($email) {
 
 ```
 
+#### 禁用创建按钮
+```php
+$grid->disableCreation();
+```
+
 #### 禁用批量删除按钮
 ```php
 $grid->disableBatchDeletion();
