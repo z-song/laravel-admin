@@ -101,11 +101,18 @@ class Grid
     protected $keyName = 'id';
 
     /**
-     * Allow batch allow.
+     * Allow batch deletion.
      *
      * @var bool
      */
     protected $allowBatchDeletion = true;
+
+    /**
+     * Allow creation.
+     *
+     * @var bool
+     */
+    protected $allowCreation = true;
 
     /**
      * Allow actions.
@@ -352,6 +359,24 @@ class Grid
     public function disableBatchDeletion()
     {
         $this->allowBatchDeletion = false;
+    }
+
+    /**
+     * Disable creation.
+     */
+    public function disableCreation()
+    {
+        $this->allowCreation = false;
+    }
+
+    /**
+     * If allow creation.
+     *
+     * @return bool
+     */
+    public function allowCreation()
+    {
+        return $this->allowCreation;
     }
 
     /**
