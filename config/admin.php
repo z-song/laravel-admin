@@ -2,6 +2,8 @@
 
 return [
 
+    'name'  => 'Laravel-admin',
+
     'prefix'    => 'admin',
 
     'directory' => app_path('Admin'),
@@ -54,7 +56,7 @@ return [
     |               | skin-green                              |
     |---------------------------------------------------------|
      */
-    'skin'    => 'skin-green',
+    'skin'    => 'skin-blue',
 
     /*
     |---------------------------------------------------------|
@@ -65,7 +67,7 @@ return [
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
      */
-    'layout'  => [],
+    'layout'  => ['sidebar-mini'],
 
     'version'   => '1.0',
 ];

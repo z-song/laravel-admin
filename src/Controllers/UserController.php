@@ -86,6 +86,8 @@ class UserController extends Controller
                     $row->actions('edit');
                 }
             });
+
+            $grid->disableBatchDeletion();
         });
     }
 
