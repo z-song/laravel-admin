@@ -3,6 +3,8 @@ laravel-admin
 
 [![Build Status](https://travis-ci.org/z-song/laravel-admin.svg?branch=master)](https://travis-ci.org/z-song/laravel-admin)
 [![StyleCI](https://styleci.io/repos/48796179/shield)](https://styleci.io/repos/48796179)
+[![Packagist](https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000)](https://packagist.org/packages/encore/laravel-admin)
+[![Total Downloads](https://img.shields.io/packagist/dt/encore/laravel-admin.svg?style=flat-square)](https://packagist.org/packages/encore/laravel-admin)
 
 `laravel-admin` 是一个可以快速帮你构建后台管理的工具，它提供的页面组件和表单元素等功能，能帮助你使用很少的代码就实现功能完善的后台管理功能。
 
@@ -53,12 +55,13 @@ php artisan admin:install
 - [显示布局](/docs/zh/layout.md)
 - [数据模型表格](/docs/zh/model-grid.md)
 - [数据模型表单](/docs/zh/model-form.md)
+  - [图片/文件上传](/docs/zh/form-upload.md)
 - [组件](/docs/zh/table.md)
   - [表格](/docs/zh/table.md)
   - [表单](/docs/zh/form.md)
   - [盒子](/docs/zh/box.md)
   - [信息盒子](/docs/zh/info-box.md)
-  - [选项卡](/docs/zh/box.md)
+  - [选项卡](/docs/zh/tab.md)
   - [滑动相册](/docs/zh/carousel.md)
   - [折叠容器](/docs/zh/collapse.md)
   - 数据图表 TODO
@@ -248,6 +251,11 @@ $router->resource('users', UserController::class);
 + [jquery-pjax](https://github.com/defunkt/jquery-pjax)
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
+
+交流
+------------
+QQ群:278455482
+
 
 License
 ------------
