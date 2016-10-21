@@ -100,7 +100,7 @@ abstract class AbstractFilter
         $value = array_get($inputs, $this->column);
 
         if (!isset($value)) {
-            return;
+            return null;
         }
 
         $this->value = $value;
