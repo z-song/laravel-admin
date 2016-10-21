@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Grid;
 
+use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter\AbstractFilter;
 use Illuminate\Support\Facades\Input;
 use ReflectionClass;
@@ -18,6 +19,11 @@ use ReflectionClass;
 class Filter
 {
     /**
+     * @var Grid
+     */
+    protected $grid;
+
+    /**
      * @var
      */
     protected $model;
@@ -32,8 +38,16 @@ class Filter
      */
     protected $allows = ['is', 'like', 'gt', 'lt', 'between'];
 
-    public function __construct(Model $model)
+    /**
+     * Create a new filter instance.
+     *
+     * @param Grid $grid
+     * @param Model $model
+     */
+    public function __construct(Grid $grid, Model $model)
     {
+        $this->grid = $grid;
+
         $this->model = $model;
 
         $this->is($this->model->eloquent()->getKeyName());
@@ -94,13 +108,21 @@ class Filter
     }
 
     /**
+     * @return Grid
+     */
+    public function getGrid()
+    {
+        return $this->grid;
+    }
+
+    /**
      * Get the string contents of the filter view.
      *
      * @return \Illuminate\View\View|string
      */
     public function render()
     {
-        return view('admin::grid.filter')->with(['filters' => $this->filters()]);
+        return view('admin::grid.filter')->with(['filters' => $this->filters(), 'grid' => $this->grid]);
     }
 
     /**

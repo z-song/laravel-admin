@@ -1,5 +1,5 @@
 <div class="form-inline pull-right">
-    <form action="" method="get" pjax-container>
+    <form action="/{!! $grid->resource() !!}" method="get" pjax-container>
         <fieldset>
 
             @foreach($filters as $filter)

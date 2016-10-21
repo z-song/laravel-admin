@@ -6,11 +6,13 @@ class Gt extends AbstractFilter
 {
     public function condition($inputs)
     {
-        if (!isset($inputs[$this->column])) {
-            return;
+        $value = array_get($inputs, $this->column);
+
+        if (is_null($value)) {
+            return null;
         }
 
-        $this->value = $inputs[$this->column];
+        $this->value = $value;
 
         return $this->buildCondition($this->column, '>=', $this->value);
     }
