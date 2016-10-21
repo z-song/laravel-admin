@@ -41,7 +41,7 @@ class Filter
     /**
      * Create a new filter instance.
      *
-     * @param Grid $grid
+     * @param Grid  $grid
      * @param Model $model
      */
     public function __construct(Grid $grid, Model $model)

@@ -43,7 +43,6 @@ class PjaxMiddleware
     protected function filterResponse(Response $response, $container)
     {
         if (!$response->isSuccessful()) {
-
             $crawler = new Crawler($response->getContent());
 
             $response->setContent(
