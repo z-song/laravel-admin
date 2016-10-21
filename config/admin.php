@@ -2,6 +2,8 @@
 
 return [
 
+    'name'  => 'Laravel-admin',
+
     'prefix'    => 'admin',
 
     'directory' => app_path('Admin'),
@@ -15,8 +17,15 @@ return [
     ],
 
     'upload'  => [
-        'image'  => base_path('public/upload/image'),
-        'file'   => base_path('public/upload/file'),
+
+        'disk' => 'admin',
+
+        'directory'  => [
+            'image'  => 'image',
+            'file'   => 'file',
+        ],
+
+        'host' => 'http://localhost:8000/upload/',
     ],
 
     'database' => [
@@ -47,7 +56,7 @@ return [
     |               | skin-green                              |
     |---------------------------------------------------------|
      */
-    'skin'    => 'skin-green',
+    'skin'    => 'skin-blue',
 
     /*
     |---------------------------------------------------------|
@@ -58,7 +67,7 @@ return [
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
      */
-    'layout'  => [],
+    'layout'  => ['sidebar-mini'],
 
     'version'   => '1.0',
 ];

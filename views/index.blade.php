@@ -79,6 +79,7 @@
 <script src="{{ asset ("/packages/admin/codemirror/mode/javascript/javascript.js") }}"></script>
 <script src="{{ asset ("/packages/admin/codemirror/addon/edit/matchbrackets.js") }}"></script>
 <script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
+<script src="{{ asset ("/packages/admin/noty/jquery.noty.packaged.min.js") }}"></script>
 
 @if(config('app.locale') == 'zh_CN')
 <script src="{{ asset ("http://map.qq.com/api/js?v=2.exp") }}"></script>
@@ -88,7 +89,26 @@
 
 <script>
 
-    $(document).pjax('a:not(a[target="_blank"])', '#pjax-container');
+    $(document).pjax('a:not(a[target="_blank"])', {
+        timeout: 5000,
+        container: '#pjax-container'
+    });
+
+    $(document).on('submit', 'form[pjax-container]', function(event) {
+        $.pjax.submit(event, '#pjax-container')
+    });
+
+    $.noty.defaults.layout = 'topRight';
+    $.noty.defaults.theme = 'relax';
+
+    $(document).on('pjax:error', function(event, xhr) {
+        noty({
+            text: "<strong>Warning!</strong><br/>"+xhr.responseText,
+            type:'warning',
+            timeout: 3000
+        });
+        return false;
+    });
 
     $(document).on("pjax:popstate", function() {
 

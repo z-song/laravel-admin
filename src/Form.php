@@ -208,6 +208,9 @@ class Form
         $ids = explode(',', $id);
 
         foreach ($ids as $id) {
+            if (empty($id)) {
+                continue;
+            }
             $this->deleteFilesAndImages($id);
             $this->model->find($id)->delete();
         }
@@ -400,11 +403,20 @@ class Form
                     $relation->sync($prepared[$name]);
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
-                    foreach ($prepared[$name] as $column => $value) {
-                        $this->model->$name->setAttribute($column, $value);
+
+                    $related = $this->model->$name;
+
+                    // if related is empty
+                    if (is_null($related)) {
+                        $related = $relation->getRelated();
+                        $related->{$relation->getForeignKey()} = $this->model->{$this->model->getKeyName()};
                     }
 
-                    $this->model->$name->save();
+                    foreach ($prepared[$name] as $column => $value) {
+                        $related->setAttribute($column, $value);
+                    }
+
+                    $related->save();
                     break;
             }
         }
@@ -424,9 +436,9 @@ class Form
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
-            $value = static::getDataByColumn($updates, $columns);
+            $value = $this->getDataByColumn($updates, $columns);
 
-            if ($value !== '' && empty($value) && !$field instanceof File) {
+            if ($value !== '' && $value !== '0' && !$field instanceof File && empty($value)) {
                 continue;
             }
 
@@ -513,7 +525,7 @@ class Form
      *
      * @return array|mixed
      */
-    protected static function getDataByColumn($data, $columns)
+    protected function getDataByColumn($data, $columns)
     {
         if (is_string($columns)) {
             return array_get($data, $columns);

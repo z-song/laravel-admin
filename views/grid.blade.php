@@ -4,10 +4,12 @@
 
         <div class="box-tools">
             {!! $grid->renderFilter() !!}
+            @if($grid->allowCreation())
             <div class="btn-group pull-right" style="margin-right: 10px">
                 <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">{{ trans('admin::lang.new') }}</a>
                 {{--<a href="/{{$grid->resource()}}/export" class="btn btn-sm btn-primary">{{ trans('admin::lang.export') }}</a>--}}
             </div>
+            @endif
 
         </div>
     </div>

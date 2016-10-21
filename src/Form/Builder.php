@@ -163,7 +163,7 @@ class Builder
             $html[] = "$name=\"$value\"";
         }
 
-        return '<form '.implode(' ', $html).'>';
+        return '<form '.implode(' ', $html).' pjax-container>';
     }
 
     /**
