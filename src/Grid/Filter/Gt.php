@@ -9,7 +9,7 @@ class Gt extends AbstractFilter
         $value = array_get($inputs, $this->column);
 
         if (is_null($value)) {
-            return null;
+            return;
         }
 
         $this->value = $value;
