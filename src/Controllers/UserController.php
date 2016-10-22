@@ -12,7 +12,7 @@ use Illuminate\Routing\Controller;
 
 class UserController extends Controller
 {
-    use AdminController;
+    use ModelForm;
 
     /**
      * Index interface.

@@ -8,12 +8,14 @@ class MultipleSelect extends Select
     {
         $relations = array_get($data, $this->column);
 
-        if (!is_array($relations)) {
-            return;
+        if (is_string($relations)) {
+            $this->value = explode(',', $relations);
         }
 
-        foreach ($relations as $relation) {
-            $this->value[] = array_pop($relation['pivot']);
+        if (is_array($relations)) {
+            foreach ($relations as $relation) {
+                $this->value[] = array_pop($relation['pivot']);
+            }
         }
     }
 
@@ -21,8 +23,14 @@ class MultipleSelect extends Select
     {
         $relations = array_get($data, $this->column);
 
-        foreach ($relations as $relation) {
-            $this->original[] = array_pop($relation['pivot']);
+        if (is_string($relations)) {
+            $this->original = explode(',', $relations);
+        }
+
+        if (is_array($relations)) {
+            foreach ($relations as $relation) {
+                $this->original[] = array_pop($relation['pivot']);
+            }
         }
     }
 
