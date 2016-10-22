@@ -13,7 +13,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class Form.
@@ -260,7 +259,7 @@ class Form
 
             foreach ($inserts as $column => $value) {
                 if (is_array($value)) {
-                    $value = join(',', $value);
+                    $value = implode(',', $value);
                 }
                 $this->model->setAttribute($column, $value);
             }
@@ -302,6 +301,7 @@ class Form
      * Get inputs for relations.
      *
      * @param array $inputs
+     *
      * @return array
      */
     protected function getRelationInputs($inputs = [])
@@ -393,9 +393,8 @@ class Form
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
-
                 if (is_array($value)) {
-                    $value = join(',', $value);
+                    $value = implode(',', $value);
                 }
 
                 $this->model->setAttribute($column, $value);
