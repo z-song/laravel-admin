@@ -5,6 +5,7 @@ class LaravelTest extends TestCase
     public function testLaravel()
     {
         $this->visit('/')
-            ->see('Laravel 5');
+            ->assertResponseStatus(200)
+            ->see('Laravel');
     }
 }
