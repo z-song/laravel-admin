@@ -13,7 +13,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class Form.
