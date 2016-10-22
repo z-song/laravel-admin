@@ -158,7 +158,7 @@ class Builder
             $attributes['enctype'] = 'multipart/form-data';
         }
 
-        $html = '';
+        $html = [];
         foreach ($attributes as $name => $value) {
             $html[] = "$name=\"$value\"";
         }
