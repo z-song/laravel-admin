@@ -11,7 +11,7 @@ use Illuminate\Routing\Controller;
 
 class PermissionController extends Controller
 {
-    use AdminController;
+    use ModelForm;
 
     /**
      * Index interface.
