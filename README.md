@@ -16,7 +16,7 @@ Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd
 截图
 ------------
 
-![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625223/2dfce286-9945-11e6-8fa0-6916f28c5e4a.jpg)
+![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625297/3b3deb64-9947-11e6-807c-cffa999004be.jpg)
 
 安装
 ------------
