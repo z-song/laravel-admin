@@ -11,12 +11,12 @@ laravel-admin
 
 [Demo](http://120.26.143.106/admin) 账号/密码:admin/admin
 
+Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
+
 截图
 ------------
 
-![grid](https://cloud.githubusercontent.com/assets/1479100/16609399/894e0832-4386-11e6-8709-1cc7ce429e7c.png)
-
-![form](https://cloud.githubusercontent.com/assets/1479100/12708198/fc6725a8-c8d7-11e5-876f-5c4f00ded0ff.png)
+![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625223/2dfce286-9945-11e6-8fa0-6916f28c5e4a.jpg)
 
 安装
 ------------
@@ -98,113 +98,13 @@ CREATE TABLE `users` (
 `laravel-admin`可以通过使用以下几步来快速生成`users`表的`CURD`操作页面：
 
 ### 1.添加路由器
+
+使用下面的命令来创建一个对应`App\User`模型的路由器
 ```php
-<?php
-
-namespace App\Admin\Controllers;
-
-use App\User;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
-use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Content;
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\ModelForm;
-
-class UserController extends Controller
-{
-    use ModelForm;
-
-    /**
-     * Index interface.
-     *
-     * @return Content
-     */
-    public function index()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->grid());
-        });
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     * @return Content
-     */
-    public function edit($id)
-    {
-        return Admin::content(function (Content $content) use ($id) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
-        });
-    }
-
-    /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form());
-        });
-    }
-
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return Admin::grid(User::class, function (Grid $grid) {
-
-            $grid->id('ID')->sortable();
-
-            $grid->name('用户名');
-            $grid->email('邮箱');
-
-            $grid->created_at();
-            $grid->updated_at();
-        });
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        return Admin::form(User::class, function (Form $form) {
-
-            $form->display('id', 'ID');
-            
-            $form->text('name', '用户名');
-            $form->email('email', '用户邮箱');
-            $form->password('password', '密码');
-            
-            $form->dateTime('created_at', 'Created At');
-            $form->dateTime('updated_at', 'Updated At');
-        });
-    }
-}
-
+php artisan admin:make UserController --model=App\\User
 ```
+
+上面的命令会创建路由器文件`app/Admin/Controllers/UserController.php`.
 
 ### 2.添加路由配置
 
@@ -236,8 +136,8 @@ $router->resource('users', UserController::class);
 + [Tencent map](http://lbs.qq.com/)
 + [bootstrap-fileinput](https://github.com/kartik-v/bootstrap-fileinput)
 + [jquery-pjax](https://github.com/defunkt/jquery-pjax)
-
-Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
++ [Nestable](http://dbushell.github.io/Nestable/)
++ [noty](http://ned.im/noty/)
 
 交流
 ------------
