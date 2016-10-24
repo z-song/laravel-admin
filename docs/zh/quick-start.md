@@ -1,6 +1,7 @@
-# 快速开始
+快速开始
+------------
 
-`Laravel`自带的`users`表结构为：
+用`Laravel`自带的`users`表举例,表结构为：
 ```sql
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -16,116 +17,16 @@ CREATE TABLE `users` (
 ```
 对应的数据模型为文件 `App\User.php`
 
-`laravel-admin`可以通过使用以下几步来快速生成`users`表的CURD操作页面：
+`laravel-admin`可以通过使用以下几步来快速生成`users`表的`CURD`操作页面：
 
 ### 1.添加路由器
+
+使用下面的命令来创建一个对应`App\User`模型的路由器
 ```php
-<?php
-
-namespace App\Admin\Controllers;
-
-use App\User;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
-use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Content;
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\ModelForm;
-
-class UserController extends Controller
-{
-    use ModelForm;
-
-    /**
-     * Index interface.
-     *
-     * @return Content
-     */
-    public function index()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->grid());
-        });
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     * @return Content
-     */
-    public function edit($id)
-    {
-        return Admin::content(function (Content $content) use ($id) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
-        });
-    }
-
-    /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form());
-        });
-    }
-
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return Admin::grid(User::class, function (Grid $grid) {
-
-            $grid->id('ID')->sortable();
-
-            $grid->name('用户名');
-            $grid->email('邮箱');
-
-            $grid->created_at();
-            $grid->updated_at();
-        });
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        return Admin::form(User::class, function (Form $form) {
-
-            $form->display('id', 'ID');
-            
-            $form->text('name', '用户名');
-            $form->email('email', '用户邮箱');
-            $form->password('password', '密码');
-            
-            $form->dateTime('created_at', 'Created At');
-            $form->dateTime('updated_at', 'Updated At');
-        });
-    }
-}
-
+php artisan admin:make UserController --model=App\\User
 ```
+
+上面的命令会创建路由器文件`app/Admin/Controllers/UserController.php`.
 
 ### 2.添加路由配置
 
@@ -136,8 +37,10 @@ $router->resource('users', UserController::class);
 
 ### 3.添加左侧菜单栏连接
 
-打开http://localhost:8000/admin/auth/menu ,添加对应的menu
+打开`http://localhost:8000/admin/auth/menu`,添加对应的menu
 
 然后就能在后台管理页面的左侧边栏看到用户管理页面的链接入口了。
 
-对于数据表格(model-grid)和数据表单(model-form)的详细使用请查看[model-grid]()和[model-form]()。
+### 4.创建表格表单
+
+剩下的工作就是构建数据表格和表单了，打开 `app/Admin/Contollers/UserController.php`,找到`form()`和`grid()`方法，然添加构建代码,更多详细使用请查看[model-grid](/docs/zh/model-grid.md)和[model-form](/docs/zh/model-form.md)。
