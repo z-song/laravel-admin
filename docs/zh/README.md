@@ -72,6 +72,14 @@ php artisan admin:install
 ------------
 安装完成之后，后台的安装目录为`app/Admin`，之后大部分的后台开发编码工作都是在这个目录下进行。
 
+```
+app/Admin
+├── Controllers
+│   ├── ExampleController.php
+│   └── HomeController.php
+└── routes.php
+```
+
 `app/Admin/routes.php`文件用来配置后台路由，详细使用请阅读[路由配置](/docs/zh/router.md)。
 
 `app/Admin/Controllers`目录用来存放后台路由器文件，该目录下的`HomeController.php`文件是后台首页的显示控制器，`ExampleController.php`为实例文件。
@@ -119,7 +127,9 @@ $router->resource('users', UserController::class);
 
 然后就能在后台管理页面的左侧边栏看到用户管理页面的链接入口了。
 
-对于数据表格(model-grid)和数据表单(model-form)的详细使用请查看[model-grid](/docs/zh/model-grid.md)和[model-form](/docs/zh/model-form.md)。
+### 4.创建表格表单
+
+剩下的工作就是构建数据表格和表单了，打开 `app/Admin/Contollers/UserController.php`,找到`form()`和`grid()`方法，然添加构建代码,更多详细使用请查看[model-grid](/docs/zh/model-grid.md)和[model-form](/docs/zh/model-form.md)。
 
 其它
 ------------
