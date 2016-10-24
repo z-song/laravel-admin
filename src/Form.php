@@ -271,7 +271,7 @@ class Form
 
         $this->complete($this->saved);
 
-        return redirect($this->resource());
+        return redirect($this->resource(0));
     }
 
     /**
@@ -407,7 +407,7 @@ class Form
 
         $this->complete($this->saved);
 
-        return redirect($this->resource());
+        return redirect($this->resource(-1));
     }
 
     /**
@@ -709,16 +709,20 @@ class Form
     /**
      * Get current resource route url.
      *
+     * @param int $slice
      * @return string
      */
-    public function resource()
+    public function resource($slice = -2)
     {
         $route = app('router')->current();
-        $prefix = $route->getPrefix();
 
-        $resource = trim(preg_replace("#$prefix#", '', $route->getUri(), 1), '/').'/';
+        $segments = explode('/', trim($route->getUri(), '/'));
 
-        return "/$prefix/".substr($resource, 0, strpos($resource, '/'));
+        if ($slice != 0) {
+            $segments = array_slice($segments, 0, $slice);
+        }
+
+        return '/'.join('/', $segments);
     }
 
     /**

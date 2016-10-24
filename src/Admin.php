@@ -121,6 +121,10 @@ class Admin
     {
         $prefix = (string) config('admin.prefix');
 
+        if (empty($prefix) || $prefix == '/') {
+            return '/'.trim($url, '/');
+        }
+
         return "/$prefix/".trim($url, '/');
     }
 
