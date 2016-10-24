@@ -710,6 +710,7 @@ class Form
      * Get current resource route url.
      *
      * @param int $slice
+     *
      * @return string
      */
     public function resource($slice = -2)
@@ -722,7 +723,7 @@ class Form
             $segments = array_slice($segments, 0, $slice);
         }
 
-        return '/'.join('/', $segments);
+        return '/'.implode('/', $segments);
     }
 
     /**
