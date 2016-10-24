@@ -7,18 +7,20 @@ laravel-admin
 [![Packagist](https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000)](https://packagist.org/packages/encore/laravel-admin)
 [![Total Downloads](https://img.shields.io/packagist/dt/encore/laravel-admin.svg?style=flat-square)](https://packagist.org/packages/encore/laravel-admin)
 
-`laravel-admin` 是一个可以快速帮你构建后台管理的工具，它提供的页面组件和表单元素等功能，能帮助你使用很少的代码就实现功能完善的后台管理功能。
+`laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
 
-[Demo](http://120.26.143.106/admin) 账号/密码:admin/admin
+[Demo](http://120.26.143.106/admin) use `username/password:admin/admin`
 
-截图
+Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
+
+[中文文档](/docs/zh/README.md)
+
+Screenshots
 ------------
 
-![grid](https://cloud.githubusercontent.com/assets/1479100/16609399/894e0832-4386-11e6-8709-1cc7ce429e7c.png)
+![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625297/3b3deb64-9947-11e6-807c-cffa999004be.jpg)
 
-![form](https://cloud.githubusercontent.com/assets/1479100/12708198/fc6725a8-c8d7-11e5-876f-5c4f00ded0ff.png)
-
-安装
+Installation
 ------------
 
 ```
@@ -32,54 +34,62 @@ Laravel 5.1
 composer require encore/laravel-admin "1.1.x-dev"
 ```
 
-在`config/app.php`加入`ServiceProvider`:
+In`config/app.php`add`ServiceProvider`:
 
 ```
 Encore\Admin\Providers\AdminServiceProvider::class
 ```
 
-然后运行下面的命令完成安装：
+Then run these commands to finnish install：
 
 ```
 php artisan vendor:publish --tag=laravel-admin
 php artisan admin:install
 ```
 
-启动服务后，在浏览器打开 `http://localhost/admin/` ,使用用户名 `admin` 和密码 `admin`登陆.
+open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.
 
-使用文档
+Documentation
 ------------
 
-- [快速开始](/docs/zh/quick-start.md)
-- [路由配置](/docs/zh/router.md)
-- [菜单配置](/docs/zh/menu.md)
-- [显示布局](/docs/zh/layout.md)
-- [数据模型表格](/docs/zh/model-grid.md)
-- [数据模型表单](/docs/zh/model-form.md)
-  - [图片/文件上传](/docs/zh/form-upload.md)
-- [组件](/docs/zh/table.md)
-  - [表格](/docs/zh/table.md)
-  - [表单](/docs/zh/form.md)
-  - [盒子](/docs/zh/box.md)
-  - [信息盒子](/docs/zh/info-box.md)
-  - [选项卡](/docs/zh/tab.md)
-  - [滑动相册](/docs/zh/carousel.md)
-  - [折叠容器](/docs/zh/collapse.md)
-  - 数据图表 TODO
-- [权限控制](/docs/zh/permission.md)
+- [quick start](/docs/en/quick-start.md)
+- [router](/docs/en/router.md)
+- [menu](/docs/en/menu.md)
+- [layout](/docs/en/layout.md)
+- [model-grid](/docs/en/model-grid.md)
+- [model-form](/docs/en/model-form.md)
+- [widgets](/docs/en/widgets/table.md)
+  - [table](/docs/en/widgets/table.md)
+  - [form](/docs/en/widgets/form.md)
+  - [box](/docs/en/widgets/box.md)
+  - [info-box](/docs/en/widgets/info-box.md)
+  - [tab](/docs/en/widgets/box.md)
+  - [carousel](/docs/en/widgets/carousel.md)
+  - [collapse](/docs/en/widgets/collapse.md)
+  - charts TODO
+- [RBAC](/docs/en/permission.md)
 
-目录结构
+Directory structure
 ------------
-安装完成之后，后台的安装目录为`app/Admin`，之后大部分的后台开发编码工作都是在这个目录下进行。
+After install,you can find directory`app/Admin`,and then most of our develop work is under this directory.
 
-`app/Admin/routes.php`文件用来配置后台路由，详细使用请阅读[路由配置](/docs/zh/router.md)。
+```
 
-`app/Admin/Controllers`目录用来存放后台路由器文件，该目录下的`HomeController.php`文件是后台首页的显示控制器，`ExampleController.php`为实例文件。
+app/Admin
+├── Controllers
+│   ├── ExampleController.php
+│   └── HomeController.php
+└── routes.php
+```
 
-快速开始
+`app/Admin/routes.php` is used to define routes，for more detail please read [routes](/docs/zh/router.md).
+
+The `app/Admin/Controllers` directory  is used to store all the controllers, The `HomeController.php` file under this directory is used to handle home request of admin,The `ExampleController.php` file is a controller example.
+
+Quick start
 ------------
 
-用`Laravel`自带的`users`表举例,表结构为：
+We use `users` table come with `Laravel` for example,the structure of table is:
 ```sql
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -93,137 +103,37 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 ```
-对应的数据模型为文件 `App\User.php`
+And the model for this table is `App\User.php`
 
-`laravel-admin`可以通过使用以下几步来快速生成`users`表的`CURD`操作页面：
+You can follow these steps to setup `CURD` interfaces of table `users`:
 
-### 1.添加路由器
+#### 1.add controller
+
+Use the following command to create a controller for `App\User` model
+
 ```php
-<?php
-
-namespace App\Admin\Controllers;
-
-use App\User;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
-use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Content;
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\ModelForm;
-
-class UserController extends Controller
-{
-    use ModelForm;
-
-    /**
-     * Index interface.
-     *
-     * @return Content
-     */
-    public function index()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->grid());
-        });
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     * @return Content
-     */
-    public function edit($id)
-    {
-        return Admin::content(function (Content $content) use ($id) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
-        });
-    }
-
-    /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form());
-        });
-    }
-
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return Admin::grid(User::class, function (Grid $grid) {
-
-            $grid->id('ID')->sortable();
-
-            $grid->name('用户名');
-            $grid->email('邮箱');
-
-            $grid->created_at();
-            $grid->updated_at();
-        });
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        return Admin::form(User::class, function (Form $form) {
-
-            $form->display('id', 'ID');
-            
-            $form->text('name', '用户名');
-            $form->email('email', '用户邮箱');
-            $form->password('password', '密码');
-            
-            $form->dateTime('created_at', 'Created At');
-            $form->dateTime('updated_at', 'Updated At');
-        });
-    }
-}
-
+php artisan admin:make UserController --model=App\\User
 ```
+The above command will create the controller in `app/Admin/Controllers/UserController.php`.
 
-### 2.添加路由配置
+#### 2.add route
 
-在`laravel-admin`的路由配置文件`app/Admin/routes.php`里添加一行：
+Add a route in `app/Admin/routes.php`：
 ```
 $router->resource('users', UserController::class);
 ```
 
-### 3.添加左侧菜单栏连接
+#### 3.add left menu item
 
-打开`http://localhost:8000/admin/auth/menu`,添加对应的menu
+Open `http://localhost:8000/admin/auth/menu`, add menu link and refresh the page, then you can find a link item in left menu bar.
 
-然后就能在后台管理页面的左侧边栏看到用户管理页面的链接入口了。
+#### 3.build grid and form
 
-对于数据表格(model-grid)和数据表单(model-form)的详细使用请查看[model-grid](/docs/zh/model-grid.md)和[model-form](/docs/zh/model-form.md)。
+The rest needs to be done is open `app/Admin/Contollers/UserController.php`, find `form()` and `grid()` method and write few lines of code with `model-grid` and `model-form`，for more detail, please read [model-grid](/docs/en/model-grid.md) and [model-form](/docs/en/model-form.md).
 
-其它
+Other
 ------------
-`laravel-admin` 基于以下组件或者服务:
+`laravel-admin` based on thses plugins or services:
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
@@ -236,13 +146,8 @@ $router->resource('users', UserController::class);
 + [Tencent map](http://lbs.qq.com/)
 + [bootstrap-fileinput](https://github.com/kartik-v/bootstrap-fileinput)
 + [jquery-pjax](https://github.com/defunkt/jquery-pjax)
-
-Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
-
-交流
-------------
-QQ群:278455482
-
++ [Nestable](http://dbushell.github.io/Nestable/)
++ [noty](http://ned.im/noty/)
 
 License
 ------------
