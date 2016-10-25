@@ -23,6 +23,8 @@ Screenshots
 Installation
 ------------
 
+First, install laravel, and make sure that the database connection settings are correct.
+
 ```
 Laravel 5.2
 composer require encore/laravel-admin "dev-master"
@@ -48,6 +50,10 @@ php artisan admin:install
 ```
 
 open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.
+
+Default Settings
+------------
+The file in `config/admin.php` contains an array of settings, you can find the default settings in there.
 
 Documentation
 ------------
