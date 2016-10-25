@@ -21,6 +21,8 @@ Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd
 安装
 ------------
 
+首先确保安装好了`laravel`，并且数据库连接设置正确。
+
 ```
 Laravel 5.2
 composer require encore/laravel-admin "dev-master"
@@ -46,6 +48,11 @@ php artisan admin:install
 ```
 
 启动服务后，在浏览器打开 `http://localhost/admin/` ,使用用户名 `admin` 和密码 `admin`登陆.
+
+默认配置
+------------
+
+安装完成之后，`laravel-admin`所有的配置都在`config/admin.php`文件中。
 
 使用文档
 ------------
