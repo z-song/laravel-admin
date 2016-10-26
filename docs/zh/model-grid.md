@@ -151,7 +151,7 @@ $grid->rows(function($row){
 
     //指定列只开启编辑操作
     if($row->id % 3) {
-        $row->action('edit');
+        $row->actions('edit');
     }
     
     // 添加自定义操作按钮
