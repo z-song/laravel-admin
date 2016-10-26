@@ -6,19 +6,17 @@ use Encore\Admin\Form\Field;
 
 class Mobile extends Field
 {
-    protected $format = '';
+    protected $format = '99999999999';
 
-    public function format($format = '999 9999 9999')
+    public function format($format)
     {
         $this->format = $format;
+
+        return $this;
     }
 
     public function render()
     {
-        if (empty($this->format)) {
-            $this->format();
-        }
-
         $options = json_encode(['mask' => $this->format]);
 
         $this->script = <<<EOT
