@@ -25,9 +25,10 @@ class Select extends Field
     }
 
     /**
-     * Set options
+     * Set options.
      *
      * @param array|callable|string $options
+     *
      * @return $this|mixed
      */
     public function options($options = [])
@@ -82,6 +83,7 @@ EOT;
      * Load options from ajax results.
      *
      * @param string $url
+     *
      * @return $this
      */
     public function ajax($url)
