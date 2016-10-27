@@ -4,6 +4,8 @@
         @foreach($tabs as $id => $tab)
         <li {{ $id == 0 ? 'class=active' : '' }}><a href="#tab_{{ $id }}" data-toggle="tab">{{ $tab['title'] }}</a></li>
         @endforeach
+
+        @if (!empty($dropDown))
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 Dropdown <span class="caret"></span>
@@ -14,6 +16,7 @@
                 @endforeach
             </ul>
         </li>
+        @endif
         <li class="pull-right header">{{ $title }}</li>
     </ul>
     <div class="tab-content">
