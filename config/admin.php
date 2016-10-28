@@ -41,6 +41,7 @@ return [
         'menu_table'  => 'admin_menu',
         'menu_model'  => Encore\Admin\Auth\Database\Menu::class,
 
+        'operation_log_table'    => 'admin_operation_log',
         'role_users_table'       => 'admin_role_users',
         'role_permissions_table' => 'admin_role_permissions',
         'role_menu_table'        => 'admin_role_menu',

@@ -42,6 +42,7 @@
         </table>
     </div>
     <div class="box-footer clearfix">
+        <input type="checkbox" class="grid-select-all">&nbsp;&nbsp;&nbsp;
         @if($grid->allowBatchDeletion())
             <a class="btn btn-sm btn-danger batch-delete">{{ trans('admin::lang.batch_delete') }}</a>
         @endif

@@ -66,6 +66,17 @@ class CreateAdminTables extends Migration
             $table->index(['role_id', 'menu_id']);
             $table->timestamps();
         });
+
+        Schema::create(config('admin.database.operation_log_table'), function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->string('path');
+            $table->string('method', 10);
+            $table->string('ip', 15);
+            $table->text('input');
+            $table->index('user_id');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -82,5 +93,6 @@ class CreateAdminTables extends Migration
         Schema::drop(config('admin.database.role_users_table'));
         Schema::drop(config('admin.database.role_permissions_table'));
         Schema::drop(config('admin.database.role_menu_table'));
+        Schema::drop(config('admin.database.operation_log_table'));
     }
 }

@@ -51,7 +51,7 @@ class Router
         $this->attributes = [
             'prefix'        => config('admin.prefix'),
             'namespace'     => Admin::controllerNamespace(),
-            'middleware'    => ['web', 'admin.auth', 'admin.pjax'],
+            'middleware'    => ['web', 'admin.auth', 'admin.pjax', 'admin.log'],
         ];
     }
 
@@ -71,6 +71,7 @@ class Router
                 'auth/roles'       => 'RoleController',
                 'auth/permissions' => 'PermissionController',
                 'auth/menu'        => 'MenuController',
+                'auth/logs'        => 'LogController',
             ]);
 
             $router->get('auth/login', 'AuthController@getLogin');
