@@ -4,7 +4,6 @@ namespace Encore\Admin\Middleware;
 
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class OperationLog
 {
@@ -19,7 +18,6 @@ class OperationLog
     public function handle(Request $request, \Closure $next)
     {
         if (Admin::user()) {
-
             $log = [
                 'user_id' => Admin::user()->id,
                 'path'    => $request->path(),
@@ -29,7 +27,6 @@ class OperationLog
             ];
 
             \Encore\Admin\Auth\Database\OperationLog::create($log);
-
         }
 
         return $next($request);
