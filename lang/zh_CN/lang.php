@@ -50,4 +50,6 @@ return [
     'parent_id'     => '父ID',
     'icon'          => '图标',
     'uri'           => '路径',
+
+    'operation_log' => '操作日志',
 ];

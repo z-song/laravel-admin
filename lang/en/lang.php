@@ -50,4 +50,6 @@ return [
     'parent_id'     => 'Parent ID',
     'icon'          => 'Icon',
     'uri'           => 'URI',
+
+    'operation_log' => 'Operation log',
 ];
