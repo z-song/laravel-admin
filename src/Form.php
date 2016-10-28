@@ -379,6 +379,8 @@ class Form
     {
         $data = Input::all();
 
+        $data = $this->handleEditable($data);
+
         if (!$this->validate($data)) {
             return back()->withInput()->withErrors($this->validator->messages());
         }
@@ -408,6 +410,25 @@ class Form
         $this->complete($this->saved);
 
         return redirect($this->resource(-1));
+    }
+
+    /**
+     * Handle editable update.
+     *
+     * @param $data
+     * @return array
+     */
+    protected function handleEditable(array $data = [])
+    {
+        if (array_key_exists('_editable', $data)) {
+            $name  = $data['name'];
+            $value = $data['value'];
+
+            array_forget($data, ['pk', 'value', 'name']);
+            array_set($data, $name, $value);
+        }
+
+        return $data;
     }
 
     /**

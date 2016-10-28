@@ -3,10 +3,14 @@
 namespace Encore\Admin\Grid;
 
 use Closure;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Grid;
 use Illuminate\Support\Facades\URL;
 
 class Column
 {
+    protected $grid;
+
     protected $name;
 
     protected $label;
@@ -32,6 +36,11 @@ class Column
         $this->name = $name;
 
         $this->label = $this->formatLabel($label);
+    }
+
+    public function setGrid(Grid $grid)
+    {
+        $this->grid = $grid;
     }
 
     /**
@@ -127,7 +136,7 @@ class Column
             }
 
             if ($this->hasHtmlWrapper()) {
-                $value = $this->htmlWrap($value);
+                $value = $this->htmlWrap($value, $item);
                 array_set($item, $this->name, $value);
             }
         }
@@ -283,6 +292,21 @@ EOT;
     }
 
     /**
+     * Make the column editable.
+     *
+     * @return $this
+     */
+    public function editable()
+    {
+        $editable = new Editable($this->name, func_get_args());
+        $editable->setResource($this->grid->resource());
+
+        $this->htmlWrapper($editable->html());
+
+        return $this;
+    }
+
+    /**
      * Set html wrapper.
      *
      * @param $wrapper
@@ -309,13 +333,14 @@ EOT;
      *
      * @return mixed
      */
-    protected function htmlWrap($value)
+    protected function htmlWrap($value, $row = [])
     {
         foreach ($this->htmlWrappers as $wrapper) {
             $value = str_replace('{value}', $value, $wrapper);
         }
 
-        $value = str_replace('{$value}', $this->original, $value);
+        $value = str_replace('{$value}', is_null($this->original) ? 'NULL' : $this->original , $value);
+        $value = str_replace('{pk}', array_get($row, $this->grid->getKeyName()), $value);
 
         return $value;
     }
