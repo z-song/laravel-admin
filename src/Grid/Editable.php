@@ -108,7 +108,9 @@ class Editable
             'format'        => $format,
             'viewformat'    => $format,
             'template'      => $format,
-            'combodate'     => new \stdClass(),
+            'combodate'     => [
+                'maxYear' => 2035,
+            ],
         ]);
     }
 
