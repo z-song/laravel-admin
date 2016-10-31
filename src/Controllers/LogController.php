@@ -47,6 +47,8 @@ class LogController extends Controller
                     $row->actions('delete');
                 });
 
+                $grid->disableCreation();
+
                 $grid->filter(function ($filter) {
                     $filter->is('user_id', 'User')->select(Administrator::all()->pluck('name', 'id'));
                     $filter->is('method')->select(array_combine(OperationLog::$methods, OperationLog::$methods));

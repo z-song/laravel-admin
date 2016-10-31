@@ -44,7 +44,7 @@ class AdminTablesSeeder extends Seeder
             [
                 'parent_id' => 0,
                 'order'     => 2,
-                'title'     => 'Auth',
+                'title'     => 'Admin',
                 'icon'      => 'fa-tasks',
                 'uri'       => '',
             ],
