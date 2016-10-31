@@ -103,11 +103,7 @@
 
     $(document).on('pjax:error', function(event, xhr) {
 
-        if (xhr.status == 404) {
-            var response = 'Page Not found';
-        } else {
-            var response = xhr.responseText;
-        }
+        var response = (xhr.status == 404) ? 'Page Not found' : xhr.responseText;
 
         if (response) {
             noty({
@@ -125,7 +121,7 @@
         $(document).one("pjax:end", function(event) {
             $(event.target).find("script[data-exec-on-popstate]").each(function() {
                 $.globalEval(this.text || this.textContent || this.innerHTML || '');
-            })
+            });
         });
     });
 
