@@ -102,11 +102,21 @@
     $.noty.defaults.theme = 'relax';
 
     $(document).on('pjax:error', function(event, xhr) {
-        noty({
-            text: "<strong>Warning!</strong><br/>"+xhr.responseText,
-            type:'warning',
-            timeout: 3000
-        });
+
+        if (xhr.status == 404) {
+            var response = 'Page Not found';
+        } else {
+            var response = xhr.responseText;
+        }
+
+        if (response) {
+            noty({
+                text: "<strong>Warning!</strong><br/>"+response,
+                type:'warning',
+                timeout: 3000
+            });
+        }
+
         return false;
     });
 
