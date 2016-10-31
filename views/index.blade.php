@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/codemirror/lib/codemirror.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/nestable/nestable.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
 
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
 
@@ -80,6 +81,7 @@
 <script src="{{ asset ("/packages/admin/codemirror/addon/edit/matchbrackets.js") }}"></script>
 <script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
 <script src="{{ asset ("/packages/admin/noty/jquery.noty.packaged.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/bootstrap3-editable/js/bootstrap-editable.min.js") }}"></script>
 
 @if(config('app.locale') == 'zh_CN')
 <script src="{{ asset ("http://map.qq.com/api/js?v=2.exp") }}"></script>
@@ -89,6 +91,16 @@
 
 <script>
 
+    $.fn.editable.defaults.params = function (params) {
+        params._token = '{{ csrf_token() }}';
+        params._editable = 1;
+        params._method = 'PUT';
+        return params;
+    };
+
+    $.noty.defaults.layout = 'topRight';
+    $.noty.defaults.theme = 'relax';
+
     $(document).pjax('a:not(a[target="_blank"])', {
         timeout: 5000,
         container: '#pjax-container'
@@ -97,9 +109,6 @@
     $(document).on('submit', 'form[pjax-container]', function(event) {
         $.pjax.submit(event, '#pjax-container')
     });
-
-    $.noty.defaults.layout = 'topRight';
-    $.noty.defaults.theme = 'relax';
 
     $(document).on('pjax:error', function(event, xhr) {
 

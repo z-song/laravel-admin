@@ -145,6 +145,16 @@ class Grid
     }
 
     /**
+     * Get primary key name of model
+     *
+     * @return string
+     */
+    public function getKeyName()
+    {
+        return $this->keyName ?: 'id';
+    }
+
+    /**
      * Add column to Grid.
      *
      * @param string $name
@@ -216,7 +226,10 @@ class Grid
     {
         //$label = $label ?: Str::upper($column);
 
-        return $this->columns[] = new Column($column, $label);
+        $column = new Column($column, $label);
+        $column->setGrid($this);
+
+        return $this->columns[] = $column;
     }
 
     public function blank($label)
