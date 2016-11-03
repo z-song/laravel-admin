@@ -339,7 +339,7 @@ EOT;
             $value = str_replace('{value}', $value, $wrapper);
         }
 
-        $value = str_replace('{$value}', is_null($this->original) ? 'NULL' : $this->original , $value);
+        $value = str_replace('{$value}', is_null($this->original) ? 'NULL' : $this->original, $value);
         $value = str_replace('{pk}', array_get($row, $this->grid->getKeyName()), $value);
 
         return $value;

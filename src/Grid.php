@@ -145,7 +145,7 @@ class Grid
     }
 
     /**
-     * Get primary key name of model
+     * Get primary key name of model.
      *
      * @return string
      */

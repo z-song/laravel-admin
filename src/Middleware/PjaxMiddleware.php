@@ -46,8 +46,8 @@ class PjaxMiddleware
             $crawler = new Crawler($response->getContent());
 
             $response->setContent([
-                'status' => false,
-                'message'=> $this->fetchContents($crawler, '.exception_message'),
+                'status'  => false,
+                'message' => $this->fetchContents($crawler, '.exception_message'),
             ]);
 
             return $this;
