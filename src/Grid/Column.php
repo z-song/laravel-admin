@@ -284,7 +284,7 @@ EOT;
     {
         $server = $server ?: config('admin.upload.host');
 
-        $wrapper = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class=\'img\' />";
+        $wrapper = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
 
         $this->htmlWrapper($wrapper);
 
