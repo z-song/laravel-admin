@@ -53,14 +53,12 @@ class Editable
 
     public function text()
     {
-
     }
 
     public function textarea()
     {
-
     }
-    
+
     public function select($options = [])
     {
         $source = [];
@@ -68,7 +66,7 @@ class Editable
         foreach ($options as $key => $value) {
             $source[] = [
                 'value' => $key,
-                'text'  => $value
+                'text'  => $value,
             ];
         }
 
@@ -129,12 +127,12 @@ EOT;
         Admin::script($this->script);
 
         $attributes = [
-            'href'      => '#',
-            'class'     => "{$this->class}-editable",
-            'data-type' => $this->type,
-            'data-pk'   => '{pk}',
-            'data-url'  => "/{$this->resource}/{pk}",
-            'data-value'=> '{$value}',
+            'href'       => '#',
+            'class'      => "{$this->class}-editable",
+            'data-type'  => $this->type,
+            'data-pk'    => '{pk}',
+            'data-url'   => "/{$this->resource}/{pk}",
+            'data-value' => '{$value}',
         ];
 
         $html = [];
@@ -142,6 +140,6 @@ EOT;
             $html[] = "$name=\"$attribute\"";
         }
 
-        return '<a '. join(' ', $html) .'>{$value}</a>';
+        return '<a '.implode(' ', $html).'>{$value}</a>';
     }
 }

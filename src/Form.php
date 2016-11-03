@@ -416,12 +416,13 @@ class Form
      * Handle editable update.
      *
      * @param $data
+     *
      * @return array
      */
     protected function handleEditable(array $data = [])
     {
         if (array_key_exists('_editable', $data)) {
-            $name  = $data['name'];
+            $name = $data['name'];
             $value = $data['value'];
 
             array_forget($data, ['pk', 'value', 'name']);

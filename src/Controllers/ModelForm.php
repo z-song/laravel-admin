@@ -19,7 +19,7 @@ trait ModelForm
         if ($this->form()->destroy($id)) {
             return response()->json([
                 'status'  => true,
-                'message' => 'delete success!'
+                'message' => 'delete success!',
             ]);
         }
     }
