@@ -112,13 +112,27 @@
 
     $(document).on('pjax:error', function(event, xhr) {
 
-        var response = (xhr.status == 404) ? 'Page Not found' : xhr.responseText;
+        var message = '';
 
-        if (response) {
+        try{
+            response = JSON.parse(xhr.responseText);
+            message = response.message || 'error';
+        }catch(e){
+            message = (xhr.status == 404) ? 'Page Not found' : 'error';
+
             noty({
-                text: "<strong>Warning!</strong><br/>"+response,
+                text: "<strong>Warning!</strong><br/>"+message,
+                type:'error',
+                timeout: 5000
+            });
+            return false;
+        }
+
+        if (message) {
+            noty({
+                text: "<strong>Warning!</strong><br/>"+message,
                 type:'warning',
-                timeout: 3000
+                timeout: 5000
             });
         }
 

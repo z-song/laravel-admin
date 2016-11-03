@@ -45,9 +45,10 @@ class PjaxMiddleware
         if (!$response->isSuccessful()) {
             $crawler = new Crawler($response->getContent());
 
-            $response->setContent(
-                $this->fetchContents($crawler, '.exception_message')
-            );
+            $response->setContent([
+                'status' => false,
+                'message'=> $this->fetchContents($crawler, '.exception_message'),
+            ]);
 
             return $this;
         }
