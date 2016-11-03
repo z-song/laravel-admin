@@ -19,7 +19,12 @@ trait ModelForm
         if ($this->form()->destroy($id)) {
             return response()->json([
                 'status'  => true,
-                'message' => 'delete success!',
+                'message' => trans('admin::lang.delete_succeeded'),
+            ]);
+        } else {
+            return response()->json([
+                'status'  => false,
+                'message' => trans('admin::lang.delete_failed'),
             ]);
         }
     }

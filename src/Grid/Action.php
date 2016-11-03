@@ -57,6 +57,23 @@ class Action
                 var id = $(this).data('id');
                 if(confirm("{$confirm}")) {
                     $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+
+                        if (typeof data === 'object') {
+                            if (data.status) {
+                                noty({
+                                    text: "<strong>Succeeded!</strong><br/>"+data.message,
+                                    type:'success',
+                                    timeout: 3000
+                                });
+                            } else {
+                                noty({
+                                    text: "<strong>Failed!</strong><br/>"+data.message,
+                                    type:'error',
+                                    timeout: 3000
+                                });
+                            }
+                        }
+
                         $.pjax.reload('#pjax-container');
                     });
                 }

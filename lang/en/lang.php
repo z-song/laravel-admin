@@ -29,6 +29,8 @@ return [
     'menu'           => 'Menu',
     'input'          => 'Input',
     'delete_confirm' => 'Are you sure to delete this item ?',
+    'delete_succeeded' => 'Delete succeeded !',
+    'delete_failed'  => 'Delete failed !',
 
     'choose'        => 'Choose',
     'choose_file'   => 'Choose file',

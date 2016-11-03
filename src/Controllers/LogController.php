@@ -65,8 +65,16 @@ class LogController extends Controller
     {
         $ids = explode(',', $id);
 
-        OperationLog::destroy(array_filter($ids));
-
-        return response()->json(['msg' => 'delete success!']);
+        if (OperationLog::destroy(array_filter($ids))) {
+            return response()->json([
+                'status'  => true,
+                'message' => trans('admin::lang.delete_succeeded'),
+            ]);
+        } else {
+            return response()->json([
+                'status'  => false,
+                'message' => trans('admin::lang.delete_failed'),
+            ]);
+        }
     }
 }
