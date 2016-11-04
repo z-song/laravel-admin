@@ -21,6 +21,8 @@ return [
     'save'          => 'Save',
     'refresh'       => 'Refresh',
     'order'         => 'Order',
+    'expand'        => 'Expand',
+    'collapse'      => 'Collapse',
 
     'action'           => 'Action',
     'title'            => 'Title',
