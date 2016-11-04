@@ -576,8 +576,8 @@ class Grid
      */
     public function script()
     {
-        $path    = app('router')->current()->getPath();
-        $token   = csrf_token();
+        $path = app('router')->current()->getPath();
+        $token = csrf_token();
         $confirm = trans('admin::lang.delete_confirm');
 
         return <<<EOT
@@ -646,7 +646,6 @@ $('.grid-order-down').on('click', function() {
 });
 
 EOT;
-
     }
 
     /**

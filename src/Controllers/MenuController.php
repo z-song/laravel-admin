@@ -10,7 +10,6 @@ use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
 use Encore\Admin\Menu\Menu;
-use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Box;
 use Encore\Admin\Widgets\Callout;
 use Illuminate\Routing\Controller;
@@ -29,9 +28,7 @@ class MenuController extends Controller
             $content->description(trans('admin::lang.list'));
 
             $content->row(function (Row $row) {
-
                 $row->column(5, function (Column $column) {
-
                     $column->append($this->callout());
 
                     $form = new \Encore\Admin\Widgets\Form();
@@ -45,7 +42,6 @@ class MenuController extends Controller
                     $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
 
                     $column->append((new Box(trans('admin::lang.new'), $form))->style('success'));
-
                 });
 
                 $menu = new Menu(new MenuModel());
@@ -138,7 +134,7 @@ class MenuController extends Controller
 
     protected function script()
     {
-        return <<<EOT
+        return <<<'EOT'
 
 $('.menu-tools').on('click', function(e){
     var target = $(e.target),
@@ -151,7 +147,6 @@ $('.menu-tools').on('click', function(e){
     }
 });
 EOT;
-
     }
 
     /**

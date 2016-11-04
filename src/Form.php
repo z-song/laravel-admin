@@ -450,11 +450,11 @@ class Form
     protected function handleOrderable($id, array $input = [])
     {
         if (array_key_exists('_orderable', $input)) {
-
             $model = $this->model->find($id);
 
             if ($model instanceof Sortable) {
                 $input['_orderable'] == 1 ? $model->moveOrderUp() : $model->moveOrderDown();
+
                 return true;
             }
         }
