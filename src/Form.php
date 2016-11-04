@@ -13,6 +13,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use Spatie\EloquentSortable\Sortable;
 
 /**
  * Class Form.
@@ -371,7 +372,9 @@ class Form
     }
 
     /**
-     * @param $id
+     * Handle update.
+     *
+     * @param int $id
      *
      * @return $this|\Illuminate\Http\RedirectResponse
      */
@@ -380,6 +383,10 @@ class Form
         $data = Input::all();
 
         $data = $this->handleEditable($data);
+
+        if ($this->handleOrderable($id, $data)) {
+            return response(['status' => true, 'message' => trans('admin::lang.succeeded')]);
+        }
 
         if (!$this->validate($data)) {
             return back()->withInput()->withErrors($this->validator->messages());
@@ -415,21 +422,44 @@ class Form
     /**
      * Handle editable update.
      *
-     * @param $data
+     * @param array $input
      *
      * @return array
      */
-    protected function handleEditable(array $data = [])
+    protected function handleEditable(array $input = [])
     {
-        if (array_key_exists('_editable', $data)) {
-            $name = $data['name'];
-            $value = $data['value'];
+        if (array_key_exists('_editable', $input)) {
+            $name = $input['name'];
+            $value = $input['value'];
 
-            array_forget($data, ['pk', 'value', 'name']);
-            array_set($data, $name, $value);
+            array_forget($input, ['pk', 'value', 'name']);
+            array_set($input, $name, $value);
         }
 
-        return $data;
+        return $input;
+    }
+
+    /**
+     * Handle orderable update.
+     *
+     * @param int   $id
+     * @param array $input
+     *
+     * @return array
+     */
+    protected function handleOrderable($id, array $input = [])
+    {
+        if (array_key_exists('_orderable', $input)) {
+
+            $model = $this->model->find($id);
+
+            if ($model instanceof Sortable) {
+                $input['_orderable'] == 1 ? $model->moveOrderUp() : $model->moveOrderDown();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

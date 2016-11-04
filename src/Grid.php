@@ -4,6 +4,7 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Exception\Handle;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid\Column;
 use Encore\Admin\Grid\Exporter;
 use Encore\Admin\Grid\Filter;
@@ -120,6 +121,13 @@ class Grid
      * @var bool
      */
     protected $allowActions = true;
+
+    /**
+     * Is grid rows orderable.
+     *
+     * @var bool
+     */
+    protected $orderable = false;
 
     /**
      * @var Exporter
@@ -411,6 +419,28 @@ class Grid
     }
 
     /**
+     * Set grid as orderable.
+     *
+     * @return $this
+     */
+    public function orderable()
+    {
+        $this->orderable = true;
+
+        return $this;
+    }
+
+    /**
+     * Is the grid orderable.
+     *
+     * @return bool
+     */
+    public function isOrderable()
+    {
+        return $this->orderable;
+    }
+
+    /**
      * Set the grid filter.
      *
      * @param callable $callback
@@ -540,12 +570,94 @@ class Grid
     }
 
     /**
+     * Js code for grid.
+     *
+     * @return string
+     */
+    public function script()
+    {
+        $path    = app('router')->current()->getPath();
+        $token   = csrf_token();
+        $confirm = trans('admin::lang.delete_confirm');
+
+        return <<<EOT
+
+$('.grid-select-all').change(function() {
+    if (this.checked) {
+        $('.grid-item').prop("checked", true);
+    } else {
+        $('.grid-item').prop("checked", false);
+    }
+});
+
+$('.batch-delete').on('click', function() {
+    var selected = [];
+    $('.grid-item:checked').each(function(){
+        selected.push($(this).data('id'));
+    });
+
+    if (selected.length == 0) {
+        return;
+    }
+
+    if(confirm("{$confirm}")) {
+        $.post('/{$path}/' + selected.join(), {_method:'delete','_token':'{$token}'}, function(data){
+            $.pjax.reload('#pjax-container');
+            noty({
+                text: "<strong>Succeeded!</strong>",
+                type:'success',
+                timeout: 1000
+            });
+        });
+    }
+});
+
+$('.grid-refresh').on('click', function() {
+    $.pjax.reload('#pjax-container');
+
+    noty({
+        text: "<strong>Succeeded!</strong>",
+        type:'success',
+        timeout: 1000
+    });
+});
+
+var grid_order = function(id, direction) {
+    $.post('/{$path}/' + id, {_method:'PUT', _token:'{$token}', _orderable:direction}, function(data){
+
+        if (data.status) {
+            noty({
+                text: "<strong>Succeeded!</strong>",
+                type:'success',
+                timeout: 1000
+            });
+
+            $.pjax.reload('#pjax-container');
+        }
+    });
+}
+
+$('.grid-order-up').on('click', function() {
+    grid_order($(this).data('id'), 1);
+});
+
+$('.grid-order-down').on('click', function() {
+    grid_order($(this).data('id'), 0);
+});
+
+EOT;
+
+    }
+
+    /**
      * Get the string contents of the grid view.
      *
      * @return string
      */
     public function __toString()
     {
+        Admin::script($this->script());
+
         return $this->render();
     }
 }

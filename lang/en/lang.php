@@ -20,6 +20,7 @@ return [
     'batch_delete'  => 'Batch delete',
     'save'          => 'Save',
     'refresh'       => 'Refresh',
+    'order'         => 'Order',
 
     'action'           => 'Action',
     'title'            => 'Title',
@@ -28,6 +29,8 @@ return [
     'submit'           => 'Submit',
     'menu'             => 'Menu',
     'input'            => 'Input',
+    'succeeded'        => 'Succeeded',
+    'failed'           => 'Failed',
     'delete_confirm'   => 'Are you sure to delete this item ?',
     'delete_succeeded' => 'Delete succeeded !',
     'delete_failed'    => 'Delete failed !',

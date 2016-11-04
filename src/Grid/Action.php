@@ -53,61 +53,32 @@ class Action
         $confirm = trans('admin::lang.delete_confirm');
         $token = csrf_token();
         $script = <<<SCRIPT
-            $('._delete').click(function() {
-                var id = $(this).data('id');
-                if(confirm("{$confirm}")) {
-                    $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
 
-                        if (typeof data === 'object') {
-                            if (data.status) {
-                                noty({
-                                    text: "<strong>Succeeded!</strong><br/>"+data.message,
-                                    type:'success',
-                                    timeout: 3000
-                                });
-                            } else {
-                                noty({
-                                    text: "<strong>Failed!</strong><br/>"+data.message,
-                                    type:'error',
-                                    timeout: 3000
-                                });
-                            }
-                        }
+$('._delete').click(function() {
+    var id = $(this).data('id');
+    if(confirm("{$confirm}")) {
+        $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
 
-                        $.pjax.reload('#pjax-container');
+            if (typeof data === 'object') {
+                if (data.status) {
+                    noty({
+                        text: "<strong>Succeeded!</strong><br/>"+data.message,
+                        type:'success',
+                        timeout: 3000
                     });
-                }
-            });
-
-            $('.grid-select-all').change(function() {
-                if (this.checked) {
-                    $('.grid-item').prop("checked", true);
                 } else {
-                    $('.grid-item').prop("checked", false);
-                }
-            });
-
-            $('.batch-delete').on('click', function() {
-                var selected = [];
-                $('.grid-item:checked').each(function(){
-                    selected.push($(this).data('id'));
-                });
-
-                if (selected.length == 0) {
-                    return;
-                }
-
-                if(confirm("{$confirm}")) {
-                    $.post('/{$this->path}/' + selected.join(), {_method:'delete','_token':'{$token}'}, function(data){
-                        $.pjax.reload('#pjax-container');
+                    noty({
+                        text: "<strong>Failed!</strong><br/>"+data.message,
+                        type:'error',
+                        timeout: 3000
                     });
                 }
-            });
+            }
 
-            $('.grid-refresh').on('click', function() {
-                $.pjax.reload('#pjax-container');
-            });
-
+            $.pjax.reload('#pjax-container');
+        });
+    }
+});
 
 SCRIPT;
 

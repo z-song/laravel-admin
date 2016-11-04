@@ -20,6 +20,7 @@ return [
     'batch_delete'  => '批量删除',
     'save'          => '保存',
     'refresh'       => '刷新',
+    'order'         => '排序',
 
     'action'           => '操作',
     'title'            => '标题',
@@ -28,6 +29,8 @@ return [
     'submit'           => '提交',
     'menu'             => '菜单',
     'input'            => '输入',
+    'succeeded'        => '成功',
+    'failed'           => '失败',
     'delete_confirm'   => '确认删除?',
     'delete_succeeded' => '删除成功 !',
     'delete_failed'    => '删除失败 !',
