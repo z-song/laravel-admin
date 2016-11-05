@@ -4,7 +4,7 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Exception\Handle;
-use Encore\Admin\Facades\Admin;
+use Encore\Admin\Facades\Admin as AdminManager;
 use Encore\Admin\Grid\Column;
 use Encore\Admin\Grid\Exporter;
 use Encore\Admin\Grid\Filter;
@@ -655,7 +655,7 @@ EOT;
      */
     public function __toString()
     {
-        Admin::script($this->script());
+        AdminManager::script($this->script());
 
         return $this->render();
     }
