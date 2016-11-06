@@ -170,5 +170,20 @@ $grid->filter(function($filter){
 
     // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
     $filter->between('created_at', 'Created Time')->datetime();
+
+    // sql: ... WHERE `title` LIKE "%$input" OR `content` LIKE "%$input";
+    $filter->where(function ($query) {
+
+        $query->where('title', 'like', "%{$this->input}%")
+            ->orWhere('content', 'like', "%{$this->input}%");
+
+    }, 'Text');
+    
+    // sql: ... WHERE `rate` >= 6 AND `created_at` = {$input};
+    $filter->where(function ($query) {
+
+        $query->whereRaw("`rate` >= 6 AND `created_at` = {$this->input}");
+
+    }, 'Text');
 });
 ```
