@@ -8,6 +8,7 @@ class Gt extends AbstractFilter
      * Get condition of this filter.
      *
      * @param array $inputs
+     *
      * @return array|mixed|void
      */
     public function condition($inputs)

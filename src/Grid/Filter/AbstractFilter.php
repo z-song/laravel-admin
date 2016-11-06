@@ -40,7 +40,7 @@ abstract class AbstractFilter
     protected $field;
 
     /**
-     * Query for filter
+     * Query for filter.
      *
      * @var string
      */
@@ -205,7 +205,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * Build query condition of model relation
+     * Build query condition of model relation.
      *
      * @return array
      */
