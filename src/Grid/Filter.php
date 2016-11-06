@@ -15,6 +15,7 @@ use ReflectionClass;
  * @method Filter     gt($column, $label = '')
  * @method Filter     lt($column, $label = '')
  * @method Filter     between($column, $label = '')
+ * @method Filter     where(\Closure $callback, $label)
  */
 class Filter
 {
@@ -36,7 +37,7 @@ class Filter
     /**
      * @var array
      */
-    protected $allows = ['is', 'like', 'gt', 'lt', 'between'];
+    protected $supports = ['is', 'like', 'gt', 'lt', 'between', 'where'];
 
     /**
      * Create a new filter instance.
@@ -135,7 +136,7 @@ class Filter
      */
     public function __call($method, $arguments)
     {
-        if (in_array($method, $this->allows)) {
+        if (in_array($method, $this->supports)) {
             $className = '\\Encore\\Admin\\Grid\\Filter\\'.ucfirst($method);
             $reflection = new ReflectionClass($className);
 
