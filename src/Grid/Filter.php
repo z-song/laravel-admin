@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Grid;
 
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter\AbstractFilter;
 use Illuminate\Support\Facades\Input;
@@ -39,6 +40,8 @@ class Filter
      */
     protected $supports = ['is', 'like', 'gt', 'lt', 'between', 'where'];
 
+    protected $useModal = false;
+
     /**
      * Create a new filter instance.
      *
@@ -52,6 +55,14 @@ class Filter
         $this->model = $model;
 
         $this->is($this->model->eloquent()->getKeyName());
+    }
+
+    /**
+     * Use modal to show filter form.
+     */
+    public function useModal()
+    {
+        $this->useModal = true;
     }
 
     /**
@@ -123,7 +134,32 @@ class Filter
      */
     public function render()
     {
+        if ($this->useModal) {
+            return $this->renderModalFilter();
+        }
+
         return view('admin::grid.filter')->with(['filters' => $this->filters(), 'grid' => $this->grid]);
+    }
+
+    /**
+     * Render modal filter.
+     *
+     * @return $this
+     */
+    public function renderModalFilter()
+    {
+        $script = <<<EOT
+
+$("#filter-modal .submit").click(function () {
+    $("#filter-modal").modal('toggle');
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+});
+
+EOT;
+        Admin::script($script);
+
+        return view('admin::filter.modal')->with(['filters' => $this->filters(), 'grid' => $this->grid]);
     }
 
     /**
