@@ -151,7 +151,7 @@ class Filter
      */
     public function renderModalFilter()
     {
-        $script = <<<EOT
+        $script = <<<'EOT'
 
 $("#filter-modal .submit").click(function () {
     $("#filter-modal").modal('toggle');

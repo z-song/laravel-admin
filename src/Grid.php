@@ -311,7 +311,7 @@ class Grid
     }
 
     /**
-     * Process the grid filter
+     * Process the grid filter.
      *
      * @return array
      */
@@ -395,7 +395,7 @@ class Grid
         $query = $query = Input::all();
         $query['_export'] = true;
 
-        return $this->resource() . '?' . http_build_query($query);
+        return $this->resource().'?'.http_build_query($query);
     }
 
     /**
@@ -453,7 +453,7 @@ class Grid
     }
 
     /**
-     * If grid allows export.s
+     * If grid allows export.s.
      *
      * @return bool
      */
