@@ -6,16 +6,29 @@ use Encore\Admin\Admin;
 
 class Action
 {
-    //const SHOW      = 'show';
     const EDIT = 'edit';
     const DELETE = 'delete';
 
+    /**
+     * Default actions.
+     *
+     * @var array
+     */
     protected $defaultActions = [self::EDIT, self::DELETE];
 
+    /**
+     * Custom actions.
+     *
+     * @var array
+     */
     protected $customActions = [];
 
+    /**
+     * Views of default actions.
+     *
+     * @var array
+     */
     protected $defaultActionViews = [
-        //self::SHOW   => '<a href="/{path}/{id}"><i class="fa fa-eye"></i></a> ',
         self::EDIT   => '<a href="/{path}/{id}/edit"><i class="fa fa-edit"></i></a> ',
         self::DELETE => '<a href="javascript:void(0);" data-id="{id}" class="_delete"><i class="fa fa-trash"></i></a> ',
     ];
@@ -25,8 +38,16 @@ class Action
      */
     protected $row;
 
+    /**
+     * @var string
+     */
     protected $path = '';
 
+    /**
+     * Generate a new Action instance.
+     *
+     * @param string $actions
+     */
     public function __construct($actions = 'edit|delete')
     {
         $actions = explode('|', $actions);
@@ -34,19 +55,28 @@ class Action
         $this->defaultActions = array_intersect($actions, $this->defaultActions);
     }
 
+    /**
+     * Set row for action.
+     *
+     * @param Row $row
+     */
     public function setRow(Row $row)
     {
         $this->row = $row;
     }
 
+    /**
+     * @param callable $callback
+     */
     public function add(\Closure $callback)
     {
         $this->customActions[] = $callback($this->row);
-
-        //return $this;
     }
 
-    public function initScript()
+    /**
+     * Set up script for action.
+     */
+    protected function setUpScript()
     {
         $this->path = app('router')->current()->getPath();
 
@@ -85,9 +115,14 @@ SCRIPT;
         Admin::script($script);
     }
 
+    /**
+     * Render actions.
+     *
+     * @return string
+     */
     public function render()
     {
-        $this->initScript();
+        $this->setUpScript();
 
         $actionEntities = $this->customActions;
 
@@ -102,14 +137,11 @@ SCRIPT;
         return implode(' ', $actionEntities);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        try {
-            $this->render();
-        } catch (\Exception $e) {
-            dd($e);
-        }
-
         return $this->render();
     }
 }

@@ -142,6 +142,8 @@ class Filter
 
             return $this->addFilter($reflection->newInstanceArgs($arguments));
         }
+
+        return null;
     }
 
     /**

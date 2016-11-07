@@ -3,34 +3,90 @@
 namespace Encore\Admin\Grid;
 
 use Closure;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
 use Illuminate\Support\Facades\URL;
 
 class Column
 {
+    /**
+     * @var Grid
+     */
     protected $grid;
 
+    /**
+     * Name of column.
+     *
+     * @var string
+     */
     protected $name;
 
+    /**
+     * Label of column.
+     *
+     * @var string
+     */
     protected $label;
 
+    /**
+     * Original value of column.
+     *
+     * @var mixed
+     */
     protected $original;
 
+    /**
+     * Is column sortable.
+     *
+     * @var bool
+     */
     protected $sortable = false;
 
+    /**
+     * Sort arguments.
+     *
+     * @var array
+     */
     protected $sort;
 
+    /**
+     * Attributes of column.
+     *
+     * @var array
+     */
     protected $attributes = [];
 
+    /**
+     * Value wrapper.
+     *
+     * @var \Closure
+     */
     protected $valueWrapper;
 
+    /**
+     * Html wrapper.
+     *
+     * @var array
+     */
     protected $htmlWrappers = [];
 
+    /**
+     * Relation name.
+     *
+     * @var bool
+     */
     protected $relation = false;
 
+    /**
+     * Relation column.
+     *
+     * @var string
+     */
     protected $relationColumn;
 
+    /**
+     * @param string $name
+     * @param string $label
+     */
     public function __construct($name, $label)
     {
         $this->name = $name;
@@ -38,6 +94,9 @@ class Column
         $this->label = $this->formatLabel($label);
     }
 
+    /**
+     * @param Grid $grid
+     */
     public function setGrid(Grid $grid)
     {
         $this->grid = $grid;
@@ -92,6 +151,17 @@ class Column
     }
 
     /**
+     * Alias for value method.
+     *
+     * @param callable $callable
+     * @return $this
+     */
+    public function display(Closure $callable)
+    {
+        return $this->value($callable);
+    }
+
+    /**
      * If has a value wrapper.
      *
      * @return bool
@@ -125,6 +195,12 @@ class Column
         return (bool) $this->relation;
     }
 
+    /**
+     * Map all data to every column.
+     *
+     * @param $data
+     * @return mixed
+     */
     public function map($data)
     {
         foreach ($data as &$item) {
