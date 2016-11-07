@@ -30,7 +30,7 @@ class Exporter
     {
         $titles = [];
 
-        $filename = $this->grid->model()->eloquent()->getTable() . '.csv';
+        $filename = $this->grid->model()->eloquent()->getTable().'.csv';
 
         $data = $this->grid->processFilter();
 
@@ -38,10 +38,10 @@ class Exporter
             $titles = array_keys(array_dot($data[0]));
         }
 
-        $output = join(',', $titles) . "\n";
+        $output = implode(',', $titles)."\n";
 
         foreach ($data as $row) {
-            $output .= implode(',', array_dot($row)) . "\n";
+            $output .= implode(',', array_dot($row))."\n";
         }
 
         $headers = [
