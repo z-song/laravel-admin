@@ -154,6 +154,7 @@ class Column
      * Alias for value method.
      *
      * @param callable $callable
+     *
      * @return $this
      */
     public function display(Closure $callable)
@@ -199,6 +200,7 @@ class Column
      * Map all data to every column.
      *
      * @param $data
+     *
      * @return mixed
      */
     public function map($data)

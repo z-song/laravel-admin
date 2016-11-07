@@ -57,7 +57,7 @@ class Editable
      * Generate a new Editable instance.
      *
      * @param string $name
-     * @param array $arguments
+     * @param array  $arguments
      */
     public function __construct($name, $arguments = [])
     {
@@ -87,7 +87,7 @@ class Editable
     }
 
     /**
-     * Set resource url
+     * Set resource url.
      *
      * @param string $resource
      */

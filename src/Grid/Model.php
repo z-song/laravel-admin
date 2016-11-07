@@ -228,6 +228,7 @@ class Model
     /**
      * @param string $method
      * @param array  $arguments
+     *
      * @return $this
      */
     public function __call($method, $arguments)
@@ -242,6 +243,7 @@ class Model
 
     /**
      * @param $key
+     *
      * @return mixed
      */
     public function __get($key)
