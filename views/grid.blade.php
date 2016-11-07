@@ -6,6 +6,12 @@
 
             {!! $grid->renderFilter() !!}
 
+            @if($grid->allowExport())
+            <div class="btn-group pull-right" style="margin-right: 10px">
+                <a href="/{{ $grid->exportUrl() }}" target="_blank" class="btn btn-sm btn-warning"><i class="fa fa-table"></i>&nbsp;&nbsp;Export</a>
+            </div>
+            @endif
+
             @if($grid->allowCreation())
             <div class="btn-group pull-right" style="margin-right: 10px">
                 <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success"><i class="fa fa-save"></i>&nbsp;&nbsp;{{ trans('admin::lang.new') }}</a>

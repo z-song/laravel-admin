@@ -40,6 +40,9 @@ class Filter
      */
     protected $supports = ['is', 'like', 'gt', 'lt', 'between', 'where'];
 
+    /**
+     * @var bool
+     */
     protected $useModal = false;
 
     /**

@@ -123,6 +123,13 @@ class Grid
     protected $allowActions = true;
 
     /**
+     * Allow export data.
+     *
+     * @var bool
+     */
+    protected $allowExport = true;
+
+    /**
      * Is grid rows orderable.
      *
      * @var bool
@@ -290,9 +297,7 @@ class Grid
             return;
         }
 
-        call_user_func($this->builder, $this);
-
-        $data = $this->filter->execute();
+        $data = $this->processFilter();
 
         $this->columns->map(function (Column $column) use (&$data) {
             $data = $column->map($data);
@@ -303,6 +308,18 @@ class Grid
         $this->buildRows($data);
 
         $this->builded = true;
+    }
+
+    /**
+     * Process the grid filter
+     *
+     * @return array
+     */
+    public function processFilter()
+    {
+        call_user_func($this->builder, $this);
+
+        return $this->filter->execute();
     }
 
     /**
@@ -361,7 +378,24 @@ class Grid
      */
     protected function setupExporter()
     {
-        $this->exporter = new Exporter($this);
+        if (Input::has('_export')) {
+            $exporter = new Exporter($this);
+
+            $exporter->export();
+        }
+    }
+
+    /**
+     * Export url.
+     *
+     * @return string
+     */
+    public function exportUrl()
+    {
+        $query = $query = Input::all();
+        $query['_export'] = true;
+
+        return $this->resource() . '?' . http_build_query($query);
     }
 
     /**
@@ -416,6 +450,24 @@ class Grid
     public function disableActions()
     {
         $this->allowActions = false;
+    }
+
+    /**
+     * If grid allows export.s
+     *
+     * @return bool
+     */
+    public function allowExport()
+    {
+        return $this->allowExport;
+    }
+
+    /**
+     * Disable export.
+     */
+    public function disableExport()
+    {
+        $this->allowExport = false;
     }
 
     /**
