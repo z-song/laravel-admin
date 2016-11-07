@@ -10,7 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                     <span class="sr-only">Close</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Filter</h4>
+                <h4 class="modal-title" id="myModalLabel">{{ trans('admin::lang.filter') }}</h4>
             </div>
             <form action="/{!! $grid->resource() !!}" method="get" pjax-container>
                 <div class="modal-body">

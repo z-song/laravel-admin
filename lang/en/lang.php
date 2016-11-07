@@ -23,6 +23,8 @@ return [
     'order'         => 'Order',
     'expand'        => 'Expand',
     'collapse'      => 'Collapse',
+    'filter'        => 'Filter',
+    'close'         => 'Close',
 
     'action'           => 'Action',
     'title'            => 'Title',

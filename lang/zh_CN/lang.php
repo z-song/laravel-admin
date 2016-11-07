@@ -23,6 +23,8 @@ return [
     'order'         => '排序',
     'expand'        => '展开',
     'collapse'      => '收起',
+    'filter'        => '过滤器',
+    'close'         => '关闭',
 
     'action'           => '操作',
     'title'            => '标题',
