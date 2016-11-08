@@ -42,6 +42,7 @@ class Box extends Widget implements Renderable
      * Set box content.
      *
      * @param $content
+     *
      * @return $this
      */
     public function content($content)
@@ -56,7 +57,7 @@ class Box extends Widget implements Renderable
     }
 
     /**
-     * Set box title
+     * Set box title.
      *
      * @param string $title
      */

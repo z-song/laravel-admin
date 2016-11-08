@@ -5,8 +5,7 @@ namespace Encore\Admin\Auth\Database;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Menu
- * @package Encore\Admin\Auth\Database
+ * Class Menu.
  *
  * @property int $id
  *

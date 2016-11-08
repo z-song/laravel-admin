@@ -41,6 +41,7 @@ class Callout extends Widget implements Renderable
      * Add style to Callout.
      *
      * @param string $style
+     *
      * @return $this
      */
     public function style($style = 'info')

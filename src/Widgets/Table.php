@@ -40,6 +40,7 @@ class Table extends Widget implements Renderable
      * Set table headers.
      *
      * @param array $headers
+     *
      * @return $this
      */
     public function setHeaders($headers = [])
@@ -53,6 +54,7 @@ class Table extends Widget implements Renderable
      * Set table rows.
      *
      * @param array $rows
+     *
      * @return $this
      */
     public function setRows($rows = [])

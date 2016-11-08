@@ -47,6 +47,7 @@ class Tab extends Widget implements Renderable
      * Set dropdown items.
      *
      * @param array $links
+     *
      * @return $this
      */
     public function dropDown(array $links)
