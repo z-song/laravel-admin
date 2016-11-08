@@ -26,7 +26,7 @@ class Filter
     protected $grid;
 
     /**
-     * @var
+     * @var Model
      */
     protected $model;
 

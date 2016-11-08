@@ -11,12 +11,24 @@ use Illuminate\Support\Collection;
  */
 class Builder
 {
+    /**
+     * @var mixed
+     */
     protected $id;
 
+    /**
+     * @var Form
+     */
     protected $form;
 
+    /**
+     * @var Collection
+     */
     protected $fields;
 
+    /**
+     * @var array
+     */
     protected $options = ['title' => 'Edit'];
 
     /**
@@ -33,6 +45,10 @@ class Builder
      */
     protected $mode = 'create';
 
+    /**
+     * Builder constructor.
+     * @param Form $form
+     */
     public function __construct(Form $form)
     {
         $this->form = $form;
@@ -86,6 +102,12 @@ class Builder
         return $this->fields;
     }
 
+    /**
+     * Add or get options.
+     *
+     * @param array $options
+     * @return array|void
+     */
     public function options($options = [])
     {
         if (empty($options)) {
@@ -181,6 +203,11 @@ class Builder
         return '</form>';
     }
 
+    /**
+     * Build submit button.
+     *
+     * @return string|void
+     */
     public function submit()
     {
         if ($this->mode == self::MODE_VIEW) {
@@ -190,6 +217,11 @@ class Builder
         return '<button type="submit" class="btn btn-info pull-right">'.trans('admin::lang.submit').'</button>';
     }
 
+    /**
+     * Render form.
+     *
+     * @return string
+     */
     public function render()
     {
         $confirm = trans('admin::lang.delete_confirm');
@@ -226,6 +258,9 @@ SCRIPT;
         return view('admin::form', $vars)->render();
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->render();

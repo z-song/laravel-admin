@@ -6,12 +6,23 @@ use Illuminate\Contracts\Support\Renderable;
 
 class Tab extends Widget implements Renderable
 {
+    /**
+     * @var array
+     */
     protected $attributes = [
         'title'    => '',
         'tabs'     => [],
         'dropDown' => [],
     ];
 
+    /**
+     * Add a tab and its contents.
+     *
+     * @param string $title
+     * @param $content
+     *
+     * @return $this
+     */
     public function add($title, $content)
     {
         $this->attributes['tabs'][] = [
@@ -22,11 +33,22 @@ class Tab extends Widget implements Renderable
         return $this;
     }
 
+    /**
+     * Set title.
+     *
+     * @param string $title
+     */
     public function title($title = '')
     {
         $this->attributes['title'] = $title;
     }
 
+    /**
+     * Set dropdown items.
+     *
+     * @param array $links
+     * @return $this
+     */
     public function dropDown(array $links)
     {
         if (is_array($links[0])) {
@@ -45,6 +67,11 @@ class Tab extends Widget implements Renderable
         return $this;
     }
 
+    /**
+     * Render Tab.
+     *
+     * @return string
+     */
     public function render()
     {
         return view('admin::widgets.tab', $this->attributes)->render();

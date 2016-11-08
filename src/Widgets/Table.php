@@ -7,12 +7,28 @@ use Illuminate\Support\Arr;
 
 class Table extends Widget implements Renderable
 {
+    /**
+     * @var array
+     */
     protected $headers = [];
 
+    /**
+     * @var array
+     */
     protected $rows = [];
 
+    /**
+     * @var array
+     */
     protected $style = [];
 
+    /**
+     * Table constructor.
+     *
+     * @param array $headers
+     * @param array $rows
+     * @param array $style
+     */
     public function __construct($headers = [], $rows = [], $style = [])
     {
         $this->setHeaders($headers);
@@ -20,6 +36,12 @@ class Table extends Widget implements Renderable
         $this->setStyle($style);
     }
 
+    /**
+     * Set table headers.
+     *
+     * @param array $headers
+     * @return $this
+     */
     public function setHeaders($headers = [])
     {
         $this->headers = $headers;
@@ -27,6 +49,12 @@ class Table extends Widget implements Renderable
         return $this;
     }
 
+    /**
+     * Set table rows.
+     *
+     * @param array $rows
+     * @return $this
+     */
     public function setRows($rows = [])
     {
         if (Arr::isAssoc($rows)) {
@@ -42,6 +70,13 @@ class Table extends Widget implements Renderable
         return $this;
     }
 
+    /**
+     * Set table style.
+     *
+     * @param array $style
+     *
+     * @return $this
+     */
     public function setStyle($style = [])
     {
         $this->style = $style;
@@ -50,6 +85,8 @@ class Table extends Widget implements Renderable
     }
 
     /**
+     * Render the table.
+     *
      * @return string
      */
     public function render()
