@@ -36,7 +36,6 @@ class Exporter
         $data = $this->grid->processFilter();
 
         if (!empty($data)) {
-
             $columns = array_dot($this->sanitize($data[0]));
 
             $titles = array_keys($columns);
@@ -45,7 +44,7 @@ class Exporter
         $output = implode(',', $titles)."\n";
 
         foreach ($data as $row) {
-            $row     = array_only($row, $titles);
+            $row = array_only($row, $titles);
             $output .= implode(',', array_dot($row))."\n";
         }
 
@@ -64,14 +63,13 @@ class Exporter
      * Remove indexed array.
      *
      * @param array $row
+     *
      * @return array
      */
     protected function sanitize(array $row)
     {
         return collect($row)->reject(function ($val, $_) {
-
             return is_array($val) && !Arr::isAssoc($val);
-
         })->toArray();
     }
 }
