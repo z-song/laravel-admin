@@ -21,6 +21,8 @@ Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd
 安装
 ------------
 
+首先确保安装好了`laravel`，并且数据库连接设置正确。
+
 ```
 Laravel 5.2
 composer require encore/laravel-admin "dev-master"
@@ -47,6 +49,11 @@ php artisan admin:install
 
 启动服务后，在浏览器打开 `http://localhost/admin/` ,使用用户名 `admin` 和密码 `admin`登陆.
 
+默认配置
+------------
+
+安装完成之后，`laravel-admin`所有的配置都在`config/admin.php`文件中。
+
 使用文档
 ------------
 
@@ -72,9 +79,17 @@ php artisan admin:install
 ------------
 安装完成之后，后台的安装目录为`app/Admin`，之后大部分的后台开发编码工作都是在这个目录下进行。
 
+```
+app/Admin
+├── Controllers
+│   ├── ExampleController.php
+│   └── HomeController.php
+└── routes.php
+```
+
 `app/Admin/routes.php`文件用来配置后台路由，详细使用请阅读[路由配置](/docs/zh/router.md)。
 
-`app/Admin/Controllers`目录用来存放后台控制器文件，该目录下的`HomeController.php`文件是后台首页的显示控制器，`ExampleController.php`为实例文件。
+`app/Admin/Controllers`目录用来存放后台路由器文件，该目录下的`HomeController.php`文件是后台首页的显示控制器，`ExampleController.php`为实例文件。
 
 快速开始
 ------------
@@ -119,7 +134,9 @@ $router->resource('users', UserController::class);
 
 然后就能在后台管理页面的左侧边栏看到用户管理页面的链接入口了。
 
-对于数据表格(model-grid)和数据表单(model-form)的详细使用请查看[model-grid](/docs/zh/model-grid.md)和[model-form](/docs/zh/model-form.md)。
+### 4.创建表格表单
+
+剩下的工作就是构建数据表格和表单了，打开 `app/Admin/Contollers/UserController.php`,找到`form()`和`grid()`方法，然添加构建代码,更多详细使用请查看[model-grid](/docs/zh/model-grid.md)和[model-form](/docs/zh/model-form.md)。
 
 其它
 ------------

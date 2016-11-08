@@ -80,47 +80,137 @@ $form->text($column, [$label])->rules('required|min:10');
 $form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
-或者通过ajax加载option选项
+如果选项过多，可通过ajax方式动态分页载入选项：
+
 ```php
-$form->select($column[, $label])->options('/admin/demo/options');
+$form->select('user_id')->options(function ($id) {
+    $user = User::find($id);
+
+    if ($user) {
+        return [$user->id => $user->name];
+    }
+})->ajax('/admin/api/users');
 ```
 
-url `/admin/demo/options`返回json格式：
+url `/admin/api/users`接口的代码：
+
+```php
+public function users(Request $request)
+{
+    $q = $request->get('q');
+
+    return User::where('name', 'like', "%$q%")->paginate(null, ['id', 'name as text']);
+}
+
 ```
-[
-    {
-        "id": 1,
-        "text": "hello"
-    },
-    {
-        "id": 2,
-        "text": "world"
-    },
-]
+接口返回的数据结构为
+```
+{
+    "total": 4,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 1,
+    "next_page_url": null,
+    "prev_page_url": null,
+    "from": 1,
+    "to": 3,
+    "data": [
+        {
+            "id": 9,
+            "text": "xxx"
+        },
+        {
+            "id": 21,
+            "text": "xxx"
+        },
+        {
+            "id": 42,
+            "text": "xxx"
+        },
+        {
+            "id": 48,
+            "text": "xxx"
+        }
+    ]
+}
 ```
 
 #### 多选框
+
 ```php
 $form->multipleSelect($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
-或者通过ajax加载option选项
-```php
-$form->multipleSelect($column[, $label])->options('/admin/demo/options');
+多选框可以处理两种情况，第一种是`ManyToMany`的关系。
+
 ```
 
-url `/admin/demo/options`返回json格式：
+class Post extends Models
+{
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+}
+
+$form->multipleSelect('tags')->options(Tag::all()->pluck('name', 'id'));
+
 ```
-[
-    {
-        "id": 1,
-        "text": "hello"
-    },
-    {
-        "id": 2,
-        "text": "world"
-    },
-]
+
+第二种是选项值以逗号`,`隔开，存储在字符串字段里。
+
+
+如果选项过多，可通过ajax方式动态分页载入选项：
+
+```php
+$form->select('friends')->options(function ($ids) {
+
+    return User::find($ids)->pluck('name', 'id');
+    
+})->ajax('/admin/api/users');
+```
+
+url `/admin/api/users`接口的代码：
+
+```php
+public function users(Request $request)
+{
+    $q = $request->get('q');
+
+    return User::where('name', 'like', "%$q%")->paginate(null, ['id', 'name as text']);
+}
+
+```
+接口返回的数据结构为
+```
+{
+    "total": 4,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 1,
+    "next_page_url": null,
+    "prev_page_url": null,
+    "from": 1,
+    "to": 3,
+    "data": [
+        {
+            "id": 9,
+            "text": "xxx"
+        },
+        {
+            "id": 21,
+            "text": "xxx"
+        },
+        {
+            "id": 42,
+            "text": "xxx"
+        },
+        {
+            "id": 48,
+            "text": "xxx"
+        }
+    ]
+}
 ```
 
 #### textarea输入框:

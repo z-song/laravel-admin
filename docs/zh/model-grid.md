@@ -127,6 +127,11 @@ $grid->email()->value(function ($email) {
 $grid->disableCreation();
 ```
 
+#### 禁用导出数据按钮
+```php
+$grid->disableExport();
+```
+
 #### 禁用批量删除按钮
 ```php
 $grid->disableBatchDeletion();
@@ -151,7 +156,7 @@ $grid->rows(function($row){
 
     //指定列只开启编辑操作
     if($row->id % 3) {
-        $row->action('edit');
+        $row->actions('edit');
     }
     
     // 添加自定义操作按钮
@@ -172,6 +177,9 @@ $grid->rows(function($row){
 ```php
 $grid->filter(function($filter){
 
+    // 如果过滤器太多，可以使用弹出模态框来显示过滤器.
+    $filter->useModal();
+
     // sql: ... WHERE `user.name` LIKE "%$name%";
     $filter->like('name', 'name');
 
@@ -180,6 +188,24 @@ $grid->filter(function($filter){
 
     // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
     $filter->between('created_at', 'Created Time')->datetime();
+    
+    // sql: ... WHERE `article.author_id` = $id;
+    $filter->is('author_id', 'Author')->select(User::all()->pluck('name', 'id'));
+
+    // sql: ... WHERE `title` LIKE "%$input" OR `content` LIKE "%$input";
+    $filter->where(function ($query) {
+
+        $query->where('title', 'like', "%{$this->input}%")
+            ->orWhere('content', 'like', "%{$this->input}%");
+
+    }, 'Text');
+    
+    // sql: ... WHERE `rate` >= 6 AND `created_at` = {$input};
+    $filter->where(function ($query) {
+
+        $query->whereRaw("`rate` >= 6 AND `created_at` = {$this->input}");
+
+    }, 'Text');
 });
 ```
 
