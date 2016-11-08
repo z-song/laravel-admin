@@ -122,10 +122,21 @@ $grid->email()->value(function ($email) {
 
 ```
 
-#### Disable The batch delete button
+#### Disable the create button 
+```php
+$grid->disableCreation();
+```
+
+#### Disable the batch delete button
 ```php
 $grid->disableBatchDeletion();
 ```
+
+#### Disable the export button
+```php
+$grid->disableExport();
+```
+
 #### Modify the row action button
 ```php
 //Opens the edit and delete operations
@@ -162,6 +173,9 @@ $grid->rows(function($row){
 ```php
 $grid->filter(function($filter){
 
+    // If you have too many filters，you can use a modal window to handle them.
+    $filter->useModal();
+
     // sql: ... WHERE `user.name` LIKE "%$name%";
     $filter->like('name', 'name');
 
@@ -170,5 +184,252 @@ $grid->filter(function($filter){
 
     // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
     $filter->between('created_at', 'Created Time')->datetime();
+    
+    // sql: ... WHERE `article.author_id` = $id;
+    $filter->is('author_id', 'Author')->select(User::all()->pluck('name', 'id'));
+
+    // sql: ... WHERE `title` LIKE "%$input" OR `content` LIKE "%$input";
+    $filter->where(function ($query) {
+
+        $query->where('title', 'like', "%{$this->input}%")
+            ->orWhere('content', 'like', "%{$this->input}%");
+
+    }, 'Text');
+    
+    // sql: ... WHERE `rate` >= 6 AND `created_at` = {$input};
+    $filter->where(function ($query) {
+
+        $query->whereRaw("`rate` >= 6 AND `created_at` = {$this->input}");
+
+    }, 'Text');
 });
+```
+
+## Relation
+
+
+### One to one
+`users`表和`profiles`表通过`profiles.user_id`字段生成一对一关联
+The `users` table and the `profiles` table are generated one-to-one relation through the `profiles.user_id` field.
+
+```sql
+
+CREATE TABLE `users` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `profiles` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`age` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`gender` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+
+The corresponding data model are:
+
+```php
+
+class User extends Model
+{
+    public function profile()
+    {
+        $this->hasOne(Profile::class);
+    }
+}
+
+class Profile extends Model
+{
+    $this->hasOne(User::class);
+}
+
+```
+
+You can associate them in a grid with the following code:
+
+```php
+Admin::grid(User::class, function (Grid $grid) {
+
+    $grid->id('ID')->sortable();
+
+    $grid->name();
+    $grid->email();
+    
+    $grid->column('profile.age');
+    $grid->column('profile.gender');
+
+    //or
+    $grid->profile()->age();
+    $grid->profile()->gender();
+
+    $grid->created_at();
+    $grid->updated_at();
+});
+
+```
+
+### One to many
+
+The `posts` and `comments` tables generate a one-to-many association via the `comments.post_id` field
+
+```sql
+
+CREATE TABLE `posts` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `comments` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`post_id` int(10) unsigned NOT NULL,
+`content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+
+The corresponding data model are:
+
+```php
+
+class Post extends Model
+{
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+}
+
+class Comment extends Model
+{
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+}
+
+```
+
+You can associate them in a grid with the following code:
+
+```php
+
+return Admin::grid(Post::class, function (Grid $grid) {
+    $grid->id('id')->sortable();
+    $grid->title();
+    $grid->content();
+
+    $grid->comments('评论数')->value(function ($comments) {
+        $count = count($comments);
+        return "<span class='label label-warning'>{$count}</span>";
+    });
+
+    $grid->created_at();
+    $grid->updated_at();
+});
+
+
+return Admin::grid(Comment::class, function (Grid $grid) {
+    $grid->id('id');
+    $grid->post()->title();
+    $grid->content();
+
+    $grid->created_at()->sortable();
+    $grid->updated_at();
+});
+
+```
+
+### Many to many
+
+The `users` and` roles` tables produce a many-to-many relationship through the pivot table `role_user`
+
+```sql
+
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(190) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_username_unique` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+CREATE TABLE `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_name_unique` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+CREATE TABLE `role_users` (
+  `role_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  KEY `role_users_role_id_user_id_index` (`role_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+```
+
+The corresponding data model are:
+
+```php
+
+class User extends Model
+{
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+}
+
+class Role extends Model
+{
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+}
+
+```
+
+You can associate them in a grid with the following code:
+
+```php
+return Admin::grid(User::class, function (Grid $grid) {
+    $grid->id('ID')->sortable();
+    $grid->username();
+    $grid->name();
+
+    $grid->roles()->value(function ($roles) {
+
+        $roles = array_map(function ($role) {
+            return "<span class='label label-success'>{$role['name']}</span>";
+        }, $roles);
+
+        return join('&nbsp;', $roles);
+    });
+
+    $grid->created_at();
+    $grid->updated_at();
+});
+
 ```
