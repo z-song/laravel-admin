@@ -4,7 +4,8 @@ namespace Encore\Admin\Grid;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
 
 class Model
@@ -43,6 +44,11 @@ class Model
     protected $perPage = 20;
 
     /**
+     * @var bool
+     */
+    protected $usePaginate = true;
+
+    /**
      * Create a new grid model instance.
      *
      * @param EloquentModel $model
@@ -65,6 +71,16 @@ class Model
     }
 
     /**
+     * Enable or disable pagination.
+     *
+     * @param bool $use
+     */
+    public function usePaginate($use = true)
+    {
+        $this->usePaginate = $use;
+    }
+
+    /**
      * Build.
      *
      * @return array
@@ -72,7 +88,7 @@ class Model
     public function buildData()
     {
         if (empty($this->data)) {
-            $this->data = $this->get()->getCollection()->toArray();
+            $this->data = $this->get()->toArray();
         }
 
         return $this->data;
@@ -102,9 +118,14 @@ class Model
         return $this->model->getTable();
     }
 
+    /**
+     * @throws \Exception
+     *
+     * @return Collection
+     */
     protected function get()
     {
-        if ($this->model instanceof Paginator) {
+        if ($this->model instanceof AbstractPaginator) {
             return $this->model;
         }
 
@@ -115,7 +136,15 @@ class Model
             $this->model = call_user_func_array([$this->model, $query['method']], $query['arguments']);
         });
 
-        return $this->model;
+        if ($this->model instanceof Collection) {
+            return $this->model;
+        }
+
+        if ($this->model instanceof AbstractPaginator) {
+            return $this->model->getCollection();
+        }
+
+        throw new \Exception('Grid query error');
     }
 
     /**
@@ -131,10 +160,19 @@ class Model
             return $query['method'] == 'paginate';
         });
 
-        $this->queries->push([
-            'method'    => 'paginate',
-            'arguments' => is_null($paginate) ? [$this->perPage] : $paginate['arguments'],
-        ]);
+        if (!$this->usePaginate) {
+            $query = [
+                'method'    => 'get',
+                'arguments' => [],
+            ];
+        } else {
+            $query = [
+                'method'    => 'paginate',
+                'arguments' => is_null($paginate) ? [$this->perPage] : $paginate['arguments'],
+            ];
+        }
+
+        $this->queries->push($query);
     }
 
     /**
@@ -225,6 +263,12 @@ class Model
         ];
     }
 
+    /**
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return $this
+     */
     public function __call($method, $arguments)
     {
         $this->queries->push([
@@ -235,6 +279,11 @@ class Model
         return $this;
     }
 
+    /**
+     * @param $key
+     *
+     * @return mixed
+     */
     public function __get($key)
     {
         $data = $this->buildData();
