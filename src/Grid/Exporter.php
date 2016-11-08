@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Grid;
+use Illuminate\Support\Arr;
 
 class Exporter
 {
@@ -35,12 +36,16 @@ class Exporter
         $data = $this->grid->processFilter();
 
         if (!empty($data)) {
-            $titles = array_keys(array_dot($data[0]));
+
+            $columns = array_dot($this->sanitize($data[0]));
+
+            $titles = array_keys($columns);
         }
 
         $output = implode(',', $titles)."\n";
 
         foreach ($data as $row) {
+            $row     = array_only($row, $titles);
             $output .= implode(',', array_dot($row))."\n";
         }
 
@@ -53,5 +58,20 @@ class Exporter
         response(rtrim($output, "\n"), 200, $headers)->send();
 
         exit;
+    }
+
+    /**
+     * Remove indexed array.
+     *
+     * @param array $row
+     * @return array
+     */
+    protected function sanitize(array $row)
+    {
+        return collect($row)->reject(function ($val, $_) {
+
+            return is_array($val) && !Arr::isAssoc($val);
+
+        })->toArray();
     }
 }
