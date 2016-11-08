@@ -3,35 +3,103 @@
 namespace Encore\Admin\Grid;
 
 use Closure;
+use Encore\Admin\Grid;
 use Illuminate\Support\Facades\URL;
 
 class Column
 {
+    /**
+     * @var Grid
+     */
+    protected $grid;
+
+    /**
+     * Name of column.
+     *
+     * @var string
+     */
     protected $name;
 
+    /**
+     * Label of column.
+     *
+     * @var string
+     */
     protected $label;
 
+    /**
+     * Original value of column.
+     *
+     * @var mixed
+     */
     protected $original;
 
+    /**
+     * Is column sortable.
+     *
+     * @var bool
+     */
     protected $sortable = false;
 
+    /**
+     * Sort arguments.
+     *
+     * @var array
+     */
     protected $sort;
 
+    /**
+     * Attributes of column.
+     *
+     * @var array
+     */
     protected $attributes = [];
 
+    /**
+     * Value wrapper.
+     *
+     * @var \Closure
+     */
     protected $valueWrapper;
 
+    /**
+     * Html wrapper.
+     *
+     * @var array
+     */
     protected $htmlWrappers = [];
 
+    /**
+     * Relation name.
+     *
+     * @var bool
+     */
     protected $relation = false;
 
+    /**
+     * Relation column.
+     *
+     * @var string
+     */
     protected $relationColumn;
 
+    /**
+     * @param string $name
+     * @param string $label
+     */
     public function __construct($name, $label)
     {
         $this->name = $name;
 
         $this->label = $this->formatLabel($label);
+    }
+
+    /**
+     * @param Grid $grid
+     */
+    public function setGrid(Grid $grid)
+    {
+        $this->grid = $grid;
     }
 
     /**
@@ -83,6 +151,18 @@ class Column
     }
 
     /**
+     * Alias for value method.
+     *
+     * @param callable $callable
+     *
+     * @return $this
+     */
+    public function display(Closure $callable)
+    {
+        return $this->value($callable);
+    }
+
+    /**
      * If has a value wrapper.
      *
      * @return bool
@@ -116,6 +196,13 @@ class Column
         return (bool) $this->relation;
     }
 
+    /**
+     * Map all data to every column.
+     *
+     * @param $data
+     *
+     * @return mixed
+     */
     public function map($data)
     {
         foreach ($data as &$item) {
@@ -127,7 +214,7 @@ class Column
             }
 
             if ($this->hasHtmlWrapper()) {
-                $value = $this->htmlWrap($value);
+                $value = $this->htmlWrap($value, $item);
                 array_set($item, $this->name, $value);
             }
         }
@@ -275,9 +362,24 @@ EOT;
     {
         $server = $server ?: config('admin.upload.host');
 
-        $wrapper = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class=\'img\' />";
+        $wrapper = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
 
         $this->htmlWrapper($wrapper);
+
+        return $this;
+    }
+
+    /**
+     * Make the column editable.
+     *
+     * @return $this
+     */
+    public function editable()
+    {
+        $editable = new Editable($this->name, func_get_args());
+        $editable->setResource($this->grid->resource());
+
+        $this->htmlWrapper($editable->html());
 
         return $this;
     }
@@ -309,13 +411,14 @@ EOT;
      *
      * @return mixed
      */
-    protected function htmlWrap($value)
+    protected function htmlWrap($value, $row = [])
     {
         foreach ($this->htmlWrappers as $wrapper) {
             $value = str_replace('{value}', $value, $wrapper);
         }
 
-        $value = str_replace('{$value}', $this->original, $value);
+        $value = str_replace('{$value}', is_null($this->original) ? 'NULL' : $this->original, $value);
+        $value = str_replace('{pk}', array_get($row, $this->grid->getKeyName()), $value);
 
         return $value;
     }

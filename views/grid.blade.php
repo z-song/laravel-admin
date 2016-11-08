@@ -3,11 +3,18 @@
         <h3 class="box-title"></h3>
 
         <div class="box-tools">
+
             {!! $grid->renderFilter() !!}
+
+            @if($grid->allowExport())
+            <div class="btn-group pull-right" style="margin-right: 10px">
+                <a href="/{{ $grid->exportUrl() }}" target="_blank" class="btn btn-sm btn-warning"><i class="fa fa-download"></i>&nbsp;&nbsp;Export</a>
+            </div>
+            @endif
+
             @if($grid->allowCreation())
             <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">{{ trans('admin::lang.new') }}</a>
-                {{--<a href="/{{$grid->resource()}}/export" class="btn btn-sm btn-primary">{{ trans('admin::lang.export') }}</a>--}}
+                <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success"><i class="fa fa-save"></i>&nbsp;&nbsp;{{ trans('admin::lang.new') }}</a>
             </div>
             @endif
 
@@ -21,6 +28,11 @@
                 @foreach($grid->columns() as $column)
                 <th>{{$column->getLabel()}}{!! $column->sorter() !!}</th>
                 @endforeach
+
+                @if($grid->isOrderable())
+                    <th>{{ trans('admin::lang.order') }}</th>
+                @endif
+
                 @if($grid->allowActions())
                     <th>{{ trans('admin::lang.action') }}</th>
                 @endif
@@ -32,6 +44,16 @@
                 @foreach($grid->columnNames as $name)
                 <td>{!! $row->column($name) !!}</td>
                 @endforeach
+
+                @if($grid->isOrderable())
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-xs btn-info grid-order-up" data-id="{{ $row->id() }}"><i class="fa fa-caret-up fa-fw"></i></button>
+                            <button type="button" class="btn btn-xs btn-default grid-order-down" data-id="{{ $row->id() }}"><i class="fa fa-caret-down fa-fw"></i></button>
+                        </div>
+                    </td>
+                @endif
+
                 @if($grid->allowActions())
                     <td>
                         {!! $row->actions() !!}
