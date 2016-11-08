@@ -47,6 +47,7 @@ class Builder
 
     /**
      * Builder constructor.
+     *
      * @param Form $form
      */
     public function __construct(Form $form)
@@ -106,6 +107,7 @@ class Builder
      * Add or get options.
      *
      * @param array $options
+     *
      * @return array|void
      */
     public function options($options = [])

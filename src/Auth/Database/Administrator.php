@@ -7,8 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Administrator
- * @package Encore\Admin\Auth\Database
+ * Class Administrator.
  *
  * @property Role[] $roles
  */

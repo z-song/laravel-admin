@@ -46,6 +46,7 @@ class Alert extends Widget implements Renderable
      * Add style.
      *
      * @param string $style
+     *
      * @return $this
      */
     public function style($style = 'info')
@@ -59,6 +60,7 @@ class Alert extends Widget implements Renderable
      * Add icon.
      *
      * @param string $icon
+     *
      * @return $this
      */
     public function icon($icon)

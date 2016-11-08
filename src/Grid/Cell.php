@@ -21,8 +21,9 @@ class Cell
 
     /**
      * Cell constructor.
-     * @param int $row
-     * @param int $column
+     *
+     * @param int    $row
+     * @param int    $column
      * @param string $value
      */
     public function __construct($row = 0, $column = 0, $value = '')
