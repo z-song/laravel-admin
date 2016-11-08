@@ -11,9 +11,15 @@ class Permission
      * Check permission.
      *
      * @param $permission
+     *
+     * @return true
      */
     public static function check($permission)
     {
+        if (static::isAdministrator()) {
+            return true;
+        }
+
         if (Auth::guard('admin')->user()->cannot($permission)) {
             static::error();
         }
@@ -23,9 +29,15 @@ class Permission
      * Roles allowed to access.
      *
      * @param $roles
+     *
+     * @return true
      */
     public static function allow($roles)
     {
+        if (static::isAdministrator()) {
+            return true;
+        }
+
         if (!Auth::guard('admin')->user()->isRole($roles)) {
             static::error();
         }
@@ -35,9 +47,15 @@ class Permission
      * Roles denied to access.
      *
      * @param $roles
+     *
+     * @return true
      */
     public static function deny($roles)
     {
+        if (static::isAdministrator()) {
+            return true;
+        }
+
         if (Auth::guard('admin')->user()->isRole($roles)) {
             static::error();
         }
@@ -45,8 +63,6 @@ class Permission
 
     /**
      * Send error response page.
-     *
-     * @param \Exception $e
      */
     protected static function error()
     {
@@ -56,5 +72,15 @@ class Permission
 
         response($content)->send();
         exit;
+    }
+
+    /**
+     * If current user is administrator.
+     *
+     * @return mixed
+     */
+    public static function isAdministrator()
+    {
+        return Auth::guard('admin')->user()->isRole('administrator');
     }
 }
