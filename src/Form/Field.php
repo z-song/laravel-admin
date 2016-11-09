@@ -250,7 +250,7 @@ class Field
      *
      * @param string $rules
      *
-     * @return $this
+     * @return $this|string
      */
     public function rules($rules = null)
     {

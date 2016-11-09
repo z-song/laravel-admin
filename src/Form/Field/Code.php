@@ -11,8 +11,6 @@ class Code extends Field
     public function lang($lang = 'php')
     {
         $this->mode = "text/x-$lang";
-
-        $this->js[] = "codemirror/mode/$lang/$lang.js";
     }
 
     public function render()
