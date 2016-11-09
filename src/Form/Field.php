@@ -248,7 +248,7 @@ class Field
     /**
      * Get or set rules.
      *
-     * @param null $rules
+     * @param string $rules
      *
      * @return $this
      */
@@ -268,7 +268,7 @@ class Field
     /**
      * Set or get value of the field.
      *
-     * @param null $value
+     * @param string $value
      *
      * @return mixed
      */

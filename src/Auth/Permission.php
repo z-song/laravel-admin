@@ -12,7 +12,7 @@ class Permission
      *
      * @param $permission
      *
-     * @return true
+     * @return boolean|null
      */
     public static function check($permission)
     {
@@ -30,7 +30,7 @@ class Permission
      *
      * @param $roles
      *
-     * @return true
+     * @return boolean|null
      */
     public static function allow($roles)
     {
@@ -48,7 +48,7 @@ class Permission
      *
      * @param $roles
      *
-     * @return true
+     * @return boolean|null
      */
     public static function deny($roles)
     {
