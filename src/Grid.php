@@ -246,6 +246,13 @@ class Grid
         return $this->columns[] = $column;
     }
 
+    /**
+     * Add a blank column.
+     *
+     * @param $label
+     *
+     * @return Column
+     */
     public function blank($label)
     {
         return $this->addColumn('blank', $label);
@@ -533,15 +540,6 @@ class Grid
         }
 
         return app('router')->current()->getPath();
-    }
-
-    public function pathOfCreate()
-    {
-        $path = $query = '';
-
-        extract(parse_url($this->resource()));
-
-        return '/'.trim($path, '/').'/create'.$query;
     }
 
     /**
