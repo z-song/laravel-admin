@@ -9,14 +9,31 @@ use Illuminate\Http\Request;
 
 class Menu implements Renderable
 {
+    /**
+     * @var array
+     */
     protected $items = [];
 
+    /**
+     * @var string
+     */
     protected $script;
 
+    /**
+     * @var string
+     */
     protected $elementId = 'tree-';
 
+    /**
+     * @var Model
+     */
     protected $model;
 
+    /**
+     * Menu constructor.
+     *
+     * @param Model|null $model
+     */
     public function __construct(Model $model = null)
     {
         $this->model = $model;

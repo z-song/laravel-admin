@@ -14,37 +14,96 @@ use Illuminate\Support\Facades\Input;
  */
 class Field
 {
+    /**
+     * Element id.
+     *
+     * @var array|string
+     */
     protected $id;
 
+    /**
+     * Element value.
+     *
+     * @var mixed
+     */
     protected $value;
 
+    /**
+     * Field original value.
+     *
+     * @var mixed
+     */
     protected $original;
 
+    /**
+     * Field default value.
+     *
+     * @var mixed
+     */
     protected $default;
 
+    /**
+     * Element label.
+     *
+     * @var string
+     */
     protected $label = '';
 
+    /**
+     * Column name.
+     *
+     * @var string
+     */
     protected $column = '';
 
+    /**
+     * Variables of elements.
+     *
+     * @var array
+     */
     protected $variables = [];
 
+    /**
+     * Options for specify elements.
+     *
+     * @var array
+     */
     protected $options = [];
 
+    /**
+     * Validation rules.
+     *
+     * @var string
+     */
     protected $rules = '';
 
-    protected $css = [];
-
-    protected $js = [];
-
+    /**
+     * Script for field.
+     *
+     * @var string
+     */
     protected $script = '';
 
+    /**
+     * Element attributes.
+     *
+     * @var array
+     */
     protected $attributes = [];
 
     /**
+     * Parent form.
+     *
      * @var Form
      */
     protected $form = null;
 
+    /**
+     * Field constructor.
+     *
+     * @param $column
+     * @param array $arguments
+     */
     public function __construct($column, $arguments = [])
     {
         $this->column = $column;
@@ -139,7 +198,7 @@ class Field
     /**
      * Set original value to the field.
      *
-     * @param $data
+     * @param array $data
      *
      * @return void
      */
@@ -191,7 +250,7 @@ class Field
      *
      * @param null $rules
      *
-     * @return string
+     * @return $this
      */
     public function rules($rules = null)
     {
@@ -202,6 +261,8 @@ class Field
         $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
         $this->rules = implode('|', $rules);
+
+        return $this;
     }
 
     /**
@@ -222,6 +283,8 @@ class Field
         }
 
         $this->value = $value;
+
+        return $this;
     }
 
     /**
@@ -319,6 +382,12 @@ class Field
         return view($this->getView(), $this->variables());
     }
 
+    /**
+     * @param $method
+     * @param $arguments
+     *
+     * @return $this
+     */
     public function __call($method, $arguments)
     {
         if ($method === 'default') {

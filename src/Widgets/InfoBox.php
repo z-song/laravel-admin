@@ -6,6 +6,9 @@ use Illuminate\Contracts\Support\Renderable;
 
 class InfoBox extends Widget implements Renderable
 {
+    /**
+     * @var array
+     */
     protected $attributes = [];
 
     /**
