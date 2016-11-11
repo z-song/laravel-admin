@@ -5,7 +5,6 @@ namespace Encore\Admin\Form;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\Input;
 
 /**
  * Class Field.
@@ -318,6 +317,7 @@ class Field
      *
      * @param array|string $attribute
      * @param mixed        $value
+     *
      * @return $this
      */
     public function attribute($attribute, $value = null)
