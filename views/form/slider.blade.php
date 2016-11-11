@@ -6,6 +6,6 @@
 
         @include('admin::form.error')
 
-        <input type="text" id="{{$id}}" name="{{$name}}" data-from="{{ old($column, $value) }}">
+        <input type="text" id="{{$id}}" name="{{$name}}" data-from="{{ old($column, $value) }}" {!! $attributes !!} />
     </div>
 </div>

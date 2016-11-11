@@ -7,7 +7,7 @@
         @include('admin::form.error')
 
         @foreach($values as $option => $label)
-            <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$id}}" {{ ($option == old($column, $value))?'checked':'' }}>&nbsp;{{$label}}&nbsp;&nbsp;
+            <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$id}}" {{ ($option == old($column, $value))?'checked':'' }} />&nbsp;{{$label}}&nbsp;&nbsp;
         @endforeach
     </div>
 </div>
