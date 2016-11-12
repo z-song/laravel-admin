@@ -248,7 +248,7 @@ class User extends Model
 
 class Profile extends Model
 {
-    $this->hasOne(User::class);
+    $this->belongsTo(User::class);
 }
 
 ```
