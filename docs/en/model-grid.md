@@ -209,7 +209,7 @@ $grid->filter(function($filter){
 
 
 ### One to one
-`users`表和`profiles`表通过`profiles.user_id`字段生成一对一关联
+
 The `users` table and the `profiles` table are generated one-to-one relation through the `profiles.user_id` field.
 
 ```sql
@@ -332,7 +332,7 @@ return Admin::grid(Post::class, function (Grid $grid) {
     $grid->title();
     $grid->content();
 
-    $grid->comments('评论数')->value(function ($comments) {
+    $grid->comments('Comments count')->value(function ($comments) {
         $count = count($comments);
         return "<span class='label label-warning'>{$count}</span>";
     });
