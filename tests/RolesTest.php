@@ -32,11 +32,23 @@ class RolesTest extends TestCase
 
     public function testAddRoleToUser()
     {
-        $this->visit('admin/auth/users/1/edit')
+        $user = [
+            'username' => 'Test',
+            'name'     => 'Name',
+            'password' => '123456',
+        ];
+
+        $this->visit('admin/auth/users/create')
+            ->see('Create')
+            ->submitForm('Submit', $user)
+            ->seePageIs('admin/auth/users')
+            ->seeInDatabase(config('admin.database.users_table'), ['username' => 'Test']);
+
+        $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
             ->submitForm('Submit', ['roles' => [2]])
             ->seePageIs('admin/auth/users')
-            ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 1, 'role_id' => 2]);
+            ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 2]);
     }
 
     public function testDeleteRole()

@@ -27,6 +27,20 @@ class AdminServiceProvider extends ServiceProvider
         'admin.auth' => \Encore\Admin\Middleware\Authenticate::class,
         'admin.pjax' => \Encore\Admin\Middleware\PjaxMiddleware::class,
         'admin.log'  => \Encore\Admin\Middleware\OperationLog::class,
+        'admin.permission'  => \Encore\Admin\Middleware\PermissionMiddleware::class,
+    ];
+
+    /**
+     * The application's route middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewareGroups = [
+        'admin' => [
+            'admin.auth',
+            'admin.pjax',
+            'admin.log',
+        ],
     ];
 
     /**
@@ -121,8 +135,14 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected function registerRouteMiddleware()
     {
+        // register route middleware.
         foreach ($this->routeMiddleware as $key => $middleware) {
             app('router')->middleware($key, $middleware);
+        }
+
+        // register middleware group.
+        foreach ($this->middlewareGroups as $key => $middleware) {
+            app('router')->middlewareGroup($key, $middleware);
         }
     }
 
