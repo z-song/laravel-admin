@@ -86,7 +86,7 @@
 @if(config('app.locale') == 'zh_CN')
 <script src="{{ asset ("http://map.qq.com/api/js?v=2.exp") }}"></script>
 @else
-<script src="{{ asset ("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key=". env('GOOGLE_API_KEY') .") }}"></script>
+<script src="{{ asset ("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key=".env('GOOGLE_API_KEY')) }}"></script>
 @endif
 
 <script>
