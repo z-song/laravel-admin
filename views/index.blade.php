@@ -55,8 +55,6 @@
 
     @include('admin::partials.footer')
 
-    @include('admin::partials.control-sidebar')
-
 </div>
 
 <!-- ./wrapper -->

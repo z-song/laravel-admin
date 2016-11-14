@@ -20,6 +20,14 @@ class Permission
             return true;
         }
 
+        if (is_array($permission)) {
+            collect($permission)->each(function ($permission) {
+                call_user_func([Permission::class, 'check'], $permission);
+            });
+
+            return;
+        }
+
         if (Auth::guard('admin')->user()->cannot($permission)) {
             static::error();
         }

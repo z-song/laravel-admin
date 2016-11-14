@@ -51,7 +51,7 @@ class Router
         $this->attributes = [
             'prefix'        => config('admin.prefix'),
             'namespace'     => Admin::controllerNamespace(),
-            'middleware'    => ['web', 'admin.auth', 'admin.pjax', 'admin.log'],
+            'middleware'    => ['web', 'admin'],
         ];
     }
 
@@ -66,13 +66,18 @@ class Router
         $attributes['namespace'] = 'Encore\Admin\Controllers';
 
         $this->router->group($attributes, function ($router) {
-            $router->resources([
-                'auth/users'       => 'UserController',
-                'auth/roles'       => 'RoleController',
-                'auth/permissions' => 'PermissionController',
-                'auth/menu'        => 'MenuController',
-                'auth/logs'        => 'LogController',
-            ]);
+
+            $attributes = ['middleware' => 'admin.permission:allow,administrator'];
+
+            $router->group($attributes, function ($router) {
+                $router->resources([
+                    'auth/users'       => 'UserController',
+                    'auth/roles'       => 'RoleController',
+                    'auth/permissions' => 'PermissionController',
+                    'auth/menu'        => 'MenuController',
+                    'auth/logs'        => 'LogController',
+                ]);
+            });
 
             $router->get('auth/login', 'AuthController@getLogin');
             $router->post('auth/login', 'AuthController@postLogin');
