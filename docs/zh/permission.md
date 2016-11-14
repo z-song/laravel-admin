@@ -4,12 +4,12 @@
 ```php
 use Encore\Admin\Auth\Permission;
 
-class UserController extends Controller
+class PostController extends Controller
 {
-    public function __construct()
+    public function create()
     {
-        // 检查权限，有user权限的角色可以访问
-        Permission::check('user');
+        // 检查权限，有create-post权限的角色可以访问
+        Permission::check('create-post');
         
         // 'editor', 'developer'两个角色可以访问
         Permission::allow(['editor', 'developer']);
