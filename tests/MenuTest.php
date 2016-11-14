@@ -29,8 +29,7 @@ class MenuTest extends TestCase
         $item = ['parent_id' => '0', 'title' => 'Test', 'uri' => 'test'];
 
         $this->visit('admin/auth/menu')
-            ->click('New')
-            ->seePageIs('admin/auth/menu/create')
+            ->seePageIs('admin/auth/menu')
             ->see('Menu')
             ->see('Tips')
             ->submitForm('Submit', $item)

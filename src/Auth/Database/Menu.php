@@ -4,6 +4,13 @@ namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Menu.
+ *
+ * @property int $id
+ *
+ * @method where($parent_id, $id)
+ */
 class Menu extends Model
 {
     /**

@@ -2,12 +2,15 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Menu;
+use Encore\Admin\Auth\Database\Menu as MenuModel;
 use Encore\Admin\Auth\Database\Role;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
+use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Tree;
+use Encore\Admin\Layout\Row;
+use Encore\Admin\Menu\Menu;
+use Encore\Admin\Widgets\Box;
 use Encore\Admin\Widgets\Callout;
 use Illuminate\Routing\Controller;
 
@@ -24,7 +27,29 @@ class MenuController extends Controller
             $content->header(trans('admin::lang.menu'));
             $content->description(trans('admin::lang.list'));
 
-            $content->body($this->tree());
+            $content->row(function (Row $row) {
+                $row->column(5, function (Column $column) {
+                    $column->append($this->callout());
+
+                    $form = new \Encore\Admin\Widgets\Form();
+                    $form->action(admin_url('auth/menu'));
+
+                    $options = [0 => 'Root'] + MenuModel::buildSelectOptions();
+                    $form->select('parent_id', trans('admin::lang.parent_id'))->options($options);
+                    $form->text('title', trans('admin::lang.title'))->rules('required');
+                    $form->text('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required');
+                    $form->text('uri', trans('admin::lang.uri'));
+                    $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+
+                    $column->append((new Box(trans('admin::lang.new'), $form))->style('success'));
+                });
+
+                $menu = new Menu(new MenuModel());
+
+                $row->column(7, $menu);
+            });
+
+            Admin::script($this->script());
         });
     }
 
@@ -47,22 +72,6 @@ class MenuController extends Controller
     }
 
     /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-            $content->header(trans('admin::lang.menu'));
-            $content->description(trans('admin::lang.create'));
-
-            $content->row($this->callout());
-            $content->row($this->form());
-        });
-    }
-
-    /**
      * @param $id
      *
      * @return $this|\Illuminate\Http\RedirectResponse
@@ -80,7 +89,15 @@ class MenuController extends Controller
     public function destroy($id)
     {
         if ($this->form()->destroy($id)) {
-            return response()->json(['msg' => 'delete success!']);
+            return response()->json([
+                'status'  => true,
+                'message' => trans('admin::lang.delete_succeeded'),
+            ]);
+        } else {
+            return response()->json([
+                'status'  => false,
+                'message' => trans('admin::lang.delete_failed'),
+            ]);
         }
     }
 
@@ -93,26 +110,16 @@ class MenuController extends Controller
     }
 
     /**
-     * Make a tree builder.
-     *
-     * @return Tree
-     */
-    public function tree()
-    {
-        return Admin::tree(Menu::class);
-    }
-
-    /**
      * Make a form builder.
      *
      * @return Form
      */
     public function form()
     {
-        return Admin::form(Menu::class, function (Form $form) {
+        return Admin::form(MenuModel::class, function (Form $form) {
             $form->display('id', 'ID');
 
-            $options = [0 => 'Root'] + Menu::buildSelectOptions();
+            $options = [0 => 'Root'] + MenuModel::buildSelectOptions();
 
             $form->select('parent_id', trans('admin::lang.parent_id'))->options($options);
             $form->text('title', trans('admin::lang.title'))->rules('required');
@@ -125,12 +132,29 @@ class MenuController extends Controller
         });
     }
 
+    protected function script()
+    {
+        return <<<'EOT'
+
+$('.menu-tools').on('click', function(e){
+    var target = $(e.target),
+        action = target.data('action');
+    if (action === 'expand-all') {
+        $('.dd').nestable('expandAll');
+    }
+    if (action === 'collapse-all') {
+        $('.dd').nestable('collapseAll');
+    }
+});
+EOT;
+    }
+
     /**
      * @return Callout
      */
     protected function callout()
     {
-        $text = 'For icons see <a href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>';
+        $text = 'For icons please see <a href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>';
 
         return new Callout($text, 'Tips', 'info');
     }

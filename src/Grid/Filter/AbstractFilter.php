@@ -8,18 +8,50 @@ use Encore\Admin\Grid\Filter\Field\Text;
 
 abstract class AbstractFilter
 {
+    /**
+     * Element id.
+     *
+     * @var array|string
+     */
     protected $id;
 
+    /**
+     * Label of field.
+     *
+     * @var string
+     */
     protected $label;
 
+    /**
+     * @var array|string
+     */
     protected $value;
 
+    /**
+     * @var
+     */
     protected $column;
 
+    /**
+     * Field object.
+     *
+     * @var
+     */
     protected $field;
 
+    /**
+     * Query for filter.
+     *
+     * @var string
+     */
     protected $query = 'where';
 
+    /**
+     * AbstractFilter constructor.
+     *
+     * @param $column
+     * @param string $label
+     */
     public function __construct($column, $label = '')
     {
         $this->column = $column;
@@ -126,21 +158,41 @@ abstract class AbstractFilter
         $this->setField(new DateTime($this));
     }
 
+    /**
+     * Set field object of filter.
+     *
+     * @param $field
+     */
     protected function setField($field)
     {
         $this->field = $field;
     }
 
+    /**
+     * Get field object of filter.
+     *
+     * @return mixed
+     */
     public function field()
     {
         return $this->field;
     }
 
+    /**
+     * Get element id.
+     *
+     * @return array|string
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Build conditions of filter.
+     *
+     * @return array|mixed
+     */
     protected function buildCondition()
     {
         $column = explode('.', $this->column);
@@ -152,6 +204,11 @@ abstract class AbstractFilter
         return call_user_func_array([$this, 'buildRelationCondition'], func_get_args());
     }
 
+    /**
+     * Build query condition of model relation.
+     *
+     * @return array
+     */
     protected function buildRelationCondition()
     {
         $args = func_get_args();
@@ -163,6 +220,9 @@ abstract class AbstractFilter
         }]];
     }
 
+    /**
+     * @return array
+     */
     protected function fieldVars()
     {
         if (method_exists($this->field(), 'variables')) {
@@ -172,6 +232,11 @@ abstract class AbstractFilter
         return [];
     }
 
+    /**
+     * Variables for filter view.
+     *
+     * @return array
+     */
     protected function variables()
     {
         $variables = [
@@ -185,6 +250,11 @@ abstract class AbstractFilter
         return array_merge($variables, $this->fieldVars());
     }
 
+    /**
+     * Render this filter.
+     *
+     * @return \Illuminate\View\View|string
+     */
     public function render()
     {
         $class = explode('\\', get_called_class());
@@ -193,6 +263,9 @@ abstract class AbstractFilter
         return view($view, $this->variables());
     }
 
+    /**
+     * @return \Illuminate\View\View|string
+     */
     public function __toString()
     {
         return $this->render();
