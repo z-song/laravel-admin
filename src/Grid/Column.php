@@ -199,7 +199,7 @@ class Column
     /**
      * Map all data to every column.
      *
-     * @param $data
+     * @param array $data
      *
      * @return mixed
      */
@@ -207,6 +207,10 @@ class Column
     {
         foreach ($data as &$item) {
             $this->original = $value = array_get($item, $this->name);
+
+            $value = $this->htmlEntityEncode($value);
+
+            array_set($item, $this->name, $value);
 
             if ($this->hasValueWrapper()) {
                 $value = call_user_func($this->valueWrapper, $value);
@@ -220,6 +224,26 @@ class Column
         }
 
         return $data;
+    }
+
+    /**
+     * Convert characters to HTML entities recursively.
+     *
+     * @param array|string $item
+     *
+     * @return mixed
+     */
+    protected function htmlEntityEncode($item)
+    {
+        if (is_array($item)) {
+            array_walk_recursive($item, function (&$value) {
+                $value = htmlentities($value);
+            });
+        } else {
+            $item = htmlentities($item);
+        }
+
+        return $item;
     }
 
     /**
@@ -417,7 +441,11 @@ EOT;
             $value = str_replace('{value}', $value, $wrapper);
         }
 
-        $value = str_replace('{$value}', is_null($this->original) ? 'NULL' : $this->original, $value);
+        $value = str_replace(
+            '{$value}',
+            is_null($this->original) ? 'NULL' : $this->htmlEntityEncode($this->original),
+            $value
+        );
         $value = str_replace('{pk}', array_get($row, $this->grid->getKeyName()), $value);
 
         return $value;
