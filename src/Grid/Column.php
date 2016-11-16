@@ -213,7 +213,7 @@ class Column
             array_set($item, $this->name, $value);
 
             if ($this->hasValueWrapper()) {
-                $value = call_user_func($this->valueWrapper, $value);
+                $value = call_user_func($this->valueWrapper, $this->original);
                 array_set($item, $this->name, $value);
             }
 
