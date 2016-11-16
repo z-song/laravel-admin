@@ -2,7 +2,7 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="/admin" class="logo">
+    <a href="/{{ trim(config('admin.prefix'), '/') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>{{config('admin.name')}}</b></span>
         <!-- logo for regular state and mobile devices -->
