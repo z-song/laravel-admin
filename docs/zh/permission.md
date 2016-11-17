@@ -19,3 +19,42 @@ class PostController extends Controller
     }
 }
 ```
+
+## 权限中间件
+
+可以在路由配置上结合权限中间件来控制路由的权限
+
+```php
+
+// 允许administrator、editor两个角色访问group里面的路由
+Route::group([
+    'middleware' => 'admin.permission:allow,administrator,editor',
+], function ($router) {
+
+    $router->resource('users', UserController::class);
+    ...
+    
+});
+
+// 禁止developer、operator两个角色访问group里面的路由
+Route::group([
+    'middleware' => 'admin.permission:deny,developer,operator',
+], function ($router) {
+
+    $router->resource('users', UserController::class);
+    ...
+    
+});
+
+// 有edit-post、create-post、delete-post三个权限的用户可以访问group里面的路由
+Route::group([
+    'middleware' => 'admin.permission:check,edit-post,create-post,delete-post',
+], function ($router) {
+
+    $router->resource('posts', PostController::class);
+    ...
+    
+});
+```
+
+权限中间件和其它中间件使用方法一致。
