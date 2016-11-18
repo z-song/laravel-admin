@@ -46,7 +46,7 @@ class Permission
             return true;
         }
 
-        if (!Auth::guard('admin')->user()->isRole($roles)) {
+        if (!Auth::guard('admin')->user()->inRoles($roles)) {
             static::error();
         }
     }
@@ -64,7 +64,7 @@ class Permission
             return true;
         }
 
-        if (Auth::guard('admin')->user()->isRole($roles)) {
+        if (Auth::guard('admin')->user()->inRoles($roles)) {
             static::error();
         }
     }
