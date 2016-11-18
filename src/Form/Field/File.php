@@ -5,6 +5,7 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
@@ -116,6 +117,10 @@ EOT;
 
     public function objectUrl($path)
     {
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return $path;
+        }
+
         return trim(config('admin.upload.host'), '/').'/'.trim($path, '/');
     }
 
