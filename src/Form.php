@@ -708,7 +708,14 @@ class Form
                     continue;
                 }
 
-                $data[$field->label()] = array_get($input, $columns);
+                $value = array_get($input, $columns);
+
+                // remove empty options from multiple select.
+                if ($field instanceof Field\MultipleSelect) {
+                    $value = array_filter($value);
+                }
+
+                $data[$field->label()] = $value;
                 $rules[$field->label()] = $rule;
             }
 
