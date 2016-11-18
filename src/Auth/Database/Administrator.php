@@ -30,7 +30,7 @@ class Administrator extends Model implements AuthenticatableContract
     }
 
     /**
-     * A User belongs to many roles.
+     * A user has and belongs to many roles.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -42,6 +42,18 @@ class Administrator extends Model implements AuthenticatableContract
     }
 
     /**
+     * A User has and belongs to many permissions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function permissions()
+    {
+        $pivotTable = config('admin.database.user_permissions_table');
+
+        return $this->belongsToMany(Permission::class, $pivotTable, 'user_id', 'permission_id');
+    }
+
+    /**
      * Check if user has permission.
      *
      * @param $permission
@@ -50,6 +62,16 @@ class Administrator extends Model implements AuthenticatableContract
      */
     public function can($permission)
     {
+        if ($this->isAdministrator()) {
+            return true;
+        }
+
+        if (method_exists($this, 'permissions')) {
+            if ($this->permissions()->where('slug', $permission)->exists()) {
+                return true;
+            }
+        }
+
         foreach ($this->roles as $role) {
             if ($role->can($permission)) {
                 return true;
@@ -72,19 +94,36 @@ class Administrator extends Model implements AuthenticatableContract
     }
 
     /**
-     * Check if user is $roles.
-     *
-     * @param $roles
+     * Check if user is administrator.
      *
      * @return mixed
      */
-    public function isRole($roles)
+    public function isAdministrator()
     {
-        if (is_string($roles)) {
-            $roles = [$roles];
-        }
+        return $this->isRole('administrator');
+    }
 
-        return $this->roles()->whereIn('slug', $roles)->exists();
+    /**
+     * Check if user is $role.
+     *
+     * @param string $role
+     *
+     * @return mixed
+     */
+    public function isRole($role)
+    {
+        return $this->roles()->where('slug', $role)->exists();
+    }
+
+    /**
+     * Check if user in $roles.
+     *
+     * @param array $roles
+     * @return mixed
+     */
+    public function inRoles($roles = [])
+    {
+        return $this->roles()->whereIn('slug', (array) $roles)->exists();
     }
 
     /**
@@ -102,7 +141,7 @@ class Administrator extends Model implements AuthenticatableContract
 
         $roles = array_column($roles, 'slug');
 
-        if ($this->isRole($roles) || $this->isRole('administrator')) {
+        if ($this->inRoles($roles) || $this->isAdministrator()) {
             return true;
         }
 

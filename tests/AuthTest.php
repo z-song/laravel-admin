@@ -26,13 +26,7 @@ class AuthTest extends TestCase
             ->seeCredentials($credentials, 'admin')
             ->seeIsAuthenticated('admin')
             ->seePageIs('admin')
-            ->see('Menu')
             ->see('Index')
-            ->see('Auth')
-            ->see('Users')
-            ->see('Roles')
-            ->see('Permission')
-            ->see('Menu')
             ->see('1024')
             ->see('150%')
             ->see('2786')
@@ -49,6 +43,14 @@ class AuthTest extends TestCase
             ->see('Last Login')
             ->see('Copyright')
             ->see('Version');
+
+        $this
+            ->see('<span>Admin</span>')
+            ->see('<span>Users</span>')
+            ->see('<span>Roles</span>')
+            ->see('<span>Permission</span>')
+            ->see('<span>Operation log</span>')
+            ->see('<span>Menu</span>');
     }
 
     public function testLogout()

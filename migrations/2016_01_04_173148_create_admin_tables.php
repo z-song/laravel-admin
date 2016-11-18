@@ -60,6 +60,13 @@ class CreateAdminTables extends Migration
             $table->timestamps();
         });
 
+        Schema::create(config('admin.database.user_permissions_table'), function (Blueprint $table) {
+            $table->integer('user_id');
+            $table->integer('permission_id');
+            $table->index(['user_id', 'permission_id']);
+            $table->timestamps();
+        });
+
         Schema::create(config('admin.database.role_menu_table'), function (Blueprint $table) {
             $table->integer('role_id');
             $table->integer('menu_id');
@@ -90,6 +97,7 @@ class CreateAdminTables extends Migration
         Schema::drop(config('admin.database.roles_table'));
         Schema::drop(config('admin.database.permissions_table'));
         Schema::drop(config('admin.database.menu_table'));
+        Schema::drop(config('admin.database.user_permissions_table'));
         Schema::drop(config('admin.database.role_users_table'));
         Schema::drop(config('admin.database.role_permissions_table'));
         Schema::drop(config('admin.database.role_menu_table'));
