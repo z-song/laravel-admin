@@ -21,7 +21,7 @@ class PermissionMiddleware
         if (count($args) > 1) {
             $type = array_shift($args);
 
-            if (! method_exists(Permission::class, $type)) {
+            if (!method_exists(Permission::class, $type)) {
                 throw new \InvalidArgumentException("Invaild permission method [$type].");
             }
 
