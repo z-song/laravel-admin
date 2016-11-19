@@ -20,6 +20,19 @@ class DateRange extends Field
         $this->options(['format' => $this->format]);
     }
 
+    public function prepare($value)
+    {
+        if ($value['start'] === '') {
+            $value['start'] = null;
+        }
+
+        if ($value['end'] === '') {
+            $value['end'] = null;
+        }
+
+        return $value;
+    }
+
     public function render()
     {
         $this->options['locale'] = config('app.locale');
