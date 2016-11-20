@@ -2,20 +2,38 @@
 
 return [
 
+    /**
+     * Laravel-admin name.
+     */
     'name'  => 'Laravel-admin',
 
+    /**
+     * Laravel-admin url prefix.
+     */
     'prefix'    => 'admin',
 
+    /**
+     * Laravel-admin install directory.
+     */
     'directory' => app_path('Admin'),
 
+    /**
+     * Laravel-admin title.
+     */
     'title'  => 'Admin',
 
+    /**
+     * Laravel-admin auth setting.
+     */
     'auth' => [
         'driver'   => 'session',
         'provider' => '',
         'model'    => Encore\Admin\Auth\Database\Administrator::class,
     ],
 
+    /**
+     * Laravel-admin upload setting.
+     */
     'upload'  => [
 
         'disk' => 'admin',
@@ -28,6 +46,9 @@ return [
         'host' => 'http://localhost:8000/upload/',
     ],
 
+    /**
+     * Laravel-admin database setting.
+     */
     'database' => [
         'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Auth\Database\Administrator::class,
