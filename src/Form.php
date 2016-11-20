@@ -934,7 +934,7 @@ class Form
      */
     public static function collectFieldAssets()
     {
-        if (! empty(static::$collectedAssets)) {
+        if (!empty(static::$collectedAssets)) {
             return static::$collectedAssets;
         }
 
@@ -942,7 +942,6 @@ class Form
         $js = collect();
 
         foreach (static::$availableFields as $field) {
-
             if (!method_exists($field, 'getAssets')) {
                 continue;
             }
