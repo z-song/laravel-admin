@@ -1,3 +1,3 @@
 @foreach($css as $c)
-<link rel="stylesheet" href="{{ asset("/packages/admin/$c") }}">
+    <link rel="stylesheet" href="{{ asset("$c") }}">
 @endforeach

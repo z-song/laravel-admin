@@ -77,6 +77,20 @@ class Field
     protected $rules = '';
 
     /**
+     * Css required by this field.
+     *
+     * @var array
+     */
+    protected static $css = [];
+
+    /**
+     * Js required by this field.
+     *
+     * @var array
+     */
+    protected static $js = [];
+
+    /**
      * Script for field.
      *
      * @var string
@@ -98,6 +112,13 @@ class Field
     protected $form = null;
 
     /**
+     * View for field to render.
+     *
+     * @var string
+     */
+    protected $view = '';
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -108,6 +129,19 @@ class Field
         $this->column = $column;
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($column);
+    }
+
+    /**
+     * Get assets required by this field.
+     *
+     * @return array
+     */
+    public static function getAssets()
+    {
+        return [
+            'css' => static::$css,
+            'js'  => static::$js,
+        ];
     }
 
     /**
@@ -381,6 +415,10 @@ class Field
      */
     public function getView()
     {
+        if (!empty($this->view)) {
+            return $this->view;
+        }
+
         $class = explode('\\', get_called_class());
 
         return 'admin::form.'.strtolower(end($class));

@@ -6,6 +6,14 @@ use Encore\Admin\Form\Field;
 
 class Radio extends Field
 {
+    protected static $css = [
+        '/packages/admin/AdminLTE/plugins/iCheck/all.css',
+    ];
+
+    protected static $js = [
+        'packages/admin/AdminLTE/plugins/iCheck/icheck.min.js',
+    ];
+
     protected $values;
 
     public function render()

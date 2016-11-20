@@ -9,6 +9,14 @@ class SwitchField extends Field
     const STATE_ON = 1;
     const STATE_OFF = 0;
 
+    protected static $css = [
+        '/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
+    ];
+
+    protected static $js = [
+        '/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+    ];
+
     protected $states = [];
 
     public function __construct($column, $arguments = [])

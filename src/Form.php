@@ -115,6 +115,20 @@ class Form
     protected $callable;
 
     /**
+     * Available fields.
+     *
+     * @var array
+     */
+    public static $availableFields = [];
+
+    /**
+     * Collected field assets.
+     *
+     * @var array
+     */
+    protected static $collectedAssets = [];
+
+    /**
      * @param \$model
      * @param \Closure $callback
      */
@@ -817,6 +831,135 @@ class Form
     }
 
     /**
+     * Register builtin fields.
+     *
+     * @return void
+     */
+    public static function registerBuiltinFields()
+    {
+        $map = [
+            'button'            => \Encore\Admin\Form\Field\Button::class,
+            'checkbox'          => \Encore\Admin\Form\Field\Checkbox::class,
+            'code'              => \Encore\Admin\Form\Field\Code::class,
+            'color'             => \Encore\Admin\Form\Field\Color::class,
+            'currency'          => \Encore\Admin\Form\Field\Currency::class,
+            'date'              => \Encore\Admin\Form\Field\Date::class,
+            'dateRange'         => \Encore\Admin\Form\Field\DateRange::class,
+            'datetime'          => \Encore\Admin\Form\Field\Datetime::class,
+            'dateTimeRange'     => \Encore\Admin\Form\Field\DatetimeRange::class,
+            'decimal'           => \Encore\Admin\Form\Field\Decimal::class,
+            'display'           => \Encore\Admin\Form\Field\Display::class,
+            'divider'           => \Encore\Admin\Form\Field\Divide::class,
+            'divide'            => \Encore\Admin\Form\Field\Divide::class,
+            'editor'            => \Encore\Admin\Form\Field\Editor::class,
+            'email'             => \Encore\Admin\Form\Field\Email::class,
+            'embedsMany'        => \Encore\Admin\Form\Field\EmbedsMany::class,
+            'file'              => \Encore\Admin\Form\Field\File::class,
+            'hasMany'           => \Encore\Admin\Form\Field\HasMany::class,
+            'hidden'            => \Encore\Admin\Form\Field\Hidden::class,
+            'id'                => \Encore\Admin\Form\Field\Id::class,
+            'image'             => \Encore\Admin\Form\Field\Image::class,
+            'ip'                => \Encore\Admin\Form\Field\Ip::class,
+            'json'              => \Encore\Admin\Form\Field\Json::class,
+            'map'               => \Encore\Admin\Form\Field\Map::class,
+            'markdown'          => \Encore\Admin\Form\Field\Markdown::class,
+            'mobile'            => \Encore\Admin\Form\Field\Mobile::class,
+            'month'             => \Encore\Admin\Form\Field\Month::class,
+            'multipleSelect'    => \Encore\Admin\Form\Field\MultipleSelect::class,
+            'number'            => \Encore\Admin\Form\Field\Number::class,
+            'password'          => \Encore\Admin\Form\Field\Password::class,
+            'radio'             => \Encore\Admin\Form\Field\Radio::class,
+            'rate'              => \Encore\Admin\Form\Field\Rate::class,
+            'select'            => \Encore\Admin\Form\Field\Select::class,
+            'slider'            => \Encore\Admin\Form\Field\Slider::class,
+            'switch'            => \Encore\Admin\Form\Field\SwitchField::class,
+            'text'              => \Encore\Admin\Form\Field\Text::class,
+            'textarea'          => \Encore\Admin\Form\Field\Textarea::class,
+            'time'              => \Encore\Admin\Form\Field\Time::class,
+            'timeRange'         => \Encore\Admin\Form\Field\TimeRange::class,
+            'url'               => \Encore\Admin\Form\Field\Url::class,
+            'year'              => \Encore\Admin\Form\Field\Year::class,
+        ];
+
+        foreach ($map as $abstract => $class) {
+            static::extend($abstract, $class);
+        }
+    }
+
+    /**
+     * Register custom field.
+     *
+     * @param string $abstract
+     * @param string $class
+     *
+     * @return void
+     */
+    public static function extend($abstract, $class)
+    {
+        static::$availableFields[$abstract] = $class;
+    }
+
+    /**
+     * Remove registered field.
+     *
+     * @param array|string $abstract
+     */
+    public static function forget($abstract)
+    {
+        array_forget(static::$availableFields, $abstract);
+    }
+
+    /**
+     * Find field class.
+     *
+     * @param string $method
+     *
+     * @return bool|mixed
+     */
+    public static function findFieldClass($method)
+    {
+        $class = array_get(static::$availableFields, $method);
+
+        if (class_exists($class)) {
+            return $class;
+        }
+
+        return false;
+    }
+
+    /**
+     * Collect assets required by registered field.
+     *
+     * @return array
+     */
+    public static function collectFieldAssets()
+    {
+        if (! empty(static::$collectedAssets)) {
+            return static::$collectedAssets;
+        }
+
+        $css = collect();
+        $js = collect();
+
+        foreach (static::$availableFields as $field) {
+
+            if (!method_exists($field, 'getAssets')) {
+                continue;
+            }
+
+            $assets = call_user_func([$field, 'getAssets']);
+
+            $css->push(array_get($assets, 'css'));
+            $js->push(array_get($assets, 'js'));
+        }
+
+        return static::$collectedAssets = [
+            'css' => $css->flatten()->unique()->filter()->toArray(),
+            'js'  => $js->flatten()->unique()->filter()->toArray(),
+        ];
+    }
+
+    /**
      * Getter.
      *
      * @param string $name
@@ -858,21 +1001,6 @@ class Form
 
             return $element;
         }
-    }
-
-    public static function findFieldClass($method)
-    {
-        $className = __NAMESPACE__.'\\Form\\Field\\'.ucfirst($method);
-
-        if (class_exists($className)) {
-            return $className;
-        }
-
-        if ($method == 'switch') {
-            return __NAMESPACE__.'\\Form\\Field\\SwitchField';
-        }
-
-        return false;
     }
 
     /**

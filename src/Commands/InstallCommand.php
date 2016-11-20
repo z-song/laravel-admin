@@ -22,6 +22,8 @@ class InstallCommand extends Command
     protected $description = 'Install the admin package';
 
     /**
+     * Install directory.
+     *
      * @var string
      */
     protected $directory = '';
@@ -76,6 +78,7 @@ class InstallCommand extends Command
         //$this->createAdministratorController();
 
         //$this->createMenuFile();
+        $this->createBootstrapFile();
         $this->createRoutesFile();
 
         //$this->copyLanguageFiles();
@@ -163,6 +166,20 @@ class InstallCommand extends Command
         $contents = $this->getStub('menu');
         $this->laravel['files']->put($file, $contents);
         $this->line('<info>Menu file was created:</info> '.str_replace(base_path(), '', $file));
+    }
+
+    /**
+     * Create routes file.
+     *
+     * @return void
+     */
+    protected function createBootstrapFile()
+    {
+        $file = $this->directory.'/bootstrap.php';
+
+        $contents = $this->getStub('bootstrap');
+        $this->laravel['files']->put($file, $contents);
+        $this->line('<info>Bootstrap file was created:</info> '.str_replace(base_path(), '', $file));
     }
 
     /**

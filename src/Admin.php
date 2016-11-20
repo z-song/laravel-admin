@@ -21,6 +21,36 @@ class Admin
     public static $script = [];
 
     /**
+     * @var array
+     */
+    public static $css = [];
+
+    /**
+     * @var array
+     */
+    public static $js = [];
+
+    /**
+     * Initialize
+     */
+    public static function init()
+    {
+        Form::registerBuiltinFields();
+    }
+
+    /**
+     * Bootstrap.
+     */
+    public static function bootstrap()
+    {
+        if (file_exists($bootstrap = admin_path('bootstrap.php'))) {
+            require $bootstrap;
+        }
+
+        Form::collectFieldAssets();
+    }
+    
+    /**
      * @param $model
      * @param Closure $callable
      *
@@ -61,6 +91,10 @@ class Admin
      */
     public function content(Closure $callable)
     {
+        static::init();
+
+        static::bootstrap();
+
         return new Content($callable);
     }
 
@@ -92,6 +126,48 @@ class Admin
         $directory = config('admin.directory');
 
         return 'App\\'.ucfirst(basename($directory)).'\\Controllers';
+    }
+
+    /**
+     * Add css or get all css.
+     *
+     * @param null $css
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     */
+    public static function css($css = null)
+    {
+        if (!is_null($css)) {
+            self::$css = array_merge(self::$css, (array) $css);
+
+            return;
+        }
+
+        $css = array_get(Form::collectFieldAssets(), 'css', []);
+
+        static::$css = array_merge(static::$css, $css);
+
+        return view('admin::partials.css', ['css' => array_unique(static::$css)]);
+    }
+
+    /**
+     * Add js or get all js.
+     *
+     * @param null $js
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     */
+    public static function js($js = null)
+    {
+        if (!is_null($js)) {
+            self::$js = array_merge(self::$js, (array) $js);
+
+            return;
+        }
+
+        $js = array_get(Form::collectFieldAssets(), 'js', []);
+
+        static::$js = array_merge(static::$js, $js);
+
+        return view('admin::partials.js', ['js' => array_unique(static::$js)]);
     }
 
     /**

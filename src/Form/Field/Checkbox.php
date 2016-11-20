@@ -8,6 +8,14 @@ class Checkbox extends Field
 {
     protected $values;
 
+    protected static $css = [
+        '/packages/admin/AdminLTE/plugins/iCheck/all.css',
+    ];
+
+    protected static $js = [
+        'packages/admin/AdminLTE/plugins/iCheck/icheck.min.js',
+    ];
+
     public function fill($data)
     {
         $relations = array_get($data, $this->column);
