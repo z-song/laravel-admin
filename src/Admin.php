@@ -31,7 +31,7 @@ class Admin
     public static $js = [];
 
     /**
-     * Initialize
+     * Initialize.
      */
     public static function init()
     {
@@ -49,7 +49,7 @@ class Admin
 
         Form::collectFieldAssets();
     }
-    
+
     /**
      * @param $model
      * @param Closure $callable
@@ -132,6 +132,7 @@ class Admin
      * Add css or get all css.
      *
      * @param null $css
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
     public static function css($css = null)
@@ -153,6 +154,7 @@ class Admin
      * Add js or get all js.
      *
      * @param null $js
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
     public static function js($js = null)

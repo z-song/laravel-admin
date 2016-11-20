@@ -4,7 +4,7 @@
  * Created by PhpStorm.
  * User: encore
  * Date: 16/11/20
- * Time: 下午6:44
+ * Time: 下午6:44.
  */
 class InstallTest extends TestCase
 {

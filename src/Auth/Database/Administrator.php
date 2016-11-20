@@ -119,6 +119,7 @@ class Administrator extends Model implements AuthenticatableContract
      * Check if user in $roles.
      *
      * @param array $roles
+     *
      * @return mixed
      */
     public function inRoles($roles = [])
