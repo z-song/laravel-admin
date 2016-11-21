@@ -135,8 +135,6 @@ EOT;
 
     public function render()
     {
-        $this->js[] = 'bootstrap-fileinput/js/fileinput_locale_'.config('app.locale').'.js';
-
         $this->options['initialCaption'] = basename($this->value);
 
         if (!empty($this->value)) {
