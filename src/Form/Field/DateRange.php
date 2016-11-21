@@ -31,12 +31,8 @@ class DateRange extends Field
 
     public function prepare($value)
     {
-        if ($value['start'] === '') {
-            $value['start'] = null;
-        }
-
-        if ($value['end'] === '') {
-            $value['end'] = null;
+        if ($value === '') {
+            $value = null;
         }
 
         return $value;
