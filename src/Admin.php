@@ -31,11 +31,25 @@ class Admin
     public static $js = [];
 
     /**
+     * @var bool
+     */
+    protected static $initialized = false;
+
+    /**
+     * @var bool
+     */
+    protected static $bootstrapped = false;
+
+    /**
      * Initialize.
      */
     public static function init()
     {
-        Form::registerBuiltinFields();
+        if (!static::$initialized) {
+            Form::registerBuiltinFields();
+
+            static::$initialized = true;
+        }
     }
 
     /**
@@ -43,11 +57,13 @@ class Admin
      */
     public static function bootstrap()
     {
-        if (file_exists($bootstrap = admin_path('bootstrap.php'))) {
-            require $bootstrap;
-        }
+        if (!static::$bootstrapped) {
+            if (file_exists($bootstrap = admin_path('bootstrap.php'))) {
+                require $bootstrap;
+            }
 
-        Form::collectFieldAssets();
+            static::$bootstrapped = true;
+        }
     }
 
     /**
@@ -69,6 +85,9 @@ class Admin
      */
     public function form($model, Closure $callable)
     {
+        static::init();
+        static::bootstrap();
+
         return new Form($this->getModel($model), $callable);
     }
 
@@ -92,8 +111,9 @@ class Admin
     public function content(Closure $callable)
     {
         static::init();
-
         static::bootstrap();
+
+        Form::collectFieldAssets();
 
         return new Content($callable);
     }
