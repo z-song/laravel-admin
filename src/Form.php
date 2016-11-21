@@ -862,7 +862,6 @@ class Form
             'ip'                => \Encore\Admin\Form\Field\Ip::class,
             'json'              => \Encore\Admin\Form\Field\Json::class,
             'map'               => \Encore\Admin\Form\Field\Map::class,
-            'markdown'          => \Encore\Admin\Form\Field\Markdown::class,
             'mobile'            => \Encore\Admin\Form\Field\Mobile::class,
             'month'             => \Encore\Admin\Form\Field\Month::class,
             'multipleSelect'    => \Encore\Admin\Form\Field\MultipleSelect::class,
