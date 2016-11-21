@@ -145,7 +145,6 @@ $router->resource('users', UserController::class);
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
-+ [Bootstrap Markdown](http://toopay.github.io/bootstrap-markdown/)
 + [Datetimepicker](http://eonasdan.github.io/bootstrap-datetimepicker/)
 + [CodeMirror](https://codemirror.net/)
 + [font-awesome](http://fontawesome.io)
@@ -156,6 +155,8 @@ $router->resource('users', UserController::class);
 + [jquery-pjax](https://github.com/defunkt/jquery-pjax)
 + [Nestable](http://dbushell.github.io/Nestable/)
 + [noty](http://ned.im/noty/)
++ [X-editable](http://github.com/vitalets/x-editable)
++ [bootstrap-number-input](https://github.com/wpic/bootstrap-number-input)
 
 交流
 ------------
