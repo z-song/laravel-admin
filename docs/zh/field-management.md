@@ -81,7 +81,7 @@ EOT;
 
 ```
 
-类中的静态资源也同样可以从外部引入，参考[Editor.php](https://github.com/z-song/laravel-admin/blob/1.3/src/Form/Field/Editor.php)
+>类中的静态资源也同样可以从外部引入，参考[Editor.php](https://github.com/z-song/laravel-admin/blob/1.3/src/Form/Field/Editor.php)
 
 创建视图`resources/views/admin/php-editor.blade.php`:
 
