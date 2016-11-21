@@ -89,11 +89,14 @@
             response = JSON.parse(xhr.responseText);
             message = response.message || 'error';
         }catch(e){
-            message = (xhr.status == 404) ? 'Page Not found' : 'error';
+
+            if (xhr.status == 0) {
+                return;
+            }
 
             noty({
-                text: "<strong>Warning!</strong><br/>"+message,
-                type:'error',
+                text: "<strong>Warning!</strong><br/>"+xhr.statusText,
+                type:'warning',
                 timeout: 5000
             });
             return false;
