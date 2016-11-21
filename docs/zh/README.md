@@ -64,6 +64,7 @@ php artisan admin:install
 - [数据模型表格](/docs/zh/model-grid.md)
 - [数据模型表单](/docs/zh/model-form.md)
   - [图片/文件上传](/docs/zh/form-upload.md)
+  - [form组件管理](/docs/zh/field-management.md)
 - [组件](/docs/zh/widgets/table.md)
   - [表格](/docs/zh/widgets/table.md)
   - [表单](/docs/zh/widgets/form.md)
