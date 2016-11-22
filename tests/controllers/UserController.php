@@ -108,7 +108,22 @@ class UserController extends Controller
         return Admin::form(User::class, function (Form $form) {
             $form->display('id', 'ID');
 
+            $form->text('username');
+            $form->email('email')->rules('required');
+            $form->mobile('mobile');
+            $form->image('avatar');
+            $form->password('password');
 
+            $form->divide();
+
+            $form->text('profile.first_name');
+            $form->text('profile.last_name');
+            $form->text('profile.postcode');
+            $form->textarea('profile.address');
+            $form->map('profile.latitude', 'profile.longitude', 'Position');
+            $form->color('profile.color');
+            $form->datetime('profile.start_at');
+            $form->datetime('profile.end_at');
 
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');
