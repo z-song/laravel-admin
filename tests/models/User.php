@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: song
- * Email: zousong@yiban.cn
- * Date: 16/11/22
- * Time: 下午1:47
- */
 
 namespace Tests\Models;
 

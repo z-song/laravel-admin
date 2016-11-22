@@ -119,13 +119,4 @@ class GridTest extends TestCase
             $this->seeInElement('td', $user->username);
         }
     }
-
-    public function testCreateUser()
-    {
-        $this->markTestIncomplete();
-
-        $this->visit('admin/users')
-            ->click('New')
-            ->seePageIs('admin/users/create');
-    }
 }
