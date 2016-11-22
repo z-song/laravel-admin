@@ -4,7 +4,7 @@ use Encore\Admin\Auth\Database\Administrator;
 use Tests\Models\User as UserModel;
 use Tests\Models\Profile as ProfileModel;
 
-class GridTest extends TestCase
+class UserGridTest extends TestCase
 {
     public function setUp()
     {
@@ -71,7 +71,7 @@ class GridTest extends TestCase
         $this->click(1)->seePageIs('admin/users?page=1');
     }
 
-    public function testGridIdFileter()
+    public function testIsFileter()
     {
         $this->seedsTable(50);
 
@@ -99,7 +99,7 @@ class GridTest extends TestCase
             ->seeInElement('td', $user->end_at);
     }
 
-    public function testGridLikeFilter()
+    public function testLikeFilter()
     {
         $this->seedsTable(50);
 
@@ -118,5 +118,25 @@ class GridTest extends TestCase
         foreach ($users as $user) {
             $this->seeInElement('td', $user->username);
         }
+    }
+
+    public function testFilterRelation()
+    {
+        $this->seedsTable(50);
+
+        $user = UserModel::with('profile')->find(rand(1, 50));
+
+        $this->visit('admin/users?email='.$user->email)
+            ->seeInElement('td', $user->username)
+            ->seeInElement('td', $user->email)
+            ->seeInElement('td', $user->mobile)
+            ->seeElement("img[src='{$user->avatar}']")
+            ->seeInElement('td', "{$user->profile->first_name} {$user->profile->last_name}")
+            ->seeInElement('td', $user->postcode)
+            ->seeInElement('td', $user->address)
+            ->seeInElement('td', "{$user->profile->latitude} {$user->profile->longitude}")
+            ->seeInElement('td', $user->color)
+            ->seeInElement('td', $user->start_at)
+            ->seeInElement('td', $user->end_at);
     }
 }
