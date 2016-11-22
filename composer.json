@@ -20,7 +20,8 @@
         "phpunit/phpunit": "~4.0",
         "laravel/laravel": "5.2.*",
         "symfony/css-selector": "2.8.*|3.0.*",
-        "symfony/dom-crawler": "2.8.*|3.0.*"
+        "symfony/dom-crawler": "2.8.*|3.0.*",
+        "fzaninotto/faker": "~1.4"
     },
     "autoload": {
         "psr-4": {
@@ -31,6 +32,10 @@
         ]
     },
     "autoload-dev": {
+        "psr-4": {
+            "Tests\\Models\\": "tests/models",
+            "Tests\\Controllers\\": "tests/controllers"
+        },
         "classmap": [
             "tests/TestCase.php"
         ]
