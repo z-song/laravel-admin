@@ -34,7 +34,8 @@ class TestCase extends LaravelTestCase
         $this->app['config']->set('database.connections.mysql.username', 'root');
         $this->app['config']->set('database.connections.mysql.password', '');
         $this->app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
-        $this->app['config']->set('admin', require __DIR__.'/../config/admin.php');
+        $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
+        $this->app['config']->set('admin', require __DIR__.'/config/admin.php');
 
         $this->artisan('vendor:publish');
 
@@ -46,6 +47,10 @@ class TestCase extends LaravelTestCase
             require $routes;
             $this->app['admin.router']->register();
         }
+
+        require __DIR__.'/routes.php';
+
+        require __DIR__.'/seeds/factory.php';
     }
 
     public function tearDown()
@@ -82,6 +87,11 @@ class TestCase extends LaravelTestCase
         $classFinder = new ClassFinder();
 
         foreach ($fileSystem->files(__DIR__.'/../migrations') as $file) {
+            $fileSystem->requireOnce($file);
+            $migrations[] = $classFinder->findClass($file);
+        }
+
+        foreach ($fileSystem->files(__DIR__.'/migrations') as $file) {
             $fileSystem->requireOnce($file);
             $migrations[] = $classFinder->findClass($file);
         }
