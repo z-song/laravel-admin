@@ -1,8 +1,8 @@
 <?php
 
 use Encore\Admin\Auth\Database\Administrator;
-use Tests\Models\User as UserModel;
 use Tests\Models\Profile as ProfileModel;
+use Tests\Models\User as UserModel;
 
 class GridTest extends TestCase
 {
@@ -49,7 +49,7 @@ class GridTest extends TestCase
     {
         factory(\Tests\Models\User::class, $count)
             ->create()
-            ->each(function($u) {
+            ->each(function ($u) {
                 $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
             });
     }
@@ -113,7 +113,7 @@ class GridTest extends TestCase
 
         $this->visit('admin/users?username=mi');
 
-        $this->assertCount($this->crawler()->filter('table tr')->count()-1, $users);
+        $this->assertCount($this->crawler()->filter('table tr')->count() - 1, $users);
 
         foreach ($users as $user) {
             $this->seeInElement('td', $user->username);

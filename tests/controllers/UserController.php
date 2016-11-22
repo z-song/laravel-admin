@@ -2,12 +2,12 @@
 
 namespace Tests\Controllers;
 
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
-use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Form;
+use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 use Tests\Models\Profile;
 use Tests\Models\User;
 
@@ -23,7 +23,6 @@ class UserController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-
             $content->header('All users');
             $content->description('description');
 
@@ -35,12 +34,12 @@ class UserController extends Controller
      * Edit interface.
      *
      * @param $id
+     *
      * @return Content
      */
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-
             $content->header('Edit user');
             $content->description('description');
 
@@ -56,7 +55,6 @@ class UserController extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-
             $content->header('Create user');
 
             $content->body($this->form());
@@ -71,7 +69,6 @@ class UserController extends Controller
     protected function grid()
     {
         return Admin::grid(User::class, function (Grid $grid) {
-
             $grid->id('ID')->sortable();
 
             $grid->username();
@@ -109,7 +106,6 @@ class UserController extends Controller
     protected function form()
     {
         return Admin::form(User::class, function (Form $form) {
-
             $form->display('id', 'ID');
 
 
