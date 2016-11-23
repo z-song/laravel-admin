@@ -19,8 +19,6 @@ class InfoBox extends Widget implements Renderable
      * @param string $color
      * @param string $link
      * @param string $info
-     *
-     * @return InfoBox
      */
     public function __construct($name, $icon, $color, $link, $info)
     {
@@ -31,8 +29,6 @@ class InfoBox extends Widget implements Renderable
             'link'  => $link,
             'info'  => $info,
         ];
-
-        return $this;
     }
 
     /**
