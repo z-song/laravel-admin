@@ -143,6 +143,13 @@ class Grid
     protected $exporter;
 
     /**
+     * View for grid to render.
+     *
+     * @var string
+     */
+    protected $view = 'admin::grid.table';
+
+    /**
      * Create a new grid instance.
      *
      * @param Eloquent $model
@@ -569,6 +576,21 @@ class Grid
     }
 
     /**
+     * Set a view to render.
+     *
+     * @param string $view
+     * @param array  $variables
+     */
+    public function view($view, $variables = [])
+    {
+        if (!empty($variables)) {
+            $this->with($variables);
+        }
+
+        $this->view = $view;
+    }
+
+    /**
      * Get the string contents of the grid view.
      *
      * @return string
@@ -581,7 +603,7 @@ class Grid
             return with(new Handle($e))->render();
         }
 
-        return view('admin::grid', $this->variables())->render();
+        return view($this->view, $this->variables())->render();
     }
 
     /**

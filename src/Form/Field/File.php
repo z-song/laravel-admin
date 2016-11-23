@@ -21,6 +21,15 @@ class File extends Field
 
     protected $storage = '';
 
+    protected static $css = [
+        '/packages/admin/bootstrap-fileinput/css/fileinput.min.css',
+    ];
+
+    protected static $js = [
+        '/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
+        '/packages/admin/bootstrap-fileinput/js/fileinput.min.js',
+    ];
+
     public function __construct($column, $arguments = [])
     {
         $this->initOptions();

@@ -9,17 +9,17 @@ class UserFormTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(Administrator::first(), 'admin');
+        $this->be(Administrator::first(), "admin");
     }
 
     public function testCreatePage()
     {
-        $this->visit('admin/users/create')
-            ->seeElement('input[type=text][name=username]')
-            ->seeElement('input[type=email][name=email]')
-            ->seeElement('input[type=text][name=mobile]')
-            ->seeElement('input[type=file][name=avatar]')
-            ->seeElement('hr')
+        $this->visit("admin/users/create")
+            ->seeElement("input[type=text][name=username]")
+            ->seeElement("input[type=email][name=email]")
+            ->seeElement("input[type=text][name=mobile]")
+            ->seeElement("input[type=file][name=avatar]")
+            ->seeElement("hr")
             ->seeElement("input[type=text][name='profile[first_name]']")
             ->seeElement("input[type=text][name='profile[last_name]']")
             ->seeElement("input[type=text][name='profile[postcode]']")
@@ -28,68 +28,69 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=hidden][name='profile[longitude]']")
             ->seeElement("input[type=text][name='profile[color]']")
             ->seeElement("input[type=text][name='profile[start_at]']")
-            ->seeElement("input[type=text][name='profile[end_at]']");
+            ->seeElement("input[type=text][name='profile[end_at]']")
+        ;
     }
 
     public function testSubmitForm()
     {
         $data = [
-            'username' => 'John Doe',
-            'email'    => 'hello@world.com',
-            'mobile'   => '13421234123',
-            'password' => 123456,
+            "username" => "John Doe",
+            "email"    => "hello@world.com",
+            "mobile"   => "13421234123",
+            "password" => 123456,
             //"avatar"   => "test.jpg",
-            'profile'  => [
-                'first_name' => 'John',
-                'last_name'  => 'Doe',
-                'postcode'   => '123456',
-                'address'    => 'Jinshajiang RD',
-                'latitude'   => '131.2123123456',
-                'longitude'  => '21.342123456',
-                'color'      => '#ffffff',
-                'start_at'   => date('Y-m-d H:i:s', time()),
-                'end_at'     => date('Y-m-d H:i:s', time()),
-            ],
+            "profile"  => [
+                "first_name" => "John",
+                "last_name"  => "Doe",
+                "postcode"   => "123456",
+                "address"    => "Jinshajiang RD",
+                "latitude"   => "131.2123123456",
+                "longitude"  => "21.342123456",
+                "color"      => "#ffffff",
+                "start_at"   => date("Y-m-d H:i:s", time()),
+                "end_at"     => date("Y-m-d H:i:s", time()),
+            ]
         ];
 
-        $this->visit('admin/users/create')
-            ->attach(__DIR__.'/assets/test.jpg', 'avatar')
+        $this->visit("admin/users/create")
+            ->attach(__DIR__."/assets/test.jpg", "avatar")
 
-            ->submitForm('Submit', $data)
-            ->seePageIs('admin/users')
-            ->seeInElement('td', 1)
-            ->seeInElement('td', $data['username'])
-            ->seeInElement('td', $data['email'])
-            ->seeInElement('td', $data['mobile'])
-            ->seeInElement('td', "{$data['profile']['first_name']} {$data['profile']['last_name']}")
-            ->seeElement('td img')
-            ->seeInElement('td', $data['profile']['postcode'])
-            ->seeInElement('td', $data['profile']['address'])
-            ->seeInElement('td', "{$data['profile']['latitude']} {$data['profile']['longitude']}")
-            ->seeInElement('td', $data['profile']['color'])
-            ->seeInElement('td', $data['profile']['start_at'])
-            ->seeInElement('td', $data['profile']['end_at']);
+            ->submitForm("Submit", $data)
+            ->seePageIs("admin/users")
+            ->seeInElement("td", 1)
+            ->seeInElement("td", $data["username"])
+            ->seeInElement("td", $data["email"])
+            ->seeInElement("td", $data["mobile"])
+            ->seeInElement("td", "{$data["profile"]["first_name"]} {$data["profile"]["last_name"]}")
+            ->seeElement("td img")
+            ->seeInElement("td", $data["profile"]["postcode"])
+            ->seeInElement("td", $data["profile"]["address"])
+            ->seeInElement("td", "{$data["profile"]["latitude"]} {$data["profile"]["longitude"]}")
+            ->seeInElement("td", $data["profile"]["color"])
+            ->seeInElement("td", $data["profile"]["start_at"])
+            ->seeInElement("td", $data["profile"]["end_at"]);
 
         $this->assertCount(1, UserModel::all());
 
-        $this->seeInDatabase('test_users', ['username' => $data['username']]);
-        $this->seeInDatabase('test_users', ['email' => $data['email']]);
-        $this->seeInDatabase('test_users', ['mobile' => $data['mobile']]);
-        $this->seeInDatabase('test_users', ['password' => $data['password']]);
+        $this->seeInDatabase("test_users", ["username" => $data["username"]]);
+        $this->seeInDatabase("test_users", ["email" => $data["email"]]);
+        $this->seeInDatabase("test_users", ["mobile" => $data["mobile"]]);
+        $this->seeInDatabase("test_users", ["password" => $data["password"]]);
 
-        $this->seeInDatabase('test_user_profiles', ['first_name' => $data['profile']['first_name']]);
-        $this->seeInDatabase('test_user_profiles', ['last_name' => $data['profile']['last_name']]);
-        $this->seeInDatabase('test_user_profiles', ['postcode' => $data['profile']['postcode']]);
-        $this->seeInDatabase('test_user_profiles', ['address' => $data['profile']['address']]);
-        $this->seeInDatabase('test_user_profiles', ['latitude' => $data['profile']['latitude']]);
-        $this->seeInDatabase('test_user_profiles', ['longitude' => $data['profile']['longitude']]);
-        $this->seeInDatabase('test_user_profiles', ['color' => $data['profile']['color']]);
-        $this->seeInDatabase('test_user_profiles', ['start_at' => $data['profile']['start_at']]);
-        $this->seeInDatabase('test_user_profiles', ['end_at' => $data['profile']['end_at']]);
+        $this->seeInDatabase("test_user_profiles", ["first_name" => $data["profile"]["first_name"]]);
+        $this->seeInDatabase("test_user_profiles", ["last_name" => $data["profile"]["last_name"]]);
+        $this->seeInDatabase("test_user_profiles", ["postcode" => $data["profile"]["postcode"]]);
+        $this->seeInDatabase("test_user_profiles", ["address" => $data["profile"]["address"]]);
+        $this->seeInDatabase("test_user_profiles", ["latitude" => $data["profile"]["latitude"]]);
+        $this->seeInDatabase("test_user_profiles", ["longitude" => $data["profile"]["longitude"]]);
+        $this->seeInDatabase("test_user_profiles", ["color" => $data["profile"]["color"]]);
+        $this->seeInDatabase("test_user_profiles", ["start_at" => $data["profile"]["start_at"]]);
+        $this->seeInDatabase("test_user_profiles", ["end_at" => $data["profile"]["end_at"]]);
 
         $avatar = UserModel::first()->avatar;
 
-        $this->assertFileExists(public_path('upload/'.$avatar));
+        $this->assertFileExists(public_path("upload/".$avatar));
     }
 
     protected function seedsTable($count = 100)
@@ -107,13 +108,13 @@ class UserFormTest extends TestCase
 
         $id = rand(1, 10);
 
-        $user = UserModel::with('profile')->find($id);
+        $user = UserModel::with("profile")->find($id);
 
         $this->visit("admin/users/$id/edit")
             ->seeElement("input[type=text][name=username][value='{$user->username}']")
             ->seeElement("input[type=email][name=email][value='{$user->email}']")
             ->seeElement("input[type=text][name=mobile][value='{$user->mobile}']")
-            ->seeElement('hr')
+            ->seeElement("hr")
             ->seeElement("input[type=text][name='profile[first_name]'][value='{$user->profile->first_name}']")
             ->seeElement("input[type=text][name='profile[last_name]'][value='{$user->profile->last_name}']")
             ->seeElement("input[type=text][name='profile[postcode]'][value='{$user->profile->postcode}']")
@@ -137,9 +138,11 @@ class UserFormTest extends TestCase
             ->seePageIs('admin/users')
             ->seeInDatabase('test_users', ['username' => 'hello world']);
 
-        $user = UserModel::with('profile')->find($id);
+        $user = UserModel::with("profile")->find($id);
 
         $this->assertEquals($user->username, 'hello world');
+
+
     }
 
     public function testUpdateFormWithRule()
@@ -161,7 +164,7 @@ class UserFormTest extends TestCase
 
         $this->type('xx@xx.xx', 'email')
             ->press('Submit')
-            ->seePageIs('admin/users')
+            ->seePageIs("admin/users")
             ->seeInDatabase('test_users', ['email' => 'xx@xx.xx']);
     }
 }

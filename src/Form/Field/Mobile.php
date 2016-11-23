@@ -6,6 +6,10 @@ use Encore\Admin\Form\Field;
 
 class Mobile extends Field
 {
+    protected static $js = [
+        '/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
+    ];
+
     protected $format = '99999999999';
 
     public function format($format)

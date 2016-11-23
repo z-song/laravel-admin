@@ -8,6 +8,10 @@ class Currency extends Field
 {
     protected $symbol = '$';
 
+    protected static $js = [
+        '/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
+    ];
+
     public function symbol($symbol)
     {
         $this->symbol = $symbol;
