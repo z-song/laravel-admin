@@ -246,8 +246,6 @@ class Grid
      */
     protected function addColumn($column = '', $label = '')
     {
-        //$label = $label ?: Str::upper($column);
-
         $column = new Column($column, $label);
         $column->setGrid($this);
 
