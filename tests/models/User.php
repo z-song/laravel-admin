@@ -24,4 +24,9 @@ class User extends Model
     {
         return "{$this->profile->latitude} {$this->profile->longitude}";
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'test_user_tags', 'user_id', 'tag_id');
+    }
 }

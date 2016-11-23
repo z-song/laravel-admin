@@ -59,6 +59,19 @@ class CreateTestTables extends Migration
 
             $table->timestamps();
         });
+
+        Schema::create('test_tags', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('test_user_tags', function (Blueprint $table) {
+            $table->integer('user_id');
+            $table->integer('tag_id');
+            $table->index(['user_id', 'tag_id']);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -72,5 +85,7 @@ class CreateTestTables extends Migration
         Schema::drop('test_files');
         Schema::drop('test_users');
         Schema::drop('test_user_profiles');
+        Schema::drop('test_tags');
+        Schema::drop('test_user_tags');
     }
 }
