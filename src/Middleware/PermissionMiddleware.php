@@ -12,12 +12,13 @@ class PermissionMiddleware
      *
      * @param \Illuminate\Http\Request $request
      * @param \Closure                 $next
-     * @param array                    $args
      *
      * @return mixed
      */
-    public function handle(Request $request, \Closure $next, ...$args)
+    public function handle(Request $request, \Closure $next)
     {
+        $args = array_slice(func_get_args(), 2);
+
         if (count($args) > 1) {
             $type = array_shift($args);
 
