@@ -605,6 +605,10 @@ class Grid
             return $this->addColumn($method, $label);
         }
 
+        if ($this->model()->eloquent()->hasGetMutator($method)) {
+            return $this->addColumn($method, $label);
+        }
+
         $relation = $this->model()->eloquent()->$method();
 
         if ($relation instanceof HasOne || $relation instanceof BelongsTo) {
