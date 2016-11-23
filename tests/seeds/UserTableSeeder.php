@@ -10,7 +10,7 @@ class UserTableSeeder extends Seeder
     {
         factory(\Tests\Models\User::class, 50)
             ->create()
-            ->each(function($u) {
+            ->each(function ($u) {
                 $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
             });
     }

@@ -66,7 +66,6 @@ class Router
         $attributes['namespace'] = 'Encore\Admin\Controllers';
 
         $this->router->group($attributes, function ($router) {
-
             $attributes = ['middleware' => 'admin.permission:allow,administrator'];
 
             $router->group($attributes, function ($router) {
