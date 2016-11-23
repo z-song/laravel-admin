@@ -28,3 +28,9 @@ $factory->define(Tests\Models\Profile::class, function (Faker $faker) {
         'end_at'     => $faker->dateTime,
     ];
 });
+
+$factory->define(Tests\Models\Tag::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});

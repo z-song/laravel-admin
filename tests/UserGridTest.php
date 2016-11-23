@@ -51,6 +51,7 @@ class UserGridTest extends TestCase
             ->create()
             ->each(function ($u) {
                 $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
+                $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
             });
     }
 
@@ -63,12 +64,29 @@ class UserGridTest extends TestCase
 
         $this->assertCount(100, UserModel::all());
         $this->assertCount(100, ProfileModel::all());
+    }
+
+    public function testGridPagination()
+    {
+        $this->seedsTable(65);
+
+        $this->visit('admin/users')
+            ->see('All users');
 
         $this->click(2)->seePageIs('admin/users?page=2');
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+
         $this->click(3)->seePageIs('admin/users?page=3');
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+
         $this->click(4)->seePageIs('admin/users?page=4');
-        $this->click(5)->seePageIs('admin/users?page=5');
+        $this->assertCount(5, $this->crawler()->filter('td a i[class*=fa-edit]'));
+
+        $this->visit('admin/users?page=5')->seePageIs('admin/users?page=5');
+        $this->assertCount(0, $this->crawler()->filter('td a i[class*=fa-edit]'));
+
         $this->click(1)->seePageIs('admin/users?page=1');
+        $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
     }
 
     public function testIsFileter()
@@ -138,5 +156,40 @@ class UserGridTest extends TestCase
             ->seeInElement('td', $user->color)
             ->seeInElement('td', $user->start_at)
             ->seeInElement('td', $user->end_at);
+    }
+
+    public function testHasManyRelation()
+    {
+        factory(\Tests\Models\User::class, 10)
+            ->create()
+            ->each(function ($u) {
+                $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
+                $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+            });
+
+        $this->visit('admin/users')
+            ->seeElement('td code');
+
+        $this->assertCount(50, $this->crawler()->filter('td code'));
+    }
+
+    public function testGridActions()
+    {
+        $this->seedsTable(15);
+
+        $this->visit('admin/users');
+
+        $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-edit]'));
+        $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-trash]'));
+    }
+
+    public function testGridRows()
+    {
+        $this->seedsTable(10);
+
+        $this->visit('admin/users')
+            ->seeInElement('td a[class*=btn]', 'detail');
+
+        $this->assertCount(5, $this->crawler()->filter('td a[class*=btn]'));
     }
 }
