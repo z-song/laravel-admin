@@ -139,7 +139,7 @@ The rest needs to be done is open `app/Admin/Contollers/UserController.php`, fin
 
 Other
 ------------
-`laravel-admin` based on thses plugins or services:
+`laravel-admin` based on following plugins or services:
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
