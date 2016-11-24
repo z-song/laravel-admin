@@ -72,8 +72,8 @@
     $.noty.defaults.layout = 'topRight';
     $.noty.defaults.theme = 'relax';
 
+    $.pjax.defaults.timeout = 5000;
     $(document).pjax('a:not(a[target="_blank"])', {
-        timeout: 5000,
         container: '#pjax-container'
     });
 
