@@ -50,6 +50,8 @@ return [
      * Laravel-admin database setting.
      */
     'database' => [
+        'connection' => '',
+
         'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Auth\Database\Administrator::class,
 

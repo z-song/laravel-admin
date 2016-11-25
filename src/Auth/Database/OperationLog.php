@@ -26,6 +26,8 @@ class OperationLog extends Model
      */
     public function __construct(array $attributes = [])
     {
+        $this->connection = config('admin.database.connection');
+        
         $this->setTable(config('admin.database.operation_log_table'));
 
         parent::__construct($attributes);
