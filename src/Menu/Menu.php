@@ -17,11 +17,6 @@ class Menu implements Renderable
     /**
      * @var string
      */
-    protected $script;
-
-    /**
-     * @var string
-     */
     protected $elementId = 'tree-';
 
     /**
@@ -43,79 +38,6 @@ class Menu implements Renderable
     }
 
     /**
-     * Variables in tree template.
-     *
-     * @return array
-     */
-    public function variables()
-    {
-        return [
-            'items' => $this->model->toTree(),
-            'id'    => $this->elementId,
-        ];
-    }
-
-    /**
-     * Build tree grid scripts.
-     *
-     * @return void
-     */
-    protected function buildupScript()
-    {
-        $confirm = trans('admin::lang.delete_confirm');
-        $token = csrf_token();
-
-        $this->script = <<<SCRIPT
-
-        $('#{$this->elementId}').nestable({});
-
-        $('._delete').click(function() {
-            var id = $(this).data('id');
-            if(confirm("{$confirm}")) {
-                $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
-                    $.pjax.reload('#pjax-container');
-                });
-            }
-        });
-
-        $('.{$this->elementId}-save').click(function () {
-            var serialize = $('#{$this->elementId}').nestable('serialize');
-            $.get('/{$this->path}', {'_tree':JSON.stringify(serialize)}, function(data){
-                $.pjax.reload('#pjax-container');
-            });
-        });
-
-        $('.{$this->elementId}-refresh').click(function () {
-            $.pjax.reload('#pjax-container');
-        });
-
-
-SCRIPT;
-    }
-
-    /**
-     * Render a tree.
-     *
-     * @return \Illuminate\Http\JsonResponse|string
-     */
-    public function render()
-    {
-        if (Request::capture()->has('_tree')) {
-            return response()->json([
-                'status' => $this->saveTree(Request::capture()->get('_tree')),
-            ]);
-        }
-
-        $this->buildupScript();
-
-        AdminManager::script($this->script);
-
-        view()->share(['path'  => $this->path]);
-
-        return view('admin::menu.tree', $this->variables())->render();
-    }
-
-    /**
      * Build menu tree presented by array.
      *
      * @param string $serialize
@@ -133,6 +55,76 @@ SCRIPT;
         $this->model->saveTree($tree);
 
         return true;
+    }
+
+    /**
+     * Build tree grid scripts.
+     *
+     * @return string
+     */
+    protected function buildupScript()
+    {
+        $confirm = trans('admin::lang.delete_confirm');
+        $token = csrf_token();
+
+        return <<<SCRIPT
+
+        $('#{$this->elementId}').nestable({});
+
+        $('._delete').click(function() {
+            var id = $(this).data('id');
+            if(confirm("{$confirm}")) {
+                $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+                    $.pjax.reload('#pjax-container');
+                });
+            }
+        });
+
+        $('.{$this->elementId}-save').click(function () {
+            var serialize = $('#{$this->elementId}').nestable('serialize');
+
+            $.post('/{$this->path}', {
+                _token: '{$token}',
+                _order: JSON.stringify(serialize)
+            },
+            function(data){
+                $.pjax.reload('#pjax-container');
+            });
+        });
+
+        $('.{$this->elementId}-refresh').click(function () {
+            $.pjax.reload('#pjax-container');
+        });
+
+
+SCRIPT;
+    }
+
+    /**
+     * Variables in tree template.
+     *
+     * @return array
+     */
+    public function variables()
+    {
+        return [
+            'id'    => $this->elementId,
+            'items' => $this->model->toTree(),
+        ];
+    }
+
+    /**
+     * Render a tree.
+     *
+     * @return \Illuminate\Http\JsonResponse|string
+     */
+    public function render()
+    {
+        AdminManager::script($this->buildupScript());
+
+        view()->share(['path'  => $this->path]);
+
+        return view('admin::menu.tree', $this->variables())->render();
     }
 
     /**
