@@ -79,9 +79,7 @@ class UserController extends Controller
                 return "<img src='{$avatar}' />";
             });
             $grid->profile()->postcode('Post code');
-            $grid->profile('Address')->value(function ($profile) {
-                return $profile['address'];
-            });
+            $grid->profile()->address();
             $grid->position('Position');
             $grid->profile()->color();
             $grid->profile()->start_at('开始时间');

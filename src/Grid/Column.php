@@ -56,18 +56,18 @@ class Column
     protected $attributes = [];
 
     /**
-     * Value wrapper.
+     * Value callback.
      *
      * @var \Closure
      */
-    protected $valueWrapper;
+    protected $valueCallback;
 
     /**
-     * Html wrapper.
+     * Html callback.
      *
      * @var array
      */
-    protected $htmlWrappers = [];
+    protected $htmlCallbacks = [];
 
     /**
      * Relation name.
@@ -137,42 +137,6 @@ class Column
     }
 
     /**
-     * Add a value wrapper.
-     *
-     * @param callable $callable
-     *
-     * @return $this
-     */
-    public function value(Closure $callable)
-    {
-        $this->valueWrapper = $callable;
-
-        return $this;
-    }
-
-    /**
-     * Alias for value method.
-     *
-     * @param callable $callable
-     *
-     * @return $this
-     */
-    public function display(Closure $callable)
-    {
-        return $this->value($callable);
-    }
-
-    /**
-     * If has a value wrapper.
-     *
-     * @return bool
-     */
-    protected function hasValueWrapper()
-    {
-        return (bool) $this->valueWrapper;
-    }
-
-    /**
      * Set relation.
      *
      * @param $relation
@@ -197,13 +161,254 @@ class Column
     }
 
     /**
-     * Map all data to every column.
+     * Mark this column as sortable.
+     *
+     * @return Column
+     */
+    public function sortable()
+    {
+        $this->sortable = true;
+
+        return $this;
+    }
+
+    /**
+     * Wrap value with badge.
+     *
+     * @param string $style
+     *
+     * @return $this
+     */
+    public function badge($style = 'red')
+    {
+        $callback = "<span class='badge bg-{$style}'>{value}</span>";
+
+        $this->htmlCallback($callback);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value with label.
+     *
+     * @param string $style
+     *
+     * @return $this
+     */
+    public function label($style = 'success')
+    {
+        $callback = "<span class='label label-{$style}'>{value}</span>";
+
+        $this->htmlCallback($callback);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value as a link.
+     *
+     * @param $href
+     * @param string $target
+     *
+     * @return $this
+     */
+    public function link($href = '', $target = '_blank')
+    {
+        if (empty($href)) {
+            $href = '{$value}';
+        }
+
+        $callback = "<a href='$href' target='$target'>{value}</a>";
+
+        $this->htmlCallback($callback);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value as a button.
+     *
+     * @param string $style
+     *
+     * @return $this
+     */
+    public function button($style = 'default')
+    {
+        if (is_array($style)) {
+            $style = array_map(function ($style) {
+                return 'btn-'.$style;
+            }, $style);
+
+            $style = implode(' ', $style);
+        } elseif (is_string($style)) {
+            $style = 'btn-'.$style;
+        }
+
+        $callback = "<span class='btn $style'>{value}</span>";
+
+        $this->htmlCallback($callback);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value as a progressbar.
+     *
+     * @param string $style
+     * @param string $size
+     * @param int    $max
+     *
+     * @return $this
+     */
+    public function progressBar($style = 'primary', $size = 'sm', $max = 100)
+    {
+        if (is_array($style)) {
+            $style = array_map(function ($style) {
+                return 'progress-bar-'.$style;
+            }, $style);
+
+            $style = implode(' ', $style);
+        } elseif (is_string($style)) {
+            $style = 'progress-bar-'.$style;
+        }
+
+        $callback = <<<EOT
+
+<div class="progress progress-$size">
+    <div class="progress-bar $style" role="progressbar" aria-valuenow="{value}" aria-valuemin="0" aria-valuemax="$max" style="width: {value}%">
+      <span class="sr-only">{value}</span>
+    </div>
+</div>
+
+EOT;
+
+        $this->htmlCallback($callback);
+
+        return $this;
+    }
+
+    /**
+     * Wrap value as a image.
+     *
+     * @param string $server
+     * @param int    $width
+     * @param int    $height
+     *
+     * @return $this
+     */
+    public function image($server = '', $width = 200, $height = 200)
+    {
+        $server = $server ?: config('admin.upload.host');
+
+        $callback = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
+
+        $this->htmlCallback($callback);
+
+        return $this;
+    }
+
+    /**
+     * Make the column editable.
+     *
+     * @return $this
+     */
+    public function editable()
+    {
+        $editable = new Editable($this->name, func_get_args());
+        $editable->setResource($this->grid->resource());
+
+        $this->htmlCallback($editable->html());
+
+        return $this;
+    }
+
+    /**
+     * Add a value callback.
+     *
+     * @param callable $callable
+     *
+     * @return $this
+     */
+    public function value(Closure $callable)
+    {
+        $this->valueCallback = $callable->bindTo($this);
+
+        return $this;
+    }
+
+    /**
+     * Alias for value method.
+     *
+     * @param callable $callable
+     *
+     * @return $this
+     */
+    public function display(Closure $callable)
+    {
+        return $this->value($callable);
+    }
+
+    /**
+     * If has a value callback.
+     *
+     * @return bool
+     */
+    protected function hasValueCallback()
+    {
+        return (bool) $this->valueCallback;
+    }
+
+    /**
+     * Set html callback.
+     *
+     * @param $callback
+     */
+    protected function htmlCallback($callback)
+    {
+        $this->htmlCallbacks[] = $callback;
+    }
+
+    /**
+     * If column has html callback.
+     *
+     * @return bool
+     */
+    protected function hasHtmlCallback()
+    {
+        return !empty($this->htmlCallbacks);
+    }
+
+    /**
+     * Wrap value with callback.
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    protected function htmlWrap($value, $row = [])
+    {
+        foreach ($this->htmlCallbacks as $callback) {
+            $value = str_replace('{value}', $value, $callback);
+        }
+
+        $value = str_replace(
+            '{$value}',
+            is_null($this->original) ? 'NULL' : $this->htmlEntityEncode($this->original),
+            $value
+        );
+        $value = str_replace('{pk}', array_get($row, $this->grid->getKeyName()), $value);
+
+        return $value;
+    }
+
+    /**
+     * Fill all data to every column.
      *
      * @param array $data
      *
      * @return mixed
      */
-    public function map($data)
+    public function fill(array $data)
     {
         foreach ($data as &$item) {
             $this->original = $value = array_get($item, $this->name);
@@ -212,12 +417,12 @@ class Column
 
             array_set($item, $this->name, $value);
 
-            if ($this->hasValueWrapper()) {
-                $value = call_user_func($this->valueWrapper, $this->original);
+            if ($this->hasValueCallback()) {
+                $value = call_user_func($this->valueCallback, $this->original);
                 array_set($item, $this->name, $value);
             }
 
-            if ($this->hasHtmlWrapper()) {
+            if ($this->hasHtmlCallback()) {
                 $value = $this->htmlWrap($value, $item);
                 array_set($item, $this->name, $value);
             }
@@ -244,211 +449,6 @@ class Column
         }
 
         return $item;
-    }
-
-    /**
-     * Mark this column as sortable.
-     *
-     * @return Column
-     */
-    public function sortable()
-    {
-        $this->sortable = true;
-
-        return $this;
-    }
-
-    /**
-     * Wrap value with badge.
-     *
-     * @param string $style
-     *
-     * @return $this
-     */
-    public function badge($style = 'red')
-    {
-        $wrapper = "<span class='badge bg-{$style}'>{value}</span>";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value with label.
-     *
-     * @param string $style
-     *
-     * @return $this
-     */
-    public function label($style = 'success')
-    {
-        $wrapper = "<span class='label label-{$style}'>{value}</span>";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a link.
-     *
-     * @param $href
-     * @param string $target
-     *
-     * @return $this
-     */
-    public function link($href = '', $target = '_blank')
-    {
-        if (empty($href)) {
-            $href = '{$value}';
-        }
-
-        $wrapper = "<a href='$href' target='$target'>{value}</a>";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a button.
-     *
-     * @param string $style
-     *
-     * @return $this
-     */
-    public function button($style = 'default')
-    {
-        if (is_array($style)) {
-            $style = array_map(function ($style) {
-                return 'btn-'.$style;
-            }, $style);
-
-            $style = implode(' ', $style);
-        } elseif (is_string($style)) {
-            $style = 'btn-'.$style;
-        }
-
-        $wrapper = "<span class='btn $style'>{value}</span>";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a progressbar.
-     *
-     * @param string $style
-     * @param string $size
-     * @param int    $max
-     *
-     * @return $this
-     */
-    public function progressBar($style = 'primary', $size = 'sm', $max = 100)
-    {
-        if (is_array($style)) {
-            $style = array_map(function ($style) {
-                return 'progress-bar-'.$style;
-            }, $style);
-
-            $style = implode(' ', $style);
-        } elseif (is_string($style)) {
-            $style = 'progress-bar-'.$style;
-        }
-
-        $wrapper = <<<EOT
-
-<div class="progress progress-$size">
-    <div class="progress-bar $style" role="progressbar" aria-valuenow="{value}" aria-valuemin="0" aria-valuemax="$max" style="width: {value}%">
-      <span class="sr-only">{value}</span>
-    </div>
-</div>
-
-EOT;
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a image.
-     *
-     * @param string $server
-     * @param int    $width
-     * @param int    $height
-     *
-     * @return $this
-     */
-    public function image($server = '', $width = 200, $height = 200)
-    {
-        $server = $server ?: config('admin.upload.host');
-
-        $wrapper = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
-    }
-
-    /**
-     * Make the column editable.
-     *
-     * @return $this
-     */
-    public function editable()
-    {
-        $editable = new Editable($this->name, func_get_args());
-        $editable->setResource($this->grid->resource());
-
-        $this->htmlWrapper($editable->html());
-
-        return $this;
-    }
-
-    /**
-     * Set html wrapper.
-     *
-     * @param $wrapper
-     */
-    protected function htmlWrapper($wrapper)
-    {
-        $this->htmlWrappers[] = $wrapper;
-    }
-
-    /**
-     * If column has html wrapper.
-     *
-     * @return bool
-     */
-    protected function hasHtmlWrapper()
-    {
-        return !empty($this->htmlWrappers);
-    }
-
-    /**
-     * Wrap value with wrapper.
-     *
-     * @param $value
-     *
-     * @return mixed
-     */
-    protected function htmlWrap($value, $row = [])
-    {
-        foreach ($this->htmlWrappers as $wrapper) {
-            $value = str_replace('{value}', $value, $wrapper);
-        }
-
-        $value = str_replace(
-            '{$value}',
-            is_null($this->original) ? 'NULL' : $this->htmlEntityEncode($this->original),
-            $value
-        );
-        $value = str_replace('{pk}', array_get($row, $this->grid->getKeyName()), $value);
-
-        return $value;
     }
 
     /**
