@@ -15,6 +15,8 @@ class Permission extends Model
      */
     public function __construct(array $attributes = [])
     {
+        $this->connection = config('admin.database.connection');
+        
         $this->table = config('admin.database.permissions_table');
 
         parent::__construct($attributes);
