@@ -8,7 +8,7 @@
 
             @if($grid->allowExport())
             <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="/{{ $grid->exportUrl() }}" target="_blank" class="btn btn-sm btn-warning"><i class="fa fa-download"></i>&nbsp;&nbsp;Export</a>
+                <a href="/{{ $grid->exportUrl() }}" target="_blank" class="btn btn-sm btn-warning"><i class="fa fa-download"></i>&nbsp;&nbsp;{{ trans('admin::lang.export') }}</a>
             </div>
             @endif
 
