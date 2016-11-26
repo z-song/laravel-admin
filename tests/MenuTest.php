@@ -59,4 +59,10 @@ class MenuTest extends TestCase
             ->seeInDatabase(config('admin.database.menu_table'), ['title' => 'blablabla'])
             ->assertEquals(7, Menu::count());
     }
+
+    public function testShowPage()
+    {
+        $this->visit('admin/auth/menu/1')
+            ->seePageIs('admin/auth/menu/1/edit');
+    }
 }
