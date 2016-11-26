@@ -15,7 +15,11 @@ class Role extends Model
      */
     public function __construct(array $attributes = [])
     {
-        $this->table = config('admin.database.roles_table');
+        $connection = config('admin.database.connection') ?: config('database.default');
+
+        $this->setConnection($connection);
+
+        $this->setTable(config('admin.database.roles_table'));
 
         parent::__construct($attributes);
     }
