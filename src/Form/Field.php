@@ -153,7 +153,7 @@ class Field
      */
     protected function formatId($column)
     {
-        return str_replace('.', '_', $column);
+        return str_replace('.', '_', trim($column, '[]'));
     }
 
     /**
