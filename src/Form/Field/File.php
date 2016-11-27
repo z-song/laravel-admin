@@ -213,7 +213,7 @@ EOT;
             return $path;
         }
 
-        return trim(config('admin.upload.host'), '/').'/'.trim($path, '/');
+        return rtrim(config('admin.upload.host'), '/').'/'.trim($path, '/');
     }
 
     /**
