@@ -90,7 +90,7 @@ class UserController extends Controller
                     return "<code>{$tag['name']}</code>";
                 })->toArray();
 
-                return join('', $tags);
+                return implode('', $tags);
             });
 
             $grid->created_at();
@@ -107,7 +107,7 @@ class UserController extends Controller
             $grid->rows(function (Grid\Row $row) {
                 if ($row->id % 2 == 0) {
                     $row->actions()->add(function ($row) {
-                        return "<a href=\"/\" class=\"btn btn-xs btn-danger\">detail</a>";
+                        return '<a href="/" class="btn btn-xs btn-danger">detail</a>';
                     });
                 }
             });

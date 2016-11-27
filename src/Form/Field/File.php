@@ -102,6 +102,7 @@ class File extends Field
      * Set options for file-upload plugin.
      *
      * @param array $options
+     *
      * @return $this
      */
     public function options($options = [])
@@ -126,6 +127,7 @@ class File extends Field
      *
      * @param string      $directory
      * @param null|string $name
+     *
      * @return $this
      */
     public function move($directory, $name = null)
@@ -141,6 +143,7 @@ class File extends Field
      * Prepare for saving.
      *
      * @param UploadedFile $file
+     *
      * @return mixed|string
      */
     public function prepare(UploadedFile $file = null)
@@ -205,6 +208,7 @@ EOT;
      * Get file visit url.
      *
      * @param $path
+     *
      * @return string
      */
     public function objectUrl($path)
