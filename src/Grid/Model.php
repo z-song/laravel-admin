@@ -208,7 +208,6 @@ class Model
         if (str_contains($this->sort['column'], '.')) {
             $this->setRelationSort($this->sort['column']);
         } else {
-
             $this->resetOrderBy();
 
             $this->queries->push([
