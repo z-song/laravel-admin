@@ -185,9 +185,9 @@ class Model
     protected function resolvePerPage($paginate)
     {
         if ($perPage = app('request')->input('per_page')) {
-
             if (is_array($paginate)) {
                 $paginate['arguments'][0] = $perPage;
+
                 return $paginate['arguments'];
             }
 
