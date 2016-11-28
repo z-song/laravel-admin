@@ -119,6 +119,13 @@ class Field
     protected $view = '';
 
     /**
+     * Help Block
+     *
+     * @var string
+     */
+    protected $help = '';
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -404,6 +411,7 @@ class Field
         $this->variables['label'] = $this->label;
         $this->variables['column'] = $this->column;
         $this->variables['attributes'] = $this->formatAttributes();
+        $this->variables['help'] = $this->help;
 
         return $this->variables;
     }
@@ -449,5 +457,19 @@ class Field
 
             return $this;
         }
+    }
+
+    /**
+     * Set help block.
+     *
+     * @param null $help
+     *
+     * @return mixed
+     */
+    public function help($help = '')
+    {
+        $this->help = $help;
+
+        return $this;
     }
 }
