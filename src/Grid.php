@@ -740,6 +740,8 @@ class Grid
             return with(new Handle($e))->render();
         }
 
+        AdminManager::script($this->script());
+
         return view($this->view, $this->variables())->render();
     }
 
@@ -833,8 +835,6 @@ EOT;
      */
     public function __toString()
     {
-        AdminManager::script($this->script());
-
         return $this->render();
     }
 }
