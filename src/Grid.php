@@ -149,6 +149,13 @@ class Grid
     protected $view = 'admin::grid.table';
 
     /**
+     * Per-page options.
+     *
+     * @var array
+     */
+    protected $perPages = [10, 20, 30, 50, 100];
+
+    /**
      * Create a new grid instance.
      *
      * @param Eloquent $model
@@ -525,6 +532,37 @@ class Grid
     }
 
     /**
+     * Set per-page options.
+     *
+     * @param array $perPages
+     */
+    public function perPages(array $perPages)
+    {
+        $this->perPages = $perPages;
+    }
+
+    /**
+     * Generate per-page options.
+     *
+     * @return string
+     */
+    public function perPageOptions()
+    {
+        $perPage = app('request')->input('per_page', 20);
+
+        $options = '';
+
+        foreach ($this->perPages as $option) {
+            $selected = ($option == $perPage) ? 'selected' : '';
+            $url = app('request')->fullUrlWithQuery(['per_page' => $option]);
+
+            $options .= "<option value=\"$url\" $selected>$option</option>\r\n";
+        }
+
+        return $options;
+    }
+
+    /**
      * Get current resource uri.
      *
      * @param string $path
@@ -779,6 +817,10 @@ $('.grid-order-up').on('click', function() {
 
 $('.grid-order-down').on('click', function() {
     grid_order($(this).data('id'), 0);
+});
+
+$('.per-page').select2().on("select2:select", function(e) {
+    $.pjax({url: this.value, container: '#pjax-container'});
 });
 
 EOT;

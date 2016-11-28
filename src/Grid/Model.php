@@ -154,7 +154,7 @@ class Model
      */
     protected function setPaginate()
     {
-        $paginate = $this->findQueryByMethod('paginate')->first();
+        $paginate = $this->findQueryByMethod('paginate');
 
         $this->queries = $this->queries->reject(function ($query) {
             return $query['method'] == 'paginate';
@@ -168,11 +168,33 @@ class Model
         } else {
             $query = [
                 'method'    => 'paginate',
-                'arguments' => is_null($paginate) ? [$this->perPage] : $paginate['arguments'],
+                'arguments' => $this->resolvePerPage($paginate),
             ];
         }
 
         $this->queries->push($query);
+    }
+
+    /**
+     * Resolve perPage for pagination.
+     *
+     * @param array|null $paginate
+     *
+     * @return array
+     */
+    protected function resolvePerPage($paginate)
+    {
+        if ($perPage = app('request')->input('per_page')) {
+
+            if (is_array($paginate)) {
+                $paginate['arguments'][0] = $perPage;
+                return $paginate['arguments'];
+            }
+
+            $this->perPage = $perPage;
+        }
+
+        return [$this->perPage];
     }
 
     /**
@@ -184,7 +206,7 @@ class Model
      */
     protected function findQueryByMethod($method)
     {
-        return $this->queries->filter(function ($query) use ($method) {
+        return $this->queries->first(function ($query) use ($method) {
             return $query['method'] == $method;
         });
     }

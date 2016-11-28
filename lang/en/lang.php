@@ -25,6 +25,8 @@ return [
     'collapse'      => 'Collapse',
     'filter'        => 'Filter',
     'close'         => 'Close',
+    'show'          => 'Show',
+    'items'         => 'items',
 
     'action'           => 'Action',
     'title'            => 'Title',

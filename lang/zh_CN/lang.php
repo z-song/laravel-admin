@@ -25,6 +25,8 @@ return [
     'collapse'      => '收起',
     'filter'        => '筛选',
     'close'         => '关闭',
+    'show'          => '显示',
+    'items'         => '条',
 
     'action'           => '操作',
     'title'            => '标题',
