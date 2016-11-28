@@ -2,7 +2,15 @@
     <div class="box-header">
         <h3 class="box-title"></h3>
 
-        <div class="box-tools">
+        <div class="input-group pull-left" style="width: 170px;">
+            <span class="input-group-addon"><small>{{ trans('admin::lang.show') }}</small></span>
+            <select class="form-control input-xs per-page" name="per-page">
+                {!! $grid->perPageOptions() !!}
+            </select>
+            <span class="input-group-addon"><small>{{ trans('admin::lang.items') }}</small></span>
+        </div>
+
+        <div class="box-tools" style="top: 10px;">
 
             {!! $grid->renderFilter() !!}
 

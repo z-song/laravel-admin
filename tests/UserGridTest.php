@@ -192,4 +192,24 @@ class UserGridTest extends TestCase
 
         $this->assertCount(5, $this->crawler()->filter('td a[class*=btn]'));
     }
+
+    public function testGridPerPage()
+    {
+        $this->seedsTable(98);
+
+        $this->visit('admin/users')
+            ->seeElement('select[class*=per-page][name=per-page]')
+            ->seeInElement('select option', 10)
+            ->seeInElement('select option[selected]', 20)
+            ->seeInElement('select option', 30)
+            ->seeInElement('select option', 50)
+            ->seeInElement('select option', 100);
+
+        $this->assertEquals('http://localhost:8000/admin/users?per_page=20', $this->crawler()->filter('select option[selected]')->attr('value'));
+
+        $perPage = rand(1, 98);
+
+        $this->visit('admin/users?per_page='.$perPage)
+            ->assertCount($perPage + 1, $this->crawler()->filter('tr'));
+    }
 }
