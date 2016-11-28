@@ -203,6 +203,7 @@ class Row
         }
 
         if (is_callable($value)) {
+            $value = $value->bindTo($this);
             $value = $value($this->column($name));
         }
 
