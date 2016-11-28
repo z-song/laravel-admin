@@ -64,6 +64,7 @@ Documentation
 - [layout](/docs/en/layout.md)
 - [model-grid](/docs/en/model-grid.md)
 - [model-form](/docs/en/model-form.md)
+  - [image/file upload](/docs/en/form-upload.md)
 - [widgets](/docs/en/widgets/table.md)
   - [table](/docs/en/widgets/table.md)
   - [form](/docs/en/widgets/form.md)
