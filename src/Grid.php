@@ -821,7 +821,7 @@ $('.grid-order-down').on('click', function() {
     grid_order($(this).data('id'), 0);
 });
 
-$('.per-page').select2().on("select2:select", function(e) {
+$('.per-page').select2({minimumResultsForSearch: -1}).on("select2:select", function(e) {
     $.pjax({url: this.value, container: '#pjax-container'});
 });
 
