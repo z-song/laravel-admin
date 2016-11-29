@@ -58,9 +58,10 @@ return [
 
     'alert'         => '注意',
 
-    'parent_id'     => '父ID',
+    'parent_id'     => '父级菜单',
     'icon'          => '图标',
     'uri'           => '路径',
 
-    'operation_log' => '操作日志',
+    'operation_log'       => '操作日志',
+    'parent_select_error' => '父级选择错误',
 ];
