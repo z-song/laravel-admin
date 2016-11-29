@@ -58,9 +58,10 @@ return [
 
     'alert'         => 'Alert',
 
-    'parent_id'     => 'Parent ID',
+    'parent_id'     => 'Parent',
     'icon'          => 'Icon',
     'uri'           => 'URI',
 
-    'operation_log' => 'Operation log',
+    'operation_log'       => 'Operation log',
+    'parent_select_error' => 'Parent select error',
 ];
