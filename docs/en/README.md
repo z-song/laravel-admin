@@ -23,6 +23,8 @@ Screenshots
 Installation
 ------------
 
+First, install laravel, and make sure that the database connection settings are correct.
+
 ```
 Laravel 5.2
 composer require encore/laravel-admin "dev-master"
@@ -49,6 +51,10 @@ php artisan admin:install
 
 open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.
 
+Default Settings
+------------
+The file in `config/admin.php` contains an array of settings, you can find the default settings in there.
+
 Documentation
 ------------
 
@@ -58,6 +64,8 @@ Documentation
 - [layout](/docs/en/layout.md)
 - [model-grid](/docs/en/model-grid.md)
 - [model-form](/docs/en/model-form.md)
+  - [image/file upload](/docs/en/form-upload.md)
+  - [components management](/docs/en/components-management.md)
 - [widgets](/docs/en/widgets/table.md)
   - [table](/docs/en/widgets/table.md)
   - [form](/docs/en/widgets/form.md)
@@ -127,13 +135,13 @@ $router->resource('users', UserController::class);
 
 Open `http://localhost:8000/admin/auth/menu`, add menu link and refresh the page, then you can find a link item in left menu bar.
 
-#### 3.build grid and form
+#### 4.build grid and form
 
 The rest needs to be done is open `app/Admin/Contollers/UserController.php`, find `form()` and `grid()` method and write few lines of code with `model-grid` and `model-form`，for more detail, please read [model-grid](/docs/en/model-grid.md) and [model-form](/docs/en/model-form.md).
 
 Other
 ------------
-`laravel-admin` based on thses plugins or services:
+`laravel-admin` based on following plugins or services:
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
