@@ -72,6 +72,8 @@ class ImageController extends Controller
 
             $grid->created_at();
             $grid->updated_at();
+
+            $grid->disableFilter();
         });
     }
 
