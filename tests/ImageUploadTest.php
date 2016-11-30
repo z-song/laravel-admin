@@ -68,6 +68,8 @@ class ImageUploadTest extends TestCase
             $this->assertFileExists(public_path('upload/'.$images['image'.$index]));
         }
 
+        $this->assertFileExists(public_path('upload/image/asdasdasdasdasd.jpeg'));
+
         File::cleanDirectory(public_path('upload/image'));
     }
 

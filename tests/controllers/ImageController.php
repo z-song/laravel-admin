@@ -91,8 +91,10 @@ class ImageController extends Controller
             $form->image('image2')->rotate(90);
             $form->image('image3')->flip('v');
             $form->image('image4')->move(null, 'renamed.jpeg');
-            $form->image('image5');
-            $form->image('image6');
+            $form->image('image5')->name(function ($file) {
+                return 'asdasdasdasdasd.'.$file->guessExtension();
+            });
+            $form->image('image6')->uniqueName();
 
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');

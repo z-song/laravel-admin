@@ -61,6 +61,13 @@ class File extends Field
     ];
 
     /**
+     * If use unique name to store upload file.
+     *
+     * @var bool
+     */
+    protected $useUniqueName = false;
+
+    /**
      * Create a new File instance.
      *
      * @param string $column
@@ -140,6 +147,32 @@ class File extends Field
     }
 
     /**
+     * Set name of store name.
+     *
+     * @param string|callable $name
+     *
+     * @return $this
+     */
+    public function name($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Use unique name for store upload file.
+     *
+     * @return $this
+     */
+    public function uniqueName()
+    {
+        $this->useUniqueName = true;
+
+        return $this;
+    }
+
+    /**
      * Prepare for saving.
      *
      * @param UploadedFile $file
@@ -158,9 +191,35 @@ class File extends Field
 
         $this->directory = $this->directory ?: $this->defaultStorePath();
 
-        $this->name = $this->name ?: $file->getClientOriginalName();
+        $this->name = $this->getStoreName($file);
 
         return $this->uploadAndDeleteOriginal($file);
+    }
+
+    /**
+     * Get store name of upload file.
+     *
+     * @param UploadedFile $file
+     *
+     * @return string
+     */
+    protected function getStoreName(UploadedFile $file)
+    {
+        if ($this->useUniqueName) {
+            return $this->generateUniqueName($file);
+        }
+
+        if (is_callable($this->name)) {
+            $callback = $this->name->bindTo($this);
+
+            return call_user_func($callback, $file);
+        }
+
+        if (is_string($this->name)) {
+            return $this->name;
+        }
+
+        return $file->getClientOriginalName();
     }
 
     /**
@@ -267,6 +326,18 @@ EOT;
     }
 
     /**
+     * Generate a unique name for uploaded file.
+     *
+     * @param UploadedFile $file
+     *
+     * @return string
+     */
+    protected function generateUniqueName(UploadedFile $file)
+    {
+        return md5(uniqid()).'.'.$file->guessExtension();
+    }
+
+    /**
      * If name already exists, rename it.
      *
      * @param $file
@@ -276,7 +347,7 @@ EOT;
     public function renameIfExists(UploadedFile $file)
     {
         if ($this->storage->exists("$this->directory/$this->name")) {
-            $this->name = md5(uniqid()).'.'.$file->guessExtension();
+            $this->name = $this->generateUniqueName($file);
         }
     }
 
