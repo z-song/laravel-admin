@@ -28,7 +28,7 @@ class Image extends File
 
         $this->directory = $this->directory ?: $this->defaultStorePath();
 
-        $this->name = $this->name ?: $image->getClientOriginalName();
+        $this->name = $this->getStoreName($image);
 
         $this->executeCalls($image->getRealPath());
 
