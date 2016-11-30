@@ -471,7 +471,7 @@ EOT;
         }
 
         $query = app('request')->all();
-        $query = array_merge($query, ['_sort' => ['column' => $this->name, 'type' => $type]]);
+        $query = array_merge($query, [$this->grid->model()->getSortName() => ['column' => $this->name, 'type' => $type]]);
 
         $url = Url::current().'?'.http_build_query($query);
 
@@ -485,7 +485,7 @@ EOT;
      */
     protected function isSorted()
     {
-        $this->sort = app('request')->get('_sort');
+        $this->sort = app('request')->get($this->grid->model()->getSortName());
 
         if (empty($this->sort)) {
             return false;
