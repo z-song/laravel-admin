@@ -7,6 +7,23 @@ $form->file('file_column');
 $form->image('image_column');
 ```
 
+### 修改存储路径或文件名
+
+```php
+
+// 修改上传目录
+$form->image('picture')->move('public/upload/image1/');
+
+// 使用随机生成文件名 (md5(uniqid()).extension)
+$form->image('picture')->uniqueName();
+
+// 自定义文件名
+$form->image('picture')->name(function ($file) {
+    return 'test.'.$file->guessExtension();
+});
+
+```
+
 [model-form](/docs/zh/model-form.md)支持本地和云存储的文件上传
 
 ### 本地上传
