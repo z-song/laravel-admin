@@ -156,6 +156,13 @@ class Grid
     protected $perPages = [10, 20, 30, 50, 100];
 
     /**
+     * Default items count per-page.
+     *
+     * @var int
+     */
+    protected $perPage = 20;
+
+    /**
      * Create a new grid instance.
      *
      * @param Eloquent $model
@@ -288,8 +295,10 @@ class Grid
      *
      * @return void
      */
-    public function paginate($perPage = null)
+    public function paginate($perPage = 20)
     {
+        $this->perPage = $perPage;
+
         $this->model()->paginate($perPage);
     }
 
@@ -548,18 +557,19 @@ class Grid
      */
     public function perPageOptions()
     {
-        $perPage = app('request')->input('per_page', 20);
+        $perPage = (int) app('request')->input($this->model->getPerPageName(), $this->perPage);
 
-        $options = '';
+        return collect($this->perPages)
+            ->push($this->perPage)
+            ->push($perPage)
+            ->unique()
+            ->sort()
+            ->map(function ($option) use ($perPage) {
+                $selected = ($option == $perPage) ? 'selected' : '';
+                $url = app('request')->fullUrlWithQuery([$this->model->getPerPageName() => $option]);
 
-        foreach ($this->perPages as $option) {
-            $selected = ($option == $perPage) ? 'selected' : '';
-            $url = app('request')->fullUrlWithQuery(['per_page' => $option]);
-
-            $options .= "<option value=\"$url\" $selected>$option</option>\r\n";
-        }
-
-        return $options;
+                return "<option value=\"$url\" $selected>$option</option>";
+            })->implode("\r\n");
     }
 
     /**

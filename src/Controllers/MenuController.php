@@ -93,7 +93,7 @@ class MenuController extends Controller
      */
     public function update($id)
     {
-        if(Request::input('parent_id') == $id) {
+        if (Request::input('parent_id') == $id) {
             throw new \Exception(trans('admin::lang.parent_select_error'));
         }
 

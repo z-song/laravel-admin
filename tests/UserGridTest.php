@@ -210,6 +210,7 @@ class UserGridTest extends TestCase
         $perPage = rand(1, 98);
 
         $this->visit('admin/users?per_page='.$perPage)
+            ->seeInElement('select option[selected]', $perPage)
             ->assertCount($perPage + 1, $this->crawler()->filter('tr'));
     }
 }
