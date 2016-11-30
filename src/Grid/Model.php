@@ -58,6 +58,13 @@ class Model
     protected $perPageName = 'per_page';
 
     /**
+     * The query string variable used to store the sort.
+     *
+     * @var string
+     */
+    protected $sortName = '_sort';
+
+    /**
      * Create a new grid model instance.
      *
      * @param EloquentModel $model
@@ -108,6 +115,29 @@ class Model
     public function setPerPageName($name)
     {
         $this->perPageName = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get the query string variable used to store the sort.
+     *
+     * @return string
+     */
+    public function getSortName()
+    {
+        return $this->sortName;
+    }
+
+    /**
+     * Set the query string variable used to store the sort.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function setSortName($name)
+    {
+        $this->sortName = $name;
 
         return $this;
     }
@@ -250,7 +280,7 @@ class Model
      */
     protected function setSort()
     {
-        $this->sort = Input::get('_sort', []);
+        $this->sort = Input::get($this->sortName, []);
         if (!is_array($this->sort)) {
             return;
         }
