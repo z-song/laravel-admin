@@ -135,7 +135,7 @@ class UserController extends Controller
             $form->text('profile.first_name');
             $form->text('profile.last_name');
             $form->text('profile.postcode');
-            $form->textarea('profile.address');
+            $form->textarea('profile.address')->rows(15);
             $form->map('profile.latitude', 'profile.longitude', 'Position');
             $form->color('profile.color');
             $form->datetime('profile.start_at');
