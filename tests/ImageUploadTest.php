@@ -13,6 +13,12 @@ class ImageUploadTest extends TestCase
         $this->be(Administrator::first(), 'admin');
     }
 
+    public function testDisableFilter()
+    {
+        $this->visit('admin/images')
+            ->dontSeeElement('input[name=id]');
+    }
+
     public function testImageUploadPage()
     {
         $this->visit('admin/images/create')

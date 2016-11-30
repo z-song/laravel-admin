@@ -131,6 +131,13 @@ class Grid
     protected $allowExport = true;
 
     /**
+     * If use grid filter.
+     *
+     * @var bool
+     */
+    protected $useFilter = true;
+
+    /**
      * Is grid rows orderable.
      *
      * @var bool
@@ -502,6 +509,14 @@ class Grid
     }
 
     /**
+     * Disable grid filter.
+     */
+    public function disableFilter()
+    {
+        $this->useFilter = false;
+    }
+
+    /**
      * Set grid as orderable.
      *
      * @return $this
@@ -540,6 +555,10 @@ class Grid
      */
     public function renderFilter()
     {
+        if (!$this->useFilter) {
+            return '';
+        }
+
         return $this->filter->render();
     }
 
@@ -560,7 +579,10 @@ class Grid
      */
     public function perPageOptions()
     {
-        $perPage = (int) app('request')->input($this->model->getPerPageName(), $this->perPage);
+        $perPage = (int) app('request')->input(
+            $this->model->getPerPageName(),
+            $this->perPage
+        );
 
         return collect($this->perPages)
             ->push($this->perPage)
