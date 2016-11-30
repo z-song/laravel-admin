@@ -23,7 +23,7 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=text][name='profile[first_name]']")
             ->seeElement("input[type=text][name='profile[last_name]']")
             ->seeElement("input[type=text][name='profile[postcode]']")
-            ->seeElement("textarea[name='profile[address]']")
+            ->seeElement("textarea[name='profile[address]'][rows=15]")
             ->seeElement("input[type=hidden][name='profile[latitude]']")
             ->seeElement("input[type=hidden][name='profile[longitude]']")
             ->seeElement("input[type=text][name='profile[color]']")
