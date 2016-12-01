@@ -138,6 +138,20 @@ class Grid
     protected $useFilter = true;
 
     /**
+     * If grid use pagination.
+     *
+     * @var bool
+     */
+    protected $usePagination = true;
+
+    /**
+     * If grid use per-page selector.
+     *
+     * @var bool
+     */
+    protected $usePerPageSelector = true;
+
+    /**
      * Is grid rows orderable.
      *
      * @var bool
@@ -317,6 +331,10 @@ class Grid
      */
     public function paginator()
     {
+        if (!$this->usePagination) {
+            return '';
+        }
+
         $query = Input::all();
 
         return $this->model()->eloquent()->appends($query)->render(
@@ -448,18 +466,26 @@ class Grid
 
     /**
      * Disable batch deletion.
+     *
+     * @return $this
      */
     public function disableBatchDeletion()
     {
         $this->allowBatchDeletion = false;
+
+        return $this;
     }
 
     /**
      * Disable creation.
+     *
+     * @return $this
      */
     public function disableCreation()
     {
         $this->allowCreation = false;
+
+        return $this;
     }
 
     /**
@@ -484,10 +510,14 @@ class Grid
 
     /**
      * Disable all actions.
+     *
+     * @return $this
      */
     public function disableActions()
     {
         $this->allowActions = false;
+
+        return $this;
     }
 
     /**
@@ -502,18 +532,70 @@ class Grid
 
     /**
      * Disable export.
+     *
+     * @return $this
      */
     public function disableExport()
     {
         $this->allowExport = false;
+
+        return $this;
     }
 
     /**
      * Disable grid filter.
+     *
+     * @return $this
      */
     public function disableFilter()
     {
         $this->useFilter = false;
+
+        return $this;
+    }
+
+    /**
+     * Disable grid pagination.
+     *
+     * @return $this
+     */
+    public function disablePagination()
+    {
+        $this->model->usePaginate(false);
+
+        $this->usePagination = false;
+
+        return $this;
+    }
+
+    /**
+     * If this grid use pagination.
+     *
+     * @return bool
+     */
+    public function usePagination()
+    {
+        return $this->usePagination;
+    }
+
+    /**
+     * Disable grid per-page selector.
+     */
+    public function disablePerPageSelector()
+    {
+        $this->usePerPageSelector = false;
+
+        return $this;
+    }
+
+    /**
+     * If this grid use per-page selector.
+     *
+     * @return bool
+     */
+    public function usePerPageSelector()
+    {
+        return $this->usePerPageSelector;
     }
 
     /**

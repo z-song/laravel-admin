@@ -2,6 +2,7 @@
     <div class="box-header">
         <h3 class="box-title"></h3>
 
+        @if($grid->usePagination() && $grid->usePerPageSelector())
         <div class="input-group pull-left" style="width: 170px;">
             <span class="input-group-addon"><small>{{ trans('admin::lang.show') }}</small></span>
             <select class="form-control input-xs per-page" name="per-page">
@@ -9,30 +10,28 @@
             </select>
             <span class="input-group-addon"><small>{{ trans('admin::lang.items') }}</small></span>
         </div>
+        @endif
 
-        <div class="box-tools" style="top: 10px;">
+        {!! $grid->renderFilter() !!}
 
-            {!! $grid->renderFilter() !!}
-
-            @if($grid->allowExport())
-            <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="/{{ $grid->exportUrl() }}" target="_blank" class="btn btn-sm btn-warning"><i class="fa fa-download"></i>&nbsp;&nbsp;{{ trans('admin::lang.export') }}</a>
-            </div>
-            @endif
-
-            @if($grid->allowCreation())
-            <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success"><i class="fa fa-save"></i>&nbsp;&nbsp;{{ trans('admin::lang.new') }}</a>
-            </div>
-            @endif
-
+        @if($grid->allowExport())
+        <div class="btn-group pull-right" style="margin-right: 10px">
+            <a href="/{{ $grid->exportUrl() }}" target="_blank" class="btn btn-sm btn-warning"><i class="fa fa-download"></i>&nbsp;&nbsp;{{ trans('admin::lang.export') }}</a>
         </div>
+        @endif
+
+        @if($grid->allowCreation())
+        <div class="btn-group pull-right" style="margin-right: 10px">
+            <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success"><i class="fa fa-save"></i>&nbsp;&nbsp;{{ trans('admin::lang.new') }}</a>
+        </div>
+        @endif
+
     </div>
     <!-- /.box-header -->
     <div class="box-body table-responsive no-padding">
         <table class="table table-hover">
             <tr>
-                <th><input type="checkbox" class="grid-select-all"></th>
+                <th><input type="checkbox" class="grid-select-all" /></th>
                 @foreach($grid->columns() as $column)
                 <th>{{$column->getLabel()}}{!! $column->sorter() !!}</th>
                 @endforeach
@@ -48,7 +47,7 @@
 
             @foreach($grid->rows() as $row)
             <tr {!! $row->getHtmlAttributes() !!}>
-                <td><input type="checkbox" class="grid-item" data-id="{{ $row->id() }}"></td>
+                <td><input type="checkbox" class="grid-item" data-id="{{ $row->id() }}" /></td>
                 @foreach($grid->columnNames as $name)
                 <td>{!! $row->column($name) !!}</td>
                 @endforeach
@@ -72,7 +71,7 @@
         </table>
     </div>
     <div class="box-footer clearfix">
-        <input type="checkbox" class="grid-select-all">&nbsp;&nbsp;&nbsp;
+        <input type="checkbox" class="grid-select-all" />&nbsp;&nbsp;&nbsp;
         @if($grid->allowBatchDeletion())
             <a class="btn btn-sm btn-danger batch-delete">{{ trans('admin::lang.batch_delete') }}</a>
         @endif
