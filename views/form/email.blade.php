@@ -10,5 +10,8 @@
             <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
             <input type="email" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control"  placeholder="{{ trans('admin::lang.input') }} {{$label}}" {!! $attributes !!} />
         </div>
+
+        @include('admin::form.help-block')
+
     </div>
 </div>

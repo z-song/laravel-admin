@@ -10,5 +10,8 @@
             <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" placeholder="0" style="text-align:right;" {!! $attributes !!} />
             <span class="input-group-addon">%</span>
         </div>
+
+        @include('admin::form.help-block')
+
     </div>
 </div>

@@ -9,5 +9,8 @@
         <div class="input-group">
             <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" placeholder="0" style="width: 100px" {!! $attributes !!} />
         </div>
+
+        @include('admin::form.help-block')
+
     </div>
 </div>
