@@ -14,7 +14,7 @@
         </div>
         <div class="col-sm-2">
             <div class="btn-group pull-left">
-                <button type="submit" class="btn btn-warning pull-right">{{ trans('admin::lang.reset') }}</button>
+                <button type="reset" class="btn btn-warning pull-right">{{ trans('admin::lang.reset') }}</button>
             </div>
         </div>
         <div class="col-sm-4">

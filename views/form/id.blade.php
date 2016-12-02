@@ -3,5 +3,8 @@
 
     <div class="col-sm-6">
         <input type="text" id="{{$id}}" name="{{$name}}" value="{{$value}}" class="form-control" readonly {!! $attributes !!} />
+
+        @include('admin::form.help-block')
+
     </div>
 </div>

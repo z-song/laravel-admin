@@ -119,6 +119,13 @@ class Field
     protected $view = '';
 
     /**
+     * Help block.
+     *
+     * @var array
+     */
+    protected $help = [];
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -317,6 +324,21 @@ class Field
     }
 
     /**
+     * Set help block for current field.
+     *
+     * @param string $text
+     * @param string $icon
+     *
+     * @return $this
+     */
+    public function help($text = '', $icon = 'fa-info-circle')
+    {
+        $this->help = compact('text', 'icon');
+
+        return $this;
+    }
+
+    /**
      * Get column of the field.
      *
      * @return string
@@ -404,6 +426,7 @@ class Field
         $this->variables['label'] = $this->label;
         $this->variables['column'] = $this->column;
         $this->variables['attributes'] = $this->formatAttributes();
+        $this->variables['help'] = $this->help;
 
         return $this->variables;
     }
