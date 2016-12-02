@@ -211,6 +211,18 @@ $grid->filter(function($filter){
         $query->whereRaw("`rate` >= 6 AND `created_at` = {$this->input}");
 
     }, 'Text');
+    
+    // 关系查询，查询对应关系`profile`的字段
+    $filter->where(function ($query) {
+
+        $input = $this->input;
+
+        $query->whereHas('profile', function ($query) use ($input) {
+            $query->where('address', 'like', "%{$input}%")->orWhere('email', 'like', "%{$input}%");
+        });
+
+    }, '地址或手机号');
+    
 });
 ```
 
