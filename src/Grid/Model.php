@@ -109,7 +109,8 @@ class Model
     /**
      * Set the query string variable used to store the per-page.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return $this
      */
     public function setPerPageName($name)
@@ -132,7 +133,8 @@ class Model
     /**
      * Set the query string variable used to store the sort.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return $this
      */
     public function setSortName($name)
