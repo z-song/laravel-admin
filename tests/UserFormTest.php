@@ -28,7 +28,11 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=hidden][name='profile[longitude]']")
             ->seeElement("input[type=text][name='profile[color]']")
             ->seeElement("input[type=text][name='profile[start_at]']")
-            ->seeElement("input[type=text][name='profile[end_at]']");
+            ->seeElement("input[type=text][name='profile[end_at]']")
+            ->seeElement('span[class=help-block] i[class*=fa-info-circle]')
+            ->seeInElement('span[class=help-block]', 'Please input your postcode')
+            ->seeElement('span[class=help-block] i[class*=fa-image]')
+            ->seeInElement('span[class=help-block]', '上传头像');
     }
 
     public function testSubmitForm()

@@ -7,5 +7,8 @@
         @include('admin::form.error')
         <input type="file" id="{{$id}}" name="{{$name}}" {!! $attributes !!} />
         <input type="hidden" id="{{$id}}_action" name="{{$name}}_action" value="0"/>
+
+        @include('admin::form.help-block')
+
     </div>
 </div>

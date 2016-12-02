@@ -127,14 +127,14 @@ class UserController extends Controller
             $form->text('username');
             $form->email('email')->rules('required');
             $form->mobile('mobile');
-            $form->image('avatar');
+            $form->image('avatar')->help('上传头像', 'fa-image');
             $form->password('password');
 
             $form->divide();
 
             $form->text('profile.first_name');
             $form->text('profile.last_name');
-            $form->text('profile.postcode');
+            $form->text('profile.postcode')->help('Please input your postcode');
             $form->textarea('profile.address')->rows(15);
             $form->map('profile.latitude', 'profile.longitude', 'Position');
             $form->color('profile.color');

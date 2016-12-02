@@ -12,5 +12,8 @@
             </div>
             <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}"  class="form-control" data-inputmask="'alias': 'ip'" data-mask placeholder="{{ trans('admin::lang.input') }} {{$label}}" style="width: 130px" {!! $attributes !!} />
         </div>
+
+        @include('admin::form.help-block')
+
     </div>
 </div>

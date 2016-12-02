@@ -8,5 +8,7 @@
             </div><!-- /.box-body -->
         </div>
 
+        @include('admin::form.help-block')
+
     </div>
 </div>
