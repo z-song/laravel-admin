@@ -197,6 +197,7 @@ class File extends Field
      * Hydrate the files array.
      *
      * @param array $value
+     *
      * @return array
      */
     protected function hydrateFiles(array $value)
@@ -382,6 +383,7 @@ EOT;
      * Initialize the caption.
      *
      * @param string $caption
+     *
      * @return string
      */
     protected function initialCaption($caption)

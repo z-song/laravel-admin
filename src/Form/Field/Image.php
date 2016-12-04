@@ -75,6 +75,7 @@ class Image extends File
      * Build a preview item.
      *
      * @param string $image
+     *
      * @return string
      */
     protected function buildPreviewItem($image)
@@ -99,6 +100,7 @@ class Image extends File
      *
      * @param string $method
      * @param array  $arguments
+     *
      * @return $this
      */
     public function __call($method, $arguments)
