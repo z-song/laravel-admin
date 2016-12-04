@@ -3,6 +3,7 @@
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\File;
 use Tests\Models\Image;
+use Tests\Models\MultipleImage;
 
 class ImageUploadTest extends TestCase
 {
@@ -71,6 +72,25 @@ class ImageUploadTest extends TestCase
         $this->assertFileExists(public_path('upload/image/asdasdasdasdasd.jpeg'));
 
         File::cleanDirectory(public_path('upload/image'));
+    }
+
+    public function testRemoveImage()
+    {
+        File::cleanDirectory(public_path('upload/image'));
+
+        $this->uploadImages();
+
+        $this->assertEquals($this->fileCountInImageDir(), 6);
+
+        $this->call(
+            'PUT', # $method
+            '/admin/images/1', # $action
+            ['image2_action' => 1, 'image5_action' => 1] # $parameters
+        );
+
+        $this->assertRedirectedTo('/admin/images');
+
+        $this->assertEquals($this->fileCountInImageDir(), 4);
     }
 
     public function testUpdateImage()
@@ -150,9 +170,7 @@ class ImageUploadTest extends TestCase
             ->seeInElement('td', 2)
             ->seeInElement('td', 3);
 
-        $fi = new FilesystemIterator(public_path('upload/image'), FilesystemIterator::SKIP_DOTS);
-
-        $this->assertEquals(iterator_count($fi), 18);
+        $this->assertEquals($this->fileCountInImageDir(), 18);
 
         $this->assertEquals(Image::count(), 3);
 
@@ -165,6 +183,87 @@ class ImageUploadTest extends TestCase
             ->dontSeeInElement('td', 2)
             ->dontSeeInElement('td', 3);
 
-        $this->assertEquals(iterator_count($fi), 0);
+        $this->assertEquals($this->fileCountInImageDir(), 0);
+    }
+
+    public function testUploadMultipleImage()
+    {
+        File::cleanDirectory(public_path('upload/image'));
+
+        $this->visit('admin/multiple-images/create')
+            ->seeElement('input[type=file][name="pictures[]"][multiple=1]');
+
+        $path = __DIR__.'/assets/test.jpg';
+
+        $file = new \Illuminate\Http\UploadedFile(
+            $path, 'test.jpg', 'image/jpeg', filesize($path), null, true
+        );
+
+        $size = rand(10, 20);
+        $files = ['pictures' => array_pad([], $size, $file)];
+
+        $this->call(
+            'POST', # $method
+            '/admin/multiple-images', # $action
+            [], # $parameters
+            [],
+            $files
+        );
+
+        $this->assertResponseStatus(302);
+        $this->assertRedirectedTo('/admin/multiple-images');
+
+        $this->assertEquals($this->fileCountInImageDir(), $size);
+
+        $pictures = MultipleImage::first()->pictures;
+
+        $pictures = json_decode($pictures, true);
+
+        $this->assertCount($size, $pictures);
+
+        foreach ($pictures as $picture) {
+            $this->assertFileExists(public_path('upload/'.$picture));
+        }
+    }
+
+    public function testRemoveMultipleFiles()
+    {
+        File::cleanDirectory(public_path('upload/image'));
+
+        // upload files
+        $path = __DIR__.'/assets/test.jpg';
+
+        $file = new \Illuminate\Http\UploadedFile(
+            $path, 'test.jpg', 'image/jpeg', filesize($path), null, true
+        );
+
+        $size = rand(10, 20);
+        $files = ['pictures' => array_pad([], $size, $file)];
+
+        $this->call(
+            'POST', # $method
+            '/admin/multiple-images', # $action
+            [], # $parameters
+            [],
+            $files
+        );
+
+        $this->assertEquals($this->fileCountInImageDir(), $size);
+
+        // remove files
+        $this->call(
+            'PUT', # $method
+            '/admin/multiple-images/1', # $action
+            ['pictures_action' => 1] # $parameters
+        );
+
+        $this->assertEquals($this->fileCountInImageDir(), 0);
+    }
+
+    protected function fileCountInImageDir($dir = 'upload/image')
+    {
+        $file = new FilesystemIterator(public_path($dir), FilesystemIterator::SKIP_DOTS);
+
+        return iterator_count($file);
     }
 }

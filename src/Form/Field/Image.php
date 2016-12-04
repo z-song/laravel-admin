@@ -7,25 +7,39 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Image extends File
 {
+    /**
+     *  Validation rules.
+     *
+     * @var string
+     */
     protected $rules = 'image';
 
+    /**
+     * Intervention calls.
+     *
+     * @var array
+     */
     protected $calls = [];
 
+    /**
+     * Get default storage path.
+     *
+     * @return mixed
+     */
     public function defaultStorePath()
     {
         return config('admin.upload.directory.image');
     }
 
-    public function prepare(UploadedFile $image = null)
+    /**
+     * Prepare for single upload file.
+     *
+     * @param UploadedFile|null $image
+     *
+     * @return string
+     */
+    protected function prepareForSingle(UploadedFile $image = null)
     {
-        if (is_null($image)) {
-            if ($this->isDeleteRequest()) {
-                return '';
-            }
-
-            return $this->original;
-        }
-
         $this->directory = $this->directory ?: $this->defaultStorePath();
 
         $this->name = $this->getStoreName($image);
@@ -38,7 +52,9 @@ class Image extends File
     }
 
     /**
-     * @param $target
+     * Execute Intervention calls.
+     *
+     * @param string $target
      *
      * @return mixed
      */
@@ -55,11 +71,22 @@ class Image extends File
         return $target;
     }
 
-    protected function preview()
+    /**
+     * Build a preview item.
+     *
+     * @param string $image
+     * @return string
+     */
+    protected function buildPreviewItem($image)
     {
-        return '<img src="'.$this->objectUrl($this->value).'" class="file-preview-image">';
+        return '<img src="'.$this->objectUrl($image).'" class="file-preview-image">';
     }
 
+    /**
+     * Render a image form field.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render()
     {
         $this->options(['allowedFileTypes' => ['image']]);
@@ -67,6 +94,13 @@ class Image extends File
         return parent::render();
     }
 
+    /**
+     * Call intervention methods.
+     *
+     * @param string $method
+     * @param array  $arguments
+     * @return $this
+     */
     public function __call($method, $arguments)
     {
         $this->calls[] = [

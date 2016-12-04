@@ -8,7 +8,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
-use Tests\Models\Profile;
+use Tests\Models\Tag;
 use Tests\Models\User;
 
 class UserController extends Controller
@@ -140,6 +140,8 @@ class UserController extends Controller
             $form->color('profile.color');
             $form->datetime('profile.start_at');
             $form->datetime('profile.end_at');
+
+            $form->multipleSelect('tags', 'Tags')->options(Tag::all()->pluck('name', 'id'));//->rules('max:10|min:3');
 
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');

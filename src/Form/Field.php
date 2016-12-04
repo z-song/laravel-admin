@@ -5,6 +5,7 @@ namespace Encore\Admin\Form;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class Field.
@@ -290,7 +291,7 @@ class Field
      *
      * @param null $rules
      *
-     * @return $this
+     * @return $this|array
      */
     public function rules($rules = null)
     {
@@ -303,6 +304,12 @@ class Field
         $this->rules = implode('|', $rules);
 
         return $this;
+    }
+
+
+    protected function getRules()
+    {
+        return $this->rules;
     }
 
     /**
@@ -366,6 +373,50 @@ class Field
     public function original()
     {
         return $this->original;
+    }
+
+    /**
+     * Validate input field data.
+     *
+     * @param array $input
+     *
+     * @return bool|Validator
+     */
+    public function validate(array $input)
+    {
+        $data = $rules = [];
+
+        if (!$fieldRules = $this->getRules()) {
+            return false;
+        }
+
+        if (is_string($this->column)) {
+            if (!array_has($input, $this->column)) {
+                return false;
+            }
+
+            $value = array_get($input, $this->column);
+
+            // remove empty options from multiple select.
+            if ($this instanceof Field\MultipleSelect) {
+                $value = array_filter($value);
+            }
+
+            $data[$this->label] = $value;
+            $rules[$this->label] = $fieldRules;
+        }
+
+        if (is_array($this->column)) {
+            foreach ($this->column as $key => $column) {
+                if (!array_key_exists($column, $input)) {
+                    continue;
+                }
+                $data[$this->label.$key] = array_get($input, $column);
+                $rules[$this->label.$key] = $fieldRules;
+            }
+        }
+
+        return Validator::make($data, $rules);
     }
 
     /**

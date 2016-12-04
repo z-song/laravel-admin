@@ -23,6 +23,12 @@ class CreateTestTables extends Migration
             $table->timestamps();
         });
 
+        Schema::create('test_multiple_images', function (Blueprint $table) {
+            $table->increments('id');
+            $table->text('pictures');
+            $table->timestamps();
+        });
+
         Schema::create('test_files', function (Blueprint $table) {
             $table->increments('id');
             $table->string('file1');
@@ -82,6 +88,7 @@ class CreateTestTables extends Migration
     public function down()
     {
         Schema::drop('test_images');
+        Schema::drop('test_multiple_images');
         Schema::drop('test_files');
         Schema::drop('test_users');
         Schema::drop('test_user_profiles');
