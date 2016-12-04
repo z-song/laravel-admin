@@ -141,7 +141,7 @@ class UserController extends Controller
             $form->datetime('profile.start_at');
             $form->datetime('profile.end_at');
 
-            $form->multipleSelect('tags', 'Tags')->options(Tag::all()->pluck('name', 'id'));//->rules('max:10|min:3');
+            $form->multipleSelect('tags', 'Tags')->options(Tag::all()->pluck('name', 'id')); //->rules('max:10|min:3');
 
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');

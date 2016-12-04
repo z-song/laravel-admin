@@ -83,9 +83,9 @@ class ImageUploadTest extends TestCase
         $this->assertEquals($this->fileCountInImageDir(), 6);
 
         $this->call(
-            'PUT', # $method
-            '/admin/images/1', # $action
-            ['image2_action' => 1, 'image5_action' => 1] # $parameters
+            'PUT', // $method
+            '/admin/images/1', // $action
+            ['image2_action' => 1, 'image5_action' => 1] // $parameters
         );
 
         $this->assertRedirectedTo('/admin/images');
@@ -203,9 +203,9 @@ class ImageUploadTest extends TestCase
         $files = ['pictures' => array_pad([], $size, $file)];
 
         $this->call(
-            'POST', # $method
-            '/admin/multiple-images', # $action
-            [], # $parameters
+            'POST', // $method
+            '/admin/multiple-images', // $action
+            [], // $parameters
             [],
             $files
         );
@@ -241,9 +241,9 @@ class ImageUploadTest extends TestCase
         $files = ['pictures' => array_pad([], $size, $file)];
 
         $this->call(
-            'POST', # $method
-            '/admin/multiple-images', # $action
-            [], # $parameters
+            'POST', // $method
+            '/admin/multiple-images', // $action
+            [], // $parameters
             [],
             $files
         );
@@ -252,9 +252,9 @@ class ImageUploadTest extends TestCase
 
         // remove files
         $this->call(
-            'PUT', # $method
-            '/admin/multiple-images/1', # $action
-            ['pictures_action' => 1] # $parameters
+            'PUT', // $method
+            '/admin/multiple-images/1', // $action
+            ['pictures_action' => 1] // $parameters
         );
 
         $this->assertEquals($this->fileCountInImageDir(), 0);

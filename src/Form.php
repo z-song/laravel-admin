@@ -265,6 +265,7 @@ class Form
 
         if ($validator = $this->validationFails($data)) {
             dump($validator->messages());
+
             return back()->withInput()->withErrors($validator->messages());
         }
 
@@ -710,10 +711,9 @@ class Form
     protected function validationFails($input)
     {
         foreach ($this->builder->fields() as $field) {
-
             if (!$validator = $field->validate($input)) {
                 continue;
-            };
+            }
 
             if (($validator instanceof Validator) && !$validator->passes()) {
                 return $validator;
