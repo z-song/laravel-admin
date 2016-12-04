@@ -32,7 +32,8 @@ class UserFormTest extends TestCase
             ->seeElement('span[class=help-block] i[class*=fa-info-circle]')
             ->seeInElement('span[class=help-block]', 'Please input your postcode')
             ->seeElement('span[class=help-block] i[class*=fa-image]')
-            ->seeInElement('span[class=help-block]', '上传头像');
+            ->seeInElement('span[class=help-block]', '上传头像')
+            ->seeElement("select[name='tags[]'][multiple=multiple]");
     }
 
     public function testSubmitForm()
@@ -102,6 +103,7 @@ class UserFormTest extends TestCase
             ->create()
             ->each(function ($u) {
                 $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
+                $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
             });
     }
 
@@ -126,7 +128,11 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=hidden][name='profile[longitude]'][value='{$user->profile->longitude}']")
             ->seeElement("input[type=text][name='profile[color]'][value='{$user->profile->color}']")
             ->seeElement("input[type=text][name='profile[start_at]'][value='{$user->profile->start_at}']")
-            ->seeElement("input[type=text][name='profile[end_at]'][value='{$user->profile->end_at}']");
+            ->seeElement("input[type=text][name='profile[end_at]'][value='{$user->profile->end_at}']")
+            ->seeElement("select[name='tags[]'][multiple=multiple]");
+
+        $this->assertCount(50, $this->crawler()->filter("select[name='tags[]'] option"));
+        $this->assertCount(5, $this->crawler()->filter("select[name='tags[]'] option[selected]"));
     }
 
     public function testUpdateForm()

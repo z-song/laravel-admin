@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Validator;
 use Spatie\EloquentSortable\Sortable;
 
 /**
@@ -263,8 +263,9 @@ class Form
     {
         $data = Input::all();
 
-        if (!$this->validate($data)) {
-            return back()->withInput()->withErrors($this->validator->messages());
+        if ($validator = $this->validationFails($data)) {
+            dump($validator->messages());
+            return back()->withInput()->withErrors($validator->messages());
         }
 
         $this->prepare($data, $this->saving);
@@ -402,8 +403,8 @@ class Form
             return response(['status' => true, 'message' => trans('admin::lang.succeeded')]);
         }
 
-        if (!$this->validate($data)) {
-            return back()->withInput()->withErrors($this->validator->messages());
+        if ($validator = $this->validationFails($data)) {
+            return back()->withInput()->withErrors($validator->messages());
         }
 
         $this->model = $this->model->with($this->getRelations())->findOrFail($id);
@@ -700,53 +701,26 @@ class Form
     }
 
     /**
-     * Validate input data.
+     * Validation fails.
      *
-     * @param $input
+     * @param array $input
      *
      * @return bool
      */
-    protected function validate($input)
+    protected function validationFails($input)
     {
-        $data = $rules = [];
-
         foreach ($this->builder->fields() as $field) {
-            if (!method_exists($field, 'rules') || !$rule = $field->rules()) {
+
+            if (!$validator = $field->validate($input)) {
                 continue;
-            }
+            };
 
-            $columns = $field->column();
-
-            if (is_string($columns)) {
-                if (!array_key_exists($columns, $input)) {
-                    continue;
-                }
-
-                $value = array_get($input, $columns);
-
-                // remove empty options from multiple select.
-                if ($field instanceof Field\MultipleSelect) {
-                    $value = array_filter($value);
-                }
-
-                $data[$field->label()] = $value;
-                $rules[$field->label()] = $rule;
-            }
-
-            if (is_array($columns)) {
-                foreach ($columns as $key => $column) {
-                    if (!array_key_exists($column, $input)) {
-                        continue;
-                    }
-                    $data[$field->label().$key] = array_get($input, $column);
-                    $rules[$field->label().$key] = $rule;
-                }
+            if (($validator instanceof Validator) && !$validator->passes()) {
+                return $validator;
             }
         }
 
-        $this->validator = Validator::make($data, $rules);
-
-        return $this->validator->passes();
+        return false;
     }
 
     /**
