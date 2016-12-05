@@ -28,7 +28,7 @@ class FileUploadTest extends TestCase
             ->seeElement('input[name=file5]')
             ->seeElement('input[name=file6]')
             ->seeInElement('a[href="/admin/files"]', 'List')
-            ->seeInElement('a[class*=item_delete]', 'Delete')
+            ->dontSeeElement('a[class*=item_delete]')
             ->seeElement('input[type=reset][value=Reset]')
             ->seeInElement('button[type=submit]', 'Submit');
     }

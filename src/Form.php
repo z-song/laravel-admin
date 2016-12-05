@@ -115,6 +115,13 @@ class Form
     protected $callable;
 
     /**
+     * Allow delete item in form page.
+     *
+     * @var bool
+     */
+    protected $allowDeletion = true;
+
+    /**
      * Available fields.
      *
      * @var array
@@ -179,6 +186,20 @@ class Form
     public function builder()
     {
         return $this->builder;
+    }
+
+    /**
+     * Disable deletion in form page.
+     *
+     * @return $this
+     */
+    public function disableDeletion()
+    {
+        $this->builder->disableDeletion();
+
+        $this->allowDeletion = false;
+
+        return $this;
     }
 
     /**
