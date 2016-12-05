@@ -122,7 +122,6 @@ class UserController extends Controller
     protected function form()
     {
         return Admin::form(User::class, function (Form $form) {
-
             $form->disableDeletion();
 
             $form->display('id', 'ID');
