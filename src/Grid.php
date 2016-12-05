@@ -749,11 +749,11 @@ class Grid
     {
         $model = $this->model()->eloquent();
 
-        if (! method_exists($model, $method)) {
+        if (!method_exists($model, $method)) {
             return false;
         }
 
-        if (! ($relation = $model->$method()) instanceof Relation) {
+        if (!($relation = $model->$method()) instanceof Relation) {
             return false;
         }
 
