@@ -34,7 +34,8 @@ class UserFormTest extends TestCase
             ->seeElement('span[class=help-block] i[class*=fa-image]')
             ->seeInElement('span[class=help-block]', '上传头像')
             ->seeElement("select[name='tags[]'][multiple=multiple]")
-            ->dontSeeElement('a[class*=item_delete]');
+            ->dontSeeElement('a[class*=item_delete]')
+            ->seeInElement('a[html-field]', 'html...');
     }
 
     public function testSubmitForm()
