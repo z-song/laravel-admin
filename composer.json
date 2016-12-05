@@ -1,14 +1,14 @@
 {
-    "name": "encore/laravel-admin",
+    "name": "playable-china/laravel-admin",
     "description": "laravel admin",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "chart", "form"],
-    "homepage": "https://github.com/z-song/laravel-admin",
+    "homepage": "https://github.com/playable-china/laravel-admin",
     "license": "MIT",
     "authors": [
         {
-            "name": "zsong",
-            "email": "zosong@126.com"
+            "name": "playable",
+            "email": "info@playable.cn"
         }
     ],
     "require": {
