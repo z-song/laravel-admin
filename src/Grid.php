@@ -355,6 +355,8 @@ class Grid
 
         $data = $this->processFilter();
 
+        Column::setOriginalGridData($data);
+
         $this->columns->map(function (Column $column) use (&$data) {
             $data = $column->fill($data);
 
