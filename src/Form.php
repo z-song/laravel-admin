@@ -54,6 +54,7 @@ use Spatie\EloquentSortable\Sortable;
  * @method Field\Divide         divide()
  * @method Field\Password       password($column, $label = '')
  * @method Field\Decimal        decimal($column, $label = '')
+ * @method Field\Html           html($html)
  */
 class Form
 {
@@ -871,6 +872,7 @@ class Form
             'timeRange'         => \Encore\Admin\Form\Field\TimeRange::class,
             'url'               => \Encore\Admin\Form\Field\Url::class,
             'year'              => \Encore\Admin\Form\Field\Year::class,
+            'html'              => \Encore\Admin\Form\Field\Html::class,
         ];
 
         foreach ($map as $abstract => $class) {
