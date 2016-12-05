@@ -109,7 +109,8 @@ class Model
     /**
      * Set the query string variable used to store the per-page.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return $this
      */
     public function setPerPageName($name)
@@ -132,7 +133,8 @@ class Model
     /**
      * Set the query string variable used to store the sort.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return $this
      */
     public function setSortName($name)
@@ -246,10 +248,10 @@ class Model
      */
     protected function resolvePerPage($paginate)
     {
-
         if ($perPage = app('request')->input($this->perPageName)) {
             if (is_array($paginate)) {
                 $paginate['arguments'][0] = $perPage;
+
                 return $paginate['arguments'];
             }
 
@@ -292,7 +294,6 @@ class Model
         if (str_contains($this->sort['column'], '.')) {
             $this->setRelationSort($this->sort['column']);
         } else {
-
             $this->resetOrderBy();
 
             $this->queries->push([

@@ -133,7 +133,6 @@ class UserFormTest extends TestCase
             ->seeElement("select[name='tags[]'][multiple=multiple]")
             ->dontSeeElement('a[class*=item_delete]');
 
-
         $this->assertCount(50, $this->crawler()->filter("select[name='tags[]'] option"));
         $this->assertCount(5, $this->crawler()->filter("select[name='tags[]'] option[selected]"));
     }

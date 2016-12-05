@@ -730,10 +730,9 @@ class Form
     protected function validationFails($input)
     {
         foreach ($this->builder->fields() as $field) {
-
             if (!$validator = $field->validate($input)) {
                 continue;
-            };
+            }
 
             if (($validator instanceof Validator) && !$validator->passes()) {
                 return $validator;

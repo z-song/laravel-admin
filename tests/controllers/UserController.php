@@ -90,7 +90,7 @@ class UserController extends Controller
                     return "<code>{$tag['name']}</code>";
                 })->toArray();
 
-                return join('', $tags);
+                return implode('', $tags);
             });
 
             $grid->created_at();
@@ -107,7 +107,7 @@ class UserController extends Controller
             $grid->rows(function (Grid\Row $row) {
                 if ($row->id % 2 == 0) {
                     $row->actions()->add(function ($row) {
-                        return "<a href=\"/\" class=\"btn btn-xs btn-danger\">detail</a>";
+                        return '<a href="/" class="btn btn-xs btn-danger">detail</a>';
                     });
                 }
             });
@@ -122,7 +122,6 @@ class UserController extends Controller
     protected function form()
     {
         return Admin::form(User::class, function (Form $form) {
-
             $form->disableDeletion();
 
             $form->display('id', 'ID');
@@ -143,7 +142,7 @@ class UserController extends Controller
             $form->datetime('profile.start_at');
             $form->datetime('profile.end_at');
 
-            $form->multipleSelect('tags', 'Tags')->options(Tag::all()->pluck('name', 'id'));//->rules('max:10|min:3');
+            $form->multipleSelect('tags', 'Tags')->options(Tag::all()->pluck('name', 'id')); //->rules('max:10|min:3');
 
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');

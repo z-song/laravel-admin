@@ -22,7 +22,6 @@ class Select extends Field
             $this->script = "$(\"#{$this->id}\").select2({allowClear: true});";
         }
 
-
         if (is_callable($this->options)) {
             $options = call_user_func($this->options, $this->value);
             $this->options($options);
