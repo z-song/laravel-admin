@@ -285,7 +285,6 @@ class Form
         $data = Input::all();
 
         if ($validator = $this->validationFails($data)) {
-            dump($validator->messages());
             return back()->withInput()->withErrors($validator->messages());
         }
 
