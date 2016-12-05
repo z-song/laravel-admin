@@ -158,6 +158,19 @@ class UserGridTest extends TestCase
             ->seeInElement('td', $user->end_at);
     }
 
+    public function testValueCallback()
+    {
+        $this->seedsTable(1);
+
+        $user = UserModel::with('profile')->find(1);
+
+        $this->visit('admin/users')
+            ->seeInElement('th', 'Column1 not in table')
+            ->seeInElement('th', 'Column2 not in table')
+            ->seeInElement('td', "full name:{$user->profile->first_name} {$user->profile->last_name}")
+            ->seeInElement('td', "{$user->email}#{$user->profile->color}");
+    }
+
     public function testHasManyRelation()
     {
         factory(\Tests\Models\User::class, 10)

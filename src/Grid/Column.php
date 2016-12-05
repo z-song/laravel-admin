@@ -84,6 +84,13 @@ class Column
     protected $relationColumn;
 
     /**
+     * Original grid data.
+     *
+     * @var array
+     */
+    protected static $originalGridData = [];
+
+    /**
      * @param string $name
      * @param string $label
      */
@@ -331,7 +338,7 @@ EOT;
      */
     public function value(Closure $callable)
     {
-        $this->valueCallback = $callable->bindTo($this);
+        $this->valueCallback = $callable;
 
         return $this;
     }
@@ -410,25 +417,56 @@ EOT;
      */
     public function fill(array $data)
     {
-        foreach ($data as &$item) {
-            $this->original = $value = array_get($item, $this->name);
+        foreach ($data as $key => &$row) {
+            $this->original = $value = array_get($row, $this->name);
+
+            $isCustomColumn = !array_has($row, $this->name);
 
             $value = $this->htmlEntityEncode($value);
 
-            array_set($item, $this->name, $value);
+            array_set($row, $this->name, $value);
 
             if ($this->hasValueCallback()) {
-                $value = call_user_func($this->valueCallback, $this->original);
-                array_set($item, $this->name, $value);
+
+                $input = $isCustomColumn ? $row : $this->original;
+
+                $callback = $this->bindOriginalRow($this->valueCallback, $key);
+                $value = call_user_func($callback, $input);
+                array_set($row, $this->name, $value);
             }
 
             if ($this->hasHtmlCallback()) {
-                $value = $this->htmlWrap($value, $item);
-                array_set($item, $this->name, $value);
+                $value = $this->htmlWrap($value, $row);
+                array_set($row, $this->name, $value);
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Set original grid data to column.
+     *
+     * @param Closure $callback
+     * @param int     $key
+     *
+     * @return Closure
+     */
+    protected function bindOriginalRow(Closure $callback, $key)
+    {
+        $originalRow = static::$originalGridData[$key];
+
+        return $callback->bindTo((object)$originalRow);
+    }
+
+    /**
+     * Set original data for column.
+     *
+     * @param array $input
+     */
+    public static function setOriginalGridData(array $input)
+    {
+        static::$originalGridData = $input;
     }
 
     /**
