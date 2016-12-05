@@ -46,6 +46,13 @@ class Builder
     protected $mode = 'create';
 
     /**
+     * Allow delete item in form page.
+     *
+     * @var bool
+     */
+    protected $allowDeletion = true;
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -137,6 +144,28 @@ class Builder
         }
 
         return '';
+    }
+
+    /**
+     * Disable deletion in form page.
+     *
+     * @return $this
+     */
+    public function disableDeletion()
+    {
+        $this->allowDeletion = false;
+
+        return $this;
+    }
+
+    /**
+     * If allow deletion in form page.
+     *
+     * @return bool
+     */
+    public function allowDeletion()
+    {
+        return $this->allowDeletion;
     }
 
     /**
@@ -256,6 +285,10 @@ SCRIPT;
             'form'     => $this,
             'resource' => $this->form->resource($slice),
         ];
+
+        if ($this->mode == static::MODE_CREATE) {
+            $this->disableDeletion();
+        }
 
         return view('admin::form', $vars)->render();
     }
