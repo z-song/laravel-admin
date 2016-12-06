@@ -25,6 +25,9 @@ Use the following command to create a controller for `App\User` model
 
 ```php
 php artisan admin:make UserController --model=App\\User
+
+// under windows use:
+php artisan admin:make UserController --model=App\User
 ```
 The above command will create the controller in `app/Admin/Controllers/UserController.php`.
 

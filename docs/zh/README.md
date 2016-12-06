@@ -24,14 +24,14 @@ Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd
 首先确保安装好了`laravel`，并且数据库连接设置正确。
 
 ```
+Laravel 5.1
+composer require encore/laravel-admin "1.1.*"
+
 Laravel 5.2
-composer require encore/laravel-admin "dev-master"
+composer require encore/laravel-admin "1.2.*"
 
 Laravel 5.3
-composer require encore/laravel-admin "1.3.x-dev"
-
-Laravel 5.1
-composer require encore/laravel-admin "1.1.x-dev"
+composer require encore/laravel-admin "1.3.*"
 ```
 
 在`config/app.php`加入`ServiceProvider`:
@@ -40,10 +40,16 @@ composer require encore/laravel-admin "1.1.x-dev"
 Encore\Admin\Providers\AdminServiceProvider::class
 ```
 
-然后运行下面的命令完成安装：
+然后运行下面的命令来发布资源：
 
 ```
 php artisan vendor:publish --tag=laravel-admin
+```
+
+在该命令会生成配置文件`config/admin.php`，可以在里面修改安装的地址、数据库连接、以及表名。
+
+然后运行下面的命令完成安装：
+```
 php artisan admin:install
 ```
 
@@ -85,10 +91,13 @@ app/Admin
 ├── Controllers
 │   ├── ExampleController.php
 │   └── HomeController.php
+├── bootstrap.php
 └── routes.php
 ```
 
 `app/Admin/routes.php`文件用来配置后台路由，详细使用请阅读[路由配置](/docs/zh/router.md)。
+
+`app/Admin/bootstrap.php` 是`laravel-admin`的启动文件, 使用方法请参考文件里面的注释.
 
 `app/Admin/Controllers`目录用来存放后台控制器文件，该目录下的`HomeController.php`文件是后台首页的显示控制器，`ExampleController.php`为实例文件。
 
@@ -118,6 +127,9 @@ CREATE TABLE `users` (
 使用下面的命令来创建一个对应`App\User`模型的路由器
 ```php
 php artisan admin:make UserController --model=App\\User
+
+// 在windows系统中
+php artisan admin:make UserController --model=App\User
 ```
 
 上面的命令会创建路由器文件`app/Admin/Controllers/UserController.php`.

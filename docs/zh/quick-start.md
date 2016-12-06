@@ -24,6 +24,9 @@ CREATE TABLE `users` (
 使用下面的命令来创建一个对应`App\User`模型的路由器
 ```php
 php artisan admin:make UserController --model=App\\User
+
+// 在windows系统中
+php artisan admin:make UserController --model=App\User
 ```
 
 上面的命令会创建路由器文件`app/Admin/Controllers/UserController.php`.

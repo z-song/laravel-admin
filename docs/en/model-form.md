@@ -57,6 +57,9 @@ $grid = Admin::form(Movie::class, function(Form $grid){
     // Display two time column 
     $form->display('created_at', 'Created time');
     $form->display('updated_at', 'Updated time');
+    
+    // remove delete btn.
+    $form->disableDeletion();
 });
 
 // Displays the form content
@@ -243,6 +246,9 @@ $form->image($column[, $label])->crop(int $width, int $height, [int $x, int $y])
 
 // Add a watermark
 $form->image($column[, $label])->insert($watermark, 'center');
+
+// multiple image upload, the path of images will store in database with JSON format
+$form->image($column[, $label])->multiple();
 ```
 
 #### file upload
@@ -255,6 +261,9 @@ $form->file($column[, $label])->move($dir, $name);
 
 // And set the upload file type
 $form->file($column[, $label])->rules('mimes:doc,docx,xlsx');
+
+// multiple file upload, the path of files will store in database with JSON format
+$form->file($column[, $label])->multiple();
 ```
 
 #### map
@@ -305,6 +314,12 @@ $form->display($column[, $label]);
 #### divide
 ```php
 $form->divide();
+```
+
+#### Html
+insert html，the argument passed in could be objects which impletements `Htmlable`、`Renderable`, or has method `__toString()`
+```php
+$form->html('html contents');
 ```
 
 #### saving callback
