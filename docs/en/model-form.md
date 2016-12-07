@@ -234,6 +234,9 @@ $form->rate($column[, $label]);
 ```
 
 #### image upload
+
+Before use upload field, you must complete upload configuration, see [image/file upload](/docs/en/form-upload.md).
+
 You can use compression, crop, add watermarks and other methods, please refer to [[Intervention] (http://image.intervention.io/getting_started/introduction)], picture upload directory in the file `config / admin.php` `Upload.image` configuration, if the directory does not exist, you need to create the directory and open write permissions:
 ```php
 $form->image($column[, $label]);
@@ -252,6 +255,9 @@ $form->image($column[, $label])->multiple();
 ```
 
 #### file upload
+
+Before use upload field, you must complete upload configuration, see [image/file upload](/docs/en/form-upload.md).
+
 The file upload directory is configured in `upload.file` in the file `config/admin.php`. If the directory does not exist, it needs to be created and write-enabled.
 ```php
 $form->file($column[, $label]);
@@ -267,6 +273,9 @@ $form->file($column[, $label])->multiple();
 ```
 
 #### map
+
+The map field refers to the network resource, and if there is a problem with the network refer to [form Component Management](/docs/en/field-management.md) to remove the component.
+
 Used to select the latitude and longitude, `$ latitude`,` $ longitude` for the latitude and longitude field, using Tencent map when `locale` set of laravel is` zh_CN`, otherwise use Google Maps:
 ```php
 $form->map($latitude, $longitude, $label);
@@ -285,13 +294,11 @@ $form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1
 ```
 
 #### rich text editor
+
+The editor field refers to the network resource, and if there is a problem with the network refer to [form Component Management](/docs/en/field-management.md) to remove the component.
+
 ```php
 $form->editor($column[, $label]);
-```
-
-#### json editor
-```php
-$form->json($column[, $label]);
 ```
 
 #### hidden field

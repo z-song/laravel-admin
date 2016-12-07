@@ -20,6 +20,53 @@ class PostController extends Controller
 }
 ```
 
+#### 其它使用方法
+
+获取当前用户对象
+```php
+Admin::user();
+```
+
+获取当前用户id
+```php
+Admin::user()->id;
+```
+
+获取用户角色
+```php
+Admin::user()->roles;
+```
+
+获取用户角色
+```php
+Admin::user()->permissions;
+```
+
+用户是否某个角色
+```php
+Admin::user()->isRole('developer');
+```
+
+是否有某个权限
+```php
+Admin::user()->can('create-post');
+```
+
+是否没有某个权限
+```php
+Admin::user()->cannot('delete-post');
+```
+
+是否是超级管理员
+```php
+Admin::user()->isAdministrator();
+```
+
+是否是其中的角色
+```php
+Admin::user()->inRoles(['editor', 'developer']);
+```
+
 ## 权限中间件
 
 可以在路由配置上结合权限中间件来控制路由的权限

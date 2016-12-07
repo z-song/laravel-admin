@@ -81,6 +81,7 @@ php artisan admin:install
   - [折叠容器](/docs/zh/widgets/collapse.md)
   - 数据图表 TODO
 - [权限控制](/docs/zh/permission.md)
+- [常见问题](/docs/zh/qa.md)
 
 目录结构
 ------------
