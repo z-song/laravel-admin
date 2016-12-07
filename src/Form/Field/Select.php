@@ -72,7 +72,7 @@ class Select extends Field
 $("#{$this->id}").change(function () {
     $.get("$source?q="+this.value, function (data) {
         $("#$field option").remove();
-        $("#$field").select2({data: data});
+        $("#$field").select2({data: data.data});
     });
 });
 EOT;
@@ -100,7 +100,7 @@ EOT;
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
-  $("#{$this->id}").select2({data: data});
+  $("#{$this->id}").select2({data: data.data});
 });
 
 EOT;
