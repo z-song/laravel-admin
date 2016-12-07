@@ -1,4 +1,4 @@
-<form {!! $attributes !!} pjax-container>
+<form {!! $attributes !!}>
     <div class="box-body">
 
         @foreach($fields as $field)
