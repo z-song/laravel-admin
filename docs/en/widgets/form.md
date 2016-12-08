@@ -27,6 +27,8 @@ echo $form->render();
 
 `Form::method($method)` method is used to set the submit method of the form form, the default is `POST` method.
 
+`Form::disablePjax()` disable pjax for form submit.
+
 # The form elements
 The `Form` object implements nearly 30 form elements via the magic method `__call()`, which adds the form element with a short call:
 

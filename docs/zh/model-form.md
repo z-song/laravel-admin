@@ -218,7 +218,7 @@ public function users(Request $request)
 
 #### textarea输入框:
 ```php
-$form->textarea($column[, $label]);
+$form->textarea($column[, $label])->rows(10);
 ```
 
 #### radio选择
@@ -227,9 +227,12 @@ $form->radio($column[, $label])->values(['m' => 'Female', 'f'=> 'Male'])->defaul
 ```
 
 #### checkbox选择
-`values()`方法用来设置选择项:
+
+`checkbox`能处理两种数据存储情况，参考[多选框](#多选框)
+
+`options()`方法用来设置选择项:
 ```php
-$form->checkbox($column[, $label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+$form->checkbox($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
 #### email个数输入框

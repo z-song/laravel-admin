@@ -83,23 +83,60 @@ $form->text($column, [$label])->rules('required|min:10');
 $form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
-Or load option by ajax
+If have too many options, you can load option by ajax
+
 ```php
-$form->select($column[, $label])->options('/admin/demo/options');
+$form->select('user_id')->options(function ($id) {
+    $user = User::find($id);
+
+    if ($user) {
+        return [$user->id => $user->name];
+    }
+})->ajax('/admin/api/users');
 ```
 
-The json format returned from url `/admin/demo/options`:
+The controller method for url `/admin/api/users` is:
+
+```php
+public function users(Request $request)
+{
+    $q = $request->get('q');
+
+    return User::where('name', 'like', "%$q%")->paginate(null, ['id', 'name as text']);
+}
+
 ```
-[
-    {
-        "id": 1,
-        "text": "hello"
-    },
-    {
-        "id": 2,
-        "text": "world"
-    },
-]
+
+The json returned from url `/admin/demo/options`:
+```
+{
+    "total": 4,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 1,
+    "next_page_url": null,
+    "prev_page_url": null,
+    "from": 1,
+    "to": 3,
+    "data": [
+        {
+            "id": 9,
+            "text": "xxx"
+        },
+        {
+            "id": 21,
+            "text": "xxx"
+        },
+        {
+            "id": 42,
+            "text": "xxx"
+        },
+        {
+            "id": 48,
+            "text": "xxx"
+        }
+    ]
+}
 ```
 
 #### Multiple select
@@ -107,28 +144,83 @@ The json format returned from url `/admin/demo/options`:
 $form->multipleSelect($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
-Or load option by ajax
-```php
-$form->multipleSelect($column[, $label])->options('/admin/demo/options');
+You can store value of multiple select in two ways, one is `many-to-many` relation.
+
 ```
 
-The json format returned from url `/admin/demo/options`:
+class Post extends Models
+{
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+}
+
+$form->multipleSelect('tags')->options(Tag::all()->pluck('name', 'id'));
+
 ```
-[
-    {
-        "id": 1,
-        "text": "hello"
-    },
-    {
-        "id": 2,
-        "text": "world"
-    },
-]
+
+The other is store values as string format separated by `,`.
+
+If have too many options, you can load option by ajax
+
+```php
+$form->select('user_id')->options(function ($id) {
+    $user = User::find($id);
+
+    if ($user) {
+        return [$user->id => $user->name];
+    }
+})->ajax('/admin/api/users');
+```
+
+The controller method for url `/admin/api/users` is:
+
+```php
+public function users(Request $request)
+{
+    $q = $request->get('q');
+
+    return User::where('name', 'like', "%$q%")->paginate(null, ['id', 'name as text']);
+}
+
+```
+
+The json returned from url `/admin/demo/options`:
+```
+{
+    "total": 4,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 1,
+    "next_page_url": null,
+    "prev_page_url": null,
+    "from": 1,
+    "to": 3,
+    "data": [
+        {
+            "id": 9,
+            "text": "xxx"
+        },
+        {
+            "id": 21,
+            "text": "xxx"
+        },
+        {
+            "id": 42,
+            "text": "xxx"
+        },
+        {
+            "id": 48,
+            "text": "xxx"
+        }
+    ]
+}
 ```
 
 #### textarea:
 ```php
-$form->textarea($column[, $label]);
+$form->textarea($column[, $label])->rows(10);
 ```
 
 #### radio
@@ -137,7 +229,10 @@ $form->radio($column[, $label])->values(['m' => 'Female', 'f'=> 'Male'])->defaul
 ```
 
 #### checkbox
-The `values ()` method is used to set options:
+
+`checkbox` can store values in two ways, see[multiple select](#Multiple select)
+
+The `options ()` method is used to set options:
 ```php
 $form->checkbox($column[, $label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
@@ -184,7 +279,7 @@ $form->time($column[, $label])->format('HH:mm:ss');
 ```php
 $form->date($column[, $label]);
 
-// 设置日期格式，更多格式参考http://momentjs.com/docs/#/displaying/format/
+// Date format setting，more format please see http://momentjs.com/docs/#/displaying/format/
 $form->date($column[, $label])->format('YYYY-MM-DD');
 ```
 

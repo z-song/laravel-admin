@@ -26,6 +26,8 @@ echo $form->render();
 
 `Form::method($method)`方法用来设置form表单的提交方法,默认为`POST`方法。
 
+`Form::disablePjax()` 不使用pjax方式提交表单。
+
 # 表单元素
 `Form`对象通过魔术方法`__call()`实现了近30种form元素的实现，可以通过简短的调用添加表单元素：
 
