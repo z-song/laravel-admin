@@ -383,7 +383,7 @@ class Field
      */
     public function validate(array $input)
     {
-        $data = $rules = [];
+        $rules = $attributes = [];
 
         if (!$fieldRules = $this->getRules()) {
             return false;
@@ -401,8 +401,8 @@ class Field
                 $value = array_filter($value);
             }
 
-            $data[$this->label] = $value;
-            $rules[$this->label] = $fieldRules;
+            $rules[$this->column] = $fieldRules;
+            $attributes[$this->column] = $this->label;
         }
 
         if (is_array($this->column)) {
@@ -410,12 +410,13 @@ class Field
                 if (!array_key_exists($column, $input)) {
                     continue;
                 }
-                $data[$this->label.$key] = array_get($input, $column);
-                $rules[$this->label.$key] = $fieldRules;
+                $input[$this->column.$key] = array_get($input, $column);
+                $rules[$this->column.$key] = $fieldRules;
+                $attributes[$this->column.$key] = $this->label;
             }
         }
 
-        return Validator::make($data, $rules);
+        return Validator::make($input, $rules, [], $attributes);
     }
 
     /**
