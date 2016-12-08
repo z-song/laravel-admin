@@ -1,4 +1,4 @@
-<div class="form-group {!! !$errors->has($label) ?: 'has-error' !!}">
+<div class="form-group {!! !$errors->has($column) ?: 'has-error' !!}">
 
     <label for="{{$id['start']}}" class="col-sm-2 control-label">{{$label}}</label>
 
