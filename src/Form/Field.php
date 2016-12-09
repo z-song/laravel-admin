@@ -405,9 +405,9 @@ class Field
                 if (!array_key_exists($column, $input)) {
                     continue;
                 }
-                $input[$this->column.$key] = $this->sanitizeInput($input, $column);
-                $rules[$this->column.$key] = $fieldRules;
-                $attributes[$this->column.$key] = $this->label;
+                $input[$column.$key] = array_get($input, $column);
+                $rules[$column.$key] = $fieldRules;
+                $attributes[$column.$key] = $this->label."[$column]";
             }
         }
 
