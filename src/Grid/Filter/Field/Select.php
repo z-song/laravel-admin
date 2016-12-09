@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Select
 {
-    protected $options = ['' => '请选择'];
+    protected $options = [];
 
     public function __construct($options)
     {
@@ -14,7 +14,7 @@ class Select
             $options = $options->toArray();
         }
 
-        $this->options = $this->options + $options;
+        $this->options = ['' => trans('admin::lang.choose')] + $options;
     }
 
     public function variables()
