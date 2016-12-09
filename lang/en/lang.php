@@ -41,9 +41,9 @@ return [
     'delete_succeeded' => 'Delete succeeded !',
     'delete_failed'    => 'Delete failed !',
 
-    'choose'        => 'Choose',
-    'choose_file'   => 'Choose file',
-    'choose_image'  => 'Choose image',
+    'choose'        => 'Select',
+    'choose_file'   => 'Select file',
+    'choose_image'  => 'Select image',
 
     'more'          => 'More',
     'deny'          => 'Permission denied',
