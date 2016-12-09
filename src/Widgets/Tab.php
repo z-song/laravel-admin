@@ -16,18 +16,30 @@ class Tab extends Widget implements Renderable
     ];
 
     /**
+     * @var null|int
+     */
+    protected $activeTab = null;
+
+    /**
      * Add a tab and its contents.
      *
      * @param string            $title
      * @param string|Renderable $content
+     * @param bool              $active
+     * @param null|string       $externalLink
      *
      * @return $this
      */
-    public function add($title, $content)
+    public function add($title, $content, $active = false, $externalLink = null)
     {
+        if ($active) {
+            $this->activeTab = count($this->attributes['tabs']);
+        }
         $this->attributes['tabs'][] = [
             'title'   => $title,
             'content' => $content,
+            'active' => false,
+            'externalLink' => $externalLink,
         ];
 
         return $this;
@@ -75,6 +87,20 @@ class Tab extends Widget implements Renderable
      */
     public function render()
     {
+        $this->activateActiveTab();
         return view('admin::widgets.tab', $this->attributes)->render();
+    }
+
+    /**
+     * Activate the active tab or fallback to first tab.
+     */
+    protected function activateActiveTab()
+    {
+        if (count($this->attributes['tabs'])) {
+            if ($this->activeTab === null) {
+                $this->activeTab = 0;
+            }
+            $this->attributes['tabs'][$this->activeTab]['active'] = true;
+        }
     }
 }
