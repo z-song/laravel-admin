@@ -242,7 +242,7 @@ class Column
     public function button($style = 'default')
     {
         return $this->display(function ($value) use ($style) {
-            $style = collect((array)$style)->map(function ($style) {
+            $style = collect((array) $style)->map(function ($style) {
                 return 'btn-'.$style;
             })->implode(' ');
 
@@ -262,7 +262,6 @@ class Column
     public function progressBar($style = 'primary', $size = 'sm', $max = 100)
     {
         return $this->display(function ($value) use ($style, $size, $max) {
-
             $style = collect((array) $style)->map(function ($style) {
                 return 'progress-bar-'.$style;
             })->implode(' ');
@@ -405,8 +404,8 @@ EOT;
     /**
      * Call all of the "display" callbacks column.
      *
-     * @param  mixed $value
-     * @param  integer $key
+     * @param mixed $value
+     * @param int   $key
      *
      * @return mixed
      */
@@ -432,7 +431,7 @@ EOT;
     {
         $originalRow = static::$originalGridData[$key];
 
-        return $callback->bindTo((object)$originalRow);
+        return $callback->bindTo((object) $originalRow);
     }
 
     /**
