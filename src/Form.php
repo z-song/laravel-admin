@@ -731,7 +731,7 @@ class Form
     protected function validationFails($input)
     {
         foreach ($this->builder->fields() as $field) {
-            if (!$validator = $field->validate($input)) {
+            if (!$validator = $field->getValidator($input)) {
                 continue;
             }
 

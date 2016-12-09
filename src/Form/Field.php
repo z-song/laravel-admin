@@ -375,13 +375,13 @@ class Field
     }
 
     /**
-     * Validate input field data.
+     * Get validator for this field.
      *
      * @param array $input
      *
      * @return bool|Validator
      */
-    public function validate(array $input)
+    public function getValidator(array $input)
     {
         $rules = $attributes = [];
 
@@ -394,12 +394,7 @@ class Field
                 return false;
             }
 
-            $value = array_get($input, $this->column);
-
-            // remove empty options from multiple select.
-            if ($this instanceof Field\MultipleSelect) {
-                $value = array_filter($value);
-            }
+            $input = $this->sanitizeInput($input, $this->column);
 
             $rules[$this->column] = $fieldRules;
             $attributes[$this->column] = $this->label;
@@ -410,13 +405,31 @@ class Field
                 if (!array_key_exists($column, $input)) {
                     continue;
                 }
-                $input[$this->column.$key] = array_get($input, $column);
+                $input[$this->column.$key] = $this->sanitizeInput($input, $column);
                 $rules[$this->column.$key] = $fieldRules;
                 $attributes[$this->column.$key] = $this->label;
             }
         }
 
         return Validator::make($input, $rules, [], $attributes);
+    }
+
+    /**
+     * Sanitize input data.
+     *
+     * @param array  $input
+     * @param string $column
+     *
+     * @return array
+     */
+    protected function sanitizeInput($input, $column)
+    {
+        if ($this instanceof Field\MultipleSelect) {
+            $value = array_get($input, $column);
+            array_set($input, $column, array_filter($value));
+        }
+
+        return $input;
     }
 
     /**
