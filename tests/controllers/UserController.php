@@ -156,6 +156,10 @@ class UserController extends Controller
             $form->display('updated_at', 'Updated At');
 
             $form->html('<a html-field>html...</a>');
+
+            $form->ignore(['password', 'password_confirmation']);
+            $form->password('password')->rules('confirmed');
+            $form->password('password_confirmation');
         });
     }
 }
