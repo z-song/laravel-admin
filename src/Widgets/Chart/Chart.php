@@ -22,7 +22,7 @@ class Chart extends Widget implements Renderable
 
     public function makeElementId()
     {
-        return 'chart_'.uniqid('', true);
+        return 'chart_'.str_replace('.', '', uniqid('', true));
     }
 
     public static function color($color = '')
