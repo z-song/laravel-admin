@@ -44,7 +44,8 @@ class UserFormTest extends TestCase
             'username' => 'John Doe',
             'email'    => 'hello@world.com',
             'mobile'   => '13421234123',
-            'password' => 123456,
+            'password' => '123456',
+            'password_confirmation' => '123456',
             //"avatar"   => "test.jpg",
             'profile'  => [
                 'first_name' => 'John',
@@ -146,6 +147,8 @@ class UserFormTest extends TestCase
 
         $this->visit("admin/users/$id/edit")
             ->type('hello world', 'username')
+            ->type('123', 'password')
+            ->type('123', 'password_confirmation')
             ->press('Submit')
             ->seePageIs('admin/users')
             ->seeInDatabase('test_users', ['username' => 'hello world']);
