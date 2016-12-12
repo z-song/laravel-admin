@@ -131,6 +131,13 @@ class Form
     public static $availableFields = [];
 
     /**
+     * Ignored saving fields.
+     *
+     * @var array
+     */
+    protected $ignored = [];
+
+    /**
      * Collected field assets.
      *
      * @var array
@@ -321,7 +328,7 @@ class Form
      */
     protected function prepare($data = [], Closure $callback = null)
     {
-        $this->inputs = $data;
+        $this->inputs = $this->removeIgnoredFields($data);
 
         if ($callback instanceof Closure) {
             $callback($this);
@@ -334,6 +341,20 @@ class Form
         $this->updates = array_filter($updates, function ($val) {
             return !is_null($val);
         });
+    }
+
+    /**
+     * Remove ignored fields from input.
+     *
+     * @param array $input
+     *
+     * @return array
+     */
+    protected function removeIgnoredFields($input)
+    {
+        array_forget($input, $this->ignored);
+
+        return $input;
     }
 
     /**
@@ -643,6 +664,20 @@ class Form
     public function saved(Closure $callback)
     {
         $this->saved = $callback;
+    }
+
+    /**
+     * Ignore fields to save.
+     *
+     * @param string|array $fields
+     *
+     * @return $this
+     */
+    public function ignore($fields)
+    {
+        $this->ignored = (array) $fields;
+
+        return $this;
     }
 
     /**
