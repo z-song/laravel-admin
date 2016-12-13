@@ -226,6 +226,9 @@ $grid->filter(function($filter){
 
     // 如果过滤器太多，可以使用弹出模态框来显示过滤器.
     $filter->useModal();
+    
+    // 禁用id查询框
+    $filter->disableIdFilter();
 
     // sql: ... WHERE `user.name` LIKE "%$name%";
     $filter->like('name', 'name');
