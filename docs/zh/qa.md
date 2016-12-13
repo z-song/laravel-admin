@@ -7,7 +7,7 @@
 复制`vendor/encore/laravel-admin/views`到项目的`resources/views/admin`，然后在`app/Admin/bootstrap.php`文件中加入代码：
 
 ```php
-app('view')->addNamespace('admin', resource_path('views/admin'));
+app('view')->prependNamespace('admin', resource_path('views/admin'));
 ```
 
 这样就用`resources/views/admin`下的视图覆盖了`laravel-admin`的视图，要注意的问题是，更新`laravel-admin`的时候，可能会遇到视图不存在的问题，这个需要自行解决
