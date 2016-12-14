@@ -241,6 +241,17 @@ class Grid
         return $column;
     }
 
+    public static function registerColumnDisplayer()
+    {
+        $map = [
+            'select' => \Encore\Admin\Grid\Displayers\Select::class,
+        ];
+
+        foreach ($map as $abstract => $class) {
+            Column::extend($abstract, $class);
+        }
+    }
+
     /**
      * Batch add column to grid.
      *

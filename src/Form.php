@@ -9,12 +9,14 @@ use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Validator;
 use Spatie\EloquentSortable\Sortable;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Form.
@@ -315,9 +317,35 @@ class Form
             $this->saveRelation($this->relations);
         });
 
-        $this->complete($this->saved);
+        if (($result = $this->complete($this->saved)) instanceof Response) {
+            return $result;
+        }
+
+        if ($response = $this->ajaxResponse()) {
+            return $response;
+        }
 
         return redirect($this->resource(0));
+    }
+
+    /**
+     * Get ajax response.
+     *
+     * @return bool|\Illuminate\Http\JsonResponse
+     */
+    protected function ajaxResponse()
+    {
+        $request = Request::capture();
+
+        // ajax but not pjax
+        if ($request->ajax() && !$request->pjax()) {
+            return response()->json([
+                'status'  => true,
+                'message' => trans('admin::lang.succeeded'),
+            ]);
+        }
+
+        return false;
     }
 
     /**
@@ -386,12 +414,12 @@ class Form
      *
      * @param Closure|null $callback
      *
-     * @return void
+     * @return mixed|null
      */
     protected function complete(Closure $callback = null)
     {
         if ($callback instanceof Closure) {
-            $callback($this);
+            return $callback($this);
         }
     }
 
@@ -474,7 +502,13 @@ class Form
             $this->updateRelation($this->relations);
         });
 
-        $this->complete($this->saved);
+        if (($result = $this->complete($this->saved)) instanceof Response) {
+            return $result;
+        }
+
+        if ($response = $this->ajaxResponse()) {
+            return $response;
+        }
 
         return redirect($this->resource(-1));
     }

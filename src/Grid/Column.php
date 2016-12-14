@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid;
 
 use Closure;
+use Encore\Admin\Admin;
 use Encore\Admin\Grid;
 use Illuminate\Support\Facades\URL;
 
@@ -187,6 +188,13 @@ class Column
         return $this;
     }
 
+    public static $displayers = [];
+
+    public static function extend($method, $extension)
+    {
+        static::$displayers[$method] = $extension;
+    }
+
     /**
      * Wrap value with badge.
      *
@@ -302,6 +310,62 @@ EOT;
             }
 
             return "<img src='$src' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
+        });
+    }
+
+    /**
+     *
+     *
+     * @param $options
+     * @return Column
+     */
+    public function select($options)
+    {
+        $class = "grid-select-{$this->name}";
+        $token = csrf_token();
+
+        $script = <<<EOT
+
+$('.$class').select2().on('change', function(){
+
+    var pk = $(this).data('key');
+    var value = $(this).val();
+
+    $.ajax({
+        url: "/{$this->grid->resource()}/" + pk,
+        type: "POST",
+        data: {
+            $this->name: value,
+            _token: '$token',
+            _method: 'PUT'
+        },
+        success: function (data) {
+            console.log(data);
+        }
+    });
+});
+
+EOT;
+        $keyName = $this->grid->getKeyName();
+        Admin::script($script);
+
+        return $this->display(function ($value) use ($options, $class, $keyName) {
+
+            $key = $this->$keyName;
+
+            $optionsHtml = '';
+
+            foreach ($options as $option => $text) {
+                $selected = $option == $value ? 'selected' : '';
+                $optionsHtml .= "<option value=\"$option\" $selected>$text</option>";
+            }
+
+            return <<<EOT
+<select style="width: 100%;" class="$class select-small" data-key="$key">
+    $optionsHtml
+</select>
+
+EOT;
         });
     }
 
@@ -543,5 +607,23 @@ EOT;
 
             return $this;
         }
+
+        if (array_key_exists($method, static::$displayers)) {
+
+            $displayer = static::$displayers[$method];
+
+            $this->display(function ($value) use ($displayer) {
+                return $displayer->displayer();
+            });
+        }
+    }
+
+    protected function getDisplayerInstance($abstract)
+    {
+//        if (class_exists($abstract)) {
+//            $instance = new $abstract();
+//
+//            $instance->setGrid();
+//        }
     }
 }
