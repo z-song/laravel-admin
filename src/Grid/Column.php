@@ -5,7 +5,9 @@ namespace Encore\Admin\Grid;
 use Closure;
 use Encore\Admin\Admin;
 use Encore\Admin\Grid;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class Column
 {
@@ -190,9 +192,9 @@ class Column
 
     public static $displayers = [];
 
-    public static function extend($method, $extension)
+    public static function extend($name, $displayer)
     {
-        static::$displayers[$method] = $extension;
+        static::$displayers[$name] = $displayer;
     }
 
     /**
@@ -287,33 +289,6 @@ EOT;
     }
 
     /**
-     * Wrap value with image tag.
-     *
-     * @param string $server
-     * @param int    $width
-     * @param int    $height
-     *
-     * @return $this
-     */
-    public function image($server = '', $width = 200, $height = 200)
-    {
-        return $this->display(function ($path) use ($server, $width, $height) {
-            if (!$path) {
-                return '';
-            }
-
-            if (url()->isValidUrl($path)) {
-                $src = $path;
-            } else {
-                $server = $server ?: config('admin.upload.host');
-                $src = trim($server, '/').'/'.trim($path, '/');
-            }
-
-            return "<img src='$src' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
-        });
-    }
-
-    /**
      *
      *
      * @param $options
@@ -387,7 +362,7 @@ EOT;
     /**
      * Alias for `display()` method.
      *
-     * @param callable $callable
+     * @param Closure $callable
      *
      * @deprecated please use `display()` method instead.
      *
@@ -401,7 +376,7 @@ EOT;
     /**
      * Add a display callback.
      *
-     * @param callable $callback
+     * @param Closure $callback
      *
      * @return $this
      */
@@ -609,21 +584,42 @@ EOT;
         }
 
         if (array_key_exists($method, static::$displayers)) {
-
-            $displayer = static::$displayers[$method];
-
-            $this->display(function ($value) use ($displayer) {
-                return $displayer->displayer();
-            });
+            return $this->resolveDisplayer(static::$displayers[$method], $arguments);
         }
+
+        return $this->display(function ($value) use ($method, $arguments) {
+
+            if (is_array($value) || $value instanceof Arrayable) {
+                return call_user_func_array([collect($value), $method], $arguments);
+            }
+
+            if (is_string($value)) {
+                return call_user_func_array([Str::class, $method], array_merge([$value], $arguments));
+            }
+
+            return $value;
+        });
     }
 
-    protected function getDisplayerInstance($abstract)
+    protected function resolveDisplayer($abstract, $arguments)
     {
-//        if (class_exists($abstract)) {
-//            $instance = new $abstract();
-//
-//            $instance->setGrid();
-//        }
+        if ($abstract instanceof Closure) {
+            return $this->display(function ($value) use ($abstract, $arguments) {
+                return call_user_func_array($abstract, array_merge([$value], $arguments));
+            });
+        }
+
+        if (class_exists($abstract)) {
+            $displayer = new $abstract();
+
+            if ($displayer instanceof Grid\Displayers\AbstractDisplayer) {
+
+                $this->display(function ($value) use ($displayer) {
+                    $displayer->accept($value);
+
+                    return $displayer->display();
+                });
+            }
+        }
     }
 }

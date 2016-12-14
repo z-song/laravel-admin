@@ -47,7 +47,7 @@ class Admin
     {
         if (!static::$initialized) {
             Form::registerBuiltinFields();
-            //Grid::registerColumnDisplayer();
+            Grid::registerColumnDisplayer();
 
             static::$initialized = true;
         }
