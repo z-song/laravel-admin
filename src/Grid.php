@@ -245,6 +245,7 @@ class Grid
     {
         $map = [
             'select' => \Encore\Admin\Grid\Displayers\Select::class,
+            'image'  => \Encore\Admin\Grid\Displayers\Image::class,
         ];
 
         foreach ($map as $abstract => $class) {

@@ -2,7 +2,10 @@
 
 namespace Encore\Admin\Grid\Displayers;
 
-class Select
+class Select extends AbstractDisplayer
 {
-
+    public function display()
+    {
+        //$this->
+    }
 }
