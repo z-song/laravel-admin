@@ -69,6 +69,7 @@ abstract class AbstractFilter
     public function setupField()
     {
         $this->field = new Text();
+        $this->field->setPlaceholder($this->label);
     }
 
     /**
@@ -269,5 +270,22 @@ abstract class AbstractFilter
     public function __toString()
     {
         return $this->render();
+    }
+
+    /**
+     * @param $method
+     * @param $params
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function __call($method, $params)
+    {
+        if (method_exists($this->field, $method)) {
+            return call_user_func_array([$this->field, $method], $params);
+        }
+
+        throw new \Exception('Method "'.$method.'" not exists.');
     }
 }
