@@ -41,6 +41,8 @@ class SwitchField extends Field
         if (isset($this->states[$value])) {
             return $this->states[$value];
         }
+
+        return $value;
     }
 
     public function render()
