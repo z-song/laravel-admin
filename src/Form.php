@@ -58,6 +58,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Password       password($column, $label = '')
  * @method Field\Decimal        decimal($column, $label = '')
  * @method Field\Html           html($html)
+ * @method Field\Tags           tags($column, $label = '')
  */
 class Form
 {
@@ -449,6 +450,10 @@ class Form
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
                     $related = $relation->getRelated();
                     foreach ($values[$name] as $column => $value) {
+                        if (is_array($value)) {
+                            $value = implode(',', $value);
+                        }
+
                         $related->setAttribute($column, $value);
                     }
 
@@ -594,6 +599,9 @@ class Form
                     }
 
                     foreach ($prepared[$name] as $column => $value) {
+                        if (is_array($value)) {
+                            $value = implode(',', $value);
+                        }
                         $related->setAttribute($column, $value);
                     }
 
@@ -967,6 +975,7 @@ class Form
             'url'               => \Encore\Admin\Form\Field\Url::class,
             'year'              => \Encore\Admin\Form\Field\Year::class,
             'html'              => \Encore\Admin\Form\Field\Html::class,
+            'tags'              => \Encore\Admin\Form\Field\Tags::class,
         ];
 
         foreach ($map as $abstract => $class) {
