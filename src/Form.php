@@ -49,7 +49,6 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Number         number($column, $label = '')
  * @method Field\Currency       currency($column, $label = '')
- * @method Field\Json           json($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
  * @method Field\SwitchField    switch($column, $label = '')
  * @method Field\Display        display($column, $label = '')
@@ -936,7 +935,6 @@ class Form
         $map = [
             'button'            => \Encore\Admin\Form\Field\Button::class,
             'checkbox'          => \Encore\Admin\Form\Field\Checkbox::class,
-            'code'              => \Encore\Admin\Form\Field\Code::class,
             'color'             => \Encore\Admin\Form\Field\Color::class,
             'currency'          => \Encore\Admin\Form\Field\Currency::class,
             'date'              => \Encore\Admin\Form\Field\Date::class,
@@ -956,7 +954,6 @@ class Form
             'id'                => \Encore\Admin\Form\Field\Id::class,
             'image'             => \Encore\Admin\Form\Field\Image::class,
             'ip'                => \Encore\Admin\Form\Field\Ip::class,
-            'json'              => \Encore\Admin\Form\Field\Json::class,
             'map'               => \Encore\Admin\Form\Field\Map::class,
             'mobile'            => \Encore\Admin\Form\Field\Mobile::class,
             'month'             => \Encore\Admin\Form\Field\Month::class,
