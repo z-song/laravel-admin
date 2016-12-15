@@ -613,9 +613,15 @@ class Grid
      * Set grid as orderable.
      *
      * @return $this
+     *
+     * @throw \Exception
      */
     public function orderable()
     {
+        if (!trait_exists('\Spatie\EloquentSortable\SortableTrait')) {
+            throw new \Exception('To use orderable grid, please install package [spatie/eloquent-sortable] first.');
+        }
+
         $this->orderable = true;
 
         return $this;
