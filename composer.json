@@ -20,7 +20,8 @@
         "laravel/laravel": "~5.3",
         "symfony/css-selector": "2.8.*|3.0.*",
         "symfony/dom-crawler": "2.8.*|3.0.*",
-        "fzaninotto/faker": "~1.4"
+        "fzaninotto/faker": "~1.4",
+        "intervention/image": "~2.3"
     },
     "autoload": {
         "psr-4": {
