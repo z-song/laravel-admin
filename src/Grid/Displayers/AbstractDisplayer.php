@@ -3,30 +3,55 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Grid;
-use Illuminate\Contracts\Support\Renderable;
+use Encore\Admin\Grid\Column;
 
 abstract class AbstractDisplayer
 {
-    protected $value;
-
-    protected $row;
-
+    /**
+     * @var Grid
+     */
     protected $grid;
 
-    public function accept($value)
+    /**
+     * @var Column
+     */
+    protected $column;
+
+    /**
+     * @var \stdClass
+     */
+    protected $row;
+
+    /**
+     * @var mixed
+     */
+    protected $value;
+
+    /**
+     * Create a new displayer instance.
+     *
+     * @param mixed     $value
+     * @param Grid      grid
+     * @param Column    $column
+     * @param \stdClass $row
+     */
+    public function __construct($value, Grid $grid, Column $column, \stdClass $row)
     {
-        $this->value = $value;
+        $this->value    = $value;
+        $this->grid     = $grid;
+        $this->column   = $column;
+        $this->row      = $row;
     }
 
-    public function setGrid(Grid $grid)
+    protected function getKey()
     {
-        $this->grid = $grid;
+        return $this->row->{$this->grid->getKeyName()};
     }
 
-    public function setRow($row)
-    {
-        $this->row = $row;
-    }
-
+    /**
+     * Display method.
+     *
+     * @return mixed
+     */
     abstract public function display();
 }

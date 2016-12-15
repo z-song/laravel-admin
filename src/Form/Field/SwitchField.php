@@ -6,9 +6,6 @@ use Encore\Admin\Form\Field;
 
 class SwitchField extends Field
 {
-    const STATE_ON = 1;
-    const STATE_OFF = 0;
-
     protected static $css = [
         '/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
     ];
@@ -17,29 +14,22 @@ class SwitchField extends Field
         '/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js',
     ];
 
-    protected $states = [];
-
-    public function __construct($column, $arguments = [])
-    {
-        $this->initStates();
-
-        parent::__construct($column, $arguments);
-    }
-
-    protected function initStates()
-    {
-        $this->states = ['on' => static::STATE_ON, 'off' => static::STATE_OFF];
-    }
+    protected $states = [
+        'on'  => ['value' => 1, 'text' => 'On'],
+        'off' => ['value' => 0, 'text' => 'Off'],
+    ];
 
     public function states($states = [])
     {
-        $this->states = $states;
+        foreach (array_dot($states) as $key => $state) {
+            array_set($this->states, $key, $state);
+        }
     }
 
     public function prepare($value)
     {
         if (isset($this->states[$value])) {
-            return $this->states[$value];
+            return $this->states[$value]['value'];
         }
 
         return $value;
@@ -47,9 +37,12 @@ class SwitchField extends Field
 
     public function render()
     {
-        $key = array_search($this->value, $this->states);
-
-        $this->value = ($key == 'on') ? 'on' : 'off';
+        foreach ($this->states as $state => $option) {
+            if ($this->value == $option['value']) {
+                $this->value = $state;
+                break;
+            }
+        }
 
         $this->script = <<<EOT
 
