@@ -1,29 +1,15 @@
 <?php
 
-namespace Encore\Admin\Grid;
+namespace Encore\Admin\Grid\Displayers;
 
-use Encore\Admin\Facades\Admin;
+use Encore\Admin\Admin;
 
-class Editable
+class Editable extends AbstractDisplayer
 {
-    /**
-     * Class of form element.
-     *
-     * @var mixed|string
-     */
-    protected $class = '';
-
     /**
      * @var array
      */
     protected $arguments = [];
-
-    /**
-     * Form element name.
-     *
-     * @var string
-     */
-    protected $name = '';
 
     /**
      * Type of editable.
@@ -33,48 +19,11 @@ class Editable
     protected $type = '';
 
     /**
-     * Script for editable action.
-     *
-     * @var string
-     */
-    protected $script = '';
-
-    /**
-     * Resource url.
-     *
-     * @var string
-     */
-    protected $resource = '';
-
-    /**
      * Options of editable function.
      *
      * @var array
      */
     protected $options = [];
-
-    /**
-     * Generate a new Editable instance.
-     *
-     * @param string $name
-     * @param array  $arguments
-     */
-    public function __construct($name, $arguments = [])
-    {
-        $this->name = $name;
-        $this->class = str_replace('.', '_', $name);
-        $this->arguments = $arguments;
-
-        $this->initOptions();
-    }
-
-    /**
-     * Initialize options for editable.
-     */
-    public function initOptions()
-    {
-        $this->options['name'] = $this->name;
-    }
 
     /**
      * Add options for editable.
@@ -84,23 +33,6 @@ class Editable
     public function addOptions($options = [])
     {
         $this->options = array_merge($this->options, $options);
-    }
-
-    /**
-     * Set resource url.
-     *
-     * @param string $resource
-     */
-    public function setResource($resource = '')
-    {
-        $this->resource = $resource;
-    }
-
-    protected function buildEditable(array $arguments = [])
-    {
-        $this->type = array_get($arguments, 0, 'text');
-
-        call_user_func_array([$this, $this->type], array_slice($arguments, 1));
     }
 
     /**
@@ -195,39 +127,38 @@ class Editable
         ]);
     }
 
-    /**
-     * Build html for editable.
-     *
-     * @return string
-     */
-    public function html()
+    protected function buildEditableOptions(array $arguments = [])
     {
-        $this->buildEditable($this->arguments);
+        $this->type = array_get($arguments, 0, 'text');
+
+        call_user_func_array([$this, $this->type], array_slice($arguments, 1));
+    }
+
+    public function display()
+    {
+        $this->options['name'] = $column = $this->column->getName();
+
+        $class = "grid-editable-$column";
+
+        $this->buildEditableOptions(func_get_args());
 
         $options = json_encode($this->options);
 
-        $this->script = <<<EOT
-
-\$('.{$this->class}-editable').editable($options);
-
-EOT;
-
-        Admin::script($this->script);
+        Admin::script("$('.$class').editable($options);");
 
         $attributes = [
             'href'       => '#',
-            'class'      => "{$this->class}-editable",
+            'class'      => "$class",
             'data-type'  => $this->type,
-            'data-pk'    => '{pk}',
-            'data-url'   => "/{$this->resource}/{pk}",
-            'data-value' => '{$value}',
+            'data-pk'    => "{$this->getKey()}",
+            'data-url'   => "/{$this->grid->resource()}/{$this->getKey()}",
+            'data-value' => "{$this->value}",
         ];
 
-        $html = [];
-        foreach ($attributes as $name => $attribute) {
-            $html[] = "$name=\"$attribute\"";
-        }
+        $attributes = collect($attributes)->map(function ($attribute, $name) {
+            return "$name='$attribute'";
+        })->implode(' ');
 
-        return '<a '.implode(' ', $html).'>{$value}</a>';
+        return "<a $attributes>{$this->value}</a>";
     }
 }
