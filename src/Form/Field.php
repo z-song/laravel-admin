@@ -56,6 +56,8 @@ class Field
      */
     protected $column = '';
 
+    protected $name = '';
+
     /**
      * Variables of elements.
      *
@@ -214,6 +216,11 @@ class Field
         }
 
         return '';
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -485,7 +492,7 @@ class Field
     protected function variables()
     {
         $this->variables['id'] = $this->id;
-        $this->variables['name'] = $this->formatName($this->column);
+        $this->variables['name'] = $this->name ?: $this->formatName($this->column);
         $this->variables['value'] = $this->value();
         $this->variables['label'] = $this->label;
         $this->variables['column'] = $this->column;
