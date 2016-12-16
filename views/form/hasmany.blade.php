@@ -1,31 +1,30 @@
-<div class="form-group" style="margin:10px 0px 30px 0px">
+<hr>
 
-    <label for="{{$id}}" class="col-sm-2 control-label">{{$label}}</label>
+<div class="form-has-many">
 
-    <div class="col-sm-6">
-        <table class="table table-hover">
-            <tr>
-                @foreach($grid->columns() as $column)
-                    <th>{{$column->getLabel()}}{!!$column->sorter()!!}</th>
-                @endforeach
-                <th>{{ trans('admin::lang.action') }}</th>
-            </tr>
+@foreach($forms as $form)
 
-            @foreach($grid->rows() as $row)
-                <tr {!! $row->getHtmlAttributes() !!}>
-                    @foreach($grid->columnNames as $name)
-                        <td>{!! $row->column($name) !!}</td>
-                    @endforeach
-                    <td>
-                        {!! $row->actions() !!}
-                    </td>
-                </tr>
-            @endforeach
-        </table>
+    @foreach($form->fields() as $field)
+        {!! $field->render() !!}
+    @endforeach
 
-        <div class="btn-group pull-left" style="margin-right: 10px">
-            <a href="/{{$grid->resource()}}" class="btn btn-sm btn-primary">{{ trans('admin::lang.list') }}</a>
-            <a href="/{{$grid->resource()}}/create" class="btn btn-sm btn-success">{{ trans('admin::lang.new') }}</a>
-        </div>
+    <hr>
+
+@endforeach
+
+<div class="clone-wrapper">
+
+    <div class="toclone">
+        @foreach($template->fields() as $field)
+            {!! $field->render() !!}
+        @endforeach
+
+            <div class="clone btn btn-success">+</div>
+            <div class="delete btn btn-danger">-</div>
+            <hr>
     </div>
+
+
+</div>
+
 </div>

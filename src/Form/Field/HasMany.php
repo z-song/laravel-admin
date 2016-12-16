@@ -2,8 +2,10 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Grid;
+use Encore\Admin\Form;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 
 /**
@@ -19,17 +21,21 @@ class HasMany extends Field
     {
         $this->relationName = $relation;
 
-        $this->builder = $arguments[1];
+        $this->column = $relation;
 
-        parent::__construct($relation, $arguments);
+        if (count($arguments) == 1) {
+            $this->label = $this->formatLabel($relation);
+            $this->builder = $arguments[0];
+        }
+
+        if (count($arguments) == 2) {
+            $this->label = $arguments[0];
+            $this->builder = $arguments[1];
+        }
     }
 
     public function render()
     {
-        if ($this->form->builder()->isMode('create')) {
-            return;
-        }
-
         $model = $this->form->model();
 
         $relation = call_user_func([$model, $this->relationName]);
@@ -38,10 +44,23 @@ class HasMany extends Field
             throw new \Exception('hasMany field must be a HasMany relation.');
         }
 
-        $grid = new Grid($relation->getRelated(), $this->builder);
+        $forms = [];
 
-        $grid->build();
+        foreach ($this->value as $data) {
 
-        return parent::render()->with(['grid' => $grid]);
+            $form = new Form\NestedForm($this->column);
+
+            call_user_func($this->builder, $form);
+
+            $forms[] = $form->fill($data);
+        }
+
+        $template = new Form\NestedForm($this->column);
+
+        call_user_func($this->builder, $template);
+
+        Admin::script("$('.clone-wrapper').cloneya();");
+
+        return parent::render()->with(compact('forms', 'template'));
     }
 }
