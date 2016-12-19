@@ -5,6 +5,11 @@ namespace Encore\Admin\Widgets;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 /**
  * Class Form.
@@ -60,6 +65,13 @@ class Form implements Renderable
     protected $attributes = [];
 
     /**
+     * Ignored saving fields.
+     *
+     * @var array
+     */
+    protected $ignored = [];
+
+    /**
      * Form constructor.
      *
      * @param array $data
@@ -73,6 +85,8 @@ class Form implements Renderable
         if (!empty($data)) {
             $this->data = $data;
         }
+
+        $this->fields = new Collection();
 
         $this->initFormAttributes();
     }
@@ -89,6 +103,16 @@ class Form implements Renderable
             'accept-charset' => 'UTF-8',
             'pjax-container' => true,
         ];
+    }
+
+    /**
+     * Get fields of this builder.
+     *
+     * @return Collection
+     */
+    public function fields()
+    {
+        return $this->fields;
     }
 
     /**
@@ -175,7 +199,7 @@ class Form implements Renderable
      */
     protected function pushField(Field &$field)
     {
-        array_push($this->fields, $field);
+        $this->fields()->push($field);
 
         return $this;
     }
@@ -187,12 +211,12 @@ class Form implements Renderable
      */
     protected function getVariables()
     {
-        foreach ($this->fields as $field) {
+        foreach ($this->fields() as $field) {
             $field->fill($this->data);
         }
 
         return [
-            'fields'        => $this->fields,
+            'fields'        => $this->fields(),
             'attributes'    => $this->formatAttribute(),
         ];
     }
@@ -227,13 +251,231 @@ class Form implements Renderable
      */
     public function hasFile()
     {
-        foreach ($this->fields as $field) {
+        foreach ($this->fields() as $field) {
             if ($field instanceof Field\File) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Store a new record.
+     *
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function validata()
+    {
+        $data = Input::all();
+
+        // Handle validation errors.
+        if ($validationMessages = $this->validationMessages($data)) {
+            return back()->withInput()->withErrors($validationMessages);
+        }
+
+        $this->prepare($data, null);
+
+        DB::transaction(function () {
+            $inserts = $this->prepareInsert($this->updates);
+            dump($inserts);
+            die;
+
+            foreach ($inserts as $column => $value) {
+                if (is_array($value)) {
+                    $value = implode(',', $value);
+                }
+                $this->model->setAttribute($column, $value);
+            }
+
+            $this->model->save();
+
+            $this->saveRelation($this->relations);
+        });
+
+        if (($result = $this->complete($this->saved)) instanceof Response) {
+            return $result;
+        }
+
+        if ($response = $this->ajaxResponse()) {
+            return $response;
+        }
+
+        return redirect($this->resource(0));
+    }
+
+    /**
+     * Get validation messages.
+     *
+     * @param array $input
+     *
+     * @return MessageBag|bool
+     */
+    protected function validationMessages($input)
+    {
+        $failedValidators = [];
+
+        foreach ($this->fields() as $field) {
+            if (!$validator = $field->getValidator($input)) {
+                continue;
+            }
+
+            if (($validator instanceof Validator) && !$validator->passes()) {
+                $failedValidators[] = $validator;
+            }
+        }
+
+        $message = $this->mergeValidationMessages($failedValidators);
+
+        return $message->any() ? $message : false;
+    }
+
+    /**
+     * Merge validation messages from input validators.
+     *
+     * @param \Illuminate\Validation\Validator[] $validators
+     *
+     * @return MessageBag
+     */
+    protected function mergeValidationMessages($validators)
+    {
+        $messageBag = new MessageBag();
+
+        foreach ($validators as $validator) {
+            $messageBag = $messageBag->merge($validator->messages());
+        }
+
+        return $messageBag;
+    }
+
+    /**
+     * Prepare input data for insert or update.
+     *
+     * @param array    $data
+     * @param callable $callback
+     */
+    protected function prepare($data = [], Closure $callback = null)
+    {
+        $this->inputs = $this->removeIgnoredFields($data);
+
+        if ($callback instanceof Closure) {
+            $callback($this);
+        }
+
+        $this->relations = $this->getRelationInputs($data);
+
+        $updates = array_except($this->inputs, array_keys($this->relations));
+
+        $this->updates = array_filter($updates, function ($val) {
+            return !is_null($val);
+        });
+    }
+
+    /**
+     * Remove ignored fields from input.
+     *
+     * @param array $input
+     *
+     * @return array
+     */
+    protected function removeIgnoredFields($input)
+    {
+        array_forget($input, $this->ignored);
+
+        return $input;
+    }
+
+    /**
+     * Ignore fields to save.
+     *
+     * @param string|array $fields
+     *
+     * @return $this
+     */
+    public function ignore($fields)
+    {
+        $this->ignored = (array) $fields;
+
+        return $this;
+    }
+
+    /**
+     * Get inputs for relations.
+     *
+     * @param array $inputs
+     *
+     * @return array
+     */
+    protected function getRelationInputs($inputs = [])
+    {
+        $relations = [];
+
+        // foreach ($inputs as $column => $value) {
+        //     if (method_exists($this->model, $column)) {
+        //         $relation = call_user_func([$this->model, $column]);
+
+        //         if ($relation instanceof Relation) {
+        //             $relations[$column] = $value;
+        //         }
+        //     }
+        // }
+
+        return $relations;
+    }
+
+    /**
+     * Prepare input data for insert.
+     *
+     * @param $inserts
+     *
+     * @return array
+     */
+    protected function prepareInsert($inserts)
+    {
+        $first = current($inserts);
+
+        if (is_array($first) && Arr::isAssoc($first)) {
+            $inserts = array_dot($inserts);
+        }
+
+        foreach ($inserts as $column => $value) {
+            if (is_null($field = $this->getFieldByColumn($column))) {
+                unset($inserts[$column]);
+                continue;
+            }
+
+            if (method_exists($field, 'prepare')) {
+                $inserts[$column] = $field->prepare($value);
+            }
+        }
+
+        $prepared = [];
+
+        foreach ($inserts as $key => $value) {
+            array_set($prepared, $key, $value);
+        }
+
+        return $prepared;
+    }
+
+    /**
+     * Find field object by column.
+     *
+     * @param $column
+     *
+     * @return mixed
+     */
+    protected function getFieldByColumn($column)
+    {
+        return $this->fields()->first(
+            function (Field $field) use ($column) {
+                if (is_array($field->column())) {
+                    return in_array($column, $field->column());
+                }
+
+                return $field->column() == $column;
+            }
+        );
     }
 
     /**
