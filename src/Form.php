@@ -7,6 +7,7 @@ use Encore\Admin\Exception\Handle;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
+use Encore\Admin\Form\NestedForm;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -605,6 +606,13 @@ class Form
                     }
 
                     $related->save();
+                    break;
+                case \Illuminate\Database\Eloquent\Relations\HasMany::class:
+
+                    $nestedForm = new NestedForm($relation);
+
+                    $nestedForm->update($prepared[$name]);
+
                     break;
             }
         }

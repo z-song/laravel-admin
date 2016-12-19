@@ -6,6 +6,7 @@ use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Grid;
 use Encore\Admin\Form;
+use Encore\Admin\Widgets\Box;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 
 /**
@@ -24,7 +25,7 @@ class HasMany extends Field
         $this->column = $relation;
 
         if (count($arguments) == 1) {
-            $this->label = $this->formatLabel($relation);
+            $this->label = $this->formatLabel();
             $this->builder = $arguments[0];
         }
 
@@ -52,14 +53,29 @@ class HasMany extends Field
 
             call_user_func($this->builder, $form);
 
-            $forms[] = $form->fill($data);
+            $forms[$data['id']] = $form->fill($data);
         }
 
         $template = new Form\NestedForm($this->column);
 
         call_user_func($this->builder, $template);
 
-        Admin::script("$('.clone-wrapper').cloneya();");
+        $template->setNameForNew();
+
+        $script = <<<EOT
+
+$('.form-has-many').on('click', '.add', function () {
+    var fields = $('.form-has-many-template').find('.form-has-many-form').clone(true, true).appendTo('.form-has-many-fields');
+});
+
+$('.form-has-many-fields').on('click', '.remove', function () {
+    $(this).closest('.form-has-many-form').hide();
+    $(this).closest('.form-has-many-form').find('.item-to-remove').val(1);
+});
+
+EOT;
+
+        Admin::script($script);
 
         return parent::render()->with(compact('forms', 'template'));
     }
