@@ -221,6 +221,18 @@ class Field
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * set the default val.
+     *
+     * @return $this
+     */
+    public function setDefault($val)
+    {
+        $this->default = $val;
+        return $this;
     }
 
     /**
@@ -546,10 +558,5 @@ class Field
      */
     public function __call($method, $arguments)
     {
-        if ($method === 'default') {
-            $this->default = $arguments[0];
-
-            return $this;
-        }
     }
 }
