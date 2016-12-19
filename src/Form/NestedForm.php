@@ -69,7 +69,7 @@ class NestedForm
     {
         $this->fields->each(function (Field $field) {
             $column = $field->column();
-            $field->setName("{$this->relation}[new][$column][]");
+            $field->setElementName("{$this->relation}[new][$column][]");
         });
     }
 
