@@ -263,7 +263,7 @@ class Form implements Renderable
     /**
      * Store a new record.
      *
-     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return array
      */
     public function validata()
     {
@@ -276,32 +276,7 @@ class Form implements Renderable
 
         $this->prepare($data, null);
 
-        DB::transaction(function () {
-            $inserts = $this->prepareInsert($this->updates);
-            dump($inserts);
-            die;
-
-            foreach ($inserts as $column => $value) {
-                if (is_array($value)) {
-                    $value = implode(',', $value);
-                }
-                $this->model->setAttribute($column, $value);
-            }
-
-            $this->model->save();
-
-            $this->saveRelation($this->relations);
-        });
-
-        if (($result = $this->complete($this->saved)) instanceof Response) {
-            return $result;
-        }
-
-        if ($response = $this->ajaxResponse()) {
-            return $response;
-        }
-
-        return redirect($this->resource(0));
+        return $this->prepareInsert($this->updates);
     }
 
     /**
