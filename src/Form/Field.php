@@ -484,6 +484,13 @@ class Field
         return implode(' ', $html);
     }
 
+    protected function formatClass()
+    {
+        $name = $this->name ?: $this->formatName($this->column);
+
+        return str_replace(['[', ']'], '_', $name);
+    }
+
     /**
      * Get the view variables of this field.
      *
@@ -498,6 +505,7 @@ class Field
         $this->variables['column'] = $this->column;
         $this->variables['attributes'] = $this->formatAttributes();
         $this->variables['help'] = $this->help;
+        $this->variables['class'] = $this->formatClass();
 
         return $this->variables;
     }
