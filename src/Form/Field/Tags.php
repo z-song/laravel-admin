@@ -6,6 +6,8 @@ use Encore\Admin\Form\Field;
 
 class Tags extends Field
 {
+    protected $value = [];
+
     protected static $css = [
         '/packages/admin/AdminLTE/plugins/select2/select2.min.css',
     ];

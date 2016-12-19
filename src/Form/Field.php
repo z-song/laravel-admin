@@ -56,7 +56,12 @@ class Field
      */
     protected $column = '';
 
-    protected $name = '';
+    /**
+     * Form element name.
+     *
+     * @var string
+     */
+    protected $elementName = '';
 
     /**
      * Variables of elements.
@@ -218,9 +223,14 @@ class Field
         return '';
     }
 
-    public function setName($name)
+    /**
+     * Set form element name.
+     *
+     * @param $name
+     */
+    public function setElementName($name)
     {
-        $this->name = $name;
+        $this->elementName = $name;
     }
 
     /**
@@ -499,13 +509,13 @@ class Field
     protected function variables()
     {
         $this->variables['id'] = $this->id;
-        $this->variables['name'] = $this->name ?: $this->formatName($this->column);
+        $this->variables['name'] = $this->elementName ?: $this->formatName($this->column);
         $this->variables['value'] = $this->value();
         $this->variables['label'] = $this->label;
         $this->variables['column'] = $this->column;
         $this->variables['attributes'] = $this->formatAttributes();
         $this->variables['help'] = $this->help;
-        $this->variables['class'] = $this->formatClass();
+        //$this->variables['class'] = $this->formatClass();
 
         return $this->variables;
     }
