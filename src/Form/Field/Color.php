@@ -53,7 +53,7 @@ class Color extends Field
     {
         $options = json_encode($this->options);
 
-        $this->script = "$('#{$this->id}').colorpicker($options);";
+        $this->script = "$('.{$this->getElementClass()}').colorpicker($options);";
 
         return parent::render();
     }
