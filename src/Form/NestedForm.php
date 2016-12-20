@@ -2,21 +2,114 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class NestedForm
 {
+    const UPDATE_KEY_NAME_OLD = 'old';
+
+    const UPDATE_KEY_NAME_NEW = 'new';
+
+    const REMOVE_FLAG_NAME = '_remove';
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Relations\HasMany|string
+     */
     protected $relation;
 
+    /**
+     * Fields in form.
+     *
+     * @var Collection
+     */
     protected $fields;
 
+    /**
+     * Scripts of form.
+     *
+     * @var array
+     */
+    protected $scripts = [];
+
+    /**
+     * Create a new NestedForm instance.
+     *
+     * @param $relation
+     */
     public function __construct($relation)
     {
         $this->relation = $relation;
 
         $this->fields = new Collection();
+    }
+
+    public function prepare($input)
+    {
+        if (array_key_exists(static::UPDATE_KEY_NAME_NEW, $input)) {
+            $new = $input[static::UPDATE_KEY_NAME_NEW];
+
+            $prepared = [];
+
+            foreach ($this->formatInputArray($new) as $record) {
+                $prepared[] = $this->prepareRecord($record);
+            }
+
+            $input[static::UPDATE_KEY_NAME_NEW] = $prepared;
+        }
+
+        return $input;
+
+
+    }
+
+    protected function prepareRecord($record)
+    {
+        if ($record[static::REMOVE_FLAG_NAME] == 1) {
+            return $record;
+        }
+
+        foreach ($this->fields as $field) {
+
+            if (!method_exists($field, 'prepare')) {
+                continue;
+            }
+
+            $columns = $field->column();
+
+            $value = $field->prepare($this->fetchColumnValue($record, $columns));
+
+            if (is_array($columns)) {
+                foreach ($columns as $name => $column) {
+                    array_set($record, $column, $value[$name]);
+                }
+            } elseif (is_string($columns)) {
+                array_set($record, $columns, $value);
+            }
+        }
+
+        return $record;
+    }
+
+    protected function fetchColumnValue($data, $columns)
+    {
+        if (is_string($columns)) {
+            return array_get($data, $columns);
+        }
+
+        if (is_array($columns)) {
+            $value = [];
+            foreach ($columns as $name => $column) {
+                if (!array_has($data, $column)) {
+                    continue;
+                }
+                $value[$name] = array_get($data, $column);
+            }
+
+            return $value;
+        }
     }
 
     /**
@@ -31,11 +124,254 @@ class NestedForm
         return $this;
     }
 
+    /**
+     * Get fields of this form.
+     *
+     * @return Collection
+     */
     public function fields()
     {
         return $this->fields;
     }
 
+    /**
+     * Get relation name of this form.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|string
+     */
+    public function getRelationName()
+    {
+        return $this->relation;
+    }
+
+    /**
+     * Get form script as string.
+     *
+     * @return string
+     */
+    public function getScript()
+    {
+        return implode("\r\n",  $this->scripts);
+    }
+
+    /**
+     * Fill data to all fields in form.
+     *
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function fill(array $data)
+    {
+        $this->fields->each(function (Field $field) use ($data) {
+            $field->fill($data);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Set form element name for original records.
+     *
+     * @param string $pk
+     *
+     * @return $this
+     */
+    public function setElementNameForOriginal($pk)
+    {
+        $this->fields->each(function (Field $field) use ($pk) {
+            $column = $field->column();
+
+            if (is_array($column)) {
+                $name = array_map(function ($col) use ($pk) {
+                    return "{$this->relation}[".static::UPDATE_KEY_NAME_OLD."][$pk][$col]";
+                }, $column);
+            } else {
+                $name = "{$this->relation}[".static::UPDATE_KEY_NAME_OLD."][$pk][$column]";
+            }
+
+            $field->setElementName($name);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Set form element name for added form elements.
+     *
+     * @return $this
+     */
+    public function setElementNameForNew()
+    {
+        $this->fields->each(function (Field $field) {
+            $column = $field->column();
+
+            if (is_array($column)) {
+                $name = array_map(function ($col) {
+                    return "{$this->relation}[".static::UPDATE_KEY_NAME_NEW."][$col][]";
+                }, $column);
+            } else {
+                $name = "{$this->relation}[".static::UPDATE_KEY_NAME_NEW."][$column][]";
+            }
+
+            $field->setElementName($name);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Update relation data with input data.
+     *
+     * @param array $input
+     */
+    public function update(array $input)
+    {
+        $this->updateMany(array_get($input, static::UPDATE_KEY_NAME_OLD, []));
+
+        $this->createMany(array_get($input, static::UPDATE_KEY_NAME_NEW, []));
+    }
+
+    /**
+     * Update an array of new instances of the related model.
+     *
+     * @param array $old
+     *
+     * @return void
+     */
+    protected function updateMany(array $old)
+    {
+        if (empty($old)) {
+            return;
+        }
+
+        $ids = $updates = [];
+        foreach ($old as $pk => $value) {
+            if ($value[static::REMOVE_FLAG_NAME] == 1) {
+                $ids[] = $pk;
+            } else {
+                $updates[$pk] = $value;
+            }
+        }
+
+        $this->performDestroyMany($ids);
+
+        $this->performUpdateMany($updates);
+    }
+
+    /**
+     * Perform destroy of many old records.
+     *
+     * @param array $removes
+     *
+     * @return void
+     */
+    protected function performDestroyMany(array $removes)
+    {
+        if (!empty($removes)) {
+            $this->relation->getRelated()->destroy($removes);
+        }
+    }
+
+    /**
+     * Perform update of many old records.
+     *
+     * @param array $updates
+     *
+     * @return void
+     */
+    protected function performUpdateMany(array $updates)
+    {
+        if (empty($updates)) {
+            return;
+        }
+
+        $this->relation->find(array_keys($updates))
+            ->each(function (Model $model) use ($updates) {
+                $model->update($updates[$model->{$model->getKeyName()}]);
+            });
+    }
+
+    /**
+     * Create an array of new instances of the related model.
+     *
+     * @param  array  $input
+     *
+     * @return array
+     */
+    protected function createMany(array $input)
+    {
+        if (empty($input)) {
+            return;
+        }
+
+        collect($input)->reject(function($record) {
+
+            return $record[static::REMOVE_FLAG_NAME] == 1;
+        })->map(function ($record) {
+            unset($record[static::REMOVE_FLAG_NAME]);
+
+            return $record;
+        })->reject(function ($record) {
+
+            return empty(array_filter($record));
+        })->pipe(function ($records) {
+
+            $this->relation->createMany($records->all());
+        });
+    }
+
+    /**
+     * Format input data into valid records.
+     *
+     * @param array $input
+     *
+     * @return Collection
+     */
+    protected function formatInputArray($input)
+    {
+        $keys = array_keys($input);
+        $records = new Collection();
+
+        foreach (range(0, count(current($input)) - 1) as $index) {
+            $records->push(
+                array_combine($keys, data_get($input, "*.$index"))
+            );
+        }
+
+        return $records;
+    }
+
+    /**
+     * Get form html without script.
+     *
+     * @return string
+     */
+    public function getFormHtml()
+    {
+        $html = '';
+
+        foreach ($this->fields() as $field) {
+            $html .= $field->render();
+
+            if ($script = $field->getScript()) {
+                $this->scripts[] = $field->getScript();
+
+                array_pop(Admin::$script);
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * Add nested-form fields dynamically.
+     *
+     * @param string $method
+     * @param array $arguments
+     *
+     * @return $this|Field
+     */
     public function __call($method, $arguments)
     {
         if ($className = Form::findFieldClass($method)) {
@@ -47,101 +383,7 @@ class NestedForm
 
             return $element;
         }
-    }
-
-    public function getRelationName()
-    {
-        return $this->relation;
-    }
-
-    public function fill($data)
-    {
-        $this->fields->each(function (Field $field) use ($data) {
-            $field->fill($data);
-            $column = $field->column();
-            $field->setElementName("{$this->relation}[old][{$data['id']}][$column]");
-        });
 
         return $this;
-    }
-
-    public function setNameForNew()
-    {
-        $this->fields->each(function (Field $field) {
-            $column = $field->column();
-            $field->setElementName("{$this->relation}[new][$column][]");
-        });
-    }
-
-    public function update($prepared)
-    {
-        $old = array_get($prepared, 'old', []);
-        $new = array_get($prepared, 'new', []);
-
-        $this->updateOld($old);
-        $this->updateNew($new);
-    }
-
-    protected function updateOld($old)
-    {
-        if (empty($old)) {
-            return;
-        }
-
-        $removes = $updates = [];
-        foreach ($old as $pk => $value) {
-            if ($value['_remove'] == 1) {
-                $removes[] = $pk;
-            } else {
-                $updates[$pk] = $value;
-            }
-        }
-
-        if (!empty($removes)) {
-            $this->relation->getRelated()->destroy($removes);
-        }
-
-        if (!empty($updates)) {
-            $this->performHasManyUpdate($updates);
-        }
-    }
-
-    protected function performHasManyUpdate($updates)
-    {
-        $this->relation->find(array_keys($updates))->each(function (Model $model) use ($updates) {
-            $model->update($updates[$model->{$model->getKeyName()}]);
-        });
-    }
-
-    public function updateNew($new)
-    {
-        if (empty($new)) {
-            return;
-        }
-
-        $first = current($new);
-        $count = count($first);
-
-        $saves = [];
-
-        foreach (range(0, $count-1) as $index) {
-            foreach ($new as $key => $value) {
-                $saves[$index][$key] = array_get($new, "$key.$index");
-            }
-        }
-
-        array_pop($saves);
-
-        $saves = collect($saves)->reject(function($save) {
-            return $save['_remove'] == 1;
-        })->map(function ($save) {
-            unset($save['_remove']);
-
-            return $save;
-        });
-
-        if (!empty($saves)) {
-            $this->relation->createMany($saves->toArray());
-        }
     }
 }

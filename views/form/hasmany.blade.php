@@ -6,13 +6,13 @@
 
 <hr style="margin-top: 0px;">
 
-<div class="form-has-many">
+<div class="has-many-{{$column}}">
 
-    <div class="form-has-many-fields">
+    <div class="has-many-{{$column}}-forms">
 
         @foreach($forms as $pk => $form)
 
-            <div class="form-has-many-form">
+            <div class="has-many-{{$column}}-form">
 
                 @foreach($form->fields() as $field)
                     {!! $field->render() !!}
@@ -21,8 +21,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-6">
-                        <input type="hidden" value="0" name="{{ $form->getRelationName()."[old][$pk][_remove]" }}" class="item-to-remove"/>
-                        <div class="remove btn btn-warning btn-sm pull-right" data-pk="{{ $pk }}"><i class="fa fa-trash">&nbsp;</i>Remove</div>
+                        <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>Remove</div>
                     </div>
                 </div>
 
@@ -32,22 +31,20 @@
         @endforeach
     </div>
 
-    <div class="form-has-many-template hide">
-        <div class="form-has-many-form">
+    <template class="{{$column}}-tpl">
+        <div class="has-many-{{$column}}-form">
 
-            @foreach($template->fields() as $field)
-                {!! $field->render() !!}
-            @endforeach
+            {!! $templateHtml !!}
+
             <div class="form-group">
                 <label class="col-sm-2 control-label"></label>
                 <div class="col-sm-6">
-                    <input type="hidden" value="0" name="{{ $template->getRelationName()."[new][_remove][]" }}" class="item-to-remove"/>
                     <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash"></i>&nbsp;Remove</div>
                 </div>
             </div>
             <hr>
         </div>
-    </div>
+    </template>
 
     <div class="form-group">
         <label class="col-sm-2 control-label"></label>

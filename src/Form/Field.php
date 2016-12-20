@@ -64,6 +64,13 @@ class Field
     protected $elementName = '';
 
     /**
+     * Form element name.
+     *
+     * @var string
+     */
+    protected $elementClass = '';
+
+    /**
      * Variables of elements.
      *
      * @var array
@@ -494,11 +501,34 @@ class Field
         return implode(' ', $html);
     }
 
-    protected function formatClass()
+    /**
+     * Set form element class.
+     *
+     * @param string $class
+     *
+     * @return $this
+     */
+    public function setElementClass($class)
     {
-        $name = $this->name ?: $this->formatName($this->column);
+        $this->elementClass = $class;
 
-        return str_replace(['[', ']'], '_', $name);
+        return $this;
+    }
+
+    /**
+     * Get element class.
+     *
+     * @return string
+     */
+    protected function getElementClass()
+    {
+        if (!$this->elementClass) {
+            $name = $this->elementName ?: $this->formatName($this->column);
+
+            $this->elementClass = str_replace(['[', ']'], '_', $name);
+        }
+
+        return $this->elementClass;
     }
 
     /**
@@ -515,7 +545,7 @@ class Field
         $this->variables['column'] = $this->column;
         $this->variables['attributes'] = $this->formatAttributes();
         $this->variables['help'] = $this->help;
-        //$this->variables['class'] = $this->formatClass();
+        $this->variables['class'] = $this->getElementClass();
 
         return $this->variables;
     }
@@ -534,6 +564,11 @@ class Field
         $class = explode('\\', get_called_class());
 
         return 'admin::form.'.strtolower(end($class));
+    }
+
+    public function getScript()
+    {
+        return $this->script;
     }
 
     /**

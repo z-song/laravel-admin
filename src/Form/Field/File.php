@@ -418,12 +418,14 @@ EOT;
 
         $options = json_encode($this->options);
 
+        $class = $this->getElementClass();
+
         $this->script = <<<EOT
 
-$("#{$this->id}").fileinput({$options});
+$(".{$class}").fileinput({$options});
 
-$("#{$this->id}").on('filecleared', function(event) {
-    $("#{$this->id}_action").val(1);
+$(".{$class}").on('filecleared', function(event) {
+    $(".{$class}_action").val(1);
 });
 
 EOT;
@@ -438,7 +440,7 @@ EOT;
      */
     public function isDeleteRequest()
     {
-        $action = Input::get($this->id.'_action');
+        $action = Input::get($this->getElementClass().'_action');
 
         if ($action == static::ACTION_REMOVE) {
             $this->destroy();
