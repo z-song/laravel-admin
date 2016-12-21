@@ -46,12 +46,12 @@ class SwitchField extends Field
 
         $this->script = <<<EOT
 
-$('#{$this->id}_checkbox').bootstrapSwitch({
+$('.{$this->getElementClass()}_checkbox').bootstrapSwitch({
     size:'small',
     onSwitchChange: function(event, state) {
-        $('#{$this->id}').val(state ? 'on' : 'off');
+        $('.{$this->getElementClass()}').val(state ? 'on' : 'off');
     }
-});;
+});
 
 EOT;
 

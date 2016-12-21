@@ -19,7 +19,7 @@ class Select extends Field
     public function render()
     {
         if (empty($this->script)) {
-            $this->script = "$(\"#{$this->id}\").select2({allowClear: true});";
+            $this->script = "$(\".{$this->getElementClass()}\").select2({allowClear: true});";
         }
 
         if (is_callable($this->options)) {
@@ -69,7 +69,7 @@ class Select extends Field
     {
         $script = <<<EOT
 
-$("#{$this->id}").change(function () {
+$(".{$this->getElementClass()}").change(function () {
     $.get("$source?q="+this.value, function (data) {
         $("#$field option").remove();
         $("#$field").select2({data: data});
@@ -100,7 +100,7 @@ EOT;
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
-  $("#{$this->id}").select2({data: data});
+  $(".{$this->getElementClass()}").select2({data: data});
 });
 
 EOT;
@@ -119,7 +119,7 @@ EOT;
     {
         $this->script = <<<EOT
 
-$("#{$this->id}").select2({
+$(".{$this->getElementClass()}").select2({
   ajax: {
     url: "$url",
     dataType: 'json',

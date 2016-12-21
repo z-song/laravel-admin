@@ -15,6 +15,8 @@ class NestedForm
 
     const REMOVE_FLAG_NAME = '_remove';
 
+    const REMOVE_FLAG_CLASS = 'fom-removed';
+
     /**
      * @var \Illuminate\Database\Eloquent\Relations\HasMany|string
      */
@@ -35,6 +37,13 @@ class NestedForm
     protected $scripts = [];
 
     /**
+     * Original data for this field.
+     *
+     * @var array
+     */
+    protected $original = [];
+
+    /**
      * Create a new NestedForm instance.
      *
      * @param $relation
@@ -46,6 +55,30 @@ class NestedForm
         $this->fields = new Collection();
     }
 
+    /**
+     * Set original values for fields.
+     *
+     * @param array $data
+     * @param string $relatedKeyName
+     *
+     * @return $this
+     */
+    public function setOriginal($data, $relatedKeyName)
+    {
+        foreach ($data as $value) {
+            $this->original[$value[$relatedKeyName]] = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Prepare for insert or update.
+     *
+     * @param array $input
+     *
+     * @return mixed
+     */
     public function prepare($input)
     {
         if (array_key_exists(static::UPDATE_KEY_NAME_NEW, $input)) {
@@ -60,39 +93,79 @@ class NestedForm
             $input[static::UPDATE_KEY_NAME_NEW] = $prepared;
         }
 
+        if (array_key_exists(static::UPDATE_KEY_NAME_OLD, $input)) {
+            $old = $input[static::UPDATE_KEY_NAME_OLD];
+
+            $prepared = [];
+
+            foreach ($old as $key => $record) {
+                $this->setFieldOriginalValue($key);
+
+                $prepared[$key] = $this->prepareRecord($record);
+            }
+
+            $input[static::UPDATE_KEY_NAME_OLD] = $prepared;
+        }
+
         return $input;
-
-
     }
 
+    /**
+     * Set original data for each field.
+     *
+     * @return void
+     */
+    protected function setFieldOriginalValue($key)
+    {
+        $values = $this->original[$key];
+
+        $this->fields->each(function (Field $field) use ($values) {
+            $field->setOriginal($values);
+        });
+    }
+
+    /**
+     * @param $record
+     * @return mixed
+     */
     protected function prepareRecord($record)
     {
         if ($record[static::REMOVE_FLAG_NAME] == 1) {
             return $record;
         }
 
+        $prepared = [];
+
         foreach ($this->fields as $field) {
-
-            if (!method_exists($field, 'prepare')) {
-                continue;
-            }
-
             $columns = $field->column();
 
-            $value = $field->prepare($this->fetchColumnValue($record, $columns));
+            $value = $this->fetchColumnValue($record, $columns);
 
-            if (is_array($columns)) {
-                foreach ($columns as $name => $column) {
-                    array_set($record, $column, $value[$name]);
+            if (method_exists($field, 'prepare')) {
+                $value = $field->prepare($value);
+            }
+
+            if ($value != $field->original()) {
+                if (is_array($columns)) {
+                    foreach ($columns as $name => $column) {
+                        array_set($prepared, $column, $value[$name]);
+                    }
+                } elseif (is_string($columns)) {
+                    array_set($prepared, $columns, $value);
                 }
-            } elseif (is_string($columns)) {
-                array_set($record, $columns, $value);
             }
         }
 
-        return $record;
+        return $prepared;
     }
 
+    /**
+     * Fetch value in input data by column name.
+     *
+     * @param array $data
+     * @param string|array $columns
+     * @return array|mixed
+     */
     protected function fetchColumnValue($data, $columns)
     {
         if (is_string($columns)) {
@@ -142,16 +215,6 @@ class NestedForm
     public function getRelationName()
     {
         return $this->relation;
-    }
-
-    /**
-     * Get form script as string.
-     *
-     * @return string
-     */
-    public function getScript()
-    {
-        return implode("\r\n",  $this->scripts);
     }
 
     /**
@@ -208,10 +271,10 @@ class NestedForm
 
             if (is_array($column)) {
                 $name = array_map(function ($col) {
-                    return "{$this->relation}[".static::UPDATE_KEY_NAME_NEW."][$col][]";
+                    return "{$this->relation}[".static::UPDATE_KEY_NAME_NEW."][$col][_counter_]";
                 }, $column);
             } else {
-                $name = "{$this->relation}[".static::UPDATE_KEY_NAME_NEW."][$column][]";
+                $name = "{$this->relation}[".static::UPDATE_KEY_NAME_NEW."][$column][_counter_]";
             }
 
             $field->setElementName($name);
@@ -288,7 +351,19 @@ class NestedForm
 
         $this->relation->find(array_keys($updates))
             ->each(function (Model $model) use ($updates) {
-                $model->update($updates[$model->{$model->getKeyName()}]);
+
+                $update = $updates[$model->{$model->getKeyName()}];
+
+                $update = array_map(function ($item) {
+
+                    if (is_array($item)) {
+                        $item = implode(',', $item);
+                    }
+
+                    return $item;
+                }, $update);
+
+                $model->update($update);
             });
     }
 
@@ -315,6 +390,16 @@ class NestedForm
         })->reject(function ($record) {
 
             return empty(array_filter($record));
+        })->map(function ($record) {
+            $record = array_map(function ($item) {
+                if (is_array($item)) {
+                    $item = implode(',', $item);
+                }
+
+                return $item;
+            }, $record);
+
+            return $record;
         })->pipe(function ($records) {
 
             $this->relation->createMany($records->all());
@@ -362,6 +447,16 @@ class NestedForm
         }
 
         return $html;
+    }
+
+    /**
+     * Get form script as string.
+     *
+     * @return string
+     */
+    public function getFormScript()
+    {
+        return implode("\r\n",  $this->scripts);
     }
 
     /**

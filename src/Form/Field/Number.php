@@ -16,7 +16,7 @@ class Number extends Field
 
         $this->script = <<<EOT
 
-$('#{$this->id}').bootstrapNumber({
+$('.{$this->getElementClass()}').bootstrapNumber({
 	upClass: 'success',
 	downClass: 'primary',
 	center: true

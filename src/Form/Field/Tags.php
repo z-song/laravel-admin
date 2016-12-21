@@ -34,7 +34,7 @@ class Tags extends Field
 
     public function render()
     {
-        $this->script = "$(\"#{$this->id}\").select2({
+        $this->script = "$(\".{$this->getElementClass()}\").select2({
             tags: true,
             tokenSeparators: [',']
         });";

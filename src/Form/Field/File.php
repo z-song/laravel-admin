@@ -247,7 +247,7 @@ class File extends Field
      */
     public function prepare($files)
     {
-        if (is_null($files)) {
+        if (!$files instanceof UploadedFile) {
             if ($this->isDeleteRequest()) {
                 return '';
             }

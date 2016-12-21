@@ -28,7 +28,7 @@ class Currency extends Field
     {
         $this->script = <<<EOT
 
-$('#{$this->id}').inputmask("currency", {radixPoint: '.', prefix:''})
+$('.{$this->getElementClass()}').inputmask("currency", {radixPoint: '.', prefix:''})
 
 EOT;
 

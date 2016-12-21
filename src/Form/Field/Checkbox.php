@@ -37,7 +37,7 @@ class Checkbox extends MultipleSelect
      */
     public function render()
     {
-        $this->script = "$('.{$this->column}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
+        $this->script = "$('.{$this->getElementClass()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
 
         return parent::render();
     }
