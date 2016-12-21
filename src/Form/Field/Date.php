@@ -38,7 +38,7 @@ class Date extends Field
         $this->options['format'] = $this->format;
         $this->options['locale'] = config('app.locale');
 
-        $this->script = "$('#{$this->id}').datetimepicker(".json_encode($this->options).');';
+        $this->script = "$('.{$this->getElementClass()}').datetimepicker(".json_encode($this->options).');';
 
         return parent::render();
     }

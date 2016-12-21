@@ -12,7 +12,7 @@ class Decimal extends Field
 
     public function render()
     {
-        $this->script = "$('#{$this->id}').inputmask('decimal', {
+        $this->script = "$('.{$this->getElementClass()}').inputmask('decimal', {
     rightAlign: true
   });";
 

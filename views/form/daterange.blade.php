@@ -10,14 +10,14 @@
             <div class="col-lg-6">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input type="text" id="{{$id['start']}}" name="{{$name['start']}}" value="{{ old($column['start'], $value['start']) }}" class="form-control" style="width: 150px" {!! $attributes !!} />
+                    <input type="text" name="{{$name['start']}}" value="{{ old($column['start'], $value['start']) }}" class="form-control {{$class['start']}}" style="width: 150px" {!! $attributes !!} />
                 </div>
             </div>
 
             <div class="col-lg-6">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input type="text" id="{{$id['end']}}" name="{{$name['end']}}" value="{{ old($column['end'], $value['end']) }}" class="form-control" style="width: 150px" {!! $attributes !!} />
+                    <input type="text" name="{{$name['end']}}" value="{{ old($column['end'], $value['end']) }}" class="form-control {{$class['end']}}" style="width: 150px" {!! $attributes !!} />
                 </div>
             </div>
         </div>

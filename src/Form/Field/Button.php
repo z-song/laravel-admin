@@ -19,7 +19,7 @@ class Button extends Field
     {
         $this->script = <<<EOT
 
-        $('#{$this->id}').on('$event', function() {
+        $('.{$this->getElementClass()}').on('$event', function() {
             $callback
         });
 

@@ -8,7 +8,7 @@
 
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control"  placeholder="{{ trans('admin::lang.input') }} {{$label}}" style="width: 110px" {!! $attributes !!} />
+            <input type="text" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control {{ $class }}"  placeholder="{{ trans('admin::lang.input') }} {{$label}}" style="width: 110px" {!! $attributes !!} />
         </div>
 
         @include('admin::form.help-block')

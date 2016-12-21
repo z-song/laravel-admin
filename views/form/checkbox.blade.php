@@ -8,7 +8,7 @@
 
         <div class="input-group">
             @foreach($options as $option => $label)
-            <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$id}}" {{ in_array($option, (array)old($column, $value))?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
+            <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ in_array($option, (array)old($column, $value))?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
             @endforeach
         </div>
 

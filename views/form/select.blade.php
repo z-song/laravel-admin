@@ -6,7 +6,7 @@
 
         @include('admin::form.error')
 
-        <select class="form-control " style="width: 100%;" id="{{$id}}" name="{{$name}}" {!! $attributes !!} >
+        <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}" {!! $attributes !!} >
             @foreach($options as $select => $option)
                 <option value="{{$select}}" {{ $select == old($column, $value) ?'selected':'' }}>{{$option}}</option>
             @endforeach

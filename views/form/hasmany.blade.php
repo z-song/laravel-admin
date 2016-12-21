@@ -31,10 +31,10 @@
         @endforeach
     </div>
 
-    <template class="{{$column}}-tpl">
+    <template class="{{$column}}-tpl" data-count="0">
         <div class="has-many-{{$column}}-form">
 
-            {!! $templateHtml !!}
+            {!! $template !!}
 
             <div class="form-group">
                 <label class="col-sm-2 control-label"></label>
