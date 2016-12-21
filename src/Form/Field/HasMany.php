@@ -130,6 +130,7 @@ class HasMany extends Field
         $templateScript = $template->getFormScript();
 
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
         $script = <<<EOT
 
@@ -138,7 +139,7 @@ $('.has-many-{$this->column}').on('click', '.add', function () {
     var tpl = $('template.{$this->column}-tpl');
     var count = tpl.data('count');
 
-    var template = tpl.html().replace(/\[_counter_\]/g, '['+count+']');
+    var template = tpl.html().replace(/\[{$defaultKey}\]/g, '['+count+']');
     $('.has-many-{$this->column}-forms').append(template);
     {$templateScript}
 
