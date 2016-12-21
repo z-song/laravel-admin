@@ -13,7 +13,9 @@ class NestedForm
 
     const UPDATE_KEY_NAME_NEW = 'new';
 
-    const REMOVE_FLAG_NAME = '_remove';
+    const DEFAULT_KEY_NAME = '_key_';
+
+    const REMOVE_FLAG_NAME = '_remove_';
 
     const REMOVE_FLAG_CLASS = 'fom-removed';
 
@@ -81,37 +83,28 @@ class NestedForm
      */
     public function prepare($input)
     {
-        if (array_key_exists(static::UPDATE_KEY_NAME_NEW, $input)) {
-            $new = $input[static::UPDATE_KEY_NAME_NEW];
+        $new = $old = [];
 
-            $prepared = [];
-
-            foreach ($this->formatInputArray($new) as $record) {
-                $prepared[] = $this->prepareRecord($record);
-            }
-
-            $input[static::UPDATE_KEY_NAME_NEW] = $prepared;
+        foreach (array_get($input, static::UPDATE_KEY_NAME_NEW, []) as $record) {
+            $new[] = $this->prepareRecord($record);
         }
 
-        if (array_key_exists(static::UPDATE_KEY_NAME_OLD, $input)) {
-            $old = $input[static::UPDATE_KEY_NAME_OLD];
+        array_set($input, static::UPDATE_KEY_NAME_NEW, $new);
 
-            $prepared = [];
-
-            foreach ($old as $key => $record) {
-                $this->setFieldOriginalValue($key);
-
-                $prepared[$key] = $this->prepareRecord($record);
-            }
-
-            $input[static::UPDATE_KEY_NAME_OLD] = $prepared;
+        foreach (array_get($input, static::UPDATE_KEY_NAME_OLD, []) as $key => $record) {
+            $this->setFieldOriginalValue($key);
+            $old[$key] = $this->prepareRecord($record);
         }
+
+        array_set($input, static::UPDATE_KEY_NAME_OLD, $old);
 
         return $input;
     }
 
     /**
      * Set original data for each field.
+     *
+     * @param string $key
      *
      * @return void
      */
@@ -164,6 +157,7 @@ class NestedForm
      *
      * @param array $data
      * @param string|array $columns
+     * 
      * @return array|mixed
      */
     protected function fetchColumnValue($data, $columns)
@@ -226,9 +220,9 @@ class NestedForm
      */
     public function fill(array $data)
     {
-        $this->fields->each(function (Field $field) use ($data) {
+        foreach ($this->fields() as $field) {
             $field->fill($data);
-        });
+        }
 
         return $this;
     }
@@ -236,27 +230,13 @@ class NestedForm
     /**
      * Set form element name for original records.
      *
-     * @param string $pk
+     * @param string $key
      *
      * @return $this
      */
-    public function setElementNameForOriginal($pk)
+    public function setElementNameForOriginal($key)
     {
-        $this->fields->each(function (Field $field) use ($pk) {
-            $column = $field->column();
-
-            if (is_array($column)) {
-                $name = array_map(function ($col) use ($pk) {
-                    return "{$this->relation}[".static::UPDATE_KEY_NAME_OLD."][$pk][$col]";
-                }, $column);
-            } else {
-                $name = "{$this->relation}[".static::UPDATE_KEY_NAME_OLD."][$pk][$column]";
-            }
-
-            $field->setElementName($name);
-        });
-
-        return $this;
+        return $this->setElementName(static::UPDATE_KEY_NAME_OLD, $key);
     }
 
     /**
@@ -266,21 +246,50 @@ class NestedForm
      */
     public function setElementNameForNew()
     {
-        $this->fields->each(function (Field $field) {
+        return $this->setElementName(static::UPDATE_KEY_NAME_NEW);
+    }
+
+    /**
+     * Set form element name.
+     *
+     * @param string $type
+     * @param null $key
+     *
+     * @return $this
+     */
+    protected function setElementName($type, $key = null)
+    {
+        $this->fields->each(function (Field $field) use ($type, $key) {
             $column = $field->column();
 
             if (is_array($column)) {
-                $name = array_map(function ($col) {
-                    return "{$this->relation}[".static::UPDATE_KEY_NAME_NEW."][$col][_counter_]";
+                $name = array_map(function ($col) use ($type, $key) {
+                    return $this->formatElementName($type, $col, $key);
                 }, $column);
             } else {
-                $name = "{$this->relation}[".static::UPDATE_KEY_NAME_NEW."][$column][_counter_]";
+                $name = $this->formatElementName($type, $column, $key);
             }
 
             $field->setElementName($name);
         });
 
         return $this;
+    }
+
+    /**
+     * Format form element name.
+     *
+     * @param string $type
+     * @param string $column
+     * @param string $key
+     *
+     * @return string
+     */
+    protected function formatElementName($type, $column, $key = null)
+    {
+        $key = $key ?: static::DEFAULT_KEY_NAME;
+
+        return sprintf("%s[%s][%s][%s]", $this->relation, $type, $key, $column);
     }
 
     /**
@@ -391,7 +400,8 @@ class NestedForm
 
             return empty(array_filter($record));
         })->map(function ($record) {
-            $record = array_map(function ($item) {
+
+            return array_map(function ($item) {
                 if (is_array($item)) {
                     $item = implode(',', $item);
                 }
@@ -399,32 +409,10 @@ class NestedForm
                 return $item;
             }, $record);
 
-            return $record;
         })->pipe(function ($records) {
 
             $this->relation->createMany($records->all());
         });
-    }
-
-    /**
-     * Format input data into valid records.
-     *
-     * @param array $input
-     *
-     * @return Collection
-     */
-    protected function formatInputArray($input)
-    {
-        $keys = array_keys($input);
-        $records = new Collection();
-
-        foreach (range(0, count(current($input)) - 1) as $index) {
-            $records->push(
-                array_combine($keys, data_get($input, "*.$index"))
-            );
-        }
-
-        return $records;
     }
 
     /**
