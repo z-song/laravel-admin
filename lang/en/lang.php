@@ -40,6 +40,8 @@ return [
     'delete_confirm'   => 'Are you sure to delete this item ?',
     'delete_succeeded' => 'Delete succeeded !',
     'delete_failed'    => 'Delete failed !',
+    'update_succeeded' => 'Update succeeded !',
+    'save_succeeded'   => 'Save succeeded !',
 
     'choose'        => 'Select',
     'choose_file'   => 'Select file',

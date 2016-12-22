@@ -326,7 +326,12 @@ class Form
             return $response;
         }
 
-        return redirect($this->resource(0));
+        $success = new MessageBag([
+            'title'   => trans('admin::lang.succeeded'),
+            'message' => trans('admin::lang.save_succeeded'),
+        ]);
+
+        return redirect($this->resource(0))->with(compact('success'));
     }
 
     /**
@@ -522,7 +527,12 @@ class Form
             return $response;
         }
 
-        return redirect($this->resource(-1));
+        $success = new MessageBag([
+            'title'   => trans('admin::lang.succeeded'),
+            'message' => trans('admin::lang.update_succeeded'),
+        ]);
+
+        return redirect($this->resource(-1))->with(compact('success'));
     }
 
     /**
