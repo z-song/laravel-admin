@@ -8,6 +8,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Form;
 use Encore\Admin\Form\NestedForm;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class HasMany.
@@ -58,6 +59,50 @@ class HasMany extends Field
     }
 
     /**
+     * Get validator for this field.
+     *
+     * @param array $input
+     *
+     * @return bool|Validator
+     */
+    public function getValidator(array $input)
+    {
+        if (!array_key_exists($this->column, $input)) {
+            return false;
+        }
+
+        $form = $this->buildNestedForm($this->column, $this->builder);
+
+        $rules = [];
+
+        foreach ($form->fields() as $field) {
+            $rules[$field->column()] = $field->getRules();
+        }
+
+        array_forget($rules, NestedForm::REMOVE_FLAG_NAME);
+
+        if (empty($rules)) {
+            return false;
+        }
+
+        $input = array_only($input, $this->column);
+
+        $newRules = [];
+
+        foreach ($rules as $key => $rule) {
+            foreach (array_keys($input[$this->column]) as $type) {
+                $newRules["{$this->column}.$type.*.$key"] = $rule;
+            }
+        }
+
+        foreach (array_keys(array_dot($input)) as $key) {
+            $attributes[$key] = substr($key, strrpos($key, '.') + 1);
+        }
+
+        return Validator::make($input, $newRules, [], $attributes);
+    }
+
+    /**
      * Prepare input data for insert or update.
      *
      * @param array $input
@@ -69,10 +114,6 @@ class HasMany extends Field
         $relatedKeyName = $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
 
         $form = $this->buildNestedForm($this->column, $this->builder);
-
-        if ($validationMessages = $form->validationMessages($input)) {
-            //return back()->withInput()->withErrors($validationMessages);
-        }
 
         return $form->setOriginal($this->original, $relatedKeyName)->prepare($input);
     }
@@ -134,9 +175,10 @@ class HasMany extends Field
                     continue;
                 }
 
-                $form = $this->buildNestedForm($this->column, $this->builder);
-
-                $forms[$key] = $form->fill($data)->setElementNameForOriginal($key);
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
+                    ->fill($data)
+                    ->setElementNameForOriginal($key)
+                    ->setErrorKey($this->column, NestedForm::UPDATE_KEY_NAME_OLD, $key);
             }
         } else {
             foreach ($this->value as $data) {
@@ -169,9 +211,10 @@ class HasMany extends Field
                     continue;
                 }
 
-                $form = $this->buildNestedForm($this->column, $this->builder);
-
-                $forms[$key] = $form->fill($data)->setElementNameForNew($key);
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
+                    ->fill($data)
+                    ->setElementNameForNew($key)
+                    ->setErrorKey($this->column, NestedForm::UPDATE_KEY_NAME_NEW, $key);
             }
         }
 

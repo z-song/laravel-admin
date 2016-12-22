@@ -7,8 +7,8 @@
         @endif
     @endforeach
 @else
-    @if($errors->has($column))
-        @foreach($errors->get($column) as $message)
+    @if($errors->has($errorKey))
+        @foreach($errors->get($errorKey) as $message)
             <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
         @endforeach
     @endif
