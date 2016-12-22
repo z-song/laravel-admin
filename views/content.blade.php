@@ -11,6 +11,8 @@
 
     <section class="content">
 
+        @include('admin::partials.error')
+
         {!! $content !!}
 
     </section>

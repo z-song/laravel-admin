@@ -82,38 +82,6 @@
         $.pjax.submit(event, '#pjax-container')
     });
 
-    $(document).on('pjax:error', function(event, xhr) {
-
-        var message = '';
-
-        try{
-            response = JSON.parse(xhr.responseText);
-            message = response.message || 'error';
-        }catch(e){
-
-            if (xhr.status == 0) {
-                return;
-            }
-
-            noty({
-                text: "<strong>Warning!</strong><br/>"+xhr.statusText,
-                type:'warning',
-                timeout: 5000
-            });
-            return false;
-        }
-
-        if (message) {
-            noty({
-                text: "<strong>Warning!</strong><br/>"+message,
-                type:'warning',
-                timeout: 5000
-            });
-        }
-
-        return false;
-    });
-
     $(document).on("pjax:popstate", function() {
 
         $(document).one("pjax:end", function(event) {
