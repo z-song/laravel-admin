@@ -31,7 +31,7 @@
         @endforeach
     </div>
 
-    <template class="{{$column}}-tpl" data-count="0">
+    <template class="{{$column}}-tpl">
         <div class="has-many-{{$column}}-form">
 
             {!! $template !!}
