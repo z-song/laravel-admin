@@ -18,7 +18,7 @@ class Column implements Buildable
             $this->append($content);
         }
 
-        $this->width = is_array($width)?implode(' ', $width):'col-md-'.$width;
+        $this->width = is_array($width) ? implode(' ', $width) : 'col-md-'.$width;
     }
 
     public function append($content)
