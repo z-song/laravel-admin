@@ -141,6 +141,13 @@ class Field
     protected $help = [];
 
     /**
+     * Key for errors.
+     *
+     * @var mixed
+     */
+    protected $errorKey;
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -330,9 +337,38 @@ class Field
         return $this;
     }
 
+    /**
+     * Get field validation rules.
+     *
+     * @return string
+     */
     protected function getRules()
     {
         return $this->rules;
+    }
+
+    /**
+     * Get key for error message.
+     *
+     * @return string
+     */
+    public function getErrorKey()
+    {
+        return $this->errorKey ?: $this->column;
+    }
+
+    /**
+     * Set key for error message.
+     *
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function setErrorKey($key)
+    {
+        $this->errorKey = $key;
+
+        return $this;
     }
 
     /**
@@ -546,6 +582,7 @@ class Field
         $this->variables['attributes'] = $this->formatAttributes();
         $this->variables['help'] = $this->help;
         $this->variables['class'] = $this->getElementClass();
+        $this->variables['errorKey'] = $this->getErrorKey();
 
         return $this->variables;
     }

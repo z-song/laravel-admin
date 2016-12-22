@@ -186,62 +186,6 @@ class NestedForm
     }
 
     /**
-     * Get validation messages.
-     *
-     * @param array $input
-     *
-     * @return MessageBag|bool
-     */
-    public function validationMessages(array $data)
-    {
-        $new = array_get($data, static::UPDATE_KEY_NAME_NEW, []);
-        $old = array_get($data, static::UPDATE_KEY_NAME_OLD, []);
-
-        $failedValidators = [];
-
-        foreach ($old as $key => $input) {
-            foreach ($this->fields() as $field) {
-                if (!$validator = $field->getValidator($input)) {
-                    continue;
-                }
-
-                if (($validator instanceof Validator) && !$validator->passes()) {
-                    $failedValidators[static::UPDATE_KEY_NAME_OLD][$key][] = $validator;
-                }
-            }
-        }
-
-        $message = $this->mergeValidationMessages($failedValidators, static::UPDATE_KEY_NAME_OLD);
-
-        return $message->any() ? $message : false;
-    }
-
-    /**
-     * Merge validation messages from input validators.
-     *
-     * @param \Illuminate\Validation\Validator[] $validators
-     *
-     * @return MessageBag
-     */
-    protected function mergeValidationMessages($validators, $type)
-    {
-        $messages = [];
-
-        foreach ($validators[$type] as $key => $validatorGroup) {
-
-            $messageBag = new MessageBag();
-
-            foreach ($validatorGroup as $validator) {
-                $messageBag->merge($validator->messages());
-            }
-
-            $messages[$type][$key] = $messageBag;
-        }
-
-        return $messages;
-    }
-
-    /**
      * @param Field $field
      *
      * @return $this
@@ -311,6 +255,24 @@ class NestedForm
     public function setElementNameForNew($key = null)
     {
         return $this->setElementName(static::UPDATE_KEY_NAME_NEW, $key);
+    }
+
+    /**
+     * Set error key for each field in the nested form.
+     *
+     * @param string $parent
+     * @param string $column
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function setErrorKey($parent, $type, $key)
+    {
+        foreach ($this->fields as $field) {
+            $field->setErrorKey("$parent.$type.$key.{$field->column()}");
+        }
+
+        return $this;
     }
 
     /**
