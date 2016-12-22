@@ -4,9 +4,10 @@ namespace Encore\Admin\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpFoundation\Response;
 
 class PjaxMiddleware
 {
@@ -26,10 +27,35 @@ class PjaxMiddleware
             return $response;
         }
 
+        if (!$response->isSuccessful()) {
+            return $this->handleErrorResponse($response);
+        }
+
         $this->filterResponse($response, $request->header('X-PJAX-CONTAINER'))
             ->setUriHeader($response, $request);
 
         return $response;
+    }
+
+    /**
+     * Handle Response with exceptions.
+     *
+     * @param Response $response
+     *
+     * @return $this
+     */
+    protected function handleErrorResponse(Response $response)
+    {
+        $exception = $response->exception;
+
+        $error = new MessageBag([
+            'type'      => get_class($exception),
+            'message'   => $exception->getMessage(),
+            'file'      => $exception->getFile(),
+            'line'      => $exception->getLine(),
+        ]);
+
+        return back()->withInput()->withErrors($error, '_exception_');
     }
 
     /**
@@ -42,17 +68,6 @@ class PjaxMiddleware
      */
     protected function filterResponse(Response $response, $container)
     {
-        if (!$response->isSuccessful()) {
-            $crawler = new Crawler($response->getContent());
-
-            $response->setContent([
-                'status'  => false,
-                'message' => $this->fetchContents($crawler, '.exception_message'),
-            ]);
-
-            return $this;
-        }
-
         $crawler = new Crawler($response->getContent());
 
         $response->setContent(
