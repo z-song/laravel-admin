@@ -95,6 +95,10 @@ class HasMany extends Field
      */
     protected function buildRelatedForms()
     {
+        if (is_null($this->value)) {
+            return [];
+        }
+
         $model = $this->form->model();
 
         $relation = call_user_func([$model, $this->relationName]);
