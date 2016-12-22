@@ -29,6 +29,13 @@ class HasMany extends Field
     protected $builder = null;
 
     /**
+     * Form data.
+     *
+     * @var array
+     */
+    protected $value = [];
+
+    /**
      * Create a new HasMany field instance.
      *
      * @param $relation
@@ -46,8 +53,7 @@ class HasMany extends Field
         }
 
         if (count($arguments) == 2) {
-            $this->label = $arguments[0];
-            $this->builder = $arguments[1];
+            list($this->label, $this->builder)  = $arguments;
         }
     }
 
@@ -63,6 +69,10 @@ class HasMany extends Field
         $relatedKeyName = $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
 
         $form = $this->buildNestedForm($this->column, $this->builder);
+
+        if ($validationMessages = $form->validationMessages($input)) {
+            //return back()->withInput()->withErrors($validationMessages);
+        }
 
         return $form->setOriginal($this->original, $relatedKeyName)->prepare($input);
     }
@@ -87,6 +97,18 @@ class HasMany extends Field
     }
 
     /**
+     * Get form data flashed in session.
+     *
+     * @param string $type
+     *
+     * @return mixed
+     */
+    protected function getDataInFlash($type)
+    {
+        return old($this->column.'.'.$type);
+    }
+
+    /**
      * build Nested form for related data.
      *
      * @return array
@@ -95,10 +117,6 @@ class HasMany extends Field
      */
     protected function buildRelatedForms()
     {
-        if (is_null($this->value)) {
-            return [];
-        }
-
         $model = $this->form->model();
 
         $relation = call_user_func([$model, $this->relationName]);
@@ -109,12 +127,52 @@ class HasMany extends Field
 
         $forms = [];
 
-        foreach ($this->value as $data) {
-            $form = $this->buildNestedForm($this->column, $this->builder);
+        if ($old = $this->getDataInFlash(NestedForm::UPDATE_KEY_NAME_OLD)) {
 
-            $key = array_get($data, $relation->getRelated()->getKeyName());
+            foreach ($old as $key => $data) {
+                if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
+                    continue;
+                }
 
-            $forms[$key] = $form->fill($data)->setElementNameForOriginal($key);
+                $form = $this->buildNestedForm($this->column, $this->builder);
+
+                $forms[$key] = $form->fill($data)->setElementNameForOriginal($key);
+            }
+        } else {
+            foreach ($this->value as $data) {
+                $form = $this->buildNestedForm($this->column, $this->builder);
+
+                $key = array_get($data, $relation->getRelated()->getKeyName());
+
+                $forms[$key] = $form->fill($data)->setElementNameForOriginal($key);
+            }
+        }
+
+        $forms = $this->appendFromSession($forms);
+
+        return $forms;
+    }
+
+    /**
+     * Build a nested form use data flashed to session, then append to forms.
+     *
+     * @param array $forms
+     *
+     * @return array
+     */
+    protected function appendFromSession($forms)
+    {
+        if ($new = $this->getDataInFlash(NestedForm::UPDATE_KEY_NAME_NEW)) {
+            foreach ($new as $key => $data) {
+
+                if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
+                    continue;
+                }
+
+                $form = $this->buildNestedForm($this->column, $this->builder);
+
+                $forms[$key] = $form->fill($data)->setElementNameForNew($key);
+            }
         }
 
         return $forms;
@@ -141,13 +199,12 @@ class HasMany extends Field
 $('.has-many-{$this->column}').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
-    var count = tpl.data('count');
+
+    var count = $('.has-many-{$this->column}-forms .has-many-{$this->column}-form').size() + 1;
 
     var template = tpl.html().replace(/\[{$defaultKey}\]/g, '['+count+']');
     $('.has-many-{$this->column}-forms').append(template);
     {$templateScript}
-
-    tpl.data('count', count+1);
 });
 
 $('.has-many-{$this->column}-forms').on('click', '.remove', function () {

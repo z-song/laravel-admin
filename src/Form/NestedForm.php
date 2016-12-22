@@ -4,8 +4,10 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\MessageBag;
 
 class NestedForm
 {
@@ -118,8 +120,12 @@ class NestedForm
     }
 
     /**
-     * @param $record
-     * @return mixed
+     *
+     * Do prepare work before store and update.
+     *
+     * @param array $record
+     *
+     * @return array
      */
     protected function prepareRecord($record)
     {
@@ -177,6 +183,62 @@ class NestedForm
 
             return $value;
         }
+    }
+
+    /**
+     * Get validation messages.
+     *
+     * @param array $input
+     *
+     * @return MessageBag|bool
+     */
+    public function validationMessages(array $data)
+    {
+        $new = array_get($data, static::UPDATE_KEY_NAME_NEW, []);
+        $old = array_get($data, static::UPDATE_KEY_NAME_OLD, []);
+
+        $failedValidators = [];
+
+        foreach ($old as $key => $input) {
+            foreach ($this->fields() as $field) {
+                if (!$validator = $field->getValidator($input)) {
+                    continue;
+                }
+
+                if (($validator instanceof Validator) && !$validator->passes()) {
+                    $failedValidators[static::UPDATE_KEY_NAME_OLD][$key][] = $validator;
+                }
+            }
+        }
+
+        $message = $this->mergeValidationMessages($failedValidators, static::UPDATE_KEY_NAME_OLD);
+
+        return $message->any() ? $message : false;
+    }
+
+    /**
+     * Merge validation messages from input validators.
+     *
+     * @param \Illuminate\Validation\Validator[] $validators
+     *
+     * @return MessageBag
+     */
+    protected function mergeValidationMessages($validators, $type)
+    {
+        $messages = [];
+
+        foreach ($validators[$type] as $key => $validatorGroup) {
+
+            $messageBag = new MessageBag();
+
+            foreach ($validatorGroup as $validator) {
+                $messageBag->merge($validator->messages());
+            }
+
+            $messages[$type][$key] = $messageBag;
+        }
+
+        return $messages;
     }
 
     /**
@@ -242,11 +304,13 @@ class NestedForm
     /**
      * Set form element name for added form elements.
      *
+     * @param null $key
+     *
      * @return $this
      */
-    public function setElementNameForNew()
+    public function setElementNameForNew($key = null)
     {
-        return $this->setElementName(static::UPDATE_KEY_NAME_NEW);
+        return $this->setElementName(static::UPDATE_KEY_NAME_NEW, $key);
     }
 
     /**
@@ -287,7 +351,7 @@ class NestedForm
      */
     protected function formatElementName($type, $column, $key = null)
     {
-        $key = $key ?: static::DEFAULT_KEY_NAME;
+        $key = is_null($key) ? static::DEFAULT_KEY_NAME : $key;
 
         return sprintf("%s[%s][%s][%s]", $this->relation, $type, $key, $column);
     }
@@ -371,6 +435,8 @@ class NestedForm
 
                     return $item;
                 }, $update);
+
+                array_forget($update, static::REMOVE_FLAG_NAME);
 
                 $model->update($update);
             });

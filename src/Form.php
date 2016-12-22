@@ -682,11 +682,11 @@ class Form
      */
     protected function prepareInsert($inserts)
     {
-        $first = current($inserts);
-
-        if (is_array($first) && Arr::isAssoc($first)) {
-            $inserts = array_dot($inserts);
-        }
+//        $first = current($inserts);
+//
+//        if (is_array($first) && Arr::isAssoc($first)) {
+//            $inserts = array_dot($inserts);
+//        }
 
         foreach ($inserts as $column => $value) {
             if (is_null($field = $this->getFieldByColumn($column))) {
