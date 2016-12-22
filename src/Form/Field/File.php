@@ -247,7 +247,7 @@ class File extends Field
      */
     public function prepare($files)
     {
-        if (!$files instanceof UploadedFile) {
+        if (!$files instanceof UploadedFile && !is_array($files)) {
             if ($this->isDeleteRequest()) {
                 return '';
             }
@@ -422,9 +422,9 @@ EOT;
 
         $this->script = <<<EOT
 
-$(".{$class}").fileinput({$options});
+$("input.{$class}").fileinput({$options});
 
-$(".{$class}").on('filecleared', function(event) {
+$("input.{$class}").on('filecleared', function(event) {
     $(".{$class}_action").val(1);
 });
 
