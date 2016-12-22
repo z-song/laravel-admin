@@ -18,7 +18,7 @@ class Column implements Buildable
             $this->append($content);
         }
 
-        $this->width = $width;
+        $this->width = is_array($width)?implode(' ', $width):'col-md-'.$width;
     }
 
     public function append($content)
@@ -43,11 +43,11 @@ class Column implements Buildable
 
     protected function startColumn()
     {
-        echo "<div class=\"col-md-{$this->width}\">";
+        echo "<section class=\"{$this->width}\">";
     }
 
     protected function endColumn()
     {
-        echo '</div>';
+        echo '</section>';
     }
 }
