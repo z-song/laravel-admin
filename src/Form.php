@@ -459,6 +459,13 @@ class Form
 
                     $relation->save($related);
                     break;
+                case \Illuminate\Database\Eloquent\Relations\HasMany::class:
+
+                    $nestedForm = new NestedForm($relation);
+
+                    $nestedForm->update($values[$name]);
+
+                    break;
             }
         }
     }
