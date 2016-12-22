@@ -30,7 +30,7 @@ class Action
      */
     protected $defaultActionViews = [
         self::EDIT   => '<a href="/{path}/{id}/edit"><i class="fa fa-edit"></i></a> ',
-        self::DELETE => '<a href="javascript:void(0);" data-id="{id}" class="_delete"><i class="fa fa-trash"></i></a> ',
+        self::DELETE => '<a href="javascript:void(0);" data-id="{id}" data-path="{path}" class="_delete"><i class="fa fa-trash"></i></a> ',
     ];
 
     /**
@@ -94,8 +94,9 @@ class Action
 
 $('._delete').click(function() {
     var id = $(this).data('id');
+    var path = $(this).data('path');
     if(confirm("{$confirm}")) {
-        $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+        $.post('/'+ path +'/' + id, {_method:'delete','_token':'{$token}'}, function(data){
 
             if (typeof data === 'object') {
                 if (data.status) {
