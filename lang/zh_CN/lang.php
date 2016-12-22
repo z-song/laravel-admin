@@ -40,6 +40,8 @@ return [
     'delete_confirm'   => '确认删除?',
     'delete_succeeded' => '删除成功 !',
     'delete_failed'    => '删除失败 !',
+    'update_succeeded' => '更新成功 !',
+    'save_succeeded'   => '保存成功 !',
 
     'choose'        => '选择',
     'choose_file'   => '选择文件',
