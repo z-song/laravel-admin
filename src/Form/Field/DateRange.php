@@ -17,6 +17,13 @@ class DateRange extends Field
 
     protected $format = 'YYYY-MM-DD';
 
+    /**
+     * Column name.
+     *
+     * @var string
+     */
+    protected $column = [];
+
     public function __construct($column, $arguments)
     {
         $this->column['start'] = $column;
