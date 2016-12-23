@@ -10,7 +10,7 @@
             <div class="input-group-addon">
                 <i class="fa fa-eye-slash"></i>
             </div>
-            <input type="password" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" placeholder="{{ trans('admin::lang.input') }} {{$label}}" {!! $attributes !!} />
+            <input type="password" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control" placeholder="{{ $placeholder }}" {!! $attributes !!} />
         </div>
 
         @include('admin::form.help-block')
