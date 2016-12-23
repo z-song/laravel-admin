@@ -269,7 +269,20 @@ class NestedForm
     public function setErrorKey($parent, $type, $key)
     {
         foreach ($this->fields as $field) {
-            $field->setErrorKey("$parent.$type.$key.{$field->column()}");
+
+            $column = $field->column();
+
+            $errorKey = '';
+
+            if (is_array($column)) {
+                foreach ($column as $k => $name) {
+                    $errorKey[$k] = "$parent.$type.$key.$name";
+                }
+            } else {
+                $errorKey = "$parent.$type.$key.{$field->column()}";
+            }
+
+            $field->setErrorKey($errorKey);
         }
 
         return $this;
