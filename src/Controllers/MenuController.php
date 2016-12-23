@@ -28,7 +28,11 @@ class MenuController extends Controller
             $content->description(trans('admin::lang.list'));
 
             $content->row(function (Row $row) {
-                $row->column(5, function (Column $column) {
+                $menu = new Menu(new MenuModel());
+
+                $row->column(6, $menu);
+
+                $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
                     $form->action(admin_url('auth/menu'));
 
@@ -41,10 +45,6 @@ class MenuController extends Controller
 
                     $column->append((new Box(trans('admin::lang.new'), $form))->style('success'));
                 });
-
-                $menu = new Menu(new MenuModel());
-
-                $row->column(7, $menu);
             });
 
             Admin::script($this->script());
