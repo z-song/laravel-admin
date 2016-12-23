@@ -159,7 +159,9 @@ class Grid
     protected $orderable = false;
 
     /**
-     * @var Exporter
+     * Export driver.
+     *
+     * @var string
      */
     protected $exporter;
 
@@ -381,6 +383,16 @@ class Grid
     }
 
     /**
+     * Get filter of Grid.
+     *
+     * @return Filter
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
      * Build the grid rows.
      *
      * @param array $data
@@ -436,11 +448,28 @@ class Grid
      */
     protected function setupExporter()
     {
-        if (Input::has('_export')) {
-            $exporter = new Exporter($this);
+        if (Input::has(Exporter::$queryName)) {
 
-            $exporter->export();
+            $this->model()->usePaginate(false);
+
+            call_user_func($this->builder, $this);
+
+            (new Exporter($this))->resolve($this->exporter)->export();
         }
+    }
+
+    /**
+     * Set exporter driver for Grid to export.
+     *
+     * @param $exporter
+     *
+     * @return $this
+     */
+    public function exporter($exporter)
+    {
+        $this->exporter = $exporter;
+
+        return $this;
     }
 
     /**
@@ -450,10 +479,9 @@ class Grid
      */
     public function exportUrl()
     {
-        $query = $query = Input::all();
-        $query['_export'] = true;
+        Input::merge([Exporter::$queryName => true]);
 
-        return $this->resource().'?'.http_build_query($query);
+        return $this->resource().'?'.http_build_query(Input::all());
     }
 
     /**
@@ -605,7 +633,7 @@ class Grid
      *
      * @return $this
      *
-     * @throw \Exception
+     * @throws \Exception
      */
     public function orderable()
     {
