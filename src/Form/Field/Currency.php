@@ -21,14 +21,14 @@ class Currency extends Field
 
     public function prepare($value)
     {
-        return (float) str_replace(',', '', $value);
+        return (float) $value;
     }
 
     public function render()
     {
         $this->script = <<<EOT
 
-$('.{$this->getElementClass()}').inputmask("currency", {radixPoint: '.', prefix:''})
+$('.{$this->getElementClass()}').inputmask("currency", {radixPoint: '.', prefix:'', removeMaskOnSubmit: true})
 
 EOT;
 
