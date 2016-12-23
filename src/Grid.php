@@ -290,18 +290,6 @@ class Grid
     }
 
     /**
-     * Add a blank column.
-     *
-     * @param $label
-     *
-     * @return Column
-     */
-    public function blank($label)
-    {
-        return $this->addColumn('blank', $label);
-    }
-
-    /**
      * Get Grid model.
      *
      * @return Model
@@ -658,7 +646,7 @@ class Grid
     /**
      * Set the grid filter.
      *
-     * @param callable $callback
+     * @param Closure $callback
      */
     public function filter(Closure $callback)
     {
