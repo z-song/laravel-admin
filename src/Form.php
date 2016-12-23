@@ -115,11 +115,6 @@ class Form
     protected $inputs = [];
 
     /**
-     * @var callable
-     */
-    protected $callable;
-
-    /**
      * Allow delete item in form page.
      *
      * @var bool
@@ -157,17 +152,7 @@ class Form
 
         $this->builder = new Builder($this);
 
-        $this->callable = $callback;
-
         $callback($this);
-    }
-
-    /**
-     * Set up the form.
-     */
-    protected function setUp()
-    {
-        call_user_func($this->callable, $this);
     }
 
     /**
