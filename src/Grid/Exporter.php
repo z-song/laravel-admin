@@ -4,7 +4,6 @@ namespace Encore\Admin\Grid;
 
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Exporters\CsvExporter;
-use Illuminate\Support\Arr;
 
 class Exporter
 {

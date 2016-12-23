@@ -30,17 +30,17 @@ abstract class AbstractDisplayer
     /**
      * Create a new displayer instance.
      *
-     * @param mixed     $value
+     * @param mixed $value
      * @param Grid      grid
      * @param Column    $column
      * @param \stdClass $row
      */
     public function __construct($value, Grid $grid, Column $column, \stdClass $row)
     {
-        $this->value    = $value;
-        $this->grid     = $grid;
-        $this->column   = $column;
-        $this->row      = $row;
+        $this->value = $value;
+        $this->grid = $grid;
+        $this->column = $column;
+        $this->row = $row;
     }
 
     protected function getKey()

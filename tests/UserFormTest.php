@@ -41,10 +41,10 @@ class UserFormTest extends TestCase
     public function testSubmitForm()
     {
         $data = [
-            'username' => 'John Doe',
-            'email'    => 'hello@world.com',
-            'mobile'   => '13421234123',
-            'password' => '123456',
+            'username'              => 'John Doe',
+            'email'                 => 'hello@world.com',
+            'mobile'                => '13421234123',
+            'password'              => '123456',
             'password_confirmation' => '123456',
             //"avatar"   => "test.jpg",
             'profile'  => [

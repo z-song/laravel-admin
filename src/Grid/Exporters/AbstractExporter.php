@@ -44,5 +44,5 @@ abstract class AbstractExporter implements ExporterInterface
     /**
      * {@inheritdoc}
      */
-    public abstract function export();
+    abstract public function export();
 }
