@@ -835,6 +835,7 @@ class Grid
         $map = [
             'editable'      => \Encore\Admin\Grid\Displayers\Editable::class,
             'switch'        => \Encore\Admin\Grid\Displayers\SwitchDisplay::class,
+            'switchGroup'   => \Encore\Admin\Grid\Displayers\SwitchGroup::class,
             'select'        => \Encore\Admin\Grid\Displayers\Select::class,
             'image'         => \Encore\Admin\Grid\Displayers\Image::class,
             'label'         => \Encore\Admin\Grid\Displayers\Label::class,
