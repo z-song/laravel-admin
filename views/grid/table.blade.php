@@ -30,20 +30,22 @@
     <!-- /.box-header -->
     <div class="box-body table-responsive no-padding">
         <table class="table table-hover">
-            <tr>
-                <th><input type="checkbox" class="grid-select-all" /></th>
-                @foreach($grid->columns() as $column)
-                <th>{{$column->getLabel()}}{!! $column->sorter() !!}</th>
-                @endforeach
+            <thead>
+                <tr>
+                    <th><input type="checkbox" class="grid-select-all" /></th>
+                    @foreach($grid->columns() as $column)
+                    <th>{{$column->getLabel()}}{!! $column->sorter() !!}</th>
+                    @endforeach
 
-                @if($grid->isOrderable())
-                    <th>{{ trans('admin::lang.order') }}</th>
-                @endif
+                    @if($grid->isOrderable())
+                        <th>{{ trans('admin::lang.order') }}</th>
+                    @endif
 
-                @if($grid->allowActions())
-                    <th>{{ trans('admin::lang.action') }}</th>
-                @endif
-            </tr>
+                    @if($grid->allowActions())
+                        <th>{{ trans('admin::lang.action') }}</th>
+                    @endif
+                </tr>
+            </thead>
 
             @foreach($grid->rows() as $row)
             <tr {!! $row->getHtmlAttributes() !!}>
