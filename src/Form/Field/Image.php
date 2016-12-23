@@ -101,9 +101,9 @@ class Image extends File
      * @param string $method
      * @param array  $arguments
      *
-     * @return $this
-     *
      * @throws \Exception
+     *
+     * @return $this
      */
     public function __call($method, $arguments)
     {

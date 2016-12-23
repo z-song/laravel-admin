@@ -12,8 +12,7 @@ class Image extends AbstractDisplayer
             $this->value = $this->value->toArray();
         }
 
-        return collect((array)$this->value)->filter()->map(function ($path) use ($server, $width, $height) {
-
+        return collect((array) $this->value)->filter()->map(function ($path) use ($server, $width, $height) {
             if (url()->isValidUrl($path)) {
                 $src = $path;
             } else {

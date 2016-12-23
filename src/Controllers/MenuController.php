@@ -29,7 +29,6 @@ class MenuController extends Controller
 
             $content->row(function (Row $row) {
                 $row->column(5, function (Column $column) {
-
                     $form = new \Encore\Admin\Widgets\Form();
                     $form->action(admin_url('auth/menu'));
 
