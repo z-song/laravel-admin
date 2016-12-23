@@ -59,6 +59,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Decimal        decimal($column, $label = '')
  * @method Field\Html           html($html)
  * @method Field\Tags           tags($column, $label = '')
+ * @method Field\Icon           icon($column, $label = '')
  */
 class Form
 {
@@ -1005,6 +1006,7 @@ class Form
             'year'              => \Encore\Admin\Form\Field\Year::class,
             'html'              => \Encore\Admin\Form\Field\Html::class,
             'tags'              => \Encore\Admin\Form\Field\Tags::class,
+            'icon'              => \Encore\Admin\Form\Field\Icon::class,
         ];
 
         foreach ($map as $abstract => $class) {
