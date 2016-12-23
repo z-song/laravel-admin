@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Exporters\CsvExporter;
 use Illuminate\Support\Arr;
 
 class Exporter
@@ -13,6 +14,22 @@ class Exporter
     protected $grid;
 
     /**
+     * Available exporter drivers.
+     *
+     * @var array
+     */
+    protected static $drivers = [];
+
+    /**
+     * Export query name.
+     *
+     * @var string
+     */
+    public static $queryName = '_export_';
+
+    /**
+     * Create a new Exporter instance.
+     *
      * @param Grid $grid
      */
     public function __construct(Grid $grid)
@@ -23,53 +40,61 @@ class Exporter
     }
 
     /**
-     * Export csv file.
+     * Set export query name.
      *
-     * @return mixed
+     * @param $name
      */
-    public function export()
+    public static function setQueryName($name)
     {
-        $titles = [];
-
-        $filename = $this->grid->model()->eloquent()->getTable().'.csv';
-
-        $data = $this->grid->processFilter();
-
-        if (!empty($data)) {
-            $columns = array_dot($this->sanitize($data[0]));
-
-            $titles = array_keys($columns);
-        }
-
-        $output = implode(',', $titles)."\n";
-
-        foreach ($data as $row) {
-            $row = array_only($row, $titles);
-            $output .= implode(',', array_dot($row))."\n";
-        }
-
-        $headers = [
-            'Content-Encoding'    => 'UTF-8',
-            'Content-Type'        => 'text/csv;charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"$filename\"",
-        ];
-
-        response(rtrim($output, "\n"), 200, $headers)->send();
-
-        exit;
+        static::$queryName = $name;
     }
 
     /**
-     * Remove indexed array.
+     * Extends new exporter driver.
      *
-     * @param array $row
-     *
-     * @return array
+     * @param $driver
+     * @param $extend
      */
-    protected function sanitize(array $row)
+    public static function extend($driver, $extend)
     {
-        return collect($row)->reject(function ($val, $_) {
-            return is_array($val) && !Arr::isAssoc($val);
-        })->toArray();
+        static::$drivers[$driver] = $extend;
+    }
+
+    /**
+     * Resolve export driver.
+     *
+     * @param string $driver
+     *
+     * @return CsvExporter
+     */
+    public function resolve($driver)
+    {
+        return $this->getExporter($driver);
+    }
+
+    /**
+     * Get export driver.
+     *
+     * @param string $driver
+     *
+     * @return CsvExporter
+     */
+    protected function getExporter($driver)
+    {
+        if (!array_key_exists($driver, static::$drivers)) {
+            return $this->getDefaultExporter();
+        }
+
+        return new static::$drivers[$driver]($this->grid);
+    }
+
+    /**
+     * Get default exporter.
+     *
+     * @return CsvExporter
+     */
+    public function getDefaultExporter()
+    {
+        return new CsvExporter($this->grid);
     }
 }
