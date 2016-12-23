@@ -69,6 +69,10 @@ class NestedForm
      */
     public function setOriginal($data, $relatedKeyName)
     {
+        if (empty($data)) {
+            return $this;
+        }
+
         foreach ($data as $value) {
             $this->original[$value[$relatedKeyName]] = $value;
         }
