@@ -476,9 +476,11 @@ class Grid
      */
     public function exportUrl()
     {
-        Input::merge([Exporter::$queryName => true]);
+        $input = Input::all();
 
-        return $this->resource().'?'.http_build_query(Input::all());
+        $input = array_merge($input, [Exporter::$queryName => true]);
+
+        return $this->resource().'?'.http_build_query($input);
     }
 
     /**

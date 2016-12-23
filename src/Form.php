@@ -143,6 +143,8 @@ class Form
     protected static $collectedAssets = [];
 
     /**
+     * Create a new form instance.
+     *
      * @param \$model
      * @param \Closure $callback
      */
@@ -667,9 +669,7 @@ class Form
      */
     protected function prepareInsert($inserts)
     {
-        $first = current($inserts);
-
-        if (is_array($first) && Arr::isAssoc($first)) {
+        if ($this->isHasOneRelation($inserts)) {
             $inserts = array_dot($inserts);
         }
 
@@ -691,6 +691,28 @@ class Form
         }
 
         return $prepared;
+    }
+
+    /**
+     * Is input data is has-one relation.
+     *
+     * @param array $inserts
+     *
+     * @return bool
+     */
+    protected function isHasOneRelation($inserts)
+    {
+        $first = current($inserts);
+
+        if (!is_array($first)) {
+            return false;
+        }
+
+        if (is_array(current($first))) {
+            return false;
+        }
+
+        return Arr::isAssoc($first);
     }
 
     /**
