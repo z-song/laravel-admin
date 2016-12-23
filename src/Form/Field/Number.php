@@ -12,7 +12,7 @@ class Number extends Field
 
     public function render()
     {
-        $this->default(0);
+        $this->default((int)$this->default);
 
         $this->script = <<<EOT
 
