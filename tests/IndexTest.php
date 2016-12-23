@@ -35,7 +35,7 @@ class IndexTest extends TestCase
             ->see('Table')
             ->see('Email')
             ->see('Last Login')
-            ->see('Copyright')
+            ->see('Powered by')
             ->see('Version');
     }
 
