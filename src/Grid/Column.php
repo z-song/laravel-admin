@@ -177,7 +177,7 @@ class Column
      */
     public function setRelation($relation, $relationColumn = null)
     {
-        $this->relation       = $relation;
+        $this->relation = $relation;
         $this->relationColumn = $relationColumn;
 
         return $this;
@@ -392,7 +392,6 @@ class Column
     protected function callSupportDisplayer($abstract, $arguments)
     {
         return $this->display(function ($value) use ($abstract, $arguments) {
-
             if (is_array($value) || $value instanceof Arrayable) {
                 return call_user_func_array([collect($value), $abstract], $arguments);
             }
@@ -422,7 +421,6 @@ class Column
         }
 
         if (class_exists($abstract) && is_subclass_of($abstract, AbstractDisplayer::class)) {
-
             $grid = $this->grid;
             $column = $this;
 
@@ -448,7 +446,7 @@ class Column
      */
     public function __call($method, $arguments)
     {
-        if ($this->isRelation() && ! $this->relationColumn) {
+        if ($this->isRelation() && !$this->relationColumn) {
             $this->name = "{$this->relation}.$method";
             $this->label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 

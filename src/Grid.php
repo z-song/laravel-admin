@@ -434,7 +434,6 @@ class Grid
     protected function setupExporter()
     {
         if (Input::has(Exporter::$queryName)) {
-
             $this->model()->usePaginate(false);
 
             call_user_func($this->builder, $this);
@@ -618,9 +617,9 @@ class Grid
     /**
      * Set grid as orderable.
      *
-     * @return $this
-     *
      * @throws \Exception
+     *
+     * @return $this
      */
     public function orderable()
     {

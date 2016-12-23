@@ -12,10 +12,8 @@ class Badge extends AbstractDisplayer
             $this->value = $this->value->toArray();
         }
 
-        return collect((array)$this->value)->map(function ($name) use ($style) {
-
+        return collect((array) $this->value)->map(function ($name) use ($style) {
             return "<span class='badge bg-{$style}'>$name</span>";
-
         })->implode('&nbsp;');
     }
 }

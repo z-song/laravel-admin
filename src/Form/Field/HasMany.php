@@ -3,9 +3,8 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Form\Field;
-use Encore\Admin\Grid;
 use Encore\Admin\Form;
+use Encore\Admin\Form\Field;
 use Encore\Admin\Form\NestedForm;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 use Illuminate\Support\Facades\Validator;
@@ -55,7 +54,7 @@ class HasMany extends Field
         }
 
         if (count($arguments) == 2) {
-            list($this->label, $this->builder)  = $arguments;
+            list($this->label, $this->builder) = $arguments;
         }
     }
 
@@ -121,7 +120,7 @@ class HasMany extends Field
     /**
      * Format validation attributes.
      *
-     * @param array $input
+     * @param array  $input
      * @param string $label
      * @param string $column
      *
@@ -138,13 +137,10 @@ class HasMany extends Field
         }
 
         foreach (array_keys(array_dot($input)) as $key) {
-
             if (is_string($column)) {
-
                 if (Str::endsWith($key, ".$column")) {
                     $attributes[$key] = $label;
                 }
-
             } else {
                 foreach ($new as $k => $val) {
                     if (Str::endsWith($key, ".$k")) {
@@ -235,9 +231,9 @@ class HasMany extends Field
     /**
      * build Nested form for related data.
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     protected function buildRelatedForms()
     {
@@ -264,7 +260,6 @@ class HasMany extends Field
             }
         } else {
             foreach ($this->value as $data) {
-
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
@@ -289,7 +284,6 @@ class HasMany extends Field
     {
         if ($new = $this->getDataInFlash(NestedForm::UPDATE_KEY_NAME_NEW)) {
             foreach ($new as $key => $data) {
-
                 if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
                     continue;
                 }
@@ -348,9 +342,9 @@ EOT;
     /**
      * Render the `HasMany` field.
      *
-     * @return $this
-     *
      * @throws \Exception
+     *
+     * @return $this
      */
     public function render()
     {

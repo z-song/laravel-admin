@@ -21,6 +21,7 @@ class Icon extends Field
 $('.{$this->getElementClass()}').iconpicker();
 
 EOT;
+
         return parent::render();
     }
 }
