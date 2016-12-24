@@ -71,8 +71,8 @@ class Select extends Field
 
 $(".{$this->getElementClass()}").change(function () {
     $.get("$source?q="+this.value, function (data) {
-        $("#$field option").remove();
-        $("#$field").select2({data: data});
+        $(".$field option").remove();
+        $(".$field").select2({data: data});
     });
 });
 EOT;
