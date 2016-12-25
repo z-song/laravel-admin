@@ -88,8 +88,11 @@ class Action
      */
     protected function setUpScript()
     {
-        $confirm = trans('admin::lang.delete_confirm');
         $token = csrf_token();
+        $confirm = trans('admin::lang.delete_confirm');
+        $deleteSucceeded = trans('admin::lang.delete_succeeded');
+        $deleteFailed = trans('admin::lang.delete_failed');
+
         $script = <<<SCRIPT
 
 $('._delete').click(function() {
@@ -97,23 +100,15 @@ $('._delete').click(function() {
     if(confirm("{$confirm}")) {
         $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
 
+            $.pjax.reload('#pjax-container');
+
             if (typeof data === 'object') {
                 if (data.status) {
-                    noty({
-                        text: "<strong>Succeeded!</strong><br/>"+data.message,
-                        type:'success',
-                        timeout: 3000
-                    });
+                    toastr.success('{$deleteSucceeded}');
                 } else {
-                    noty({
-                        text: "<strong>Failed!</strong><br/>"+data.message,
-                        type:'error',
-                        timeout: 3000
-                    });
+                    toastr.error('{$deleteFailed}');
                 }
             }
-
-            $.pjax.reload('#pjax-container');
         });
     }
 });

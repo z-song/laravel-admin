@@ -42,6 +42,7 @@ return [
     'delete_failed'    => '删除失败 !',
     'update_succeeded' => '更新成功 !',
     'save_succeeded'   => '保存成功 !',
+    'refresh_succeeded'=> '刷新成功 !',
 
     'choose'        => '选择',
     'choose_file'   => '选择文件',

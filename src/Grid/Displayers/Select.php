@@ -29,7 +29,7 @@ $('.$class').select2().on('change', function(){
             _method: 'PUT'
         },
         success: function (data) {
-            console.log(data);
+            toastr.success(data.message);
         }
     });
 });

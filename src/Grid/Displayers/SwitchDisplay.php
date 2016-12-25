@@ -51,7 +51,7 @@ $('.$class').bootstrapSwitch({
                 _method: 'PUT'
             },
             success: function (data) {
-                console.log(data);
+                toastr.success(data.message);
             }
         });
     }
