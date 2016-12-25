@@ -31,7 +31,7 @@ abstract class AbstractDisplayer
      * Create a new displayer instance.
      *
      * @param mixed $value
-     * @param Grid      grid
+     * @param Grid      $grid
      * @param Column    $column
      * @param \stdClass $row
      */
@@ -43,9 +43,36 @@ abstract class AbstractDisplayer
         $this->row = $row;
     }
 
+    /**
+     * Get key of current row.
+     *
+     * @return mixed
+     */
     protected function getKey()
     {
         return $this->row->{$this->grid->getKeyName()};
+    }
+
+    /**
+     * Get url path of current resource.
+     *
+     * @return string
+     */
+    public function getResource()
+    {
+        return $this->grid->resource();
+    }
+
+    /**
+     * Get translation.
+     *
+     * @param string $text
+     *
+     * @return string|\Symfony\Component\Translation\TranslatorInterface
+     */
+    protected function trans($text)
+    {
+        return trans("admin::lang.$text");
     }
 
     /**
