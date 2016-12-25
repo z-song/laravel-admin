@@ -310,7 +310,7 @@ class Form
             return $result;
         }
 
-        if ($response = $this->ajaxResponse()) {
+        if ($response = $this->ajaxResponse(trans('admin::lang.save_succeeded'))) {
             return $response;
         }
 
@@ -325,9 +325,11 @@ class Form
     /**
      * Get ajax response.
      *
+     * @param string $message
+     *
      * @return bool|\Illuminate\Http\JsonResponse
      */
-    protected function ajaxResponse()
+    protected function ajaxResponse($message)
     {
         $request = Request::capture();
 
@@ -335,7 +337,7 @@ class Form
         if ($request->ajax() && !$request->pjax()) {
             return response()->json([
                 'status'  => true,
-                'message' => trans('admin::lang.succeeded'),
+                'message' => $message,
             ]);
         }
 
@@ -477,7 +479,10 @@ class Form
         $data = $this->handleEditable($data);
 
         if ($this->handleOrderable($id, $data)) {
-            return response(['status' => true, 'message' => trans('admin::lang.succeeded')]);
+            return response([
+                'status' => true,
+                'message' => trans('admin::lang.update_succeeded')
+            ]);
         }
 
         // Handle validation errors.
@@ -511,7 +516,7 @@ class Form
             return $result;
         }
 
-        if ($response = $this->ajaxResponse()) {
+        if ($response = $this->ajaxResponse(trans('admin::lang.update_succeeded'))) {
             return $response;
         }
 

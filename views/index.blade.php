@@ -16,6 +16,7 @@
 
     {!! Admin::css() !!}
     <link rel="stylesheet" href="{{ asset("/packages/admin/nestable/nestable.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/toastr/build/toastr.min.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/fonts.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
@@ -55,7 +56,7 @@
 <!-- REQUIRED JS SCRIPTS -->
 <script src="{{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}"></script>
 <script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
-<script src="{{ asset ("/packages/admin/noty/jquery.noty.packaged.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/toastr/build/toastr.min.js") }}"></script>
 <script src="{{ asset ("/packages/admin/bootstrap3-editable/js/bootstrap-editable.min.js") }}"></script>
 
 {!! Admin::js() !!}
@@ -69,8 +70,12 @@
         return params;
     };
 
-    $.noty.defaults.layout = 'topRight';
-    $.noty.defaults.theme = 'relax';
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        showMethod: 'slideDown',
+        timeOut: 4000
+    };
 
     $.pjax.defaults.timeout = 5000;
     $.pjax.defaults.maxCacheLength = 0;

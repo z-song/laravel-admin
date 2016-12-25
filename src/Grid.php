@@ -843,6 +843,8 @@ class Grid
             'link'          => \Encore\Admin\Grid\Displayers\Link::class,
             'badge'         => \Encore\Admin\Grid\Displayers\Badge::class,
             'progressBar'   => \Encore\Admin\Grid\Displayers\ProgressBar::class,
+            'radio'         => \Encore\Admin\Grid\Displayers\Radio::class,
+            'checkbox'      => \Encore\Admin\Grid\Displayers\Checkbox::class,
         ];
 
         foreach ($map as $abstract => $class) {
@@ -919,6 +921,8 @@ class Grid
         $path = app('router')->current()->getPath();
         $token = csrf_token();
         $confirm = trans('admin::lang.delete_confirm');
+        $deleteSucceeded = trans('admin::lang.delete_succeeded');
+        $refreshSucceeded = trans('admin::lang.refresh_succeeded');
 
         return <<<EOT
 
@@ -943,36 +947,22 @@ $('.batch-delete').on('click', function() {
     if(confirm("{$confirm}")) {
         $.post('/{$path}/' + selected.join(), {_method:'delete','_token':'{$token}'}, function(data){
             $.pjax.reload('#pjax-container');
-            noty({
-                text: "<strong>Succeeded!</strong>",
-                type:'success',
-                timeout: 1000
-            });
+            toastr.success('{$deleteSucceeded}');
         });
     }
 });
 
 $('.grid-refresh').on('click', function() {
     $.pjax.reload('#pjax-container');
-
-    noty({
-        text: "<strong>Succeeded!</strong>",
-        type:'success',
-        timeout: 1000
-    });
+    toastr.success('{$refreshSucceeded}');
 });
 
 var grid_order = function(id, direction) {
     $.post('/{$path}/' + id, {_method:'PUT', _token:'{$token}', _orderable:direction}, function(data){
 
         if (data.status) {
-            noty({
-                text: "<strong>Succeeded!</strong>",
-                type:'success',
-                timeout: 1000
-            });
-
             $.pjax.reload('#pjax-container');
+            toastr.success(data.message);
         }
     });
 }

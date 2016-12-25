@@ -42,6 +42,7 @@ return [
     'delete_failed'    => 'Delete failed !',
     'update_succeeded' => 'Update succeeded !',
     'save_succeeded'   => 'Save succeeded !',
+    'refresh_succeeded'=> 'Refresh succeeded !',
 
     'choose'        => 'Select',
     'choose_file'   => 'Select file',
