@@ -71,7 +71,7 @@ php artisan admin:install
   - [列操作和扩展](/docs/zh/model-grid-column.md)
 - [数据模型表单](/docs/zh/model-form.md)
   - [图片/文件上传](/docs/zh/form-upload.md)
-  - [form组件使用](/docs/zh/model-form-field.md)
+  - [form组件使用](/docs/zh/model-form-fields.md)
   - [form组件管理](/docs/zh/field-management.md)
 - [组件](/docs/zh/widgets/table.md)
   - [表格](/docs/zh/widgets/table.md)
