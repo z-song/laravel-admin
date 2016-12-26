@@ -68,8 +68,10 @@ php artisan admin:install
 - [菜单配置](/docs/zh/menu.md)
 - [显示布局](/docs/zh/layout.md)
 - [数据模型表格](/docs/zh/model-grid.md)
+  - [列操作和扩展](/docs/zh/model-grid-column.md)
 - [数据模型表单](/docs/zh/model-form.md)
   - [图片/文件上传](/docs/zh/form-upload.md)
+  - [form组件使用](/docs/zh/model-form-field.md)
   - [form组件管理](/docs/zh/field-management.md)
 - [组件](/docs/zh/widgets/table.md)
   - [表格](/docs/zh/widgets/table.md)
@@ -167,9 +169,10 @@ $router->resource('users', UserController::class);
 + [bootstrap-fileinput](https://github.com/kartik-v/bootstrap-fileinput)
 + [jquery-pjax](https://github.com/defunkt/jquery-pjax)
 + [Nestable](http://dbushell.github.io/Nestable/)
-+ [noty](http://ned.im/noty/)
++ [toastr](http://codeseven.github.io/toastr/)
 + [X-editable](http://github.com/vitalets/x-editable)
 + [bootstrap-number-input](https://github.com/wpic/bootstrap-number-input)
++ [fontawesome-iconpicker](https://github.com/itsjavi/fontawesome-iconpicker)
 
 交流
 ------------
