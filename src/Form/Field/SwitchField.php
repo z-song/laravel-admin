@@ -48,6 +48,10 @@ class SwitchField extends Field
 
 $('.{$this->getElementClass()}_checkbox').bootstrapSwitch({
     size:'small',
+    onText: '{$this->states['on']['text']}',
+    offText: '{$this->states['off']['text']}',
+    onColor: '{$this->states['on']['color']}',
+    offColor: '{$this->states['off']['color']}',
     onSwitchChange: function(event, state) {
         $('.{$this->getElementClass()}').val(state ? 'on' : 'off');
     }
