@@ -10,6 +10,7 @@ class Tab extends Widget implements Renderable
      * @var array
      */
     protected $attributes = [
+        'id'       => '',
         'title'    => '',
         'tabs'     => [],
         'dropDown' => [],
@@ -26,6 +27,7 @@ class Tab extends Widget implements Renderable
     public function add($title, $content)
     {
         $this->attributes['tabs'][] = [
+            'id'      => mt_rand(),
             'title'   => $title,
             'content' => $content,
         ];
