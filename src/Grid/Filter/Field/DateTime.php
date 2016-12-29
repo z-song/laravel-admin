@@ -11,10 +11,7 @@ class DateTime
      */
     protected $filter;
 
-    /**
-     * @var \Encore\Admin\Grid\Filter\AbstractFilter
-     */
-    protected $options;
+    protected $options = [];
 
     public function __construct($filter, $options = [])
     {
