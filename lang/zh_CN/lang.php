@@ -26,7 +26,7 @@ return [
     'filter'        => '筛选',
     'close'         => '关闭',
     'show'          => '显示',
-    'items'         => '条',
+    'entries'       => '条',
 
     'action'           => '操作',
     'title'            => '标题',
@@ -67,4 +67,8 @@ return [
 
     'operation_log'       => '操作日志',
     'parent_select_error' => '父级选择错误',
+
+    'pagination'    => [
+        'range'  => '从 :first 到 :last ，总共 :total 条',
+    ],
 ];

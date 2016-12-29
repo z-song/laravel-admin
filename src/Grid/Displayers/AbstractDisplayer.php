@@ -20,7 +20,7 @@ abstract class AbstractDisplayer
     /**
      * @var \stdClass
      */
-    protected $row;
+    public $row;
 
     /**
      * @var mixed
@@ -48,7 +48,7 @@ abstract class AbstractDisplayer
      *
      * @return mixed
      */
-    protected function getKey()
+    public function getKey()
     {
         return $this->row->{$this->grid->getKeyName()};
     }
