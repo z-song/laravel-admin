@@ -30,7 +30,7 @@ abstract class AbstractDisplayer
     /**
      * Create a new displayer instance.
      *
-     * @param mixed $value
+     * @param mixed     $value
      * @param Grid      $grid
      * @param Column    $column
      * @param \stdClass $row
