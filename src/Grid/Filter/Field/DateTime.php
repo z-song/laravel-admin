@@ -13,7 +13,7 @@ class DateTime
 
     protected $options = [];
 
-    public function __construct($filter, $options = [])
+    public function __construct($filter, $options)
     {
         $this->filter = $filter;
 
