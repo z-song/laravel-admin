@@ -15,8 +15,8 @@ class SwitchField extends Field
     ];
 
     protected $states = [
-        'on'  => ['value' => 1, 'text' => 'On'],
-        'off' => ['value' => 0, 'text' => 'Off'],
+        'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
+        'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
     ];
 
     public function states($states = [])
