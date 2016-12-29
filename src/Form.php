@@ -480,8 +480,8 @@ class Form
 
         if ($this->handleOrderable($id, $data)) {
             return response([
-                'status' => true,
-                'message' => trans('admin::lang.update_succeeded')
+                'status'  => true,
+                'message' => trans('admin::lang.update_succeeded'),
             ]);
         }
 
