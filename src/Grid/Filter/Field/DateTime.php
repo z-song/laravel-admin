@@ -11,19 +11,26 @@ class DateTime
      */
     protected $filter;
 
-    public function __construct($filter)
+    /**
+     * @var \Encore\Admin\Grid\Filter\AbstractFilter
+     */
+    protected $options;
+
+    public function __construct($filter, $options = [])
     {
         $this->filter = $filter;
+
+        $this->options = $options;
 
         $this->prepare();
     }
 
     public function prepare()
     {
-        $options['format'] = 'YYYY-MM-DD HH:mm:ss';
-        $options['locale'] = config('app.locale');
+        $this->options['format'] = $this->options['format'] || 'YYYY-MM-DD HH:mm:ss';
+        $this->options['locale'] = $this->options['locale'] || config('app.locale');
 
-        $script = "$('#{$this->filter->getId()}').datetimepicker(".json_encode($options).');';
+        $script = "$('#{$this->filter->getId()}').datetimepicker(".json_encode($this->options).');';
 
         Admin::script($script);
     }
