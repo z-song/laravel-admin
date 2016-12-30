@@ -85,17 +85,17 @@ class Between extends AbstractFilter
         return $this->buildCondition($this->column, $this->value);
     }
 
-    public function datetime()
+    public function datetime($options = [])
     {
         $this->view = 'admin::filter.betweenDatetime';
 
-        $this->prepareForDatetime();
+        $this->prepareForDatetime($options);
     }
 
-    protected function prepareForDatetime()
+    protected function prepareForDatetime($options = [])
     {
-        $options['format'] = 'YYYY-MM-DD HH:mm:ss';
-        $options['locale'] = config('app.locale');
+        $options['format'] = array_get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
+        $options['locale'] = array_get($options, 'locale', config('app.locale'));
 
         $startOptions = json_encode($options);
         $endOptions = json_encode($options + ['useCurrent' => false]);
