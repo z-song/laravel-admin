@@ -620,17 +620,20 @@ class Field
     }
 
     /**
-     * set view
+     * set view.
      *
      * @param $view
+     *
      * @return $this
-     * author Edwin Hui
+     *               author Edwin Hui
      */
     public function setView($view)
     {
         $this->view = $view;
+
         return $this;
     }
+
     /**
      * Get view of this field.
      *
