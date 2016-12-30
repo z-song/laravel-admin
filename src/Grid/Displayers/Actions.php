@@ -60,21 +60,21 @@ class Actions extends AbstractDisplayer
     }
 
     /**
-     * Disable deletion.
+     * Disable delete.
      *
      * @return void.
      */
-    public function disableDeletion()
+    public function disableDelete()
     {
         $this->allowDelete = false;
     }
 
     /**
-     * Disable Editing.
+     * Disable edit.
      *
      * @return void.
      */
-    public function disableEditing()
+    public function disableEdit()
     {
         $this->allowEdit = false;
     }
