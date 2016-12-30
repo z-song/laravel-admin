@@ -12,6 +12,11 @@
             <div class="btn-group pull-right" style="margin-right: 10px">
                 <a href="{{ $resource }}" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;{{ trans('admin::lang.list') }}</a>
             </div>
+
+            <div class="btn-group pull-right" style="margin-right: 10px">
+                <a class="btn btn-sm btn-default form-history-back"><i class="fa fa-arrow-left"></i>&nbsp;{{ trans('admin::lang.back') }}</a>
+            </div>
+
         </div>
     </div>
     <!-- /.box-header -->
