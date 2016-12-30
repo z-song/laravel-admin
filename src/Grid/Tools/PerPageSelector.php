@@ -74,7 +74,6 @@ class PerPageSelector extends AbstractTool
             return "<option value=\"$url\" $selected>$option</option>";
         })->implode("\r\n");
 
-
         $show = trans('admin::lang.show');
         $entries = trans('admin::lang.entries');
 
@@ -90,7 +89,6 @@ class PerPageSelector extends AbstractTool
     </label>
 
 EOT;
-
     }
 
     /**
@@ -100,7 +98,7 @@ EOT;
      */
     protected function script()
     {
-        return <<<EOT
+        return <<<'EOT'
 
 $('.grid-per-pager').on("change", function(e) {
     $.pjax({url: this.value, container: '#pjax-container'});
