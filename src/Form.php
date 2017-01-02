@@ -314,12 +314,24 @@ class Form
             return $response;
         }
 
+        return $this->redirectAfterStore();
+    }
+
+    /**
+     * Get RedirectResponse after store.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirectAfterStore()
+    {
         $success = new MessageBag([
             'title'   => trans('admin::lang.succeeded'),
             'message' => trans('admin::lang.save_succeeded'),
         ]);
 
-        return redirect($this->resource(0))->with(compact('success'));
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(0);
+
+        return redirect($url)->with(compact('success'));
     }
 
     /**
@@ -520,12 +532,24 @@ class Form
             return $response;
         }
 
+        return $this->redirectAfterUpdate();
+    }
+
+    /**
+     * Get RedirectResponse after update.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirectAfterUpdate()
+    {
         $success = new MessageBag([
             'title'   => trans('admin::lang.succeeded'),
             'message' => trans('admin::lang.update_succeeded'),
         ]);
 
-        return redirect($this->resource(-1))->with(compact('success'));
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
+
+        return redirect($url)->with(compact('success'));
     }
 
     /**

@@ -31,6 +31,7 @@ return [
     'action'           => 'Action',
     'title'            => 'Title',
     'description'      => 'Description',
+    'back'             => 'Back',
     'back_to_list'     => 'Back to List',
     'submit'           => 'Submit',
     'menu'             => 'Menu',
