@@ -373,7 +373,12 @@ $form->hidden($column);
 ### 开关选择
 `on`和`off`对用开关的两个值`1`和`0`:
 ```php
-$form->switch($column[, $label])->states(['on' => 1, 'off' => 0]);
+$states = [
+    'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+    'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
+];
+
+$form->switch($column[, $label])->states($states);
 ```
 
 ### 显示字段
