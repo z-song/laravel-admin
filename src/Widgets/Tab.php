@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Widgets;
 
+use Encore\Admin\Facades\Admin;
 use Illuminate\Contracts\Support\Renderable;
 
 class Tab extends Widget implements Renderable
@@ -10,11 +11,20 @@ class Tab extends Widget implements Renderable
      * @var array
      */
     protected $attributes = [
-        'id'       => '',
-        'title'    => '',
-        'tabs'     => [],
-        'dropDown' => [],
+        'id'         => '',
+        'title'      => '',
+        'tabs'       => [],
+        'dropDown'   => [],
     ];
+
+    protected $id;
+
+    protected $script;
+
+    public function __construct()
+    {
+        $this->attributes['id'] = $this->id = time().mt_rand(0, 10000);
+    }
 
     /**
      * Add a tab and its contents.
@@ -27,7 +37,7 @@ class Tab extends Widget implements Renderable
     public function add($title, $content)
     {
         $this->attributes['tabs'][] = [
-            'id'      => mt_rand(),
+            'id'      => time().mt_rand(0, 10000),
             'title'   => $title,
             'content' => $content,
         ];
@@ -70,6 +80,15 @@ class Tab extends Widget implements Renderable
         return $this;
     }
 
+    public function silmScroll($options = [])
+    {
+        $options = json_encode($options);
+
+        $this->script = <<<EOT
+$('#tab_content_{$this->id}').slimScroll({$options});
+EOT;
+    }
+
     /**
      * Render Tab.
      *
@@ -77,6 +96,8 @@ class Tab extends Widget implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.tab', $this->attributes)->render();
+        $js = $this->script ? '<script>'.$this->script.'</script>' : '';
+
+        return view('admin::widgets.tab', $this->attributes)->render().$js;
     }
 }

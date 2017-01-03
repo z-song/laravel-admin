@@ -332,6 +332,20 @@ $('.has-many-{$this->column}-forms').on('click', '.remove', function () {
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
 });
 
+$('.has-many-{$this->column} .box-tools').on('click', function (e) {
+    var target = $(e.target);
+    var action = target.data('action');
+    if(action === 'collapse-all'){
+        target.closest('.box').find('[data-widget="collapse"] > i.fa-minus').trigger('click');
+        target.siblings('[data-action="expand-all"]').show();
+        target.hide();
+    }else if(action === 'expand-all'){
+        target.closest('.box').find('[data-widget="collapse"] > i.fa-plus').trigger('click');
+        target.siblings('[data-action="collapse-all"]').show();
+        target.hide();
+    }
+});
+
 EOT;
 
         Admin::script($script);

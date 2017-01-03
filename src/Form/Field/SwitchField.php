@@ -21,9 +21,7 @@ class SwitchField extends Field
 
     public function states($states = [])
     {
-        foreach (array_dot($states) as $key => $state) {
-            array_set($this->states, $key, $state);
-        }
+        array_merge($this->states, $states);
     }
 
     public function prepare($value)
