@@ -26,9 +26,7 @@ trait ModelTree
         $branch = [];
 
         if (empty($elements)) {
-            $orderColumn = DB::getQueryGrammar()->wrap('order');
-            $byOrder = $orderColumn.' = 0,'.$orderColumn;
-            $elements = static::with('roles')->orderByRaw($byOrder)->get()->toArray();
+            $elements = static::allElements();
         }
 
         foreach ($elements as $element) {
@@ -44,6 +42,17 @@ trait ModelTree
         }
 
         return $branch;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function allElements()
+    {
+        $orderColumn = DB::getQueryGrammar()->wrap('order');
+        $byOrder = $orderColumn.' = 0,'.$orderColumn;
+
+        return static::orderByRaw($byOrder)->get()->toArray();
     }
 
     /**
@@ -96,7 +105,7 @@ trait ModelTree
     {
         $options = static::buildSelectOptions();
 
-        return collect($options);
+        return collect($options)->prepend('Root', 0)->all();
     }
 
     /**
@@ -157,6 +166,16 @@ trait ModelTree
 
             if (Request::has('parent_id') && Request::input('parent_id') == $branch->getKey()) {
                 throw new \Exception(trans('admin::lang.parent_select_error'));
+            }
+
+            if (Request::has('_order')) {
+                $order = Request::input('_order');
+
+                Request::offsetUnset('_order');
+
+                static::tree()->saveOrder($order);
+
+                return false;
             }
 
             return $branch;

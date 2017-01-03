@@ -36,8 +36,7 @@ class MenuController extends Controller
                     $form = new \Encore\Admin\Widgets\Form();
                     $form->action(admin_url('auth/menu'));
 
-                    $options = Menu::selectOptions()->prepend('Root', 0);
-                    $form->select('parent_id', trans('admin::lang.parent_id'))->options($options);
+                    $form->select('parent_id', trans('admin::lang.parent_id'))->options(Menu::selectOptions());
                     $form->text('title', trans('admin::lang.title'))->rules('required');
                     $form->icon('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin::lang.uri'));
@@ -58,7 +57,7 @@ class MenuController extends Controller
 
             $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
 
-            if (isset($branch['children'])) {
+            if (!isset($branch['children'])) {
 
                 $uri = admin_url($branch['uri']);
 
@@ -87,22 +86,6 @@ class MenuController extends Controller
     }
 
     /**
-     * Store input data.
-     *
-     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store()
-    {
-        if (Request::has('_order')) {
-            return response()->json([
-                'status' => Menu::tree()->saveOrder(Request::input('_order')),
-            ]);
-        }
-
-        return $this->form()->store();
-    }
-
-    /**
      * Make a form builder.
      *
      * @return Form
@@ -112,9 +95,7 @@ class MenuController extends Controller
         return Menu::form(function (Form $form) {
             $form->display('id', 'ID');
 
-            $options = Menu::selectOptions()->prepend('Root', 0);
-
-            $form->select('parent_id', trans('admin::lang.parent_id'))->options($options);
+            $form->select('parent_id', trans('admin::lang.parent_id'))->options(Menu::selectOptions());
             $form->text('title', trans('admin::lang.title'))->rules('required');
             $form->icon('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
             $form->text('uri', trans('admin::lang.uri'));
