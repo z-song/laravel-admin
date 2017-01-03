@@ -89,7 +89,7 @@ class Tree implements Renderable
 
         $('#{$this->elementId}').nestable({});
 
-        $('._delete').click(function() {
+        $('.tree_branch_delete').click(function() {
             var id = $(this).data('id');
             if(confirm("{$confirm}")) {
                 $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){

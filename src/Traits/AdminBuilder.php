@@ -8,19 +8,34 @@ use Encore\Admin\Tree;
 
 trait AdminBuilder
 {
-    public static function grid($callback)
+    /**
+     * @param \Closure $callback
+     *
+     * @return Grid
+     */
+    public static function grid(\Closure $callback)
     {
         return new Grid(new static, $callback);
     }
 
-    public static function form($callback)
+    /**
+     * @param \Closure $callback
+     *
+     * @return Form
+     */
+    public static function form(\Closure $callback)
     {
         Form::registerBuiltinFields();
 
         return new Form(new static, $callback);
     }
 
-    public static function tree($callback = null)
+    /**
+     * @param \Closure $callback
+     *
+     * @return Tree
+     */
+    public static function tree(\Closure $callback = null)
     {
         return new Tree(new static, $callback);
     }

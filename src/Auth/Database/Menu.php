@@ -52,4 +52,15 @@ class Menu extends Model
 
         return $this->belongsToMany(Role::class, $pivotTable, 'menu_id', 'role_id');
     }
+
+    /**
+     * @return array
+     */
+    public static function allElements()
+    {
+        $orderColumn = DB::getQueryGrammar()->wrap('order');
+        $byOrder = $orderColumn.' = 0,'.$orderColumn;
+
+        return static::with('roles')->orderByRaw($byOrder)->get()->toArray();
+    }
 }
