@@ -17,8 +17,8 @@ EOT;
 
     protected function script()
     {
-        return <<<EOT
-\$('.grid-row-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
+        return <<<'EOT'
+$('.grid-row-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
     if (this.checked) {
         $(this).closest('tr').css('background-color', '#ffffd5');
     } else {
@@ -26,6 +26,5 @@ EOT;
     }
 });
 EOT;
-
     }
 }

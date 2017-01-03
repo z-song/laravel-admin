@@ -17,16 +17,16 @@ class Tab extends Widget implements Renderable
         'dropDown'   => [],
     ];
 
-	protected $id;
+    protected $id;
 
-	protected $script;
+    protected $script;
 
-	public function __construct()
-	{
-		$this->attributes['id'] = $this->id = time() . mt_rand(0, 10000);
-	}
+    public function __construct()
+    {
+        $this->attributes['id'] = $this->id = time().mt_rand(0, 10000);
+    }
 
-	/**
+    /**
      * Add a tab and its contents.
      *
      * @param string            $title
@@ -37,7 +37,7 @@ class Tab extends Widget implements Renderable
     public function add($title, $content)
     {
         $this->attributes['tabs'][] = [
-            'id'      => time() . mt_rand(0, 10000),
+            'id'      => time().mt_rand(0, 10000),
             'title'   => $title,
             'content' => $content,
         ];
@@ -82,12 +82,11 @@ class Tab extends Widget implements Renderable
 
     public function silmScroll($options = [])
     {
-	    $options = json_encode($options);
+        $options = json_encode($options);
 
-	    $this->script = <<<EOT
+        $this->script = <<<EOT
 $('#tab_content_{$this->id}').slimScroll({$options});
 EOT;
-
     }
 
     /**
@@ -97,7 +96,8 @@ EOT;
      */
     public function render()
     {
-    	$js = $this->script ? '<script>'. $this->script .'</script>' : '';
-        return view('admin::widgets.tab', $this->attributes)->render() . $js;
+        $js = $this->script ? '<script>'.$this->script.'</script>' : '';
+
+        return view('admin::widgets.tab', $this->attributes)->render().$js;
     }
 }
