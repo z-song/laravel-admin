@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
+use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Box;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Request;
@@ -53,18 +54,22 @@ class MenuController extends Controller
      */
     protected function treeView()
     {
-        return Menu::tree(function ($branch) {
+        return Menu::tree(function (Tree $tree) {
 
-            $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
+            $tree->disableCreate();
 
-            if (!isset($branch['children'])) {
+            $tree->branch(function ($branch) {
+                $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
 
-                $uri = admin_url($branch['uri']);
+                if (!isset($branch['children'])) {
 
-                $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
-            }
+                    $uri = admin_url($branch['uri']);
 
-            return $payload;
+                    $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
+                }
+
+                return $payload;
+            });
         });
     }
 
