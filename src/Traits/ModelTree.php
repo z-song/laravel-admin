@@ -14,30 +14,103 @@ trait ModelTree
     protected static $branchOrder = [];
 
     /**
-     * Format data to tree like array.
+     * @var string
+     */
+    protected $parentKeyName = 'parent_id';
+
+    /**
+     * @var string
+     */
+    protected $titleColumn = 'title';
+
+    /**
+     * @var string
+     */
+    protected $orderColumn = 'order';
+
+    /**
+     * Get children of current node.
      *
-     * @param array $elements
-     * @param int   $parentId
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany(static::class, $this->parentKeyName);
+    }
+
+    /**
+     * Get parent of current node.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent()
+    {
+        return $this->belongsTo(static::class, $this->parentKeyName);
+    }
+
+    /**
+     * @return string
+     */
+    public function getParentKeyName()
+    {
+        return $this->parentKeyName;
+    }
+
+    /**
+     * Get title column
+     *
+     * @return string
+     */
+    public function getTitleColumn()
+    {
+        return $this->titleColumn;
+    }
+
+    /**
+     * Get order column name.
+     *
+     * @return string
+     */
+    public function getOrderColumn()
+    {
+        return $this->orderColumn;
+    }
+
+    /**
+     * Format data to tree like array.
      *
      * @return array
      */
-    public static function toTree(array $elements = [], $parentId = 0)
+    public static function toTree()
+    {
+        return (new static)->buildNestedArray();
+    }
+
+    /**
+     * Build Nested array.
+     *
+     * @param array $nodes
+     * @param int $parentId
+     *
+     * @return array
+     */
+    protected function buildNestedArray(array $nodes = [], $parentId = 0)
     {
         $branch = [];
 
-        if (empty($elements)) {
-            $elements = static::allElements();
+        if (empty($nodes)) {
+            $nodes = $this->allNodes();
         }
 
-        foreach ($elements as $element) {
-            if ($element['parent_id'] == $parentId) {
-                $children = static::toTree($elements, $element['id']);
+        foreach ($nodes as $node) {
+            if ($node[$this->parentKeyName] == $parentId) {
+                $children = $this->buildNestedArray($nodes, $node[$this->getKeyName()]);
 
                 if ($children) {
-                    $element['children'] = $children;
+                    $node['children'] = $children;
                 }
 
-                $branch[] = $element;
+                $branch[] = $node;
             }
         }
 
@@ -45,11 +118,13 @@ trait ModelTree
     }
 
     /**
+     * Get all elements
+     *
      * @return mixed
      */
-    public static function allElements()
+    public function allNodes()
     {
-        $orderColumn = DB::getQueryGrammar()->wrap('order');
+        $orderColumn = DB::getQueryGrammar()->wrap($this->orderColumn);
         $byOrder = $orderColumn.' = 0,'.$orderColumn;
 
         return static::orderByRaw($byOrder)->get()->toArray();
@@ -67,6 +142,7 @@ trait ModelTree
         static::$branchOrder = array_flip(array_flatten($order));
 
         static::$branchOrder = array_map(function ($item) {
+
             return ++$item;
         }, static::$branchOrder);
     }
@@ -86,8 +162,8 @@ trait ModelTree
         foreach ($tree as $branch) {
             $node = static::find($branch['id']);
 
-            $node->parent_id = $parentId;
-            $node->order = static::$branchOrder[$branch['id']];
+            $node->{$node->getParentKeyName()} = $parentId;
+            $node->{$node->getOrderColumn()} = static::$branchOrder[$branch['id']];
             $node->save();
 
             if (isset($branch['children'])) {
@@ -103,7 +179,7 @@ trait ModelTree
      */
     public static function selectOptions()
     {
-        $options = static::buildSelectOptions();
+        $options = (new static)->buildSelectOptions();
 
         return collect($options)->prepend('Root', 0)->all();
     }
@@ -111,30 +187,28 @@ trait ModelTree
     /**
      * Build options of select field in form.
      *
-     * @param array  $elements
+     * @param array  $nodes
      * @param int    $parentId
      * @param string $prefix
      *
      * @return array
      */
-    protected static function buildSelectOptions(array $elements = [], $parentId = 0, $prefix = '')
+    protected function buildSelectOptions(array $nodes = [], $parentId = 0, $prefix = '')
     {
         $prefix = $prefix ?: str_repeat('&nbsp;', 6);
 
         $options = [];
 
-        if (empty($elements)) {
-            $orderColumn = DB::getQueryGrammar()->wrap('order');
-            $byOrder = $orderColumn.' = 0,'.$orderColumn;
-            $elements = static::orderByRaw($byOrder)->get(['id', 'parent_id', 'title'])->toArray();
+        if (empty($nodes)) {
+            $nodes = $this->allNodes();
         }
 
-        foreach ($elements as $element) {
-            $element['title'] = $prefix.'&nbsp;'.$element['title'];
-            if ($element['parent_id'] == $parentId) {
-                $children = static::buildSelectOptions($elements, $element['id'], $prefix.$prefix);
+        foreach ($nodes as $node) {
+            $node[$this->titleColumn] = $prefix.'&nbsp;'.$node[$this->titleColumn];
+            if ($node[$this->parentKeyName] == $parentId) {
+                $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $prefix.$prefix);
 
-                $options[$element['id']] = $element['title'];
+                $options[$node[$this->getKeyName()]] = $node[$this->titleColumn];
 
                 if ($children) {
                     $options += $children;
@@ -150,7 +224,7 @@ trait ModelTree
      */
     public function delete()
     {
-        $this->where('parent_id', $this->id)->delete();
+        $this->where($this->parentKeyName, $this->getKey())->delete();
 
         return parent::delete();
     }
@@ -164,7 +238,9 @@ trait ModelTree
 
         static::saving(function (Model $branch) {
 
-            if (Request::has('parent_id') && Request::input('parent_id') == $branch->getKey()) {
+            $parentKeyName = $branch->getParentKeyname();
+
+            if (Request::has($parentKeyName) && Request::input($parentKeyName) == $branch->getKey()) {
                 throw new \Exception(trans('admin::lang.parent_select_error'));
             }
 

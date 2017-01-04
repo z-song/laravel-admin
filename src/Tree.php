@@ -35,7 +35,22 @@ class Tree implements Renderable
     /**
      * @var \Closure
      */
-    protected $branchCallback;
+    protected $callback;
+
+    /**
+     * @var null
+     */
+    protected $branchCallback = null;
+
+    /**
+     * @var bool
+     */
+    public $useCreate = true;
+
+    /**
+     * @var array
+     */
+    protected $nestableOptions = [];
 
     /**
      * Menu constructor.
@@ -45,10 +60,71 @@ class Tree implements Renderable
     public function __construct(Model $model = null, \Closure $callback = null)
     {
         $this->model = $model;
-        $this->branchCallback = $callback;
 
         $this->path = app('router')->current()->getPath();
         $this->elementId .= uniqid();
+
+        if ($callback instanceof \Closure) {
+            call_user_func($callback, $this);
+        }
+
+        $this->initBranchCallback();
+    }
+
+    /**
+     * Initialize branch callback.
+     *
+     * @return void
+     */
+    protected function initBranchCallback()
+    {
+        if (is_null($this->branchCallback)) {
+            $this->branchCallback = function ($branch) {
+
+                $key = $branch[$this->model->getKeyName()];
+                $title = $branch[$this->model->getTitleColumn()];
+
+                return "$key - $title";
+            };
+        }
+    }
+
+    /**
+     * Set branch callback
+     *
+     * @param \Closure $branchCallback
+     *
+     * @return $this
+     */
+    public function branch(\Closure $branchCallback)
+    {
+        $this->branchCallback = $branchCallback;
+
+        return $this;
+    }
+
+    /**
+     * Set nestable options.
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function nestable($options = [])
+    {
+        $this->nestableOptions = array_merge($this->nestableOptions, $options);
+
+        return $this;
+    }
+
+    /**
+     * Disable create.
+     *
+     * @return void
+     */
+    public function disableCreate()
+    {
+        $this->useCreate = false;
     }
 
     /**
@@ -76,7 +152,7 @@ class Tree implements Renderable
      *
      * @return string
      */
-    protected function buildupScript()
+    protected function script()
     {
         $token = csrf_token();
 
@@ -85,9 +161,11 @@ class Tree implements Renderable
         $refreshSucceeded = trans('admin::lang.refresh_succeeded');
         $deleteSucceeded = trans('admin::lang.delete_succeeded');
 
+        $nestableOptions = json_encode($this->nestableOptions);
+
         return <<<SCRIPT
 
-        $('#{$this->elementId}').nestable({});
+        $('#{$this->elementId}').nestable($nestableOptions);
 
         $('.tree_branch_delete').click(function() {
             var id = $(this).data('id');
@@ -117,13 +195,13 @@ class Tree implements Renderable
             toastr.success('{$refreshSucceeded}');
         });
 
-        $('.menu-tools').on('click', function(e){
+        $('.{$this->elementId}-tree-tools').on('click', function(e){
             var target = $(e.target),
                 action = target.data('action');
-            if (action === 'expand-all') {
+            if (action === 'expand') {
                 $('.dd').nestable('expandAll');
             }
-            if (action === 'collapse-all') {
+            if (action === 'collapse') {
                 $('.dd').nestable('collapseAll');
             }
         });
@@ -150,8 +228,9 @@ SCRIPT;
     public function variables()
     {
         return [
-            'id'    => $this->elementId,
-            'items' => $this->model->toTree(),
+            'id'        => $this->elementId,
+            'items'     => $this->model->toTree(),
+            'useCreate' => $this->useCreate
         ];
     }
 
@@ -162,10 +241,11 @@ SCRIPT;
      */
     public function render()
     {
-        Admin::script($this->buildupScript());
+        Admin::script($this->script());
 
         view()->share([
             'path'           => $this->path,
+            'keyName'        => $this->model->getKeyName(),
             'branchView'     => $this->view['branch'],
             'branchCallback' => $this->branchCallback,
         ]);
