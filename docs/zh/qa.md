@@ -12,7 +12,11 @@ app('view')->prependNamespace('admin', resource_path('views/admin'));
 
 这样就用`resources/views/admin`下的视图覆盖了`laravel-admin`的视图，要注意的问题是，更新`laravel-admin`的时候，可能会遇到视图不存在的问题，这个需要自行解决
 
-## 关于自定义语言
+## 设置语言
+
+完成安装之后，默认语言为英文(en)，如果要使用中文，打开`config/app.php`，将`locale`设置为`zh_CN`即可。
+
+## 自定义语言
 
 如果需要修改`laravel-admin`的语言包，可以用下面的方式解决
 
