@@ -16,7 +16,7 @@ trait ModelTree
     /**
      * @var string
      */
-    protected $parentKeyName = 'parent_id';
+    protected $parentColumn = 'parent_id';
 
     /**
      * @var string
@@ -35,7 +35,7 @@ trait ModelTree
      */
     public function children()
     {
-        return $this->hasMany(static::class, $this->parentKeyName);
+        return $this->hasMany(static::class, $this->parentColumn);
     }
 
     /**
@@ -45,15 +45,25 @@ trait ModelTree
      */
     public function parent()
     {
-        return $this->belongsTo(static::class, $this->parentKeyName);
+        return $this->belongsTo(static::class, $this->parentColumn);
     }
 
     /**
      * @return string
      */
-    public function getParentKeyName()
+    public function getParentColumn()
     {
-        return $this->parentKeyName;
+        return $this->parentColumn;
+    }
+
+    /**
+     * Set parent column.
+     *
+     * @param string $column
+     */
+    public function setParentColumn($column)
+    {
+        $this->parentColumn = $column;
     }
 
     /**
@@ -67,6 +77,16 @@ trait ModelTree
     }
 
     /**
+     * Set title column.
+     *
+     * @param string $column
+     */
+    public function setTitleColumn($column)
+    {
+        $this->titleColumn = $column;
+    }
+
+    /**
      * Get order column name.
      *
      * @return string
@@ -74,6 +94,16 @@ trait ModelTree
     public function getOrderColumn()
     {
         return $this->orderColumn;
+    }
+
+    /**
+     * Set order column.
+     *
+     * @param string $column
+     */
+    public function setOrderColumn($column)
+    {
+        $this->orderColumn = $column;
     }
 
     /**
@@ -103,7 +133,7 @@ trait ModelTree
         }
 
         foreach ($nodes as $node) {
-            if ($node[$this->parentKeyName] == $parentId) {
+            if ($node[$this->parentColumn] == $parentId) {
                 $children = $this->buildNestedArray($nodes, $node[$this->getKeyName()]);
 
                 if ($children) {
@@ -162,7 +192,7 @@ trait ModelTree
         foreach ($tree as $branch) {
             $node = static::find($branch['id']);
 
-            $node->{$node->getParentKeyName()} = $parentId;
+            $node->{$node->getParentColumn()} = $parentId;
             $node->{$node->getOrderColumn()} = static::$branchOrder[$branch['id']];
             $node->save();
 
@@ -205,7 +235,7 @@ trait ModelTree
 
         foreach ($nodes as $node) {
             $node[$this->titleColumn] = $prefix.'&nbsp;'.$node[$this->titleColumn];
-            if ($node[$this->parentKeyName] == $parentId) {
+            if ($node[$this->parentColumn] == $parentId) {
                 $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $prefix.$prefix);
 
                 $options[$node[$this->getKeyName()]] = $node[$this->titleColumn];
@@ -224,7 +254,7 @@ trait ModelTree
      */
     public function delete()
     {
-        $this->where($this->parentKeyName, $this->getKey())->delete();
+        $this->where($this->parentColumn, $this->getKey())->delete();
 
         return parent::delete();
     }
@@ -238,9 +268,9 @@ trait ModelTree
 
         static::saving(function (Model $branch) {
 
-            $parentKeyName = $branch->getParentKeyname();
+            $parentColumn = $branch->getParentColumn();
 
-            if (Request::has($parentKeyName) && Request::input($parentKeyName) == $branch->getKey()) {
+            if (Request::has($parentColumn) && Request::input($parentColumn) == $branch->getKey()) {
                 throw new \Exception(trans('admin::lang.parent_select_error'));
             }
 
