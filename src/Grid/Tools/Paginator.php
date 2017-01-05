@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid\Tools;
 
 use Encore\Admin\Grid;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Input;
 
 class Paginator extends AbstractTool
@@ -31,9 +32,11 @@ class Paginator extends AbstractTool
      */
     protected function initPaginator()
     {
-        $query = Input::all();
+        $this->paginator = $this->grid->model()->eloquent();
 
-        $this->paginator  = $this->grid->model()->eloquent()->appends($query);
+        if ($this->paginator instanceof LengthAwarePaginator) {
+            $this->paginator->appends(Input::all());
+        }
     }
 
     /**
