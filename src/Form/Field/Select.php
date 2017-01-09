@@ -5,6 +5,7 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Str;
 
 class Select extends Field
 {
@@ -67,12 +68,19 @@ class Select extends Field
      */
     public function load($field, $source)
     {
+        if (Str::contains($field, '.')) {
+            $field = $this->formatName($field);
+            $class = str_replace(['[', ']'], '_', $field);
+        } else {
+            $class = $field;
+        }
+
         $script = <<<EOT
 
 $(".{$this->getElementClass()}").change(function () {
     $.get("$source?q="+this.value, function (data) {
-        $(".$field option").remove();
-        $(".$field").select2({data: data});
+        $(".$class option").remove();
+        $(".$class").select2({data: data});
     });
 });
 EOT;
