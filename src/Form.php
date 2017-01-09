@@ -8,6 +8,7 @@ use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
 use Encore\Admin\Form\NestedForm;
+use Encore\Admin\Form\Tab;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -212,10 +213,14 @@ class Form
      */
     public function edit($id)
     {
-        $this->builder->setMode(Builder::MODE_EDIT);
-        $this->builder->setResourceId($id);
+        if ($tab = $this->builder->getTab()) {
+            $tab->edit($id);
+        } else {
+            $this->builder->setMode(Builder::MODE_EDIT);
+            $this->builder->setResourceId($id);
 
-        $this->setFieldValue($id);
+            $this->setFieldValue($id);
+        }
 
         return $this;
     }
@@ -488,6 +493,17 @@ class Form
     public function update($id)
     {
         $data = Input::all();
+
+        if ($tab = $this->builder->getTab()) {
+
+            $tab = $tab->getTabs()->first(function ($tab) use ($data) {
+                return $tab['id'] == $data['_tab_'];
+            });
+
+            $form = new static($this->model(), $tab['content']);
+
+            $this->builder->mergeFields($form->builder()->fields());
+        }
 
         $data = $this->handleEditable($data);
 
@@ -1118,6 +1134,23 @@ class Form
             'css' => $css->flatten()->unique()->filter()->toArray(),
             'js'  => $js->flatten()->unique()->filter()->toArray(),
         ];
+    }
+
+    /**
+     * Use tab to split form.
+     *
+     * @param string $title
+     * @param Closure $content
+     *
+     * @return $this
+     */
+    public function tab($title, Closure $content)
+    {
+        $tab = new Tab($this);
+
+        $this->builder->setTab($tab);
+
+        return $tab->tab($title, $content);
     }
 
     /**
