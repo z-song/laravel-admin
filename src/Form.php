@@ -15,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Spatie\EloquentSortable\Sortable;
 use Symfony\Component\HttpFoundation\Response;
@@ -482,7 +483,7 @@ class Form
      *
      * @param int $id
      *
-     * @return $this|\Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function update($id)
     {
@@ -578,7 +579,7 @@ class Form
      * @param int   $id
      * @param array $input
      *
-     * @return array
+     * @return bool
      */
     protected function handleOrderable($id, array $input = [])
     {
@@ -609,7 +610,7 @@ class Form
                 continue;
             }
 
-            $prepared = $this->prepareUpdate([$name => $values]);
+            $prepared = $this->prepareUpdate([$name => $values], true);
 
             if (empty($prepared)) {
                 continue;
@@ -659,12 +660,18 @@ class Form
      *
      * @return array
      */
-    protected function prepareUpdate($updates)
+    protected function prepareUpdate($updates, $isRelation = false)
     {
         $prepared = [];
 
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
+
+            if (!$isRelation && Str::contains($columns, '.')) {
+                continue;
+            } elseif ($isRelation && !Str::contains($columns, '.')) {
+                continue;
+            }
 
             $value = $this->getDataByColumn($updates, $columns);
 
