@@ -248,7 +248,7 @@ class File extends Field
     public function prepare($files)
     {
         if (!$files instanceof UploadedFile && !is_array($files)) {
-            if ($this->isDeleteRequest()) {
+            if ($this->handleDeleteRequest()) {
                 return '';
             }
 
@@ -430,7 +430,17 @@ $("input.{$class}").on('filecleared', function(event) {
 
 EOT;
 
-        return parent::render()->with(['multiple' => $this->multiple]);
+        return parent::render()->with(['multiple' => $this->multiple, 'actionName' => $this->getActionName()]);
+    }
+
+    /**
+     * Get action element name.
+     *
+     * @return array|mixed|string
+     */
+    protected function getActionName()
+    {
+        return $this->formatName($this->column.'_action');
     }
 
     /**
@@ -438,9 +448,9 @@ EOT;
      *
      * @return bool
      */
-    public function isDeleteRequest()
+    public function handleDeleteRequest()
     {
-        $action = Input::get($this->getElementClass().'_action');
+        $action = Input::get($this->column.'_action');
 
         if ($action == static::ACTION_REMOVE) {
             $this->destroy();
