@@ -59,6 +59,11 @@ class Builder
     protected $allowDeletion = true;
 
     /**
+     * @var Tab
+     */
+    protected $tab;
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -107,6 +112,22 @@ class Builder
     }
 
     /**
+     * @param Tab $tab
+     */
+    public function setTab(Tab $tab)
+    {
+        $this->tab = $tab;
+    }
+
+    /**
+     * @return Tab
+     */
+    public function getTab()
+    {
+        return $this->tab;
+    }
+
+    /**
      * Get fields of this builder.
      *
      * @return Collection
@@ -114,6 +135,14 @@ class Builder
     public function fields()
     {
         return $this->fields;
+    }
+
+    /**
+     * @param $fields
+     */
+    public function mergeFields($fields)
+    {
+        $this->fields = $this->fields->merge($fields);
     }
 
     /**
@@ -272,12 +301,40 @@ class Builder
         $this->fields->push($hidden->value($previous));
     }
 
+    public function render()
+    {
+        if ($this->tab) {
+            return $this->renderTabForm();
+        }
+
+        return $this->renderSimpleForm();
+    }
+
+    protected function renderTabForm()
+    {
+        $model = $this->form->model();
+
+        $tabs = $this->tab->getTabs()->map(function ($tab) use ($model) {
+
+            $form = new Form($model, $tab['content']);
+            $form->hidden('_tab_')->default($tab['id']);
+
+            if ($edit = $this->tab->getEdit()) {
+                $form->edit($edit);
+            }
+
+            return array_merge($tab, compact('form'));
+        })->all();
+
+        return view('admin::form.tab', compact('tabs'))->render();
+    }
+
     /**
      * Render form.
      *
      * @return string
      */
-    public function render()
+    protected function renderSimpleForm()
     {
         $confirm = trans('admin::lang.delete_confirm');
         $token = csrf_token();
