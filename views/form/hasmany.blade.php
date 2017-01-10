@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-6">
-                        <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>Remove</div>
+                        <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin::lang.remove') }}</div>
                     </div>
                 </div>
 
@@ -39,7 +39,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label"></label>
                 <div class="col-sm-6">
-                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash"></i>&nbsp;Remove</div>
+                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash"></i>&nbsp;{{ trans('admin::lang.remove') }}</div>
                 </div>
             </div>
             <hr>
@@ -49,7 +49,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label"></label>
         <div class="col-sm-6">
-            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;New</div>
+            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin::lang.new') }}</div>
         </div>
     </div>
 
