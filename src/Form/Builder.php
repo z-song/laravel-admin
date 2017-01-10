@@ -35,7 +35,7 @@ class Builder
     /**
      * @var array
      */
-    protected $options = ['title' => 'Edit'];
+    protected $options = [];
 
     /**
      * Modes constants.
@@ -50,13 +50,6 @@ class Builder
      * @var string
      */
     protected $mode = 'create';
-
-    /**
-     * Allow delete item in form page.
-     *
-     * @var bool
-     */
-    protected $allowDeletion = true;
 
     /**
      * @var Tab
@@ -150,7 +143,7 @@ class Builder
      *
      * @param array $options
      *
-     * @return array|void
+     * @return array|null
      */
     public function options($options = [])
     {
@@ -179,28 +172,6 @@ class Builder
         }
 
         return '';
-    }
-
-    /**
-     * Disable deletion in form page.
-     *
-     * @return $this
-     */
-    public function disableDeletion()
-    {
-        $this->allowDeletion = false;
-
-        return $this;
-    }
-
-    /**
-     * If allow deletion in form page.
-     *
-     * @return bool
-     */
-    public function allowDeletion()
-    {
-        return $this->allowDeletion;
     }
 
     /**
@@ -272,12 +243,12 @@ class Builder
     /**
      * Build submit button.
      *
-     * @return string|void
+     * @return string
      */
     public function submit()
     {
         if ($this->mode == self::MODE_VIEW) {
-            return;
+            return '';
         }
 
         return '<button type="submit" class="btn btn-info pull-right">'.trans('admin::lang.submit').'</button>';
@@ -301,12 +272,16 @@ class Builder
         $this->fields->push($hidden->value($previous));
     }
 
+    /**
+     * Render
+     *
+     * @return string
+     */
     protected function renderTabForm()
     {
         $tabs = $this->tab->getTabs()->map(function ($tab) {
 
             $form = new Form($this->form->model(), $tab['content']);
-            $form->hidden('_tab_')->default($tab['id']);
 
             // In edit mode.
             if ($this->isMode(static::MODE_EDIT)) {
@@ -316,7 +291,7 @@ class Builder
             return array_merge($tab, compact('form'));
         });
 
-        $script = <<<EOT
+        $script = <<<SCRIPT
 
 var url = document.location.toString();
 if (url.match('#')) {
@@ -326,13 +301,13 @@ if (url.match('#')) {
 // Change hash for page-reload
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
-})
+});
 
-EOT;
+SCRIPT;
 
         Admin::script($script);
 
-        return view('admin::form.tab', compact('tabs'))->render();
+        return view('admin::form.tab', ['form' => $this, 'tabs' => $tabs])->render();
     }
 
     /**
@@ -342,32 +317,13 @@ EOT;
      */
     protected function renderSimpleForm()
     {
-        $confirm = trans('admin::lang.delete_confirm');
-        $token = csrf_token();
-
         $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
 
-        $location = '/'.trim($this->form->resource($slice), '/');
-
         $script = <<<SCRIPT
-            $('.item_delete').click(function() {
-                var id = $(this).data('id');
-                if(confirm('{$confirm}')) {
-                    $.post('{$this->form->resource($slice)}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
-                        $.pjax({
-                            timeout: 2000,
-                            url: '$location',
-                            container: '#pjax-container'
-                          });
-                        return false;
-                    });
-                }
-            });
-
-            $('.form-history-back').on('click', function () {
-                event.preventDefault();
-                history.back(1);
-            })
+$('.form-history-back').on('click', function () {
+    event.preventDefault();
+    history.back(1);
+});
 SCRIPT;
 
         Admin::script($script);
@@ -378,15 +334,14 @@ SCRIPT;
             'resource' => $this->form->resource($slice),
         ];
 
-        if ($this->mode == static::MODE_CREATE) {
-            $this->disableDeletion();
-        }
-
         $this->addRedirectUrlField();
 
         return view('admin::form', $vars)->render();
     }
 
+    /**
+     * @return string
+     */
     public function render()
     {
         if ($this->tab) {
@@ -394,6 +349,18 @@ SCRIPT;
         }
 
         return $this->renderSimpleForm();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function renderWithoutForm()
+    {
+        return preg_replace(
+            ['/<form[^>]+>/', '/<\/form>/'],
+            ['<div class="form-horizontal">', '</div>'],
+            $this->renderSimpleForm()
+        );
     }
 
     /**
