@@ -7,14 +7,21 @@ use Illuminate\Support\Collection;
 
 class Tab
 {
+    /**
+     * @var Form
+     */
     protected $form;
 
+    /**
+     * @var Collection
+     */
     protected $tabs;
 
-    protected $edit;
-
-    protected $counter = 0;
-
+    /**
+     * Tab constructor.
+     *
+     * @param Form $form
+     */
     public function __construct(Form $form)
     {
         $this->form = $form;
@@ -22,34 +29,42 @@ class Tab
         $this->tabs = new Collection();
     }
 
-    public function tab($title, \Closure $content)
+    /**
+     * Add a tab section.
+     *
+     * @param string $title
+     * @param \Closure $content
+     * @param boolean $active
+     *
+     * @return $this
+     */
+    public function tab($title, \Closure $content, $active = false)
     {
-        $id = 'form-tab-'.(++$this->counter);
+        $id = 'form-'.($this->tabs->count() + 1);
 
-        $this->tabs->push(compact('id', 'title', 'content'));
+        $this->tabs->push(compact('id', 'title', 'content', 'active'));
 
         return $this;
     }
 
+    /**
+     * Get all tabs.
+     *
+     * @return Collection
+     */
     public function getTabs()
     {
+        // If there is no active tab, then active the first.
+        if ($this->tabs->filter(function ($tab) {
+            return $tab['active'];
+        })->isEmpty()) {
+
+            $first = $this->tabs->first();
+            $first['active'] = true;
+
+            $this->tabs->offsetSet(0, $first);
+        }
+
         return $this->tabs;
-    }
-
-    public function edit($id)
-    {
-        $this->edit = $id;
-    }
-
-    public function getEdit()
-    {
-        return $this->edit;
-    }
-
-    public function render()
-    {
-        dd($this->tabs);
-
-        return view('admin::form.tab');
     }
 }
