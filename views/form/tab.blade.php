@@ -1,3 +1,4 @@
+{!! $form->open() !!}
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
 
@@ -10,9 +11,10 @@
 
         @foreach($tabs as $tab)
             <div class="tab-pane {{ $tab['active'] ? 'active' : '' }}" id="tab-{{ $tab['id'] }}">
-                {!! $tab['form']->render() !!}
+                {!! $tab['form']->builder()->renderWithoutForm() !!}
             </div>
         @endforeach
 
     </div>
 </div>
+{!! $form->close() !!}
