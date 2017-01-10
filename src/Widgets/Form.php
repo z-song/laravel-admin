@@ -41,6 +41,10 @@ use Illuminate\Contracts\Support\Renderable;
  * @method Field\Display        display($name, $label = '')
  * @method Field\Rate           rate($name, $label = '')
  * @method Field\Divide         divide()
+ * @method Field\Decimal        decimal($column, $label = '')
+ * @method Field\Html           html($html)
+ * @method Field\Tags           tags($column, $label = '')
+ * @method Field\Icon           icon($column, $label = '')
  */
 class Form implements Renderable
 {
