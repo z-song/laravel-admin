@@ -118,13 +118,6 @@ class Form
     protected $inputs = [];
 
     /**
-     * Allow delete item in form page.
-     *
-     * @var bool
-     */
-    protected $allowDeletion = true;
-
-    /**
      * Available fields.
      *
      * @var array
@@ -188,20 +181,6 @@ class Form
     public function builder()
     {
         return $this->builder;
-    }
-
-    /**
-     * Disable deletion in form page.
-     *
-     * @return $this
-     */
-    public function disableDeletion()
-    {
-        $this->builder->disableDeletion();
-
-        $this->allowDeletion = false;
-
-        return $this;
     }
 
     /**
@@ -280,11 +259,13 @@ class Form
     /**
      * Store a new record.
      *
-     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\Http\JsonResponse
      */
     public function store()
     {
         $data = Input::all();
+
+        $this->prepareForTabs();
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
@@ -479,6 +460,17 @@ class Form
         }
     }
 
+    protected function prepareForTabs()
+    {
+        if ($tab = $this->builder->getTab()) {
+            $tab->getTabs()->each(function ($tab) {
+                $form = new static($this->model(), $tab['content']);
+
+                $this->builder->mergeFields($form->builder()->fields());
+            });
+        }
+    }
+
     /**
      * Handle update.
      *
@@ -490,16 +482,7 @@ class Form
     {
         $data = Input::all();
 
-        if ($tab = $this->builder->getTab()) {
-
-            $tab = $tab->getTabs()->first(function ($tab) use ($data) {
-                return $tab['id'] == $data['_tab_'];
-            });
-
-            $form = new static($this->model(), $tab['content']);
-
-            $this->builder->mergeFields($form->builder()->fields());
-        }
+        $this->prepareForTabs();
 
         $data = $this->handleEditable($data);
 
