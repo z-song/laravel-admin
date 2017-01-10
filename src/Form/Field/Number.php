@@ -16,11 +16,13 @@ class Number extends Field
 
         $this->script = <<<EOT
 
-$('.{$this->getElementClass()}').bootstrapNumber({
-	upClass: 'success',
-	downClass: 'primary',
-	center: true
-});
+$('.{$this->getElementClass()}:not(.initialized)')
+    .addClass('initialized')
+    .bootstrapNumber({
+        upClass: 'success',
+        downClass: 'primary',
+        center: true
+    });
 
 EOT;
 
