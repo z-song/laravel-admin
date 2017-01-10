@@ -301,30 +301,36 @@ class Builder
         $this->fields->push($hidden->value($previous));
     }
 
-    public function render()
-    {
-        if ($this->tab) {
-            return $this->renderTabForm();
-        }
-
-        return $this->renderSimpleForm();
-    }
-
     protected function renderTabForm()
     {
-        $model = $this->form->model();
+        $tabs = $this->tab->getTabs()->map(function ($tab) {
 
-        $tabs = $this->tab->getTabs()->map(function ($tab) use ($model) {
-
-            $form = new Form($model, $tab['content']);
+            $form = new Form($this->form->model(), $tab['content']);
             $form->hidden('_tab_')->default($tab['id']);
 
-            if ($edit = $this->tab->getEdit()) {
-                $form->edit($edit);
+            // In edit mode.
+            if ($this->isMode(static::MODE_EDIT)) {
+                $form->edit($this->id);
             }
 
             return array_merge($tab, compact('form'));
-        })->all();
+        });
+
+        $script = <<<EOT
+
+var url = document.location.toString();
+if (url.match('#')) {
+    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+}
+
+// Change hash for page-reload
+$('.nav-tabs a').on('shown.bs.tab', function (e) {
+    window.location.hash = e.target.hash;
+})
+
+EOT;
+
+        Admin::script($script);
 
         return view('admin::form.tab', compact('tabs'))->render();
     }
@@ -379,6 +385,15 @@ SCRIPT;
         $this->addRedirectUrlField();
 
         return view('admin::form', $vars)->render();
+    }
+
+    public function render()
+    {
+        if ($this->tab) {
+            return $this->renderTabForm();
+        }
+
+        return $this->renderSimpleForm();
     }
 
     /**

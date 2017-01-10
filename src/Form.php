@@ -213,14 +213,10 @@ class Form
      */
     public function edit($id)
     {
-        if ($tab = $this->builder->getTab()) {
-            $tab->edit($id);
-        } else {
-            $this->builder->setMode(Builder::MODE_EDIT);
-            $this->builder->setResourceId($id);
+        $this->builder->setMode(Builder::MODE_EDIT);
+        $this->builder->setResourceId($id);
 
-            $this->setFieldValue($id);
-        }
+        $this->setFieldValue($id);
 
         return $this;
     }
@@ -1142,7 +1138,7 @@ class Form
      * @param string $title
      * @param Closure $content
      *
-     * @return $this
+     * @return Tab
      */
     public function tab($title, Closure $content)
     {
