@@ -158,9 +158,7 @@ $grid->rows(function($row){
     if($row->id % 3) {
         $row->actions('edit');
     }
-    
    
-
     //指定列添加自定义操作按钮
     if($row->id % 2) {
         $row->actions()->add(function ($row) {
@@ -170,7 +168,7 @@ $grid->rows(function($row){
 });
 ```
 #### 添加算定义操作按钮
-```
+```php
 $grid->actions(function(Actions $action){
 
         //在操作按钮组前添加
