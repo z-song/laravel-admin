@@ -65,6 +65,13 @@ class Model
     protected $sortName = '_sort';
 
     /**
+     * Collection callback.
+     *
+     * @var \Closure
+     */
+    protected $collectionCallback;
+
+    /**
      * Create a new grid model instance.
      *
      * @param EloquentModel $model
@@ -145,6 +152,20 @@ class Model
     }
 
     /**
+     * Set collection callback.
+     *
+     * @param \Closure $callback
+     *
+     * @return $this
+     */
+    public function collection(\Closure $callback = null)
+    {
+        $this->collectionCallback = $callback;
+
+        return $this;
+    }
+
+    /**
      * Build.
      *
      * @return array
@@ -152,7 +173,13 @@ class Model
     public function buildData()
     {
         if (empty($this->data)) {
-            $this->data = $this->get()->toArray();
+            $collection = $this->get();
+
+            if ($this->collectionCallback) {
+                $collection = call_user_func($this->collectionCallback, $collection);
+            }
+
+            $this->data = $collection->toArray();
         }
 
         return $this->data;
