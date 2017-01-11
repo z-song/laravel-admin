@@ -605,13 +605,15 @@ class Form
                 continue;
             }
 
-            $prepared = $this->prepareUpdate([$name => $values], true);
+            $relation = $this->model->$name();
+
+            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
+
+            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
 
             if (empty($prepared)) {
                 continue;
             }
-
-            $relation = $this->model->$name();
 
             switch (get_class($relation)) {
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
@@ -655,16 +657,24 @@ class Form
      *
      * @return array
      */
-    protected function prepareUpdate($updates, $isRelation = false)
+
+    /**
+     * Prepare input data for update.
+     *
+     * @param array $updates
+     * @param bool  $hasDot    If column name contains a 'dot', only has-one relation column use this.
+     * @return array
+     */
+    protected function prepareUpdate(array $updates, $hasDot = false)
     {
         $prepared = [];
 
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
-            if (!$isRelation && Str::contains($columns, '.')) {
+            if (!$hasDot && Str::contains($columns, '.')) {
                 continue;
-            } elseif ($isRelation && !Str::contains($columns, '.')) {
+            } elseif ($hasDot && !Str::contains($columns, '.')) {
                 continue;
             }
 
