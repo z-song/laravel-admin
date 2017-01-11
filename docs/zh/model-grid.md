@@ -159,10 +159,7 @@ $grid->rows(function($row){
         $row->actions('edit');
     }
     
-    // 添加自定义操作按钮
-    $row->actions()->add(function ($row) {
-        return "<a href='/url/{$row->id}'><i class='fa fa-eye'></i></a>";
-    });
+   
 
     //指定列添加自定义操作按钮
     if($row->id % 2) {
@@ -170,6 +167,17 @@ $grid->rows(function($row){
             return "<a class=\"btn btn-xs btn-danger\">btn</a>";
         });
     }
+});
+```
+#### 添加算定义操作按钮
+```
+$grid->actions(function(Actions $action){
+
+        //在操作按钮组前添加
+        $action->prepend("<a  href='".route('exampleImageSave',['id'=>$action->getkey()])."' ><i class='fa fa-image'></i></a>");
+        
+        //在操作按钮组后添加
+        $action->append("<a  href='".route('exampleImageSave',['id'=>$action->getkey()])."' ><i class='fa fa-image'></i></a>");
 });
 ```
 
