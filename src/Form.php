@@ -952,15 +952,13 @@ class Form
      */
     public function resource($slice = -2)
     {
-        $route = app('router')->current();
-
-        $segments = explode('/', trim($route->getUri(), '/'));
+        $segments = explode('/', trim(app('request')->getUri(), '/'));
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
         }
 
-        return '/'.implode('/', $segments);
+        return implode('/', $segments);
     }
 
     /**

@@ -32,7 +32,7 @@ class CreateButton extends AbstractTool
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="/{$this->grid->resource()}/create" class="btn btn-sm btn-success">
+    <a href="{$this->grid->resource()}/create" class="btn btn-sm btn-success">
         <i class="fa fa-save"></i>&nbsp;&nbsp;{$new}
     </a>
 </div>

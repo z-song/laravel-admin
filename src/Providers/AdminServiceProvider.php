@@ -137,7 +137,7 @@ class AdminServiceProvider extends ServiceProvider
     {
         // register route middleware.
         foreach ($this->routeMiddleware as $key => $middleware) {
-            app('router')->middleware($key, $middleware);
+            app('router')->aliasMiddleware($key, $middleware);
         }
 
         // register middleware group.
