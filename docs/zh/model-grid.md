@@ -167,7 +167,7 @@ $grid->rows(function($row){
     }
 });
 ```
-#### 添加算定义操作按钮
+#### 添加自定义操作按钮
 ```php
 $grid->actions(function(Actions $action){
 
