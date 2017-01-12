@@ -21,11 +21,13 @@
         @if( !empty($groups))
             @foreach($groups as $group)
                 <section id="{{ $group['id'] }}">
+                    @if( !empty($group['title']))
                     <div class="row">
                         <div class="col-md-2"><h4 class="pull-right">{{ $group['title'] }}</h4></div>
                         <div class="col-md-6"></div>
                     </div>
                     <hr style="margin-top: 0px;">
+                    @endif
                     @foreach($group['form']->builder()->fields() as $field)
                         {!! $field->render() !!}
                     @endforeach
