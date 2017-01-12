@@ -19,9 +19,13 @@
     {!! $form->open(['class' => "form-horizontal"]) !!}
         <div class="box-body">
 
-            @foreach($form->fields() as $field)
-                {!! $field->render() !!}
-            @endforeach
+            @if(!$tabObj->isEmpty())
+                @include('admin::form.tab', compact('tabObj'))
+            @else
+                @foreach($form->fields() as $field)
+                    {!! $field->render() !!}
+                @endforeach
+            @endif
 
         </div>
         <!-- /.box-body -->
@@ -43,6 +47,11 @@
             </div>
 
         </div>
+
+        @foreach($form->getHiddenFields() as $hiddenField)
+            {!! $hiddenField->render() !!}
+        @endforeach
+
         <!-- /.box-footer -->
     {!! $form->close() !!}
 </div>

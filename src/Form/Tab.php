@@ -18,6 +18,11 @@ class Tab
     protected $tabs;
 
     /**
+     * @var int
+     */
+    protected $offset = 0;
+
+    /**
      * Tab constructor.
      *
      * @param Form $form
@@ -30,21 +35,43 @@ class Tab
     }
 
     /**
-     * Add a tab section.
+     * Append a tab section.
      *
      * @param string $title
      * @param \Closure $content
-     * @param boolean $active
+     * @param bool $active
      *
      * @return $this
      */
-    public function tab($title, \Closure $content, $active = false)
+    public function append($title, \Closure $content, $active = false)
     {
+        $fields = $this->collectFields($content);
+
         $id = 'form-'.($this->tabs->count() + 1);
 
-        $this->tabs->push(compact('id', 'title', 'content', 'active'));
+        $this->tabs->push(compact('id', 'title', 'fields', 'active'));
 
         return $this;
+    }
+
+    /**
+     * Collect fields under current tab.
+     *
+     * @param \Closure $content
+     *
+     * @return Collection
+     */
+    protected function collectFields(\Closure $content)
+    {
+        call_user_func($content, $this->form);
+
+        $all = $this->form->builder()->fields();
+
+        $fields = $all->slice($this->offset);
+
+        $this->offset = $all->count();
+
+        return $fields;
     }
 
     /**
@@ -66,5 +93,13 @@ class Tab
         }
 
         return $this->tabs;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->tabs->isEmpty();
     }
 }

@@ -48,7 +48,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Year           year($column, $label = '')
  * @method Field\Month          month($column, $label = '')
  * @method Field\DateRange      dateRange($start, $end, $label = '')
- * @method Field\DateTimeRange  dateTimeRange($start, $end, $label = '')
+ * @method Field\DateTimeRange  datetimeRange($start, $end, $label = '')
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Number         number($column, $label = '')
  * @method Field\Currency       currency($column, $label = '')
@@ -139,6 +139,11 @@ class Form
     protected static $collectedAssets = [];
 
     /**
+     * @var Form\Tab
+     */
+    protected $tab = null;
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -216,6 +221,35 @@ class Form
     }
 
     /**
+     * Use tab to split form.
+     *
+     * @param string $title
+     * @param Closure $content
+     *
+     * @return $this
+     */
+    public function tab($title, Closure $content, $active = false)
+    {
+        $this->getTab()->append($title, $content, $active);
+
+        return $this;
+    }
+
+    /**
+     * Get Tab instance.
+     *
+     * @return Tab
+     */
+    public function getTab()
+    {
+        if (is_null($this->tab)) {
+            $this->tab = new Tab($this);
+        }
+
+        return $this->tab;
+    }
+
+    /**
      * Destroy data entity and remove files.
      *
      * @param $id
@@ -264,8 +298,6 @@ class Form
     public function store()
     {
         $data = Input::all();
-
-        $this->prepareForTabs();
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
@@ -460,17 +492,6 @@ class Form
         }
     }
 
-    protected function prepareForTabs()
-    {
-        if ($tab = $this->builder->getTab()) {
-            $tab->getTabs()->each(function ($tab) {
-                $form = new static($this->model(), $tab['content']);
-
-                $this->builder->mergeFields($form->builder()->fields());
-            });
-        }
-    }
-
     /**
      * Handle update.
      *
@@ -481,8 +502,6 @@ class Form
     public function update($id)
     {
         $data = Input::all();
-
-        $this->prepareForTabs();
 
         $data = $this->handleEditable($data);
 
@@ -672,9 +691,7 @@ class Form
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
-            if (!$hasDot && Str::contains($columns, '.')) {
-                continue;
-            } elseif ($hasDot && !Str::contains($columns, '.')) {
+            if ($this->invalidColumn($columns, $hasDot)) {
                 continue;
             }
 
@@ -700,6 +717,26 @@ class Form
         }
 
         return $prepared;
+    }
+
+    /**
+     *
+     *
+     * @param string|array $columns
+     * @param bool $hasDot
+     * @return bool
+     */
+    public function invalidColumn($columns, $hasDot = false)
+    {
+        foreach ((array) $columns as $column) {
+            if ((!$hasDot && Str::contains($column, '.')) ||
+                ($hasDot && !Str::contains($column, '.')))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -760,7 +797,7 @@ class Form
     /**
      * Set saving callback.
      *
-     * @param callable $callback
+     * @param Closure $callback
      *
      * @return void
      */
@@ -1013,6 +1050,7 @@ class Form
             'dateRange'         => \Encore\Admin\Form\Field\DateRange::class,
             'datetime'          => \Encore\Admin\Form\Field\Datetime::class,
             'dateTimeRange'     => \Encore\Admin\Form\Field\DatetimeRange::class,
+            'datetimeRange'     => \Encore\Admin\Form\Field\DatetimeRange::class,
             'decimal'           => \Encore\Admin\Form\Field\Decimal::class,
             'display'           => \Encore\Admin\Form\Field\Display::class,
             'divider'           => \Encore\Admin\Form\Field\Divide::class,
@@ -1123,23 +1161,6 @@ class Form
             'css' => $css->flatten()->unique()->filter()->toArray(),
             'js'  => $js->flatten()->unique()->filter()->toArray(),
         ];
-    }
-
-    /**
-     * Use tab to split form.
-     *
-     * @param string $title
-     * @param Closure $content
-     *
-     * @return Tab
-     */
-    public function tab($title, Closure $content)
-    {
-        $tab = new Tab($this);
-
-        $this->builder->setTab($tab);
-
-        return $tab->tab($title, $content);
     }
 
     /**
