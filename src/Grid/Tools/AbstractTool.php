@@ -29,7 +29,7 @@ abstract class AbstractTool implements Renderable
     /**
      * {@inheritdoc}
      */
-    public abstract function render();
+    abstract public function render();
 
     /**
      * @return string
