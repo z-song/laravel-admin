@@ -7,9 +7,9 @@ use Encore\Admin\Exception\Handle;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
+use Encore\Admin\Form\Group;
 use Encore\Admin\Form\NestedForm;
 use Encore\Admin\Form\Tab;
-use Encore\Admin\Form\Group;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -663,7 +663,8 @@ class Form
      * Prepare input data for update.
      *
      * @param array $updates
-     * @param bool  $hasDot    If column name contains a 'dot', only has-one relation column use this.
+     * @param bool  $hasDot  If column name contains a 'dot', only has-one relation column use this.
+     *
      * @return array
      */
     protected function prepareUpdate(array $updates, $hasDot = false)
@@ -1131,7 +1132,7 @@ class Form
     /**
      * Use tab to split form.
      *
-     * @param string $title
+     * @param string  $title
      * @param Closure $content
      *
      * @return Tab
@@ -1148,7 +1149,7 @@ class Form
     /**
      * Use group to split form.
      *
-     * @param string $title
+     * @param string  $title
      * @param Closure $content
      *
      * @return Tab

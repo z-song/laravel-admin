@@ -4,7 +4,6 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Form;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class Group
 {
@@ -33,7 +32,7 @@ class Group
     /**
      * Add a tab section.
      *
-     * @param string $title
+     * @param string   $title
      * @param \Closure $content
      *
      * @return $this
