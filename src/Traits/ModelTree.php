@@ -67,7 +67,7 @@ trait ModelTree
     }
 
     /**
-     * Get title column
+     * Get title column.
      *
      * @return string
      */
@@ -113,14 +113,14 @@ trait ModelTree
      */
     public static function toTree()
     {
-        return (new static)->buildNestedArray();
+        return (new static())->buildNestedArray();
     }
 
     /**
      * Build Nested array.
      *
      * @param array $nodes
-     * @param int $parentId
+     * @param int   $parentId
      *
      * @return array
      */
@@ -148,7 +148,7 @@ trait ModelTree
     }
 
     /**
-     * Get all elements
+     * Get all elements.
      *
      * @return mixed
      */
@@ -172,7 +172,6 @@ trait ModelTree
         static::$branchOrder = array_flip(array_flatten($order));
 
         static::$branchOrder = array_map(function ($item) {
-
             return ++$item;
         }, static::$branchOrder);
     }
@@ -209,7 +208,7 @@ trait ModelTree
      */
     public static function selectOptions()
     {
-        $options = (new static)->buildSelectOptions();
+        $options = (new static())->buildSelectOptions();
 
         return collect($options)->prepend('Root', 0)->all();
     }
@@ -267,7 +266,6 @@ trait ModelTree
         parent::boot();
 
         static::saving(function (Model $branch) {
-
             $parentColumn = $branch->getParentColumn();
 
             if (Request::has($parentColumn) && Request::input($parentColumn) == $branch->getKey()) {

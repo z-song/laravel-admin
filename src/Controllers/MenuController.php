@@ -12,7 +12,6 @@ use Encore\Admin\Layout\Row;
 use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Box;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Request;
 
 class MenuController extends Controller
 {
@@ -30,7 +29,6 @@ class MenuController extends Controller
             $content->description(trans('admin::lang.list'));
 
             $content->row(function (Row $row) {
-
                 $row->column(6, $this->treeView()->render());
 
                 $row->column(6, function (Column $column) {
@@ -69,14 +67,12 @@ class MenuController extends Controller
     protected function treeView()
     {
         return Menu::tree(function (Tree $tree) {
-
             $tree->disableCreate();
 
             $tree->branch(function ($branch) {
                 $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
 
                 if (!isset($branch['children'])) {
-
                     $uri = admin_url($branch['uri']);
 
                     $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";

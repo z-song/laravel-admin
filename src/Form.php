@@ -223,7 +223,7 @@ class Form
     /**
      * Use tab to split form.
      *
-     * @param string $title
+     * @param string  $title
      * @param Closure $content
      *
      * @return $this
@@ -681,7 +681,8 @@ class Form
      * Prepare input data for update.
      *
      * @param array $updates
-     * @param bool  $hasDot    If column name contains a 'dot', only has-one relation column use this.
+     * @param bool  $hasDot  If column name contains a 'dot', only has-one relation column use this.
+     *
      * @return array
      */
     protected function prepareUpdate(array $updates, $hasDot = false)
@@ -720,18 +721,16 @@ class Form
     }
 
     /**
-     *
-     *
      * @param string|array $columns
-     * @param bool $hasDot
+     * @param bool         $hasDot
+     *
      * @return bool
      */
     public function invalidColumn($columns, $hasDot = false)
     {
         foreach ((array) $columns as $column) {
             if ((!$hasDot && Str::contains($column, '.')) ||
-                ($hasDot && !Str::contains($column, '.')))
-            {
+                ($hasDot && !Str::contains($column, '.'))) {
                 return true;
             }
         }

@@ -27,7 +27,7 @@ class Paginator extends AbstractTool
     }
 
     /**
-     * Initialize work for Paginator
+     * Initialize work for Paginator.
      *
      * @return void
      */
@@ -72,7 +72,7 @@ class Paginator extends AbstractTool
         $parameters = [
             'first' => $this->paginator->firstItem(),
             'last'  => $this->paginator->lastItem(),
-            'total' => $this->paginator->total()
+            'total' => $this->paginator->total(),
         ];
 
         $parameters = collect($parameters)->flatMap(function ($parameter, $key) {
@@ -93,8 +93,8 @@ class Paginator extends AbstractTool
             return '';
         }
 
-        return $this->paginationRanger() .
-            $this->paginationLinks() .
+        return $this->paginationRanger().
+            $this->paginationLinks().
             $this->perPageSelector();
     }
 }

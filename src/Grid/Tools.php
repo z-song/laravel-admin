@@ -95,9 +95,7 @@ class Tools implements Renderable
     public function render()
     {
         return $this->tools->map(function (AbstractTool $tool) {
-
             return $tool->setGrid($this->grid)->render();
-
         })->implode(' ');
     }
 }
