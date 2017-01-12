@@ -34,7 +34,6 @@ class UserFormTest extends TestCase
             ->seeElement('span[class=help-block] i[class*=fa-image]')
             ->seeInElement('span[class=help-block]', '上传头像')
             ->seeElement("select[name='tags[]'][multiple=multiple]")
-            ->dontSeeElement('a[class*=item_delete]')
             ->seeInElement('a[html-field]', 'html...');
     }
 
@@ -132,8 +131,7 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=text][name='profile[color]'][value='{$user->profile->color}']")
             ->seeElement("input[type=text][name='profile[start_at]'][value='{$user->profile->start_at}']")
             ->seeElement("input[type=text][name='profile[end_at]'][value='{$user->profile->end_at}']")
-            ->seeElement("select[name='tags[]'][multiple=multiple]")
-            ->dontSeeElement('a[class*=item_delete]');
+            ->seeElement("select[name='tags[]'][multiple=multiple]");
 
         $this->assertCount(50, $this->crawler()->filter("select[name='tags[]'] option"));
         $this->assertCount(5, $this->crawler()->filter("select[name='tags[]'] option[selected]"));

@@ -35,7 +35,6 @@ class ImageUploadTest extends TestCase
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
             ->seeInElement('a[href="/admin/images"]', 'List')
-            ->dontSeeElement('a[class*=item_delete]')
             ->seeElement('input[type=reset][value=Reset]')
             ->seeInElement('button[type=submit]', 'Submit');
     }
@@ -112,7 +111,6 @@ class ImageUploadTest extends TestCase
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
             ->seeInElement('a[href="/admin/images"]', 'List')
-            ->seeInElement('a[class*=item_delete]', 'Delete')
             ->seeElement('input[type=reset][value=Reset]')
             ->seeInElement('button[type=submit]', 'Submit');
 
