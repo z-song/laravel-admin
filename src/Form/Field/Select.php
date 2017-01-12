@@ -60,27 +60,37 @@ class Select extends Field
         return $this;
     }
 
+
     /**
      * Load options for other select on change.
      *
      * @param $field
-     * @param $source
+     * @param $sourceUrl
+     * @param string $idField
+     * @param string $textField
+     * author Edwin Hui
      */
-    public function load($field, $source)
+    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
     {
+
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
             $class = str_replace(['[', ']'], '_', $field);
         } else {
             $class = $field;
         }
-
         $script = <<<EOT
 
 $(".{$this->getElementClass()}").change(function () {
-    $.get("$source?q="+this.value, function (data) {
+    $.get("$sourceUrl?q="+this.value, function (data) {
         $(".$class option").remove();
-        $(".$class").select2({data: data});
+        $(".$class").select2({
+            data: $.map(data, function (d) {
+				d.id = d.$idField;
+				d.text = d.$textField;
+	            return d;
+	        })
+	    });
     });
 });
 EOT;
@@ -120,44 +130,54 @@ EOT;
      * Load options from ajax results.
      *
      * @param string $url
-     *
+     * @param $idField
+     * @param $textField
+     * @param string $script
      * @return $this
+     * author Edwin Hui
      */
-    public function ajax($url)
+    public function ajax($url, $idField, $textField, $script = '')
     {
         $this->script = <<<EOT
 
 $(".{$this->getElementClass()}").select2({
-  ajax: {
-    url: "$url",
-    dataType: 'json',
-    delay: 250,
-    data: function (params) {
-      return {
-        q: params.term,
-        page: params.page
-      };
-    },
-    processResults: function (data, params) {
-      params.page = params.page || 1;
-
-      return {
-        results: data.data,
-        pagination: {
-          more: data.next_page_url
-        }
-      };
-    },
-    cache: true
-  },
-  minimumInputLength: 1,
-  escapeMarkup: function (markup) {
-      return markup;
-  }
+	ajax: {
+		url: "$url",
+		dataType: 'json',
+		delay: 250,
+		data: function (params) {
+			return {
+				q: params.term,
+				page: params.page
+			};
+		},
+		processResults: function (data, params) {
+			params.page = params.page || 1;
+			return {
+				results: $.map(data.data, function (d) {
+							d.id = d.$idField;
+							d.text = d.$textField;
+                            return d;
+                        }),
+				pagination: {
+					more: data.next_page_url
+				}
+			};
+		},
+		cache: true
+	},
+	minimumInputLength: 1,
+	escapeMarkup: function (markup) {
+	  return markup;
+	},
+	$script
 });
 
 EOT;
 
         return $this;
     }
+
+
+
 }
