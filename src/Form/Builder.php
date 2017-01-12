@@ -6,6 +6,7 @@ use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 /**
  * Class Builder.
@@ -52,9 +53,9 @@ class Builder
     protected $mode = 'create';
 
     /**
-     * @var Tab
+     * @var array
      */
-    protected $tab;
+    protected $hiddenFields = [];
 
     /**
      * Builder constructor.
@@ -105,19 +106,15 @@ class Builder
     }
 
     /**
-     * @param Tab $tab
+     * @return string
      */
-    public function setTab(Tab $tab)
+    public function getResource()
     {
-        $this->tab = $tab;
-    }
+        if ($this->mode == self::MODE_CREATE) {
+            return $this->form->resource(-1);
+        }
 
-    /**
-     * @return Tab
-     */
-    public function getTab()
-    {
-        return $this->tab;
+        return $this->form->resource();
     }
 
     /**
@@ -131,11 +128,21 @@ class Builder
     }
 
     /**
-     * @param $fields
+     * @return array
      */
-    public function mergeFields($fields)
+    public function getHiddenFields()
     {
-        $this->fields = $this->fields->merge($fields);
+        return $this->hiddenFields;
+    }
+
+    /**
+     * @param Field $field
+     *
+     * @return void
+     */
+    public function addHiddenField(Field $field)
+    {
+        $this->hiddenFields[] = $field;
     }
 
     /**
@@ -191,6 +198,24 @@ class Builder
     }
 
     /**
+     * Add field for store redirect url after update or store.
+     *
+     * @return void
+     */
+    protected function addRedirectUrlField()
+    {
+        $previous = URL::previous();
+
+        if (!$previous || $previous == URL::current()) {
+            return;
+        }
+
+        if (Str::contains($previous, url($this->getResource()))) {
+            $this->addHiddenField((new Form\Field\Hidden(static::PREVIOUS_URL_KEY))->value($previous));
+        }
+    }
+
+    /**
      * Open up a new HTML form.
      *
      * @param array $options
@@ -203,8 +228,11 @@ class Builder
 
         if ($this->mode == self::MODE_EDIT) {
             $attributes['action'] = $this->form->resource().'/'.$this->id;
-            $this->form->hidden('_method')->value('PUT');
+
+            $this->addHiddenField((new Form\Field\Hidden('_method'))->value('PUT'));
         }
+
+        $this->addRedirectUrlField();
 
         if ($this->mode == self::MODE_CREATE) {
             $attributes['action'] = $this->form->resource(-1);
@@ -255,112 +283,60 @@ class Builder
     }
 
     /**
-     * Add field for store redirect url after update or store.
-     *
-     * @return void
-     */
-    protected function addRedirectUrlField()
-    {
-        $previous = URL::previous();
-
-        if (!$previous || $previous == URL::current()) {
-            return;
-        }
-
-        $hidden = new Form\Field\Hidden(static::PREVIOUS_URL_KEY);
-
-        $this->fields->push($hidden->value($previous));
-    }
-
-    /**
-     * Render
+     * Render form.
      *
      * @return string
      */
-    protected function renderTabForm()
+    public function render()
     {
-        $tabs = $this->tab->getTabs()->map(function ($tab) {
-
-            $form = new Form($this->form->model(), $tab['content']);
-
-            // In edit mode.
-            if ($this->isMode(static::MODE_EDIT)) {
-                $form->edit($this->id);
-            }
-
-            return array_merge($tab, compact('form'));
-        });
+        $tabObj = $this->form->getTab();
 
         $script = <<<SCRIPT
+        
+$('.form-history-back').on('click', function () {
+    event.preventDefault();
+    history.back(1);
+});
+
+SCRIPT;
+
+        if (!$tabObj->isEmpty()) {
+            $script .=  <<<SCRIPT
 
 var url = document.location.toString();
 if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
 }
-
+        
 // Change hash for page-reload
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 });
 
+if ($('.has-error').length) {
+    $('.has-error').parent().each(function () {
+        var tabId = '#'+$(this).attr('id');
+        $('li a[href="'+tabId+'"] i').removeClass('hide');
+    });
+    
+    var first = $('.has-error:first').parent().attr('id');
+    $('li a[href="#'+first+'"]').tab('show');
+}
+
 SCRIPT;
-
-        Admin::script($script);
-
-        return view('admin::form.tab', ['form' => $this, 'tabs' => $tabs])->render();
-    }
-
-    /**
-     * Render form.
-     *
-     * @return string
-     */
-    protected function renderSimpleForm()
-    {
-        $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
-
-        $script = <<<SCRIPT
-$('.form-history-back').on('click', function () {
-    event.preventDefault();
-    history.back(1);
-});
-SCRIPT;
-
-        Admin::script($script);
-
-        $vars = [
-            'id'       => $this->id,
-            'form'     => $this,
-            'resource' => $this->form->resource($slice),
-        ];
-
-        $this->addRedirectUrlField();
-
-        return view('admin::form', $vars)->render();
-    }
-
-    /**
-     * @return string
-     */
-    public function render()
-    {
-        if ($this->tab) {
-            return $this->renderTabForm();
         }
 
-        return $this->renderSimpleForm();
-    }
+        Admin::script($script);
 
-    /**
-     * @return mixed
-     */
-    public function renderWithoutForm()
-    {
-        return preg_replace(
-            ['/<form[^>]+>/', '/<\/form>/'],
-            ['<div class="form-horizontal">', '</div>'],
-            $this->renderSimpleForm()
-        );
+        $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
+
+        $data = [
+            'form'     => $this,
+            'resource' => $this->form->resource($slice),
+            'tabObj'   => $tabObj,
+        ];
+
+        return view('admin::form', $data)->render();
     }
 
     /**
