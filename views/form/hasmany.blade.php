@@ -1,56 +1,58 @@
+<div id="has-many-{{$column}}" class="box has-many-{{$column}}" style="margin-bottom: 0;">
+    <div class="box-header with-border" style="margin-bottom: 20px;">
+        <h3 class="box-title">{{ $label }}</h3>
+        <div class="box-tools pull-right">
+            <div class="btn btn-success btn-sm add"><i class="fa fa-save"></i>&nbsp;New</div>
+            <div class="btn btn-primary btn-sm" data-action="collapse-all"><i class="fa fa-minus-square-o"></i>&nbsp;{{ trans('admin::lang.collapse') }}</div>
+            <div class="btn btn-primary btn-sm" data-action="expand-all" style="display:none;"><i class="fa fa-plus-square-o"></i>&nbsp;{{ trans('admin::lang.expand') }}</div>
+        </div>
+        <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="padding:0;">
+        <div id="has-many-{{$column}}-forms" class="has-many-{{$column}}-forms">
+            @foreach($forms as $pk => $form)
 
-<div class="row">
-    <div class="col-md-2"><h4 class="pull-right">{{ $label }}</h4></div>
-    <div class="col-md-6"></div>
-</div>
-
-<hr style="margin-top: 0px;">
-
-<div class="has-many-{{$column}}">
-
-    <div class="has-many-{{$column}}-forms">
-
-        @foreach($forms as $pk => $form)
-
-            <div class="has-many-{{$column}}-form">
-
-                @foreach($form->fields() as $field)
-                    {!! $field->render() !!}
-                @endforeach
-
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"></label>
-                    <div class="col-sm-6">
-                        <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin::lang.remove') }}</div>
+                <div class="has-many-{{$column}}-form">
+                    <div class="box" style="border-top:none;">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">{{ $pk }}</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool remove"><i class="fa fa-times"></i></button>
+                            </div>
+                            <!-- /.box-tools -->
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            @foreach($form->fields() as $field)
+                                {!! $field->render() !!}
+                            @endforeach
+                        </div>
+                        <!-- /.box-body -->
                     </div>
                 </div>
+            @endforeach
+        </div>
+        <template class="{{$column}}-tpl">
+            <div class="has-many-{{$column}}-form has-many-new-form">
+                <div class="box" style="border-top:none; ">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><small class="label bg-green"><i class="fa fa-save"></i>&nbsp;New</small></h3>
 
-                <hr>
-            </div>
-
-        @endforeach
-    </div>
-
-    <template class="{{$column}}-tpl">
-        <div class="has-many-{{$column}}-form">
-
-            {!! $template !!}
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label"></label>
-                <div class="col-sm-6">
-                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash"></i>&nbsp;{{ trans('admin::lang.remove') }}</div>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool remove"><i class="fa fa-times"></i></button>
+                        </div>
+                        <!-- /.box-tools -->
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        {!! $template !!}
+                    </div>
+                    <!-- /.box-body -->
                 </div>
             </div>
-            <hr>
-        </div>
-    </template>
-
-    <div class="form-group">
-        <label class="col-sm-2 control-label"></label>
-        <div class="col-sm-6">
-            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin::lang.new') }}</div>
-        </div>
+        </template>
     </div>
-
 </div>

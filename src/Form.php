@@ -9,6 +9,7 @@ use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
 use Encore\Admin\Form\NestedForm;
 use Encore\Admin\Form\Tab;
+use Encore\Admin\Form\Group;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -1142,6 +1143,23 @@ class Form
         $this->builder->setTab($tab);
 
         return $tab->tab($title, $content);
+    }
+
+    /**
+     * Use group to split form.
+     *
+     * @param string $title
+     * @param Closure $content
+     *
+     * @return Tab
+     */
+    public function group($title, Closure $content)
+    {
+        $group = new Group($this);
+
+        $this->builder->setGroup($group);
+
+        return $group->group($title, $content);
     }
 
     /**

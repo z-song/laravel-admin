@@ -57,6 +57,11 @@ class Builder
     protected $tab;
 
     /**
+     * @var Group
+     */
+    protected $group;
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -118,6 +123,22 @@ class Builder
     public function getTab()
     {
         return $this->tab;
+    }
+
+    /**
+     * @param Group $group
+     */
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
+    }
+
+    /**
+     * @return Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 
     /**
@@ -310,6 +331,49 @@ SCRIPT;
         return view('admin::form.tab', ['form' => $this, 'tabs' => $tabs])->render();
     }
 
+
+    /**
+     * Render
+     *
+     * @return string
+     */
+    protected function renderGroupForm()
+    {
+        $groups = $this->group->getGroups()->map(function ($group) {
+
+            $form = new Form($this->form->model(), $group['content']);
+
+            // In edit mode.
+            if ($this->isMode(static::MODE_EDIT)) {
+                $form->edit($this->id);
+            }
+
+            return array_merge($group, compact('form'));
+        });
+
+        $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
+
+        $script = <<<SCRIPT
+$('.form-history-back').on('click', function () {
+    event.preventDefault();
+    history.back(1);
+});
+SCRIPT;
+
+        Admin::script($script);
+
+        $vars = [
+            'id'       => $this->id,
+            'form'     => $this,
+            'resource' => $this->form->resource($slice),
+            'groups' => $groups,
+        ];
+
+        $this->addRedirectUrlField();
+
+        return view('admin::form.group', $vars)->render();
+    }
+
     /**
      * Render form.
      *
@@ -344,6 +408,9 @@ SCRIPT;
      */
     public function render()
     {
+        if ($this->group){
+            return $this->renderGroupForm();
+        }
         if ($this->tab) {
             return $this->renderTabForm();
         }

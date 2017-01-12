@@ -316,18 +316,30 @@ class HasMany extends Field
 
         $script = <<<EOT
 
-$('.has-many-{$this->column}').on('click', '.add', function () {
+$('#has-many-{$this->column}').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
 
-    var count = $('.has-many-{$this->column}-forms .has-many-{$this->column}-form').size() + 1;
+    var count = $('#has-many-{$this->column}-forms .has-many-{$this->column}-form').size() + 1;
 
     var template = tpl.html().replace(/\[{$defaultKey}\]/g, '['+count+']');
-    $('.has-many-{$this->column}-forms').append(template);
+    $('#has-many-{$this->column}-forms').append(template);
     {$templateScript}
 });
+$('#has-many-{$this->column}').on('click', '.btn[data-action]', function () {
+    var action = $(this).data('action');
+    if( action === 'collapse-all'){
+        $('#has-many-{$this->column}-forms .btn-box-tool > i.fa-minus').trigger('click');
+        $(this).hide();
+        $('#has-many-{$this->column} [data-action="expand-all"]').show();
+    }else if( action === 'expand-all' ){
+        $('.has-many-{$this->column}-forms .btn-box-tool > i.fa-plus').trigger('click');
+        $(this).hide();
+        $('#has-many-{$this->column} [data-action="collapse-all"]').show();
+    }
+});
 
-$('.has-many-{$this->column}-forms').on('click', '.remove', function () {
+$('#has-many-{$this->column}-forms').on('click', '.remove', function () {
     $(this).closest('.has-many-{$this->column}-form').hide();
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
 });
