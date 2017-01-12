@@ -436,8 +436,8 @@ class Grid
         $column = $this->addColumn('__actions__', trans('admin::lang.action'));
 
         $column->display(function ($value) use ($grid, $column, $callback) {
-
             $actions = new Actions($value, $grid, $column, $this);
+
             return $actions->display($callback);
         });
     }
@@ -588,8 +588,6 @@ class Grid
 
         $this->rowsCallback = $callable;
     }
-
-
 
     /**
      * Setup grid tools.
