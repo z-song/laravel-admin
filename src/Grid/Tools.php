@@ -78,6 +78,16 @@ class Tools implements Renderable
     }
 
     /**
+     * @param \Closure $closure
+     */
+    public function batch(\Closure $closure)
+    {
+        call_user_func($closure, $this->tools->first(function ($tool) {
+            return $tool instanceof BatchActions;
+        }));
+    }
+
+    /**
      * Render header tools bar.
      *
      * @return string

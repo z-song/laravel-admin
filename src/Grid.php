@@ -687,6 +687,8 @@ class Grid
      * Disable batch deletion.
      *
      * @return $this
+     *
+     * @deprecated
      */
     public function disableBatchDeletion()
     {
