@@ -32,9 +32,9 @@ class Tab
     /**
      * Add a tab section.
      *
-     * @param string $title
+     * @param string   $title
      * @param \Closure $content
-     * @param boolean $active
+     * @param bool     $active
      *
      * @return $this
      */
@@ -58,7 +58,6 @@ class Tab
         if ($this->tabs->filter(function ($tab) {
             return $tab['active'];
         })->isEmpty()) {
-
             $first = $this->tabs->first();
             $first['active'] = true;
 

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\URL;
 class Builder
 {
     /**
-     *  Previous url key
+     *  Previous url key.
      */
     const PREVIOUS_URL_KEY = '_previous_';
 
@@ -294,14 +294,13 @@ class Builder
     }
 
     /**
-     * Render
+     * Render.
      *
      * @return string
      */
     protected function renderTabForm()
     {
         $tabs = $this->tab->getTabs()->map(function ($tab) {
-
             $form = new Form($this->form->model(), $tab['content']);
 
             // In edit mode.
@@ -312,7 +311,7 @@ class Builder
             return array_merge($tab, compact('form'));
         });
 
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 
 var url = document.location.toString();
 if (url.match('#')) {
@@ -331,16 +330,14 @@ SCRIPT;
         return view('admin::form.tab', ['form' => $this, 'tabs' => $tabs])->render();
     }
 
-
     /**
-     * Render
+     * Render.
      *
      * @return string
      */
     protected function renderGroupForm()
     {
         $groups = $this->group->getGroups()->map(function ($group) {
-
             $form = new Form($this->form->model(), $group['content']);
 
             // In edit mode.
@@ -353,7 +350,7 @@ SCRIPT;
 
         $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
 
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.form-history-back').on('click', function () {
     event.preventDefault();
     history.back(1);
@@ -366,7 +363,7 @@ SCRIPT;
             'id'       => $this->id,
             'form'     => $this,
             'resource' => $this->form->resource($slice),
-            'groups' => $groups,
+            'groups'   => $groups,
         ];
 
         $this->addRedirectUrlField();
@@ -383,7 +380,7 @@ SCRIPT;
     {
         $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
 
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.form-history-back').on('click', function () {
     event.preventDefault();
     history.back(1);
@@ -408,7 +405,7 @@ SCRIPT;
      */
     public function render()
     {
-        if ($this->group){
+        if ($this->group) {
             return $this->renderGroupForm();
         }
         if ($this->tab) {

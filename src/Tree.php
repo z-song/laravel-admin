@@ -80,7 +80,6 @@ class Tree implements Renderable
     {
         if (is_null($this->branchCallback)) {
             $this->branchCallback = function ($branch) {
-
                 $key = $branch[$this->model->getKeyName()];
                 $title = $branch[$this->model->getTitleColumn()];
 
@@ -90,7 +89,7 @@ class Tree implements Renderable
     }
 
     /**
-     * Set branch callback
+     * Set branch callback.
      *
      * @param \Closure $branchCallback
      *
@@ -230,7 +229,7 @@ SCRIPT;
         return [
             'id'        => $this->elementId,
             'items'     => $this->model->toTree(),
-            'useCreate' => $this->useCreate
+            'useCreate' => $this->useCreate,
         ];
     }
 

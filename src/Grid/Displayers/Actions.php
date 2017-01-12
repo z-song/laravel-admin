@@ -149,7 +149,7 @@ EOT;
         $token = csrf_token();
         $confirm = trans('admin::lang.delete_confirm');
         $successMsg = trans('admin::lang.delete_succeeded');
-        $faildMsg  = trans('admin::lang.delete_failed');
+        $faildMsg = trans('admin::lang.delete_failed');
 
         $script = <<<SCRIPT
 
@@ -180,6 +180,5 @@ SCRIPT;
     <i class="fa fa-trash"></i>
 </a>
 EOT;
-
     }
 }
