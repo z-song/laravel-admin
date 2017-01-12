@@ -38,6 +38,5 @@ class ExportButton extends AbstractTool
 </div>
 
 EOT;
-
     }
 }

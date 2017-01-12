@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class Builder
 {
     /**
-     *  Previous url key
+     *  Previous url key.
      */
     const PREVIOUS_URL_KEY = '_previous_';
 
@@ -291,7 +291,7 @@ class Builder
     {
         $tabObj = $this->form->getTab();
 
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
         
 $('.form-history-back').on('click', function () {
     event.preventDefault();
@@ -301,7 +301,7 @@ $('.form-history-back').on('click', function () {
 SCRIPT;
 
         if (!$tabObj->isEmpty()) {
-            $script .=  <<<SCRIPT
+            $script .= <<<'SCRIPT'
 
 var url = document.location.toString();
 if (url.match('#')) {

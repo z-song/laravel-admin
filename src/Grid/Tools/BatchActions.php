@@ -52,7 +52,7 @@ class BatchActions extends AbstractTool
     /**
      * Add a batch action.
      *
-     * @param string $title
+     * @param string      $title
      * @param BatchAction $abstract
      *
      * @return $this
@@ -92,7 +92,7 @@ class BatchActions extends AbstractTool
      */
     protected function script()
     {
-        return <<<EOT
+        return <<<'EOT'
 
 $('.grid-select-all').iCheck({checkboxClass:'icheckbox_minimal-blue'});
 
@@ -114,7 +114,6 @@ var selectedRows = function () {
 }
 
 EOT;
-
     }
 
     /**
