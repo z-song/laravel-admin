@@ -1,20 +1,24 @@
-{!! $form->open() !!}
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
 
-        @foreach($tabs as $tab)
-            <li {{ $tab['active'] ? 'class=active' : '' }}><a href="#tab-{{ $tab['id'] }}" data-toggle="tab">{{ $tab['title'] }}</a></li>
+        @foreach($tabObj->getTabs() as $tab)
+            <li {{ $tab['active'] ? 'class=active' : '' }}>
+                <a href="#tab-{{ $tab['id'] }}" data-toggle="tab">
+                    {{ $tab['title'] }} <i class="fa fa-exclamation-circle text-red hide"></i>
+                </a>
+            </li>
         @endforeach
 
     </ul>
     <div class="tab-content">
 
-        @foreach($tabs as $tab)
+        @foreach($tabObj->getTabs() as $tab)
             <div class="tab-pane {{ $tab['active'] ? 'active' : '' }}" id="tab-{{ $tab['id'] }}">
-                {!! $tab['form']->builder()->renderWithoutForm() !!}
+                @foreach($tab['fields'] as $field)
+                    {!! $field->render() !!}
+                @endforeach
             </div>
         @endforeach
 
     </div>
 </div>
-{!! $form->close() !!}
