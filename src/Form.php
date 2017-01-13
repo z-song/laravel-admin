@@ -304,9 +304,11 @@ class Form
             return back()->withInput()->withErrors($validationMessages);
         }
 
-         if (($response = $this->prepare($data, $this->saving)) instanceof Response) {
-             return $response;
-         }
+        $this->prepare($data);
+
+        if (($response = $this->callSaving()) instanceof Response) {
+            return $response;
+        }
 
         DB::transaction(function () {
             $inserts = $this->prepareInsert($this->updates);
@@ -377,17 +379,12 @@ class Form
      * Prepare input data for insert or update.
      *
      * @param array    $data
-     * @param Closure $callback
      *
      * @return mixed
      */
-    protected function prepare($data = [], Closure $callback = null)
+    protected function prepare($data = [])
     {
         $this->inputs = $this->removeIgnoredFields($data);
-
-        if ($callback instanceof Closure) {
-            return $callback($this);
-        }
 
         $this->relations = $this->getRelationInputs($data);
 
@@ -434,6 +431,18 @@ class Form
         }
 
         return $relations;
+    }
+
+    /**
+     * Call saving callback.
+     *
+     * @return mixed
+     */
+    protected function callSaving()
+    {
+        if ($this->saving instanceof Closure) {
+            return call_user_func($this->saving, $this);
+        }
     }
 
     /**
@@ -525,7 +534,9 @@ class Form
 
         $this->setFieldOriginalValue();
 
-        if (($response = $this->prepare($data, $this->saving)) instanceof Response) {
+        $this->prepare($data);
+
+        if (($response = $this->callSaving()) instanceof Response) {
             return $response;
         }
 
