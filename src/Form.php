@@ -304,7 +304,9 @@ class Form
             return back()->withInput()->withErrors($validationMessages);
         }
 
-        $this->prepare($data, $this->saving);
+         if (($response = $this->prepare($data, $this->saving)) instanceof Response) {
+             return $response;
+         }
 
         DB::transaction(function () {
             $inserts = $this->prepareInsert($this->updates);
@@ -321,8 +323,8 @@ class Form
             $this->saveRelation($this->relations);
         });
 
-        if (($result = $this->complete($this->saved)) instanceof Response) {
-            return $result;
+        if (($response = $this->complete($this->saved)) instanceof Response) {
+            return $response;
         }
 
         if ($response = $this->ajaxResponse(trans('admin::lang.save_succeeded'))) {
@@ -375,14 +377,16 @@ class Form
      * Prepare input data for insert or update.
      *
      * @param array    $data
-     * @param callable $callback
+     * @param Closure $callback
+     *
+     * @return mixed
      */
     protected function prepare($data = [], Closure $callback = null)
     {
         $this->inputs = $this->removeIgnoredFields($data);
 
         if ($callback instanceof Closure) {
-            $callback($this);
+            return $callback($this);
         }
 
         $this->relations = $this->getRelationInputs($data);
@@ -521,7 +525,9 @@ class Form
 
         $this->setFieldOriginalValue();
 
-        $this->prepare($data, $this->saving);
+        if (($response = $this->prepare($data, $this->saving)) instanceof Response) {
+            return $response;
+        }
 
         DB::transaction(function () {
             $updates = $this->prepareUpdate($this->updates);
