@@ -304,9 +304,7 @@ class Form
             return back()->withInput()->withErrors($validationMessages);
         }
 
-        $this->prepare($data);
-
-        if (($response = $this->callSaving()) instanceof Response) {
+        if (($response = $this->prepare($data)) instanceof Response) {
             return $response;
         }
 
@@ -385,6 +383,10 @@ class Form
     protected function prepare($data = [])
     {
         $this->inputs = $this->removeIgnoredFields($data);
+
+        if (($response = $this->callSaving()) instanceof Response) {
+            return $response;
+        }
 
         $this->relations = $this->getRelationInputs($data);
 
@@ -534,9 +536,7 @@ class Form
 
         $this->setFieldOriginalValue();
 
-        $this->prepare($data);
-
-        if (($response = $this->callSaving()) instanceof Response) {
+        if (($response = $this->prepare($data)) instanceof Response) {
             return $response;
         }
 
