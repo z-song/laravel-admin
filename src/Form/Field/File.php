@@ -96,7 +96,7 @@ class File extends Field
      */
     protected function initStorage()
     {
-        $this->storage = Storage::disk(config('admin.upload.disk'));
+        $this->disk(config('admin.upload.disk'));
     }
 
     /**
@@ -149,6 +149,20 @@ class File extends Field
     public function defaultStorePath()
     {
         return config('admin.upload.directory.file');
+    }
+
+    /**
+     * Set disk for storage.
+     *
+     * @param string $disk Disks defined in `config/filesystems.php`.
+     *
+     * @return $this
+     */
+    public function disk($disk)
+    {
+        $this->storage = Storage::disk($disk);
+
+        return $this;
     }
 
     /**
