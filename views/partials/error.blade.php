@@ -1,12 +1,8 @@
-@if($errors->hasBag('_exception_'))
-    <?php $error = $errors->getBag('_exception_');?>
-    <div class="alert alert-warning alert-dismissable">
+@if(Session::has('error'))
+    <?php $error = Session::get('error');?>
+    <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h4>
-            <i class="icon fa fa-warning"></i>
-            <i style="border-bottom: 1px dotted #fff;cursor: pointer;" title="{{ $error->get('type')[0] }}" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">{{ class_basename($error->get('type')[0]) }}</i>
-            In <i title="{{ $error->get('file')[0] }} line {{ $error->get('line')[0] }}" style="border-bottom: 1px dotted #fff;cursor: pointer;" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">{{ basename($error->get('file')[0]) }} line {{ $error->get('line')[0] }}</i> :
-        </h4>
-        <p>{{ $error->get('message')[0] }}</p>
+        <h4><i class="icon fa fa-ban"></i>{{ array_get($error->get('title'), 0) }}</h4>
+        <p>{{ array_get($error->get('message'), 0) }}</p>
     </div>
 @endif
