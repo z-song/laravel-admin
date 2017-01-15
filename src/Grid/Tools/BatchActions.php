@@ -83,6 +83,5 @@ $('.grid-batch-delete').on('click', function() {
 });
 
 EOT;
-
     }
 }

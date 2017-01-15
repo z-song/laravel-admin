@@ -15,7 +15,7 @@ trait AdminBuilder
      */
     public static function grid(\Closure $callback)
     {
-        return new Grid(new static, $callback);
+        return new Grid(new static(), $callback);
     }
 
     /**
@@ -27,7 +27,7 @@ trait AdminBuilder
     {
         Form::registerBuiltinFields();
 
-        return new Form(new static, $callback);
+        return new Form(new static(), $callback);
     }
 
     /**
@@ -37,6 +37,6 @@ trait AdminBuilder
      */
     public static function tree(\Closure $callback = null)
     {
-        return new Tree(new static, $callback);
+        return new Tree(new static(), $callback);
     }
 }

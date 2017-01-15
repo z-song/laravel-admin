@@ -60,7 +60,6 @@ class Select extends DataField
         return $this;
     }
 
-
     /**
      * Load options for other select on change.
      *
@@ -68,11 +67,10 @@ class Select extends DataField
      * @param $sourceUrl
      * @param string $idField
      * @param string $textField
-     * author Edwin Hui
+     *                          author Edwin Hui
      */
     public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
     {
-
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
             $class = str_replace(['[', ']'], '_', $field);
@@ -133,8 +131,9 @@ EOT;
      * @param $idField
      * @param $textField
      * @param string $script
+     *
      * @return $this
-     * author Edwin Hui
+     *               author Edwin Hui
      */
     public function ajax($url, $idField, $textField, $script = '')
     {
@@ -177,7 +176,4 @@ EOT;
 
         return $this;
     }
-
-
-
 }
