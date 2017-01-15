@@ -17,33 +17,52 @@
     <!-- /.box-header -->
     <!-- form start -->
     {!! $form->open(['class' => "form-horizontal"]) !!}
-        <div class="box-body">
+    <div class="box-body">
+        @if( !empty($groups))
+            @foreach($groups as $group)
+                <section id="{{ $group['id'] }}">
+                    @if( !empty($group['title']))
+                        <div class="row">
+                            <div class="col-md-2"><h4 class="pull-right">{{ $group['title'] }}</h4></div>
+                            <div class="col-md-6"></div>
+                        </div>
+                        <hr style="margin-top: 0px;">
+                    @endif
+                    @foreach($group['form']->builder()->fields() as $field)
+                        {!! $field->render() !!}
+                    @endforeach
 
+
+                </section>
+            @endforeach
+
+        @else
             @foreach($form->fields() as $field)
                 {!! $field->render() !!}
             @endforeach
+        @endif
+
+
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <div class="col-sm-2">
 
         </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <div class="col-sm-2">
+        <div class="col-sm-6">
 
-            </div>
-            <div class="col-sm-6">
-
-                <div class="btn-group pull-right">
+            <div class="btn-group pull-right">
                 {!! $form->submit() !!}
-                </div>
+            </div>
 
-                <div class="btn-group pull-left">
-                    <input type="reset" class="btn btn-warning" value="{{ trans('admin::lang.reset') }}"/>
-                </div>
-
+            <div class="btn-group pull-left">
+                <input type="reset" class="btn btn-warning" value="{{ trans('admin::lang.reset') }}"/>
             </div>
 
         </div>
-        <!-- /.box-footer -->
+
+    </div>
+    <!-- /.box-footer -->
     {!! $form->close() !!}
 </div>
-

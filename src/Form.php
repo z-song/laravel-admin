@@ -5,11 +5,9 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Exception\Handle;
 use Encore\Admin\Form\Builder;
-use Encore\Admin\Form\Field;
-use Encore\Admin\Form\Field\File;
-use Encore\Admin\Form\NestedForm;
-use Encore\Admin\Form\Tab;
-use Encore\Admin\Form\Group;
+use Encore\Admin\Field;
+use Encore\Admin\Field\DataField;
+use Encore\Admin\Field\DataField\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -25,44 +23,44 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class Form.
  *
- * @method Field\Text           text($column, $label = '')
- * @method Field\Checkbox       checkbox($column, $label = '')
- * @method Field\Radio          radio($column, $label = '')
- * @method Field\Select         select($column, $label = '')
- * @method Field\MultipleSelect multipleSelect($column, $label = '')
- * @method Field\Textarea       textarea($column, $label = '')
- * @method Field\Hidden         hidden($column, $label = '')
- * @method Field\Id             id($column, $label = '')
- * @method Field\Ip             ip($column, $label = '')
- * @method Field\Url            url($column, $label = '')
- * @method Field\Color          color($column, $label = '')
- * @method Field\Email          email($column, $label = '')
- * @method Field\Mobile         mobile($column, $label = '')
- * @method Field\Slider         slider($column, $label = '')
- * @method Field\Map            map($latitude, $longitude, $label = '')
- * @method Field\Editor         editor($column, $label = '')
- * @method Field\File           file($column, $label = '')
- * @method Field\Image          image($column, $label = '')
- * @method Field\Date           date($column, $label = '')
- * @method Field\Datetime       datetime($column, $label = '')
- * @method Field\Time           time($column, $label = '')
- * @method Field\Year           year($column, $label = '')
- * @method Field\Month          month($column, $label = '')
- * @method Field\DateRange      dateRange($start, $end, $label = '')
- * @method Field\DateTimeRange  dateTimeRange($start, $end, $label = '')
- * @method Field\TimeRange      timeRange($start, $end, $label = '')
- * @method Field\Number         number($column, $label = '')
- * @method Field\Currency       currency($column, $label = '')
- * @method Field\HasMany        hasMany($relationName, $callback)
- * @method Field\SwitchField    switch($column, $label = '')
- * @method Field\Display        display($column, $label = '')
- * @method Field\Rate           rate($column, $label = '')
- * @method Field\Divide         divide()
- * @method Field\Password       password($column, $label = '')
- * @method Field\Decimal        decimal($column, $label = '')
- * @method Field\Html           html($html)
- * @method Field\Tags           tags($column, $label = '')
- * @method Field\Icon           icon($column, $label = '')
+ * @method DataField\Text           text($column, $label = '')
+ * @method DataField\Checkbox       checkbox($column, $label = '')
+ * @method DataField\Radio          radio($column, $label = '')
+ * @method DataField\Select         select($column, $label = '')
+ * @method DataField\MultipleSelect multipleSelect($column, $label = '')
+ * @method DataField\Textarea       textarea($column, $label = '')
+ * @method DataField\Hidden         hidden($column, $label = '')
+ * @method DataField\Id             id($column, $label = '')
+ * @method DataField\Ip             ip($column, $label = '')
+ * @method DataField\Url            url($column, $label = '')
+ * @method DataField\Color          color($column, $label = '')
+ * @method DataField\Email          email($column, $label = '')
+ * @method DataField\Mobile         mobile($column, $label = '')
+ * @method DataField\Slider         slider($column, $label = '')
+ * @method DataField\Map            map($latitude, $longitude, $label = '')
+ * @method DataField\Editor         editor($column, $label = '')
+ * @method DataField\File           file($column, $label = '')
+ * @method DataField\Image          image($column, $label = '')
+ * @method DataField\Date           date($column, $label = '')
+ * @method DataField\Datetime       datetime($column, $label = '')
+ * @method DataField\Time           time($column, $label = '')
+ * @method DataField\Year           year($column, $label = '')
+ * @method DataField\Month          month($column, $label = '')
+ * @method DataField\DateRange      dateRange($start, $end, $label = '')
+ * @method DataField\DateTimeRange  dateTimeRange($start, $end, $label = '')
+ * @method DataField\TimeRange      timeRange($start, $end, $label = '')
+ * @method DataField\Number         number($column, $label = '')
+ * @method DataField\Currency       currency($column, $label = '')
+ * @method DataField\HasMany        hasMany($relationName, $callback)
+ * @method DataField\SwitchField    switch($column, $label = '')
+ * @method DataField\Display        display($column, $label = '')
+ * @method DataField\Rate           rate($column, $label = '')
+ * @method DataField\Divide         divide()
+ * @method DataField\Password       password($column, $label = '')
+ * @method DataField\Decimal        decimal($column, $label = '')
+ * @method DataField\Html           html($html)
+ * @method DataField\Tags           tags($column, $label = '')
+ * @method DataField\Icon           icon($column, $label = '')
  */
 class Form
 {
@@ -140,6 +138,11 @@ class Form
     protected static $collectedAssets = [];
 
     /**
+     * Relation remove flag
+     */
+    const REMOVE_FLAG_NAME = '_remove_';
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -161,7 +164,7 @@ class Form
      */
     public function pushField(Field $field)
     {
-        $field->setForm($this);
+        $field->setOwner($this);
 
         $this->builder->fields()->push($field);
 
@@ -196,7 +199,7 @@ class Form
         $this->builder->setMode(Builder::MODE_EDIT);
         $this->builder->setResourceId($id);
 
-        $this->setFieldValue($id);
+        $this->fill($this->getModelData($id));
 
         return $this;
     }
@@ -211,7 +214,7 @@ class Form
         $this->builder->setMode(Builder::MODE_VIEW);
         $this->builder->setResourceId($id);
 
-        $this->setFieldValue($id);
+        $this->fill($this->getModelData($id));
 
         return $this;
     }
@@ -249,7 +252,7 @@ class Form
             ->findOrFail($id)->toArray();
 
         $this->builder->fields()->filter(function ($field) {
-            return $field instanceof Field\File;
+            return $field instanceof DataField\File;
         })->each(function (File $file) use ($data) {
             $file->setOriginal($data);
 
@@ -266,7 +269,7 @@ class Form
     {
         $data = Input::all();
 
-        $this->prepareForTabs();
+//        $this->prepareForTabs();
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
@@ -287,14 +290,14 @@ class Form
 
             $this->model->save();
 
-            $this->saveRelation($this->relations);
+            $this->updateRelation($this->relations);
         });
 
         if (($result = $this->complete($this->saved)) instanceof Response) {
             return $result;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin::lang.save_succeeded'))) {
+        if ($response = $this->ajaxSuccess(trans('admin::lang.save_succeeded'))) {
             return $response;
         }
 
@@ -325,7 +328,7 @@ class Form
      *
      * @return bool|\Illuminate\Http\JsonResponse
      */
-    protected function ajaxResponse($message)
+    protected function ajaxSuccess($message)
     {
         $request = Request::capture();
 
@@ -333,6 +336,28 @@ class Form
         if ($request->ajax() && !$request->pjax()) {
             return response()->json([
                 'status'  => true,
+                'message' => $message,
+            ]);
+        }
+
+        return false;
+    }
+
+    /**
+     * Get ajax error.
+     *
+     * @param string $message
+     *
+     * @return bool|\Illuminate\Http\JsonResponse
+     */
+    protected function ajaxError($message)
+    {
+        $request = Request::capture();
+
+        // ajax but not pjax
+        if ($request->ajax() && !$request->pjax()) {
+            return response()->json([
+                'status'  => false,
                 'message' => $message,
             ]);
         }
@@ -415,62 +440,17 @@ class Form
         }
     }
 
-    /**
-     * Save relations data.
-     *
-     * @param array $relations
-     *
-     * @return void
-     */
-    protected function saveRelation($relations)
-    {
-        foreach ($relations as $name => $values) {
-            if (!method_exists($this->model, $name)) {
-                continue;
-            }
 
-            $values = $this->prepareInsert([$name => $values]);
-
-            $relation = $this->model->$name();
-
-            switch (get_class($relation)) {
-                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
-                case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
-                    $relation->attach($values[$name]);
-                    break;
-                case \Illuminate\Database\Eloquent\Relations\HasOne::class:
-                    $related = $relation->getRelated();
-                    foreach ($values[$name] as $column => $value) {
-                        if (is_array($value)) {
-                            $value = implode(',', $value);
-                        }
-
-                        $related->setAttribute($column, $value);
-                    }
-
-                    $relation->save($related);
-                    break;
-                case \Illuminate\Database\Eloquent\Relations\HasMany::class:
-
-                    $nestedForm = new NestedForm($relation);
-
-                    $nestedForm->update($values[$name]);
-
-                    break;
-            }
-        }
-    }
-
-    protected function prepareForTabs()
-    {
-        if ($tab = $this->builder->getTab()) {
-            $tab->getTabs()->each(function ($tab) {
-                $form = new static($this->model(), $tab['content']);
-
-                $this->builder->mergeFields($form->builder()->fields());
-            });
-        }
-    }
+//    protected function prepareForTabs()
+//    {
+//        if ($tab = $this->builder->getTab()) {
+//            $tab->getTabs()->each(function ($tab) {
+//                $form = new static($this->model(), $tab['content']);
+//
+//                $this->builder->mergeFields($form->builder()->fields());
+//            });
+//        }
+//    }
 
     /**
      * Handle update.
@@ -483,7 +463,7 @@ class Form
     {
         $data = Input::all();
 
-        $this->prepareForTabs();
+//        $this->prepareForTabs();
 
         $data = $this->handleEditable($data);
 
@@ -496,10 +476,15 @@ class Form
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
+
+            if( $ajaxError = $this->ajaxError($validationMessages)){
+                return $ajaxError;
+            }
+
             return back()->withInput()->withErrors($validationMessages);
         }
 
-        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+        $this->model = $this->model->with($this->getRelations())->findOrNew($id);
 
         $this->setFieldOriginalValue();
 
@@ -525,12 +510,15 @@ class Form
             return $result;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin::lang.update_succeeded'))) {
+        if ($response = $this->ajaxSuccess(trans('admin::lang.update_succeeded'))) {
             return $response;
         }
 
         return $this->redirectAfterUpdate();
     }
+
+
+
 
     /**
      * Get RedirectResponse after update.
@@ -606,58 +594,34 @@ class Form
                 continue;
             }
 
-            $relation = $this->model->$name();
+            foreach($values as $ralated){
 
-            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
+                $relationModel = $this->model()->$name();
 
-            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
+                $keyName = $relationModel->getRelated()->getKeyName();
 
-            if (empty($prepared)) {
-                continue;
+                $instance = $relationModel->findOrNew($ralated[$keyName]);
+
+                if( $ralated[ static::REMOVE_FLAG_NAME ] == 1){
+
+                    $instance->delete();
+                    
+                    continue;
+                }
+
+                array_forget($ralated, static::REMOVE_FLAG_NAME);
+                
+                $instance->fill($ralated);
+
+                $instance->save();
             }
 
-            switch (get_class($relation)) {
-                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
-                case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
-                    $relation->sync($prepared[$name]);
-                    break;
-                case \Illuminate\Database\Eloquent\Relations\HasOne::class:
 
-                    $related = $this->model->$name;
-
-                    // if related is empty
-                    if (is_null($related)) {
-                        $related = $relation->getRelated();
-                        $related->{$relation->getForeignKey()} = $this->model->{$this->model->getKeyName()};
-                    }
-
-                    foreach ($prepared[$name] as $column => $value) {
-                        if (is_array($value)) {
-                            $value = implode(',', $value);
-                        }
-                        $related->setAttribute($column, $value);
-                    }
-
-                    $related->save();
-                    break;
-                case \Illuminate\Database\Eloquent\Relations\HasMany::class:
-
-                    $nestedForm = new NestedForm($relation);
-
-                    $nestedForm->update($prepared[$name]);
-
-                    break;
-            }
         }
     }
 
-    /**
-     * Prepare input data for update.
-     *
-     * @param $updates
-     *
-     * @return array
-     */
+
+
 
     /**
      * Prepare input data for update.
@@ -856,23 +820,37 @@ class Form
     }
 
     /**
-     * Set all fields value in form.
+     * Get model data
      *
      * @param $id
-     *
-     * @return void
+     * @return mixed
+     * author Edwin Hui
      */
-    protected function setFieldValue($id)
+    protected function getModelData($id)
     {
         $relations = $this->getRelations();
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
-        $data = $this->model->toArray();
+        return $this->model->toArray();
+    }
 
+
+    /**
+     * Set all fields value in form.
+     *
+     * @param array $data
+     * @return $this
+     * author Edwin Hui
+     */
+    public function fill(array $data)
+    {
         $this->builder->fields()->each(function (Field $field) use ($data) {
+
             $field->fill($data);
         });
+
+        return $this;
     }
 
     /**
@@ -1008,47 +986,48 @@ class Form
     public static function registerBuiltinFields()
     {
         $map = [
-            'button'            => \Encore\Admin\Form\Field\Button::class,
-            'checkbox'          => \Encore\Admin\Form\Field\Checkbox::class,
-            'color'             => \Encore\Admin\Form\Field\Color::class,
-            'currency'          => \Encore\Admin\Form\Field\Currency::class,
-            'date'              => \Encore\Admin\Form\Field\Date::class,
-            'dateRange'         => \Encore\Admin\Form\Field\DateRange::class,
-            'datetime'          => \Encore\Admin\Form\Field\Datetime::class,
-            'dateTimeRange'     => \Encore\Admin\Form\Field\DatetimeRange::class,
-            'decimal'           => \Encore\Admin\Form\Field\Decimal::class,
-            'display'           => \Encore\Admin\Form\Field\Display::class,
-            'divider'           => \Encore\Admin\Form\Field\Divide::class,
-            'divide'            => \Encore\Admin\Form\Field\Divide::class,
-            'editor'            => \Encore\Admin\Form\Field\Editor::class,
-            'email'             => \Encore\Admin\Form\Field\Email::class,
-            'embedsMany'        => \Encore\Admin\Form\Field\EmbedsMany::class,
-            'file'              => \Encore\Admin\Form\Field\File::class,
-            'hasMany'           => \Encore\Admin\Form\Field\HasMany::class,
-            'hidden'            => \Encore\Admin\Form\Field\Hidden::class,
-            'id'                => \Encore\Admin\Form\Field\Id::class,
-            'image'             => \Encore\Admin\Form\Field\Image::class,
-            'ip'                => \Encore\Admin\Form\Field\Ip::class,
-            'map'               => \Encore\Admin\Form\Field\Map::class,
-            'mobile'            => \Encore\Admin\Form\Field\Mobile::class,
-            'month'             => \Encore\Admin\Form\Field\Month::class,
-            'multipleSelect'    => \Encore\Admin\Form\Field\MultipleSelect::class,
-            'number'            => \Encore\Admin\Form\Field\Number::class,
-            'password'          => \Encore\Admin\Form\Field\Password::class,
-            'radio'             => \Encore\Admin\Form\Field\Radio::class,
-            'rate'              => \Encore\Admin\Form\Field\Rate::class,
-            'select'            => \Encore\Admin\Form\Field\Select::class,
-            'slider'            => \Encore\Admin\Form\Field\Slider::class,
-            'switch'            => \Encore\Admin\Form\Field\SwitchField::class,
-            'text'              => \Encore\Admin\Form\Field\Text::class,
-            'textarea'          => \Encore\Admin\Form\Field\Textarea::class,
-            'time'              => \Encore\Admin\Form\Field\Time::class,
-            'timeRange'         => \Encore\Admin\Form\Field\TimeRange::class,
-            'url'               => \Encore\Admin\Form\Field\Url::class,
-            'year'              => \Encore\Admin\Form\Field\Year::class,
-            'html'              => \Encore\Admin\Form\Field\Html::class,
-            'tags'              => \Encore\Admin\Form\Field\Tags::class,
-            'icon'              => \Encore\Admin\Form\Field\Icon::class,
+            'button'            => \Encore\Admin\Field\DataField\Button::class,
+            'checkbox'          => \Encore\Admin\Field\DataField\Checkbox::class,
+            'color'             => \Encore\Admin\Field\DataField\Color::class,
+            'currency'          => \Encore\Admin\Field\DataField\Currency::class,
+            'date'              => \Encore\Admin\Field\DataField\Date::class,
+            'dateRange'         => \Encore\Admin\Field\DataField\DateRange::class,
+            'datetime'          => \Encore\Admin\Field\DataField\Datetime::class,
+            'dateTimeRange'     => \Encore\Admin\Field\DataField\DatetimeRange::class,
+            'decimal'           => \Encore\Admin\Field\DataField\Decimal::class,
+            'display'           => \Encore\Admin\Field\DataField\Display::class,
+            'divider'           => \Encore\Admin\Field\DataField\Divide::class,
+            'divide'            => \Encore\Admin\Field\DataField\Divide::class,
+            'editor'            => \Encore\Admin\Field\DataField\Editor::class,
+            'email'             => \Encore\Admin\Field\DataField\Email::class,
+            'embedsMany'        => \Encore\Admin\Field\DataField\EmbedsMany::class,
+            'file'              => \Encore\Admin\Field\DataField\File::class,
+            'hasMany'           => \Encore\Admin\Field\DataField\HasMany::class,
+            'hasMany2'          => \Encore\Admin\Field\RelationField\HasMany2::class,
+            'hidden'            => \Encore\Admin\Field\DataField\Hidden::class,
+            'id'                => \Encore\Admin\Field\DataField\Id::class,
+            'image'             => \Encore\Admin\Field\DataField\Image::class,
+            'ip'                => \Encore\Admin\Field\DataField\Ip::class,
+            'map'               => \Encore\Admin\Field\DataField\Map::class,
+            'mobile'            => \Encore\Admin\Field\DataField\Mobile::class,
+            'month'             => \Encore\Admin\Field\DataField\Month::class,
+            'multipleSelect'    => \Encore\Admin\Field\DataField\MultipleSelect::class,
+            'number'            => \Encore\Admin\Field\DataField\Number::class,
+            'password'          => \Encore\Admin\Field\DataField\Password::class,
+            'radio'             => \Encore\Admin\Field\DataField\Radio::class,
+            'rate'              => \Encore\Admin\Field\DataField\Rate::class,
+            'select'            => \Encore\Admin\Field\DataField\Select::class,
+            'slider'            => \Encore\Admin\Field\DataField\Slider::class,
+            'switch'            => \Encore\Admin\Field\DataField\SwitchField::class,
+            'text'              => \Encore\Admin\Field\DataField\Text::class,
+            'textarea'          => \Encore\Admin\Field\DataField\Textarea::class,
+            'time'              => \Encore\Admin\Field\DataField\Time::class,
+            'timeRange'         => \Encore\Admin\Field\DataField\TimeRange::class,
+            'url'               => \Encore\Admin\Field\DataField\Url::class,
+            'year'              => \Encore\Admin\Field\DataField\Year::class,
+            'html'              => \Encore\Admin\Field\DataField\Html::class,
+            'tags'              => \Encore\Admin\Field\DataField\Tags::class,
+            'icon'              => \Encore\Admin\Field\DataField\Icon::class,
         ];
 
         foreach ($map as $abstract => $class) {
@@ -1128,39 +1107,39 @@ class Form
         ];
     }
 
-    /**
-     * Use tab to split form.
-     *
-     * @param string $title
-     * @param Closure $content
-     *
-     * @return Tab
-     */
-    public function tab($title, Closure $content)
-    {
-        $tab = new Tab($this);
-
-        $this->builder->setTab($tab);
-
-        return $tab->tab($title, $content);
-    }
-
-    /**
-     * Use group to split form.
-     *
-     * @param string $title
-     * @param Closure $content
-     *
-     * @return Tab
-     */
-    public function group($title, Closure $content)
-    {
-        $group = new Group($this);
-
-        $this->builder->setGroup($group);
-
-        return $group->group($title, $content);
-    }
+//    /**
+//     * Use tab to split form.
+//     *
+//     * @param string $title
+//     * @param Closure $content
+//     *
+//     * @return Tab
+//     */
+//    public function tab($title, Closure $content)
+//    {
+//        $tab = new Tab($this);
+//
+//        $this->builder->setTab($tab);
+//
+//        return $tab->tab($title, $content);
+//    }
+//
+//    /**
+//     * Use group to split form.
+//     *
+//     * @param string $title
+//     * @param Closure $content
+//     *
+//     * @return Tab
+//     */
+//    public function group($title, Closure $content)
+//    {
+//        $group = new Group($this);
+//
+//        $this->builder->setGroup($group);
+//
+//        return $group->group($title, $content);
+//    }
 
     /**
      * Getter.
@@ -1198,7 +1177,7 @@ class Form
         if ($className = static::findFieldClass($method)) {
             $column = array_get($arguments, 0, ''); //[0];
 
-            $element = new $className($column, array_slice($arguments, 1));
+            $element = new $className( $column, array_slice($arguments, 1));
 
             $this->pushField($element);
 

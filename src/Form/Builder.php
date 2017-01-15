@@ -4,6 +4,7 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
+use Encore\Admin\Field;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 
@@ -275,6 +276,54 @@ class Builder
         return '<button type="submit" class="btn btn-info pull-right">'.trans('admin::lang.submit').'</button>';
     }
 
+    public function ajaxSubmit()
+    {
+        if ($this->mode == self::MODE_VIEW) {
+            return '';
+        }
+
+        $script = <<<SCRIPT
+$('button.ajax-submit').on('click', function(){
+    var \$form = $(this).closest('form');
+    var url = \$form.attr('action');
+    \$form.find('.has-error').removeClass('has-error');
+    \$form.find('.error-label').remove();
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: \$form.serialize(),
+      success: function(data){
+        if(data.status === false){
+            $.each(data.message, function(key, value){
+                var \$target = $('[name="' + key + '"]:not([type="hidden"])');
+                \$target.closest('.form-group').addClass('has-error');
+                $.each(value, function(k, error){
+                   \$target.before('<label class="control-label error-label" for="inputError"><i class="fa fa-times-circle-o"></i> ' + error + '</label>');
+                });
+            });
+        }else if(data.status === true){
+            $('section.content').prepend('<div class="alert alert-success alert-dismissable success-label">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
+        '<h4><i class="icon fa fa-check"></i>Succeeded</h4>' +
+        '<p>' + data.message + '</p>' +
+        '</div>');
+        $(window).scrollTop(0);
+        };
+        },
+      error: function(data){
+       $('html').html(data.responseText);
+       $(window).scrollTop(0);
+      }
+    });
+
+});
+SCRIPT;
+
+        Admin::script($script);
+
+        return '<button type="button" class="btn btn-info pull-right ajax-submit">'.trans('admin::lang.submit').'</button>';
+    }
+
     /**
      * Add field for store redirect url after update or store.
      *
@@ -288,7 +337,7 @@ class Builder
             return;
         }
 
-        $hidden = new Form\Field\Hidden(static::PREVIOUS_URL_KEY);
+        $hidden = new Field\DataField\Hidden(static::PREVIOUS_URL_KEY);
 
         $this->fields->push($hidden->value($previous));
     }
@@ -333,23 +382,41 @@ SCRIPT;
 
 
     /**
+     * get group with form data
+     *
+     * @return bool|static
+     * author Edwin Hui
+     */
+    protected function getGroupWithFormData()
+    {
+        if( !empty($this->group)){
+
+            return $this->group->getGroups()->map(function ($group) {
+
+                $form = new Form($this->form->model(), $group['content']);
+
+                // In edit mode.
+                if ($this->isMode(static::MODE_EDIT)) {
+                    $form->edit($this->id);
+                }
+
+                return array_merge($group, compact('form'));
+            });
+        }
+
+        return false;
+
+    }
+
+    /**
      * Render
      *
      * @return string
      */
-    protected function renderGroupForm()
+    protected function renderSimpleForm()
     {
-        $groups = $this->group->getGroups()->map(function ($group) {
 
-            $form = new Form($this->form->model(), $group['content']);
-
-            // In edit mode.
-            if ($this->isMode(static::MODE_EDIT)) {
-                $form->edit($this->id);
-            }
-
-            return array_merge($group, compact('form'));
-        });
+        $groups = $this->getGroupWithFormData();
 
         $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
 
@@ -371,7 +438,7 @@ SCRIPT;
 
         $this->addRedirectUrlField();
 
-        return view('admin::form.group', $vars)->render();
+        return view('admin::form', $vars)->render();
     }
 
     /**
@@ -379,38 +446,38 @@ SCRIPT;
      *
      * @return string
      */
-    protected function renderSimpleForm()
-    {
-        $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
-
-        $script = <<<SCRIPT
-$('.form-history-back').on('click', function () {
-    event.preventDefault();
-    history.back(1);
-});
-SCRIPT;
-
-        Admin::script($script);
-
-        $vars = [
-            'id'       => $this->id,
-            'form'     => $this,
-            'resource' => $this->form->resource($slice),
-        ];
-
-        $this->addRedirectUrlField();
-
-        return view('admin::form', $vars)->render();
-    }
+//    protected function renderSimpleForm()
+//    {
+//        $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
+//
+//        $script = <<<SCRIPT
+//$('.form-history-back').on('click', function () {
+//    event.preventDefault();
+//    history.back(1);
+//});
+//SCRIPT;
+//
+//        Admin::script($script);
+//
+//        $vars = [
+//            'id'       => $this->id,
+//            'form'     => $this,
+//            'resource' => $this->form->resource($slice),
+//        ];
+//
+//        $this->addRedirectUrlField();
+//
+//        return view('admin::form', $vars)->render();
+//    }
 
     /**
      * @return string
      */
     public function render()
     {
-        if ($this->group){
-            return $this->renderGroupForm();
-        }
+//        if ($this->group){
+//            return $this->renderGroupForm();
+//        }
         if ($this->tab) {
             return $this->renderTabForm();
         }
