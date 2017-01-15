@@ -234,7 +234,7 @@ class Admin
      */
     public function menu()
     {
-        return Menu::toTree();
+        return (new Menu())->toTree();
     }
 
     /**
