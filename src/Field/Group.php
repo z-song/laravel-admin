@@ -85,6 +85,10 @@ class Group
         return $this;
     }
 
+    public function getRelationName()
+    {
+        return $this->relationName;
+    }
     /**
      * @param DataField $field
      *

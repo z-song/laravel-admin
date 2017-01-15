@@ -1,58 +1,55 @@
-<div id="has-many-{{$column}}" class="box has-many-{{$column}}" style="margin-bottom: 0;">
-    <div class="box-header with-border" style="margin-bottom: 20px;">
-        <h3 class="box-title">{{ $label }}</h3>
-        <div class="box-tools pull-right">
-            <div class="btn btn-success btn-sm add"><i class="fa fa-save"></i>&nbsp;New</div>
-            <div class="btn btn-primary btn-sm" data-action="collapse-all"><i class="fa fa-minus-square-o"></i>&nbsp;{{ trans('admin::lang.collapse') }}</div>
-            <div class="btn btn-primary btn-sm" data-action="expand-all" style="display:none;"><i class="fa fa-plus-square-o"></i>&nbsp;{{ trans('admin::lang.expand') }}</div>
-        </div>
-        <!-- /.box-tools -->
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body" style="padding:0;">
-        <div id="has-many-{{$column}}-forms" class="has-many-{{$column}}-forms">
-            @foreach($groups as $pk => $group)
-
-                <div class="has-many-{{$column}}-form">
-                    <div class="box" style="border-top:none;">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">{{ $pk }}</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool remove"><i class="fa fa-times"></i></button>
-                            </div>
-                            <!-- /.box-tools -->
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            @foreach($group->fields() as $field)
-                                {!! $field->render() !!}
-                            @endforeach
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                </div>
+<style>
+    .nav-tabs > li:hover > i{
+        display: inline;
+    }
+    .close-tab {
+        position: absolute;
+        font-size: 10px;
+        top: 2px;
+        right: 5px;
+        color: #94A6B0;
+        cursor: pointer;
+        display: none;
+    }
+</style>
+<div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}}">
+    <ul class="nav nav-tabs">
+        @foreach($groups as $pk => $group)
+            <li class="@if ($group == reset($groups)) active @endif ">
+                <a href="#{{ $group->getRelationName() . '_' . $pk }}" data-toggle="tab">{{ $pk }}</a>
+                <i class="close-tab fa fa-times" ></i>
+            </li>
+        @endforeach
+        <li class="pull-right">
+            <a class="btn btn-success btn-sm add"><i class="fa fa-save"></i>&nbsp;New</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        @foreach($groups as $pk => $group)
+        <div class="tab-pane @if ($group == reset($groups)) active @endif" id="{{ $group->getRelationName() . '_' . $pk }}">
+            @foreach($group->fields() as $field)
+                {!! $field->render() !!}
             @endforeach
         </div>
-        <template class="{{$column}}-tpl">
-            <div class="has-many-{{$column}}-form has-many-new-form">
-                <div class="box" style="border-top:none; ">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><small class="label bg-green"><i class="fa fa-save"></i>&nbsp;New</small></h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-box-tool remove"><i class="fa fa-times"></i></button>
-                        </div>
-                        <!-- /.box-tools -->
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        {!! $template !!}
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-            </div>
-        </template>
+        @endforeach
     </div>
+
+    <template id="has-many-{{$column}}-tpl" class="{{$column}}-tpl">
+                <li >
+                    <a href="#{{ $group->getRelationName() . '_tpl_' . $group::DEFAULT_KEY_NAME }}" data-toggle="tab">>&nbsp;New</a>
+                    <i class="close-tab fa fa-times" ></i>
+                </li>
+                <div class="tab-pane @if ($group == reset($groups)) active @endif" id="{{ $group->getRelationName() . '_' . $pk }}">
+                    {!! $template !!}
+                </div>
+    </template>
 </div>
+
+<script>
+    $('#has-many-{{$column}} i.close-tab').on('click', function(){
+        var $navTab = $(this).siblings('a');
+        $($navTab.attr('href')).remove();
+        $navTab.closest('li').remove();
+        $('#has-many-{{$column}} .nav-tabs li:first-child a').tab('show');
+    });
+</script>
