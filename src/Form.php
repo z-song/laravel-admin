@@ -376,7 +376,7 @@ class Form
     /**
      * Prepare input data for insert or update.
      *
-     * @param array    $data
+     * @param array $data
      *
      * @return mixed
      */
