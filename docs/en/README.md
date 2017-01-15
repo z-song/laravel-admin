@@ -69,15 +69,15 @@ Documentation
 - [Menu](/docs/en/menu.md)
 - [Layout](/docs/en/layout.md)
 - [Model-grid](/docs/en/model-grid.md)
-  - [Row actions](/docs/zh/model-grid-actions.md)
-  - [Extend column](/docs/zh/model-grid-column.md)
-  - [Custom tools](/docs/zh/grid-custom-tools.md)
+  - [Row actions](/docs/en/model-grid-actions.md)
+  - [Extend column](/docs/en/model-grid-column.md)
+  - [Custom tools](/docs/en/grid-custom-tools.md)
 - [Model-form](/docs/en/model-form.md)
-  - [Form fields](/docs/zh/model-form-fields.md)
+  - [Form fields](/docs/en/model-form-fields.md)
   - [Image/File upload](/docs/en/form-upload.md)
   - [Field management](/docs/en/field-management.md)
-  - [Form callbacks](/docs/zh/model-form-callback.md)
-- [Model-tree](/docs/zh/model-tree.md)
+  - [Form callbacks](/docs/en/model-form-callback.md)
+- [Model-tree](/docs/en/model-tree.md)
 - [widgets](/docs/en/widgets/table.md)
   - [table](/docs/en/widgets/table.md)
   - [form](/docs/en/widgets/form.md)
@@ -103,7 +103,7 @@ app/Admin
 └── routes.php
 ```
 
-`app/Admin/routes.php` is used to define routes，for more detail please read [routes](/docs/zh/router.md).
+`app/Admin/routes.php` is used to define routes，for more detail please read [routes](/docs/en/router.md).
 
 `app/Admin/bootstrap.php` is bootstrapper for laravel-admin, more usages see comments inside it.
 

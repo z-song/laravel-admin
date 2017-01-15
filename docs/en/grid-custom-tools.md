@@ -1,8 +1,5 @@
 # Custom tools
 
-在`model-grid`的头部默认有`批量删除`和`刷新`两个操作工具，如果有更多的操作需求，`model-grid`提供了自定义工具的功能,下面的示例添加一个性别分类选择的按钮组工具。
-
-
 `model-grid` has `batch delete` and `refresh` operations tools as default, `model-grid` provides custom tool functionality if there are more operational requirements, the following example will show you how to add a `Gender selector` button group tool.
 
 First define the tool class `app/Admin/Extensions/Tools/UserGender.php`：

@@ -121,6 +121,4 @@ Category::tree(function ($tree) {
 })
 ```
 
-```
-
 

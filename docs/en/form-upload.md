@@ -89,7 +89,7 @@ Also configure the disk, in the `config/filesystems.php` add an item:
          ],
         'access_key'=> '',  //AccessKey
         'secret_key'=> '',  //SecretKey
-        'bucket'    => '',  //Bucket名字
+        'bucket'    => '',  //Bucket
         'notify_url'=> '',  //
     ],
 ],

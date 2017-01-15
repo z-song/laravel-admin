@@ -1,4 +1,4 @@
-# 列操作
+# Model-grid column
 
 `model-grid` built-in a lot of the operation of the column, you can use these methods very flexible operation of the column data.
 
