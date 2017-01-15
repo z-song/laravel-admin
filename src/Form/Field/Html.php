@@ -14,13 +14,21 @@ class Html extends Field
     protected $html = '';
 
     /**
+     * @var string
+     */
+    protected $label = '';
+
+    /**
      * Create a new Html instance.
      *
      * @param mixed $html
+     * @param array $arguments
      */
-    public function __construct($html)
+    public function __construct($html, $arguments)
     {
         $this->html = $html;
+
+        $this->label = array_get($arguments, 0);
     }
 
     /**
@@ -32,9 +40,9 @@ class Html extends Field
     {
         return <<<EOT
 <div class="form-group">
-    <label  class="col-sm-2 control-label"></label>
+    <label  class="col-sm-2 control-label">{$this->label}</label>
     <div class="col-sm-6">
-        $this->html
+        {$this->html}
     </div>
 </div>
 EOT;
