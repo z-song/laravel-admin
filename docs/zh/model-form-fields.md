@@ -38,6 +38,35 @@ $form->text('title')->attribute('data-title', 'title...');
 $form->text('title')->placeholder('请输入。。。');
 ```
 
+### model-form-tab
+
+如果表单元素太多,会导致form页面太长, 这种情况下可以使用tab来分隔form:
+
+```php
+
+$form->tab('Basic info', function ($form) {
+    
+    $form->text('username');
+    $form->email('email');
+    
+})->tab('Profile', function ($form) {
+                       
+   $form->image('avatar');
+   $form->text('address');
+   $form->mobile('phone');
+   
+})->tab('Jobs', function ($form) {
+                         
+     $form->hasMany('jobs', function () {
+         $form->text('company');
+         $form->date('start_date');
+         $form->date('end_date');
+     });
+
+  })
+
+```
+
 ## Basic Usage
 
 ### 文本输入框
@@ -194,7 +223,7 @@ $form->textarea($column[, $label])->rows(10);
 
 ### radio选择
 ```php
-$form->radio($column[, $label])->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
+$form->radio($column[, $label])->options(['m' => 'Female', 'f'=> 'Male'])->default('m');
 ```
 
 ### checkbox选择
@@ -301,7 +330,11 @@ $form->rate($column[, $label]);
 
 使用图片上传功能之前需要先完成上传配置，请参考:[图片/文件上传](/docs/zh/form-upload.md).
 
-可以使用压缩、裁切、添加水印等各种方法，请参考[[Intervention](http://image.intervention.io/getting_started/introduction)]，图片上传目录在文件`config/admin.php`中的`upload.image`中配置，如果目录不存在，需要创建该目录并开放写权限。：
+图片上传目录在文件`config/admin.php`中的`upload.image`中配置，如果目录不存在，需要创建该目录并开放写权限。
+
+可以使用压缩、裁切、添加水印等各种方法,需要先安装[intervention/image](http://image.intervention.io/getting_started/installation).
+
+更多使用方法请参考[[Intervention](http://image.intervention.io/getting_started/introduction)]：
 ```php
 $form->image($column[, $label]);
 
@@ -338,17 +371,11 @@ $form->file($column[, $label])->multiple();
 
 ### 地图控件
 
-地图组件引用了网络资源，如果网络方面有问题参考[form组件管理](/docs/zh/field-management.md)移除该组件
+地图组件引用了网络资源，默认关闭,如果要开启这个组件参考[form组件管理](/docs/zh/field-management.md)
 
-地图控件，用来选择经纬度,`$latitude`, `$longitude`为经纬度字段，laravel的`locale`设置为`zh_CN`的时候使用腾讯地图，否则使用Google地图：
+地图控件，用来选择经纬度,`$latitude`, `$longitude`为经纬度字段，`Laravel`的`locale`设置为`zh_CN`的时候使用腾讯地图，否则使用Google地图：
 ```php
 $form->map($latitude, $longitude, $label);
-
-// 使用腾讯地图
-$form->map($latitude, $longitude, $label)->useTencentMap();
-
-// 使用Google地图
-$form->map($latitude, $longitude, $label)->useGoogleMap();
 ```
 
 ### 滑动选择控件
@@ -359,7 +386,7 @@ $form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1
 
 ### 富文本编辑框
 
-编辑器组件引用了网络资源，如果网络方面有问题参考[form组件管理](/docs/zh/field-management.md)移除该组件
+编辑器组件引用了网络资源，默认关闭,如果要开启这个组件参考[form组件管理](/docs/zh/field-management.md).
 
 ```php
 $form->editor($column[, $label]);
@@ -395,7 +422,7 @@ $form->divide();
 ### Html
 插入html内容，参数可以是实现了`Htmlable`、`Renderable`或者实现了`__toString()`方法的类
 ```php
-$form->html('你的html内容');
+$form->html('你的html内容', $label = '');
 ```
 
 ### tags

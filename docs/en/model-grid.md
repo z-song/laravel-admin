@@ -70,11 +70,6 @@ echo $grid;
 
 ## Basic Usage
 
-#### Set the table title
-```php
-$grid->title('Movie list');
-```
-
 #### Add a column
 ```php
 
@@ -102,10 +97,10 @@ $grid->model()->take(100);
 
 ```php
 // The default is 15 per page
-$grid->paginate(15);
+$grid->paginate(20);
 ```
 
-#### Modify the display output
+#### Modify the display output of column
 
 ```php
 $grid->text()->display(function($text) {
@@ -149,19 +144,9 @@ $grid->disableCreation();
 $grid->disablePagination();
 ```
 
-#### Disable PerPage Selector
-```php
-$grid->disablePerPageSelector();
-```
-
 #### Disable data filter
 ```php
 $grid->disableFilter();
-```
-
-#### Disable the batch delete button
-```php
-$grid->disableBatchDeletion();
 ```
 
 #### Disable the export button
@@ -177,50 +162,6 @@ $grid->orderable();
 #### Set options for perPage selector
 ```php
 $grid->perPages([10, 20, 30, 40, 50]);
-```
-
-#### Modify the row action button
-```php
-//Opens the edit and delete operations
-$grid->actions('edit|delete');
-
-//Close all operations
-$grid->disableActions();
-```
-
-#### Column control 
-```php
-$grid->rows(function($row){
-
-    //add style to lines which Id less than 10 
-    if($row->id < 10) {
-        $row->style('color:red');
-    }
-
-    // Open the edit operation for specified column
-    if($row->id % 3) {
-        $row->action('edit');
-    }
-
-    //Specifies the column to add a custom action button
-    if($row->id % 2) {
-        $row->actions()->add(function ($row) {
-            return "<a class=\"btn btn-xs btn-danger\">btn</a>";
-        });
-    }
-    
-    // add custom button in specified rows.
-    if($row->id % 2) {
-        $row->actions()->add(function ($row) {
-            return "<a class=\"btn btn-xs btn-danger\">btn</a>";
-        });
-    }
-    
-    // modify the output of column `column1`, use the data in column `column2`
-    $row->column('column1', function ($column1)  use ($row) {
-        return $column1 . $row->column2;
-    });
-});
 ```
 
 #### Add query filters

@@ -1,9 +1,9 @@
-# Components management
+# Fields management
 
 
-## Remove components
+## Remove field
 
-The built-in `map` and `editor` components requires the front-end files via cdn, and if there are problems with the network, they can be removed in the following ways
+The built-in `map` and `editor` fields requires the front-end files via cdn, and if there are problems with the network, they can be removed in the following ways
 
 Locate the file `app/Admin/bootstrap.php`. If the file does not exist, update `laravel-admin` and create this file.
 
@@ -22,9 +22,9 @@ Form::forget(['map', 'editor']);
 
 ```
 
-This removes the two components, which can be used to remove the other components.
+This removes the two fields, which can be used to remove the other fields.
 
-## Extend the custom component
+## Extend the custom field
 
 Extend a PHP code editor based on [codemirror](http://codemirror.net/index.html) with the following steps.
 
@@ -32,7 +32,7 @@ see [PHP mode](http://codemirror.net/mode/php/).
 
 Download and unzip the [codemirror](http://codemirror.net/codemirror.zip) library to the front-end resource directory, for example, in the directory `public/packages/codemirror-5.20.2`.
 
-Create a new component class `app/Admin/Extensions/PHPEditor.php`:
+Create a new field class `app/Admin/Extensions/PHPEditor.php`:
 
 ```php
 <?php
@@ -122,4 +122,4 @@ $form->php('code');
 
 ```
 
-In this way, you can add any form components you want to add.
+In this way, you can add any form fields you want to add.

@@ -73,19 +73,3 @@ echo $form;
 ```php
 $form->ignore('column1', 'column2', 'column3');
 ```
-
-### 去掉删除按钮
-```php
-$form->disableDeletion;
-```
-
-### 保存数据回调
-保存数据的时候添加回调，保存数据之前可以对提交数据做一些操作：
-```php
-$form->saving(function(Form $form) {
-    if($form->password && $form->model()->password != $form->password)
-    {
-        $form->password = bcrypt($form->password);
-    }
-});
-```

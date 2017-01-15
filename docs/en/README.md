@@ -64,14 +64,20 @@ The file in `config/admin.php` contains an array of settings, you can find the d
 Documentation
 ------------
 
-- [quick start](/docs/en/quick-start.md)
-- [router](/docs/en/router.md)
-- [menu](/docs/en/menu.md)
-- [layout](/docs/en/layout.md)
-- [model-grid](/docs/en/model-grid.md)
-- [model-form](/docs/en/model-form.md)
-  - [image/file upload](/docs/en/form-upload.md)
-  - [components management](/docs/en/components-management.md)
+- [Quick start](/docs/en/quick-start.md)
+- [Router](/docs/en/router.md)
+- [Menu](/docs/en/menu.md)
+- [Layout](/docs/en/layout.md)
+- [Model-grid](/docs/en/model-grid.md)
+  - [Row actions](/docs/zh/model-grid-actions.md)
+  - [Extend column](/docs/zh/model-grid-column.md)
+  - [Custom tools](/docs/zh/grid-custom-tools.md)
+- [Model-form](/docs/en/model-form.md)
+  - [Form fields](/docs/zh/model-form-fields.md)
+  - [Image/File upload](/docs/en/form-upload.md)
+  - [Field management](/docs/en/field-management.md)
+  - [Form callbacks](/docs/zh/model-form-callback.md)
+- [Model-tree](/docs/zh/model-tree.md)
 - [widgets](/docs/en/widgets/table.md)
   - [table](/docs/en/widgets/table.md)
   - [form](/docs/en/widgets/form.md)
@@ -131,7 +137,7 @@ Use the following command to create a controller for `App\User` model
 ```php
 php artisan admin:make UserController --model=App\\User
 
-// in windows
+// under windows use:
 php artisan admin:make UserController --model=App\User
 ```
 The above command will create the controller in `app/Admin/Controllers/UserController.php`.
@@ -157,9 +163,7 @@ Other
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
-+ [Bootstrap Markdown](http://toopay.github.io/bootstrap-markdown/)
 + [Datetimepicker](http://eonasdan.github.io/bootstrap-datetimepicker/)
-+ [CodeMirror](https://codemirror.net/)
 + [font-awesome](http://fontawesome.io)
 + [moment](http://momentjs.com/)
 + [Google map](https://www.google.com/maps)
@@ -167,7 +171,10 @@ Other
 + [bootstrap-fileinput](https://github.com/kartik-v/bootstrap-fileinput)
 + [jquery-pjax](https://github.com/defunkt/jquery-pjax)
 + [Nestable](http://dbushell.github.io/Nestable/)
-+ [noty](http://ned.im/noty/)
++ [toastr](http://codeseven.github.io/toastr/)
++ [X-editable](http://github.com/vitalets/x-editable)
++ [bootstrap-number-input](https://github.com/wpic/bootstrap-number-input)
++ [fontawesome-iconpicker](https://github.com/itsjavi/fontawesome-iconpicker)
 
 License
 ------------

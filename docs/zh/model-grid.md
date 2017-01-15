@@ -70,11 +70,6 @@ echo $grid;
 
 ## Basic Usage
 
-#### 设置表格title
-```php
-$grid->title('电影列表');
-```
-
 #### 添加列
 ```php
 
@@ -149,10 +144,6 @@ $grid->disableCreation();
 $grid->disablePagination();
 ```
 
-#### 禁用页数选择器
-```php
-$grid->disablePerPageSelector();
-```
 #### 禁用查询过滤器
 ```php
 $grid->disableFilter();
@@ -163,61 +154,9 @@ $grid->disableFilter();
 $grid->disableExport();
 ```
 
-#### 禁用批量删除按钮
-```php
-$grid->disableBatchDeletion();
-```
-
-#### 开启行排序功能
-```php
-$grid->orderable();
-```
-
 #### 设置分页选择器选项
 ```php
 $grid->perPages([10, 20, 30, 40, 50]);
-```
-
-#### 修改行操作按钮
-```php
-//开启编辑和删除操作
-$grid->actions('edit|delete');
-
-//关闭所有操作
-$grid->disableActions();
-```
-
-#### 控制列
-```php
-$grid->rows(function($row){
-
-    //id小于10的行添加style
-    if($row->id < 10) {
-        $row->style('color:red');
-    }
-
-    //指定列只开启编辑操作
-    if($row->id % 3) {
-        $row->actions('edit');
-    }
-    
-    // 添加自定义操作按钮
-    $row->actions()->add(function ($row) {
-        return "<a href='/url/{$row->id}'><i class='fa fa-eye'></i></a>";
-    });
-
-    //指定列添加自定义操作按钮
-    if($row->id % 2) {
-        $row->actions()->add(function ($row) {
-            return "<a class=\"btn btn-xs btn-danger\">btn</a>";
-        });
-    }
-    
-    // 修改column1的显示，使用列column2的值
-    $row->column('column1', function ($column1)  use ($row) {
-        return $column1 . $row->column2;
-    });
-});
 ```
 
 #### 添加查询过滤器

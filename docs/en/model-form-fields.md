@@ -1,77 +1,70 @@
-# Model-Form
+# Builtin form fields
 
-The `Encore\Admin\Form` class is used to generate a data model-based form. For example, there is a` movies` table in the database
+There are a lots of form components built into the `model-form` to help you quickly build forms.
 
-```sql
-CREATE TABLE `movies` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `director` int(10) unsigned NOT NULL,
-  `describe` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `rate` tinyint unsigned NOT NULL,
-  `released` enum(0, 1),
-  `release_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+## Public methods
 
+### Set validation rules
+
+```php
+$form->text('title')->rules('required|min:3');
+```
+Please refer to the more rules:[Validation](https://laravel.com/docs/5.3/validation).
+
+### Set the value to save
+```php
+$form->text('title')->value('text...');
 ```
 
-The corresponding data model is `App\Models\Movie`, and the following code can generate the` movies` data form:
+### Set default value
+```php
+$form->text('title')->default('text...');
+```
+
+### Set help message
+```php
+$form->text('title')->help('help...');
+```
+
+### Set attributes of field element
+```php
+$form->text('title')->attribute(['data-title' => 'title...']);
+
+$form->text('title')->attribute('data-title', 'title...');
+```
+
+### Set placeholder
+```php
+$form->text('title')->placeholder('Please input...');
+```
+
+### model-form-tab
+
+If the form contains too many fields, will lead to form page is too long, in which case you can use the tab to separate the form:
 
 ```php
 
-use App\Models\Movie;
-use Encore\Admin\Form;
-use Encore\Admin\Facades\Admin;
+$form->tab('Basic info', function ($form) {
+    
+    $form->text('username');
+    $form->email('email');
+    
+})->tab('Profile', function ($form) {
+                       
+   $form->image('avatar');
+   $form->text('address');
+   $form->mobile('phone');
+   
+})->tab('Jobs', function ($form) {
+                         
+     $form->hasMany('jobs', function () {
+         $form->text('company');
+         $form->date('start_date');
+         $form->date('end_date');
+     });
 
-$grid = Admin::form(Movie::class, function(Form $grid){
+  })
 
-    // Displays the record id
-    $form->display('id', 'ID');
-
-    // Add an input box of type text
-    $form->text('title', 'Movie title');
-    
-    $directors = [
-        'John'  => 1,
-        'Smith' => 2,
-        'Kate'  => 3,
-    ];
-    
-    $form->select('director', 'Director')->options($directors);
-    
-    // Add textarea for the describe field
-    $form->textarea('describe', 'Describe');
-    
-    // Number input
-    $form->number('rate', 'Rate');
-    
-    // Add a switch field
-    $form->switch('released', 'Released?');
-    
-    // Add a date and time selection box
-    $form->dateTime('release_at', 'release time');
-    
-    // Display two time column 
-    $form->display('created_at', 'Created time');
-    $form->display('updated_at', 'Updated time');
-    
-    // remove delete btn.
-    $form->disableDeletion();
-});
-
-// Displays the form content
-echo $form;
-
-```
-
-## Other methods
-
-### Ignore fields to store
-```php
-$form->ignore('column1', 'column2', 'column3');
 ```
 
 # Basic Usage
@@ -90,7 +83,7 @@ $form->text($column, [$label])->rules('required|min:10');
 $form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
-If have too many options, you can load option by ajax
+If have too many options, you can load option by ajax:
 
 ```php
 $form->select('user_id')->options(function ($id) {
@@ -102,7 +95,7 @@ $form->select('user_id')->options(function ($id) {
 })->ajax('/admin/api/users');
 ```
 
-The controller method for url `/admin/api/users` is:
+The controller method for api `/admin/api/users` is:
 
 ```php
 public function users(Request $request)
@@ -114,7 +107,7 @@ public function users(Request $request)
 
 ```
 
-The json returned from url `/admin/demo/options`:
+The json returned from api `/admin/demo/options`:
 ```
 {
     "total": 4,
@@ -181,7 +174,7 @@ $form->select('user_id')->options(function ($id) {
 })->ajax('/admin/api/users');
 ```
 
-The controller method for url `/admin/api/users` is:
+The controller method for api `/admin/api/users` is:
 
 ```php
 public function users(Request $request)
@@ -193,7 +186,7 @@ public function users(Request $request)
 
 ```
 
-The json returned from url `/admin/demo/options`:
+The json returned from api `/admin/demo/options`:
 ```
 {
     "total": 4,
@@ -232,16 +225,16 @@ $form->textarea($column[, $label])->rows(10);
 
 #### radio
 ```php
-$form->radio($column[, $label])->values(['m' => 'Female', 'f'=> 'Male'])->default('m');
+$form->radio($column[, $label])->options(['m' => 'Female', 'f'=> 'Male'])->default('m');
 ```
 
 #### checkbox
 
 `checkbox` can store values in two ways, see[multiple select](#Multiple select)
 
-The `options ()` method is used to set options:
+The `options()` method is used to set options:
 ```php
-$form->checkbox($column[, $label])->values([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+$form->checkbox($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
 #### email input
@@ -274,7 +267,7 @@ $form->mobile($column[, $label])->format('999 9999 9999');
 $form->color($column[, $label])->default('#ccc');
 ```
 
-#### time select
+#### time input
 ```php
 $form->time($column[, $label]);
 
@@ -389,7 +382,7 @@ $form->map($latitude, $longitude, $label)->useTencentMap();
 $form->map($latitude, $longitude, $label)->useGoogleMap();
 ```
 
-#### slide
+#### slider
 Can be used to select the type of digital fields, such as age:
 ```php
 $form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
@@ -411,7 +404,12 @@ $form->hidden($column);
 #### switch
 `On` and` off` pairs of switches with the values `1` and` 0`:
 ```php
-$form->switch($column[, $label])->states(['on' => 1, 'off' => 0]);
+$states = [
+    'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
+    'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
+];
+
+$form->switch($column[, $label])->states($states);
 ```
 
 #### display field
@@ -431,13 +429,93 @@ insert html，the argument passed in could be objects which impletements `Htmlab
 $form->html('html contents');
 ```
 
-#### saving callback
-Add callback function when saving data, can use it do some operations when saving data.
+### tags
+Insert the comma (,) separated string `tags`
 ```php
-$form->saving(function(Form $form) {
-    if($form->password && $form->model()->password != $form->password)
+$form->tags('keywords');
+```
+
+### icon
+Select the `font-awesome` icon.
+```php
+$form->icon('icon');
+```
+
+### hasMany
+
+One-to-many built-in tables for dealing with one-to-many relationships. Here is a simple example:
+
+There are two tables are one-to-many relationship:
+
+```sql
+CREATE TABLE `demo_painters` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `bio` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `demo_paintings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `painter_id` int(10) unsigned NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `body` text COLLATE utf8_unicode_ci NOT NULL,
+  `completed_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY painter_id (`painter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+
+The model of tables are:
+```php
+<?php
+
+namespace App\Models\Demo;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Painter extends Model
+{
+    public function paintings()
     {
-        $form->password = bcrypt($form->password);
+        return $this->hasMany(Painting::class, 'painter_id');
     }
+}
+
+<?php
+
+namespace App\Models\Demo;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Painting extends Model
+{
+    protected $fillable = ['title', 'body', 'completed_at'];
+
+    public function painter()
+    {
+        return $this->belongsTo(Painter::class, 'painter_id');
+    }
+}
+```
+
+Build the form code as follows:
+```php
+$form->display('id', 'ID');
+
+$form->text('username')->rules('required');
+$form->textarea('bio')->rules('required');
+
+$form->hasMany('paintings', function (Form\NestedForm $form) {
+    $form->text('title');
+    $form->image('body');
+    $form->datetime('completed_at');
 });
+
+$form->display('created_at', 'Created At');
+$form->display('updated_at', 'Updated At');
 ```
