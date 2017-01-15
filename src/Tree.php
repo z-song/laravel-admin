@@ -23,6 +23,11 @@ class Tree implements Renderable
     protected $model;
 
     /**
+     * @var \Closure
+     */
+    protected $queryCallback;
+
+    /**
      * View of tree to render.
      *
      * @var string
@@ -98,6 +103,18 @@ class Tree implements Renderable
     public function branch(\Closure $branchCallback)
     {
         $this->branchCallback = $branchCallback;
+
+        return $this;
+    }
+
+    /**
+     * Set query callback this tree.
+     *
+     * @return Model
+     */
+    public function query(\Closure $callback)
+    {
+        $this->queryCallback = $callback;
 
         return $this;
     }
@@ -228,7 +245,7 @@ SCRIPT;
     {
         return [
             'id'        => $this->elementId,
-            'items'     => $this->model->toTree(),
+            'items'     => $this->model->withQuery($this->queryCallback)->toTree(),
             'useCreate' => $this->useCreate,
         ];
     }
