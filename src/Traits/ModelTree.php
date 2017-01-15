@@ -29,6 +29,11 @@ trait ModelTree
     protected $orderColumn = 'order';
 
     /**
+     * @var \Closure
+     */
+    protected $queryCallback;
+
+    /**
      * Get children of current node.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -107,13 +112,27 @@ trait ModelTree
     }
 
     /**
+     * Set query callback to model.
+     *
+     * @param \Closure|null $query
+     *
+     * @return $this
+     */
+    public function withQuery(\Closure $query = null)
+    {
+        $this->queryCallback = $query;
+
+        return $this;
+    }
+
+    /**
      * Format data to tree like array.
      *
      * @return array
      */
-    public static function toTree()
+    public function toTree()
     {
-        return (new static())->buildNestedArray();
+        return $this->buildNestedArray();
     }
 
     /**
@@ -157,7 +176,13 @@ trait ModelTree
         $orderColumn = DB::getQueryGrammar()->wrap($this->orderColumn);
         $byOrder = $orderColumn.' = 0,'.$orderColumn;
 
-        return static::orderByRaw($byOrder)->get()->toArray();
+        $self = new static();
+
+        if ($this->queryCallback instanceof \Closure) {
+            $self = call_user_func($this->queryCallback, $self);
+        }
+
+        return $self->orderByRaw($byOrder)->get()->toArray();
     }
 
     /**
