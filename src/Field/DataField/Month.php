@@ -6,5 +6,5 @@ class Month extends Date
 {
     protected $format = 'MM';
 
-    protected $view = 'admin::form.date';
+    protected $view = 'admin::field.date';
 }

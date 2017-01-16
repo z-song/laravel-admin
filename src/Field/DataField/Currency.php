@@ -8,6 +8,12 @@ class Currency extends DataField
 {
     protected $symbol = '$';
 
+    /**
+     * digits
+     * @var int
+     */
+    protected $digits = 2;
+
     protected static $js = [
         '/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
     ];
@@ -24,14 +30,22 @@ class Currency extends DataField
         return (float) $value;
     }
 
+    public function digits($number)
+    {
+        $this->digits = (int)$number;
+
+        return $this;
+    }
+
     public function render()
     {
         $this->script = <<<EOT
 
-$('.{$this->getElementClass()}').inputmask("currency", {radixPoint: '.', prefix:'', removeMaskOnSubmit: true})
+$('.{$this->getElementClass()}').inputmask("currency", {radixPoint: '.', prefix:'', digits:$this->digits, removeMaskOnSubmit: true})
 
 EOT;
 
         return parent::render()->with(['symbol' => $this->symbol]);
     }
+
 }

@@ -116,12 +116,6 @@ class Form
      */
     protected $inputs = [];
 
-    /**
-     * Available fields.
-     *
-     * @var array
-     */
-    public static $availableFields = [];
 
     /**
      * Ignored saving fields.
@@ -130,12 +124,7 @@ class Form
      */
     protected $ignored = [];
 
-    /**
-     * Collected field assets.
-     *
-     * @var array
-     */
-    protected static $collectedAssets = [];
+
 
     /**
      * Relation remove flag
@@ -594,29 +583,66 @@ class Form
                 continue;
             }
 
-            foreach($values as $ralated){
+            $relation = $this->model->$name();
 
-                $relationModel = $this->model()->$name();
+            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
 
-                $keyName = $relationModel->getRelated()->getKeyName();
+            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
 
-                $instance = $relationModel->findOrNew($ralated[$keyName]);
-
-                if( $ralated[ static::REMOVE_FLAG_NAME ] == 1){
-
-                    $instance->delete();
-                    
-                    continue;
-                }
-
-                array_forget($ralated, static::REMOVE_FLAG_NAME);
-                
-                $instance->fill($ralated);
-
-                $instance->save();
+            if (empty($values)) {
+                continue;
             }
 
+            switch (get_class($relation)) {
+                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
+                case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
+                    $relation->sync($prepared[$name]);
+                    break;
+                case \Illuminate\Database\Eloquent\Relations\HasOne::class:
 
+                    $related = $this->model->$name;
+
+                    // if related is empty
+                    if (is_null($related)) {
+                        $related = $relation->getRelated();
+                        $related->{$relation->getForeignKey()} = $this->model->{$this->model->getKeyName()};
+                    }
+
+                    foreach ($prepared[$name] as $column => $value) {
+                        if (is_array($value)) {
+                            $value = implode(',', $value);
+                        }
+                        $related->setAttribute($column, $value);
+                    }
+
+                    $related->save();
+                    break;
+                case \Illuminate\Database\Eloquent\Relations\HasMany::class:
+
+                    foreach($prepared as $ralated){
+
+                        $relationModel = $this->model()->$name();
+
+                        $keyName = $relationModel->getRelated()->getKeyName();
+
+                        $instance = $relationModel->findOrNew($ralated[$keyName]);
+
+                        if( $ralated[ static::REMOVE_FLAG_NAME ] == 1){
+
+                            $instance->delete();
+
+                            continue;
+                        }
+
+                        array_forget($ralated, static::REMOVE_FLAG_NAME);
+
+                        $instance->fill($ralated);
+
+                        $instance->save();
+                    }
+
+                    break;
+            }
         }
     }
 
@@ -653,18 +679,31 @@ class Form
                 $value = $field->prepare($value);
             }
 
-            if ($value != $field->original()) {
-                if (is_array($columns)) {
-                    foreach ($columns as $name => $column) {
-                        array_set($prepared, $column, $value[$name]);
-                    }
-                } elseif (is_string($columns)) {
-                    array_set($prepared, $columns, $value);
+            if( $field instanceof \Encore\Admin\Field\RelationField){
+                foreach($field->fields() as $fld){
+                    $prepared = $this->getPrepareInputs($prepared, $fld, $value);
                 }
+            }else{
+                $prepared = $this->getPrepareInputs($prepared, $field, $value);
             }
         }
 
         return $prepared;
+    }
+
+    protected function getPrepareInputs($inputs, $field, $value)
+    {
+        if ($value != $field->original()) {
+            $columns = $field->column();
+            if (is_array($columns)) {
+                foreach ($columns as $name => $column) {
+                    array_set($inputs, $column, $value[$name]);
+                }
+            } elseif (is_string($columns)) {
+                array_set($inputs, $columns, $value);
+            }
+        }
+        return $inputs;
     }
 
     /**
@@ -869,8 +908,16 @@ class Form
                 continue;
             }
 
-            if (($validator instanceof Validator) && !$validator->passes()) {
-                $failedValidators[] = $validator;
+            if( $field instanceof \Encore\Admin\Field\RelationField){
+                foreach($validator as $valid){
+                    if (($valid instanceof Validator) && !$valid->passes()) {
+                        $failedValidators[] = $valid;
+                    }
+                }
+            }else {
+                if (($validator instanceof Validator) && !$validator->passes()) {
+                    $failedValidators[] = $validator;
+                }
             }
         }
 
@@ -878,6 +925,8 @@ class Form
 
         return $message->any() ? $message : false;
     }
+
+
 
     /**
      * Merge validation messages from input validators.
@@ -978,134 +1027,7 @@ class Form
         return array_set($this->inputs, $key, $value);
     }
 
-    /**
-     * Register builtin fields.
-     *
-     * @return void
-     */
-    public static function registerBuiltinFields()
-    {
-        $map = [
-            'button'            => \Encore\Admin\Field\DataField\Button::class,
-            'checkbox'          => \Encore\Admin\Field\DataField\Checkbox::class,
-            'color'             => \Encore\Admin\Field\DataField\Color::class,
-            'currency'          => \Encore\Admin\Field\DataField\Currency::class,
-            'date'              => \Encore\Admin\Field\DataField\Date::class,
-            'dateRange'         => \Encore\Admin\Field\DataField\DateRange::class,
-            'datetime'          => \Encore\Admin\Field\DataField\Datetime::class,
-            'dateTimeRange'     => \Encore\Admin\Field\DataField\DatetimeRange::class,
-            'decimal'           => \Encore\Admin\Field\DataField\Decimal::class,
-            'display'           => \Encore\Admin\Field\DataField\Display::class,
-            'divider'           => \Encore\Admin\Field\DataField\Divide::class,
-            'divide'            => \Encore\Admin\Field\DataField\Divide::class,
-            'editor'            => \Encore\Admin\Field\DataField\Editor::class,
-            'email'             => \Encore\Admin\Field\DataField\Email::class,
-            'embedsMany'        => \Encore\Admin\Field\DataField\EmbedsMany::class,
-            'file'              => \Encore\Admin\Field\DataField\File::class,
-            'hasMany'           => \Encore\Admin\Field\DataField\HasMany::class,
-            'hasMany2'          => \Encore\Admin\Field\RelationField\HasMany2::class,
-            'hidden'            => \Encore\Admin\Field\DataField\Hidden::class,
-            'id'                => \Encore\Admin\Field\DataField\Id::class,
-            'image'             => \Encore\Admin\Field\DataField\Image::class,
-            'ip'                => \Encore\Admin\Field\DataField\Ip::class,
-            'map'               => \Encore\Admin\Field\DataField\Map::class,
-            'mobile'            => \Encore\Admin\Field\DataField\Mobile::class,
-            'month'             => \Encore\Admin\Field\DataField\Month::class,
-            'multipleSelect'    => \Encore\Admin\Field\DataField\MultipleSelect::class,
-            'number'            => \Encore\Admin\Field\DataField\Number::class,
-            'password'          => \Encore\Admin\Field\DataField\Password::class,
-            'radio'             => \Encore\Admin\Field\DataField\Radio::class,
-            'rate'              => \Encore\Admin\Field\DataField\Rate::class,
-            'select'            => \Encore\Admin\Field\DataField\Select::class,
-            'slider'            => \Encore\Admin\Field\DataField\Slider::class,
-            'switch'            => \Encore\Admin\Field\DataField\SwitchField::class,
-            'text'              => \Encore\Admin\Field\DataField\Text::class,
-            'textarea'          => \Encore\Admin\Field\DataField\Textarea::class,
-            'time'              => \Encore\Admin\Field\DataField\Time::class,
-            'timeRange'         => \Encore\Admin\Field\DataField\TimeRange::class,
-            'url'               => \Encore\Admin\Field\DataField\Url::class,
-            'year'              => \Encore\Admin\Field\DataField\Year::class,
-            'html'              => \Encore\Admin\Field\DataField\Html::class,
-            'tags'              => \Encore\Admin\Field\DataField\Tags::class,
-            'icon'              => \Encore\Admin\Field\DataField\Icon::class,
-        ];
 
-        foreach ($map as $abstract => $class) {
-            static::extend($abstract, $class);
-        }
-    }
-
-    /**
-     * Register custom field.
-     *
-     * @param string $abstract
-     * @param string $class
-     *
-     * @return void
-     */
-    public static function extend($abstract, $class)
-    {
-        static::$availableFields[$abstract] = $class;
-    }
-
-    /**
-     * Remove registered field.
-     *
-     * @param array|string $abstract
-     */
-    public static function forget($abstract)
-    {
-        array_forget(static::$availableFields, $abstract);
-    }
-
-    /**
-     * Find field class.
-     *
-     * @param string $method
-     *
-     * @return bool|mixed
-     */
-    public static function findFieldClass($method)
-    {
-        $class = array_get(static::$availableFields, $method);
-
-        if (class_exists($class)) {
-            return $class;
-        }
-
-        return false;
-    }
-
-    /**
-     * Collect assets required by registered field.
-     *
-     * @return array
-     */
-    public static function collectFieldAssets()
-    {
-        if (!empty(static::$collectedAssets)) {
-            return static::$collectedAssets;
-        }
-
-        $css = collect();
-        $js = collect();
-
-        foreach (static::$availableFields as $field) {
-            if (!method_exists($field, 'getAssets')) {
-                continue;
-            }
-
-            $assets = call_user_func([$field, 'getAssets']);
-
-            $css->push(array_get($assets, 'css'));
-            $js->push(array_get($assets, 'js'));
-        }
-
-        return static::$collectedAssets = [
-            'css' => $css->flatten()->unique()->filter()->toArray(),
-            'js'  => $js->flatten()->unique()->filter()->toArray(),
-        ];
-    }
 
 //    /**
 //     * Use tab to split form.
@@ -1174,7 +1096,7 @@ class Form
      */
     public function __call($method, $arguments)
     {
-        if ($className = static::findFieldClass($method)) {
+        if ($className = Field::findFieldClass($method)) {
             $column = array_get($arguments, 0, ''); //[0];
 
             $element = new $className( $column, array_slice($arguments, 1));

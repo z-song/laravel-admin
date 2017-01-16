@@ -46,7 +46,7 @@ class Admin
     public static function init()
     {
         if (!static::$initialized) {
-            Form::registerBuiltinFields();
+            Field::registerBuiltinFields();
             Grid::registerColumnDisplayer();
 
             static::$initialized = true;
@@ -114,7 +114,7 @@ class Admin
         static::init();
         static::bootstrap();
 
-        Form::collectFieldAssets();
+        Field::collectFieldAssets();
 
         return new Content($callable);
     }
@@ -164,7 +164,7 @@ class Admin
             return;
         }
 
-        $css = array_get(Form::collectFieldAssets(), 'css', []);
+        $css = array_get(Field::collectFieldAssets(), 'css', []);
 
         static::$css = array_merge(static::$css, $css);
 
@@ -186,7 +186,7 @@ class Admin
             return;
         }
 
-        $js = array_get(Form::collectFieldAssets(), 'js', []);
+        $js = array_get(Field::collectFieldAssets(), 'js', []);
 
         static::$js = array_merge(static::$js, $js);
 

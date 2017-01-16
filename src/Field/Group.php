@@ -3,7 +3,6 @@
 namespace Encore\Admin\Field;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Form;
 use Encore\Admin\Field;
 use Illuminate\Support\Collection;
 
@@ -126,7 +125,7 @@ class Group
      *
      * @return string
      */
-    public function getFormHtml()
+    public function getTemplateHtml()
     {
         $html = '';
 
@@ -154,6 +153,22 @@ class Group
     }
 
     /**
+     * Get validator for this field.
+     *
+     * @param array $input
+     *
+     * @return bool|Validator
+     */
+    public function getValidator(array $input)
+    {
+        $validators = [];
+        foreach($this->fields as $field){
+            $validators[] = $field->getValidator($input);
+        }
+        return $validators;
+    }
+
+    /**
      * Add nested-form fields dynamically.
      *
      * @param string $method
@@ -163,7 +178,7 @@ class Group
      */
     public function __call($method, $arguments)
     {
-        if ($className = Form::findFieldClass($method)) {
+        if ($className = Field::findFieldClass($method)) {
             $column = array_get($arguments, 0, '');
 
             $column = "{$this->relationName}.{$this->key}.{$column}";

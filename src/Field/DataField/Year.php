@@ -6,5 +6,5 @@ class Year extends Date
 {
     protected $format = 'YYYY';
 
-    protected $view = 'admin::form.date';
+    protected $view = 'admin::field.date';
 }

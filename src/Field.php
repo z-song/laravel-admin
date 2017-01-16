@@ -138,6 +138,20 @@ class Field
      */
     protected $errorKey;
 
+    /**
+     * Collected field assets.
+     *
+     * @var array
+     */
+    protected static $collectedAssets = [];
+
+    /**
+     * Available fields.
+     *
+     * @var array
+     */
+    public static $availableFields = [];
+
 
     /**
      * Field constructor.
@@ -566,7 +580,7 @@ class Field
 
         $class = explode('\\', get_called_class());
 
-        return 'admin::form.'.strtolower(end($class));
+        return 'admin::field.'.strtolower(end($class));
     }
 
     public function getScript()
@@ -586,5 +600,133 @@ class Field
         return view($this->getView(), $this->variables());
     }
 
+    /**
+     * Register builtin fields.
+     *
+     * @return void
+     */
+    public static function registerBuiltinFields()
+    {
+        $map = [
+            'button'            => \Encore\Admin\Field\DataField\Button::class,
+            'checkbox'          => \Encore\Admin\Field\DataField\Checkbox::class,
+            'color'             => \Encore\Admin\Field\DataField\Color::class,
+            'currency'          => \Encore\Admin\Field\DataField\Currency::class,
+            'date'              => \Encore\Admin\Field\DataField\Date::class,
+            'dateRange'         => \Encore\Admin\Field\DataField\DateRange::class,
+            'datetime'          => \Encore\Admin\Field\DataField\Datetime::class,
+            'dateTimeRange'     => \Encore\Admin\Field\DataField\DatetimeRange::class,
+            'decimal'           => \Encore\Admin\Field\DataField\Decimal::class,
+            'display'           => \Encore\Admin\Field\DataField\Display::class,
+            'divider'           => \Encore\Admin\Field\DataField\Divide::class,
+            'divide'            => \Encore\Admin\Field\DataField\Divide::class,
+            'editor'            => \Encore\Admin\Field\DataField\Editor::class,
+            'email'             => \Encore\Admin\Field\DataField\Email::class,
+            'embedsMany'        => \Encore\Admin\Field\DataField\EmbedsMany::class,
+            'file'              => \Encore\Admin\Field\DataField\File::class,
+            'hasMany'           => \Encore\Admin\Field\DataField\HasMany::class,
+            'hasMany2'          => \Encore\Admin\Field\RelationField\HasMany::class,
+            'hidden'            => \Encore\Admin\Field\DataField\Hidden::class,
+            'id'                => \Encore\Admin\Field\DataField\Id::class,
+            'image'             => \Encore\Admin\Field\DataField\Image::class,
+            'ip'                => \Encore\Admin\Field\DataField\Ip::class,
+            'map'               => \Encore\Admin\Field\DataField\Map::class,
+            'mobile'            => \Encore\Admin\Field\DataField\Mobile::class,
+            'month'             => \Encore\Admin\Field\DataField\Month::class,
+            'multipleSelect'    => \Encore\Admin\Field\DataField\MultipleSelect::class,
+            'number'            => \Encore\Admin\Field\DataField\Number::class,
+            'password'          => \Encore\Admin\Field\DataField\Password::class,
+            'radio'             => \Encore\Admin\Field\DataField\Radio::class,
+            'rate'              => \Encore\Admin\Field\DataField\Rate::class,
+            'select'            => \Encore\Admin\Field\DataField\Select::class,
+            'slider'            => \Encore\Admin\Field\DataField\Slider::class,
+            'switch'            => \Encore\Admin\Field\DataField\SwitchField::class,
+            'text'              => \Encore\Admin\Field\DataField\Text::class,
+            'textarea'          => \Encore\Admin\Field\DataField\Textarea::class,
+            'time'              => \Encore\Admin\Field\DataField\Time::class,
+            'timeRange'         => \Encore\Admin\Field\DataField\TimeRange::class,
+            'url'               => \Encore\Admin\Field\DataField\Url::class,
+            'year'              => \Encore\Admin\Field\DataField\Year::class,
+            'html'              => \Encore\Admin\Field\DataField\Html::class,
+            'tags'              => \Encore\Admin\Field\DataField\Tags::class,
+            'icon'              => \Encore\Admin\Field\DataField\Icon::class,
+        ];
+
+        foreach ($map as $abstract => $class) {
+            static::extend($abstract, $class);
+        }
+    }
+
+    /**
+     * Register custom field.
+     *
+     * @param string $abstract
+     * @param string $class
+     *
+     * @return void
+     */
+    public static function extend($abstract, $class)
+    {
+        static::$availableFields[$abstract] = $class;
+    }
+
+    /**
+     * Remove registered field.
+     *
+     * @param array|string $abstract
+     */
+    public static function forget($abstract)
+    {
+        array_forget(static::$availableFields, $abstract);
+    }
+
+    /**
+     * Find field class.
+     *
+     * @param string $method
+     *
+     * @return bool|mixed
+     */
+    public static function findFieldClass($method)
+    {
+        $class = array_get(static::$availableFields, $method);
+
+        if (class_exists($class)) {
+            return $class;
+        }
+
+        return false;
+    }
+
+    /**
+     * Collect assets required by registered field.
+     *
+     * @return array
+     */
+    public static function collectFieldAssets()
+    {
+        if (!empty(static::$collectedAssets)) {
+            return static::$collectedAssets;
+        }
+
+        $css = collect();
+        $js = collect();
+
+        foreach (static::$availableFields as $field) {
+            if (!method_exists($field, 'getAssets')) {
+                continue;
+            }
+
+            $assets = call_user_func([$field, 'getAssets']);
+
+            $css->push(array_get($assets, 'css'));
+            $js->push(array_get($assets, 'js'));
+        }
+
+        return static::$collectedAssets = [
+            'css' => $css->flatten()->unique()->filter()->toArray(),
+            'js'  => $js->flatten()->unique()->filter()->toArray(),
+        ];
+    }
 
 }

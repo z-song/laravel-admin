@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 /**
- * Class HasMany.
+ * Class Relation Field.
  */
 class RelationField extends Field
 {
@@ -36,6 +36,19 @@ class RelationField extends Field
      */
     protected $builder = null;
 
+    /**
+     * HasMany groups
+     *
+     * @var mixed
+     */
+    protected $groups = [];
+
+    /**
+     * Group template
+     *
+     * @var \Encore\Admin\Field\Group
+     */
+    protected $template;
 
     /**
      * Create a new HasMany field instance.
@@ -57,6 +70,7 @@ class RelationField extends Field
         if (count($arguments) == 2) {
             list($this->label, $this->builder) = $arguments;
         }
+
     }
 
 
@@ -71,7 +85,7 @@ class RelationField extends Field
     }
 
     /**
-     * Build a Nested form.
+     * Build fields group
      *
      * @param string $relationName
      * @param \Closure$builder
@@ -104,7 +118,7 @@ class RelationField extends Field
             throw new \Exception('hasMany field must be a HasMany relation.');
         }
 
-        $groups = [];
+        $this->groups = [];
 
         if ($datas = $this->getDataInFlash()) {
             foreach ($datas as $key => $data) {
@@ -114,7 +128,7 @@ class RelationField extends Field
                 //{$this->relationName}.{$this->key}.{$column}
                 $data = [$this->relationName => [ $key => $data]];
 
-                $groups[$key] = $this->buildGroup($this->relationName, $this->builder, $key)->fill([$data]);
+                $this->groups[$key] = $this->buildGroup($this->relationName, $this->builder, $key)->fill([$data]);
             }
         } else {
             foreach ($this->value as $data) {
@@ -122,11 +136,38 @@ class RelationField extends Field
 
                 $data = [$this->relationName => [ $key => $data]];
 
-                $groups[$key] = $this->buildGroup($this->relationName, $this->builder, $key)->fill($data);
+                $this->groups[$key] = $this->buildGroup($this->relationName, $this->builder, $key)->fill($data);
             }
         }
 
-        return $groups;
+        return $this->groups;
+    }
+
+    public function fields()
+    {
+        $fields = [];
+        foreach($this->groups as $group){
+            $fields = array_merge($fields, $group->fields());
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Get validator for this field.
+     *
+     * @param array $input
+     *
+     * @return bool|Validator
+     */
+    public function getValidator(array $input)
+    {
+        $validators = [];
+        foreach($this->buildGroups() as $group){
+            $validators = array_merge($validators, $group->getValidator($input));
+        }
+
+        return $validators;
     }
 
 
@@ -137,22 +178,23 @@ class RelationField extends Field
      */
     protected function buildTemplateGroup()
     {
-        $group = $this->buildGroup($this->relationName, $this->builder, Group::DEFAULT_KEY_NAME);
+        $this->template = $this->buildGroup($this->relationName, $this->builder, Group::DEFAULT_KEY_NAME);
 
-        $templateHtml = $group->getFormHtml();
-        $templateScript = $this->getTemplateScript( $group->getFormScript() );
+        Admin::script(
+            $this->getTemplateScript(
+                $this->template->getFormScript()
+            )
+        );
 
-	    Admin::script($templateScript);
-
-        return $templateHtml;
+        return $this->template;
     }
 
     public function getTemplateScript($templateScript)
     {
-	    $removeClass = Group::REMOVE_FLAG_CLASS;
-	    $defaultKey = Group::DEFAULT_KEY_NAME;
+        $removeClass = Group::REMOVE_FLAG_CLASS;
+        $defaultKey = Group::DEFAULT_KEY_NAME;
 
-	    return <<<EOT
+        return <<<EOT
     $('#has-many-{$this->column} > .nav').on('click', 'i.close-tab', function(){
         var \$navTab = $(this).siblings('a');
         var \$pane = $(\$navTab.attr('href'));
@@ -179,6 +221,7 @@ EOT;
     }
 
 
+
     /**
      * Render the `HasMany` field.
      *
@@ -193,33 +236,5 @@ EOT;
             'template'  => $this->buildTemplateGroup(),
         ]);
     }
-
-
-
-
-    /**
-     * Prepare input data for insert or update.
-     *
-     * @param array $input
-     *
-     * @return array
-     */
-//    public function prepare($input)
-//    {
-//        $relatedKeyName = $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
-//
-//        $form = $this->buildNestedForm($this->column, $this->builder);
-//
-//        return $form->setOriginal($this->original, $relatedKeyName)->prepare($input);
-//    }
-
-
-
-
-
-
-
-
-
 
 }

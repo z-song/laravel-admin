@@ -303,7 +303,7 @@ $('button.ajax-submit').on('click', function(){
             });
         }else if(data.status === true){
             $('section.content').prepend('<div class="alert alert-success alert-dismissable success-label">' +
-        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">¡Á</button>' +
+        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">ï¿½ï¿½</button>' +
         '<h4><i class="icon fa fa-check"></i>Succeeded</h4>' +
         '<p>' + data.message + '</p>' +
         '</div>');
