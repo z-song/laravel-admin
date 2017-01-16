@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Field;
 
+use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Field;
 use Illuminate\Support\Collection;
