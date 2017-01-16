@@ -4,6 +4,7 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
+use Encore\Admin\Field;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 
@@ -35,7 +36,7 @@ class Builder
     /**
      * @var array
      */
-    protected $options = ['title' => 'Edit'];
+    protected $options = [];
 
     /**
      * Modes constants.
@@ -52,11 +53,14 @@ class Builder
     protected $mode = 'create';
 
     /**
-     * Allow delete item in form page.
-     *
-     * @var bool
+     * @var Tab
      */
-    protected $allowDeletion = true;
+    protected $tab;
+
+    /**
+     * @var Group
+     */
+    protected $group;
 
     /**
      * Builder constructor.
@@ -107,6 +111,38 @@ class Builder
     }
 
     /**
+     * @param Tab $tab
+     */
+    public function setTab(Tab $tab)
+    {
+        $this->tab = $tab;
+    }
+
+    /**
+     * @return Tab
+     */
+    public function getTab()
+    {
+        return $this->tab;
+    }
+
+    /**
+     * @param Group $group
+     */
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
+    }
+
+    /**
+     * @return Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
      * Get fields of this builder.
      *
      * @return Collection
@@ -117,11 +153,19 @@ class Builder
     }
 
     /**
+     * @param $fields
+     */
+    public function mergeFields($fields)
+    {
+        $this->fields = $this->fields->merge($fields);
+    }
+
+    /**
      * Add or get options.
      *
      * @param array $options
      *
-     * @return array|void
+     * @return array|null
      */
     public function options($options = [])
     {
@@ -150,28 +194,6 @@ class Builder
         }
 
         return '';
-    }
-
-    /**
-     * Disable deletion in form page.
-     *
-     * @return $this
-     */
-    public function disableDeletion()
-    {
-        $this->allowDeletion = false;
-
-        return $this;
-    }
-
-    /**
-     * If allow deletion in form page.
-     *
-     * @return bool
-     */
-    public function allowDeletion()
-    {
-        return $this->allowDeletion;
     }
 
     /**
@@ -243,15 +265,63 @@ class Builder
     /**
      * Build submit button.
      *
-     * @return string|void
+     * @return string
      */
     public function submit()
     {
         if ($this->mode == self::MODE_VIEW) {
-            return;
+            return '';
         }
 
         return '<button type="submit" class="btn btn-info pull-right">'.trans('admin::lang.submit').'</button>';
+    }
+
+    public function ajaxSubmit()
+    {
+        if ($this->mode == self::MODE_VIEW) {
+            return '';
+        }
+
+        $script = <<<SCRIPT
+$('button.ajax-submit').on('click', function(){
+    var \$form = $(this).closest('form');
+    var url = \$form.attr('action');
+    \$form.find('.has-error').removeClass('has-error');
+    \$form.find('.error-label').remove();
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: \$form.serialize(),
+      success: function(data){
+        if(data.status === false){
+            $.each(data.message, function(key, value){
+                var \$target = $('[name="' + key + '"]:not([type="hidden"])');
+                \$target.closest('.form-group').addClass('has-error');
+                $.each(value, function(k, error){
+                   \$target.before('<label class="control-label error-label" for="inputError"><i class="fa fa-times-circle-o"></i> ' + error + '</label>');
+                });
+            });
+        }else if(data.status === true){
+            $('section.content').prepend('<div class="alert alert-success alert-dismissable success-label">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">¡Á</button>' +
+        '<h4><i class="icon fa fa-check"></i>Succeeded</h4>' +
+        '<p>' + data.message + '</p>' +
+        '</div>');
+        $(window).scrollTop(0);
+        };
+        },
+      error: function(data){
+       $('html').html(data.responseText);
+       $(window).scrollTop(0);
+      }
+    });
+
+});
+SCRIPT;
+
+        Admin::script($script);
+
+        return '<button type="button" class="btn btn-info pull-right ajax-submit">'.trans('admin::lang.submit').'</button>';
     }
 
     /**
@@ -267,44 +337,94 @@ class Builder
             return;
         }
 
-        $hidden = new Form\Field\Hidden(static::PREVIOUS_URL_KEY);
+        $hidden = new Field\DataField\Hidden(static::PREVIOUS_URL_KEY);
 
         $this->fields->push($hidden->value($previous));
     }
 
     /**
-     * Render form.
+     * Render
      *
      * @return string
      */
-    public function render()
+    protected function renderTabForm()
     {
-        $confirm = trans('admin::lang.delete_confirm');
-        $token = csrf_token();
+        $tabs = $this->tab->getTabs()->map(function ($tab) {
+
+            $form = new Form($this->form->model(), $tab['content']);
+
+            // In edit mode.
+            if ($this->isMode(static::MODE_EDIT)) {
+                $form->edit($this->id);
+            }
+
+            return array_merge($tab, compact('form'));
+        });
+
+        $script = <<<SCRIPT
+
+var url = document.location.toString();
+if (url.match('#')) {
+    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+}
+
+// Change hash for page-reload
+$('.nav-tabs a').on('shown.bs.tab', function (e) {
+    window.location.hash = e.target.hash;
+});
+
+SCRIPT;
+
+        Admin::script($script);
+
+        return view('admin::form.tab', ['form' => $this, 'tabs' => $tabs])->render();
+    }
+
+
+    /**
+     * get group with form data
+     *
+     * @return bool|static
+     * author Edwin Hui
+     */
+    protected function getGroupWithFormData()
+    {
+        if( !empty($this->group)){
+
+            return $this->group->getGroups()->map(function ($group) {
+
+                $form = new Form($this->form->model(), $group['content']);
+
+                // In edit mode.
+                if ($this->isMode(static::MODE_EDIT)) {
+                    $form->edit($this->id);
+                }
+
+                return array_merge($group, compact('form'));
+            });
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Render
+     *
+     * @return string
+     */
+    protected function renderSimpleForm()
+    {
+
+        $groups = $this->getGroupWithFormData();
 
         $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
 
-        $location = '/'.trim($this->form->resource($slice), '/');
-
         $script = <<<SCRIPT
-            $('.item_delete').click(function() {
-                var id = $(this).data('id');
-                if(confirm('{$confirm}')) {
-                    $.post('{$this->form->resource($slice)}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
-                        $.pjax({
-                            timeout: 2000,
-                            url: '$location',
-                            container: '#pjax-container'
-                          });
-                        return false;
-                    });
-                }
-            });
-
-            $('.form-history-back').on('click', function () {
-                event.preventDefault();
-                history.back(1);
-            })
+$('.form-history-back').on('click', function () {
+    event.preventDefault();
+    history.back(1);
+});
 SCRIPT;
 
         Admin::script($script);
@@ -313,15 +433,68 @@ SCRIPT;
             'id'       => $this->id,
             'form'     => $this,
             'resource' => $this->form->resource($slice),
+            'groups' => $groups,
         ];
-
-        if ($this->mode == static::MODE_CREATE) {
-            $this->disableDeletion();
-        }
 
         $this->addRedirectUrlField();
 
         return view('admin::form', $vars)->render();
+    }
+
+    /**
+     * Render form.
+     *
+     * @return string
+     */
+//    protected function renderSimpleForm()
+//    {
+//        $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
+//
+//        $script = <<<SCRIPT
+//$('.form-history-back').on('click', function () {
+//    event.preventDefault();
+//    history.back(1);
+//});
+//SCRIPT;
+//
+//        Admin::script($script);
+//
+//        $vars = [
+//            'id'       => $this->id,
+//            'form'     => $this,
+//            'resource' => $this->form->resource($slice),
+//        ];
+//
+//        $this->addRedirectUrlField();
+//
+//        return view('admin::form', $vars)->render();
+//    }
+
+    /**
+     * @return string
+     */
+    public function render()
+    {
+//        if ($this->group){
+//            return $this->renderGroupForm();
+//        }
+        if ($this->tab) {
+            return $this->renderTabForm();
+        }
+
+        return $this->renderSimpleForm();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function renderWithoutForm()
+    {
+        return preg_replace(
+            ['/<form[^>]+>/', '/<\/form>/'],
+            ['<div class="form-horizontal">', '</div>'],
+            $this->renderSimpleForm()
+        );
     }
 
     /**

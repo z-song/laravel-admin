@@ -13,6 +13,7 @@ return [
     'new'           => 'New',
     'create'        => 'Create',
     'delete'        => 'Delete',
+    'remove'        => 'Remove',
     'edit'          => 'Edit',
     'view'          => 'View',
     'reset'         => 'Reset',

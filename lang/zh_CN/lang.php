@@ -13,6 +13,7 @@ return [
     'new'           => '新增',
     'create'        => '创建',
     'delete'        => '删除',
+    'remove'        => '移除',
     'edit'          => '编辑',
     'view'          => '查看',
     'reset'         => '撤销',
