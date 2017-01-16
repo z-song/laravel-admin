@@ -20,7 +20,7 @@
                 <i class="close-tab fa fa-times" ></i>
             </li>
         @endforeach
-        <li class="pull-right nav-tools">
+        <li class="pull-right nav-tools" style="height: 45px;">
             <button type="button" class="btn btn-success btn-sm add"><i class="fa fa-save"></i>&nbsp;New</button>
         </li>
     </ul>
@@ -41,7 +41,7 @@
         </li>
     </template>
     <template class="pane-tpl">
-        <div class="tab-pane" id="{{ $group->getRelationName() . '_tpl_' . $group::DEFAULT_KEY_NAME }}">
+        <div class="tab-pane new" id="{{ $group->getRelationName() . '_tpl_' . $group::DEFAULT_KEY_NAME }}">
             {!! $template !!}
         </div>
     </template>

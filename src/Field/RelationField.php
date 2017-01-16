@@ -155,7 +155,12 @@ class RelationField extends Field
 	    return <<<EOT
     $('#has-many-{$this->column} > .nav').on('click', 'i.close-tab', function(){
         var \$navTab = $(this).siblings('a');
-        $(\$navTab.attr('href')).removeClass('active').find('.$removeClass').val(1);
+        var \$pane = $(\$navTab.attr('href'));
+        if( \$pane.hasClass('new') ){
+            \$pane.remove();
+        }else{
+            \$pane.removeClass('active').find('.$removeClass').val(1);
+        }
         \$navTab.closest('li').remove();
         $('#has-many-{$this->column} > .nav > li:first-child > a').tab('show');
     });
