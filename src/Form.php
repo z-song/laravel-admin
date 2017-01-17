@@ -591,20 +591,21 @@ class Form
                 continue;
             }
 
+	        if (empty($relationValues)) {
+		        continue;
+	        }
+
             $relation = $this->model->$name();
 
-            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
-
-            $prepared = $this->prepareUpdate([$name => $relationValues], $hasDot);
-
-            if (empty($relationValues)) {
-                continue;
-            }
+//            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
+//
+//            $prepared = $this->prepareUpdate([$name => $relationValues], $hasDot);
 
             switch (get_class($relation)) {
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
                 case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
-                    $relation->sync($prepared[$name]);
+//	            $relation->sync($prepared[$name]);
+	            $relation->sync($relationValues);
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
 
@@ -616,7 +617,7 @@ class Form
                         $related->{$relation->getForeignKey()} = $this->model->{$this->model->getKeyName()};
                     }
 
-                    foreach ($prepared[$name] as $column => $value) {
+                    foreach ($relationValues as $column => $value) {
                         if (is_array($value)) {
                             $value = implode(',', $value);
                         }
@@ -627,7 +628,7 @@ class Form
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
 
-                    foreach($prepared as $ralated){
+                    foreach($relationValues as $ralated){
 
                         $relationModel = $this->model()->$name();
 

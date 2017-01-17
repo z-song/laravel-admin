@@ -6,6 +6,7 @@ use Encore\Admin\Admin;
 use Encore\Admin\Field\RelationField;
 use Encore\Admin\Field\Group;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
+use Illuminate\Support\Collection;
 
 
 /**
@@ -123,9 +124,9 @@ class HasMany extends RelationField
 
 	public function fields()
 	{
-		$fields = [];
+		$fields = new Collection();;
 		foreach($this->groups as $group){
-			$fields = array_merge($fields, $group->fields());
+			$fields->merge($group->fields());
 		}
 
 		return $fields;
@@ -158,7 +159,7 @@ class HasMany extends RelationField
 		$defaultKey = Group::DEFAULT_KEY_NAME;
 
 		return <<<EOT
-    $('#has-many-{$this->column} > .nav').on('click', 'i.close-tab', function(){
+    $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
         var \$navTab = $(this).siblings('a');
         var \$pane = $(\$navTab.attr('href'));
         if( \$pane.hasClass('new') ){
@@ -170,7 +171,7 @@ class HasMany extends RelationField
         $('#has-many-{$this->column} > .nav > li:first-child > a').tab('show');
     });
 
-    $('#has-many-{$this->column} > .nav > li.nav-tools').on('click', '.add', function(){
+    $('#has-many-{$this->column} > .nav > li.nav-tools').off('click', '.add').on('click', '.add', function(){
         var index = $('#has-many-{$this->column} > .nav > li').size();
         var navTabHtml = $('#has-many-{$this->column} > template.nav-tab-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
         var paneHtml = $('#has-many-{$this->column} > template.pane-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
