@@ -35,6 +35,13 @@ class Group
     protected $scripts = [];
 
     /**
+     * template
+     *
+     * @var array
+     */
+    protected $template = [];
+
+    /**
      * owner, the top level with model().
      *
      * @var
@@ -124,11 +131,12 @@ class Group
      *
      * @return string
      */
-    public function getTemplateHtml()
+    public function buildTemplate()
     {
         $html = '';
 
         foreach ($this->fields() as $field) {
+
             $html .= $field->render();
 
             if ($script = $field->getScript()) {
@@ -138,7 +146,10 @@ class Group
             }
         }
 
-        return $html;
+        $this->template['html'] = $html;
+        $this->template['script'] = implode("\r\n", $this->scripts);
+
+        return $this;
     }
 
     /**
@@ -146,9 +157,19 @@ class Group
      *
      * @return string
      */
-    public function getFormScript()
+    public function getTemplateScript()
     {
-        return implode("\r\n", $this->scripts);
+        return $this->template['script'];
+    }
+
+    /**
+     * Get form html as string.
+     *
+     * @return string
+     */
+    public function getTemplateHtml()
+    {
+        return $this->template['html'];
     }
 
     /**
@@ -181,9 +202,14 @@ class Group
         if ($className = Field::findFieldClass($method)) {
             $column = array_get($arguments, 0, '');
 
-            $column = "{$this->relationName}.{$this->key}.{$column}";
+//            $column = "{$this->relationName}.{$this->key}.{$column}";
 
             $element = new $className($column, array_slice($arguments, 1));
+
+            $element->setColumnName("{$this->relationName}.{$this->key}.{$column}")
+                    ->setElementClass("{$this->relationName}_{$column}")
+                    ->setErrorKey("{$this->relationName}_{$this->key}_{$column}");
+
 
             $this->pushField($element);
 

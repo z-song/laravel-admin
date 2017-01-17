@@ -79,10 +79,11 @@ class Select extends DataField
         }
         $script = <<<EOT
 
-$(".{$this->getElementClass()}").change(function () {
+$(document).on('change', ".{$this->getElementClass()}", function () {
+    var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
-        $(".$class option").remove();
-        $(".$class").select2({
+        target.find("option").remove();
+        $(target).select2({
             data: $.map(data, function (d) {
 				d.id = d.$idField;
 				d.text = d.$textField;

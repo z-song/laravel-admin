@@ -52,10 +52,8 @@ class RelationField extends Field
      * @param $relation
      * @param array $arguments
      */
-    public function __construct(/*&$owner,*/ $relation, $arguments = [])
+    public function __construct($relation, $arguments = [])
     {
-        //    	$this->owner = &$owner;
-
         $this->relationName = $relation;
 
         $this->column = $relation;

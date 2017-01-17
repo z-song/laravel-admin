@@ -31,11 +31,11 @@ class HasMany extends RelationField
      */
     public function buildTemplate()
     {
-        $this->template = $this->buildGroup($this->relationName, $this->builder, 'new_'.Group::DEFAULT_KEY_NAME);
+        $this->template = $this->buildGroup($this->relationName, $this->builder, 'new_'.Group::DEFAULT_KEY_NAME)->buildTemplate();
 
         Admin::script(
             $this->getTemplateScript(
-                $this->template->getFormScript()
+                $this->template->getTemplateScript()
             )
         );
 
@@ -169,7 +169,6 @@ class HasMany extends RelationField
         $('#has-many-{$this->column} > .tab-content').append(paneHtml);
         $('#has-many-{$this->column} > .nav > li:last-child a').tab('show');
         {$templateScript}
-
     });
 EOT;
     }

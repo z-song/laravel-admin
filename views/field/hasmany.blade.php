@@ -26,7 +26,7 @@
     </ul>
     <div class="tab-content">
         @foreach($groups as $pk => $group)
-        <div class="tab-pane @if ($group == reset($groups)) active @endif" id="{{ $group->getRelationName() . '_' . $pk }}">
+        <div class="tab-pane fields-group @if ($group == reset($groups)) active @endif" id="{{ $group->getRelationName() . '_' . $pk }}">
             @foreach($group->fields() as $field)
                 {!! $field->render() !!}
             @endforeach
@@ -41,7 +41,7 @@
         </li>
     </template>
     <template class="pane-tpl">
-        <div class="tab-pane new" id="{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}">
+        <div class="tab-pane fields-group new" id="{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}">
             {!! $template->getTemplateHtml() !!}
         </div>
     </template>

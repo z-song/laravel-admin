@@ -158,9 +158,8 @@ class Field
      * @param $column
      * @param array $arguments
      */
-    public function __construct(/*&$owner,*/ $column, $arguments = [])
+    public function __construct($column, $arguments = [])
     {
-        //    	$this->owner = &$owner;
         $this->column = $column;
         $this->elementName = $this->formatName($this->column);
         $this->label = $this->formatLabel($arguments);
@@ -268,6 +267,7 @@ class Field
     public function setColumnName($columnName)
     {
         $this->column = $columnName;
+        return $this;
     }
 
     /**
