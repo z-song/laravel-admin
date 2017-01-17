@@ -267,6 +267,7 @@ class Field
     public function setColumnName($columnName)
     {
         $this->column = $columnName;
+
         return $this;
     }
 
