@@ -107,7 +107,7 @@ class Form
      *
      * @var array
      */
-    protected $relations = [];
+    protected $relationsInput = [];
 
     /**
      * Input data.
@@ -153,7 +153,6 @@ class Form
      */
     public function pushField(Field $field)
     {
-        $field->setOwner($this);
 
         $this->builder->fields()->push($field);
 
@@ -188,7 +187,7 @@ class Form
         $this->builder->setMode(Builder::MODE_EDIT);
         $this->builder->setResourceId($id);
 
-        $this->fill($this->getModelData($id));
+	    $this->fill($this->getModelData($id))->buildRelationField();
 
         return $this;
     }
@@ -203,9 +202,18 @@ class Form
         $this->builder->setMode(Builder::MODE_VIEW);
         $this->builder->setResourceId($id);
 
-        $this->fill($this->getModelData($id));
+        $this->fill($this->getModelData($id))->buildRelationField();
 
         return $this;
+    }
+
+    protected function buildRelationField()
+    {
+	    foreach($this->builder->fields() as $field){
+		    if( $field instanceof \Encore\Admin\Field\RelationField){
+			    $field->build();
+		    }
+	    }
     }
 
     /**
@@ -279,7 +287,7 @@ class Form
 
             $this->model->save();
 
-            $this->updateRelation($this->relations);
+            $this->updateRelation($this->relationsInput);
         });
 
         if (($result = $this->complete($this->saved)) instanceof Response) {
@@ -368,9 +376,9 @@ class Form
             $callback($this);
         }
 
-        $this->relations = $this->getRelationInputs($data);
+        $this->relationsInput = $this->getRelationInputs($data);
 
-        $updates = array_except($this->inputs, array_keys($this->relations));
+        $updates = array_except($this->inputs, array_keys($this->relationsInput));
 
         $this->updates = array_filter($updates, function ($val) {
             return !is_null($val);
@@ -400,19 +408,19 @@ class Form
      */
     protected function getRelationInputs($inputs = [])
     {
-        $relations = [];
+        $relationsInput = [];
 
         foreach ($inputs as $column => $value) {
             if (method_exists($this->model, $column)) {
                 $relation = call_user_func([$this->model, $column]);
 
                 if ($relation instanceof Relation) {
-                    $relations[$column] = $value;
+                    $relationsInput[$column] = $value;
                 }
             }
         }
 
-        return $relations;
+        return $relationsInput;
     }
 
     /**
@@ -492,7 +500,7 @@ class Form
 
             $this->model->save();
 
-            $this->updateRelation($this->relations);
+            $this->updateRelation($this->relationsInput);
         });
 
         if (($result = $this->complete($this->saved)) instanceof Response) {
@@ -572,13 +580,13 @@ class Form
     /**
      * Update relation data.
      *
-     * @param array $relations
+     * @param array $relationsInput
      *
      * @return void
      */
-    protected function updateRelation($relations)
+    protected function updateRelation($relationsInput)
     {
-        foreach ($relations as $name => $values) {
+        foreach ($relationsInput as $name => $relationValues) {
             if (!method_exists($this->model, $name)) {
                 continue;
             }
@@ -587,9 +595,9 @@ class Form
 
             $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
 
-            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
+            $prepared = $this->prepareUpdate([$name => $relationValues], $hasDot);
 
-            if (empty($values)) {
+            if (empty($relationValues)) {
                 continue;
             }
 
@@ -643,6 +651,7 @@ class Form
 
                     break;
             }
+
         }
     }
 
@@ -908,24 +917,20 @@ class Form
                 continue;
             }
 
-            if( $field instanceof \Encore\Admin\Field\RelationField){
-                foreach($validator as $valid){
-                    if (($valid instanceof Validator) && !$valid->passes()) {
-                        $failedValidators[] = $valid;
-                    }
-                }
-            }else {
-                if (($validator instanceof Validator) && !$validator->passes()) {
-                    $failedValidators[] = $validator;
-                }
-            }
+            if($field instanceof \Encore\Admin\Field\RelationField){
+
+	            $failedValidators = array_merge($failedValidators, $validator);
+
+            }else if (($validator instanceof Validator) && !$validator->passes()) {
+
+		        $failedValidators[] = $validator;
+	        }
         }
 
         $message = $this->mergeValidationMessages($failedValidators);
 
         return $message->any() ? $message : false;
     }
-
 
 
     /**
@@ -1097,13 +1102,21 @@ class Form
     public function __call($method, $arguments)
     {
         if ($className = Field::findFieldClass($method)) {
+
             $column = array_get($arguments, 0, ''); //[0];
 
-            $element = new $className( $column, array_slice($arguments, 1));
+            $field = new $className(  $column, array_slice($arguments, 1));
 
-            $this->pushField($element);
+	        $field->setOwner($this);
 
-            return $element;
+//	        if( $field instanceof \Encore\Admin\Field\RelationField\HasMany){
+//				$field->fill( $this->model()->wi)->buildGroups();
+//		        $field->buildTemplate();
+//	        }
+
+            $this->pushField($field);
+
+            return $field;
         }
     }
 

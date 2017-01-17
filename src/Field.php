@@ -153,14 +153,15 @@ class Field
     public static $availableFields = [];
 
 
-    /**
-     * Field constructor.
-     *
-     * @param $column
-     * @param array $arguments
-     */
-    public function __construct($column, $arguments = [])
+	/**
+	 * Field constructor.
+	 * @param $owner
+	 * @param $column
+	 * @param array $arguments
+	 */
+    public function __construct(/*&$owner,*/ $column, $arguments = [])
     {
+//    	$this->owner = &$owner;
         $this->column = $column;
         $this->elementName = $this->formatName($this->column);
         $this->label = $this->formatLabel($arguments);
@@ -279,9 +280,9 @@ class Field
      *
      * @return $this
      */
-    public function setOwner($owner)
+    public function setOwner(&$owner)
     {
-        $this->owner = $owner;
+        $this->owner = &$owner;
 
         return $this;
     }
@@ -314,6 +315,8 @@ class Field
         }
 
         $this->value = array_get($data, $this->column);
+
+	    return $this;
     }
 
     /**
@@ -624,8 +627,8 @@ class Field
             'email'             => \Encore\Admin\Field\DataField\Email::class,
             'embedsMany'        => \Encore\Admin\Field\DataField\EmbedsMany::class,
             'file'              => \Encore\Admin\Field\DataField\File::class,
-            'hasMany'           => \Encore\Admin\Field\DataField\HasMany::class,
-            'hasMany2'          => \Encore\Admin\Field\RelationField\HasMany::class,
+//            'hasMany'           => \Encore\Admin\Field\DataField\HasMany::class,
+            'hasMany'          => \Encore\Admin\Field\RelationField\HasMany::class,
             'hidden'            => \Encore\Admin\Field\DataField\Hidden::class,
             'id'                => \Encore\Admin\Field\DataField\Id::class,
             'image'             => \Encore\Admin\Field\DataField\Image::class,

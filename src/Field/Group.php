@@ -50,7 +50,7 @@ class Group
 
     const REMOVE_FLAG_CLASS = 'fom-removed';
 
-    public function __construct($relationName, $key)
+    public function __construct($relationName, $key = '_key_')
     {
         $this->relationName = $relationName;
 

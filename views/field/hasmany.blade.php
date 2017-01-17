@@ -36,7 +36,7 @@
 
     <template class="nav-tab-tpl">
         <li >
-            <a href="#{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">&nbsp;New</a>
+            <a href="#{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">&nbsp;New {{ $template::DEFAULT_KEY_NAME }}</a>
             <i class="close-tab fa fa-times" ></i>
         </li>
     </template>
