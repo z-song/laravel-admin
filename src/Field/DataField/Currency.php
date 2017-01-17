@@ -9,7 +9,8 @@ class Currency extends DataField
     protected $symbol = '$';
 
     /**
-     * digits
+     * digits.
+     *
      * @var int
      */
     protected $digits = 2;
@@ -32,7 +33,7 @@ class Currency extends DataField
 
     public function digits($number)
     {
-        $this->digits = (int)$number;
+        $this->digits = (int) $number;
 
         return $this;
     }
@@ -47,5 +48,4 @@ EOT;
 
         return parent::render()->with(['symbol' => $this->symbol]);
     }
-
 }

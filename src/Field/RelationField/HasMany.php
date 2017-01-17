@@ -3,162 +3,152 @@
 namespace Encore\Admin\Field\RelationField;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Field\RelationField;
 use Encore\Admin\Field\Group;
+use Encore\Admin\Field\RelationField;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 use Illuminate\Support\Collection;
-
 
 /**
  * Class HasMany.
  */
 class HasMany extends RelationField
 {
-	/**
-	 * build relation field
-	 *
-	 * @param $data
-	 */
-	public function build($data = null)
-	{
-		$this->buildGroups($data);
-		$this->buildTemplate();
-	}
+    /**
+     * build relation field.
+     *
+     * @param $data
+     */
+    public function build($data = null)
+    {
+        $this->buildGroups($data);
+        $this->buildTemplate();
+    }
 
-	/**
-	 * Build a Nested form template for dynamically add sub form .
-	 *
-	 * @return string
-	 */
-	public function buildTemplate()
-	{
-		$this->template = $this->buildGroup($this->relationName, $this->builder, 'new_' . Group::DEFAULT_KEY_NAME);
+    /**
+     * Build a Nested form template for dynamically add sub form .
+     *
+     * @return string
+     */
+    public function buildTemplate()
+    {
+        $this->template = $this->buildGroup($this->relationName, $this->builder, 'new_'.Group::DEFAULT_KEY_NAME);
 
-		Admin::script(
-			$this->getTemplateScript(
-				$this->template->getFormScript()
-			)
-		);
+        Admin::script(
+            $this->getTemplateScript(
+                $this->template->getFormScript()
+            )
+        );
 
-		return $this->template;
-	}
+        return $this->template;
+    }
 
+    public function buildGroups($relationData = null)
+    {
+        $relationData = $relationData ?: $this->value;
 
+        $model = $this->owner->model();
 
-	public function buildGroups( $relationData = null )
-	{
-		$relationData = $relationData ? : $this->value;
+        $relation = call_user_func([$model, $this->relationName]);
 
-		$model = $this->owner->model();
+        if (!$relation instanceof Relation) {
+            throw new \Exception('hasMany field must be a HasMany relation.');
+        }
 
-		$relation = call_user_func([$model, $this->relationName]);
+        $this->groups = [];
 
-		if (!$relation instanceof Relation) {
-			throw new \Exception('hasMany field must be a HasMany relation.');
-		}
+        if ($datas = $this->getDataInFlash()) {
+            foreach ($datas as $key => $data) {
+                if ($data[Group::REMOVE_FLAG_NAME] == 1) {
+                    continue;
+                }
+                //{$this->relationName}.{$this->key}.{$column}
+                $data = [$this->relationName => [$key => $data]];
 
-		$this->groups = [];
+                $this->groups[$key] = $this->buildGroup($this->relationName, $this->builder, $key)->fill([$data]);
+            }
+        } elseif (!empty($this->groups)) {
+            return $this->groups;
+        }
 
-		if ($datas = $this->getDataInFlash()) {
-			foreach ($datas as $key => $data) {
-				if ($data[Group::REMOVE_FLAG_NAME] == 1) {
-					continue;
-				}
-				//{$this->relationName}.{$this->key}.{$column}
-				$data = [$this->relationName => [ $key => $data]];
+        foreach ($relationData as $key => $data) {
+            $relationKey = array_get($data, $relation->getRelated()->getKeyName());
+            $relationKey = $relationKey ?: $key;
 
-				$this->groups[$key] = $this->buildGroup($this->relationName, $this->builder, $key)->fill([$data]);
-			}
-		}else if( !empty($this->groups) ){
-			return $this->groups;
-		}
+            $data = [$this->relationName => [$relationKey => $data]];
 
-		foreach ($relationData as $key => $data) {
-			$relationKey = array_get($data, $relation->getRelated()->getKeyName());
-			$relationKey = $relationKey ? :$key;
+            $this->groups[$relationKey] = $this->buildGroup($this->relationName, $this->builder, $relationKey)->fill($data);
+        }
 
-			$data = [$this->relationName => [ $relationKey => $data]];
+        return $this->groups;
+    }
 
-			$this->groups[$relationKey] = $this->buildGroup($this->relationName, $this->builder, $relationKey)->fill($data);
-		}
+    /**
+     * Get form data flashed in session.
+     *
+     * @return mixed
+     */
+    protected function getDataInFlash()
+    {
+        return old($this->column);
+    }
 
-		return $this->groups;
-	}
+    /**
+     * Build fields group.
+     *
+     * @param string $relationName
+     * @param \Closure$builder
+     *
+     * @return NestedForm2
+     */
+    protected function buildGroup($relationName, \Closure $builder, $key)
+    {
+        $group = new Group($relationName, $key);
 
-	/**
-	 * Get form data flashed in session.
-	 *
-	 * @return mixed
-	 */
-	protected function getDataInFlash()
-	{
-		return old($this->column);
-	}
+        call_user_func($builder, $group);
 
-	/**
-	 * Build fields group
-	 *
-	 * @param string $relationName
-	 * @param \Closure$builder
-	 *
-	 * @return NestedForm2
-	 */
-	protected function buildGroup($relationName, \Closure $builder, $key)
-	{
-		$group = new Group($relationName, $key);
+        $pk = $this->owner->model()->$relationName()->getRelated()->getKeyName();
 
-		call_user_func($builder, $group);
+        $group->hidden($pk);
 
-		$pk = $this->owner->model()->$relationName()->getRelated()->getKeyName();
+        $group->hidden(Group::REMOVE_FLAG_NAME)->default(0)->attribute(['class' => Group::REMOVE_FLAG_CLASS]);
 
-		$group->hidden($pk);
+        return $group;
+    }
 
-		$group->hidden(Group::REMOVE_FLAG_NAME)->default(0)->attribute(['class' => Group::REMOVE_FLAG_CLASS]);
+    public function fields()
+    {
+        $fields = new Collection();
+        foreach ($this->groups as $group) {
+            $fields->merge($group->fields());
+        }
 
-		return $group;
-	}
+        return $fields;
+    }
 
+    /**
+     * Get validator for this field.
+     *
+     * @param array $input
+     *
+     * @return bool|Validator
+     */
+    public function getValidator(array $input)
+    {
+        $validators = [];
+        $groups = $this->buildGroups($input[$this->relationName]);
+        foreach ($groups as $group) {
+            $validators = array_merge($validators, $group->getValidator($input));
+        }
 
+        return array_filter($validators);
+    }
 
+    protected function getTemplateScript($templateScript)
+    {
+        $removeClass = Group::REMOVE_FLAG_CLASS;
+        $defaultKey = Group::DEFAULT_KEY_NAME;
 
-
-	public function fields()
-	{
-		$fields = new Collection();;
-		foreach($this->groups as $group){
-			$fields->merge($group->fields());
-		}
-
-		return $fields;
-	}
-
-	/**
-	 * Get validator for this field.
-	 *
-	 * @param array $input
-	 *
-	 * @return bool|Validator
-	 */
-	public function getValidator(array $input)
-	{
-		$validators = [];
-		$groups = $this->buildGroups($input[$this->relationName]);
-		foreach($groups as $group){
-			$validators = array_merge($validators, $group->getValidator($input));
-		}
-
-		return array_filter($validators);
-	}
-
-
-
-
-	protected function getTemplateScript($templateScript)
-	{
-		$removeClass = Group::REMOVE_FLAG_CLASS;
-		$defaultKey = Group::DEFAULT_KEY_NAME;
-
-		return <<<EOT
+        return <<<EOT
     $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
         var \$navTab = $(this).siblings('a');
         var \$pane = $(\$navTab.attr('href'));
@@ -182,24 +172,20 @@ class HasMany extends RelationField
 
     });
 EOT;
-	}
+    }
 
-
-
-	/**
-	 * Render the `HasMany` field.
-	 *
-	 * @throws \Exception
-	 *
-	 * @return $this
-	 */
-	public function render()
-	{
-		return parent::render()->with([
-			'groups'     => $this->groups,
-			'template'  => $this->template,
-		]);
-	}
-
-
+    /**
+     * Render the `HasMany` field.
+     *
+     * @throws \Exception
+     *
+     * @return $this
+     */
+    public function render()
+    {
+        return parent::render()->with([
+            'groups'     => $this->groups,
+            'template'   => $this->template,
+        ]);
+    }
 }

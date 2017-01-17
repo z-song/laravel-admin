@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Field;
 
-use Encore\Admin\Form;
 use Encore\Admin\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +13,6 @@ use Illuminate\Support\Facades\Validator;
  */
 class DataField extends Field
 {
-
     /**
      * Field default value.
      *
@@ -35,9 +33,6 @@ class DataField extends Field
      * @var string|array
      */
     protected $placeholder;
-
-
-
 
     /**
      * Set the field options.
@@ -100,7 +95,7 @@ class DataField extends Field
     }
 
     /**
-     * Sanitize input data. Clear empty value
+     * Sanitize input data. Clear empty value.
      *
      * @param array  $input
      * @param string $column
@@ -150,7 +145,6 @@ class DataField extends Field
     {
         return $this->placeholder ?: trans('admin::lang.input').' '.$this->label;
     }
-
 
     /**
      * Get the view variables of this field.

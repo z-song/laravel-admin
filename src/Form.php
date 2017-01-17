@@ -4,10 +4,9 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Exception\Handle;
-use Encore\Admin\Form\Builder;
-use Encore\Admin\Field;
 use Encore\Admin\Field\DataField;
 use Encore\Admin\Field\DataField\File;
+use Encore\Admin\Form\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -116,7 +115,6 @@ class Form
      */
     protected $inputs = [];
 
-
     /**
      * Ignored saving fields.
      *
@@ -124,10 +122,8 @@ class Form
      */
     protected $ignored = [];
 
-
-
     /**
-     * Relation remove flag
+     * Relation remove flag.
      */
     const REMOVE_FLAG_NAME = '_remove_';
 
@@ -153,7 +149,6 @@ class Form
      */
     public function pushField(Field $field)
     {
-
         $this->builder->fields()->push($field);
 
         return $this;
@@ -187,7 +182,7 @@ class Form
         $this->builder->setMode(Builder::MODE_EDIT);
         $this->builder->setResourceId($id);
 
-	    $this->fill($this->getModelData($id))->buildRelationField();
+        $this->fill($this->getModelData($id))->buildRelationField();
 
         return $this;
     }
@@ -209,11 +204,11 @@ class Form
 
     protected function buildRelationField()
     {
-	    foreach($this->builder->fields() as $field){
-		    if( $field instanceof \Encore\Admin\Field\RelationField){
-			    $field->build();
-		    }
-	    }
+        foreach ($this->builder->fields() as $field) {
+            if ($field instanceof \Encore\Admin\Field\RelationField) {
+                $field->build();
+            }
+        }
     }
 
     /**
@@ -437,7 +432,6 @@ class Form
         }
     }
 
-
 //    protected function prepareForTabs()
 //    {
 //        if ($tab = $this->builder->getTab()) {
@@ -473,8 +467,7 @@ class Form
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-
-            if( $ajaxError = $this->ajaxError($validationMessages)){
+            if ($ajaxError = $this->ajaxError($validationMessages)) {
                 return $ajaxError;
             }
 
@@ -513,9 +506,6 @@ class Form
 
         return $this->redirectAfterUpdate();
     }
-
-
-
 
     /**
      * Get RedirectResponse after update.
@@ -591,9 +581,9 @@ class Form
                 continue;
             }
 
-	        if (empty($relationValues)) {
-		        continue;
-	        }
+            if (empty($relationValues)) {
+                continue;
+            }
 
             $relation = $this->model->$name();
 
@@ -605,7 +595,7 @@ class Form
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
                 case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
 //	            $relation->sync($prepared[$name]);
-	            $relation->sync($relationValues);
+                $relation->sync($relationValues);
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
 
@@ -628,16 +618,14 @@ class Form
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
 
-                    foreach($relationValues as $ralated){
-
+                    foreach ($relationValues as $ralated) {
                         $relationModel = $this->model()->$name();
 
                         $keyName = $relationModel->getRelated()->getKeyName();
 
                         $instance = $relationModel->findOrNew($ralated[$keyName]);
 
-                        if( $ralated[ static::REMOVE_FLAG_NAME ] == 1){
-
+                        if ($ralated[static::REMOVE_FLAG_NAME] == 1) {
                             $instance->delete();
 
                             continue;
@@ -652,18 +640,15 @@ class Form
 
                     break;
             }
-
         }
     }
-
-
-
 
     /**
      * Prepare input data for update.
      *
      * @param array $updates
-     * @param bool  $hasDot    If column name contains a 'dot', only has-one relation column use this.
+     * @param bool  $hasDot  If column name contains a 'dot', only has-one relation column use this.
+     *
      * @return array
      */
     protected function prepareUpdate(array $updates, $hasDot = false)
@@ -689,11 +674,11 @@ class Form
                 $value = $field->prepare($value);
             }
 
-            if( $field instanceof \Encore\Admin\Field\RelationField){
-                foreach($field->fields() as $fld){
+            if ($field instanceof \Encore\Admin\Field\RelationField) {
+                foreach ($field->fields() as $fld) {
                     $prepared = $this->getPrepareInputs($prepared, $fld, $value);
                 }
-            }else{
+            } else {
                 $prepared = $this->getPrepareInputs($prepared, $field, $value);
             }
         }
@@ -713,6 +698,7 @@ class Form
                 array_set($inputs, $columns, $value);
             }
         }
+
         return $inputs;
     }
 
@@ -869,11 +855,12 @@ class Form
     }
 
     /**
-     * Get model data
+     * Get model data.
      *
      * @param $id
+     *
      * @return mixed
-     * author Edwin Hui
+     *               author Edwin Hui
      */
     protected function getModelData($id)
     {
@@ -884,18 +871,17 @@ class Form
         return $this->model->toArray();
     }
 
-
     /**
      * Set all fields value in form.
      *
      * @param array $data
+     *
      * @return $this
-     * author Edwin Hui
+     *               author Edwin Hui
      */
     public function fill(array $data)
     {
         $this->builder->fields()->each(function (Field $field) use ($data) {
-
             $field->fill($data);
         });
 
@@ -918,21 +904,17 @@ class Form
                 continue;
             }
 
-            if($field instanceof \Encore\Admin\Field\RelationField){
-
-	            $failedValidators = array_merge($failedValidators, $validator);
-
-            }else if (($validator instanceof Validator) && !$validator->passes()) {
-
-		        $failedValidators[] = $validator;
-	        }
+            if ($field instanceof \Encore\Admin\Field\RelationField) {
+                $failedValidators = array_merge($failedValidators, $validator);
+            } elseif (($validator instanceof Validator) && !$validator->passes()) {
+                $failedValidators[] = $validator;
+            }
         }
 
         $message = $this->mergeValidationMessages($failedValidators);
 
         return $message->any() ? $message : false;
     }
-
 
     /**
      * Merge validation messages from input validators.
@@ -1033,8 +1015,6 @@ class Form
         return array_set($this->inputs, $key, $value);
     }
 
-
-
 //    /**
 //     * Use tab to split form.
 //     *
@@ -1103,12 +1083,11 @@ class Form
     public function __call($method, $arguments)
     {
         if ($className = Field::findFieldClass($method)) {
-
             $column = array_get($arguments, 0, ''); //[0];
 
-            $field = new $className(  $column, array_slice($arguments, 1));
+            $field = new $className($column, array_slice($arguments, 1));
 
-	        $field->setOwner($this);
+            $field->setOwner($this);
 
 //	        if( $field instanceof \Encore\Admin\Field\RelationField\HasMany){
 //				$field->fill( $this->model()->wi)->buildGroups();

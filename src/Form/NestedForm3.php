@@ -3,9 +3,8 @@
 namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Form;
 use Encore\Admin\Field;
-use Illuminate\Database\Eloquent\Model;
+use Encore\Admin\Form;
 use Illuminate\Support\Collection;
 
 class NestedForm3
@@ -13,7 +12,7 @@ class NestedForm3
     const DEFAULT_KEY_NAME = '_key_';
 
     /**
-     * Relation remove flag
+     * Relation remove flag.
      */
     const REMOVE_FLAG_NAME = '_remove_';
 
@@ -56,8 +55,6 @@ class NestedForm3
 
         $this->fields = new Collection();
     }
-
-
 
     /**
      * Get fields of this form.
@@ -103,7 +100,7 @@ class NestedForm3
      *
      * @return string
      */
-    protected function formatElementName( $column, $key = null)
+    protected function formatElementName($column, $key = null)
     {
         $key = is_null($key) ? static::DEFAULT_KEY_NAME : $key;
 
@@ -111,7 +108,7 @@ class NestedForm3
         return sprintf('%s[%s][%s]', $this->relation, $key, $column);
     }
 
-    protected function formatColumnName( $column, $key = null)
+    protected function formatColumnName($column, $key = null)
     {
         $key = is_null($key) ? static::DEFAULT_KEY_NAME : $key;
 
@@ -121,21 +118,21 @@ class NestedForm3
     /**
      * Set form element name.
      *
-     * @param null   $key
+     * @param null $key
      *
      * @return $this
      */
-    protected function setElementName( $key = null)
+    protected function setElementName($key = null)
     {
-        $this->fields->each(function (Field $field) use ( $key) {
+        $this->fields->each(function (Field $field) use ($key) {
             $column = $field->column();
 
             if (is_array($column)) {
-                $name = array_map(function ($col) use ( $key) {
-                    return $this->formatElementName( $col, $key);
+                $name = array_map(function ($col) use ($key) {
+                    return $this->formatElementName($col, $key);
                 }, $column);
             } else {
-                $name = $this->formatElementName( $column, $key);
+                $name = $this->formatElementName($column, $key);
             }
 
             $field->setElementName($name);
@@ -147,21 +144,21 @@ class NestedForm3
     /**
      * Set form element name.
      *
-     * @param null   $key
+     * @param null $key
      *
      * @return $this
      */
-    protected function setColumnName( $key = null)
+    protected function setColumnName($key = null)
     {
-        $this->fields->each(function (Field $field) use ( $key) {
+        $this->fields->each(function (Field $field) use ($key) {
             $column = $field->column();
 
             if (is_array($column)) {
-                $name = array_map(function ($col) use ( $key) {
-                    return $this->formatColumnName( $col, $key);
+                $name = array_map(function ($col) use ($key) {
+                    return $this->formatColumnName($col, $key);
                 }, $column);
             } else {
-                $name = $this->formatColumnName( $column, $key);
+                $name = $this->formatColumnName($column, $key);
             }
 
             $field->setColumnName($name);
@@ -178,7 +175,7 @@ class NestedForm3
      *
      * @return $this
      */
-    public function setErrorKey($parent,  $key)
+    public function setErrorKey($parent, $key)
     {
         foreach ($this->fields as $field) {
             $column = $field->column();

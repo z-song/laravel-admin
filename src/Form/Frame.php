@@ -4,7 +4,6 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Form;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class Frame
 {
@@ -19,9 +18,9 @@ class Frame
     protected $frames;
 
     /**
-     * Frame name
+     * Frame name.
      *
-     * @var String
+     * @var string
      */
     protected $name = 'frame';
 
@@ -40,14 +39,14 @@ class Frame
     /**
      * Add a tab section.
      *
-     * @param string $title
+     * @param string   $title
      * @param \Closure $content
      *
      * @return $this
      */
     public function frame($title, \Closure $content)
     {
-        $id = $this->name . '-' . ($this->frames->count() + 1);
+        $id = $this->name.'-'.($this->frames->count() + 1);
 
         $this->frames[$id] = compact('id', 'title', 'content');
 
