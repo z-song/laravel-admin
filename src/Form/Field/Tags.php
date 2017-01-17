@@ -18,10 +18,10 @@ class Tags extends Field
 
     public function fill($data)
     {
-        $relations = array_get($data, $this->column);
+        $this->value = array_get($data, $this->column);
 
-        if (is_string($relations)) {
-            $this->value = explode(',', $relations);
+        if (is_string($this->value)) {
+            $this->value = explode(',', $this->value);
         }
 
         $this->value = array_filter($this->value);
