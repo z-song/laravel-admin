@@ -6,43 +6,40 @@ use Encore\Admin\Admin;
 use Encore\Admin\Field;
 use Illuminate\Support\Collection;
 
-
 class Group
 {
-
     /**
      * @var Collection
      */
     protected $fields;
 
     /**
-     * nested form index, key
+     * nested form index, key.
      *
      * @var
      */
     protected $key;
 
     /**
-     * relation name
+     * relation name.
      *
      * @var
      */
     protected $relationName;
 
     /**
-     * Group scripts
+     * Group scripts.
      *
      * @var
      */
     protected $scripts = [];
 
     /**
-     * owner, the top level with model()
+     * owner, the top level with model().
      *
      * @var
      */
     protected $owner = null;
-
 
     const DEFAULT_KEY_NAME = '_key_';
 
@@ -82,6 +79,7 @@ class Group
         $this->fields->each(function (Field $field) use ($data) {
             $field->fill($data);
         });
+
         return $this;
     }
 
@@ -89,6 +87,7 @@ class Group
     {
         return $this->relationName;
     }
+
     /**
      * @param DataField $field
      *
@@ -96,7 +95,7 @@ class Group
      */
     public function pushField(DataField $field)
     {
-        $field->setGroup( $this);
+        $field->setGroup($this);
 
         $this->fields->push($field);
 
@@ -162,9 +161,10 @@ class Group
     public function getValidator(array $input)
     {
         $validators = [];
-        foreach($this->fields as $field){
+        foreach ($this->fields as $field) {
             $validators[] = $field->getValidator($input);
         }
+
         return $validators;
     }
 

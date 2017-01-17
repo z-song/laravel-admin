@@ -2,13 +2,9 @@
 
 namespace Encore\Admin\Field;
 
-use Encore\Admin\Admin;
-use Encore\Admin\Form;
 use Encore\Admin\Field;
-use Encore\Admin\Field\DataField;
+use Encore\Admin\Form;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 /**
  * Class Relation Field.
@@ -37,14 +33,14 @@ class RelationField extends Field
     protected $builder = null;
 
     /**
-     * HasMany groups
+     * HasMany groups.
      *
      * @var mixed
      */
     protected $groups = [];
 
     /**
-     * Group template
+     * Group template.
      *
      * @var \Encore\Admin\Field\Group
      */
@@ -58,7 +54,7 @@ class RelationField extends Field
      */
     public function __construct(/*&$owner,*/ $relation, $arguments = [])
     {
-//    	$this->owner = &$owner;
+        //    	$this->owner = &$owner;
 
         $this->relationName = $relation;
 
@@ -72,19 +68,17 @@ class RelationField extends Field
         if (count($arguments) == 2) {
             list($this->label, $this->builder) = $arguments;
         }
-
     }
 
-	/**
-	 * Render the `HasMany` field.
-	 *
-	 * @throws \Exception
-	 *
-	 * @return $this
-	 */
-	public function render()
-	{
-		return parent::render();
-	}
-
+    /**
+     * Render the `HasMany` field.
+     *
+     * @throws \Exception
+     *
+     * @return $this
+     */
+    public function render()
+    {
+        return parent::render();
+    }
 }

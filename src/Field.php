@@ -2,7 +2,6 @@
 
 namespace Encore\Admin;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -104,14 +103,14 @@ class Field
     protected $attributes = [];
 
     /**
-     * owner, the top level with model()
+     * owner, the top level with model().
      *
      * @var
      */
     protected $owner = null;
 
     /**
-     * fields group
+     * fields group.
      *
      * @var Field
      */
@@ -152,21 +151,20 @@ class Field
      */
     public static $availableFields = [];
 
-
-	/**
-	 * Field constructor.
-	 * @param $owner
-	 * @param $column
-	 * @param array $arguments
-	 */
+    /**
+     * Field constructor.
+     *
+     * @param $owner
+     * @param $column
+     * @param array $arguments
+     */
     public function __construct(/*&$owner,*/ $column, $arguments = [])
     {
-//    	$this->owner = &$owner;
+        //    	$this->owner = &$owner;
         $this->column = $column;
         $this->elementName = $this->formatName($this->column);
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($column);
-
     }
 
     /**
@@ -260,20 +258,17 @@ class Field
      * Get form element name.
      *
      * @return string
-     * author Edwin Hui
+     *                author Edwin Hui
      */
     public function getElementName()
     {
         return $this->elementName;
     }
 
-
-    public function setColumnName( $columnName )
+    public function setColumnName($columnName)
     {
         $this->column = $columnName;
     }
-
-
 
     /**
      * @param $owner
@@ -316,7 +311,7 @@ class Field
 
         $this->value = array_get($data, $this->column);
 
-	    return $this;
+        return $this;
     }
 
     /**
@@ -338,7 +333,6 @@ class Field
 
         $this->original = array_get($data, $this->column);
     }
-
 
     /**
      * Get or set rules.
@@ -393,8 +387,6 @@ class Field
 
         return $this;
     }
-
-
 
     /**
      * Set help block for current field.
@@ -469,7 +461,6 @@ class Field
         return Validator::make($input, $rules, [], $attributes);
     }
 
-
     /**
      * Add html attributes to elements.
      *
@@ -488,7 +479,6 @@ class Field
 
         return $this;
     }
-
 
     /**
      * Format the field attributes.
@@ -628,7 +618,7 @@ class Field
             'embedsMany'        => \Encore\Admin\Field\DataField\EmbedsMany::class,
             'file'              => \Encore\Admin\Field\DataField\File::class,
 //            'hasMany'           => \Encore\Admin\Field\DataField\HasMany::class,
-            'hasMany'          => \Encore\Admin\Field\RelationField\HasMany::class,
+            'hasMany'           => \Encore\Admin\Field\RelationField\HasMany::class,
             'hidden'            => \Encore\Admin\Field\DataField\Hidden::class,
             'id'                => \Encore\Admin\Field\DataField\Id::class,
             'image'             => \Encore\Admin\Field\DataField\Image::class,
@@ -731,5 +721,4 @@ class Field
             'js'  => $js->flatten()->unique()->filter()->toArray(),
         ];
     }
-
 }

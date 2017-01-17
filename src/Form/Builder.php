@@ -3,8 +3,8 @@
 namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Form;
 use Encore\Admin\Field;
+use Encore\Admin\Form;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\URL;
 class Builder
 {
     /**
-     *  Previous url key
+     *  Previous url key.
      */
     const PREVIOUS_URL_KEY = '_previous_';
 
@@ -282,23 +282,23 @@ class Builder
             return '';
         }
 
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('button.ajax-submit').on('click', function(){
-    var \$form = $(this).closest('form');
-    var url = \$form.attr('action');
-    \$form.find('.has-error').removeClass('has-error');
-    \$form.find('.error-label').remove();
+    var $form = $(this).closest('form');
+    var url = $form.attr('action');
+    $form.find('.has-error').removeClass('has-error');
+    $form.find('.error-label').remove();
     $.ajax({
       type: 'POST',
       url: url,
-      data: \$form.serialize(),
+      data: $form.serialize(),
       success: function(data){
         if(data.status === false){
             $.each(data.message, function(key, value){
-                var \$target = $('[name="' + key + '"]:not([type="hidden"])');
-                \$target.closest('.form-group').addClass('has-error');
+                var $target = $('[name="' + key + '"]:not([type="hidden"])');
+                $target.closest('.form-group').addClass('has-error');
                 $.each(value, function(k, error){
-                   \$target.before('<label class="control-label error-label" for="inputError"><i class="fa fa-times-circle-o"></i> ' + error + '</label>');
+                   $target.before('<label class="control-label error-label" for="inputError"><i class="fa fa-times-circle-o"></i> ' + error + '</label>');
                 });
             });
         }else if(data.status === true){
@@ -343,14 +343,13 @@ SCRIPT;
     }
 
     /**
-     * Render
+     * Render.
      *
      * @return string
      */
     protected function renderTabForm()
     {
         $tabs = $this->tab->getTabs()->map(function ($tab) {
-
             $form = new Form($this->form->model(), $tab['content']);
 
             // In edit mode.
@@ -361,7 +360,7 @@ SCRIPT;
             return array_merge($tab, compact('form'));
         });
 
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 
 var url = document.location.toString();
 if (url.match('#')) {
@@ -380,19 +379,16 @@ SCRIPT;
         return view('admin::form.tab', ['form' => $this, 'tabs' => $tabs])->render();
     }
 
-
     /**
-     * get group with form data
+     * get group with form data.
      *
      * @return bool|static
-     * author Edwin Hui
+     *                     author Edwin Hui
      */
     protected function getGroupWithFormData()
     {
-        if( !empty($this->group)){
-
+        if (!empty($this->group)) {
             return $this->group->getGroups()->map(function ($group) {
-
                 $form = new Form($this->form->model(), $group['content']);
 
                 // In edit mode.
@@ -405,22 +401,20 @@ SCRIPT;
         }
 
         return false;
-
     }
 
     /**
-     * Render
+     * Render.
      *
      * @return string
      */
     protected function renderSimpleForm()
     {
-
         $groups = $this->getGroupWithFormData();
 
         $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
 
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.form-history-back').on('click', function () {
     event.preventDefault();
     history.back(1);
@@ -433,7 +427,7 @@ SCRIPT;
             'id'       => $this->id,
             'form'     => $this,
             'resource' => $this->form->resource($slice),
-            'groups' => $groups,
+            'groups'   => $groups,
         ];
 
         $this->addRedirectUrlField();
@@ -475,7 +469,7 @@ SCRIPT;
      */
     public function render()
     {
-//        if ($this->group){
+        //        if ($this->group){
 //            return $this->renderGroupForm();
 //        }
         if ($this->tab) {

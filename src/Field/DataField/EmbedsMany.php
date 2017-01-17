@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Field\DataField;
 
-use Encore\Admin\Form;
 use Encore\Admin\Field\DataField;
+use Encore\Admin\Form;
 use Jenssegers\Mongodb\Relations\EmbedsMany as Relation;
 
 /**
