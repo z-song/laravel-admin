@@ -24,8 +24,12 @@ class Select extends Field
         }
 
         if ($this->options instanceof \Closure) {
-            $optionCallback = $this->options->bindTo($this->form->model());
-            $this->options(call_user_func($optionCallback, $this->value));
+
+            if ($this->form) {
+                $this->options = $this->options->bindTo($this->form->model());
+            }
+
+            $this->options(call_user_func($this->options, $this->value));
         }
 
         $this->options = array_filter($this->options);
@@ -80,7 +84,7 @@ class Select extends Field
 $(".{$this->getElementClass()}").change(function () {
     $.get("$source?q="+this.value, function (data) {
         $(".$class option").remove();
-        $(".$class").select2({data: data});
+        $(".$class").select2({data: data}).trigger('change');
     });
 });
 EOT;
