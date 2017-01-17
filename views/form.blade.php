@@ -28,7 +28,7 @@
     </div>
     <!-- /.box-header -->
     <!-- form start -->
-    <div class="box-body">
+    <div class="box-body fields-group">
         @foreach($form->fields() as $field)
             @if($field instanceof \Encore\Admin\Field\DataField)
             {!! $field->render() !!}
