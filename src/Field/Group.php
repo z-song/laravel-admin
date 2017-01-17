@@ -35,7 +35,7 @@ class Group
     protected $scripts = [];
 
     /**
-     * template
+     * template.
      *
      * @var array
      */
@@ -136,7 +136,6 @@ class Group
         $html = '';
 
         foreach ($this->fields() as $field) {
-
             $html .= $field->render();
 
             if ($script = $field->getScript()) {
@@ -209,7 +208,6 @@ class Group
             $element->setColumnName("{$this->relationName}.{$this->key}.{$column}")
                     ->setElementClass("{$this->relationName}_{$column}")
                     ->setErrorKey("{$this->relationName}_{$this->key}_{$column}");
-
 
             $this->pushField($element);
 
