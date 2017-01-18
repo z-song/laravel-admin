@@ -109,7 +109,7 @@ class Admin
      *
      * @return Content
      */
-    public function content(Closure $callable)
+    public function content(Closure $callable = null)
     {
         static::init();
         static::bootstrap();
