@@ -291,33 +291,6 @@ class HasMany extends Field
             }
         }
 
-        $forms = $this->appendFromSession($forms);
-
-        return $forms;
-    }
-
-    /**
-     * Build a nested form use data flashed to session, then append to forms.
-     *
-     * @param array $forms
-     *
-     * @return array
-     */
-    protected function appendFromSession($forms)
-    {
-        if ($new = $this->getDataInFlash(NestedForm::UPDATE_KEY_NAME_NEW)) {
-            foreach ($new as $key => $data) {
-                if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
-                    continue;
-                }
-
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-                    ->fill($data)
-                    ->setElementName($key)
-                    ->setErrorKey($this->column, NestedForm::UPDATE_KEY_NAME_NEW, $key);
-            }
-        }
-
         return $forms;
     }
 
