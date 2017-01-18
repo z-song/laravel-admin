@@ -6,6 +6,7 @@ use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -160,6 +161,16 @@ class File extends Field
      */
     public function disk($disk)
     {
+        if (! array_key_exists($disk, config('filesystems.disks'))) {
+
+            $error = new MessageBag([
+                'title'   => 'Config error.',
+                'message' => "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`.",
+            ]);
+
+            return session()->flash('error', $error);
+        }
+
         $this->storage = Storage::disk($disk);
 
         return $this;
