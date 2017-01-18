@@ -1,11 +1,9 @@
-<div class="box-group" id="accordion" style="margin-bottom: 20px">
-    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-
+<div {!! $attributes !!}>
     @foreach($items as $key => $item)
     <div class="panel box box-primary" style="margin-bottom: 0px">
         <div class="box-header with-border">
             <h4 class="box-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $key }}">
+                <a data-toggle="collapse" data-parent="#{{$id}}" href="#collapse{{ $key }}">
                     {{ $item['title'] }}
                 </a>
             </h4>
