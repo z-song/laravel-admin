@@ -78,6 +78,11 @@ return [
         'role_menu_table'        => 'admin_role_menu',
     ],
 
+    /**
+     * By setting this option to open or close operation log in laravel-admin.
+     */
+    'operation_log'   => true,
+
     /*
     |---------------------------------------------------------|
     | SKINS         | skin-blue                               |
