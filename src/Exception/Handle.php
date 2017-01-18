@@ -7,30 +7,25 @@ use Illuminate\Support\ViewErrorBag;
 
 class Handle
 {
-    protected $exception;
-
-    public function __construct(\Exception $e)
-    {
-        $this->exception = $e;
-    }
-
-    public function render()
+    /**
+     * Render exception.
+     *
+     * @param \Exception $exception
+     *
+     * @return string
+     */
+    public static function renderException(\Exception $exception)
     {
         $error = new MessageBag([
-            'type'      => get_class($this->exception),
-            'message'   => $this->exception->getMessage(),
-            'file'      => $this->exception->getFile(),
-            'line'      => $this->exception->getLine(),
+            'type'      => get_class($exception),
+            'message'   => $exception->getMessage(),
+            'file'      => $exception->getFile(),
+            'line'      => $exception->getLine(),
         ]);
 
         $errors = new ViewErrorBag();
-        $errors->put('_exception_', $error);
+        $errors->put('exception', $error);
 
-        return view('admin::partials.error', compact('errors'))->render();
-    }
-
-    public function __toString()
-    {
-        return $this->render();
+        return view('admin::partials.exception', compact('errors'))->render();
     }
 }

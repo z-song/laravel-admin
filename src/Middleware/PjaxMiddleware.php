@@ -42,7 +42,7 @@ class PjaxMiddleware
      *
      * @param Response $response
      *
-     * @return $this
+     * @return \Illuminate\Http\RedirectResponse
      */
     protected function handleErrorResponse(Response $response)
     {
@@ -55,7 +55,7 @@ class PjaxMiddleware
             'line'      => $exception->getLine(),
         ]);
 
-        return back()->withInput()->withErrors($error, '_exception_');
+        return back()->withInput()->withErrors($error, 'exception');
     }
 
     /**

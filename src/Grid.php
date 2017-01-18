@@ -931,7 +931,7 @@ class Grid
         try {
             $this->build();
         } catch (\Exception $e) {
-            return with(new Handle($e))->render();
+            return Handle::renderException($e);
         }
 
         return view($this->view, $this->variables())->render();
