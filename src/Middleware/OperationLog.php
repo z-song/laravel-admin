@@ -17,7 +17,7 @@ class OperationLog
      */
     public function handle(Request $request, \Closure $next)
     {
-        if (Admin::user()) {
+        if (config('admin.operation_log') && Admin::user()) {
             $log = [
                 'user_id' => Admin::user()->id,
                 'path'    => $request->path(),
