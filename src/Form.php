@@ -1031,7 +1031,7 @@ class Form
         try {
             return $this->builder->render();
         } catch (\Exception $e) {
-            return with(new Handle($e))->render();
+            return Handle::renderException($e);
         }
     }
 

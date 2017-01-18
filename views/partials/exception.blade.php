@@ -1,5 +1,5 @@
-@if($errors->hasBag('_exception_'))
-    <?php $error = $errors->getBag('_exception_');?>
+@if($errors->hasBag('exception'))
+    <?php $error = $errors->getBag('exception');?>
     <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         <h4>
