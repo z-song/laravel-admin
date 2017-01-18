@@ -39,14 +39,14 @@ class HasMany extends Field
     /**
      * Create a new HasMany field instance.
      *
-     * @param $relation
+     * @param $relationName
      * @param array $arguments
      */
-    public function __construct($relation, $arguments = [])
+    public function __construct($relationName, $arguments = [])
     {
-        $this->relationName = $relation;
+        $this->relationName = $relationName;
 
-        $this->column = $relation;
+        $this->column = $relationName;
 
         if (count($arguments) == 1) {
             $this->label = $this->formatLabel();
@@ -157,27 +157,51 @@ class HasMany extends Field
      * Reset input key for validation.
      *
      * @param array $input
-     * @param array $column
+     * @param array $column   $column is the column name array set
      *
      * @return void.
      */
     protected function resetInputKey(array &$input, array $column)
     {
+	    /**
+	     * flip the column name array set
+	     *
+	     * for example, for the DateRange, the column like as below
+	     *
+	     * ["start" => "$startDate", "end" => "$endDate"]
+	     *
+	     * to:
+	     *
+	     * [ "$startDate" => "start", "$endDate" => "end" ]
+	     *
+	     */
         $column = array_flip($column);
 
-        foreach ($input[$this->column] as $type => $group) {
-            foreach ($group as $key => $value) {
-                foreach ($value as $k => $v) {
-                    if (!array_key_exists($k, $column)) {
-                        continue;
-                    }
+	    /**
+	     * $this->column is the inputs array's node name, default is the relation name
+	     *
+	     * So... $input[$this->column] is the data of this column's inputs data
+	     *
+	     * in the HasMany relation, has many data/field set, $set is field set in the below
+	     */
+        foreach ($input[$this->column] as $index => $set) {
 
-                    $newKey = $k.$column[$k];
+	        /**
+	         * foreach the field set to find the corresponding $column
+	         */
+	        foreach ($set as $name => $value) {
+		        if (!array_key_exists($name, $column)) {
+			        continue;
+		        }
 
-                    array_set($input, "{$this->column}.$type.$key.$newKey", $v);
-                    array_forget($input, "{$this->column}.$type.$key.$k");
-                }
-            }
+		        /**
+		         * $newKey = 
+		         */
+		        $newKey = $name.$column[$name];
+
+		        array_set($input, "{$this->column}.$index.$newKey", $value);
+		        array_forget($input, "{$this->column}.$index.$name");
+	        }
         }
     }
 
@@ -218,14 +242,13 @@ class HasMany extends Field
 
     /**
      * Get form data flashed in session.
-     *
-     * @param string $type
+
      *
      * @return mixed
      */
-    protected function getDataInFlash($type)
+    protected function getDataInFlash()
     {
-        return old($this->column.'.'.$type);
+        return old($this->column);
     }
 
     /**
@@ -247,7 +270,7 @@ class HasMany extends Field
 
         $forms = [];
 
-        if ($old = $this->getDataInFlash(NestedForm::UPDATE_KEY_NAME_OLD)) {
+        if ($old = $this->getDataInFlash()) {
             foreach ($old as $key => $data) {
                 if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
                     continue;
@@ -255,8 +278,8 @@ class HasMany extends Field
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
                     ->fill($data)
-                    ->setElementNameForOriginal($key)
-                    ->setErrorKey($this->column, NestedForm::UPDATE_KEY_NAME_OLD, $key);
+                    ->setElementName($key)
+                    ->setErrorKey($key);
             }
         } else {
             foreach ($this->value as $data) {
@@ -264,7 +287,7 @@ class HasMany extends Field
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
                     ->fill($data)
-                    ->setElementNameForOriginal($key);
+                    ->setElementName($key);
             }
         }
 
@@ -290,7 +313,7 @@ class HasMany extends Field
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
                     ->fill($data)
-                    ->setElementNameForNew($key)
+                    ->setElementName($key)
                     ->setErrorKey($this->column, NestedForm::UPDATE_KEY_NAME_NEW, $key);
             }
         }
@@ -306,7 +329,7 @@ class HasMany extends Field
     protected function buildTemplateForm()
     {
         $template = $this->buildNestedForm($this->column, $this->builder);
-        $template->setElementNameForNew();
+        $template->setElementName();
 
         $templateHtml = $template->getFormHtml();
         $templateScript = $template->getFormScript();
