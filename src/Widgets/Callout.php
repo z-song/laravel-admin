@@ -9,6 +9,11 @@ class Callout extends Widget implements Renderable
     /**
      * @var string
      */
+    protected $view = 'admin::widgets.callout';
+
+    /**
+     * @var string
+     */
     protected $title = '';
 
     /**
@@ -34,7 +39,7 @@ class Callout extends Widget implements Renderable
 
         $this->title = $title;
 
-        $this->style = $style;
+        $this->style($style);
     }
 
     /**
@@ -56,10 +61,12 @@ class Callout extends Widget implements Renderable
      */
     protected function variables()
     {
+        $this->class("callout callout-{$this->style}");
+
         return [
-            'title'   => $this->title,
-            'content' => $this->content,
-            'style'   => $this->style,
+            'title'         => $this->title,
+            'content'       => $this->content,
+            'attributes'    => $this->formatAttributes()
         ];
     }
 
@@ -70,6 +77,6 @@ class Callout extends Widget implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.callout', $this->variables())->render();
+        return view($this->view, $this->variables())->render();
     }
 }

@@ -1,4 +1,4 @@
-<div class="nav-tabs-custom">
+<div {!! $attributes !!}>
     <ul class="nav nav-tabs">
 
         @foreach($tabs as $id => $tab)
