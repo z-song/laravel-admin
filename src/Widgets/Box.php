@@ -7,14 +7,19 @@ use Illuminate\Contracts\Support\Renderable;
 class Box extends Widget implements Renderable
 {
     /**
-     * @var array
+     * @var string
      */
-    protected $attributes = [
-        'class'     => [],
-        'tools'     => [],
-        'title'     => 'Box header',
-        'content'   => 'here is the box content.',
-    ];
+    protected $view = 'admin::widgets.box';
+
+    /**
+     * @var string
+     */
+    protected $title = 'Box header';
+
+    /**
+     * @var string
+     */
+    protected $content = 'here is the box content.';
 
     /**
      * @var array
@@ -36,6 +41,8 @@ class Box extends Widget implements Renderable
         if ($content) {
             $this->content($content);
         }
+
+        $this->class('box');
     }
 
     /**
@@ -48,9 +55,9 @@ class Box extends Widget implements Renderable
     public function content($content)
     {
         if ($content instanceof Renderable) {
-            $this->attributes['content'] = $content->render();
+            $this->content = $content->render();
         } else {
-            $this->attributes['content'] = (string) $content;
+            $this->content = (string) $content;
         }
 
         return $this;
@@ -60,10 +67,14 @@ class Box extends Widget implements Renderable
      * Set box title.
      *
      * @param string $title
+     *
+     * @return $this
      */
     public function title($title)
     {
-        $this->attributes['title'] = $title;
+        $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -73,7 +84,7 @@ class Box extends Widget implements Renderable
      */
     public function collapsable()
     {
-        $this->attributes['tools'][] =
+        $this->tools[] =
             '<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
 
         return $this;
@@ -86,7 +97,7 @@ class Box extends Widget implements Renderable
      */
     public function removable()
     {
-        $this->attributes['tools'][] =
+        $this->tools[] =
             '<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>';
 
         return $this;
@@ -109,7 +120,7 @@ class Box extends Widget implements Renderable
             return 'box-'.$style;
         }, $styles);
 
-        $this->attributes['class'] = array_merge($this->attributes['class'], $styles);
+        $this->class = $this->class . ' ' . join(' ', $styles);
 
         return $this;
     }
@@ -121,9 +132,22 @@ class Box extends Widget implements Renderable
      */
     public function solid()
     {
-        $this->attributes['class'][] = 'box-solid';
+        return $this->style('solid');
+    }
 
-        return $this;
+    /**
+     * Variables in view.
+     *
+     * @return array
+     */
+    protected function variables()
+    {
+        return [
+            'title'         => $this->title,
+            'content'       => $this->content,
+            'tools'         => $this->tools,
+            'attributes'    => $this->formatAttributes(),
+        ];
     }
 
     /**
@@ -133,6 +157,6 @@ class Box extends Widget implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.box', $this->attributes)->render();
+        return view($this->view, $this->variables())->render();
     }
 }

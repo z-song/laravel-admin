@@ -7,6 +7,11 @@ use Illuminate\Contracts\Support\Renderable;
 class Alert extends Widget implements Renderable
 {
     /**
+     * @var string
+     */
+    protected $view = 'admin::widgets.alert';
+
+    /**
      * @var string|\Symfony\Component\Translation\TranslatorInterface
      */
     protected $title = '';
@@ -39,7 +44,7 @@ class Alert extends Widget implements Renderable
 
         $this->title = $title ?: trans('admin::lang.alert');
 
-        $this->style = $style;
+        $this->style($style);
     }
 
     /**
@@ -75,11 +80,13 @@ class Alert extends Widget implements Renderable
      */
     protected function variables()
     {
+        $this->class("alert alert-{$this->style} alert-dismissable");
+
         return [
-            'title'   => $this->title,
-            'content' => $this->content,
-            'style'   => $this->style,
-            'icon'    => $this->icon,
+            'title'         => $this->title,
+            'content'       => $this->content,
+            'icon'          => $this->icon,
+            'attributes'    => $this->formatAttributes()
         ];
     }
 
@@ -90,6 +97,6 @@ class Alert extends Widget implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.alert', $this->variables())->render();
+        return view($this->view, $this->variables())->render();
     }
 }

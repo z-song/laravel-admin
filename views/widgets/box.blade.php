@@ -1,4 +1,4 @@
-<div class="box {!! join($class, ' ') !!}">
+<div {!! $attributes !!}>
     <div class="box-header with-border">
         <h3 class="box-title">{{ $title }}</h3>
         <div class="box-tools pull-right">
