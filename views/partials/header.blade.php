@@ -4,9 +4,9 @@
     <!-- Logo -->
     <a href="/{{ trim(config('admin.prefix'), '/') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>{{config('admin.name')}}</b></span>
+        <span class="logo-mini">{!! config('admin.logo-mini', config('admin.name')) !!}</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>{{config('admin.name')}}</b></span>
+        <span class="logo-lg">{!! config('admin.logo', config('admin.name')) !!}</span>
     </a>
 
     <!-- Header Navbar -->

@@ -5,7 +5,17 @@ return [
     /*
      * Laravel-admin name.
      */
-    'name'  => 'Laravel-admin',
+    'name'      => 'Laravel-admin',
+
+    /**
+     * Logo in admin panel header.
+     */
+    'logo'      => '<b>Laravel</b> admin',
+
+    /**
+     * Mini-logo in admin panel header.
+     */
+    'logo-mini' => '<b>La</b>',
 
     /*
      * Laravel-admin url prefix.
@@ -18,7 +28,7 @@ return [
     'directory' => app_path('Admin'),
 
     /*
-     * Laravel-admin title.
+     * Laravel-admin html title.
      */
     'title'  => 'Admin',
 
@@ -106,5 +116,8 @@ return [
      */
     'layout'  => ['sidebar-mini'],
 
+    /**
+     * Version displayed in footer.
+     */
     'version'   => '1.0',
 ];
