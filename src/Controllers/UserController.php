@@ -70,25 +70,21 @@ class UserController extends Controller
             $grid->id('ID')->sortable();
             $grid->username(trans('admin::lang.username'));
             $grid->name(trans('admin::lang.name'));
-
-            $grid->roles(trans('admin::lang.roles'))->value(function ($roles) {
-                $roles = array_map(function ($role) {
-                    return "<span class='label label-success'>{$role['name']}</span>";
-                }, $roles);
-
-                return implode('&nbsp;', $roles);
-            });
-
+            $grid->roles(trans('admin::lang.roles'))->pluck('name')->label();
             $grid->created_at(trans('admin::lang.created_at'));
             $grid->updated_at(trans('admin::lang.updated_at'));
 
-            $grid->rows(function ($row) {
-                if ($row->id == 1) {
-                    $row->actions('edit');
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                if ($actions->getKey() == 1) {
+                    $actions->disableDelete();
                 }
             });
 
-            $grid->disableBatchDeletion();
+            $grid->tools(function (Grid\Tools $tools) {
+                $tools->batch(function (Grid\Tools\BatchActions $actions) {
+                    $actions->disableDelete();
+                });
+            });
 
             $grid->disableExport();
         });
