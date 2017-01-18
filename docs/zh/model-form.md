@@ -71,5 +71,5 @@ echo $form;
 
 ### 忽略掉不需要保存的字段
 ```php
-$form->ignore('column1', 'column2', 'column3');
+$form->ignore(['column1', 'column2', 'column3']);
 ```
