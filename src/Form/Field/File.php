@@ -204,10 +204,6 @@ class File extends Field
             return false;
         }
 
-        if (!array_has($input, $this->column)) {
-            return false;
-        }
-
         $rules[$this->column] = $fieldRules;
         $attributes[$this->column] = $this->label;
 
