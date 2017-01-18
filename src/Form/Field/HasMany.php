@@ -324,8 +324,10 @@ $('.has-many-{$this->column}').on('click', '.add', function () {
 
     var template = tpl.html().replace(/\[{$defaultKey}\]/g, '['+count+']');
     $('.has-many-{$this->column}-forms').append(template);
-    {$templateScript}
+    
 });
+
+{$templateScript}
 
 $('.has-many-{$this->column}-forms').on('click', '.remove', function () {
     $(this).closest('.has-many-{$this->column}-form').hide();
