@@ -73,13 +73,17 @@ class RoleController extends Controller
             $grid->created_at(trans('admin::lang.created_at'));
             $grid->updated_at(trans('admin::lang.updated_at'));
 
-            $grid->rows(function ($row) {
-                if ($row->slug == 'administrator') {
-                    $row->actions('edit');
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                if ($actions->row->slug == 'administrator') {
+                    $actions->disableDelete();
                 }
             });
 
-            $grid->disableBatchDeletion();
+            $grid->tools(function (Grid\Tools $tools) {
+                $tools->batch(function (Grid\Tools\BatchActions $actions) {
+                    $actions->disableDelete();
+                });
+            });
         });
     }
 
