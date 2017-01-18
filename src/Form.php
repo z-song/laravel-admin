@@ -7,7 +7,6 @@ use Encore\Admin\Exception\Handle;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
-use Encore\Admin\Form\NestedForm;
 use Encore\Admin\Form\Tab;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -142,6 +141,9 @@ class Form
      * @var Form\Tab
      */
     protected $tab = null;
+
+
+	const REMOVE_FLAG_NAME = '_remove_';
 
     /**
      * Create a new form instance.
@@ -320,7 +322,7 @@ class Form
 
             $this->model->save();
 
-            $this->saveRelation($this->relations);
+            $this->updateRelation($this->relations);
         });
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
@@ -461,51 +463,7 @@ class Form
         }
     }
 
-    /**
-     * Save relations data.
-     *
-     * @param array $relations
-     *
-     * @return void
-     */
-    protected function saveRelation($relations)
-    {
-        foreach ($relations as $name => $values) {
-            if (!method_exists($this->model, $name)) {
-                continue;
-            }
 
-            $values = $this->prepareInsert([$name => $values]);
-
-            $relation = $this->model->$name();
-
-            switch (get_class($relation)) {
-                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
-                case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
-                    $relation->attach($values[$name]);
-                    break;
-                case \Illuminate\Database\Eloquent\Relations\HasOne::class:
-                    $related = $relation->getRelated();
-                    foreach ($values[$name] as $column => $value) {
-                        if (is_array($value)) {
-                            $value = implode(',', $value);
-                        }
-
-                        $related->setAttribute($column, $value);
-                    }
-
-                    $relation->save($related);
-                    break;
-                case \Illuminate\Database\Eloquent\Relations\HasMany::class:
-
-                    $nestedForm = new NestedForm($relation);
-
-                    $nestedForm->update($values[$name]);
-
-                    break;
-            }
-        }
-    }
 
     /**
      * Handle update.
@@ -630,13 +588,13 @@ class Form
     /**
      * Update relation data.
      *
-     * @param array $relations
+     * @param array $relationsData
      *
      * @return void
      */
-    protected function updateRelation($relations)
+    protected function updateRelation($relationsData)
     {
-        foreach ($relations as $name => $values) {
+        foreach ($relationsData as $name => $values) {
             if (!method_exists($this->model, $name)) {
                 continue;
             }
@@ -654,7 +612,7 @@ class Form
             switch (get_class($relation)) {
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
                 case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
-                    $relation->sync($prepared[$name]);
+                    $relation->save($prepared[$name]);
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
 
@@ -677,9 +635,25 @@ class Form
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
 
-                    $nestedForm = new NestedForm($relation);
+	                foreach ($values as $ralated) {
+		                $relationModel = $this->model()->$name();
 
-                    $nestedForm->update($prepared[$name]);
+		                $keyName = $relationModel->getRelated()->getKeyName();
+
+		                $instance = $relationModel->findOrNew($ralated[$keyName]);
+
+		                if ($ralated[static::REMOVE_FLAG_NAME] == 1) {
+			                $instance->delete();
+
+			                continue;
+		                }
+
+		                array_forget($ralated, static::REMOVE_FLAG_NAME);
+
+		                $instance->fill($ralated);
+
+		                $instance->save();
+	                }
 
                     break;
             }
@@ -755,38 +729,6 @@ class Form
         return false;
     }
 
-    /**
-     * Prepare input data for insert.
-     *
-     * @param $inserts
-     *
-     * @return array
-     */
-    protected function prepareInsert($inserts)
-    {
-        if ($this->isHasOneRelation($inserts)) {
-            $inserts = array_dot($inserts);
-        }
-
-        foreach ($inserts as $column => $value) {
-            if (is_null($field = $this->getFieldByColumn($column))) {
-                unset($inserts[$column]);
-                continue;
-            }
-
-            if (method_exists($field, 'prepare')) {
-                $inserts[$column] = $field->prepare($value);
-            }
-        }
-
-        $prepared = [];
-
-        foreach ($inserts as $key => $value) {
-            array_set($prepared, $key, $value);
-        }
-
-        return $prepared;
-    }
 
     /**
      * Is input data is has-one relation.
