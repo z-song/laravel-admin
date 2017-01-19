@@ -245,13 +245,17 @@ class Field
     }
 
     /**
-     * Set form element name.
+     * Set form element name
      *
      * @param $name
+     * @return $this
+     * author Edwin Hui
      */
     public function setElementName($name)
     {
         $this->elementName = $name;
+
+        return $this;
     }
 
     /**

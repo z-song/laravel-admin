@@ -632,7 +632,7 @@ class Form
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
 
-                    foreach ($values as $ralated) {
+                    foreach ($prepared[$name] as $ralated) {
                         $relationModel = $this->model()->$name();
 
                         $keyName = $relationModel->getRelated()->getKeyName();
