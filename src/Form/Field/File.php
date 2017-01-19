@@ -208,7 +208,7 @@ class File extends Field
         $attributes[$this->column] = $this->label;
 
         if ($this->multiple) {
-            list($rules, $input) = $this->hydrateFiles(array_get($input, $this->column));
+            list($rules, $input) = $this->hydrateFiles(array_get($input, $this->column, []));
         }
 
         return Validator::make($input, $rules, [], $attributes);
