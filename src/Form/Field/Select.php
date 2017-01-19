@@ -69,15 +69,15 @@ class Select extends Field
      * @param $field
      * @param $source
      */
-	public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
-	{
-		if (Str::contains($field, '.')) {
-			$field = $this->formatName($field);
-			$class = str_replace(['[', ']'], '_', $field);
-		} else {
-			$class = $field;
-		}
-		$script = <<<EOT
+    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
+    {
+        if (Str::contains($field, '.')) {
+            $field = $this->formatName($field);
+            $class = str_replace(['[', ']'], '_', $field);
+        } else {
+            $class = $field;
+        }
+        $script = <<<EOT
 
 $(document).on('change', ".{$this->getElementClass()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
@@ -94,8 +94,8 @@ $(document).on('change', ".{$this->getElementClass()}", function () {
 });
 EOT;
 
-		Admin::script($script);
-	}
+        Admin::script($script);
+    }
 
     /**
      * Load options from remote.
@@ -131,11 +131,11 @@ EOT;
      * @param string $url
      * @param $idField
      * @param $textField
-     * @param string $script    more script to custom
+     * @param string $script more script to custom
      *
      * @return $this
      */
-	public function ajax($url, $idField, $textField, $script = '')
+    public function ajax($url, $idField, $textField, $script = '')
     {
         $this->script = <<<EOT
 

@@ -33,6 +33,7 @@ class Currency extends Field
     public function digits($number)
     {
         $this->digits = (int) $number;
+
         return $this;
     }
 

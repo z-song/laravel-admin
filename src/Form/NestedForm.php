@@ -20,7 +20,8 @@ class NestedForm
     protected $relationName;
 
     /**
-     * the NestedForm key
+     * the NestedForm key.
+     *
      * @var
      */
     protected $key;
@@ -39,17 +40,18 @@ class NestedForm
      */
     protected $original = [];
 
-	/**
-	 * template.
-	 *
-	 * @var array
-	 */
-	protected $template = [];
+    /**
+     * template.
+     *
+     * @var array
+     */
+    protected $template = [];
 
     /**
      * Create a new NestedForm instance.
      *
      * NestedForm constructor.
+     *
      * @param $relation
      * @param $key
      */
@@ -112,14 +114,13 @@ class NestedForm
      */
     protected function setFieldOriginalValue($key)
     {
-        if(array_key_exists($key, $this->original)){
+        if (array_key_exists($key, $this->original)) {
             $values = $this->original[$key];
 
             $this->fields->each(function (Field $field) use ($values) {
                 $field->setOriginal($values);
             });
         }
-
     }
 
     /**
@@ -142,7 +143,7 @@ class NestedForm
 
             $value = $this->fetchColumnValue($record, $columns);
 
-            if(empty($value)){
+            if (empty($value)) {
                 continue;
             }
 
@@ -311,20 +312,20 @@ class NestedForm
 //    }
 
     /**
-     * Build template
+     * Build template.
      *
      * @return string
      */
-	public function buildTemplate()
+    public function buildTemplate()
     {
-	    $html = '';
-	    $scripts = [];
+        $html = '';
+        $scripts = [];
 
         foreach ($this->fields() as $field) {
-	        $html .= $field->render();  //when field render, will push $script to Admin
+            $html .= $field->render();  //when field render, will push $script to Admin
 
             if ($script = $field->getScript()) {
-	            $scripts[] = $field->getScript();
+                $scripts[] = $field->getScript();
 
                 /*
                  * Del the lastest script
@@ -333,30 +334,31 @@ class NestedForm
             }
         }
 
-	    $this->template['html'] = $html;
-	    $this->template['script'] = implode("\r\n", $scripts); //separate scripts with enter
+        $this->template['html'] = $html;
+        $this->template['script'] = implode("\r\n", $scripts); //separate scripts with enter
 
-	    return $this;
+        return $this;
     }
 
-	/**
-	 * Get template scrip.
-	 *
-	 * @return string
-	 */
-	public function getTemplateHtml()
-	{
-		return $this->template['html'];
-	}
-	/**
-	 * Get template scrip.
-	 *
-	 * @return string
-	 */
-	public function getTemplateScript()
-	{
-		return $this->template['script'];
-	}
+    /**
+     * Get template scrip.
+     *
+     * @return string
+     */
+    public function getTemplateHtml()
+    {
+        return $this->template['html'];
+    }
+
+    /**
+     * Get template scrip.
+     *
+     * @return string
+     */
+    public function getTemplateScript()
+    {
+        return $this->template['script'];
+    }
 
     /**
      * Add nested-form fields dynamically.
@@ -373,7 +375,7 @@ class NestedForm
 
             $element = new $className($column, array_slice($arguments, 1));
 
-            $key = is_null($this->key) ? 'new_'. static::DEFAULT_KEY_NAME : $this->key;
+            $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
 
             $element->setElementName("{$this->relationName}[{$key}][{$column}]")
                 ->setErrorKey("{$this->relationName}.{$key}.{$column}")
