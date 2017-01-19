@@ -6,6 +6,13 @@ use Encore\Admin\Form\Field;
 
 class Currency extends Field
 {
+    /**
+     * digits.
+     *
+     * @var int
+     */
+    protected $digits = 2;
+
     protected $symbol = '$';
 
     protected static $js = [
@@ -22,6 +29,12 @@ class Currency extends Field
         'prefix'                => '',
         'removeMaskOnSubmit'    => true,
     ];
+
+    public function digits($number)
+    {
+        $this->digits = (int) $number;
+        return $this;
+    }
 
     public function symbol($symbol)
     {

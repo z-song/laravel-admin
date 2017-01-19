@@ -231,22 +231,21 @@ class HasMany extends Field
     /**
      * Build a Nested form.
      *
-     * @param string $column
-     * @param \Closure$builder
-     *
+     * @param $column
+     * @param \Closure $builder
+     * @param null $key
      * @return NestedForm
+     * author Edwin Hui
      */
-    protected function buildNestedForm($column, \Closure $builder)
+    protected function buildNestedForm($column, \Closure $builder, $key = null)
     {
-        $form = new Form\NestedForm($column);
+        $form = new Form\NestedForm($column, $key);
 
         call_user_func($builder, $form);
 
         $form->hidden($this->getKeyName());
 
         $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->attribute(['class' => NestedForm::REMOVE_FLAG_CLASS]);
-
-//	    $form->setElementName($key)->setErrorKey($key);
 
         return $form;
     }
@@ -297,19 +296,13 @@ class HasMany extends Field
                     continue;
                 }
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-                    ->fill($data)
-                    ->setElementName($key)
-                    ->setErrorKey($key);
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)->fill($data);
             }
         } else {
             foreach ($this->value as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-                    ->fill($data)
-                    ->setElementName($key)
-                    ->setErrorKey($key);
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)->fill($data);
             }
         }
 
@@ -323,19 +316,17 @@ class HasMany extends Field
      */
     protected function getTemplate()
     {
-	    $template = $this->buildNestedForm($this->column, $this->builder)
-		    ->buildTemplate()
-		    ->setElementName();
+	    $template = $this->buildNestedForm($this->column, $this->builder)->buildTemplate();
 
 	    switch($this->viewMode){
-		    case 'default':
-			    $this->view = 'admin::form.hasmany';
-			    $this->buildTemplateScriptDefault($template);
-		    	break;
-		    case 'tab':
+            case 'tab':
 			    $this->view = 'admin::form.hasmanytab';
 			    $this->buildTemplateScriptTab($template);
 		    	break;
+            default:
+                $this->view = 'admin::form.hasmany';
+                $this->buildTemplateScriptDefault($template);
+                break;
 	    }
 	    return $template;
 
@@ -347,11 +338,11 @@ class HasMany extends Field
 	 * @param $template
 	 * @return $this
 	 */
-    protected function buildTemplateScriptDefault($template)
+    protected function buildTemplateScriptDefault(NestedForm $template)
     {
 
-	    $removeClass = $template->REMOVE_FLAG_CLASS;
-	    $defaultKey = $template::DEFAULT_KEY_NAME;
+	    $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+	    $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
 	    $script = <<<EOT
 
@@ -378,12 +369,12 @@ EOT;
 	    return $this;
     }
 
-    protected function buildTemplateScriptTab($template)
+    protected function buildTemplateScriptTab(NestedForm $template)
     {
-	    $removeClass = $template::REMOVE_FLAG_CLASS;
-	    $defaultKey = $template::DEFAULT_KEY_NAME;
+	    $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+	    $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
-	    return <<<EOT
+        $script = <<<EOT
     $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
         var \$navTab = $(this).siblings('a');
         var \$pane = $(\$navTab.attr('href'));
@@ -392,8 +383,12 @@ EOT;
         }else{
             \$pane.removeClass('active').find('.$removeClass').val(1);
         }
-        \$navTab.closest('li').remove();
-        $('#has-many-{$this->column} > .nav > li:first-child > a').tab('show');
+        if(\$navTab.closest('li').hasClass('active')){
+            \$navTab.closest('li').remove();
+            $('#has-many-{$this->column} > .nav > li:nth-child(2) > a').tab('show');
+        }else{
+            \$navTab.closest('li').remove();
+        }
     });
 
     $('#has-many-{$this->column} > .nav > li.nav-tools').off('click', '.add').on('click', '.add', function(){
@@ -413,6 +408,19 @@ EOT;
     }
 
 
+    /**
+     * change view mode
+     *
+     * @param $mode
+     * @return $this
+     * author Edwin Hui
+     */
+    public function viewMode($mode)
+    {
+        $this->viewMode = $mode;
+
+        return $this;
+    }
 
     /**
      * Render the `HasMany` field.
@@ -423,9 +431,11 @@ EOT;
      */
     public function render()
     {
+        $template = $this->getTemplate();
+
         return parent::render()->with([
             'forms'     => $this->buildRelatedForms(),
-            'template'  => $this->getTemplate(),
+            'template'  => $template,
         ]);
     }
 }
