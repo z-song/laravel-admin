@@ -23,14 +23,14 @@
                     <!-- Menu Toggle Button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <!-- The user image in the navbar-->
-                        <img src="{{ asset ("/packages/admin/AdminLTE/dist/img/user2-160x160.jpg") }}" class="user-image" alt="User Image">
+                        <img src="{{ Admin::user()->avatar }}" class="user-image" alt="User Image">
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
                         <span class="hidden-xs">{{ Admin::user()->name }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->
                         <li class="user-header">
-                            <img src="{{ asset ("/packages/admin/AdminLTE/dist/img/user2-160x160.jpg") }}" class="img-circle" alt="User Image">
+                            <img src="{{ Admin::user()->avatar }}" class="img-circle" alt="User Image">
 
                             <p>
                                 {{ Admin::user()->name }}
@@ -38,9 +38,9 @@
                             </p>
                         </li>
                         <li class="user-footer">
-                            {{--<div class="pull-left">--}}
-                                {{--<a href="#" class="btn btn-default btn-flat">Profile</a>--}}
-                            {{--</div>--}}
+                            <div class="pull-left">
+                                <a href="{{ Admin::url('auth/setting') }}" class="btn btn-default btn-flat">{{ trans('admin::lang.setting') }}</a>
+                            </div>
                             <div class="pull-right">
                                 <a href="{{ Admin::url('auth/logout') }}" class="btn btn-default btn-flat">{{ trans('admin::lang.logout') }}</a>
                             </div>

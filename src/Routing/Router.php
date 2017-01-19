@@ -81,6 +81,8 @@ class Router
             $router->get('auth/login', 'AuthController@getLogin');
             $router->post('auth/login', 'AuthController@postLogin');
             $router->get('auth/logout', 'AuthController@getLogout');
+            $router->get('auth/setting', 'AuthController@getSetting');
+            $router->put('auth/setting', 'AuthController@putSetting');
         });
     }
 

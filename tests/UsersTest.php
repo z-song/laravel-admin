@@ -27,6 +27,7 @@ class UsersTest extends TestCase
             'username' => 'Test',
             'name'     => 'Name',
             'password' => '123456',
+            'password_confirmation' => '123456',
         ];
 
         $this->visit('admin/auth/users/create')
@@ -45,12 +46,11 @@ class UsersTest extends TestCase
 
         $this->assertFalse($this->app['auth']->guard('admin')->getUser()->isAdministrator());
 
-        $this
-                ->dontSee('<span>Users</span>')
-                ->dontSee('<span>Roles</span>')
-                ->dontSee('<span>Permission</span>')
-                ->dontSee('<span>Operation log</span>')
-                ->dontSee('<span>Menu</span>');
+        $this->dontSee('<span>Users</span>')
+            ->dontSee('<span>Roles</span>')
+            ->dontSee('<span>Permission</span>')
+            ->dontSee('<span>Operation log</span>')
+            ->dontSee('<span>Menu</span>');
     }
 
     public function testUpdateUser()
@@ -66,9 +66,15 @@ class UsersTest extends TestCase
     {
         $password = 'odjwyufkglte';
 
+        $data = [
+            'password' => $password,
+            'password_confirmation' => $password,
+            'roles' => [1]
+        ];
+
         $this->visit('admin/auth/users/'.$this->user->id.'/edit')
             ->see('Create')
-            ->submitForm('Submit', ['password' => $password, 'roles' => [1]])
+            ->submitForm('Submit', $data)
             ->seePageIs('admin/auth/users')
             ->visit('admin/auth/logout')
             ->dontSeeIsAuthenticated('admin')
