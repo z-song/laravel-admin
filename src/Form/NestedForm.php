@@ -4,7 +4,6 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class NestedForm
@@ -21,7 +20,8 @@ class NestedForm
     protected $relationName;
 
     /**
-     * the NestedForm key
+     * the NestedForm key.
+     *
      * @var
      */
     protected $key;
@@ -40,17 +40,18 @@ class NestedForm
      */
     protected $original = [];
 
-	/**
-	 * template.
-	 *
-	 * @var array
-	 */
-	protected $template = [];
+    /**
+     * template.
+     *
+     * @var array
+     */
+    protected $template = [];
 
     /**
      * Create a new NestedForm instance.
      *
      * NestedForm constructor.
+     *
      * @param $relation
      * @param $key
      */
@@ -78,9 +79,9 @@ class NestedForm
         }
 
         foreach ($data as $value) {
-	        /**
-	         * like $this->original[30] = [ id = 30, .....]
-	         */
+            /*
+             * like $this->original[30] = [ id = 30, .....]
+             */
             $this->original[$value[$relatedKeyName]] = $value;
         }
 
@@ -98,7 +99,7 @@ class NestedForm
     {
         foreach ($input as $key => $record) {
             $this->setFieldOriginalValue($key);
-	        $input[$key] = $this->prepareRecord($record);
+            $input[$key] = $this->prepareRecord($record);
         }
 
         return $input;
@@ -113,14 +114,13 @@ class NestedForm
      */
     protected function setFieldOriginalValue($key)
     {
-        if(array_key_exists($key, $this->original)){
+        if (array_key_exists($key, $this->original)) {
             $values = $this->original[$key];
 
             $this->fields->each(function (Field $field) use ($values) {
                 $field->setOriginal($values);
             });
         }
-
     }
 
     /**
@@ -143,7 +143,7 @@ class NestedForm
 
             $value = $this->fetchColumnValue($record, $columns);
 
-            if(empty($value)){
+            if (empty($value)) {
                 continue;
             }
 
@@ -242,7 +242,6 @@ class NestedForm
         return $this;
     }
 
-
     /**
      * Set error key for each field in the nested form.
      *
@@ -274,7 +273,7 @@ class NestedForm
     /**
      * Set form element name.
      *
-     * @param null   $key
+     * @param null $key
      *
      * @return $this
      */
@@ -312,54 +311,54 @@ class NestedForm
 //        return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
 //    }
 
-
     /**
-     * Build template
+     * Build template.
      *
      * @return string
      */
-	public function buildTemplate()
+    public function buildTemplate()
     {
-	    $html = '';
-	    $scripts = [];
+        $html = '';
+        $scripts = [];
 
         foreach ($this->fields() as $field) {
-	        $html .= $field->render();  //when field render, will push $script to Admin
+            $html .= $field->render();  //when field render, will push $script to Admin
 
             if ($script = $field->getScript()) {
-	            $scripts[] = $field->getScript();
+                $scripts[] = $field->getScript();
 
-	            /**
-	             * Del the lastest script
-	             */
+                /*
+                 * Del the lastest script
+                 */
                 array_pop(Admin::$script);
             }
         }
 
-	    $this->template['html'] = $html;
-	    $this->template['script'] = implode("\r\n", $scripts); //separate scripts with enter
+        $this->template['html'] = $html;
+        $this->template['script'] = implode("\r\n", $scripts); //separate scripts with enter
 
-	    return $this;
+        return $this;
     }
 
-	/**
-	 * Get template scrip.
-	 *
-	 * @return string
-	 */
-	public function getTemplateHtml()
-	{
-		return $this->template['html'];
-	}
-	/**
-	 * Get template scrip.
-	 *
-	 * @return string
-	 */
-	public function getTemplateScript()
-	{
-		return $this->template['script'];
-	}
+    /**
+     * Get template scrip.
+     *
+     * @return string
+     */
+    public function getTemplateHtml()
+    {
+        return $this->template['html'];
+    }
+
+    /**
+     * Get template scrip.
+     *
+     * @return string
+     */
+    public function getTemplateScript()
+    {
+        return $this->template['script'];
+    }
 
     /**
      * Add nested-form fields dynamically.
@@ -376,7 +375,7 @@ class NestedForm
 
             $element = new $className($column, array_slice($arguments, 1));
 
-            $key = is_null($this->key) ? 'new_'. static::DEFAULT_KEY_NAME : $this->key;
+            $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
 
             $element->setElementName("{$this->relationName}[{$key}][{$column}]")
                 ->setErrorKey("{$this->relationName}.{$key}.{$column}")
