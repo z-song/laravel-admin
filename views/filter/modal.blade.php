@@ -24,6 +24,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary submit">{{ trans('admin::lang.submit') }}</button>
+                    <button type="reset" class="btn btn-warning pull-left">{{ trans('admin::lang.reset') }}</button>
                 </div>
             </form>
         </div>
