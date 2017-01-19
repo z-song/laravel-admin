@@ -36,6 +36,13 @@ class HasMany extends Field
      */
     protected $value = [];
 
+	/**
+	 * View Mode
+	 *
+	 * @var string
+	 */
+	protected $viewMode = 'default';
+
     /**
      * Create a new HasMany field instance.
      *
@@ -56,6 +63,7 @@ class HasMany extends Field
         if (count($arguments) == 2) {
             list($this->label, $this->builder) = $arguments;
         }
+
     }
 
     /**
@@ -314,20 +322,41 @@ class HasMany extends Field
      *
      * @return string
      */
-    protected function buildTemplateForm()
+    protected function getTemplate()
     {
-        $template = $this->buildNestedForm($this->column, $this->builder);
-        $template->setElementName();
+	    $template = $this->buildNestedForm($this->column, $this->builder)
+		    ->buildTemplate()
+		    ->setElementName();
 
-        $templateHtml = $template->getFormHtml();
-        $templateScript = $template->getFormScript();
+	    switch($this->viewMode){
+		    case 'default':
+			    $this->view = 'admin::form.hasmany';
+			    $this->buildTemplateScriptDefault($template);
+		    	break;
+		    case 'tab':
+			    $this->view = 'admin::form.hasmanytab';
+			    $this->buildTemplateScriptTab($template);
+		    	break;
+	    }
+	    return $template;
 
-        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
-        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
+    }
 
-        $script = <<<EOT
+	/**
+	 * Build default tamplate script
+	 *
+	 * @param $template
+	 * @return $this
+	 */
+    protected function buildTemplateScriptDefault($template)
+    {
 
-$('.has-many-{$this->column}').on('click', '.add', function () {
+	    $removeClass = $template->REMOVE_FLAG_CLASS;
+	    $defaultKey = $template::DEFAULT_KEY_NAME;
+
+	    $script = <<<EOT
+
+$('#has-many-{$this->column}').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
 
@@ -335,20 +364,56 @@ $('.has-many-{$this->column}').on('click', '.add', function () {
 
     var template = tpl.html().replace(/\[{$defaultKey}\]/g, '['+count+']');
     $('.has-many-{$this->column}-forms').append(template);
-    {$templateScript}
+    {$template->getTemplateScript()}
 });
 
-$('.has-many-{$this->column}-forms').on('click', '.remove', function () {
+$('#has-many-{$this->column}').on('click', '.remove', function () {
     $(this).closest('.has-many-{$this->column}-form').hide();
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
 });
 
 EOT;
 
-        Admin::script($script);
+	    Admin::script($script);
 
-        return $templateHtml;
+	    return $this;
     }
+
+    protected function buildTemplateScriptTab($template)
+    {
+	    $removeClass = $template::REMOVE_FLAG_CLASS;
+	    $defaultKey = $template::DEFAULT_KEY_NAME;
+
+	    return <<<EOT
+    $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
+        var \$navTab = $(this).siblings('a');
+        var \$pane = $(\$navTab.attr('href'));
+        if( \$pane.hasClass('new') ){
+            \$pane.remove();
+        }else{
+            \$pane.removeClass('active').find('.$removeClass').val(1);
+        }
+        \$navTab.closest('li').remove();
+        $('#has-many-{$this->column} > .nav > li:first-child > a').tab('show');
+    });
+
+    $('#has-many-{$this->column} > .nav > li.nav-tools').off('click', '.add').on('click', '.add', function(){
+        var index = $('#has-many-{$this->column} > .nav > li').size();
+        var navTabHtml = $('#has-many-{$this->column} > template.nav-tab-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
+        var paneHtml = $('#has-many-{$this->column} > template.pane-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
+        $('#has-many-{$this->column} > .nav').append(navTabHtml);
+        $('#has-many-{$this->column} > .tab-content').append(paneHtml);
+        $('#has-many-{$this->column} > .nav > li:last-child a').tab('show');
+        {$template->getTemplateScript()}
+    });
+EOT;
+
+	    Admin::script($script);
+
+	    return $this;
+    }
+
+
 
     /**
      * Render the `HasMany` field.
@@ -361,7 +426,7 @@ EOT;
     {
         return parent::render()->with([
             'forms'     => $this->buildRelatedForms(),
-            'template'  => $this->buildTemplateForm(),
+            'template'  => $this->getTemplate(),
         ]);
     }
 }
