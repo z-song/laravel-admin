@@ -16,6 +16,7 @@ return [
     'remove'        => '移除',
     'edit'          => '编辑',
     'view'          => '查看',
+    'browse'        => '浏览',
     'reset'         => '撤销',
     'export'        => '导出',
     'batch_delete'  => '批量删除',
