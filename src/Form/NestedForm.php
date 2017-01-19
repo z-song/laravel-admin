@@ -20,6 +20,12 @@ class NestedForm
     protected $relationName;
 
     /**
+     * the NestedForm key
+     * @var
+     */
+    protected $key;
+
+    /**
      * Fields in form.
      *
      * @var Collection
@@ -43,11 +49,15 @@ class NestedForm
     /**
      * Create a new NestedForm instance.
      *
+     * NestedForm constructor.
      * @param $relation
+     * @param $key
      */
-    public function __construct($relation)
+    public function __construct($relation, $key)
     {
         $this->relationName = $relation;
+
+        $this->key = $key;
 
         $this->fields = new Collection();
     }
@@ -102,11 +112,14 @@ class NestedForm
      */
     protected function setFieldOriginalValue($key)
     {
-        $values = $this->original[$key];
+        if(array_key_exists($key, $this->original)){
+            $values = $this->original[$key];
 
-        $this->fields->each(function (Field $field) use ($values) {
-            $field->setOriginal($values);
-        });
+            $this->fields->each(function (Field $field) use ($values) {
+                $field->setOriginal($values);
+            });
+        }
+
     }
 
     /**
@@ -129,11 +142,15 @@ class NestedForm
 
             $value = $this->fetchColumnValue($record, $columns);
 
+            if(empty($value)){
+                continue;
+            }
+
             if (method_exists($field, 'prepare')) {
                 $value = $field->prepare($value);
             }
 
-            if ($value != $field->original()) {
+            if (($field instanceof \Encore\Admin\Form\Field\Hidden) || $value != $field->original()) {
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
                         array_set($prepared, $column, $value[$name]);
@@ -143,6 +160,8 @@ class NestedForm
                 }
             }
         }
+
+        $prepared[static::REMOVE_FLAG_NAME] = $record[static::REMOVE_FLAG_NAME];
 
         return $prepared;
     }
@@ -276,6 +295,25 @@ class NestedForm
         return $this;
     }
 
+//    public function setElementName( $key = null)
+//    {
+//        $this->fields->each(function (Field $field) use ( $key) {
+//            $column = $field->column();
+//
+//            if (is_array($column)) {
+//                $name = array_map(function ($col) use ( $key) {
+//                    return $this->formatElementName( $col, $key);
+//                }, $column);
+//            } else {
+//                $name = $this->formatElementName( $column, $key);
+//            }
+//
+//            $field->setElementName($name);
+//        });
+//
+//        return $this;
+//    }
+
     /**
      * Format form element name.
      *
@@ -286,7 +324,7 @@ class NestedForm
      */
     protected function formatElementName($column, $key = null)
     {
-        $key = is_null($key) ? 'new_'.static::DEFAULT_KEY_NAME : $key;
+        $key = is_null($key) ? 'new_'. static::DEFAULT_KEY_NAME : $key;
 
         return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
     }
@@ -340,7 +378,7 @@ class NestedForm
 	 */
 	public function getTemplateHtml()
 	{
-		$this->template['html'];
+		return $this->template['html'];
 	}
 	/**
 	 * Get template scrip.
@@ -349,7 +387,7 @@ class NestedForm
 	 */
 	public function getTemplateScript()
 	{
-		$this->template['script'];
+		return $this->template['script'];
 	}
 
     /**
@@ -366,6 +404,12 @@ class NestedForm
             $column = array_get($arguments, 0, '');
 
             $element = new $className($column, array_slice($arguments, 1));
+
+            $key = is_null($this->key) ? 'new_'. static::DEFAULT_KEY_NAME : $this->key;
+
+            $element->setElementName("{$this->relationName}[{$key}][{$column}]")
+                ->setErrorKey("{$this->relationName}.{$key}.{$column}")
+                ->setElementClass("{$this->relationName}_{$column}");
 
             $this->pushField($element);
 

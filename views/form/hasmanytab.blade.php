@@ -22,15 +22,16 @@
 </style>
 <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}}">
     <ul class="nav nav-tabs">
+        <li class="nav-tools" >
+            <button type="button" class="btn btn-default btn-sm add"><i class="fa fa-plus-circle" style="font-size: large;"></i></button>
+        </li>
         @foreach($forms as $pk => $form)
             <li class="@if ($form == reset($forms)) active @endif ">
                 <a href="#{{ $form->getRelationName() . '_' . $pk }}" data-toggle="tab">{{ $pk }}</a>
                 <i class="close-tab fa fa-times" ></i>
             </li>
         @endforeach
-        <li class="pull-right nav-tools" style="height: 45px;">
-            <button type="button" class="btn btn-success btn-sm add"><i class="fa fa-save"></i>&nbsp;New</button>
-        </li>
+
     </ul>
     
     <div class="tab-content has-many-{{$column}}-forms">
@@ -44,26 +45,16 @@
         @endforeach
     </div>
 
-    <template class="{{$column}}-tpl">
-        <div class="nav-tab-tpl">
-            <li >
-                <a href="#{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">&nbsp;New {{ $template::DEFAULT_KEY_NAME }}</a>
-                <i class="close-tab fa fa-times" ></i>
-            </li>
-        </div>
-        <div class="pane-tpl">
-            <div class="tab-pane fields-group new" id="{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}">
-                {!! $template->getTemplateHtml() !!}
-            </div>
+    <template class="nav-tab-tpl">
+        <li class="new">
+            <a href="#{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">&nbsp;New {{ $template::DEFAULT_KEY_NAME }}</a>
+            <i class="close-tab fa fa-times" ></i>
+        </li>
+    </template>
+    <template class="pane-tpl">
+        <div class="tab-pane fields-group new" id="{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}">
+            {!! $template->getTemplateHtml() !!}
         </div>
     </template>
-
-
-    <div class="form-group">
-        <label class="col-sm-2 control-label"></label>
-        <div class="col-sm-6">
-            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin::lang.new') }}</div>
-        </div>
-    </div>
 
 </div>
