@@ -29,6 +29,11 @@ class Builder
     protected $form;
 
     /**
+     * @var
+     */
+    protected $action;
+
+    /**
      * @var Collection
      */
     protected $fields;
@@ -115,6 +120,38 @@ class Builder
         }
 
         return $this->form->resource();
+    }
+
+    /**
+     * Set form action.
+     *
+     * @param string $action
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
+
+    /**
+     * Get Form action.
+     *
+     * @return string
+     */
+    public function getAction()
+    {
+        if ($this->action) {
+            return $this->action;
+        }
+
+        if ($this->isMode(static::MODE_EDIT)) {
+            return $this->form->resource().'/'.$this->id;
+        }
+
+        if ($this->isMode(static::MODE_CREATE)) {
+            return $this->form->resource(-1);
+        }
+
+        return '';
     }
 
     /**
@@ -227,17 +264,12 @@ class Builder
         $attributes = [];
 
         if ($this->mode == self::MODE_EDIT) {
-            $attributes['action'] = $this->form->resource().'/'.$this->id;
-
             $this->addHiddenField((new Form\Field\Hidden('_method'))->value('PUT'));
         }
 
         $this->addRedirectUrlField();
 
-        if ($this->mode == self::MODE_CREATE) {
-            $attributes['action'] = $this->form->resource(-1);
-        }
-
+        $attributes['action'] = $this->getAction();
         $attributes['method'] = array_get($options, 'method', 'post');
         $attributes['accept-charset'] = 'UTF-8';
 
