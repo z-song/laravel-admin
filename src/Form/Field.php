@@ -388,12 +388,40 @@ class Field
     public function value($value = null)
     {
         if (is_null($value)) {
-            return is_null($this->value) ? $this->default : $this->value;
+            return is_null($this->value) ? $this->getDefault() : $this->value;
         }
 
         $this->value = $value;
 
         return $this;
+    }
+
+    /**
+     * Set default value for field.
+     *
+     * @param $default
+     *
+     * @return $this
+     */
+    public function setDefault($default)
+    {
+        $this->default = $default;
+
+        return $this;
+    }
+
+    /**
+     * Get default value.
+     *
+     * @return mixed
+     */
+    public function getDefault()
+    {
+        if ($this->default instanceof \Closure) {
+            return call_user_func($this->default, $this->form);
+        }
+
+        return $this->default;
     }
 
     /**
@@ -661,9 +689,7 @@ class Field
     public function __call($method, $arguments)
     {
         if ($method === 'default') {
-            $this->default = $arguments[0];
-
-            return $this;
+            return $this->setDefault(array_get($arguments, 0));
         }
     }
 }
