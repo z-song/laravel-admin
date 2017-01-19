@@ -24,7 +24,6 @@ class Select extends Field
         }
 
         if ($this->options instanceof \Closure) {
-
             if ($this->form) {
                 $this->options = $this->options->bindTo($this->form->model());
             }
