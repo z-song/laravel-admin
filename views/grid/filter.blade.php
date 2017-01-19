@@ -10,6 +10,9 @@
                 <div class="input-group-btn">
                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </div>
+                <div class="input-group-btn">
+                    <button type="reset" class="btn btn-warning"><i class="fa fa-undo"></i></button>
+                </div>
             </div>
 
         </fieldset>
