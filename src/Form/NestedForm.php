@@ -9,10 +9,6 @@ use Illuminate\Support\Collection;
 
 class NestedForm
 {
-    const UPDATE_KEY_NAME_OLD = 'old';
-
-    const UPDATE_KEY_NAME_NEW = 'new';
-
     const DEFAULT_KEY_NAME = '_key_';
 
     const REMOVE_FLAG_NAME = '_remove_';
@@ -23,6 +19,8 @@ class NestedForm
      * @var \Illuminate\Database\Eloquent\Relations\HasMany|string
      */
     protected $relationName;
+
+
 
     /**
      * Fields in form.
@@ -263,7 +261,7 @@ class NestedForm
      *
      * @return $this
      */
-    protected function setElementName( $key = null)
+    public function setElementName( $key = null)
     {
         $this->fields->each(function (Field $field) use ( $key) {
             $column = $field->column();

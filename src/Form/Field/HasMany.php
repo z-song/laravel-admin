@@ -108,9 +108,9 @@ class HasMany extends Field
 
         $newRules = [];
 
-        foreach ($rules as $key => $rule) {
-            foreach (array_keys($input[$this->column]) as $type) {
-                $newRules["{$this->column}.$type.*.$key"] = $rule;
+        foreach ($rules as $column => $rule) {
+            foreach (array_keys($input[$this->column]) as $key) {
+                $newRules["{$this->column}.$key.$column"] = $rule;
             }
         }
 
@@ -235,10 +235,24 @@ class HasMany extends Field
 
         call_user_func($builder, $form);
 
+	    $form->hidden($this->getKeyName());
+
         $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->attribute(['class' => NestedForm::REMOVE_FLAG_CLASS]);
+
+//	    $form->setElementName($key)->setErrorKey($key);
 
         return $form;
     }
+
+	/**
+	 * get the HasMany relation key name
+	 *
+	 * @return string
+	 */
+	protected function getKeyName()
+	{
+		return $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
+	}
 
     /**
      * Get form data flashed in session.
@@ -270,24 +284,25 @@ class HasMany extends Field
 
         $forms = [];
 
-        if ($old = $this->getDataInFlash()) {
-            foreach ($old as $key => $data) {
+        if ($values = $this->getDataInFlash()) {
+            foreach ($values as $key => $data) {
                 if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
                     continue;
                 }
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-                    ->fill($data)
-                    ->setElementName($key)
-                    ->setErrorKey($key);
+	                ->fill($data)
+	                ->setElementName($key)
+	                ->setErrorKey($key);
             }
         } else {
             foreach ($this->value as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-                    ->fill($data)
-                    ->setElementName($key);
+	                ->fill($data)
+	                ->setElementName($key)
+	                ->setErrorKey($key);
             }
         }
 
