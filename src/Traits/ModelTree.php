@@ -171,18 +171,18 @@ trait ModelTree
      *
      * @return mixed
      */
-    public function allNodes()
+    public function allNodes($query = null)
     {
         $orderColumn = DB::getQueryGrammar()->wrap($this->orderColumn);
         $byOrder = $orderColumn.' = 0,'.$orderColumn;
 
-        $self = new static();
+        $query = $query ?: $this;
 
         if ($this->queryCallback instanceof \Closure) {
-            $self = call_user_func($this->queryCallback, $self);
+            $query = call_user_func($this->queryCallback, $query);
         }
 
-        return $self->orderByRaw($byOrder)->get()->toArray();
+        return $query->orderByRaw($byOrder)->get()->toArray();
     }
 
     /**
@@ -231,9 +231,11 @@ trait ModelTree
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function selectOptions()
+    public function scopeSelectOptions($query)
     {
-        $options = (new static())->buildSelectOptions();
+        $nodes = $this->allNodes($query);
+
+        $options = $this->buildSelectOptions($nodes);
 
         return collect($options)->prepend('Root', 0)->all();
     }
