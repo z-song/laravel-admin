@@ -36,12 +36,12 @@ class HasMany extends Field
      */
     protected $value = [];
 
-	/**
-	 * View Mode
-	 *
-	 * @var string
-	 */
-	protected $viewMode = 'default';
+    /**
+     * View Mode.
+     *
+     * @var string
+     */
+    protected $viewMode = 'default';
 
     /**
      * Create a new HasMany field instance.
@@ -63,7 +63,6 @@ class HasMany extends Field
         if (count($arguments) == 2) {
             list($this->label, $this->builder) = $arguments;
         }
-
     }
 
     /**
@@ -233,9 +232,10 @@ class HasMany extends Field
      *
      * @param $column
      * @param \Closure $builder
-     * @param null $key
+     * @param null     $key
+     *
      * @return NestedForm
-     * author Edwin Hui
+     *                    author Edwin Hui
      */
     protected function buildNestedForm($column, \Closure $builder, $key = null)
     {
@@ -316,35 +316,35 @@ class HasMany extends Field
      */
     protected function getTemplate()
     {
-	    $template = $this->buildNestedForm($this->column, $this->builder)->buildTemplate();
+        $template = $this->buildNestedForm($this->column, $this->builder)->buildTemplate();
 
-	    switch($this->viewMode){
+        switch ($this->viewMode) {
             case 'tab':
-			    $this->view = 'admin::form.hasmanytab';
-			    $this->buildTemplateScriptTab($template);
-		    	break;
+                $this->view = 'admin::form.hasmanytab';
+                $this->buildTemplateScriptTab($template);
+                break;
             default:
                 $this->view = 'admin::form.hasmany';
                 $this->buildTemplateScriptDefault($template);
                 break;
-	    }
-	    return $template;
+        }
 
+        return $template;
     }
 
-	/**
-	 * Build default tamplate script
-	 *
-	 * @param $template
-	 * @return $this
-	 */
+    /**
+     * Build default tamplate script.
+     *
+     * @param $template
+     *
+     * @return $this
+     */
     protected function buildTemplateScriptDefault(NestedForm $template)
     {
+        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
-	    $removeClass = NestedForm::REMOVE_FLAG_CLASS;
-	    $defaultKey = NestedForm::DEFAULT_KEY_NAME;
-
-	    $script = <<<EOT
+        $script = <<<EOT
 
 $('#has-many-{$this->column}').on('click', '.add', function () {
 
@@ -364,15 +364,15 @@ $('#has-many-{$this->column}').on('click', '.remove', function () {
 
 EOT;
 
-	    Admin::script($script);
+        Admin::script($script);
 
-	    return $this;
+        return $this;
     }
 
     protected function buildTemplateScriptTab(NestedForm $template)
     {
-	    $removeClass = NestedForm::REMOVE_FLAG_CLASS;
-	    $defaultKey = NestedForm::DEFAULT_KEY_NAME;
+        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
         $script = <<<EOT
     $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
@@ -402,18 +402,18 @@ EOT;
     });
 EOT;
 
-	    Admin::script($script);
+        Admin::script($script);
 
-	    return $this;
+        return $this;
     }
 
-
     /**
-     * change view mode
+     * change view mode.
      *
      * @param $mode
+     *
      * @return $this
-     * author Edwin Hui
+     *               author Edwin Hui
      */
     public function viewMode($mode)
     {
