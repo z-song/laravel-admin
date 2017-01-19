@@ -432,6 +432,8 @@ EOT;
     public function render()
     {
         $this->options['initialCaption'] = $this->initialCaption($this->value);
+        $this->options['removeLabel'] = trans('admin::lang.remove');
+        $this->options['browseLabel'] = trans('admin::lang.browse');
 
         if (!empty($this->value)) {
             $this->options['initialPreview'] = $this->preview();

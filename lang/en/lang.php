@@ -16,6 +16,7 @@ return [
     'remove'        => 'Remove',
     'edit'          => 'Edit',
     'view'          => 'View',
+    'browse'        => 'Browse',
     'reset'         => 'Reset',
     'export'        => 'Export',
     'batch_delete'  => 'Batch delete',
