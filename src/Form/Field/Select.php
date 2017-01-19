@@ -69,27 +69,33 @@ class Select extends Field
      * @param $field
      * @param $source
      */
-    public function load($field, $source)
-    {
-        if (Str::contains($field, '.')) {
-            $field = $this->formatName($field);
-            $class = str_replace(['[', ']'], '_', $field);
-        } else {
-            $class = $field;
-        }
+	public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
+	{
+		if (Str::contains($field, '.')) {
+			$field = $this->formatName($field);
+			$class = str_replace(['[', ']'], '_', $field);
+		} else {
+			$class = $field;
+		}
+		$script = <<<EOT
 
-        $script = <<<EOT
-
-$(".{$this->getElementClass()}").change(function () {
-    $.get("$source?q="+this.value, function (data) {
-        $(".$class option").remove();
-        $(".$class").select2({data: data}).trigger('change');
+$(document).on('change', ".{$this->getElementClass()}", function () {
+    var target = $(this).closest('.fields-group').find(".$class");
+    $.get("$sourceUrl?q="+this.value, function (data) {
+        target.find("option").remove();
+        $(target).select2({
+            data: $.map(data, function (d) {
+				d.id = d.$idField;
+				d.text = d.$textField;
+	            return d;
+	        })
+	    });
     });
 });
 EOT;
 
-        Admin::script($script);
-    }
+		Admin::script($script);
+	}
 
     /**
      * Load options from remote.
@@ -123,10 +129,13 @@ EOT;
      * Load options from ajax results.
      *
      * @param string $url
+     * @param $idField
+     * @param $textField
+     * @param string $script    more script to custom
      *
      * @return $this
      */
-    public function ajax($url)
+	public function ajax($url, $idField, $textField, $script = '')
     {
         $this->script = <<<EOT
 
@@ -145,7 +154,11 @@ $(".{$this->getElementClass()}").select2({
       params.page = params.page || 1;
 
       return {
-        results: data.data,
+        results: $.map(data.data, function (d) {
+					d.id = d.$idField;
+					d.text = d.$textField;
+                    return d;
+                }),
         pagination: {
           more: data.next_page_url
         }
@@ -156,7 +169,8 @@ $(".{$this->getElementClass()}").select2({
   minimumInputLength: 1,
   escapeMarkup: function (markup) {
       return markup;
-  }
+  },
+  $script
 });
 
 EOT;

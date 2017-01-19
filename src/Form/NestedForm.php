@@ -30,18 +30,18 @@ class NestedForm
     protected $fields;
 
     /**
-     * Scripts of form.
-     *
-     * @var array
-     */
-    protected $scripts = [];
-
-    /**
      * Original data for this field.
      *
      * @var array
      */
     protected $original = [];
+
+	/**
+	 * template.
+	 *
+	 * @var array
+	 */
+	protected $template = [];
 
     /**
      * Create a new NestedForm instance.
@@ -290,26 +290,27 @@ class NestedForm
      */
     protected function formatElementName($column, $key = null)
     {
-        $key = is_null($key) ? static::DEFAULT_KEY_NAME : $key;
+        $key = is_null($key) ? 'new_'.static::DEFAULT_KEY_NAME : $key;
 
         return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
     }
 
 
     /**
-     * Get form html without script.
+     * Build template
      *
      * @return string
      */
-    public function getFormHtml()
+	public function buildTemplate()
     {
-        $html = '';
+	    $html = '';
+	    $scripts = [];
 
         foreach ($this->fields() as $field) {
-            $html .= $field->render();  //when field render, will push $script to Admin
+	        $html .= $field->render();  //when field render, will push $script to Admin
 
             if ($script = $field->getScript()) {
-                $this->scripts[] = $field->getScript();
+	            $scripts[] = $field->getScript();
 
 	            /**
 	             * Del the lastest script
@@ -318,21 +319,30 @@ class NestedForm
             }
         }
 
-        return $html;
+	    $this->template['html'] = $html;
+	    $this->template['script'] = implode("\r\n", $scripts); //separate scripts with enter
+
+	    return $this;
     }
 
-    /**
-     * Get form script as string.
-     *
-     * @return string
-     */
-    public function getFormScript()
-    {
-	    /**
-	     * separate scripts with enter
-	     */
-        return implode("\r\n", $this->scripts);
-    }
+	/**
+	 * Get template scrip.
+	 *
+	 * @return string
+	 */
+	public function getTemplateHtml()
+	{
+		$this->template['html'];
+	}
+	/**
+	 * Get template scrip.
+	 *
+	 * @return string
+	 */
+	public function getTemplateScript()
+	{
+		$this->template['script'];
+	}
 
     /**
      * Add nested-form fields dynamically.
