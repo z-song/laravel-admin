@@ -89,7 +89,7 @@ $(document).on('change', ".{$this->getElementClass()}", function () {
 				d.text = d.$textField;
 	            return d;
 	        })
-	    });
+	    }).trigger('change');
     });
 });
 EOT;
