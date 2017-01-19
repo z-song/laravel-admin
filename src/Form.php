@@ -142,8 +142,7 @@ class Form
      */
     protected $tab = null;
 
-
-	const REMOVE_FLAG_NAME = '_remove_';
+    const REMOVE_FLAG_NAME = '_remove_';
 
     /**
      * Create a new form instance.
@@ -463,8 +462,6 @@ class Form
         }
     }
 
-
-
     /**
      * Handle update.
      *
@@ -635,25 +632,25 @@ class Form
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
 
-	                foreach ($values as $ralated) {
-		                $relationModel = $this->model()->$name();
+                    foreach ($values as $ralated) {
+                        $relationModel = $this->model()->$name();
 
-		                $keyName = $relationModel->getRelated()->getKeyName();
+                        $keyName = $relationModel->getRelated()->getKeyName();
 
-		                $instance = $relationModel->findOrNew($ralated[$keyName]);
+                        $instance = $relationModel->findOrNew($ralated[$keyName]);
 
-		                if ($ralated[static::REMOVE_FLAG_NAME] == 1) {
-			                $instance->delete();
+                        if ($ralated[static::REMOVE_FLAG_NAME] == 1) {
+                            $instance->delete();
 
-			                continue;
-		                }
+                            continue;
+                        }
 
-		                array_forget($ralated, static::REMOVE_FLAG_NAME);
+                        array_forget($ralated, static::REMOVE_FLAG_NAME);
 
-		                $instance->fill($ralated);
+                        $instance->fill($ralated);
 
-		                $instance->save();
-	                }
+                        $instance->save();
+                    }
 
                     break;
             }
@@ -728,7 +725,6 @@ class Form
 
         return false;
     }
-
 
     /**
      * Is input data is has-one relation.

@@ -165,51 +165,50 @@ class HasMany extends Field
      * Reset input key for validation.
      *
      * @param array $input
-     * @param array $column   $column is the column name array set
+     * @param array $column $column is the column name array set
      *
      * @return void.
      */
     protected function resetInputKey(array &$input, array $column)
     {
-	    /**
-	     * flip the column name array set
-	     *
-	     * for example, for the DateRange, the column like as below
-	     *
-	     * ["start" => "$startDate", "end" => "$endDate"]
-	     *
-	     * to:
-	     *
-	     * [ "$startDate" => "start", "$endDate" => "end" ]
-	     *
-	     */
+        /**
+         * flip the column name array set.
+         *
+         * for example, for the DateRange, the column like as below
+         *
+         * ["start" => "$startDate", "end" => "$endDate"]
+         *
+         * to:
+         *
+         * [ "$startDate" => "start", "$endDate" => "end" ]
+         */
         $column = array_flip($column);
 
-	    /**
-	     * $this->column is the inputs array's node name, default is the relation name
-	     *
-	     * So... $input[$this->column] is the data of this column's inputs data
-	     *
-	     * in the HasMany relation, has many data/field set, $set is field set in the below
-	     */
+        /**
+         * $this->column is the inputs array's node name, default is the relation name.
+         *
+         * So... $input[$this->column] is the data of this column's inputs data
+         *
+         * in the HasMany relation, has many data/field set, $set is field set in the below
+         */
         foreach ($input[$this->column] as $index => $set) {
 
-	        /**
-	         * foreach the field set to find the corresponding $column
-	         */
-	        foreach ($set as $name => $value) {
-		        if (!array_key_exists($name, $column)) {
-			        continue;
-		        }
+            /*
+             * foreach the field set to find the corresponding $column
+             */
+            foreach ($set as $name => $value) {
+                if (!array_key_exists($name, $column)) {
+                    continue;
+                }
 
-		        /**
-		         * $newKey = 
-		         */
-		        $newKey = $name.$column[$name];
+                /**
+                 * $newKey =.
+                 */
+                $newKey = $name.$column[$name];
 
-		        array_set($input, "{$this->column}.$index.$newKey", $value);
-		        array_forget($input, "{$this->column}.$index.$name");
-	        }
+                array_set($input, "{$this->column}.$index.$newKey", $value);
+                array_forget($input, "{$this->column}.$index.$name");
+            }
         }
     }
 
@@ -243,7 +242,7 @@ class HasMany extends Field
 
         call_user_func($builder, $form);
 
-	    $form->hidden($this->getKeyName());
+        $form->hidden($this->getKeyName());
 
         $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->attribute(['class' => NestedForm::REMOVE_FLAG_CLASS]);
 
@@ -252,15 +251,15 @@ class HasMany extends Field
         return $form;
     }
 
-	/**
-	 * get the HasMany relation key name
-	 *
-	 * @return string
-	 */
-	protected function getKeyName()
-	{
-		return $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
-	}
+    /**
+     * get the HasMany relation key name.
+     *
+     * @return string
+     */
+    protected function getKeyName()
+    {
+        return $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
+    }
 
     /**
      * Get form data flashed in session.
@@ -299,18 +298,18 @@ class HasMany extends Field
                 }
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-	                ->fill($data)
-	                ->setElementName($key)
-	                ->setErrorKey($key);
+                    ->fill($data)
+                    ->setElementName($key)
+                    ->setErrorKey($key);
             }
         } else {
             foreach ($this->value as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-	                ->fill($data)
-	                ->setElementName($key)
-	                ->setErrorKey($key);
+                    ->fill($data)
+                    ->setElementName($key)
+                    ->setErrorKey($key);
             }
         }
 

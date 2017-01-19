@@ -4,7 +4,6 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class NestedForm
@@ -19,8 +18,6 @@ class NestedForm
      * @var \Illuminate\Database\Eloquent\Relations\HasMany|string
      */
     protected $relationName;
-
-
 
     /**
      * Fields in form.
@@ -70,9 +67,9 @@ class NestedForm
         }
 
         foreach ($data as $value) {
-	        /**
-	         * like $this->original[30] = [ id = 30, .....]
-	         */
+            /*
+             * like $this->original[30] = [ id = 30, .....]
+             */
             $this->original[$value[$relatedKeyName]] = $value;
         }
 
@@ -90,7 +87,7 @@ class NestedForm
     {
         foreach ($input as $key => $record) {
             $this->setFieldOriginalValue($key);
-	        $input[$key] = $this->prepareRecord($record);
+            $input[$key] = $this->prepareRecord($record);
         }
 
         return $input;
@@ -225,7 +222,6 @@ class NestedForm
         return $this;
     }
 
-
     /**
      * Set error key for each field in the nested form.
      *
@@ -257,21 +253,21 @@ class NestedForm
     /**
      * Set form element name.
      *
-     * @param null   $key
+     * @param null $key
      *
      * @return $this
      */
-    public function setElementName( $key = null)
+    public function setElementName($key = null)
     {
-        $this->fields->each(function (Field $field) use ( $key) {
+        $this->fields->each(function (Field $field) use ($key) {
             $column = $field->column();
 
             if (is_array($column)) {
-                $name = array_map(function ($col) use ( $key) {
-                    return $this->formatElementName( $col, $key);
+                $name = array_map(function ($col) use ($key) {
+                    return $this->formatElementName($col, $key);
                 }, $column);
             } else {
-                $name = $this->formatElementName( $column, $key);
+                $name = $this->formatElementName($column, $key);
             }
 
             $field->setElementName($name);
@@ -295,7 +291,6 @@ class NestedForm
         return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
     }
 
-
     /**
      * Build template
      *
@@ -303,26 +298,39 @@ class NestedForm
      */
 	public function buildTemplate()
     {
-	    $html = '';
-	    $scripts = [];
+        $html = '';
+        $scripts = [];
 
         foreach ($this->fields() as $field) {
-	        $html .= $field->render();  //when field render, will push $script to Admin
+            $html .= $field->render();  //when field render, will push $script to Admin
 
             if ($script = $field->getScript()) {
-	            $scripts[] = $field->getScript();
+                $scripts[] = $field->getScript();
 
-	            /**
-	             * Del the lastest script
-	             */
+                /*
+                 * Del the lastest script
+                 */
                 array_pop(Admin::$script);
             }
         }
 
-	    $this->template['html'] = $html;
-	    $this->template['script'] = implode("\r\n", $scripts); //separate scripts with enter
+        $this->template['html'] = $html;
+        $this->template['script'] = implode("\r\n", $scripts); //separate scripts with enter
 
-	    return $this;
+        return $this;
+    }
+
+    /**
+     * Get form script as string.
+     *
+     * @return string
+     */
+    public function getFormScript()
+    {
+        /*
+         * separate scripts with enter
+         */
+        return implode("\r\n", $this->scripts);
     }
 
 	/**
