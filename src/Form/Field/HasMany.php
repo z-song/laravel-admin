@@ -37,16 +37,23 @@ class HasMany extends Field
     protected $value = [];
 
     /**
+     * View Mode.
+     *
+     * @var string
+     */
+    protected $viewMode = 'default';
+
+    /**
      * Create a new HasMany field instance.
      *
-     * @param $relation
+     * @param $relationName
      * @param array $arguments
      */
-    public function __construct($relation, $arguments = [])
+    public function __construct($relationName, $arguments = [])
     {
-        $this->relationName = $relation;
+        $this->relationName = $relationName;
 
-        $this->column = $relation;
+        $this->column = $relationName;
 
         if (count($arguments) == 1) {
             $this->label = $this->formatLabel();
@@ -108,9 +115,9 @@ class HasMany extends Field
 
         $newRules = [];
 
-        foreach ($rules as $key => $rule) {
-            foreach (array_keys($input[$this->column]) as $type) {
-                $newRules["{$this->column}.$type.*.$key"] = $rule;
+        foreach ($rules as $column => $rule) {
+            foreach (array_keys($input[$this->column]) as $key) {
+                $newRules["{$this->column}.$key.$column"] = $rule;
             }
         }
 
@@ -157,26 +164,62 @@ class HasMany extends Field
      * Reset input key for validation.
      *
      * @param array $input
-     * @param array $column
+     * @param array $column $column is the column name array set
      *
      * @return void.
      */
     protected function resetInputKey(array &$input, array $column)
     {
+        /**
+         * flip the column name array set.
+         *
+         * for example, for the DateRange, the column like as below
+         *
+         * ["start" => "created_at", "end" => "updated_at"]
+         *
+         * to:
+         *
+         * [ "created_at" => "start", "updated_at" => "end" ]
+         */
         $column = array_flip($column);
 
-        foreach ($input[$this->column] as $type => $group) {
-            foreach ($group as $key => $value) {
-                foreach ($value as $k => $v) {
-                    if (!array_key_exists($k, $column)) {
-                        continue;
-                    }
+        /**
+         * $this->column is the inputs array's node name, default is the relation name.
+         *
+         * So... $input[$this->column] is the data of this column's inputs data
+         *
+         * in the HasMany relation, has many data/field set, $set is field set in the below
+         */
+        foreach ($input[$this->column] as $index => $set) {
 
-                    $newKey = $k.$column[$k];
-
-                    array_set($input, "{$this->column}.$type.$key.$newKey", $v);
-                    array_forget($input, "{$this->column}.$type.$key.$k");
+            /*
+             * foreach the field set to find the corresponding $column
+             */
+            foreach ($set as $name => $value) {
+                /*
+                 * if doesn't have column name, continue to the next loop
+                 */
+                if (!array_key_exists($name, $column)) {
+                    continue;
                 }
+
+                /**
+                 * example:  $newKey = created_atstart.
+                 *
+                 * Σ( ° △ °|||)︴
+                 *
+                 * I don't know why a form need range input? Only can imagine is for range search....
+                 */
+                $newKey = $name.$column[$name];
+
+                /*
+                 * set new key
+                 */
+                array_set($input, "{$this->column}.$index.$newKey", $value);
+                /*
+                 * forget the old key and value
+                 */
+                array_forget($input, "{$this->column}.$index.$name");
             }
         }
     }
@@ -200,10 +243,11 @@ class HasMany extends Field
     /**
      * Build a Nested form.
      *
-     * @param string $column
-     * @param \Closure$builder
+     * @param $column
+     * @param \Closure $builder
      *
      * @return NestedForm
+     *                    author Edwin Hui
      */
     protected function buildNestedForm($column, \Closure $builder)
     {
@@ -211,21 +255,32 @@ class HasMany extends Field
 
         call_user_func($builder, $form);
 
+        $form->hidden($this->getKeyName());
+
         $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->attribute(['class' => NestedForm::REMOVE_FLAG_CLASS]);
 
         return $form;
     }
 
     /**
-     * Get form data flashed in session.
+     * get the HasMany relation key name.
      *
-     * @param string $type
+     * @return string
+     */
+    protected function getKeyName()
+    {
+        return $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
+    }
+
+    /**
+     * Get form data flashed in session.
+
      *
      * @return mixed
      */
-    protected function getDataInFlash($type)
+    protected function getDataInFlash()
     {
-        return old($this->column.'.'.$type);
+        return old($this->column);
     }
 
     /**
@@ -247,16 +302,17 @@ class HasMany extends Field
 
         $forms = [];
 
-        if ($old = $this->getDataInFlash(NestedForm::UPDATE_KEY_NAME_OLD)) {
-            foreach ($old as $key => $data) {
+        if ($values = $this->getDataInFlash()) {
+            foreach ($values as $key => $data) {
                 if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
                     continue;
                 }
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
                     ->fill($data)
-                    ->setElementNameForOriginal($key)
-                    ->setErrorKey($this->column, NestedForm::UPDATE_KEY_NAME_OLD, $key);
+                    ->setElementName($key)
+                    ->setErrorKey($key);
+//                    ->setElementClass();
             }
         } else {
             foreach ($this->value as $data) {
@@ -264,34 +320,8 @@ class HasMany extends Field
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
                     ->fill($data)
-                    ->setElementNameForOriginal($key);
-            }
-        }
-
-        $forms = $this->appendFromSession($forms);
-
-        return $forms;
-    }
-
-    /**
-     * Build a nested form use data flashed to session, then append to forms.
-     *
-     * @param array $forms
-     *
-     * @return array
-     */
-    protected function appendFromSession($forms)
-    {
-        if ($new = $this->getDataInFlash(NestedForm::UPDATE_KEY_NAME_NEW)) {
-            foreach ($new as $key => $data) {
-                if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
-                    continue;
-                }
-
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-                    ->fill($data)
-                    ->setElementNameForNew($key)
-                    ->setErrorKey($this->column, NestedForm::UPDATE_KEY_NAME_NEW, $key);
+                    ->setElementName($key);
+//	                ->setElementClass();
             }
         }
 
@@ -303,20 +333,42 @@ class HasMany extends Field
      *
      * @return string
      */
-    protected function buildTemplateForm()
+    protected function getTemplate()
     {
-        $template = $this->buildNestedForm($this->column, $this->builder);
-        $template->setElementNameForNew();
+        $template = $this->buildNestedForm($this->column, $this->builder)
+            ->setElementName()
+            ->setElementClass()
+            ->buildTemplate();
 
-        $templateHtml = $template->getFormHtml();
-        $templateScript = $template->getFormScript();
+        switch ($this->viewMode) {
+            case 'tab':
+                $this->view = 'admin::form.hasmanytab';
+                $this->buildTemplateScriptTab($template);
+                break;
+            default:
+                $this->view = 'admin::form.hasmany';
+                $this->buildTemplateScriptDefault($template);
+                break;
+        }
 
+        return $template;
+    }
+
+    /**
+     * Build default tamplate script.
+     *
+     * @param $template
+     *
+     * @return $this
+     */
+    protected function buildTemplateScriptDefault(NestedForm $template)
+    {
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
         $script = <<<EOT
 
-$('.has-many-{$this->column}').on('click', '.add', function () {
+$('#has-many-{$this->column}').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
 
@@ -324,10 +376,10 @@ $('.has-many-{$this->column}').on('click', '.add', function () {
 
     var template = tpl.html().replace(/\[{$defaultKey}\]/g, '['+count+']');
     $('.has-many-{$this->column}-forms').append(template);
-    {$templateScript}
+    {$template->getTemplateScript()}
 });
 
-$('.has-many-{$this->column}-forms').on('click', '.remove', function () {
+$('#has-many-{$this->column}').on('click', '.remove', function () {
     $(this).closest('.has-many-{$this->column}-form').hide();
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
 });
@@ -336,7 +388,70 @@ EOT;
 
         Admin::script($script);
 
-        return $templateHtml;
+        return $this;
+    }
+
+    protected function buildTemplateScriptTab(NestedForm $template)
+    {
+        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
+
+        $script = <<<EOT
+    $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
+        var \$navTab = $(this).siblings('a');
+        var \$pane = $(\$navTab.attr('href'));
+        if( \$pane.hasClass('new') ){
+            \$pane.remove();
+        }else{
+            \$pane.removeClass('active').find('.$removeClass').val(1);
+        }
+        if(\$navTab.closest('li').hasClass('active')){
+            \$navTab.closest('li').remove();
+            $('#has-many-{$this->column} > .nav > li:nth-child(2) > a').tab('show');
+        }else{
+            \$navTab.closest('li').remove();
+        }
+    });
+
+    $('#has-many-{$this->column} > .nav > li.nav-tools').off('click', '.add').on('click', '.add', function(){
+        var index = $('#has-many-{$this->column} > .nav > li').size();
+        var navTabHtml = $('#has-many-{$this->column} > template.nav-tab-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
+        var paneHtml = $('#has-many-{$this->column} > template.pane-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
+        $('#has-many-{$this->column} > .nav').append(navTabHtml);
+        $('#has-many-{$this->column} > .tab-content').append(paneHtml);
+        $('#has-many-{$this->column} > .nav > li:last-child a').tab('show');
+        {$template->getTemplateScript()}
+    });
+
+if ($('.has-error').length) {
+    $('.has-error').parent('.tab-pane').each(function () {
+        var tabId = '#'+$(this).attr('id');
+        $('li a[href="'+tabId+'"] i').removeClass('hide');
+    });
+    
+    var first = $('.has-error:first').parent().attr('id');
+    $('li a[href="#'+first+'"]').tab('show');
+}
+EOT;
+
+        Admin::script($script);
+
+        return $this;
+    }
+
+    /**
+     * change view mode.
+     *
+     * @param $mode
+     *
+     * @return $this
+     *               author Edwin Hui
+     */
+    public function mode($mode)
+    {
+        $this->viewMode = $mode;
+
+        return $this;
     }
 
     /**
@@ -348,9 +463,14 @@ EOT;
      */
     public function render()
     {
+        /**
+         * getTemplate() must run before render(), because it need to change view and Admin::script($script) before render.
+         */
+        $template = $this->getTemplate();
+
         return parent::render()->with([
             'forms'     => $this->buildRelatedForms(),
-            'template'  => $this->buildTemplateForm(),
+            'template'  => $template,
         ]);
     }
 }
