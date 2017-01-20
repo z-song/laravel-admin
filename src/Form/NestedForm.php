@@ -242,31 +242,31 @@ class NestedForm
         return $this;
     }
 
-	/**
-	 * set Element class
-	 *
-	 * @return $this
-	 */
-	public function setElementClass()
-	{
-		foreach ($this->fields as $field) {
-			$column = $field->column();
+    /**
+     * set Element class.
+     *
+     * @return $this
+     */
+    public function setElementClass()
+    {
+        foreach ($this->fields as $field) {
+            $column = $field->column();
 
-			$class = '';
+            $class = '';
 
-			if (is_array($column)) {
-				foreach ($column as $k => $name) {
-					$class[$k] = "{$this->relationName}_$name";
-				}
-			} else {
-				$class = "{$this->relationName}_{$field->column()}";
-			}
+            if (is_array($column)) {
+                foreach ($column as $k => $name) {
+                    $class[$k] = "{$this->relationName}_$name";
+                }
+            } else {
+                $class = "{$this->relationName}_{$field->column()}";
+            }
 
-			$field->setElementClass($class);
-		}
+            $field->setElementClass($class);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Set error key for each field in the nested form.
@@ -277,7 +277,7 @@ class NestedForm
      */
     public function setErrorKey($key = null)
     {
-	    $key = is_null($key) ? 'new_'. static::DEFAULT_KEY_NAME : $key;
+        $key = is_null($key) ? 'new_'.static::DEFAULT_KEY_NAME : $key;
 
         foreach ($this->fields as $field) {
             $column = $field->column();
@@ -334,7 +334,7 @@ class NestedForm
      */
     protected function formatElementName($column, $key = null)
     {
-        $key = is_null($key) ? 'new_'. static::DEFAULT_KEY_NAME : $key;
+        $key = is_null($key) ? 'new_'.static::DEFAULT_KEY_NAME : $key;
 
         return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
     }
@@ -401,29 +401,29 @@ class NestedForm
         if ($className = Form::findFieldClass($method)) {
             $column = array_get($arguments, 0, '');
 
-	        $field = new $className($column, array_slice($arguments, 1));
+            $field = new $className($column, array_slice($arguments, 1));
 
-	        $column = $field->column();
+            $column = $field->column();
 
-	        $elementName = $elementClass = $errorKey = '';
+            $elementName = $elementClass = $errorKey = '';
 
-	        $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
+            $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
 
-	        if (is_array($column)) {
-		        foreach ($column as $k => $name) {
-			        $elementName[$k] = "{$this->relationName}[$key][$name]";
-			        $errorKey[$k] = "{$this->relationName}.$key.$name";
-			        $elementClass[$k] = "{$this->relationName}_$name";
-		        }
-	        } else {
-		        $elementName = "{$this->relationName}[$key][{$field->column()}]";
-		        $errorKey = "{$this->relationName}.$key.{$field->column()}";
-		        $elementClass = "{$this->relationName}_{$field->column()}";
-	        }
+            if (is_array($column)) {
+                foreach ($column as $k => $name) {
+                    $elementName[$k] = "{$this->relationName}[$key][$name]";
+                    $errorKey[$k] = "{$this->relationName}.$key.$name";
+                    $elementClass[$k] = "{$this->relationName}_$name";
+                }
+            } else {
+                $elementName = "{$this->relationName}[$key][{$field->column()}]";
+                $errorKey = "{$this->relationName}.$key.{$field->column()}";
+                $elementClass = "{$this->relationName}_{$field->column()}";
+            }
 
-	        $field->setElementName($elementName)
-	                ->setErrorKey($errorKey)
-	                ->setElementClass($elementClass);
+            $field->setElementName($elementName)
+                    ->setErrorKey($errorKey)
+                    ->setElementClass($elementClass);
 
             $this->pushField($field);
 

@@ -196,30 +196,29 @@ class HasMany extends Field
              * foreach the field set to find the corresponding $column
              */
             foreach ($set as $name => $value) {
-	            /**
-	             * if doesn't have column name, continue to the next loop
-	             */
+                /*
+                 * if doesn't have column name, continue to the next loop
+                 */
                 if (!array_key_exists($name, $column)) {
                     continue;
                 }
 
                 /**
-                 * example:  $newKey = created_atstart
+                 * example:  $newKey = created_atstart.
                  *
                  * Σ( ° △ °|||)︴
                  *
                  * I don't know why a form need range input? Only can imagine is for range search....
-                 *
                  */
                 $newKey = $name.$column[$name];
 
-	            /**
-	             * set new key
-	             */
+                /*
+                 * set new key
+                 */
                 array_set($input, "{$this->column}.$index.$newKey", $value);
-	            /**
-	             * forget the old key and value
-	             */
+                /*
+                 * forget the old key and value
+                 */
                 array_forget($input, "{$this->column}.$index.$name");
             }
         }
