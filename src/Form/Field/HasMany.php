@@ -175,11 +175,11 @@ class HasMany extends Field
          *
          * for example, for the DateRange, the column like as below
          *
-         * ["start" => "$startDate", "end" => "$endDate"]
+         * ["start" => "created_at", "end" => "updated_at"]
          *
          * to:
          *
-         * [ "$startDate" => "start", "$endDate" => "end" ]
+         * [ "created_at" => "start", "updated_at" => "end" ]
          */
         $column = array_flip($column);
 
@@ -196,16 +196,30 @@ class HasMany extends Field
              * foreach the field set to find the corresponding $column
              */
             foreach ($set as $name => $value) {
+	            /**
+	             * if doesn't have column name, continue to the next loop
+	             */
                 if (!array_key_exists($name, $column)) {
                     continue;
                 }
 
                 /**
-                 * $newKey =.
+                 * example:  $newKey = created_atstart
+                 *
+                 * Σ( ° △ °|||)︴
+                 *
+                 * I don't know why a form need range input? Only can imagine is for range search....
+                 *
                  */
                 $newKey = $name.$column[$name];
 
+	            /**
+	             * set new key
+	             */
                 array_set($input, "{$this->column}.$index.$newKey", $value);
+	            /**
+	             * forget the old key and value
+	             */
                 array_forget($input, "{$this->column}.$index.$name");
             }
         }
