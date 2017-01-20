@@ -7,12 +7,12 @@ return [
      */
     'name'      => 'Laravel-admin',
 
-    /**
+    /*
      * Logo in admin panel header.
      */
     'logo'      => '<b>Laravel</b> admin',
 
-    /**
+    /*
      * Mini-logo in admin panel header.
      */
     'logo-mini' => '<b>La</b>',
@@ -88,7 +88,7 @@ return [
         'role_menu_table'        => 'admin_role_menu',
     ],
 
-    /**
+    /*
      * By setting this option to open or close operation log in laravel-admin.
      */
     'operation_log'   => true,
@@ -116,7 +116,7 @@ return [
      */
     'layout'  => ['sidebar-mini'],
 
-    /**
+    /*
      * Version displayed in footer.
      */
     'version'   => '1.0',
