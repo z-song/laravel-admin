@@ -27,7 +27,9 @@
         </li>
         @foreach($forms as $pk => $form)
             <li class="@if ($form == reset($forms)) active @endif ">
-                <a href="#{{ $form->getRelationName() . '_' . $pk }}" data-toggle="tab">{{ $pk }}</a>
+                <a href="#{{ $form->getRelationName() . '_' . $pk }}" data-toggle="tab">
+                    {{ $pk }} <i class="fa fa-exclamation-circle text-red hide"></i>
+                </a>
                 <i class="close-tab fa fa-times" ></i>
             </li>
         @endforeach
@@ -47,7 +49,9 @@
 
     <template class="nav-tab-tpl">
         <li class="new">
-            <a href="#{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">&nbsp;New {{ $template::DEFAULT_KEY_NAME }}</a>
+            <a href="#{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">
+                &nbsp;New {{ $template::DEFAULT_KEY_NAME }} <i class="fa fa-exclamation-circle text-red hide"></i>
+            </a>
             <i class="close-tab fa fa-times" ></i>
         </li>
     </template>

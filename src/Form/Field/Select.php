@@ -135,7 +135,7 @@ EOT;
      *
      * @return $this
      */
-    public function ajax($url, $idField, $textField, $script = '')
+    public function ajax($url, $idField = 'id', $textField = 'text', $script = '')
     {
         $this->script = <<<EOT
 
@@ -155,9 +155,9 @@ $(".{$this->getElementClass()}").select2({
 
       return {
         results: $.map(data.data, function (d) {
-					d.id = d.$idField;
-					d.text = d.$textField;
-                    return d;
+                   d.id = d.$idField;
+                   d.text = d.$textField;
+                   return d;
                 }),
         pagination: {
           more: data.next_page_url
