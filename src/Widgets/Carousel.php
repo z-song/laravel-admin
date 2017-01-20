@@ -33,7 +33,6 @@ class Carousel extends Widget implements Renderable
         $this->id('carousel-'.uniqid());
         $this->class('carousel slide');
         $this->offsetSet('data-ride', 'carousel');
-
     }
 
     /**

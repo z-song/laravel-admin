@@ -32,9 +32,9 @@ class RolesTest extends TestCase
     public function testAddRoleToUser()
     {
         $user = [
-            'username' => 'Test',
-            'name'     => 'Name',
-            'password' => '123456',
+            'username'              => 'Test',
+            'name'                  => 'Name',
+            'password'              => '123456',
             'password_confirmation' => '123456',
 
         ];
