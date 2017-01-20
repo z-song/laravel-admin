@@ -637,7 +637,7 @@ class Form
 
                         $keyName = $relationModel->getRelated()->getKeyName();
 
-                        $instance = $relationModel->findOrNew($ralated[$keyName]);
+                        $instance = $relationModel->findOrNew(array_get($ralated, $keyName));
 
                         if ($ralated[static::REMOVE_FLAG_NAME] == 1) {
                             $instance->delete();

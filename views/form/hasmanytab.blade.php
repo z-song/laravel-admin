@@ -49,14 +49,14 @@
 
     <template class="nav-tab-tpl">
         <li class="new">
-            <a href="#{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">
+            <a href="#{{ $template->getRelationName() . '_new_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">
                 &nbsp;New {{ $template::DEFAULT_KEY_NAME }} <i class="fa fa-exclamation-circle text-red hide"></i>
             </a>
             <i class="close-tab fa fa-times" ></i>
         </li>
     </template>
     <template class="pane-tpl">
-        <div class="tab-pane fields-group new" id="{{ $template->getRelationName() . '_tpl_' . $template::DEFAULT_KEY_NAME }}">
+        <div class="tab-pane fields-group new" id="{{ $template->getRelationName() . '_new_' . $template::DEFAULT_KEY_NAME }}">
             {!! $template->getTemplateHtml() !!}
         </div>
     </template>
