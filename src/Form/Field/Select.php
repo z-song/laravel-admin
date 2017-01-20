@@ -66,8 +66,10 @@ class Select extends Field
     /**
      * Load options for other select on change.
      *
-     * @param $field
-     * @param $source
+     * @param string $field
+     * @param string $sourceUrl
+     * @param string $idField
+     * @param string $textField
      */
     public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
     {
@@ -77,6 +79,7 @@ class Select extends Field
         } else {
             $class = $field;
         }
+
         $script = <<<EOT
 
 $(document).on('change', ".{$this->getElementClass()}", function () {
@@ -85,11 +88,11 @@ $(document).on('change', ".{$this->getElementClass()}", function () {
         target.find("option").remove();
         $(target).select2({
             data: $.map(data, function (d) {
-				d.id = d.$idField;
-				d.text = d.$textField;
-	            return d;
-	        })
-	    }).trigger('change');
+                d.id = d.$idField;
+                d.text = d.$textField;
+                return d;
+            })
+        }).trigger('change');
     });
 });
 EOT;
@@ -131,11 +134,10 @@ EOT;
      * @param string $url
      * @param $idField
      * @param $textField
-     * @param string $script more script to custom
      *
      * @return $this
      */
-    public function ajax($url, $idField = 'id', $textField = 'text', $script = '')
+    public function ajax($url, $idField = 'id', $textField = 'text')
     {
         $this->script = <<<EOT
 
@@ -169,8 +171,7 @@ $(".{$this->getElementClass()}").select2({
   minimumInputLength: 1,
   escapeMarkup: function (markup) {
       return markup;
-  },
-  $script
+  }
 });
 
 EOT;
