@@ -700,23 +700,23 @@ class Form
         return $prepared;
     }
 
-	/**
-	 * @param string|array $columns
-	 * @param bool         $hasDot
-	 *
-	 * @return bool
-	 */
-	public function invalidColumn($columns, $hasDot = false)
-	{
-		foreach ((array) $columns as $column) {
-			if ((!$hasDot && Str::contains($column, '.')) ||
-				($hasDot && !Str::contains($column, '.'))) {
-				return true;
-			}
-		}
+    /**
+     * @param string|array $columns
+     * @param bool         $hasDot
+     *
+     * @return bool
+     */
+    public function invalidColumn($columns, $hasDot = false)
+    {
+        foreach ((array) $columns as $column) {
+            if ((!$hasDot && Str::contains($column, '.')) ||
+                ($hasDot && !Str::contains($column, '.'))) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * Prepare input data for insert.
