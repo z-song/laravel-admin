@@ -245,14 +245,13 @@ class HasMany extends Field
      *
      * @param $column
      * @param \Closure $builder
-     * @param null     $key
      *
      * @return NestedForm
      *                    author Edwin Hui
      */
-    protected function buildNestedForm($column, \Closure $builder, $key = null)
+    protected function buildNestedForm($column, \Closure $builder)
     {
-        $form = new Form\NestedForm($column, $key);
+        $form = new Form\NestedForm($column);
 
         call_user_func($builder, $form);
 
@@ -309,13 +308,20 @@ class HasMany extends Field
                     continue;
                 }
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)->fill($data);
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
+	                ->fill($data)
+                    ->setElementName($key)
+                    ->setErrorKey($key);
+//                    ->setElementClass();
             }
         } else {
             foreach ($this->value as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)->fill($data);
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
+	                ->fill($data)
+	                ->setElementName($key);
+//	                ->setElementClass();
             }
         }
 
@@ -329,7 +335,10 @@ class HasMany extends Field
      */
     protected function getTemplate()
     {
-        $template = $this->buildNestedForm($this->column, $this->builder)->buildTemplate();
+        $template = $this->buildNestedForm($this->column, $this->builder)
+	        ->setElementName()
+	        ->setElementClass()
+	        ->buildTemplate();
 
         switch ($this->viewMode) {
             case 'tab':
@@ -413,6 +422,16 @@ EOT;
         $('#has-many-{$this->column} > .nav > li:last-child a').tab('show');
         {$template->getTemplateScript()}
     });
+
+if ($('.has-error').length) {
+    $('.has-error').parent('.tab-pane').each(function () {
+        var tabId = '#'+$(this).attr('id');
+        $('li a[href="'+tabId+'"] i').removeClass('hide');
+    });
+    
+    var first = $('.has-error:first').parent().attr('id');
+    $('li a[href="#'+first+'"]').tab('show');
+}
 EOT;
 
         Admin::script($script);
@@ -444,6 +463,9 @@ EOT;
      */
     public function render()
     {
+	    /**
+	     * getTemplate() must run before render(), because it need to change view and Admin::script($script) before render
+	     */
         $template = $this->getTemplate();
 
         return parent::render()->with([

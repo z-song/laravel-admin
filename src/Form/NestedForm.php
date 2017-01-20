@@ -20,13 +20,6 @@ class NestedForm
     protected $relationName;
 
     /**
-     * the NestedForm key.
-     *
-     * @var
-     */
-    protected $key;
-
-    /**
      * Fields in form.
      *
      * @var Collection
@@ -55,11 +48,9 @@ class NestedForm
      * @param $relation
      * @param $key
      */
-    public function __construct($relation, $key)
+    public function __construct($relation)
     {
         $this->relationName = $relation;
-
-        $this->key = $key;
 
         $this->fields = new Collection();
     }
@@ -415,28 +406,6 @@ class NestedForm
             $column = array_get($arguments, 0, '');
 
             $field = new $className($column, array_slice($arguments, 1));
-
-            $column = $field->column();
-
-            $elementName = $elementClass = $errorKey = '';
-
-            $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
-
-            if (is_array($column)) {
-                foreach ($column as $k => $name) {
-                    $elementName[$k] = "{$this->relationName}[$key][$name]";
-                    $errorKey[$k] = "{$this->relationName}.$key.$name";
-                    $elementClass[$k] = "{$this->relationName}_$name";
-                }
-            } else {
-                $elementName = "{$this->relationName}[$key][{$field->column()}]";
-                $errorKey = "{$this->relationName}.$key.{$field->column()}";
-                $elementClass = "{$this->relationName}_{$field->column()}";
-            }
-
-            $field->setElementName($elementName)
-                    ->setErrorKey($errorKey)
-                    ->setElementClass($elementClass);
 
             $this->pushField($field);
 
