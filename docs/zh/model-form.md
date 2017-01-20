@@ -26,7 +26,7 @@ use App\Models\Movie;
 use Encore\Admin\Form;
 use Encore\Admin\Facades\Admin;
 
-$grid = Admin::form(Movie::class, function(Form $grid){
+$grid = Admin::form(Movie::class, function(Form $form){
 
     // 显示记录id
     $form->display('id', 'ID');
