@@ -700,6 +700,24 @@ class Form
         return $prepared;
     }
 
+	/**
+	 * @param string|array $columns
+	 * @param bool         $hasDot
+	 *
+	 * @return bool
+	 */
+	public function invalidColumn($columns, $hasDot = false)
+	{
+		foreach ((array) $columns as $column) {
+			if ((!$hasDot && Str::contains($column, '.')) ||
+				($hasDot && !Str::contains($column, '.'))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
     /**
      * Prepare input data for insert.
      *
@@ -712,39 +730,25 @@ class Form
         if ($this->isHasOneRelation($inserts)) {
             $inserts = array_dot($inserts);
         }
+
         foreach ($inserts as $column => $value) {
             if (is_null($field = $this->getFieldByColumn($column))) {
                 unset($inserts[$column]);
                 continue;
             }
+
             if (method_exists($field, 'prepare')) {
                 $inserts[$column] = $field->prepare($value);
             }
         }
+
         $prepared = [];
+
         foreach ($inserts as $key => $value) {
             array_set($prepared, $key, $value);
         }
 
         return $prepared;
-    }
-
-    /**
-     * @param string|array $columns
-     * @param bool         $hasDot
-     *
-     * @return bool
-     */
-    public function invalidColumn($columns, $hasDot = false)
-    {
-        foreach ((array) $columns as $column) {
-            if ((!$hasDot && Str::contains($column, '.')) ||
-                ($hasDot && !Str::contains($column, '.'))) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
