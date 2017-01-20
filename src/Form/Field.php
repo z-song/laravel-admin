@@ -247,10 +247,11 @@ class Field
     /**
      * Set form element name.
      *
-     * @param $name
+     * @param string $name
      *
      * @return $this
-     *               author Edwin Hui
+     *
+     * @author Edwin Hui
      */
     public function setElementName($name)
     {
@@ -262,7 +263,7 @@ class Field
     /**
      * Fill data to the field.
      *
-     * @param $data
+     * @param array $data
      *
      * @return void
      */
