@@ -242,6 +242,32 @@ class NestedForm
         return $this;
     }
 
+	/**
+	 * set Element class
+	 *
+	 * @return $this
+	 */
+	public function setElementClass()
+	{
+		foreach ($this->fields as $field) {
+			$column = $field->column();
+
+			$class = '';
+
+			if (is_array($column)) {
+				foreach ($column as $k => $name) {
+					$class[$k] = "{$this->relationName}_$name";
+				}
+			} else {
+				$class = "{$this->relationName}_{$field->column()}";
+			}
+
+			$field->setElementClass($class);
+		}
+
+		return $this;
+	}
+
     /**
      * Set error key for each field in the nested form.
      *
@@ -249,8 +275,10 @@ class NestedForm
      *
      * @return $this
      */
-    public function setErrorKey($key)
+    public function setErrorKey($key = null)
     {
+	    $key = is_null($key) ? 'new_'. static::DEFAULT_KEY_NAME : $key;
+
         foreach ($this->fields as $field) {
             $column = $field->column();
 
@@ -277,17 +305,17 @@ class NestedForm
      *
      * @return $this
      */
-    public function setElementName($key = null)
+    public function setElementName( $key = null)
     {
-        $this->fields->each(function (Field $field) use ($key) {
+        $this->fields->each(function (Field $field) use ( $key) {
             $column = $field->column();
 
             if (is_array($column)) {
-                $name = array_map(function ($col) use ($key) {
-                    return $this->formatElementName($col, $key);
+                $name = array_map(function ($col) use ( $key) {
+                    return $this->formatElementName( $col, $key);
                 }, $column);
             } else {
-                $name = $this->formatElementName($column, $key);
+                $name = $this->formatElementName( $column, $key);
             }
 
             $field->setElementName($name);
@@ -295,25 +323,6 @@ class NestedForm
 
         return $this;
     }
-
-//    public function setElementName( $key = null)
-//    {
-//        $this->fields->each(function (Field $field) use ( $key) {
-//            $column = $field->column();
-//
-//            if (is_array($column)) {
-//                $name = array_map(function ($col) use ( $key) {
-//                    return $this->formatElementName( $col, $key);
-//                }, $column);
-//            } else {
-//                $name = $this->formatElementName( $column, $key);
-//            }
-//
-//            $field->setElementName($name);
-//        });
-//
-//        return $this;
-//    }
 
     /**
      * Format form element name.
@@ -405,17 +414,33 @@ class NestedForm
         if ($className = Form::findFieldClass($method)) {
             $column = array_get($arguments, 0, '');
 
-            $element = new $className($column, array_slice($arguments, 1));
+	        $field = new $className($column, array_slice($arguments, 1));
 
-            $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
+	        $column = $field->column();
 
-            $element->setElementName("{$this->relationName}[{$key}][{$column}]")
-                ->setErrorKey("{$this->relationName}.{$key}.{$column}")
-                ->setElementClass("{$this->relationName}_{$column}");
+	        $elementName = $elementClass = $errorKey = '';
 
-            $this->pushField($element);
+	        $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
 
-            return $element;
+	        if (is_array($column)) {
+		        foreach ($column as $k => $name) {
+			        $elementName[$k] = "{$this->relationName}[$key][$name]";
+			        $errorKey[$k] = "{$this->relationName}.$key.$name";
+			        $elementClass[$k] = "{$this->relationName}_$name";
+		        }
+	        } else {
+		        $elementName = "{$this->relationName}[$key][{$field->column()}]";
+		        $errorKey = "{$this->relationName}.$key.{$field->column()}";
+		        $elementClass = "{$this->relationName}_{$field->column()}";
+	        }
+
+	        $field->setElementName($elementName)
+	                ->setErrorKey($errorKey)
+	                ->setElementClass($elementClass);
+
+            $this->pushField($field);
+
+            return $field;
         }
 
         return $this;
