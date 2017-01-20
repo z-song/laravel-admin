@@ -43,7 +43,7 @@ class FileUploadTest extends TestCase
 
     public function testUploadFile()
     {
-	    $this->markTestSkipped();
+        $this->markTestSkipped();
 
         File::cleanDirectory(public_path('upload/file'));
 
@@ -74,7 +74,7 @@ class FileUploadTest extends TestCase
 
     public function testUpdateFile()
     {
-	    $this->markTestSkipped();
+        $this->markTestSkipped();
 
         File::cleanDirectory(public_path('upload/file'));
 

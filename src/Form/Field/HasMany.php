@@ -309,7 +309,7 @@ class HasMany extends Field
                 }
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-	                ->fill($data)
+                    ->fill($data)
                     ->setElementName($key)
                     ->setErrorKey($key);
 //                    ->setElementClass();
@@ -319,8 +319,8 @@ class HasMany extends Field
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-	                ->fill($data)
-	                ->setElementName($key);
+                    ->fill($data)
+                    ->setElementName($key);
 //	                ->setElementClass();
             }
         }
@@ -336,9 +336,9 @@ class HasMany extends Field
     protected function getTemplate()
     {
         $template = $this->buildNestedForm($this->column, $this->builder)
-	        ->setElementName()
-	        ->setElementClass()
-	        ->buildTemplate();
+            ->setElementName()
+            ->setElementClass()
+            ->buildTemplate();
 
         switch ($this->viewMode) {
             case 'tab':
@@ -463,9 +463,9 @@ EOT;
      */
     public function render()
     {
-	    /**
-	     * getTemplate() must run before render(), because it need to change view and Admin::script($script) before render
-	     */
+        /**
+         * getTemplate() must run before render(), because it need to change view and Admin::script($script) before render.
+         */
         $template = $this->getTemplate();
 
         return parent::render()->with([
