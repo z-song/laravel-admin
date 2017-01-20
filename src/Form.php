@@ -700,33 +700,34 @@ class Form
         return $prepared;
     }
 
-	/**
-	 * Prepare input data for insert.
-	 *
-	 * @param $inserts
-	 *
-	 * @return array
-	 */
-	protected function prepareInsert($inserts)
-	{
-		if ($this->isHasOneRelation($inserts)) {
-			$inserts = array_dot($inserts);
-		}
-		foreach ($inserts as $column => $value) {
-			if (is_null($field = $this->getFieldByColumn($column))) {
-				unset($inserts[$column]);
-				continue;
-			}
-			if (method_exists($field, 'prepare')) {
-				$inserts[$column] = $field->prepare($value);
-			}
-		}
-		$prepared = [];
-		foreach ($inserts as $key => $value) {
-			array_set($prepared, $key, $value);
-		}
-		return $prepared;
-	}
+    /**
+     * Prepare input data for insert.
+     *
+     * @param $inserts
+     *
+     * @return array
+     */
+    protected function prepareInsert($inserts)
+    {
+        if ($this->isHasOneRelation($inserts)) {
+            $inserts = array_dot($inserts);
+        }
+        foreach ($inserts as $column => $value) {
+            if (is_null($field = $this->getFieldByColumn($column))) {
+                unset($inserts[$column]);
+                continue;
+            }
+            if (method_exists($field, 'prepare')) {
+                $inserts[$column] = $field->prepare($value);
+            }
+        }
+        $prepared = [];
+        foreach ($inserts as $key => $value) {
+            array_set($prepared, $key, $value);
+        }
+
+        return $prepared;
+    }
 
     /**
      * @param string|array $columns
