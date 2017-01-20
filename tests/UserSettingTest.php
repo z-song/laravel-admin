@@ -56,7 +56,7 @@ class UserSettingTest extends TestCase
     public function testUpdatePasswordConfirmation()
     {
         $data = [
-            'password' => '123456',
+            'password'              => '123456',
             'password_confirmation' => '123',
         ];
 
@@ -69,7 +69,7 @@ class UserSettingTest extends TestCase
     public function testUpdatePassword()
     {
         $data = [
-            'password' => '123456',
+            'password'              => '123456',
             'password_confirmation' => '123456',
         ];
 

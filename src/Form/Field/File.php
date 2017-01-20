@@ -161,8 +161,7 @@ class File extends Field
      */
     public function disk($disk)
     {
-        if (! array_key_exists($disk, config('filesystems.disks'))) {
-
+        if (!array_key_exists($disk, config('filesystems.disks'))) {
             $error = new MessageBag([
                 'title'   => 'Config error.',
                 'message' => "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`.",

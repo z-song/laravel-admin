@@ -1,17 +1,17 @@
 <?php
 
 return [
-    'online'        => '在线',
-    'login'         => '登陆',
-    'logout'        => '登出',
-    'setting'       => '设置',
-    'name'          => '名称',
-    'username'      => '用户名',
-    'password'      => '密码',
+    'online'                => '在线',
+    'login'                 => '登陆',
+    'logout'                => '登出',
+    'setting'               => '设置',
+    'name'                  => '名称',
+    'username'              => '用户名',
+    'password'              => '密码',
     'password_confirmation' => '确认密码',
-    'remember_me'   => '记住我',
-    'user_setting'  => '用户设置',
-    'avatar'        => '头像',
+    'remember_me'           => '记住我',
+    'user_setting'          => '用户设置',
+    'avatar'                => '头像',
 
     'list'          => '列表',
     'new'           => '新增',

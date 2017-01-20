@@ -1,17 +1,17 @@
 <?php
 
 return [
-    'online'        => 'Online',
-    'login'         => 'Login',
-    'logout'        => 'Logout',
-    'setting'       => 'Setting',
-    'name'          => 'Name',
-    'username'      => 'Username',
-    'password'      => 'Password',
+    'online'                => 'Online',
+    'login'                 => 'Login',
+    'logout'                => 'Logout',
+    'setting'               => 'Setting',
+    'name'                  => 'Name',
+    'username'              => 'Username',
+    'password'              => 'Password',
     'password_confirmation' => 'Password confirmation',
-    'remember_me'   => 'Remember me',
-    'user_setting'  => 'User setting',
-    'avatar'        => 'Avatar',
+    'remember_me'           => 'Remember me',
+    'user_setting'          => 'User setting',
+    'avatar'                => 'Avatar',
 
     'list'          => 'List',
     'new'           => 'New',
