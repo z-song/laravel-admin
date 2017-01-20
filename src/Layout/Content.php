@@ -29,6 +29,7 @@ class Content implements Renderable
 
     /**
      * Content constructor.
+     *
      * @param Closure|null $callback
      */
     public function __construct(\Closure $callback = null)
@@ -82,6 +83,7 @@ class Content implements Renderable
      * Add one row for content body.
      *
      * @param $content
+     *
      * @return $this
      */
     public function row($content)
@@ -132,6 +134,7 @@ class Content implements Renderable
      *
      * @param string $title
      * @param string $message
+     *
      * @return $this
      */
     public function withError($title = '', $message = '')

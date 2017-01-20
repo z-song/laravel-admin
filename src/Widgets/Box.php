@@ -120,7 +120,7 @@ class Box extends Widget implements Renderable
             return 'box-'.$style;
         }, $styles);
 
-        $this->class = $this->class . ' ' . join(' ', $styles);
+        $this->class = $this->class.' '.implode(' ', $styles);
 
         return $this;
     }

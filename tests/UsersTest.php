@@ -24,9 +24,9 @@ class UsersTest extends TestCase
     public function testCreateUser()
     {
         $user = [
-            'username' => 'Test',
-            'name'     => 'Name',
-            'password' => '123456',
+            'username'              => 'Test',
+            'name'                  => 'Name',
+            'password'              => '123456',
             'password_confirmation' => '123456',
         ];
 
@@ -67,9 +67,9 @@ class UsersTest extends TestCase
         $password = 'odjwyufkglte';
 
         $data = [
-            'password' => $password,
+            'password'              => $password,
             'password_confirmation' => $password,
-            'roles' => [1]
+            'roles'                 => [1],
         ];
 
         $this->visit('admin/auth/users/'.$this->user->id.'/edit')

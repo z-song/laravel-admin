@@ -968,6 +968,7 @@ class Form
      * Set action for form.
      *
      * @param string $action
+     *
      * @return $this
      */
     public function setAction($action)

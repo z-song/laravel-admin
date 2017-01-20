@@ -74,7 +74,6 @@ class AuthController extends Controller
     public function getSetting()
     {
         return Admin::content(function (Content $content) {
-
             $content->header(trans('admin::lang.user_setting'));
             $content->body($this->settingForm()->edit(Admin::user()->id));
         });
@@ -98,7 +97,6 @@ class AuthController extends Controller
     protected function settingForm()
     {
         return Administrator::form(function (Form $form) {
-
             $form->display('username', trans('admin::lang.username'));
             $form->text('name', trans('admin::lang.name'))->rules('required');
             $form->image('avatar', trans('admin::lang.avatar'));
@@ -119,7 +117,6 @@ class AuthController extends Controller
             });
 
             $form->saved(function () {
-
                 $success = new MessageBag([
                     'title'   => trans('admin::lang.succeeded'),
                     'message' => trans('admin::lang.update_succeeded'),

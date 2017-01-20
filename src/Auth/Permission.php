@@ -79,9 +79,7 @@ class Permission
         $pjaxMiddleware = new PjaxMiddleware();
 
         $pjaxMiddleware->handle(Request::capture(), function () {
-
             return response(Admin::content()->withError(trans('admin::lang.deny')));
-
         })->send();
 
         exit;
