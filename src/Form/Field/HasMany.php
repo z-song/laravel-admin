@@ -415,7 +415,7 @@ EOT;
      * @return $this
      *               author Edwin Hui
      */
-    public function viewMode($mode)
+    public function mode($mode)
     {
         $this->viewMode = $mode;
 
