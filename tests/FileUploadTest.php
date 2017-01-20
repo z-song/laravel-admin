@@ -6,165 +6,161 @@ use Tests\Models\File as FileModel;
 
 class FileUploadTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
+	public function setUp()
+	{
+		parent::setUp();
 
-        $this->be(Administrator::first(), 'admin');
-    }
+		$this->be(Administrator::first(), 'admin');
+	}
 
-    public function testFileUploadPage()
-    {
-        $this->visit('admin/files/create')
-            ->see('Upload file')
-            ->seeInElement('h3[class=box-title]', 'Create')
-            ->seeElement('input[name=file1]')
-            ->seeElement('input[name=file2]')
-            ->seeElement('input[name=file3]')
-            ->seeElement('input[name=file4]')
-            ->seeElement('input[name=file5]')
-            ->seeElement('input[name=file6]')
-            ->seeInElement('a[href="/admin/files"]', 'List')
-            ->seeElement('input[type=reset][value=Reset]')
-            ->seeInElement('button[type=submit]', 'Submit');
-    }
+	public function testFileUploadPage()
+	{
+		$this->visit('admin/files/create')
+			->see('Upload file')
+			->seeInElement('h3[class=box-title]', 'Create')
+			->seeElement('input[name=file1]')
+			->seeElement('input[name=file2]')
+			->seeElement('input[name=file3]')
+			->seeElement('input[name=file4]')
+			->seeElement('input[name=file5]')
+			->seeElement('input[name=file6]')
+			->seeInElement('a[href="/admin/files"]', 'List')
+			->seeElement('input[type=reset][value=Reset]')
+			->seeInElement('button[type=submit]', 'Submit');
+	}
 
-    protected function uploadFiles()
-    {
-        return $this->visit('admin/files/create')
-            ->attach(__DIR__.'/AuthTest.php', 'file1')
-            ->attach(__DIR__.'/InstallTest.php', 'file2')
-            ->attach(__DIR__.'/IndexTest.php', 'file3')
-            ->attach(__DIR__.'/LaravelTest.php', 'file4')
-            ->attach(__DIR__.'/routes.php', 'file5')
-            ->attach(__DIR__.'/migrations/2016_11_22_093148_create_test_tables.php', 'file6')
-            ->press('Submit');
-    }
+	protected function uploadFiles()
+	{
+		return $this->visit('admin/files/create')
+			->attach(__DIR__.'/AuthTest.php', 'file1')
+			->attach(__DIR__.'/InstallTest.php', 'file2')
+			->attach(__DIR__.'/IndexTest.php', 'file3')
+			->attach(__DIR__.'/LaravelTest.php', 'file4')
+			->attach(__DIR__.'/routes.php', 'file5')
+			->attach(__DIR__.'/migrations/2016_11_22_093148_create_test_tables.php', 'file6')
+			->press('Submit');
+	}
 
-    public function testUploadFile()
-    {
-        $this->markTestSkipped();
+	public function testUploadFile()
+	{
+		File::cleanDirectory(public_path('upload/file'));
 
-        File::cleanDirectory(public_path('upload/file'));
+		$this->uploadFiles()
+			->seePageIs('admin/files');
 
-        $this->uploadFiles()
-            ->seePageIs('admin/files');
+		$this->assertEquals(FileModel::count(), 1);
 
-        $this->assertEquals(FileModel::count(), 1);
+		$where = [
+			'file1' => 'file/AuthTest.php',
+			'file2' => 'file/InstallTest.php',
+			'file3' => 'file/IndexTest.php',
+			'file4' => 'file/LaravelTest.php',
+			'file5' => 'file/routes.php',
+			'file6' => 'file/2016_11_22_093148_create_test_tables.php',
+		];
 
-        $where = [
-            'file1' => 'file/AuthTest.php',
-            'file2' => 'file/InstallTest.php',
-            'file3' => 'file/IndexTest.php',
-            'file4' => 'file/LaravelTest.php',
-            'file5' => 'file/routes.php',
-            'file6' => 'file/2016_11_22_093148_create_test_tables.php',
-        ];
+		$this->seeInDatabase('test_files', $where);
 
-        $this->seeInDatabase('test_files', $where);
+		$files = FileModel::first()->toArray();
 
-        $files = FileModel::first()->toArray();
+		foreach (range(1, 6) as $index) {
+			$this->assertFileExists(public_path('upload/'.$files['file'.$index]));
+		}
 
-        foreach (range(1, 6) as $index) {
-            $this->assertFileExists(public_path('upload/'.$files['file'.$index]));
-        }
+		File::cleanDirectory(public_path('upload/file'));
+	}
 
-        File::cleanDirectory(public_path('upload/file'));
-    }
+	public function testUpdateFile()
+	{
+		File::cleanDirectory(public_path('upload/file'));
 
-    public function testUpdateFile()
-    {
-        $this->markTestSkipped();
+		$this->uploadFiles();
 
-        File::cleanDirectory(public_path('upload/file'));
+		$old = FileModel::first();
 
-        $this->uploadFiles();
+		$this->visit('admin/files/1/edit')
+			->see('ID')
+			->see('Created At')
+			->see('Updated At')
+			->seeElement('input[name=file1]')
+			->seeElement('input[name=file2]')
+			->seeElement('input[name=file3]')
+			->seeElement('input[name=file4]')
+			->seeElement('input[name=file5]')
+			->seeElement('input[name=file6]')
+			->seeInElement('a[href="/admin/files"]', 'List')
+			->seeElement('input[type=reset][value=Reset]')
+			->seeInElement('button[type=submit]', 'Submit');
 
-        $old = FileModel::first();
+		$this->attach(__DIR__.'/RoleTest.php', 'file3')
+			->attach(__DIR__.'/MenuTest.php', 'file4')
+			->attach(__DIR__.'/TestCase.php', 'file5')
+			->press('Submit');
 
-        $this->visit('admin/files/1/edit')
-            ->see('ID')
-            ->see('Created At')
-            ->see('Updated At')
-            ->seeElement('input[name=file1]')
-            ->seeElement('input[name=file2]')
-            ->seeElement('input[name=file3]')
-            ->seeElement('input[name=file4]')
-            ->seeElement('input[name=file5]')
-            ->seeElement('input[name=file6]')
-            ->seeInElement('a[href="/admin/files"]', 'List')
-            ->seeElement('input[type=reset][value=Reset]')
-            ->seeInElement('button[type=submit]', 'Submit');
+		$new = FileModel::first();
 
-        $this->attach(__DIR__.'/RoleTest.php', 'file3')
-            ->attach(__DIR__.'/MenuTest.php', 'file4')
-            ->attach(__DIR__.'/TestCase.php', 'file5')
-            ->press('Submit');
+		$this->assertEquals($old->id, $new->id);
+		$this->assertEquals($old->file1, $new->file1);
+		$this->assertEquals($old->file2, $new->file2);
+		$this->assertEquals($old->file6, $new->file6);
 
-        $new = FileModel::first();
+		$this->assertNotEquals($old->file3, $new->file3);
+		$this->assertNotEquals($old->file4, $new->file4);
+		$this->assertNotEquals($old->file5, $new->file5);
 
-        $this->assertEquals($old->id, $new->id);
-        $this->assertEquals($old->file1, $new->file1);
-        $this->assertEquals($old->file2, $new->file2);
-        $this->assertEquals($old->file6, $new->file6);
+		File::cleanDirectory(public_path('upload/file'));
+	}
 
-        $this->assertNotEquals($old->file3, $new->file3);
-        $this->assertNotEquals($old->file4, $new->file4);
-        $this->assertNotEquals($old->file5, $new->file5);
+	public function testDeleteFiles()
+	{
+		File::cleanDirectory(public_path('upload/file'));
 
-        File::cleanDirectory(public_path('upload/file'));
-    }
+		$this->uploadFiles();
 
-    public function testDeleteFiles()
-    {
-        File::cleanDirectory(public_path('upload/file'));
+		$this->visit('admin/files')
+			->seeInElement('td', 1);
 
-        $this->uploadFiles();
+		$files = FileModel::first()->toArray();
 
-        $this->visit('admin/files')
-            ->seeInElement('td', 1);
+		$this->delete('admin/files/1')
+			->dontSeeInDatabase('test_files', ['id' => 1]);
 
-        $files = FileModel::first()->toArray();
+		foreach (range(1, 6) as $index) {
+			$this->assertFileNotExists(public_path('upload/'.$files['file'.$index]));
+		}
 
-        $this->delete('admin/files/1')
-            ->dontSeeInDatabase('test_files', ['id' => 1]);
+		$this->visit('admin/files')
+			->dontSeeInElement('td', 1);
+	}
 
-        foreach (range(1, 6) as $index) {
-            $this->assertFileNotExists(public_path('upload/'.$files['file'.$index]));
-        }
+	public function testBatchDelete()
+	{
+		File::cleanDirectory(public_path('upload/file'));
 
-        $this->visit('admin/files')
-            ->dontSeeInElement('td', 1);
-    }
+		$this->uploadFiles();
+		$this->uploadFiles();
+		$this->uploadFiles();
 
-    public function testBatchDelete()
-    {
-        File::cleanDirectory(public_path('upload/file'));
+		$this->visit('admin/files')
+			->seeInElement('td', 1)
+			->seeInElement('td', 2)
+			->seeInElement('td', 3);
 
-        $this->uploadFiles();
-        $this->uploadFiles();
-        $this->uploadFiles();
+		$fi = new FilesystemIterator(public_path('upload/file'), FilesystemIterator::SKIP_DOTS);
 
-        $this->visit('admin/files')
-            ->seeInElement('td', 1)
-            ->seeInElement('td', 2)
-            ->seeInElement('td', 3);
+		$this->assertEquals(iterator_count($fi), 18);
 
-        $fi = new FilesystemIterator(public_path('upload/file'), FilesystemIterator::SKIP_DOTS);
+		$this->assertEquals(FileModel::count(), 3);
 
-        $this->assertEquals(iterator_count($fi), 18);
+		$this->delete('admin/files/1,2,3');
 
-        $this->assertEquals(FileModel::count(), 3);
+		$this->assertEquals(FileModel::count(), 0);
 
-        $this->delete('admin/files/1,2,3');
+		$this->visit('admin/files')
+			->dontSeeInElement('td', 1)
+			->dontSeeInElement('td', 2)
+			->dontSeeInElement('td', 3);
 
-        $this->assertEquals(FileModel::count(), 0);
-
-        $this->visit('admin/files')
-            ->dontSeeInElement('td', 1)
-            ->dontSeeInElement('td', 2)
-            ->dontSeeInElement('td', 3);
-
-        $this->assertEquals(iterator_count($fi), 0);
-    }
+		$this->assertEquals(iterator_count($fi), 0);
+	}
 }
