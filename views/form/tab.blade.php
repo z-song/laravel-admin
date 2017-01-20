@@ -10,7 +10,7 @@
         @endforeach
 
     </ul>
-    <div class="tab-content">
+    <div class="tab-content fields-group">
 
         @foreach($tabObj->getTabs() as $tab)
             <div class="tab-pane {{ $tab['active'] ? 'active' : '' }}" id="tab-{{ $tab['id'] }}">

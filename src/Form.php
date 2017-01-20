@@ -632,22 +632,22 @@ class Form
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
 
-                    foreach ($prepared[$name] as $ralated) {
-                        $relationModel = $this->model()->$name();
+                    foreach ($prepared[$name] as $related) {
+                        $relation = $this->model()->$name();
 
-                        $keyName = $relationModel->getRelated()->getKeyName();
+                        $keyName = $relation->getRelated()->getKeyName();
 
-                        $instance = $relationModel->findOrNew(array_get($ralated, $keyName));
+                        $instance = $relation->findOrNew(array_get($related, $keyName));
 
-                        if ($ralated[static::REMOVE_FLAG_NAME] == 1) {
+                        if ($related[static::REMOVE_FLAG_NAME] == 1) {
                             $instance->delete();
 
                             continue;
                         }
 
-                        array_forget($ralated, static::REMOVE_FLAG_NAME);
+                        array_forget($related, static::REMOVE_FLAG_NAME);
 
-                        $instance->fill($ralated);
+                        $instance->fill($related);
 
                         $instance->save();
                     }

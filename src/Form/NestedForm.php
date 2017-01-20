@@ -333,7 +333,7 @@ class NestedForm
     /**
      * Build template.
      *
-     * @return string
+     * @return $this
      */
     public function buildTemplate()
     {
@@ -360,20 +360,7 @@ class NestedForm
     }
 
     /**
-     * Get form script as string.
-     *
-     * @return string
-     */
-    public function getFormScript()
-    {
-        /*
-         * separate scripts with enter
-         */
-        return implode("\r\n", $this->scripts);
-    }
-
-    /**
-     * Get template scrip.
+     * Get template script.
      *
      * @return string
      */
@@ -383,7 +370,7 @@ class NestedForm
     }
 
     /**
-     * Get template scrip.
+     * Get template script.
      *
      * @return string
      */

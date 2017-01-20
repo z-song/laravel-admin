@@ -44,6 +44,13 @@ class HasMany extends Field
     protected $viewMode = 'default';
 
     /**
+     * Default view for hasmany field.
+     *
+     * @var string
+     */
+    protected  $view = 'admin::form.hasmany';
+
+    /**
      * Create a new HasMany field instance.
      *
      * @param $relationName
@@ -233,21 +240,20 @@ class HasMany extends Field
      */
     public function prepare($input)
     {
-        $relatedKeyName = $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
-
         $form = $this->buildNestedForm($this->column, $this->builder);
 
-        return $form->setOriginal($this->original, $relatedKeyName)->prepare($input);
+        return $form->setOriginal($this->original, $this->getKeyName())->prepare($input);
     }
 
     /**
      * Build a Nested form.
      *
-     * @param $column
+     * @param string $column
      * @param \Closure $builder
      *
      * @return NestedForm
-     *                    author Edwin Hui
+     *
+     * @author Edwin Hui
      */
     protected function buildNestedForm($column, \Closure $builder)
     {
@@ -263,7 +269,7 @@ class HasMany extends Field
     }
 
     /**
-     * get the HasMany relation key name.
+     * Get the HasMany relation key name.
      *
      * @return string
      */
@@ -274,7 +280,6 @@ class HasMany extends Field
 
     /**
      * Get form data flashed in session.
-
      *
      * @return mixed
      */
@@ -284,7 +289,7 @@ class HasMany extends Field
     }
 
     /**
-     * build Nested form for related data.
+     * Build Nested form for related data.
      *
      * @throws \Exception
      *
@@ -331,7 +336,7 @@ class HasMany extends Field
     /**
      * Build a Nested form template for dynamically add sub form .
      *
-     * @return string
+     * @return NestedForm
      */
     protected function getTemplate()
     {
@@ -346,7 +351,6 @@ class HasMany extends Field
                 $this->buildTemplateScriptTab($template);
                 break;
             default:
-                $this->view = 'admin::form.hasmany';
                 $this->buildTemplateScriptDefault($template);
                 break;
         }
@@ -355,7 +359,7 @@ class HasMany extends Field
     }
 
     /**
-     * Build default tamplate script.
+     * Build default template script.
      *
      * @param $template
      *
@@ -391,6 +395,13 @@ EOT;
         return $this;
     }
 
+    /**
+     * Build tab template script.
+     *
+     * @param NestedForm $template
+     *
+     * @return $this
+     */
     protected function buildTemplateScriptTab(NestedForm $template)
     {
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
@@ -440,18 +451,29 @@ EOT;
     }
 
     /**
-     * change view mode.
+     * Set view mode.
      *
-     * @param $mode
+     * @param string $mode currently support `tab` mode.
      *
      * @return $this
-     *               author Edwin Hui
+     *
+     * @author Edwin Hui
      */
     public function mode($mode)
     {
         $this->viewMode = $mode;
 
         return $this;
+    }
+
+    /**
+     * Use tab mode to showing hasmany field.
+     *
+     * @return HasMany
+     */
+    public function useTab()
+    {
+        return $this->mode('tab');
     }
 
     /**
