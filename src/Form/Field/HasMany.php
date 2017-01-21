@@ -48,7 +48,7 @@ class HasMany extends Field
      *
      * @var string
      */
-    protected  $view = 'admin::form.hasmany';
+    protected $view = 'admin::form.hasmany';
 
     /**
      * Create a new HasMany field instance.
@@ -248,16 +248,17 @@ class HasMany extends Field
     /**
      * Build a Nested form.
      *
-     * @param string $column
+     * @param string   $column
      * @param \Closure $builder
+     * @param null     $key
      *
      * @return NestedForm
-     *
-     * @author Edwin Hui
      */
-    protected function buildNestedForm($column, \Closure $builder)
+    protected function buildNestedForm($column, \Closure $builder, $key = null)
     {
-        $form = new Form\NestedForm($column);
+        $form = new Form\NestedForm($column, $key);
+
+        $form->setForm($this->form);
 
         call_user_func($builder, $form);
 
@@ -313,20 +314,15 @@ class HasMany extends Field
                     continue;
                 }
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-                    ->fill($data)
-                    ->setElementName($key)
-                    ->setErrorKey($key);
-//                    ->setElementClass();
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
+                    ->fill($data);
             }
         } else {
             foreach ($this->value as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder)
-                    ->fill($data)
-                    ->setElementName($key);
-//	                ->setElementClass();
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
+                    ->fill($data);
             }
         }
 
@@ -341,9 +337,7 @@ class HasMany extends Field
     protected function getTemplate()
     {
         $template = $this->buildNestedForm($this->column, $this->builder)
-            ->setElementName()
-            ->setElementClass()
-            ->buildTemplate();
+                         ->buildTemplate();
 
         switch ($this->viewMode) {
             case 'tab':

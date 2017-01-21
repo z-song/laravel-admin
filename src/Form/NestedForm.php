@@ -20,6 +20,13 @@ class NestedForm
     protected $relationName;
 
     /**
+     * NestedForm key.
+     *
+     * @var
+     */
+    protected $key;
+
+    /**
      * Fields in form.
      *
      * @var Collection
@@ -41,16 +48,25 @@ class NestedForm
     protected $template = [];
 
     /**
+     * @var \Encore\Admin\Form
+     */
+    protected $form;
+
+    /**
      * Create a new NestedForm instance.
      *
      * NestedForm constructor.
      *
      * @param $relation
-     * @param $key
+     * @param null $key
      */
-    public function __construct($relation)
+    public function __construct($relation, $key = null)
     {
+        //    	$this->form = $form;
+
         $this->relationName = $relation;
+
+        $this->key = $key;
 
         $this->fields = new Collection();
     }
@@ -379,6 +395,47 @@ class NestedForm
         return $this->template['script'];
     }
 
+    protected function formatField(Field $field)
+    {
+        $column = $field->column();
+
+        $elementName = $elementClass = $errorKey = '';
+
+        $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
+
+        if (is_array($column)) {
+            foreach ($column as $k => $name) {
+                $elementName[$k] = "{$this->relationName}[$key][$name]";
+                $errorKey[$k] = "{$this->relationName}.$key.$name";
+                $elementClass[$k] = "{$this->relationName}_$name";
+            }
+        } else {
+            $elementName = "{$this->relationName}[$key][{$field->column()}]";
+            $errorKey = "{$this->relationName}.$key.{$field->column()}";
+            $elementClass = "{$this->relationName}_{$field->column()}";
+        }
+
+        $field->setElementName($elementName)
+            ->setErrorKey($errorKey)
+            ->setElementClass($elementClass);
+
+        return $field;
+    }
+
+    /**
+     * Set Form.
+     *
+     * @param Form $form
+     *
+     * @return $this
+     */
+    public function setForm(Form $form)
+    {
+        $this->form = $form;
+
+        return $this;
+    }
+
     /**
      * Add nested-form fields dynamically.
      *
@@ -393,6 +450,10 @@ class NestedForm
             $column = array_get($arguments, 0, '');
 
             $field = new $className($column, array_slice($arguments, 1));
+
+            $field->setForm($this->form);
+
+            $field = $this->formatField($field);
 
             $this->pushField($field);
 
