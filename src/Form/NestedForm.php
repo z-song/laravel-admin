@@ -47,10 +47,10 @@ class NestedForm
      */
     protected $template = [];
 
-	/**
-	 * @var \Encore\Admin\Form
-	 */
-	protected $form;
+    /**
+     * @var \Encore\Admin\Form
+     */
+    protected $form;
 
     /**
      * Create a new NestedForm instance.
@@ -62,7 +62,7 @@ class NestedForm
      */
     public function __construct($relation, $key = null)
     {
-//    	$this->form = $form;
+        //    	$this->form = $form;
 
         $this->relationName = $relation;
 
@@ -422,17 +422,18 @@ class NestedForm
         return $field;
     }
 
-	/**
-	 * Set Form
-	 *
-	 * @param Form $form
-	 * @return $this
-	 */
+    /**
+     * Set Form.
+     *
+     * @param Form $form
+     *
+     * @return $this
+     */
     public function setForm(Form $form)
     {
-    	$this->form = $form;
+        $this->form = $form;
 
-	    return $this;
+        return $this;
     }
 
     /**
@@ -450,7 +451,7 @@ class NestedForm
 
             $field = new $className($column, array_slice($arguments, 1));
 
-	        $field->setForm($this->form);
+            $field->setForm($this->form);
 
             $field = $this->formatField($field);
 
