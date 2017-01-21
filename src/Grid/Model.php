@@ -3,6 +3,8 @@
 namespace Encore\Admin\Grid;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
@@ -376,20 +378,39 @@ class Model
     }
 
     /**
-     * Build join parameters.
+     * Build join parameters for related model.
+     *
+     * `HasOne` and `BelongsTo` relation has different join parameters.
      *
      * @param Relation $relation
      *
      * @return array
+     *
+     * @throws \Exception
      */
     protected function joinParameters(Relation $relation)
     {
-        return [
-            $relation->getRelated()->getTable(),
-            $relation->getQualifiedParentKeyName(),
-            '=',
-            $relation->getForeignKey(),
-        ];
+        $relatedTable = $relation->getRelated()->getTable();
+
+        if ($relation instanceof BelongsTo) {
+            return [
+                $relatedTable,
+                $relation->getForeignKey(),
+                '=',
+                $relatedTable . '.' . $relation->getRelated()->getKeyName(),
+            ];
+        }
+
+        if ($relation instanceof HasOne) {
+            return [
+                $relatedTable,
+                $relation->getQualifiedParentKeyName(),
+                '=',
+                $relation->getForeignKey(),
+            ];
+        }
+
+        throw new \Exception('Related sortable only support `HasOne` and `BelongsTo` relation.');
     }
 
     /**
