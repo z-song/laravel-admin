@@ -245,14 +245,15 @@ class HasMany extends Field
         return $form->setOriginal($this->original, $this->getKeyName())->prepare($input);
     }
 
-	/**
-	 * Build a Nested form.
-	 *
-	 * @param string $column
-	 * @param \Closure $builder
-	 * @param null $key
-	 * @return NestedForm
-	 */
+    /**
+     * Build a Nested form.
+     *
+     * @param string   $column
+     * @param \Closure $builder
+     * @param null     $key
+     *
+     * @return NestedForm
+     */
     protected function buildNestedForm($column, \Closure $builder, $key = null)
     {
         $form = new Form\NestedForm($column, $key);
