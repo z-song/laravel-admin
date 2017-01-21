@@ -248,7 +248,7 @@ class HasMany extends Field
     /**
      * Build a Nested form.
      *
-     * @param string $column
+     * @param string   $column
      * @param \Closure $builder
      * @param null     $key
      *
