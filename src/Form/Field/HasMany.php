@@ -48,7 +48,7 @@ class HasMany extends Field
      *
      * @var string
      */
-    protected  $view = 'admin::form.hasmany';
+    protected $view = 'admin::form.hasmany';
 
     /**
      * Create a new HasMany field instance.
@@ -245,14 +245,15 @@ class HasMany extends Field
         return $form->setOriginal($this->original, $this->getKeyName())->prepare($input);
     }
 
-	/**
-	 * Build a Nested form.
-	 *
-	 * @param string $column
-	 * @param \Closure $builder
-	 * @param null $key
-	 * @return NestedForm
-	 */
+    /**
+     * Build a Nested form.
+     *
+     * @param $column
+     * @param \Closure $builder
+     * @param null     $key
+     *
+     * @return NestedForm
+     */
     protected function buildNestedForm($column, \Closure $builder, $key = null)
     {
         $form = new Form\NestedForm($column, $key);
@@ -334,7 +335,7 @@ class HasMany extends Field
     protected function getTemplate()
     {
         $template = $this->buildNestedForm($this->column, $this->builder)
-	                     ->buildTemplate();
+                         ->buildTemplate();
 
         switch ($this->viewMode) {
             case 'tab':
