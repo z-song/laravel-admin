@@ -258,7 +258,7 @@ class HasMany extends Field
     {
         $form = new Form\NestedForm($column, $key);
 
-	    $form->setForm($this->form);
+        $form->setForm($this->form);
 
         call_user_func($builder, $form);
 
