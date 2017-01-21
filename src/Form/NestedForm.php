@@ -19,6 +19,13 @@ class NestedForm
      */
     protected $relationName;
 
+	/**
+	 * NestedForm key
+	 *
+	 * @var
+	 */
+	protected $key;
+
     /**
      * Fields in form.
      *
@@ -40,17 +47,19 @@ class NestedForm
      */
     protected $template = [];
 
-    /**
-     * Create a new NestedForm instance.
-     *
-     * NestedForm constructor.
-     *
-     * @param $relation
-     * @param $key
-     */
-    public function __construct($relation)
+	/**
+	 * Create a new NestedForm instance.
+	 *
+	 * NestedForm constructor.
+	 *
+	 * @param $relation
+	 * @param null $key
+	 */
+    public function __construct($relation, $key = null)
     {
         $this->relationName = $relation;
+
+	    $this->key = $key;
 
         $this->fields = new Collection();
     }
@@ -379,6 +388,33 @@ class NestedForm
         return $this->template['script'];
     }
 
+    protected function formatField(Field $field)
+    {
+	    $column = $field->column();
+
+	    $elementName = $elementClass = $errorKey = '';
+
+	    $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
+
+	    if (is_array($column)) {
+		    foreach ($column as $k => $name) {
+			    $elementName[$k] = "{$this->relationName}[$key][$name]";
+			    $errorKey[$k] = "{$this->relationName}.$key.$name";
+			    $elementClass[$k] = "{$this->relationName}_$name";
+		    }
+	    } else {
+		    $elementName = "{$this->relationName}[$key][{$field->column()}]";
+		    $errorKey = "{$this->relationName}.$key.{$field->column()}";
+		    $elementClass = "{$this->relationName}_{$field->column()}";
+	    }
+
+	    $field->setElementName($elementName)
+		    ->setErrorKey($errorKey)
+		    ->setElementClass($elementClass);
+
+	    return $field;
+    }
+
     /**
      * Add nested-form fields dynamically.
      *
@@ -393,6 +429,8 @@ class NestedForm
             $column = array_get($arguments, 0, '');
 
             $field = new $className($column, array_slice($arguments, 1));
+
+	        $field = $this->formatField($field);
 
             $this->pushField($field);
 
