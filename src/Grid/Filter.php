@@ -3,15 +3,15 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Facades\Admin;
-use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter\AbstractFilter;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use ReflectionClass;
 
 /**
  * Class Filter.
  *
- * @method Filter     is($column, $label = '')
+ * @method Filter     equal($column, $label = '')
  * @method Filter     like($column, $label = '')
  * @method Filter     gt($column, $label = '')
  * @method Filter     lt($column, $label = '')
@@ -20,11 +20,6 @@ use ReflectionClass;
  */
 class Filter
 {
-    /**
-     * @var Grid
-     */
-    protected $grid;
-
     /**
      * @var Model
      */
@@ -38,7 +33,7 @@ class Filter
     /**
      * @var array
      */
-    protected $supports = ['is', 'like', 'gt', 'lt', 'between', 'where'];
+    protected $supports = ['equal', 'is', 'like', 'gt', 'lt', 'between', 'where'];
 
     /**
      * If use a modal to hold the filters.
@@ -55,15 +50,24 @@ class Filter
     protected $useIdFilter = true;
 
     /**
+     * Action of search form.
+     *
+     * @var string
+     */
+    protected $action;
+
+    /**
+     * @var string
+     */
+    protected $view = 'admin::grid.filter';
+
+    /**
      * Create a new filter instance.
      *
-     * @param Grid  $grid
      * @param Model $model
      */
-    public function __construct(Grid $grid, Model $model)
+    public function __construct(Model $model)
     {
-        $this->grid = $grid;
-
         $this->model = $model;
 
         $this->is($this->model->eloquent()->getKeyName());
@@ -75,6 +79,20 @@ class Filter
     public function useModal()
     {
         $this->useModal = true;
+    }
+
+    /**
+     * Set action of search form.
+     *
+     * @param string $action
+     *
+     * @return $this
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
     }
 
     /**
@@ -140,16 +158,6 @@ class Filter
     }
 
     /**
-     * Get parent grid instance.
-     *
-     * @return Grid
-     */
-    public function getGrid()
-    {
-        return $this->grid;
-    }
-
-    /**
      * Get the string contents of the filter view.
      *
      * @return \Illuminate\View\View|string
@@ -165,20 +173,10 @@ class Filter
         }
 
         if ($this->useModal) {
-            return $this->renderModalFilter();
-        }
 
-        return view('admin::grid.filter')->with(['filters' => $this->filters, 'grid' => $this->grid]);
-    }
+            $this->view = 'admin::filter.modal';
 
-    /**
-     * Render modal filter.
-     *
-     * @return $this
-     */
-    public function renderModalFilter()
-    {
-        $script = <<<'EOT'
+            $script = <<<'EOT'
 
 $("#filter-modal .submit").click(function () {
     $("#filter-modal").modal('toggle');
@@ -187,9 +185,40 @@ $("#filter-modal .submit").click(function () {
 });
 
 EOT;
-        Admin::script($script);
+            Admin::script($script);
+        }
 
-        return view('admin::filter.modal')->with(['filters' => $this->filters(), 'grid' => $this->grid]);
+        return view($this->view)->with([
+            'action'    => $this->action ?: $this->urlWithoutFilters(),
+            'filters'   => $this->filters,
+        ]);
+    }
+
+    /**
+     * Get url without filter queryString.
+     *
+     * @return string
+     */
+    protected function urlWithoutFilters()
+    {
+        $columns = [];
+
+        /** @var Filter\AbstractFilter $filter **/
+        foreach ($this->filters as $filter) {
+            $columns[] = $filter->getColumn();
+        }
+
+        /** @var \Illuminate\Http\Request $request **/
+        $request = Request::instance();
+
+        $query = $request->query();
+        array_forget($query, $columns);
+
+        $question = $request->getBaseUrl().$request->getPathInfo() == '/' ? '/?' : '?';
+
+        return count($request->query()) > 0
+            ? $request->url().$question.http_build_query($query)
+            : $request->fullUrl();
     }
 
     /**
