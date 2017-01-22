@@ -353,7 +353,11 @@ class File extends Field
      */
     protected function preview()
     {
-        $files = json_decode($this->value, true);
+        $files = $this->value;
+
+        if (is_string($this->value)) {
+            $files = json_decode($this->value, true);
+        }
 
         if (!is_array($files)) {
             $files = [$this->value];
@@ -413,7 +417,10 @@ EOT;
         }
 
         if ($this->multiple) {
-            $caption = json_decode($caption, true);
+
+            if (is_string($caption)) {
+                $caption = json_decode($caption, true);
+            }
         } else {
             $caption = [$caption];
         }
@@ -516,7 +523,11 @@ EOT;
      */
     public function destroy()
     {
-        $files = json_decode($this->original, true);
+        $files = $this->original;
+
+        if (is_string($this->original)) {
+            $files = json_decode($this->original, true);
+        }
 
         if (!is_array($files)) {
             $files = [$this->original];
