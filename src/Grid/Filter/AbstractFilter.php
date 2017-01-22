@@ -28,7 +28,7 @@ abstract class AbstractFilter
     protected $value;
 
     /**
-     * @var
+     * @var string
      */
     protected $column;
 
@@ -145,10 +145,16 @@ abstract class AbstractFilter
      * Select filter.
      *
      * @param array $options
+     *
+     * @return $this
      */
     public function select($options = [])
     {
-        $this->setField(new Select($options));
+        $select = new Select($options);
+
+        $select->setParent($this);
+
+        return $this->setField($select);
     }
 
     /**
@@ -168,7 +174,7 @@ abstract class AbstractFilter
      */
     protected function setField($field)
     {
-        $this->field = $field;
+        return $this->field = $field;
     }
 
     /**
@@ -191,9 +197,24 @@ abstract class AbstractFilter
         return $this->id;
     }
 
+    /**
+     * Get column name of current filter.
+     *
+     * @return string
+     */
     public function getColumn()
     {
         return $this->column;
+    }
+
+    /**
+     * Get value of current filter.
+     *
+     * @return array|string
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /**
