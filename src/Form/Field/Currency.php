@@ -2,9 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Currency extends Field
+class Currency extends Text
 {
     protected $symbol = '$';
 
@@ -45,6 +43,9 @@ $('.{$this->getElementClass()}').inputmask("currency", $options);
 
 EOT;
 
-        return parent::render()->with(['symbol' => $this->symbol]);
+        $this->prepend($this->symbol)
+            ->defaultAttribute('style', 'width: 120px');
+
+        return parent::render();
     }
 }

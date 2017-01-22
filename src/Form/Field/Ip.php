@@ -2,9 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Ip extends Field
+class Ip extends Text
 {
     protected $rules = 'ip';
 
@@ -14,7 +12,15 @@ class Ip extends Field
 
     public function render()
     {
-        $this->script = '$("[data-mask]").inputmask();';
+        $options = json_encode(['alias' => 'ip']);
+
+        $this->script = <<<EOT
+
+$('.{$this->getElementClass()}').inputmask($options);
+EOT;
+
+        $this->prepend('<i class="fa fa-laptop"></i>')
+            ->defaultAttribute('style', 'width: 130px');
 
         return parent::render();
     }

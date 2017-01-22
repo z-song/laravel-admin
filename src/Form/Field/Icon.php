@@ -2,10 +2,10 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Icon extends Field
+class Icon extends Text
 {
+    protected $default = 'fa-pencil';
+
     protected static $css = [
         '/packages/admin/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css',
     ];
@@ -18,9 +18,12 @@ class Icon extends Field
     {
         $this->script = <<<EOT
 
-$('.{$this->getElementClass()}').iconpicker();
+$('.{$this->getElementClass()}').iconpicker({placement:'bottomLeft'});
 
 EOT;
+
+        $this->prepend('<i class="fa fa-pencil"></i>')
+            ->defaultAttribute('style', 'width: 140px');
 
         return parent::render();
     }

@@ -2,9 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Date extends Field
+class Date extends Text
 {
     protected static $css = [
         '/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
@@ -39,6 +37,9 @@ class Date extends Field
         $this->options['locale'] = config('app.locale');
 
         $this->script = "$('.{$this->getElementClass()}').datetimepicker(".json_encode($this->options).');';
+
+        $this->prepend('<i class="fa fa-calendar"></i>')
+            ->defaultAttribute('style', 'width: 110px');
 
         return parent::render();
     }
