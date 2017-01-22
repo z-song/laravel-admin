@@ -55,12 +55,14 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\SwitchField    switch($column, $label = '')
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
- * @method Field\Divide         divide()
+ * @method Field\Divide         divider()
  * @method Field\Password       password($column, $label = '')
  * @method Field\Decimal        decimal($column, $label = '')
  * @method Field\Html           html($html, $label = '')
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
+ * @method Field\Embeds         embeds($column, $label = '')
+ *
  */
 class Form
 {
@@ -142,6 +144,9 @@ class Form
      */
     protected $tab = null;
 
+    /**
+     * Remove flag in `has many` form.
+     */
     const REMOVE_FLAG_NAME = '_remove_';
 
     /**
@@ -313,10 +318,10 @@ class Form
             $inserts = $this->prepareInsert($this->updates);
 
             foreach ($inserts as $column => $value) {
-                if (is_array($value)) {
-                    $value = implode(',', $value);
-                }
-                $this->model->setAttribute($column, $value);
+                $this->model->setAttribute(
+                    $column,
+                    $this->formatValueBeforeSave($value)
+                );
             }
 
             $this->model->save();
@@ -499,11 +504,10 @@ class Form
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
-                if (is_array($value)) {
-                    $value = implode(',', $value);
-                }
-
-                $this->model->setAttribute($column, $value);
+                $this->model->setAttribute(
+                    $column,
+                    $this->formatValueBeforeSave($value)
+                );
             }
 
             $this->model->save();
@@ -520,6 +524,28 @@ class Form
         }
 
         return $this->redirectAfterUpdate();
+    }
+
+    /**
+     * Cast values to valid string format.
+     *
+     * For array value, format assoc array to json string, and indexed array to dot nation string.
+     *
+     * @param array|string $value
+     *
+     * @return string
+     */
+    protected function formatValueBeforeSave($value)
+    {
+        if (is_array($value)) {
+            if (Arr::isAssoc($value)) {
+                $value = json_encode($value);
+            } else {
+                $value = implode(',', $value);
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -622,10 +648,10 @@ class Form
                     }
 
                     foreach ($prepared[$name] as $column => $value) {
-                        if (is_array($value)) {
-                            $value = implode(',', $value);
-                        }
-                        $related->setAttribute($column, $value);
+                        $related->setAttribute(
+                            $column,
+                            $this->formatValueBeforeSave($value)
+                        );
                     }
 
                     $related->save();
@@ -1048,9 +1074,9 @@ class Form
             'display'           => \Encore\Admin\Form\Field\Display::class,
             'divider'           => \Encore\Admin\Form\Field\Divide::class,
             'divide'            => \Encore\Admin\Form\Field\Divide::class,
+            'embeds'             => \Encore\Admin\Form\Field\Embeds::class,
             'editor'            => \Encore\Admin\Form\Field\Editor::class,
             'email'             => \Encore\Admin\Form\Field\Email::class,
-            'embedsMany'        => \Encore\Admin\Form\Field\EmbedsMany::class,
             'file'              => \Encore\Admin\Form\Field\File::class,
             'hasMany'           => \Encore\Admin\Form\Field\HasMany::class,
             'hidden'            => \Encore\Admin\Form\Field\Hidden::class,
