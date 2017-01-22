@@ -2,9 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Mobile extends Field
+class Mobile extends Text
 {
     protected static $js = [
         '/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
@@ -27,6 +25,9 @@ class Mobile extends Field
 
 $('.{$this->getElementClass()}').inputmask($options);
 EOT;
+
+        $this->prepend('<i class="fa fa-phone"></i>')
+            ->defaultAttribute('style', 'width: 150px');
 
         return parent::render();
     }

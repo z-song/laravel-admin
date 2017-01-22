@@ -2,9 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Number extends Field
+class Number extends Text
 {
     protected static $js = [
         '/packages/admin/number-input/bootstrap-number-input.js',
@@ -25,6 +23,8 @@ $('.{$this->getElementClass()}:not(.initialized)')
     });
 
 EOT;
+
+        $this->prepend('')->defaultAttribute('style', 'width: 100px');
 
         return parent::render();
     }
