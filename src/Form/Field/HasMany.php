@@ -91,6 +91,7 @@ class HasMany extends Field
 
         $rules = $attributes = [];
 
+        /** @var Field $field */
         foreach ($form->fields() as $field) {
             if (!$fieldRules = $field->getRules()) {
                 continue;
@@ -475,7 +476,7 @@ EOT;
      *
      * @throws \Exception
      *
-     * @return $this
+     * @return \Illuminate\View\View
      */
     public function render()
     {
