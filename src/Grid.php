@@ -221,7 +221,7 @@ class Grid
      */
     protected function setupFilter()
     {
-        $this->filter = new Filter($this, $this->model());
+        $this->filter = new Filter($this->model());
     }
 
     /**

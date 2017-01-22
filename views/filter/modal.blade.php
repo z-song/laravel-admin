@@ -1,5 +1,6 @@
 <div class="btn-group pull-right" style="margin-right: 10px">
     <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#filter-modal"><i class="fa fa-filter"></i>&nbsp;&nbsp;{{ trans('admin::lang.filter') }}</a>
+    <a href="{!! $action !!}" class="btn btn-sm btn-warning"><i class="fa fa-undo"></i></a>
 </div>
 
 <div class="modal fade" id="filter-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -12,7 +13,7 @@
                 </button>
                 <h4 class="modal-title" id="myModalLabel">{{ trans('admin::lang.filter') }}</h4>
             </div>
-            <form action="/{!! $grid->resource() !!}" method="get" pjax-container>
+            <form action="{!! $action !!}" method="get" pjax-container>
                 <div class="modal-body">
                     <div class="form">
                         @foreach($filters as $filter)

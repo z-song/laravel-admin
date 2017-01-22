@@ -32,14 +32,16 @@ class UserGridTest extends TestCase
             ->seeInElement('tr th', 'Created at')
             ->seeInElement('tr th', 'Updated at');
 
-        $this->seeElement('form[action="/admin/users"][method=get]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name=id]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name=username]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name=email]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name="profile[start_at][start]"]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name="profile[start_at][end]"]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name="profile[end_at][start]"]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name="profile[end_at][end]"]');
+        $action = url('/admin/users');
+
+        $this->seeElement("form[action='$action'][method=get]")
+            ->seeElement("form[action='$action'][method=get] input[name=id]")
+            ->seeElement("form[action='$action'][method=get] input[name=username]")
+            ->seeElement("form[action='$action'][method=get] input[name=email]")
+            ->seeElement("form[action='$action'][method=get] input[name='profile[start_at][start]']")
+            ->seeElement("form[action='$action'][method=get] input[name='profile[start_at][end]']")
+            ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][start]']")
+            ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][end]']");
 
         $this->seeInElement('a[href="/admin/users?_export_=1"]', 'Export')
             ->seeInElement('a[href="/admin/users/create"]', 'New');
