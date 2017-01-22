@@ -35,6 +35,20 @@ class Embeds extends Field
     }
 
     /**
+     * Prepare input data for insert or update.
+     *
+     * @param array $input
+     *
+     * @return array
+     */
+    public function prepare($input)
+    {
+        $form = $this->buildEmbeddedForm();
+
+        return $form->setOriginal($this->original)->prepare($input);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getValidator(array $input)
@@ -47,6 +61,7 @@ class Embeds extends Field
 
         $rules = $attributes = [];
 
+        /** @var Field $field */
         foreach ($this->buildEmbeddedForm()->fields() as $field) {
             if (!$fieldRules = $field->getRules()) {
                 continue;

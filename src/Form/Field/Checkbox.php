@@ -15,14 +15,6 @@ class Checkbox extends MultipleSelect
     ];
 
     /**
-     * {@inheritdoc}
-     */
-    public function prepare(array $value)
-    {
-        return $value;
-    }
-
-    /**
      * Set options.
      *
      * @param array|callable|string $options
