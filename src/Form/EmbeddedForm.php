@@ -20,6 +20,13 @@ class EmbeddedForm
     protected $fields;
 
     /**
+     * Original data for this field.
+     *
+     * @var array
+     */
+    protected $original = [];
+
+    /**
      * Column name for this form.
      *
      * @var string
@@ -63,6 +70,80 @@ class EmbeddedForm
     }
 
     /**
+     * Set original values for fields.
+     *
+     * @param array  $data
+     *
+     * @return $this
+     */
+    public function setOriginal($data)
+    {
+        if (empty($data)) {
+            return $this;
+        }
+
+        $this->original = $data;
+
+        return $this;
+    }
+
+    /**
+     * Prepare for insert or update.
+     *
+     * @param array $input
+     *
+     * @return mixed
+     */
+    public function prepare($input)
+    {
+        foreach ($input as $key => $record) {
+            $this->setFieldOriginalValue($key);
+            $input[$key] = $this->prepareValue($key, $record);
+        }
+
+        return $input;
+    }
+
+    /**
+     * Do prepare work for each field.
+     *
+     * @param string $key
+     * @param string $record
+     *
+     * @return mixed
+     */
+    protected function prepareValue($key, $record)
+    {
+        $field = $this->fields->first(function (Field $field) use ($key) {
+            return in_array($key, (array) $field->column());
+        });
+
+        if (method_exists($field, 'prepare')) {
+            return $field->prepare($record);
+        }
+
+        return $record;
+    }
+
+    /**
+     * Set original data for each field.
+     *
+     * @param string $key
+     *
+     * @return void
+     */
+    protected function setFieldOriginalValue($key)
+    {
+        if (array_key_exists($key, $this->original)) {
+            $values = $this->original[$key];
+
+            $this->fields->each(function (Field $field) use ($values) {
+                $field->setOriginal($values);
+            });
+        }
+    }
+
+    /**
      * Fill data to all fields in form.
      *
      * @param array $data
@@ -71,9 +152,9 @@ class EmbeddedForm
      */
     public function fill(array $data)
     {
-        foreach ($this->fields as $field) {
+        $this->fields->each(function (Field $field) use ($data) {
             $field->fill($data);
-        }
+        });
 
         return $this;
     }
@@ -132,13 +213,14 @@ class EmbeddedForm
      * @param string $method
      * @param array  $arguments
      *
-     * @return $this|Field
+     * @return Field|$this
      */
     public function __call($method, $arguments)
     {
         if ($className = Form::findFieldClass($method)) {
             $column = array_get($arguments, 0, '');
 
+            /** @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
             $field->setForm($this->parent);
