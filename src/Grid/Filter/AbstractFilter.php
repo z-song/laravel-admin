@@ -191,6 +191,11 @@ abstract class AbstractFilter
         return $this->id;
     }
 
+    public function getColumn()
+    {
+        return $this->column;
+    }
+
     /**
      * Build conditions of filter.
      *
