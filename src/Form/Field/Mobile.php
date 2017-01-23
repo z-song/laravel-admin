@@ -8,18 +8,18 @@ class Mobile extends Text
         '/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
     ];
 
-    protected $format = '99999999999';
-
-    public function format($format)
-    {
-        $this->format = $format;
-
-        return $this;
-    }
+    /**
+     * @see https://github.com/RobinHerbots/Inputmask#options
+     *
+     * @var array
+     */
+    protected $options = [
+        'mask' => '99999999999',
+    ];
 
     public function render()
     {
-        $options = json_encode(['mask' => $this->format]);
+        $options = json_encode($this->options);
 
         $this->script = <<<EOT
 
