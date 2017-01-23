@@ -16,6 +16,7 @@ class Currency extends Text
      * @var array
      */
     protected $options = [
+        'alias'                 => 'currency',
         'radixPoint'            => '.',
         'prefix'                => '',
         'removeMaskOnSubmit'    => true,
@@ -39,7 +40,7 @@ class Currency extends Text
 
         $this->script = <<<EOT
 
-$('.{$this->getElementClass()}').inputmask("currency", $options);
+$('.{$this->getElementClass()}').inputmask($options);
 
 EOT;
 
