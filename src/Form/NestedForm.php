@@ -195,7 +195,7 @@ class NestedForm
 
             $value = $this->fetchColumnValue($record, $columns);
 
-            if (empty($value)) {
+            if (is_null($value)) {
                 continue;
             }
 
