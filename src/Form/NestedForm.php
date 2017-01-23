@@ -333,7 +333,7 @@ class NestedForm
      */
     public function setErrorKey($key = null)
     {
-        $key = is_null($key) ? 'new_'.static::DEFAULT_KEY_NAME : $key;
+        $key = $key ?: static::DEFAULT_KEY_NAME;
 
         /** @var Field $field */
         foreach ($this->fields as $field) {
@@ -391,7 +391,7 @@ class NestedForm
      */
     protected function formatElementName($column, $key = null)
     {
-        $key = is_null($key) ? 'new_'.static::DEFAULT_KEY_NAME : $key;
+        $key = $key ?: static::DEFAULT_KEY_NAME;
 
         return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
     }
@@ -452,7 +452,7 @@ class NestedForm
 
         $elementName = $elementClass = $errorKey = '';
 
-        $key = is_null($this->key) ? 'new_'.static::DEFAULT_KEY_NAME : $this->key;
+        $key = $this->key ?: static::DEFAULT_KEY_NAME;
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {
