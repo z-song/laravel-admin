@@ -2,7 +2,7 @@
 
     <label for="{{$id}}" class="col-sm-2 col-lg-2 control-label">{{$label}}</label>
 
-    <div class="col-sm-6 col-lg-6 col-lg-6">
+    <div class="col-sm-8 col-lg-8">
 
         @include('admin::form.error')
 
