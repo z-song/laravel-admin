@@ -1,7 +1,7 @@
 
 <div class="row">
     <div class="col-md-2"><h4 class="pull-right">{{ $label }}</h4></div>
-    <div class="col-md-6"></div>
+    <div class="col-md-8"></div>
 </div>
 
 <hr style="margin-top: 0px;">

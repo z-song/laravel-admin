@@ -1,8 +1,8 @@
 <div class="form-group {!! !$errors->has($column) ?: 'has-error' !!}">
 
-    <label for="{{$id}}" class="col-sm-2 control-label">{{$label}}</label>
+    <label for="{{$id}}" class="col-sm-2 col-lg-2 col-lg-2 control-label">{{$label}}</label>
 
-    <div class="col-sm-6" id="{{$id}}">
+    <div class="col-sm-10 col-lg-8 col-lg-8" id="{{$id}}">
 
         @include('admin::form.error')
 
