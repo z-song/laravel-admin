@@ -110,7 +110,9 @@ class Filter
      */
     public function conditions()
     {
-        $inputs = array_filter(Input::all(), function ($input) {
+        $inputs = array_dot(Input::all());
+
+        $inputs = array_filter($inputs, function ($input) {
             return $input !== '';
         });
 
