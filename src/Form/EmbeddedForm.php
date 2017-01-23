@@ -47,7 +47,6 @@ use Illuminate\Support\Collection;
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
- *
  */
 class EmbeddedForm
 {
@@ -116,7 +115,7 @@ class EmbeddedForm
     /**
      * Set original values for fields.
      *
-     * @param array  $data
+     * @param array $data
      *
      * @return $this
      */
