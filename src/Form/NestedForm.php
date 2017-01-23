@@ -48,7 +48,6 @@ use Illuminate\Support\Collection;
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
- *
  */
 class NestedForm
 {
@@ -244,8 +243,6 @@ class NestedForm
 
             return $value;
         }
-
-        return null;
     }
 
     /**
@@ -333,7 +330,7 @@ class NestedForm
      */
     public function setErrorKey($key = null)
     {
-        $key = $key ?: 'new_' . static::DEFAULT_KEY_NAME;
+        $key = $key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         /** @var Field $field */
         foreach ($this->fields as $field) {
@@ -391,7 +388,7 @@ class NestedForm
      */
     protected function formatElementName($column, $key = null)
     {
-        $key = $key ?: 'new_' . static::DEFAULT_KEY_NAME;
+        $key = $key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
     }
@@ -452,7 +449,7 @@ class NestedForm
 
         $elementName = $elementClass = $errorKey = '';
 
-        $key = $this->key ?: 'new_' . static::DEFAULT_KEY_NAME;
+        $key = $this->key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {
