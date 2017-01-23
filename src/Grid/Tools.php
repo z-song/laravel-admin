@@ -52,11 +52,11 @@ class Tools implements Renderable
     /**
      * Append tools.
      *
-     * @param AbstractTool $tool
+     * @param AbstractTool|string $tool
      *
      * @return $this
      */
-    public function append(AbstractTool $tool)
+    public function append($tool)
     {
         $this->tools->push($tool);
 
@@ -66,15 +66,39 @@ class Tools implements Renderable
     /**
      * Prepend a tool.
      *
-     * @param AbstractTool $tool
+     * @param AbstractTool|string $tool
      *
      * @return $this
      */
-    public function prepend(AbstractTool $tool)
+    public function prepend($tool)
     {
         $this->tools->prepend($tool);
 
         return $this;
+    }
+
+    /**
+     * Disable refresh button.
+     *
+     * @return void
+     */
+    public function disableRefreshButton()
+    {
+        $this->tools = $this->tools->reject(function ($tool) {
+            return $tool instanceof RefreshButton;
+        });
+    }
+
+    /**
+     * Disable batch actions.
+     *
+     * @return void
+     */
+    public function disableBatchActions()
+    {
+        $this->tools = $this->tools->reject(function ($tool) {
+            return $tool instanceof BatchActions;
+        });
     }
 
     /**
@@ -94,8 +118,13 @@ class Tools implements Renderable
      */
     public function render()
     {
-        return $this->tools->map(function (AbstractTool $tool) {
-            return $tool->setGrid($this->grid)->render();
+        return $this->tools->map(function ( $tool) {
+
+            if ($tool instanceof AbstractTool) {
+                return $tool->setGrid($this->grid)->render();
+            }
+
+            return (string) $tool;
         })->implode(' ');
     }
 }
