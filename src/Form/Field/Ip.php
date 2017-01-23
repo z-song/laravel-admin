@@ -16,7 +16,7 @@ class Ip extends Text
      * @var array
      */
     protected $options = [
-        'alias' => 'ip'
+        'alias' => 'ip',
     ];
 
     public function render()

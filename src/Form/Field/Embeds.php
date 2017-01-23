@@ -69,7 +69,7 @@ class Embeds extends Field
 
             $column = $field->column();
 
-            /**
+            /*
              *
              * For single column field format rules to:
              * [
@@ -100,12 +100,11 @@ class Embeds extends Field
             }
 
             /**
-             *
              * For single column field format attributes to:
              * [
              *     'extra.name' => $label
              *     'extra.email' => $label
-             * ]
+             * ].
              *
              * For multiple column field with rules like 'required':
              * 'extra' => [
@@ -181,7 +180,6 @@ class Embeds extends Field
         $column = array_flip($column);
 
         foreach ($input[$this->column] as $key => $value) {
-
             if (!array_key_exists($key, $column)) {
                 continue;
             }
@@ -196,7 +194,6 @@ class Embeds extends Field
              * forget the old key and value
              */
             array_forget($input, "{$this->column}.$key");
-
         }
     }
 
