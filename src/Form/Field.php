@@ -601,7 +601,7 @@ class Field
         $html = [];
 
         foreach ($this->attributes as $name => $value) {
-            $html[] = "$name=\"$value\"";
+            $html[] = $name.'="'.e($value).'"';
         }
 
         return implode(' ', $html);
