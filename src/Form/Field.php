@@ -269,10 +269,10 @@ class Field
      */
     public function fill($data)
     {
-        // Field value is already setted.
-        if (!is_null($this->value)) {
-            return;
-        }
+         // Field value is already setted.
+//        if (!is_null($this->value)) {
+//            return;
+//        }
 
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
