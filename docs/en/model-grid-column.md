@@ -229,7 +229,7 @@ For example, the following column shows the string value of the `title` field:
 $grid->title();
 ```
 
-在`title`列输出的字符串基础上调用`Str::limit()`方法
+Call `Str::limit()` on `title` colum.
 
 Can call `Str::limit()` method on the output string of the `title` column.
 
