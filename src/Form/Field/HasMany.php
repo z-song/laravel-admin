@@ -373,7 +373,7 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
 
     var count = $('.has-many-{$this->column}-forms .has-many-{$this->column}-form').size() + 1;
 
-    var template = tpl.html().replace(/\[{$defaultKey}\]/g, '['+count+']');
+    var template = tpl.html().replace(/{$defaultKey}/g, ''+count+'');
     $('.has-many-{$this->column}-forms').append(template);
     {$template->getTemplateScript()}
 });
