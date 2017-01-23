@@ -104,8 +104,10 @@ $(document).on('change', ".{$this->getClass($column)}", function () {
             $(target).append($('<option>', {
                 value: item.$idField,
                 text : item.$textField
-            })).trigger('change');
+            }));
         });
+        
+        $(target).trigger('change');
     });
 });
 EOT;
