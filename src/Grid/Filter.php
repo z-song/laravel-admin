@@ -175,7 +175,6 @@ class Filter
         }
 
         if ($this->useModal) {
-
             $this->view = 'admin::filter.modal';
 
             $script = <<<'EOT'
@@ -205,12 +204,12 @@ EOT;
     {
         $columns = [];
 
-        /** @var Filter\AbstractFilter $filter **/
+        /** @var Filter\AbstractFilter $filter * */
         foreach ($this->filters as $filter) {
             $columns[] = $filter->getColumn();
         }
 
-        /** @var \Illuminate\Http\Request $request **/
+        /** @var \Illuminate\Http\Request $request * */
         $request = Request::instance();
 
         $query = $request->query();
