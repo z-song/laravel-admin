@@ -5,7 +5,6 @@ namespace Encore\Admin\Grid\Filter\Field;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid\Filter\AbstractFilter;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Str;
 
 class Select
 {
@@ -32,7 +31,7 @@ class Select
     }
 
     /**
-     * Set parent filter
+     * Set parent filter.
      *
      * @param AbstractFilter $filter
      */
@@ -68,7 +67,7 @@ class Select
     {
         return [
             'options' => $this->buildOptions(),
-            'class'   => str_replace('.', '_', $this->parent->getColumn())
+            'class'   => str_replace('.', '_', $this->parent->getColumn()),
         ];
     }
 

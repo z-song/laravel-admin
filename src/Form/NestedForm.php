@@ -48,7 +48,6 @@ use Illuminate\Support\Collection;
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
- *
  */
 class NestedForm
 {
@@ -193,9 +192,11 @@ class NestedForm
         foreach ($this->fields as $field) {
             $columns = $field->column();
 
+            $isHidden = $field instanceof \Encore\Admin\Form\Field\Hidden;
+
             $value = $this->fetchColumnValue($record, $columns);
 
-            if (is_null($value)) {
+            if (is_null($value) || ($isHidden && $value === '')) {
                 continue;
             }
 
@@ -203,7 +204,7 @@ class NestedForm
                 $value = $field->prepare($value);
             }
 
-            if (($field instanceof \Encore\Admin\Form\Field\Hidden) || $value != $field->original()) {
+            if ($isHidden || $value != $field->original()) {
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
                         array_set($prepared, $column, $value[$name]);
@@ -244,8 +245,6 @@ class NestedForm
 
             return $value;
         }
-
-        return null;
     }
 
     /**
@@ -333,7 +332,7 @@ class NestedForm
      */
     public function setErrorKey($key = null)
     {
-        $key = $key ?: static::DEFAULT_KEY_NAME;
+        $key = $key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         /** @var Field $field */
         foreach ($this->fields as $field) {
@@ -391,7 +390,7 @@ class NestedForm
      */
     protected function formatElementName($column, $key = null)
     {
-        $key = $key ?: static::DEFAULT_KEY_NAME;
+        $key = $key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
     }
@@ -452,7 +451,7 @@ class NestedForm
 
         $elementName = $elementClass = $errorKey = '';
 
-        $key = $this->key ?: static::DEFAULT_KEY_NAME;
+        $key = $this->key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {
