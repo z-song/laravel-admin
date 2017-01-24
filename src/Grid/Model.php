@@ -384,9 +384,9 @@ class Model
      *
      * @param Relation $relation
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     protected function joinParameters(Relation $relation)
     {
@@ -397,7 +397,7 @@ class Model
                 $relatedTable,
                 $relation->getForeignKey(),
                 '=',
-                $relatedTable . '.' . $relation->getRelated()->getKeyName(),
+                $relatedTable.'.'.$relation->getRelated()->getKeyName(),
             ];
         }
 
