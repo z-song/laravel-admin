@@ -330,7 +330,7 @@ class HasMany extends Field
 
         $forms = [];
 
-        /**
+        /*
          * If redirect from `exception` or `validation error` page.
          *
          * Then get form data from session flash.
@@ -488,7 +488,7 @@ EOT;
         return parent::render()->with([
             'forms'         => $this->buildRelatedForms(),
             'template'      => $template,
-            'relationName'  => $this->relationName
+            'relationName'  => $this->relationName,
         ]);
     }
 }

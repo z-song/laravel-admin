@@ -417,7 +417,6 @@ EOT;
         }
 
         if ($this->multiple) {
-
             if (is_string($caption)) {
                 $caption = json_decode($caption, true);
             }
