@@ -48,6 +48,7 @@ class Select
     protected function buildOptions()
     {
         if ($this->options instanceof \Closure) {
+            $this->options = $this->options->bindTo($this->parent);
             $this->options = call_user_func($this->options, $this->parent->getValue());
         }
 
