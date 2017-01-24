@@ -192,9 +192,11 @@ class NestedForm
         foreach ($this->fields as $field) {
             $columns = $field->column();
 
+	        $isHidden = $field instanceof \Encore\Admin\Form\Field\Hidden;
+
             $value = $this->fetchColumnValue($record, $columns);
 
-            if (is_null($value) || $value === '') {
+            if (is_null($value) || ($isHidden && $value === '') ) {
                 continue;
             }
 
@@ -202,7 +204,7 @@ class NestedForm
                 $value = $field->prepare($value);
             }
 
-            if (($field instanceof \Encore\Admin\Form\Field\Hidden) || $value != $field->original()) {
+            if ($isHidden || $value != $field->original()) {
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
                         array_set($prepared, $column, $value[$name]);
