@@ -327,6 +327,20 @@ class File extends Field
     }
 
     /**
+     * Get directory for store file.
+     *
+     * @return mixed|string
+     */
+    public function getDirectory()
+    {
+        if ($this->directory instanceof \Closure) {
+            return call_user_func($this->directory, $this->form);
+        }
+
+        return $this->directory;
+    }
+
+    /**
      * Upload file and delete original file.
      *
      * @param UploadedFile $file
@@ -337,7 +351,7 @@ class File extends Field
     {
         $this->renameIfExists($file);
 
-        $target = $this->directory.'/'.$this->name;
+        $target = $this->getDirectory().'/'.$this->name;
 
         $this->storage->put($target, file_get_contents($file->getRealPath()));
 
@@ -510,7 +524,7 @@ EOT;
      */
     public function renameIfExists(UploadedFile $file)
     {
-        if ($this->storage->exists("$this->directory/$this->name")) {
+        if ($this->storage->exists("{$this->getDirectory()}/$this->name")) {
             $this->name = $this->generateUniqueName($file);
         }
     }
