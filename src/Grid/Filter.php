@@ -70,7 +70,7 @@ class Filter
     {
         $this->model = $model;
 
-        $this->is($this->model->eloquent()->getKeyName());
+        $this->equal($this->model->eloquent()->getKeyName());
     }
 
     /**
@@ -134,6 +134,8 @@ class Filter
      */
     protected function addFilter(AbstractFilter $filter)
     {
+        $filter->setParent($this);
+
         return $this->filters[] = $filter;
     }
 
@@ -142,7 +144,7 @@ class Filter
      *
      * @return AbstractFilter[]
      */
-    protected function filters()
+    public function filters()
     {
         return $this->filters;
     }

@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Grid\Filter;
 
+use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\Filter\Field\DateTime;
 use Encore\Admin\Grid\Filter\Field\Select;
 use Encore\Admin\Grid\Filter\Field\Text;
@@ -45,6 +46,11 @@ abstract class AbstractFilter
      * @var string
      */
     protected $query = 'where';
+
+    /**
+     * @var Filter
+     */
+    protected $parent;
 
     /**
      * AbstractFilter constructor.
@@ -119,6 +125,57 @@ abstract class AbstractFilter
     public function formatId($columns)
     {
         return str_replace('.', '_', $columns);
+    }
+
+    /**
+     * @param Filter $filter
+     */
+    public function setParent(Filter $filter)
+    {
+        $this->parent = $filter;
+    }
+
+    /**
+     * Get siblings of current filter.
+     *
+     * @param null $index
+     * @return AbstractFilter[]|mixed
+     */
+    public function siblings($index = null)
+    {
+        if (!is_null($index)) {
+            return array_get($this->parent->filters(), $index);
+        }
+
+        return $this->parent->filters();
+    }
+
+    /**
+     * Get previous filter.
+     *
+     * @param int $step
+     *
+     * @return AbstractFilter[]|mixed
+     */
+    public function previous($step = 1)
+    {
+        return $this->siblings(
+            array_search($this, $this->parent->filters()) - $step
+        );
+    }
+
+    /**
+     * Get next filter.
+     *
+     * @param int $step
+     *
+     * @return AbstractFilter[]|mixed
+     */
+    public function next($step = 1)
+    {
+        return $this->siblings(
+            array_search($this, $this->parent->filters()) + $step
+        );
     }
 
     /**
