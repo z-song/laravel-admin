@@ -52,14 +52,14 @@ use Illuminate\Support\Collection;
  */
 class NestedForm
 {
-    const DEFAULT_KEY_NAME = '_key_';
+    const DEFAULT_KEY_NAME = '__LA_KEY__';
 
     const REMOVE_FLAG_NAME = '_remove_';
 
     const REMOVE_FLAG_CLASS = 'fom-removed';
 
     /**
-     * @var \Illuminate\Database\Eloquent\Relations\HasMany|string
+     * @var string
      */
     protected $relationName;
 
@@ -85,13 +85,6 @@ class NestedForm
     protected $original = [];
 
     /**
-     * template.
-     *
-     * @var array
-     */
-    protected $template = [];
-
-    /**
      * @var \Encore\Admin\Form
      */
     protected $form;
@@ -101,18 +94,30 @@ class NestedForm
      *
      * NestedForm constructor.
      *
-     * @param $relation
-     * @param null $key
+     * @param string $relation
+     * @param null   $key
      */
     public function __construct($relation, $key = null)
     {
-        //    	$this->form = $form;
-
         $this->relationName = $relation;
 
         $this->key = $key;
 
         $this->fields = new Collection();
+    }
+
+    /**
+     * Set Form.
+     *
+     * @param Form $form
+     *
+     * @return $this
+     */
+    public function setForm(Form $form)
+    {
+        $this->form = $form;
+
+        return $this;
     }
 
     /**
@@ -189,7 +194,7 @@ class NestedForm
 
         $prepared = [];
 
-        /** @var Field $field */
+        /* @var Field $field */
         foreach ($this->fields as $field) {
             $columns = $field->column();
 
@@ -271,16 +276,6 @@ class NestedForm
     }
 
     /**
-     * Get relation name of this form.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|string
-     */
-    public function getRelationName()
-    {
-        return $this->relationName;
-    }
-
-    /**
      * Fill data to all fields in form.
      *
      * @param array $data
@@ -289,7 +284,7 @@ class NestedForm
      */
     public function fill(array $data)
     {
-        /** @var Field $field */
+        /* @var Field $field */
         foreach ($this->fields() as $field) {
             $field->fill($data);
         }
@@ -298,193 +293,62 @@ class NestedForm
     }
 
     /**
-     * set Element class.
+     * Get the html and script of template.
      *
-     * @return $this
+     * @return array
      */
-    public function setElementClass()
-    {
-        /** @var Field $field */
-        foreach ($this->fields as $field) {
-            $column = $field->column();
-
-            $class = '';
-
-            if (is_array($column)) {
-                foreach ($column as $k => $name) {
-                    $class[$k] = "{$this->relationName}_$name";
-                }
-            } else {
-                $class = "{$this->relationName}_{$field->column()}";
-            }
-
-            $field->setElementClass($class);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set error key for each field in the nested form.
-     *
-     * @param string $key
-     *
-     * @return $this
-     */
-    public function setErrorKey($key = null)
-    {
-        $key = $key ?: static::DEFAULT_KEY_NAME;
-
-        /** @var Field $field */
-        foreach ($this->fields as $field) {
-            $column = $field->column();
-
-            $errorKey = '';
-
-            if (is_array($column)) {
-                foreach ($column as $k => $name) {
-                    $errorKey[$k] = "{$this->relationName}.$key.$name";
-                }
-            } else {
-                $errorKey = "{$this->relationName}.$key.{$field->column()}";
-            }
-
-            $field->setErrorKey($errorKey);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set form element name.
-     *
-     * @param null $key
-     *
-     * @return $this
-     */
-    public function setElementName($key = null)
-    {
-        $this->fields->each(function (Field $field) use ($key) {
-            $column = $field->column();
-
-            if (is_array($column)) {
-                $name = array_map(function ($col) use ($key) {
-                    return $this->formatElementName($col, $key);
-                }, $column);
-            } else {
-                $name = $this->formatElementName($column, $key);
-            }
-
-            $field->setElementName($name);
-        });
-
-        return $this;
-    }
-
-    /**
-     * Format form element name.
-     *
-     * @param string $column
-     * @param string $key
-     *
-     * @return string
-     */
-    protected function formatElementName($column, $key = null)
-    {
-        $key = $key ?: static::DEFAULT_KEY_NAME;
-
-        return sprintf('%s[%s][%s]', $this->relationName, $key, $column);
-    }
-
-    /**
-     * Build template.
-     *
-     * @return $this
-     */
-    public function buildTemplate()
+    public function getTemplateHtmlAndScript()
     {
         $html = '';
         $scripts = [];
 
-        /** @var Field $field */
+        /* @var Field $field */
         foreach ($this->fields() as $field) {
-            $html .= $field->render();  //when field render, will push $script to Admin
 
-            if ($script = $field->getScript()) {
-                $scripts[] = $field->getScript();
+            //when field render, will push $script to Admin
+            $html .= $field->render();
 
-                /*
-                 * Del the lastest script
-                 */
-                array_pop(Admin::$script);
+            /*
+             * Get and remove the last script of Admin::$script stack.
+             */
+            if ($field->getScript()) {
+                $scripts[] = array_pop(Admin::$script);
             }
         }
 
-        $this->template['html'] = $html;
-        $this->template['script'] = implode("\r\n", $scripts); //separate scripts with enter
-
-        return $this;
+        return [$html, implode("\r\n", $scripts)];
     }
 
     /**
-     * Get template script.
+     * Set `errorKey` `elementName` `elementClass` for fields inside hasmany fields.
      *
-     * @return string
-     */
-    public function getTemplateHtml()
-    {
-        return $this->template['html'];
-    }
-
-    /**
-     * Get template script.
+     * @param Field $field
      *
-     * @return string
+     * @return Field
      */
-    public function getTemplateScript()
-    {
-        return $this->template['script'];
-    }
-
     protected function formatField(Field $field)
     {
         $column = $field->column();
 
         $elementName = $elementClass = $errorKey = '';
 
-        $key = $this->key ?: static::DEFAULT_KEY_NAME;
+        $key = $this->key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {
-                $elementName[$k] = "{$this->relationName}[$key][$name]";
-                $errorKey[$k] = "{$this->relationName}.$key.$name";
-                $elementClass[$k] = "{$this->relationName}_$name";
+                $errorKey[$k]       = sprintf("%s.%s.%s",   $this->relationName, $key, $name);
+                $elementName[$k]    = sprintf("%s[%s][%s]", $this->relationName, $key, $name);
+                $elementClass[$k]   = sprintf("%s_%s",      $this->relationName, $name);
             }
         } else {
-            $elementName = "{$this->relationName}[$key][{$field->column()}]";
-            $errorKey = "{$this->relationName}.$key.{$field->column()}";
-            $elementClass = "{$this->relationName}_{$field->column()}";
+            $errorKey       = sprintf("%s.%s.%s",   $this->relationName, $key, $column);
+            $elementName    = sprintf("%s[%s][%s]", $this->relationName, $key, $column);
+            $elementClass   = sprintf("%s_%s",      $this->relationName, $column);
         }
 
-        $field->setElementName($elementName)
-            ->setErrorKey($errorKey)
+        return $field->setErrorKey($errorKey)
+            ->setElementName($elementName)
             ->setElementClass($elementClass);
-
-        return $field;
-    }
-
-    /**
-     * Set Form.
-     *
-     * @param Form $form
-     *
-     * @return $this
-     */
-    public function setForm(Form $form)
-    {
-        $this->form = $form;
-
-        return $this;
     }
 
     /**
@@ -493,13 +357,14 @@ class NestedForm
      * @param string $method
      * @param array  $arguments
      *
-     * @return $this|Field
+     * @return mixed
      */
     public function __call($method, $arguments)
     {
         if ($className = Form::findFieldClass($method)) {
             $column = array_get($arguments, 0, '');
 
+            /* @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
             $field->setForm($this->form);

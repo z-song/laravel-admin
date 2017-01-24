@@ -1074,7 +1074,7 @@ class Form
             'display'           => \Encore\Admin\Form\Field\Display::class,
             'divider'           => \Encore\Admin\Form\Field\Divide::class,
             'divide'            => \Encore\Admin\Form\Field\Divide::class,
-            'embeds'             => \Encore\Admin\Form\Field\Embeds::class,
+            'embeds'            => \Encore\Admin\Form\Field\Embeds::class,
             'editor'            => \Encore\Admin\Form\Field\Editor::class,
             'email'             => \Encore\Admin\Form\Field\Email::class,
             'file'              => \Encore\Admin\Form\Field\File::class,

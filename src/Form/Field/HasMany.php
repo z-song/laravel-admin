@@ -39,16 +39,21 @@ class HasMany extends Field
     /**
      * View Mode.
      *
+     * Supports `default` and `tab` currently.
+     *
      * @var string
      */
     protected $viewMode = 'default';
 
     /**
-     * Default view for hasmany field.
+     * Available views for HasMany field.
      *
-     * @var string
+     * @var array
      */
-    protected $view = 'admin::form.hasmany';
+    protected $views = [
+        'default'   => 'admin::form.hasmany',
+        'tab'       => 'admin::form.hasmanytab',
+    ];
 
     /**
      * Create a new HasMany field instance.
@@ -91,7 +96,7 @@ class HasMany extends Field
 
         $rules = $attributes = [];
 
-        /** @var Field $field */
+        /* @var Field $field */
         foreach ($form->fields() as $field) {
             if (!$fieldRules = $field->getRules()) {
                 continue;
@@ -281,171 +286,6 @@ class HasMany extends Field
     }
 
     /**
-     * Get form data flashed in session.
-     *
-     * @return mixed
-     */
-    protected function getDataInFlash()
-    {
-        return old($this->column);
-    }
-
-    /**
-     * Build Nested form for related data.
-     *
-     * @throws \Exception
-     *
-     * @return array
-     */
-    protected function buildRelatedForms()
-    {
-        $model = $this->form->model();
-
-        $relation = call_user_func([$model, $this->relationName]);
-
-        if (!$relation instanceof Relation) {
-            throw new \Exception('hasMany field must be a HasMany relation.');
-        }
-
-        $forms = [];
-
-        if ($values = $this->getDataInFlash()) {
-            foreach ($values as $key => $data) {
-                if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
-                    continue;
-                }
-
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
-                    ->fill($data);
-            }
-        } else {
-            foreach ($this->value as $data) {
-                $key = array_get($data, $relation->getRelated()->getKeyName());
-
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
-                    ->fill($data);
-            }
-        }
-
-        return $forms;
-    }
-
-    /**
-     * Build a Nested form template for dynamically add sub form .
-     *
-     * @return NestedForm
-     */
-    protected function getTemplate()
-    {
-        $template = $this->buildNestedForm($this->column, $this->builder)
-                         ->buildTemplate();
-
-        switch ($this->viewMode) {
-            case 'tab':
-                $this->view = 'admin::form.hasmanytab';
-                $this->buildTemplateScriptTab($template);
-                break;
-            default:
-                $this->buildTemplateScriptDefault($template);
-                break;
-        }
-
-        return $template;
-    }
-
-    /**
-     * Build default template script.
-     *
-     * @param $template
-     *
-     * @return $this
-     */
-    protected function buildTemplateScriptDefault(NestedForm $template)
-    {
-        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
-        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
-
-        $script = <<<EOT
-
-$('#has-many-{$this->column}').on('click', '.add', function () {
-
-    var tpl = $('template.{$this->column}-tpl');
-
-    var count = $('.has-many-{$this->column}-forms .has-many-{$this->column}-form').size() + 1;
-
-    var template = tpl.html().replace(/\[{$defaultKey}\]/g, '['+count+']');
-    $('.has-many-{$this->column}-forms').append(template);
-    {$template->getTemplateScript()}
-});
-
-$('#has-many-{$this->column}').on('click', '.remove', function () {
-    $(this).closest('.has-many-{$this->column}-form').hide();
-    $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
-});
-
-EOT;
-
-        Admin::script($script);
-
-        return $this;
-    }
-
-    /**
-     * Build tab template script.
-     *
-     * @param NestedForm $template
-     *
-     * @return $this
-     */
-    protected function buildTemplateScriptTab(NestedForm $template)
-    {
-        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
-        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
-
-        $script = <<<EOT
-    $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
-        var \$navTab = $(this).siblings('a');
-        var \$pane = $(\$navTab.attr('href'));
-        if( \$pane.hasClass('new') ){
-            \$pane.remove();
-        }else{
-            \$pane.removeClass('active').find('.$removeClass').val(1);
-        }
-        if(\$navTab.closest('li').hasClass('active')){
-            \$navTab.closest('li').remove();
-            $('#has-many-{$this->column} > .nav > li:nth-child(2) > a').tab('show');
-        }else{
-            \$navTab.closest('li').remove();
-        }
-    });
-
-    $('#has-many-{$this->column} > .nav > li.nav-tools').off('click', '.add').on('click', '.add', function(){
-        var index = $('#has-many-{$this->column} > .nav > li').size();
-        var navTabHtml = $('#has-many-{$this->column} > template.nav-tab-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
-        var paneHtml = $('#has-many-{$this->column} > template.pane-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
-        $('#has-many-{$this->column} > .nav').append(navTabHtml);
-        $('#has-many-{$this->column} > .tab-content').append(paneHtml);
-        $('#has-many-{$this->column} > .nav > li:last-child a').tab('show');
-        {$template->getTemplateScript()}
-    });
-
-if ($('.has-error').length) {
-    $('.has-error').parent('.tab-pane').each(function () {
-        var tabId = '#'+$(this).attr('id');
-        $('li a[href="'+tabId+'"] i').removeClass('hide');
-    });
-    
-    var first = $('.has-error:first').parent().attr('id');
-    $('li a[href="#'+first+'"]').tab('show');
-}
-EOT;
-
-        Admin::script($script);
-
-        return $this;
-    }
-
-    /**
      * Set view mode.
      *
      * @param string $mode currently support `tab` mode.
@@ -472,6 +312,163 @@ EOT;
     }
 
     /**
+     * Build Nested form for related data.
+     *
+     * @throws \Exception
+     *
+     * @return array
+     */
+    protected function buildRelatedForms()
+    {
+        $model = $this->form->model();
+
+        $relation = call_user_func([$model, $this->relationName]);
+
+        if (!$relation instanceof Relation) {
+            throw new \Exception('hasMany field must be a HasMany relation.');
+        }
+
+        $forms = [];
+
+        /**
+         * If redirect from `exception` or `validation error` page.
+         *
+         * Then get form data from session flash.
+         *
+         * Else get data from database.
+         */
+        if ($values = old($this->column)) {
+            foreach ($values as $key => $data) {
+                if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
+                    continue;
+                }
+
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
+                    ->fill($data);
+            }
+        } else {
+            foreach ($this->value as $data) {
+                $key = array_get($data, $relation->getRelated()->getKeyName());
+
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
+                    ->fill($data);
+            }
+        }
+
+        return $forms;
+    }
+
+    /**
+     * Setup script for this field in different view mode.
+     *
+     * @param string $script
+     *
+     * @return void
+     */
+    protected function setupScript($script)
+    {
+        $method = 'setupScriptFor'.ucfirst($this->viewMode).'View';
+
+        call_user_func([$this, $method], $script);
+    }
+
+    /**
+     * Setup default template script.
+     *
+     * @param string $templateScript
+     *
+     * @return void
+     */
+    protected function setupScriptForDefaultView($templateScript)
+    {
+        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
+
+        /**
+         * When add a new sub form, replace all element key in new sub form.
+         *
+         * @example comments[new___key__][title]  => comments[new_{count}][title]
+         *
+         * {count} is increment number of current sub form count.
+         */
+        $script = <<<EOT
+
+$('#has-many-{$this->column}').on('click', '.add', function () {
+
+    var tpl = $('template.{$this->column}-tpl');
+
+    var count = $('.has-many-{$this->column}-forms .has-many-{$this->column}-form').size() + 1;
+
+    var template = tpl.html().replace(/{$defaultKey}/g, count);
+    $('.has-many-{$this->column}-forms').append(template);
+    {$templateScript}
+});
+
+$('#has-many-{$this->column}').on('click', '.remove', function () {
+    $(this).closest('.has-many-{$this->column}-form').hide();
+    $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
+});
+
+EOT;
+
+        Admin::script($script);
+    }
+
+    /**
+     * Setup tab template script.
+     *
+     * @param string $templateScript
+     *
+     * @return void
+     */
+    protected function setupScriptForTabView($templateScript)
+    {
+        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
+
+        $script = <<<EOT
+
+$('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
+    var \$navTab = $(this).siblings('a');
+    var \$pane = $(\$navTab.attr('href'));
+    if( \$pane.hasClass('new') ){
+        \$pane.remove();
+    }else{
+        \$pane.removeClass('active').find('.$removeClass').val(1);
+    }
+    if(\$navTab.closest('li').hasClass('active')){
+        \$navTab.closest('li').remove();
+        $('#has-many-{$this->column} > .nav > li:nth-child(2) > a').tab('show');
+    }else{
+        \$navTab.closest('li').remove();
+    }
+});
+
+$('#has-many-{$this->column} > .nav > li.nav-tools').off('click', '.add').on('click', '.add', function(){
+    var index = $('#has-many-{$this->column} > .nav > li').size();
+    var navTabHtml = $('#has-many-{$this->column} > template.nav-tab-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
+    var paneHtml = $('#has-many-{$this->column} > template.pane-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
+    $('#has-many-{$this->column} > .nav').append(navTabHtml);
+    $('#has-many-{$this->column} > .tab-content').append(paneHtml);
+    $('#has-many-{$this->column} > .nav > li:last-child a').tab('show');
+    {$templateScript}
+});
+
+if ($('.has-error').length) {
+    $('.has-error').parent('.tab-pane').each(function () {
+        var tabId = '#'+$(this).attr('id');
+        $('li a[href="'+tabId+'"] i').removeClass('hide');
+    });
+    
+    var first = $('.has-error:first').parent().attr('id');
+    $('li a[href="#'+first+'"]').tab('show');
+}
+EOT;
+
+        Admin::script($script);
+    }
+
+    /**
      * Render the `HasMany` field.
      *
      * @throws \Exception
@@ -480,14 +477,18 @@ EOT;
      */
     public function render()
     {
-        /**
-         * getTemplate() must run before render(), because it need to change view and Admin::script($script) before render.
-         */
-        $template = $this->getTemplate();
+        // specify a view to render.
+        $this->view = $this->views[$this->viewMode];
+
+        list($template, $script) = $this->buildNestedForm($this->column, $this->builder)
+            ->getTemplateHtmlAndScript();
+
+        $this->setupScript($script);
 
         return parent::render()->with([
-            'forms'     => $this->buildRelatedForms(),
-            'template'  => $template,
+            'forms'         => $this->buildRelatedForms(),
+            'template'      => $template,
+            'relationName'  => $this->relationName
         ]);
     }
 }
