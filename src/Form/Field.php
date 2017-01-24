@@ -340,7 +340,7 @@ class Field
      *
      * @param null $rules
      *
-     * @return $this|array
+     * @return mixed
      */
     public function rules($rules = null)
     {

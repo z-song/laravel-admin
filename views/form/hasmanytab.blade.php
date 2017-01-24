@@ -27,7 +27,7 @@
         </li>
         @foreach($forms as $pk => $form)
             <li class="@if ($form == reset($forms)) active @endif ">
-                <a href="#{{ $form->getRelationName() . '_' . $pk }}" data-toggle="tab">
+                <a href="#{{ $relationName . '_' . $pk }}" data-toggle="tab">
                     {{ $pk }} <i class="fa fa-exclamation-circle text-red hide"></i>
                 </a>
                 <i class="close-tab fa fa-times" ></i>
@@ -39,7 +39,7 @@
     <div class="tab-content has-many-{{$column}}-forms">
 
         @foreach($forms as $pk => $form)
-            <div class="tab-pane fields-group has-many-{{$column}}-form @if ($form == reset($forms)) active @endif" id="{{ $form->getRelationName() . '_' . $pk }}">
+            <div class="tab-pane fields-group has-many-{{$column}}-form @if ($form == reset($forms)) active @endif" id="{{ $relationName . '_' . $pk }}">
                 @foreach($form->fields() as $field)
                     {!! $field->render() !!}
                 @endforeach
@@ -49,15 +49,15 @@
 
     <template class="nav-tab-tpl">
         <li class="new">
-            <a href="#{{ $template->getRelationName() . '_new_' . $template::DEFAULT_KEY_NAME }}" data-toggle="tab">
-                &nbsp;New {{ $template::DEFAULT_KEY_NAME }} <i class="fa fa-exclamation-circle text-red hide"></i>
+            <a href="#{{ $relationName . '_new_' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}" data-toggle="tab">
+                &nbsp;New {{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }} <i class="fa fa-exclamation-circle text-red hide"></i>
             </a>
             <i class="close-tab fa fa-times" ></i>
         </li>
     </template>
     <template class="pane-tpl">
-        <div class="tab-pane fields-group new" id="{{ $template->getRelationName() . '_new_' . $template::DEFAULT_KEY_NAME }}">
-            {!! $template->getTemplateHtml() !!}
+        <div class="tab-pane fields-group new" id="{{ $relationName . '_new_' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}">
+            {!! $template !!}
         </div>
     </template>
 

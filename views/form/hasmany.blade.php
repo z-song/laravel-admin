@@ -34,7 +34,7 @@
     <template class="{{$column}}-tpl">
         <div class="has-many-{{$column}}-form">
 
-            {!! $template->getTemplateHtml() !!}
+            {!! $template !!}
 
             <div class="form-group">
                 <label class="col-sm-2 col-lg-2 control-label"></label>
