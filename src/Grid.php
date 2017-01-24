@@ -104,48 +104,6 @@ class Grid
     protected $keyName = 'id';
 
     /**
-     * Allow batch deletion.
-     *
-     * @var bool
-     */
-    protected $allowBatchDeletion = true;
-
-    /**
-     * Allow creation.
-     *
-     * @var bool
-     */
-    protected $allowCreation = true;
-
-    /**
-     * Allow actions.
-     *
-     * @var bool
-     */
-    protected $allowActions = true;
-
-    /**
-     * Allow export data.
-     *
-     * @var bool
-     */
-    protected $allowExport = true;
-
-    /**
-     * If use grid filter.
-     *
-     * @var bool
-     */
-    protected $useFilter = true;
-
-    /**
-     * If grid use pagination.
-     *
-     * @var bool
-     */
-    protected $usePagination = true;
-
-    /**
      * Export driver.
      *
      * @var string
@@ -186,6 +144,21 @@ class Grid
      * @var Closure
      */
     protected $actionsCallback;
+
+    /**
+     * Options for grid.
+     *
+     * @var array
+     */
+    protected $options = [
+        'usePagination'     => true,
+        'useFilter'         => true,
+        'useExporter'       => true,
+        'useActions'        => true,
+        'useRowSelector'    => true,
+        'allowCreate'       => true,
+        'allowBatchDelete'  => true,
+    ];
 
     /**
      * Create a new grid instance.
@@ -238,6 +211,17 @@ class Grid
 
             (new Exporter($this))->resolve($this->exporter)->export();
         }
+    }
+
+    public function option($key, $value = null)
+    {
+        if (is_null($value)) {
+            return $this->options[$key];
+        }
+
+        $this->options[$key] = $value;
+
+        return $this;
     }
 
     /**
@@ -369,7 +353,7 @@ class Grid
     {
         $this->model->usePaginate(false);
 
-        $this->usePagination = false;
+        $this->option('usePagination', false);
 
         return $this;
     }
@@ -381,7 +365,7 @@ class Grid
      */
     public function usePagination()
     {
-        return $this->usePagination;
+        return $this->option('usePagination');
     }
 
     /**
@@ -401,15 +385,13 @@ class Grid
      */
     public function disableActions()
     {
-        $this->allowActions = false;
-
-        return $this;
+        return $this->option('useActions', false);
     }
 
     /**
      * Set grid action callback.
      *
-     * @param callable $callback
+     * @param Closure $callback
      *
      * @return $this
      */
@@ -427,7 +409,7 @@ class Grid
      */
     protected function appendActionsColumn()
     {
-        if (!$this->allowActions) {
+        if (!$this->option('useActions')) {
             return;
         }
 
@@ -443,12 +425,31 @@ class Grid
     }
 
     /**
+     * Disable row selector.
+     *
+     * @return Grid|mixed
+     */
+    public function disableRowSelector()
+    {
+        $this->tools(function ($tools) {
+            /* @var Grid\Tools $tools */
+            $tools->disableBatchActions();
+        });
+
+        return $this->option('useRowSelector', false);
+    }
+
+    /**
      * Prepend checkbox column for grid.
      *
      * @return void
      */
     protected function prependRowSelectorColumn()
     {
+        if (!$this->option('useRowSelector')) {
+            return;
+        }
+
         $grid = $this;
 
         $column = new Column('__row_selector__', ' ');
@@ -499,7 +500,7 @@ class Grid
      */
     public function disableFilter()
     {
-        $this->useFilter = false;
+        $this->option('useFilter', false);
 
         return $this;
     }
@@ -539,11 +540,11 @@ class Grid
     /**
      * Render the grid filter.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
     public function renderFilter()
     {
-        if (!$this->useFilter) {
+        if (!$this->option('useFilter')) {
             return '';
         }
 
@@ -578,7 +579,7 @@ class Grid
      *
      * @param callable $callable
      *
-     * @return Collection|void
+     * @return Collection|null
      */
     public function rows(Closure $callable = null)
     {
@@ -646,7 +647,7 @@ class Grid
      */
     public function allowExport()
     {
-        return $this->allowExport;
+        return $this->option('useExporter');
     }
 
     /**
@@ -656,9 +657,7 @@ class Grid
      */
     public function disableExport()
     {
-        $this->allowExport = false;
-
-        return $this;
+        return $this->option('useExporter', false);
     }
 
     /**
@@ -678,7 +677,7 @@ class Grid
      */
     public function allowBatchDeletion()
     {
-        return $this->allowBatchDeletion;
+        return $this->option('allowBatchDelete');
     }
 
     /**
@@ -690,9 +689,7 @@ class Grid
      */
     public function disableBatchDeletion()
     {
-        $this->allowBatchDeletion = false;
-
-        return $this;
+        return $this->option('allowBatchDelete', false);
     }
 
     /**
@@ -702,9 +699,7 @@ class Grid
      */
     public function disableCreation()
     {
-        $this->allowCreation = false;
-
-        return $this;
+        return $this->option('allowCreate', false);
     }
 
     /**
@@ -714,7 +709,7 @@ class Grid
      */
     public function allowCreation()
     {
-        return $this->allowCreation;
+        return $this->option('allowCreate');
     }
 
     /**
@@ -827,7 +822,7 @@ class Grid
      * @param $method
      * @param $arguments
      *
-     * @return $this|Column
+     * @return Column
      */
     public function __call($method, $arguments)
     {
