@@ -157,7 +157,7 @@ class EmbeddedForm
      */
     protected function prepareValue($key, $record)
     {
-        $field = $this->fields->first(function (Field $field) use ($key) {
+        $field = $this->fields->first(function ($_, Field $field) use ($key) {
             return in_array($key, (array) $field->column());
         });
 

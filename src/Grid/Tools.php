@@ -106,7 +106,7 @@ class Tools implements Renderable
      */
     public function batch(\Closure $closure)
     {
-        call_user_func($closure, $this->tools->first(function ($tool) {
+        call_user_func($closure, $this->tools->first(function ($_, $tool) {
             return $tool instanceof BatchActions;
         }));
     }
