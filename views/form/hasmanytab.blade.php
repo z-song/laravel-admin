@@ -1,3 +1,11 @@
+
+<div class="row">
+    <div class="col-md-2"><h4 class="pull-right">{{ $label }}</h4></div>
+    <div class="col-md-8"></div>
+</div>
+
+<hr style="margin-top: 0px;">
+
 <style>
     .nav-tabs > li:hover > i{
         display: inline;
@@ -13,16 +21,10 @@
     }
 </style>
 <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}}">
-    <div class="row header">
-        <div class="col-md-2"><h4 class="pull-right">{{ $label }}</h4></div>
-        <div class="col-md-8">
-            <button type="button" class="btn btn-default btn-sm add"><i class="fa fa-plus-circle" style="font-size: large;"></i></button>
-        </div>
-    </div>
-
-    <hr style="margin-top: 0px;">
-
     <ul class="nav nav-tabs">
+        <li class="nav-tools" >
+            <button type="button" class="btn btn-default btn-sm add"><i class="fa fa-plus-circle" style="font-size: large;"></i></button>
+        </li>
         @foreach($forms as $pk => $form)
             <li class="@if ($form == reset($forms)) active @endif ">
                 <a href="#{{ $relationName . '_' . $pk }}" data-toggle="tab">
