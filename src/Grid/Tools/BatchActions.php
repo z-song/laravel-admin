@@ -98,15 +98,15 @@ $('.grid-select-all').iCheck({checkboxClass:'icheckbox_minimal-blue'});
 
 $('.grid-select-all').on('ifChanged', function(event) {
     if (this.checked) {
-        $('.grid-row-checkbox').iCheck('check');
+        $(this).closest('div.box').find('.grid-row-checkbox').iCheck('check');
     } else {
-        $('.grid-row-checkbox').iCheck('uncheck');
+        $(this).closest('div.box').find('.grid-row-checkbox').iCheck('uncheck');
     }
 });
 
-var selectedRows = function () {
+var selectedRows = function (checkboxAll) {
     var selected = [];
-    $('.grid-row-checkbox:checked').each(function(){
+    checkboxAll.closest('div.box').find('.grid-row-checkbox:checked').each(function(){
         selected.push($(this).data('id'));
     });
 
