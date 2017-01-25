@@ -387,19 +387,18 @@ class HasMany extends Field
         /**
          * When add a new sub form, replace all element key in new sub form.
          *
-         * @example comments[new___key__][title]  => comments[new_{count}][title]
+         * @example comments[new___key__][title]  => comments[new_{index}][title]
          *
          * {count} is increment number of current sub form count.
          */
         $script = <<<EOT
-
+var index = 0;
 $('#has-many-{$this->column}').on('click', '.add', function () {
-
+    index ++;
+    
     var tpl = $('template.{$this->column}-tpl');
 
-    var count = $('.has-many-{$this->column}-forms .has-many-{$this->column}-form').size() + 1;
-
-    var template = tpl.html().replace(/{$defaultKey}/g, count);
+    var template = tpl.html().replace(/{$defaultKey}/g, index);
     $('.has-many-{$this->column}-forms').append(template);
     {$templateScript}
 });
@@ -444,8 +443,9 @@ $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i
     }
 });
 
+var index = 0;
 $('#has-many-{$this->column} > .nav > li.nav-tools').off('click', '.add').on('click', '.add', function(){
-    var index = $('#has-many-{$this->column} > .nav > li').size();
+    index ++;
     var navTabHtml = $('#has-many-{$this->column} > template.nav-tab-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
     var paneHtml = $('#has-many-{$this->column} > template.pane-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
     $('#has-many-{$this->column} > .nav').append(navTabHtml);
