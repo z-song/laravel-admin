@@ -438,13 +438,13 @@ $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i
     }
     if(\$navTab.closest('li').hasClass('active')){
         \$navTab.closest('li').remove();
-        $('#has-many-{$this->column} > .nav > li:nth-child(2) > a').tab('show');
+        $('#has-many-{$this->column} > .nav > li:nth-child(1) > a').tab('show');
     }else{
         \$navTab.closest('li').remove();
     }
 });
 
-$('#has-many-{$this->column} > .nav > li.nav-tools').off('click', '.add').on('click', '.add', function(){
+$('#has-many-{$this->column} > .header').off('click', '.add').on('click', '.add', function(){
     var index = $('#has-many-{$this->column} > .nav > li').size();
     var navTabHtml = $('#has-many-{$this->column} > template.nav-tab-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
     var paneHtml = $('#has-many-{$this->column} > template.pane-tpl').html().replace(/{$defaultKey}/g, ''+index+'');
