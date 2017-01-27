@@ -152,10 +152,10 @@ class Admin
     {
         $directory = config('admin.directory');
 
-      return implode("\\",
+        return ltrim(implode('\\',
               array_map('ucfirst',
-                  explode("/",
-                      str_replace(app()->basePath(), '', $directory)))) . '\\Controllers';
+                  explode('/', str_replace(app()->basePath(), '', $directory)))), '\\')
+              . '\\Controllers';
     }
 
     /**
