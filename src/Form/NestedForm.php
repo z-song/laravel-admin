@@ -169,13 +169,13 @@ class NestedForm
      */
     protected function setFieldOriginalValue($key)
     {
+        $values = [];
         if (array_key_exists($key, $this->original)) {
             $values = $this->original[$key];
-
-            $this->fields->each(function (Field $field) use ($values) {
-                $field->setOriginal($values);
-            });
         }
+        $this->fields->each(function (Field $field) use ($values) {
+            $field->setOriginal($values);
+        });
     }
 
     /**
