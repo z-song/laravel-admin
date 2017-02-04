@@ -515,3 +515,37 @@ $form->hasMany('paintings', function (Form\NestedForm $form) {
 $form->display('created_at', 'Created At');
 $form->display('updated_at', 'Updated At');
 ```
+
+### embeds
+
+用于处理`mysql`的`JSON`类型字段数据或者`mongodb`的`object`类型数据，也可以将多个field的数据值以`JSON`字符串的形式存储在`mysql`的字符创类型字段中
+
+比如`orders`表中的`JSON`或字符串类型的`extra`字段，用来存储多个field的数据，先定义model:
+```php
+class Order extends Model
+{
+    protected $casts = [
+        'extra' => 'json',
+    ];
+}
+```
+然后在form中使用：
+```php
+$form->embeds('extra', function ($form) {
+
+    $form->text('extra1')->rules('required');
+    $form->email('extra2')->rules('required');
+    $form->mobile('extra3');
+    $form->datetime('extra4');
+
+    $form->dateRange('extra5', 'extra6', '范围')->rules('required');
+
+});
+
+// 自定义标题
+$form->embeds('extra', '附加信息', function ($form) {
+    ...
+});
+```
+
+回调函数里面构建表单元素的方法调用和外面是一样的。

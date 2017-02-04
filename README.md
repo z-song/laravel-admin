@@ -35,6 +35,9 @@ composer require encore/laravel-admin "1.2.*"
 Laravel 5.3
 composer require encore/laravel-admin "1.3.*"
 
+Laravel 5.4
+composer require encore/laravel-admin "1.4.x-dev"
+
 ```
 
 In`config/app.php`add`ServiceProvider`:
