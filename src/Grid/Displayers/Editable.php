@@ -151,7 +151,7 @@ class Editable extends AbstractDisplayer
             'class'      => "$class",
             'data-type'  => $this->type,
             'data-pk'    => "{$this->getKey()}",
-            'data-url'   => "/{$this->grid->resource()}/{$this->getKey()}",
+            'data-url'   => "{$this->grid->resource()}/{$this->getKey()}",
             'data-value' => "{$this->value}",
         ];
 

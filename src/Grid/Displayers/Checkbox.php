@@ -54,7 +54,7 @@ $('form.grid-checkbox-$name').on('submit', function () {
     }).get();
 
     $.ajax({
-        url: "/{$this->getResource()}/" + $(this).data('key'),
+        url: "{$this->getResource()}/" + $(this).data('key'),
         type: "POST",
         data: {
             $name: values,

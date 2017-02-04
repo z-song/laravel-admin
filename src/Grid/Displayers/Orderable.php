@@ -39,7 +39,7 @@ $('.grid-row-orderable').on('click', function() {
     var key = $(this).data('id');
     var direction = $(this).data('direction');
 
-    $.post('/{$this->getResource()}/' + key, {_method:'PUT', _token:'{$token}', _orderable:direction}, function(data){
+    $.post('{$this->getResource()}/' + key, {_method:'PUT', _token:'{$token}', _orderable:direction}, function(data){
 
         if (data.status) {
             $.pjax.reload('#pjax-container');

@@ -156,7 +156,7 @@ EOT;
 $('.grid-row-delete').click(function() {
     var id = $(this).data('id');
     if(confirm("{$confirm}")) {
-        $.post('/{$this->getResource()}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+        $.post('{$this->getResource()}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
 
             $.pjax.reload('#pjax-container');
 
