@@ -70,6 +70,8 @@ class Select extends Field
      * @param string $sourceUrl
      * @param string $idField
      * @param string $textField
+     *
+     * @return $this
      */
     public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
     {
@@ -98,6 +100,8 @@ $(document).on('change', ".{$this->getElementClass()}", function () {
 EOT;
 
         Admin::script($script);
+
+        return $this;
     }
 
     /**
