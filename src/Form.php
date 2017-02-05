@@ -1004,6 +1004,24 @@ class Form
     }
 
     /**
+     * Set field and label width in current form.
+     *
+     * @param int $fieldWidth
+     * @param int $labelWidth
+     *
+     * @return $this
+     */
+    public function setWidth($fieldWidth = 8, $labelWidth = 2)
+    {
+        $this->builder()->fields()->each(function ($field) use ($fieldWidth, $labelWidth) {
+            /* @var Field $field  */
+            $field->setWidth($fieldWidth, $labelWidth);
+        });
+
+        return $this;
+    }
+
+    /**
      * Get current resource route url.
      *
      * @param int $slice

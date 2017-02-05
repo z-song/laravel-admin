@@ -153,6 +153,24 @@ class Form implements Renderable
     }
 
     /**
+     * Set field and label width in current form.
+     *
+     * @param int $fieldWidth
+     * @param int $labelWidth
+     *
+     * @return $this
+     */
+    public function setWidth($fieldWidth = 8, $labelWidth = 2)
+    {
+        collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
+            /* @var Field $field  */
+            $field->setWidth($fieldWidth, $labelWidth);
+        });
+
+        return $this;
+    }
+
+    /**
      * Find field class with given name.
      *
      * @param string $method
