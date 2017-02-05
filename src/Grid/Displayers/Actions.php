@@ -148,23 +148,27 @@ EOT;
     {
         $token = csrf_token();
         $confirm = trans('admin::lang.delete_confirm');
-        $successMsg = trans('admin::lang.delete_succeeded');
-        $faildMsg = trans('admin::lang.delete_failed');
 
         $script = <<<SCRIPT
 
 $('.grid-row-delete').click(function() {
-    var id = $(this).data('id');
     if(confirm("{$confirm}")) {
-        $.post('{$this->getResource()}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+        $.ajax({
+            method: 'post',
+            url: '{$this->getResource()}/' + $(this).data('id'),
+            data: {
+                _method:'delete',
+                _token:'{$token}'
+            },
+            success: function (data) {
+                $.pjax.reload('#pjax-container');
 
-            $.pjax.reload('#pjax-container');
-
-            if (typeof data === 'object') {
-                if (data.status) {
-                    toastr.success('{$successMsg}');
-                } else {
-                    toastr.error('{$faildMsg}');
+                if (typeof data === 'object') {
+                    if (data.status) {
+                        toastr.success(data.message);
+                    } else {
+                        toastr.error(data.message);
+                    }
                 }
             }
         });
