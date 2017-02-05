@@ -155,6 +155,16 @@ class Field
     protected $placeholder;
 
     /**
+     * Width for label and field.
+     *
+     * @var array
+     */
+    protected $width = [
+        'label' => 2,
+        'field' => 8,
+    ];
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -313,6 +323,24 @@ class Field
     public function setForm(Form $form)
     {
         $this->form = $form;
+
+        return $this;
+    }
+
+    /**
+     * Set width for field and label.
+     *
+     * @param int $field
+     * @param int $label
+     *
+     * @return $this
+     */
+    public function setWidth($field = 8, $label = 2)
+    {
+        $this->width = [
+            'label' => $label,
+            'field' => $field,
+        ];
 
         return $this;
     }
@@ -644,18 +672,19 @@ class Field
      */
     protected function variables()
     {
-        $this->variables['id'] = $this->id;
-        $this->variables['name'] = $this->elementName ?: $this->formatName($this->column);
-        $this->variables['value'] = $this->value();
-        $this->variables['label'] = $this->label;
-        $this->variables['column'] = $this->column;
-        $this->variables['attributes'] = $this->formatAttributes();
-        $this->variables['help'] = $this->help;
-        $this->variables['class'] = $this->getElementClass();
-        $this->variables['errorKey'] = $this->getErrorKey();
-        $this->variables['placeholder'] = $this->getPlaceholder();
-
-        return $this->variables;
+        return array_merge($this->variables, [
+            'id'            => $this->id,
+            'name'          => $this->elementName ?: $this->formatName($this->column),
+            'help'          => $this->help,
+            'class'         => $this->getElementClass(),
+            'value'         => $this->value(),
+            'label'         => $this->label,
+            'width'         => $this->width,
+            'column'        => $this->column,
+            'errorKey'      => $this->getErrorKey(),
+            'attributes'    => $this->formatAttributes(),
+            'placeholder'   => $this->getPlaceholder(),
+        ]);
     }
 
     /**
@@ -674,6 +703,11 @@ class Field
         return 'admin::form.'.strtolower(end($class));
     }
 
+    /**
+     * Get script of current field.
+     *
+     * @return string
+     */
     public function getScript()
     {
         return $this->script;

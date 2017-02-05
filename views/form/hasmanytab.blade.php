@@ -14,8 +14,8 @@
 </style>
 <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}}">
     <div class="row header">
-        <div class="col-md-2"><h4 class="pull-right">{{ $label }}</h4></div>
-        <div class="col-md-8">
+        <div class="col-md-{{$width['label']}}"><h4 class="pull-right">{{ $label }}</h4></div>
+        <div class="col-md-{{$width['field']}}">
             <button type="button" class="btn btn-default btn-sm add"><i class="fa fa-plus-circle" style="font-size: large;"></i></button>
         </div>
     </div>
