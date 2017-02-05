@@ -2,13 +2,15 @@
 
 namespace Encore\Admin\Grid;
 
+use Encore\Admin\Middleware\PjaxMiddleware;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 
 class Model
 {
@@ -184,6 +186,8 @@ class Model
             $this->data = $collection->toArray();
         }
 
+
+
         return $this->data;
     }
 
@@ -192,13 +196,15 @@ class Model
      *
      * @param array $conditions
      *
-     * @return void
+     * @return $this
      */
     public function addConditions(array $conditions)
     {
         foreach ($conditions as $condition) {
             call_user_func_array([$this, key($condition)], current($condition));
         }
+
+        return $this;
     }
 
     /**
@@ -218,7 +224,7 @@ class Model
      */
     protected function get()
     {
-        if ($this->model instanceof AbstractPaginator) {
+        if ($this->model instanceof LengthAwarePaginator) {
             return $this->model;
         }
 
@@ -233,11 +239,32 @@ class Model
             return $this->model;
         }
 
-        if ($this->model instanceof AbstractPaginator) {
+        if ($this->model instanceof LengthAwarePaginator) {
+
+            $this->handleInvalidPage($this->model);
+
             return $this->model->getCollection();
         }
 
         throw new \Exception('Grid query error');
+    }
+
+    /**
+     * If current page is greater than last page, then redirect to last page.
+     *
+     * @param LengthAwarePaginator $paginator
+     *
+     * @return void
+     */
+    protected function handleInvalidPage(LengthAwarePaginator $paginator)
+    {
+        if ($paginator->lastPage() && $paginator->currentPage() > $paginator->lastPage()) {
+            $lastPageUrl = Request::fullUrlWithQuery([
+                $paginator->getPageName() => $paginator->lastPage()
+            ]);
+
+            PjaxMiddleware::respond(redirect($lastPageUrl));
+        }
     }
 
     /**

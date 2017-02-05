@@ -84,8 +84,8 @@ class UserGridTest extends TestCase
         $this->click(4)->seePageIs('admin/users?page=4');
         $this->assertCount(5, $this->crawler()->filter('td a i[class*=fa-edit]'));
 
-        $this->visit('admin/users?page=5')->seePageIs('admin/users?page=5');
-        $this->assertCount(0, $this->crawler()->filter('td a i[class*=fa-edit]'));
+//        $this->visit('admin/users?page=5')->seePageIs('admin/users?page=5');
+//        $this->assertCount(0, $this->crawler()->filter('td a i[class*=fa-edit]'));
 
         $this->click(1)->seePageIs('admin/users?page=1');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));

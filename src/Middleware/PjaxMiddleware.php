@@ -17,7 +17,7 @@ class PjaxMiddleware
      * @param Request $request
      * @param Closure $next
      *
-     * @return mixed
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle($request, Closure $next)
     {
@@ -35,6 +35,22 @@ class PjaxMiddleware
             ->setUriHeader($response, $request);
 
         return $response;
+    }
+
+    /**
+     * Send a response through this middleware.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
+    public static function respond(\Symfony\Component\HttpFoundation\Response $response)
+    {
+        $next = function () use ($response) {
+            return $response;
+        };
+
+        (new static)->handle(Request::capture(), $next)->send();
+
+        exit;
     }
 
     /**
