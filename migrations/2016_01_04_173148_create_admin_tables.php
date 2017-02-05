@@ -98,14 +98,14 @@ class CreateAdminTables extends Migration
     {
         $connection = config('admin.database.connection') ?: config('database.default');
 
-        Schema::connection($connection)->drop(config('admin.database.users_table'));
-        Schema::connection($connection)->drop(config('admin.database.roles_table'));
-        Schema::connection($connection)->drop(config('admin.database.permissions_table'));
-        Schema::connection($connection)->drop(config('admin.database.menu_table'));
-        Schema::connection($connection)->drop(config('admin.database.user_permissions_table'));
-        Schema::connection($connection)->drop(config('admin.database.role_users_table'));
-        Schema::connection($connection)->drop(config('admin.database.role_permissions_table'));
-        Schema::connection($connection)->drop(config('admin.database.role_menu_table'));
-        Schema::connection($connection)->drop(config('admin.database.operation_log_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.users_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.roles_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.permissions_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.menu_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.user_permissions_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.role_users_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.role_permissions_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.role_menu_table'));
+        Schema::connection($connection)->dropIfExists(config('admin.database.operation_log_table'));
     }
 }
