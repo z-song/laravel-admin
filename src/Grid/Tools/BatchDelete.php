@@ -10,7 +10,6 @@ class BatchDelete extends BatchAction
     public function script()
     {
         $confirm = trans('admin::lang.delete_confirm');
-        $message = trans('admin::lang.delete_succeeded');
 
         return <<<EOT
 
@@ -26,7 +25,14 @@ $('{$this->getElementClass()}').on('click', function() {
             },
             success: function (data) {
                 $.pjax.reload('#pjax-container');
-                toastr.success('{$message}');
+
+                if (typeof data === 'object') {
+                    if (data.status) {
+                        toastr.success(data.message);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
             }
         });
     }
