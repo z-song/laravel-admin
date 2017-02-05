@@ -156,9 +156,7 @@ class Filter
      */
     public function execute()
     {
-        $this->model->addConditions($this->conditions());
-
-        return $this->model->buildData();
+        return $this->model->addConditions($this->conditions())->buildData();
     }
 
     /**
