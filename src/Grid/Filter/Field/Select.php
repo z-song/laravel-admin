@@ -47,6 +47,14 @@ class Select
      */
     protected function buildOptions()
     {
+        $default = ['' => trans('admin::lang.choose')];
+
+        if (is_string($this->options)) {
+            $this->loadAjaxOptions($this->options);
+
+            return $default;
+        }
+
         if ($this->options instanceof \Closure) {
             $this->options = $this->options->bindTo($this->parent);
             $this->options = call_user_func($this->options, $this->parent->getValue());
@@ -58,7 +66,50 @@ class Select
 
         $options = is_array($this->options) ? $this->options : [];
 
-        return ['' => trans('admin::lang.choose')] + $options;
+        return array_merge($default, $options);
+    }
+
+    /**
+     * Load options from ajax.
+     *
+     * @param string $resourceUrl
+     */
+    protected function loadAjaxOptions($resourceUrl)
+    {
+        $script = <<<EOT
+
+$(".{$this->getElementClass()}").select2({
+  ajax: {
+    url: "$resourceUrl",
+    dataType: 'json',
+    delay: 250,
+    data: function (params) {
+      return {
+        q: params.term,
+        page: params.page
+      };
+    },
+    processResults: function (data, params) {
+      params.page = params.page || 1;
+
+      return {
+        results: data.data,
+        pagination: {
+          more: data.next_page_url
+        }
+      };
+    },
+    cache: true
+  },
+  minimumInputLength: 1,
+  escapeMarkup: function (markup) {
+      return markup;
+  }
+});
+
+EOT;
+
+        Admin::script($script);
     }
 
     /**
@@ -68,8 +119,16 @@ class Select
     {
         return [
             'options' => $this->buildOptions(),
-            'class'   => str_replace('.', '_', $this->parent->getColumn()),
+            'class'   => $this->getElementClass(),
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getElementClass()
+    {
+        return str_replace('.', '_', $this->parent->getColumn());
     }
 
     /**
