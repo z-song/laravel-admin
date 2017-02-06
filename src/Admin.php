@@ -154,7 +154,7 @@ class Admin
 
         return ltrim(implode('\\',
               array_map('ucfirst',
-                  explode('/', str_replace(app()->basePath(), '', $directory)))), '\\')
+                  explode(DIRECTORY_SEPARATOR, str_replace(app()->basePath(), '', $directory)))), '\\')
               . '\\Controllers';
     }
 
