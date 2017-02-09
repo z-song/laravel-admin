@@ -125,6 +125,10 @@ class EmbeddedForm
             return $this;
         }
 
+        if (is_string($data)) {
+            $data = json_decode($data, true);
+        }
+
         $this->original = $data;
 
         return $this;
