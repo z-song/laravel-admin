@@ -164,7 +164,7 @@ class Grid
      * Create a new grid instance.
      *
      * @param Eloquent $model
-     * @param callable $builder
+     * @param Closure $builder
      */
     public function __construct(Eloquent $model, Closure $builder)
     {
@@ -213,6 +213,14 @@ class Grid
         }
     }
 
+    /**
+     * Get or set option for grid.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return $this|mixed
+     */
     public function option($key, $value = null)
     {
         if (is_null($value)) {
@@ -273,7 +281,7 @@ class Grid
      *
      * @param array $columns
      *
-     * @return Collection|void
+     * @return Collection|null
      */
     public function columns($columns = [])
     {
@@ -286,12 +294,14 @@ class Grid
                 $this->column($column, $label);
             }
 
-            return;
+            return null;
         }
 
         foreach (func_get_args() as $column) {
             $this->column($column);
         }
+
+        return null;
     }
 
     /**
@@ -577,7 +587,7 @@ class Grid
     /**
      * Set grid row callback function.
      *
-     * @param callable $callable
+     * @param Closure $callable
      *
      * @return Collection|null
      */
@@ -588,12 +598,14 @@ class Grid
         }
 
         $this->rowsCallback = $callable;
+
+        return null;
     }
 
     /**
      * Setup grid tools.
      *
-     * @param callable $callback
+     * @param Closure $callback
      *
      * @return void
      */

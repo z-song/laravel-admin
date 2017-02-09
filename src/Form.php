@@ -536,12 +536,8 @@ class Form
      */
     protected function formatValueBeforeSave($value)
     {
-        if (is_array($value)) {
-            if (Arr::isAssoc($value)) {
-                $value = json_encode($value);
-            } else {
-                $value = implode(',', $value);
-            }
+        if (is_array($value) && !Arr::isAssoc($value)) {
+            $value = implode(',', $value);
         }
 
         return $value;
