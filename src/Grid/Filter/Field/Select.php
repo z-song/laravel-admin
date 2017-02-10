@@ -66,7 +66,7 @@ class Select
 
         $options = is_array($this->options) ? $this->options : [];
 
-        return array_merge($default, $options);
+        return $default + $options;
     }
 
     /**
