@@ -4,6 +4,24 @@ namespace Encore\Admin\Form\Field;
 
 class MultipleSelect extends Select
 {
+
+    /**
+     * Pivot column name.
+     *
+     * @var string
+     */
+    protected $pivotColumn = '';
+
+    public function __construct($column, $arguments = [])
+    {
+        if (isset($arguments[1])) {
+            parent::__construct($column, array($arguments[1]));
+            $this->pivotColumn = $arguments[0];
+        } else {
+            parent::__construct($column, $arguments);
+        }
+    }
+
     public function fill($data)
     {
         $relations = array_get($data, $this->column);
@@ -17,7 +35,11 @@ class MultipleSelect extends Select
                 $this->value = $relations;
             } else {
                 foreach ($relations as $relation) {
-                    $this->value[] = array_pop($relation['pivot']);
+                    if (!empty($this->pivotColumn)) {
+                        $this->value[] = $relation['pivot'][$this->pivotColumn];
+                    } else {
+                        $this->value[] = array_pop($relation['pivot']);
+                    }
                 }
             }
         }
@@ -36,7 +58,11 @@ class MultipleSelect extends Select
                 $this->original = $relations;
             } else {
                 foreach ($relations as $relation) {
-                    $this->original[] = array_pop($relation['pivot']);
+                    if (!empty($this->pivotColumn)) {
+                        $this->value[] = $relation['pivot'][$this->pivotColumn];
+                    } else {
+                        $this->value[] = array_pop($relation['pivot']);
+                    }
                 }
             }
         }
