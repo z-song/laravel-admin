@@ -63,6 +63,9 @@
 
 <script>
 
+    function LA() {}
+    LA.token = "{{ csrf_token() }}";
+
     $.fn.editable.defaults.params = function (params) {
         params._token = '{{ csrf_token() }}';
         params._editable = 1;
