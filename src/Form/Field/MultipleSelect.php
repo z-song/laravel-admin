@@ -2,8 +2,42 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class MultipleSelect extends Select
 {
+    /**
+     * Other key for many-to-many relation.
+     *
+     * @var string
+     */
+    protected $otherKey;
+
+    /**
+     * Get other key for this many-to-many relation.
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    protected function getOtherKey()
+    {
+        if ($this->otherKey) {
+            return $this->otherKey;
+        }
+
+        if (method_exists($this->form->model(), $this->column) &&
+            ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
+        ) {
+            /* @var BelongsToMany $relation */
+            $fullKey = $relation->getOtherKey();
+
+            return $this->otherKey = substr($fullKey, strpos($fullKey, '.') + 1);
+        }
+
+        throw new \Exception('Column of this field must be a `BelongsToMany` relation.');
+    }
+
     public function fill($data)
     {
         $relations = array_get($data, $this->column);
@@ -17,7 +51,7 @@ class MultipleSelect extends Select
                 $this->value = $relations;
             } else {
                 foreach ($relations as $relation) {
-                    $this->value[] = array_pop($relation['pivot']);
+                    $this->value[] = array_get($relation, "pivot.{$this->getOtherKey()}");
                 }
             }
         }
@@ -36,7 +70,7 @@ class MultipleSelect extends Select
                 $this->original = $relations;
             } else {
                 foreach ($relations as $relation) {
-                    $this->original[] = array_pop($relation['pivot']);
+                    $this->original[] = array_get($relation, "pivot.{$this->getOtherKey()}");
                 }
             }
         }
