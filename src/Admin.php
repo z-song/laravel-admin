@@ -288,6 +288,5 @@ class Admin
         }
 
         return $this->navbar;
-
     }
 }
