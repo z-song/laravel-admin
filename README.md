@@ -6,6 +6,7 @@ laravel-admin
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/z-song/laravel-admin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/z-song/laravel-admin/?branch=master)
 [![Packagist](https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000)](https://packagist.org/packages/encore/laravel-admin)
 [![Total Downloads](https://img.shields.io/packagist/dt/encore/laravel-admin.svg?style=flat-square)](https://packagist.org/packages/encore/laravel-admin)
+[![Awesome Laravel](https://img.shields.io/badge/Awesome-Laravel-brightgreen.svg)](https://github.com/z-song/laravel-admin)
 
 `laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
 
@@ -13,7 +14,7 @@ laravel-admin
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
-[中文文档](/docs/zh/README.md)
+[Documentation](http://z-song.github.io/laravel-admin/index.html#/) | [中文文档](http://z-song.github.io/laravel-admin/index.html#/zh/)
 
 Screenshots
 ------------

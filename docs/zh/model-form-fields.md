@@ -216,7 +216,7 @@ public function users(Request $request)
 }
 ```
 
-### textarea输入框:
+### textarea输入框
 ```php
 $form->textarea($column[, $label])->rows(10);
 ```

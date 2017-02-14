@@ -218,7 +218,7 @@ The json returned from api `/admin/demo/options`:
 }
 ```
 
-#### textarea:
+#### textarea
 ```php
 $form->textarea($column[, $label])->rows(10);
 ```
