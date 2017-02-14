@@ -377,7 +377,15 @@ class File extends Field
             $files = [$this->value];
         }
 
-        return array_map([$this, 'buildPreviewItem'], $files);
+        $preview['initialPreview'] = array_map(function($file){
+        	return  'http://erp.dev.qiawei.com/upload/1.jpg' ;
+        },$files);
+	    $preview['initialPreviewAsData'] = true;
+	    $preview['initialPreviewConfig'] = $this->getFilesInfo($files);
+
+	    return $preview;
+
+//        return array_map([$this, 'buildPreviewItem'], $files);
     }
 
     /**
@@ -455,16 +463,36 @@ EOT;
         $this->options['browseLabel'] = trans('admin::lang.browse');
 
         if (!empty($this->value)) {
-            $this->options['initialPreview'] = $this->preview();
+//            $this->options['initialPreview'] = $this->preview();
+	        $this->options = array_merge($this->options, $this->preview());
+
         }
 
-        $options = json_encode($this->options);
+        $options = str_replace("\\/", "/", json_encode($this->options));
 
         $class = $this->getElementClass();
 
         $this->script = <<<EOT
 
-$("input.{$class}").fileinput({$options});
+$("input.{$class}").fileinput({
+        initialPreview: [
+            'http://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/631px-FullMoon2010.jpg',
+            'http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Earth_Eastern_Hemisphere.jpg/600px-Earth_Eastern_Hemisphere.jpg'
+        ],
+        initialPreviewAsData: true,
+        initialPreviewConfig: [
+            {caption: "Moon.jpg", size: 930321, width: "120px", key: 1},
+            {caption: "Earth.jpg", size: 1218822, width: "120px", key: 2}
+        ],
+        deleteUrl: "/site/file-delete",
+        overwriteInitial: false,
+        maxFileSize: 100,
+        initialCaption: "The Moon and the Earth"
+
+});
+
+
+
 
 $("input.{$class}").on('filecleared', function(event) {
     $(".{$class}_action").val(1);
@@ -473,6 +501,29 @@ $("input.{$class}").on('filecleared', function(event) {
 EOT;
 
         return parent::render()->with(['multiple' => $this->multiple, 'actionName' => $this->getActionName()]);
+    }
+
+
+    private function filesInitialPreview($attachList){
+	    if($attachList){
+		    $preview = [];
+		    foreach($attachList as $n => $value) {
+			    $preview[] = $value['dir'];
+		    };
+	    }
+	    return $preview;
+    }
+
+    private function getFilesInfo($files)
+    {
+    	$info = [];
+	    foreach($files as $k => $file){
+		    $info[$k]['filename'] = basename($file);
+		    $info[$k]['filesize'] = filesize(public_path('upload'). '/'.  $file);
+		    $info[$k]['filetype'] = mime_content_type(public_path('upload') . '/'. $file);
+		    $info[$k]['key'] = $k + 1;
+	    }
+	    return $info;
     }
 
     /**
