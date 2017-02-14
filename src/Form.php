@@ -639,7 +639,7 @@ class Form
                     // if related is empty
                     if (is_null($related)) {
                         $related = $relation->getRelated();
-                        $related->{$relation->getForeignKey()} = $this->model->{$this->model->getKeyName()};
+                        $related->{$relation->getForeignKeyName()} = $this->model->{$this->model->getKeyName()};
                     }
 
                     foreach ($prepared[$name] as $column => $value) {
