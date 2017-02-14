@@ -49,7 +49,7 @@ class File extends Field
      * @var array
      */
     protected static $css = [
-        '/packages/admin/bootstrap-fileinput/css/fileinput.min.css',
+        '/packages/admin/bootstrap-fileinput/css/fileinput.min.css?v=4.3.7',
     ];
 
     /**
@@ -58,8 +58,8 @@ class File extends Field
      * @var array
      */
     protected static $js = [
-        '/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
-        '/packages/admin/bootstrap-fileinput/js/fileinput.min.js',
+        '/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
+        '/packages/admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
     ];
 
     /**
@@ -377,36 +377,19 @@ class File extends Field
             $files = [$this->value];
         }
 
-        $preview['initialPreview'] = array_map(function($file){
-        	return  'http://erp.dev.qiawei.com/upload/1.jpg' ;
-        },$files);
-	    $preview['initialPreviewAsData'] = true;
-	    $preview['initialPreviewConfig'] = $this->getFilesInfo($files);
+	    $preview = [];
+
+	    if( !empty($files)){
+		    $preview['initialPreview'] = array_map(function($file){
+			    return  '/upload/' . $file;
+		    },$files);
+		    $preview['initialPreviewAsData'] = true;
+		    $preview['initialPreviewConfig'] = $this->getFilesInfo($files);
+	    }
 
 	    return $preview;
 
 //        return array_map([$this, 'buildPreviewItem'], $files);
-    }
-
-    /**
-     * Preview html for file-upload plugin.
-     *
-     * @return string
-     */
-    protected function buildPreviewItem($file)
-    {
-        $fileName = basename($file);
-
-        return <<<EOT
-<div class="file-preview-other-frame">
-   <div class="file-preview-other">
-   <span class="file-icon-4x"><i class="fa fa-file"></i></span>
-</div>
-   </div>
-   <div class="file-preview-other-footer"><div class="file-thumbnail-footer">
-    <div class="file-footer-caption">{$fileName}</div>
-</div></div>
-EOT;
     }
 
     /**
@@ -442,13 +425,18 @@ EOT;
             if (is_string($caption)) {
                 $caption = json_decode($caption, true);
             }
-        } else {
+        }
+
+        if( !is_array($caption) ){
             $caption = [$caption];
         }
 
-        $caption = array_map('basename', $caption);
+//        $caption = array_map('basename', $caption);
 
-        return implode(',', $caption);
+//        return implode(',', $caption);
+	    $count = count($caption);
+
+	    return "$count files selected";
     }
 
     /**
@@ -459,6 +447,7 @@ EOT;
     public function render()
     {
         $this->options['initialCaption'] = $this->initialCaption($this->value);
+	    $this->options['overwriteInitial'] = false;
         $this->options['removeLabel'] = trans('admin::lang.remove');
         $this->options['browseLabel'] = trans('admin::lang.browse');
 
@@ -474,25 +463,7 @@ EOT;
 
         $this->script = <<<EOT
 
-$("input.{$class}").fileinput({
-        initialPreview: [
-            'http://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/631px-FullMoon2010.jpg',
-            'http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Earth_Eastern_Hemisphere.jpg/600px-Earth_Eastern_Hemisphere.jpg'
-        ],
-        initialPreviewAsData: true,
-        initialPreviewConfig: [
-            {caption: "Moon.jpg", size: 930321, width: "120px", key: 1},
-            {caption: "Earth.jpg", size: 1218822, width: "120px", key: 2}
-        ],
-        deleteUrl: "/site/file-delete",
-        overwriteInitial: false,
-        maxFileSize: 100,
-        initialCaption: "The Moon and the Earth"
-
-});
-
-
-
+$("input.{$class}").fileinput({$options});
 
 $("input.{$class}").on('filecleared', function(event) {
     $(".{$class}_action").val(1);
@@ -503,24 +474,23 @@ EOT;
         return parent::render()->with(['multiple' => $this->multiple, 'actionName' => $this->getActionName()]);
     }
 
-
-    private function filesInitialPreview($attachList){
-	    if($attachList){
-		    $preview = [];
-		    foreach($attachList as $n => $value) {
-			    $preview[] = $value['dir'];
-		    };
-	    }
-	    return $preview;
-    }
-
+	/**
+	 * get the file info from fiels array
+	 *
+	 * @param $files
+	 * @return array
+	 */
     private function getFilesInfo($files)
     {
     	$info = [];
+	    $uploadPath = public_path('upload'). '/';
 	    foreach($files as $k => $file){
 		    $info[$k]['filename'] = basename($file);
-		    $info[$k]['filesize'] = filesize(public_path('upload'). '/'.  $file);
-		    $info[$k]['filetype'] = mime_content_type(public_path('upload') . '/'. $file);
+		    if( !file_exists($uploadPath .  $file)){
+			    continue;
+		    }
+		    $info[$k]['filesize'] = filesize( $uploadPath .  $file);
+		    $info[$k]['filetype'] = mime_content_type( $uploadPath . $file);
 		    $info[$k]['key'] = $k + 1;
 	    }
 	    return $info;
@@ -611,4 +581,24 @@ EOT;
             $this->storage->delete($item);
         }
     }
+
+	/**
+	 * Upload file and delete original file.
+	 *
+	 * @param UploadedFile $file
+	 *
+	 * @return mixed
+	 */
+	protected function ajaxUploadAndDeleteOriginal(UploadedFile $file)
+	{
+		$this->renameIfExists($file);
+
+		$target = $this->getDirectory().'/'.$this->name;
+
+		$this->storage->put($target, file_get_contents($file->getRealPath()));
+
+		$this->destroy();
+
+		return $target;
+	}
 }
