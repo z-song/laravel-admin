@@ -4,6 +4,7 @@ namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Scaffold\ControllerCreator;
 use Encore\Admin\Scaffold\MigrationCreator;
 use Encore\Admin\Scaffold\ModelCreator;
 use Illuminate\Http\Request;
@@ -64,9 +65,20 @@ class ScaffoldController extends Controller
 
         try {
 
-            (new ModelCreator($request->get('table_name'), $request->get('model_name')))->create();
+            // Create controller
+            $paths['controller'] = (new ControllerCreator($request->get('controller_name')))
+                ->create($request->get('model_name'));
 
+            // Create model.
+            $modelCreator = new ModelCreator($request->get('table_name'), $request->get('model_name'));
 
+            $paths['model'] = $modelCreator->create(
+                $request->get('primary_key'),
+                $request->get('timestamps') == 'on',
+                $request->get('soft_deletes') == 'on'
+            );
+
+            // Create migration
             $migrationName = 'create_'.$request->get('table_name').'_table';
 
             $paths['migration'] = (new MigrationCreator(app('files')))->buildBluePrint(
