@@ -289,7 +289,7 @@ class File extends Field
         if ($this->multiple || is_array($files)) {
             $targets = array_map([$this, 'prepareForSingle'], $files);
 
-            return json_encode(array_merge($targets, $original));
+            return json_encode(array_merge($original, $targets));
 
 //	        return json_encode($targets);
         }
@@ -470,6 +470,7 @@ class File extends Field
         $pk = $this->form->builder()->getPk();
         $this->options['initialCaption'] = $this->initialCaption($this->value);
         $this->options['overwriteInitial'] = false;
+	    $this->options['initialPreviewFileType'] = 'object';
         $this->options['deleteUrl'] = $this->form->resource(-2).'/'.$pk;
         $this->options['deleteExtraData'] = ['pk'=> $pk, 'name' => $this->column, '_delfile' => 1, '_token' => csrf_token(), '_method' => 'PUT'];
         $this->options['removeLabel'] = trans('admin::lang.remove');
@@ -510,7 +511,7 @@ EOT;
         $uploadPath = public_path('upload').'/';
         foreach ($files as $k => $file) {
             $info[$k]['filename'] = $info[$k]['caption'] = basename($file);
-            $info[$k]['key'] = $file;
+	        $info[$k]['key'] = $file;
             if (empty($file) || !file_exists($uploadPath.$file)) {
                 continue;
             }
