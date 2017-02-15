@@ -267,9 +267,21 @@ class File extends Field
      */
     public function prepare($files)
     {
+	    $original = (array)json_decode($this->original, true);
+
         if (!$files instanceof UploadedFile && !is_array($files)) {
             if ($this->handleDeleteRequest()) {
                 return '';
+            }
+
+            if(is_string($files) ){
+
+	            if(($key = array_search($files,$original))){
+		            $this->destroyItem($files);
+		            array_splice($original, $key,1);
+	            }
+
+            	return $this->value = json_encode($original);
             }
 
             return $this->original;
@@ -278,7 +290,9 @@ class File extends Field
         if ($this->multiple || is_array($files)) {
             $targets = array_map([$this, 'prepareForSingle'], $files);
 
-            return json_encode($targets);
+            return json_encode(array_merge($targets, $original));
+
+//	        return json_encode($targets);
         }
 
         return $this->prepareForSingle($files);
@@ -297,7 +311,8 @@ class File extends Field
 
         $this->name = $this->getStoreName($file);
 
-        return $this->uploadAndDeleteOriginal($file);
+//	    return $this->uploadAndDeleteOriginal($file);
+	    return $this->upload($file);
     }
 
     /**
@@ -347,18 +362,25 @@ class File extends Field
      *
      * @return mixed
      */
-    protected function uploadAndDeleteOriginal(UploadedFile $file)
-    {
-        $this->renameIfExists($file);
+	protected function uploadAndDeleteOriginal(UploadedFile $file)
+	{
+		$target = $this->upload($file);
 
-        $target = $this->getDirectory().'/'.$this->name;
+		$this->destroy();
 
-        $this->storage->put($target, file_get_contents($file->getRealPath()));
+		return $target;
+	}
 
-        $this->destroy();
+	protected function upload(UploadedFile $file)
+	{
+		$this->renameIfExists($file);
 
-        return $target;
-    }
+		$target = $this->getDirectory().'/'.$this->name;
+
+		$this->storage->put($target, file_get_contents($file->getRealPath()));
+
+		return $target;
+	}
 
     /**
      * Preview html for file-upload plugin.
@@ -381,10 +403,10 @@ class File extends Field
 
 	    if( !empty($files)){
 		    $preview['initialPreview'] = array_map(function($file){
-			    return  '/upload/' . $file;
+			    return  "/upload/$file";
 		    },$files);
 		    $preview['initialPreviewAsData'] = true;
-		    $preview['initialPreviewConfig'] = $this->getFilesInfo($files);
+		    $preview['initialPreviewConfig'] = $this->initialPreviewConfig($files);
 	    }
 
 	    return $preview;
@@ -446,8 +468,11 @@ class File extends Field
      */
     public function render()
     {
+    	$pk = $this->form->builder()->getPk();
         $this->options['initialCaption'] = $this->initialCaption($this->value);
 	    $this->options['overwriteInitial'] = false;
+	    $this->options['deleteUrl'] = $this->form->resource(-2) . '/' . $pk;
+	    $this->options['deleteExtraData'] = ['pk'=> $pk, 'name' => $this->column, '_delfile' => 1, '_token' => csrf_token() , '_method' => 'PUT'];
         $this->options['removeLabel'] = trans('admin::lang.remove');
         $this->options['browseLabel'] = trans('admin::lang.browse');
 
@@ -480,18 +505,18 @@ EOT;
 	 * @param $files
 	 * @return array
 	 */
-    private function getFilesInfo($files)
+    private function initialPreviewConfig($files)
     {
     	$info = [];
 	    $uploadPath = public_path('upload'). '/';
 	    foreach($files as $k => $file){
 		    $info[$k]['filename'] = basename($file);
-		    if( !file_exists($uploadPath .  $file)){
+		    $info[$k]['key'] = $file;
+		    if( empty($file) || !file_exists($uploadPath .  $file)){
 			    continue;
 		    }
 		    $info[$k]['filesize'] = filesize( $uploadPath .  $file);
 		    $info[$k]['filetype'] = mime_content_type( $uploadPath . $file);
-		    $info[$k]['key'] = $k + 1;
 	    }
 	    return $info;
     }
@@ -570,35 +595,18 @@ EOT;
         array_map([$this, 'destroyItem'], $files);
     }
 
-    /**
-     * Destroy single original file.
-     *
-     * @param string $item
-     */
+	/**
+	 * Destroy single original file.
+	 *
+	 * @param $item
+	 * @return bool
+	 *
+	 */
     protected function destroyItem($item)
     {
         if ($this->storage->exists($item)) {
+
             $this->storage->delete($item);
         }
     }
-
-	/**
-	 * Upload file and delete original file.
-	 *
-	 * @param UploadedFile $file
-	 *
-	 * @return mixed
-	 */
-	protected function ajaxUploadAndDeleteOriginal(UploadedFile $file)
-	{
-		$this->renameIfExists($file);
-
-		$target = $this->getDirectory().'/'.$this->name;
-
-		$this->storage->put($target, file_get_contents($file->getRealPath()));
-
-		$this->destroy();
-
-		return $target;
-	}
 }
