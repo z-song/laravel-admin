@@ -479,6 +479,8 @@ class Form
 
         $data = $this->handleEditable($data);
 
+        $data = $this->handleDelFile($data);
+
         if ($this->handleOrderable($id, $data)) {
             return response([
                 'status'  => true,
@@ -574,6 +576,26 @@ class Form
             $value = $input['value'];
 
             array_forget($input, ['pk', 'value', 'name']);
+            array_set($input, $name, $value);
+        }
+
+        return $input;
+    }
+
+    /**
+     * Handle editable update.
+     *
+     * @param array $input
+     *
+     * @return array
+     */
+    protected function handleDelFile(array $input = [])
+    {
+        if (array_key_exists('_delfile', $input)) {
+            $name = $input['name'];
+            $value = $input['key'];
+
+            array_forget($input, ['pk', 'name', 'key']);
             array_set($input, $name, $value);
         }
 

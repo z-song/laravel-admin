@@ -139,6 +139,7 @@ abstract class AbstractFilter
      * Get siblings of current filter.
      *
      * @param null $index
+     *
      * @return AbstractFilter[]|mixed
      */
     public function siblings($index = null)

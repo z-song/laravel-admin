@@ -111,6 +111,14 @@ class Builder
     }
 
     /**
+     * @return pk
+     */
+    public function getPk()
+    {
+        return $this->id;
+    }
+
+    /**
      * @return string
      */
     public function getResource()

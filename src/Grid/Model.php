@@ -186,8 +186,6 @@ class Model
             $this->data = $collection->toArray();
         }
 
-
-
         return $this->data;
     }
 
@@ -240,7 +238,6 @@ class Model
         }
 
         if ($this->model instanceof LengthAwarePaginator) {
-
             $this->handleInvalidPage($this->model);
 
             return $this->model->getCollection();
@@ -260,7 +257,7 @@ class Model
     {
         if ($paginator->lastPage() && $paginator->currentPage() > $paginator->lastPage()) {
             $lastPageUrl = Request::fullUrlWithQuery([
-                $paginator->getPageName() => $paginator->lastPage()
+                $paginator->getPageName() => $paginator->lastPage(),
             ]);
 
             PjaxMiddleware::respond(redirect($lastPageUrl));

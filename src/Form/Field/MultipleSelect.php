@@ -16,9 +16,9 @@ class MultipleSelect extends Select
     /**
      * Get other key for this many-to-many relation.
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     protected function getOtherKey()
     {

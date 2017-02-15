@@ -25,7 +25,6 @@ class Navbar implements Renderable
     public function render()
     {
         return $this->items->reverse()->map(function ($item) {
-
             if ($item instanceof Htmlable) {
                 return $item->toHtml();
             }
@@ -35,7 +34,6 @@ class Navbar implements Renderable
             }
 
             return (string) $item;
-
         })->implode('');
     }
 }

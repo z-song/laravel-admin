@@ -155,7 +155,7 @@ class Admin
         return ltrim(implode('\\',
               array_map('ucfirst',
                   explode(DIRECTORY_SEPARATOR, str_replace(app()->basePath(), '', $directory)))), '\\')
-              . '\\Controllers';
+              .'\\Controllers';
     }
 
     /**
@@ -288,6 +288,5 @@ class Admin
         }
 
         return $this->navbar;
-
     }
 }
