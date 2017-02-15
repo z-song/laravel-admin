@@ -509,7 +509,7 @@ EOT;
         $info = [];
         $uploadPath = public_path('upload').'/';
         foreach ($files as $k => $file) {
-            $info[$k]['filename'] = basename($file);
+            $info[$k]['filename'] = $info[$k]['caption'] = basename($file);
             $info[$k]['key'] = $file;
             if (empty($file) || !file_exists($uploadPath.$file)) {
                 continue;
