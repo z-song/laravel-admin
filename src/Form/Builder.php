@@ -110,12 +110,12 @@ class Builder
         $this->id = $id;
     }
 
-	/**
-	 * @return pk
-	 */
+    /**
+     * @return pk
+     */
     public function getPk()
     {
-    	return $this->id;
+        return $this->id;
     }
 
     /**
