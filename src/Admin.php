@@ -9,6 +9,7 @@ use Encore\Admin\Widgets\Navbar;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;
 
 /**
@@ -288,6 +289,26 @@ class Admin
         }
 
         return $this->navbar;
+    }
 
+    public function enableHelpersRoutes($attributes = [])
+    {
+        $attributes = array_merge([
+            'prefix'     => 'admin/helpers',
+            'middleware' => ['web', 'admin']
+        ], $attributes);
+
+        Route::group($attributes, function ($router) {
+
+
+            /* @var \Illuminate\Routing\Router $router */
+            $router->get('terminal/database', 'Encore\Admin\Controllers\TerminalController@database');
+            $router->post('terminal/database', 'Encore\Admin\Controllers\TerminalController@runDatabase');
+            $router->get('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@artisan');
+            $router->post('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@runArtisan');
+            $router->get('scaffold', 'Encore\Admin\Controllers\ScaffoldController@index');
+            $router->post('scaffold', 'Encore\Admin\Controllers\ScaffoldController@store');
+
+        });
     }
 }
