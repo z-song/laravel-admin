@@ -6,8 +6,21 @@ use Illuminate\Database\Migrations\MigrationCreator as BaseMigrationCreator;
 
 class MigrationCreator extends BaseMigrationCreator
 {
+    /**
+     * @var string
+     */
     protected $bluePrint = '';
 
+    /**
+     * Create a new model.
+     *
+     * @param string $name
+     * @param string $path
+     * @param null $table
+     * @param bool|true $create
+     *
+     * @return string
+     */
     public function create($name, $path, $table = null, $create = true)
     {
         $this->ensureMigrationDoesntAlreadyExist($name);
@@ -23,6 +36,15 @@ class MigrationCreator extends BaseMigrationCreator
         return $path;
     }
 
+    /**
+     * Populate stub.
+     *
+     * @param string $name
+     * @param string $stub
+     * @param string $table
+     *
+     * @return mixed
+     */
     protected function populateStub($name, $stub, $table)
     {
         return str_replace(
@@ -32,6 +54,18 @@ class MigrationCreator extends BaseMigrationCreator
         );
     }
 
+    /**
+     * Build the table blueprint.
+     *
+     * @param array $fields
+     * @param string $keyName
+     * @param bool|true $useTimestamps
+     * @param bool|false $softDeletes
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     */
     public function buildBluePrint($fields = [], $keyName = 'id', $useTimestamps = true, $softDeletes = false)
     {
         $fields = array_filter($fields, function ($field) {

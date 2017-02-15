@@ -3,11 +3,15 @@
 namespace DummyNamespace;
 
 use Illuminate\Database\Eloquent\Model;
-ImportSoftDeletesTraitDummy
+DummyImportSoftDeletesTrait
 
 class DummyClass extends Model
 {
-    UseSoftDeletesTraitDummy
+    DummyUseSoftDeletesTrait
 
-    ModelTableDummy
+    DummyModelTable
+
+    DummyModelKey
+
+    DummyTimestamp
 }

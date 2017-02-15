@@ -36,7 +36,7 @@
                     <label for="inputControllerName" class="col-sm-1 control-label">Controller</label>
 
                     <div class="col-sm-4">
-                        <input type="text" name="controller_name" class="form-control" id="inputControllerName" placeholder="controller" value="{{ old('controller_name', "App\\Admin\\Controller\\") }}">
+                        <input type="text" name="controller_name" class="form-control" id="inputControllerName" placeholder="controller" value="{{ old('controller_name', "App\\Admin\\Controllers\\") }}">
                     </div>
                 </div>
 
@@ -110,10 +110,10 @@
                     <div class='form-group' style="margin-left: 20px;">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" checked name="use_timestamps"> Created_at & Updated_at
+                                <input type="checkbox" checked name="timestamps"> Created_at & Updated_at
                             </label>
                             <label>
-                                <input type="checkbox" name="use_soft_deletes"> Soft deletes
+                                <input type="checkbox" name="soft_deletes"> Soft deletes
                             </label>
                         </div>
                     </div>
