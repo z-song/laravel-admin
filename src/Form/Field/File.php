@@ -294,6 +294,8 @@ class File extends Field
 //	        return json_encode($targets);
         }
 
+        $this->destroy(); //destroy the original files for single upload
+        
         return $this->prepareForSingle($files);
     }
 
