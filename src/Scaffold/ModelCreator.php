@@ -32,7 +32,7 @@ class ModelCreator
      *
      * @param string $tableName
      * @param string $name
-     * @param null $files
+     * @param null   $files
      */
     public function __construct($tableName, $name, $files = null)
     {
@@ -46,13 +46,13 @@ class ModelCreator
     /**
      * Create a new migration file.
      *
-     * @param string $keyName
-     * @param bool|true $timestamps
+     * @param string     $keyName
+     * @param bool|true  $timestamps
      * @param bool|false $softDeletes
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function create($keyName = 'id', $timestamps = true, $softDeletes = false)
     {
@@ -90,7 +90,7 @@ class ModelCreator
 
         array_shift($segments);
 
-        return app_path(join('/', $segments)).'.php';
+        return app_path(implode('/', $segments)).'.php';
     }
 
     /**
@@ -110,6 +110,7 @@ class ModelCreator
      *
      * @param string $stub
      * @param string $name
+     *
      * @return $this
      */
     protected function replaceClass(&$stub, $name)
@@ -191,7 +192,7 @@ class ModelCreator
 
         $table = Str::plural(strtolower($class)) !== $this->tableName ? "protected \$table = '$this->tableName';\n" : '';
 
-        $stub  = str_replace('DummyModelTable', $table, $stub);
+        $stub = str_replace('DummyModelTable', $table, $stub);
 
         return $this;
     }
@@ -222,7 +223,7 @@ class ModelCreator
      */
     public function replaceSpace($stub)
     {
-        return str_replace(["\n\n\n", "\n    \n"], ["\n\n", ""], $stub);
+        return str_replace(["\n\n\n", "\n    \n"], ["\n\n", ''], $stub);
     }
 
     /**

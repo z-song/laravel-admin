@@ -17,7 +17,6 @@ class ScaffoldController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-
             $content->header('Scaffold');
 
             $dbTypes = [
@@ -58,7 +57,7 @@ class ScaffoldController extends Controller
 
             // 3. Create migration.
             if (in_array('migration', $request->get('create'))) {
-                $migrationName = 'create_' . $request->get('table_name') . '_table';
+                $migrationName = 'create_'.$request->get('table_name').'_table';
 
                 $paths['migration'] = (new MigrationCreator(app('files')))->buildBluePrint(
                     $request->get('fields'),
@@ -73,7 +72,6 @@ class ScaffoldController extends Controller
                 Artisan::call('migrate');
                 $message = Artisan::output();
             }
-
         } catch (\Exception $exception) {
 
             // Delete generated files if exception thrown.
@@ -100,14 +98,14 @@ class ScaffoldController extends Controller
         $messages = [];
 
         foreach ($paths as $name => $path) {
-            $messages[] = ucfirst($name) . ": $path";
+            $messages[] = ucfirst($name).": $path";
         }
 
         $messages[] = "<br />$message";
 
         $success = new MessageBag([
             'title'   => 'Success',
-            'message' => join('<br />', $messages),
+            'message' => implode('<br />', $messages),
         ]);
 
         return back()->with(compact('success'));
