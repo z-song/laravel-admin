@@ -156,7 +156,7 @@ class Admin
         return ltrim(implode('\\',
               array_map('ucfirst',
                   explode(DIRECTORY_SEPARATOR, str_replace(app()->basePath(), '', $directory)))), '\\')
-              . '\\Controllers';
+              .'\\Controllers';
     }
 
     /**
@@ -294,8 +294,8 @@ class Admin
     public function enableHelpersRoutes($attributes = [])
     {
         $attributes = array_merge([
-            'prefix'     => trim(config('admin.prefix'), '/') . '/helpers',
-            'middleware' => ['web', 'admin']
+            'prefix'     => trim(config('admin.prefix'), '/').'/helpers',
+            'middleware' => ['web', 'admin'],
         ], $attributes);
 
         Route::group($attributes, function ($router) {
@@ -307,7 +307,6 @@ class Admin
             $router->post('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@runArtisan');
             $router->get('scaffold', 'Encore\Admin\Controllers\ScaffoldController@index');
             $router->post('scaffold', 'Encore\Admin\Controllers\ScaffoldController@store');
-
         });
     }
 }

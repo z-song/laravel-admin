@@ -2,9 +2,9 @@
 
 namespace Encore\Admin\Controllers;
 
-use Exception;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
+use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Artisan;
@@ -23,7 +23,6 @@ class TerminalController extends Controller
     public function artisan()
     {
         return Admin::content(function (Content $content) {
-
             $content->header('Artisan terminal');
 
             $content->row(view('admin::helpers.artisan', ['commands' => $this->organizedCommands()]));
@@ -36,19 +35,18 @@ class TerminalController extends Controller
 
         // If Exception raised.
         if (1 === Artisan::handle(
-            new ArgvInput(explode(' ', 'artisan ' . trim($command))),
+            new ArgvInput(explode(' ', 'artisan '.trim($command))),
             $output = new StringOutput()
         )) {
             return $this->renderException(new Exception($output->getContent()));
         }
 
-        return sprintf("<pre>%s</pre>", $output->getContent());
+        return sprintf('<pre>%s</pre>', $output->getContent());
     }
-    
+
     public function database()
     {
         return Admin::content(function (Content $content) {
-
             $content->header('Database terminal');
 
             $content->row(view('admin::helpers.database', ['connections' => $this->connections()]));
@@ -85,7 +83,7 @@ class TerminalController extends Controller
             $dbs[] = [
                 'option'   => $name,
                 'value'    => "db:$name",
-                'selected' => $name == config('database.default')
+                'selected' => $name == config('database.default'),
             ];
         }
 
@@ -96,7 +94,7 @@ class TerminalController extends Controller
         foreach ($connections as $name => $_) {
             $redis[] = [
                 'value'     => "redis:$name",
-                'option'    => $name
+                'option'    => $name,
             ];
         }
 
@@ -146,7 +144,7 @@ class TerminalController extends Controller
         $log = current($connection->getQueryLog());
 
         if (empty($result)) {
-            return sprintf("<pre>Empty set (%s sec)</pre>\r\n",number_format($log['time'] / 1000, 2));
+            return sprintf("<pre>Empty set (%s sec)</pre>\r\n", number_format($log['time'] / 1000, 2));
         }
 
         $result = json_decode(json_encode($result), true);
@@ -166,7 +164,7 @@ class TerminalController extends Controller
 
     protected function execMongodbQuery($config, $query)
     {
-        if(Str::contains($query, '.find(') && ! Str::contains($query, '.toArray(')) {
+        if (Str::contains($query, '.find(') && !Str::contains($query, '.toArray(')) {
             $query .= '.toArray()';
         }
 
@@ -175,15 +173,15 @@ class TerminalController extends Controller
 
         try {
             $cursor = $manager->executeCommand($config['database'], $command);
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             return $this->renderException($exception);
         }
 
         $result = $cursor->toArray()[0];
 
         $result = json_decode(json_encode($result), true);
-        
-        if(isset($result['errmsg'])) {
+
+        if (isset($result['errmsg'])) {
             return $this->renderException(new Exception($result['errmsg']));
         }
 
@@ -241,7 +239,7 @@ class TerminalController extends Controller
     {
         return sprintf(
             "<div class='callout callout-warning'><i class='icon fa fa-warning'></i>&nbsp;&nbsp;&nbsp;%s</div>",
-            str_replace("\n", "<br />", $exception->getMessage())
+            str_replace("\n", '<br />', $exception->getMessage())
         );
     }
 }
@@ -265,4 +263,3 @@ class StringOutput extends Output
         return trim($this->output);
     }
 }
-
