@@ -22,8 +22,7 @@ class ControllerCreator
      * ControllerCreator constructor.
      *
      * @param string $name
-     *
-     * @param null $files
+     * @param null   $files
      */
     public function __construct($name, $files = null)
     {
@@ -37,9 +36,9 @@ class ControllerCreator
      *
      * @param string $model
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function create($model)
     {
@@ -89,8 +88,9 @@ class ControllerCreator
     /**
      * Replace the class name for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param string $stub
+     * @param string $name
+     *
      * @return string
      */
     protected function replaceClass($stub, $name)
@@ -104,6 +104,7 @@ class ControllerCreator
      * Get file path from giving controller name.
      *
      * @param $name
+     *
      * @return string
      */
     public function getPath($name)
@@ -112,7 +113,7 @@ class ControllerCreator
 
         array_shift($segments);
 
-        return app_path(join('/', $segments)).'.php';
+        return app_path(implode('/', $segments)).'.php';
     }
 
     /**

@@ -164,7 +164,7 @@ class Grid
      * Create a new grid instance.
      *
      * @param Eloquent $model
-     * @param Closure $builder
+     * @param Closure  $builder
      */
     public function __construct(Eloquent $model, Closure $builder)
     {
@@ -294,14 +294,12 @@ class Grid
                 $this->column($column, $label);
             }
 
-            return null;
+            return;
         }
 
         foreach (func_get_args() as $column) {
             $this->column($column);
         }
-
-        return null;
     }
 
     /**
@@ -598,8 +596,6 @@ class Grid
         }
 
         $this->rowsCallback = $callable;
-
-        return null;
     }
 
     /**
