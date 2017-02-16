@@ -99,6 +99,16 @@
         });
     });
 
+    $(function() {
+        $('.sidebar-menu li:not(.treeview) a').each(function() {
+            $(this).on('click', function () {
+                $(this).parent().siblings().removeClass('active')
+                $(this).parent().siblings('.treeview').children('ul.treeview-menu.menu-open').css("display", "none");
+                $(this).parent().addClass('active');
+            });
+        });
+    });
+
 </script>
 
 </body>
