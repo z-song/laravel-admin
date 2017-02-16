@@ -630,7 +630,9 @@ class Form
             switch (get_class($relation)) {
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
                 case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
-                    $relation->sync($prepared[$name]);
+                    if (isset($prepared[$name])) {
+                        $relation->sync($prepared[$name]);
+                    }
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
 
