@@ -6,13 +6,9 @@
                 {!! $filter->render() !!}
             @endforeach
 
-            <div class="input-group input-group-sm">
-                <div class="input-group-btn">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                </div>
-                <div class="input-group-btn">
-                    <a href="{!! $action !!}" class="btn btn-warning" ><i class="fa fa-undo"></i></a>
-                </div>
+            <div class="btn-group btn-group-sm">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <a href="{!! $action !!}" class="btn btn-warning" ><i class="fa fa-undo"></i></a>
             </div>
 
         </fieldset>
