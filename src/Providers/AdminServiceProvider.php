@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Providers;
 
-use Encore\Admin\Routing\Router;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,10 +12,10 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
-        'MakeCommand',
-        'MenuCommand',
-        'InstallCommand',
-        'UninstallCommand',
+        'Encore\Admin\Commands\MakeCommand',
+        'Encore\Admin\Commands\MenuCommand',
+        'Encore\Admin\Commands\InstallCommand',
+        'Encore\Admin\Commands\UninstallCommand',
     ];
 
     /**
@@ -28,6 +28,7 @@ class AdminServiceProvider extends ServiceProvider
         'admin.pjax'        => \Encore\Admin\Middleware\PjaxMiddleware::class,
         'admin.log'         => \Encore\Admin\Middleware\OperationLog::class,
         'admin.permission'  => \Encore\Admin\Middleware\PermissionMiddleware::class,
+        'admin.bootstrap'   => \Encore\Admin\Middleware\BootstrapMiddleware::class,
     ];
 
     /**
@@ -40,6 +41,7 @@ class AdminServiceProvider extends ServiceProvider
             'admin.auth',
             'admin.pjax',
             'admin.log',
+            'admin.bootstrap',
         ],
     ];
 
@@ -56,10 +58,10 @@ class AdminServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/../../config/admin.php' => config_path('admin.php')], 'laravel-admin');
         $this->publishes([__DIR__.'/../../assets' => public_path('packages/admin')], 'laravel-admin');
 
+        Admin::registerAuthRoutes();
+
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
-
-            $this->app['admin.router']->register();
         }
     }
 
@@ -75,14 +77,15 @@ class AdminServiceProvider extends ServiceProvider
 
             $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
 
-            $this->setupAuth();
+            if (is_null(config('auth.guards.admin'))) {
+                $this->setupAuth();
+            }
+
         });
 
-        $this->setupClassAliases();
         $this->registerRouteMiddleware();
-        $this->registerCommands();
 
-        $this->registerRouter();
+        $this->commands($this->commands);
     }
 
     /**
@@ -101,34 +104,6 @@ class AdminServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup the class aliases.
-     *
-     * @return void
-     */
-    protected function setupClassAliases()
-    {
-        $aliases = [
-            'admin.router'  => \Encore\Admin\Routing\Router::class,
-        ];
-
-        foreach ($aliases as $key => $alias) {
-            $this->app->alias($key, $alias);
-        }
-    }
-
-    /**
-     * Register admin routes.
-     *
-     * @return void
-     */
-    public function registerRouter()
-    {
-        $this->app->singleton('admin.router', function ($app) {
-            return new Router($app['router']);
-        });
-    }
-
-    /**
      * Register the route middleware.
      *
      * @return void
@@ -143,18 +118,6 @@ class AdminServiceProvider extends ServiceProvider
         // register middleware group.
         foreach ($this->middlewareGroups as $key => $middleware) {
             app('router')->middlewareGroup($key, $middleware);
-        }
-    }
-
-    /**
-     * Register the commands.
-     *
-     * @return void
-     */
-    protected function registerCommands()
-    {
-        foreach ($this->commands as $command) {
-            $this->commands('Encore\Admin\Commands\\'.$command);
         }
     }
 }

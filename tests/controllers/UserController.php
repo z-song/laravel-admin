@@ -127,6 +127,9 @@ class UserController extends Controller
      */
     protected function form()
     {
+        Form::extend('map', Form\Field\Map::class);
+        Form::extend('editor', Form\Field\Editor::class);
+
         return Admin::form(User::class, function (Form $form) {
             $form->disableDeletion();
 

@@ -45,7 +45,7 @@ class TestCase extends LaravelTestCase
 
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
-            $this->app['admin.router']->register();
+            //$this->app['admin.router']->register();
         }
 
         require __DIR__.'/routes.php';
