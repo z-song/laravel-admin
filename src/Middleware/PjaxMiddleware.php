@@ -48,7 +48,7 @@ class PjaxMiddleware
             return $response;
         };
 
-        (new static)->handle(Request::capture(), $next)->send();
+        (new static())->handle(Request::capture(), $next)->send();
 
         exit;
     }
