@@ -295,7 +295,7 @@ class File extends Field
         }
 
         $this->destroy(); //destroy the original files for single upload
-	    
+
         return $this->prepareForSingle($files);
     }
 
