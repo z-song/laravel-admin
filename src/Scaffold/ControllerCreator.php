@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Scaffold;
 
-use Illuminate\Support\Str;
-
 class ControllerCreator
 {
     /**

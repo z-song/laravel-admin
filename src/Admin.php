@@ -294,12 +294,11 @@ class Admin
     public function enableHelpersRoutes($attributes = [])
     {
         $attributes = array_merge([
-            'prefix'     => 'admin/helpers',
+            'prefix'     => trim(config('admin.prefix'), '/') . '/helpers',
             'middleware' => ['web', 'admin']
         ], $attributes);
 
         Route::group($attributes, function ($router) {
-
 
             /* @var \Illuminate\Routing\Router $router */
             $router->get('terminal/database', 'Encore\Admin\Controllers\TerminalController@database');
