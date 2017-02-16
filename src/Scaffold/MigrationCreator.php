@@ -73,10 +73,11 @@ class MigrationCreator extends BaseMigrationCreator
         });
 
         if (empty($fields)) {
-            throw new \Exception('table fields can\'t be empty');
+            throw new \Exception('Table fields can\'t be empty');
         }
 
         $rows[] = "\$table->increments('$keyName');\n";
+
 
         foreach ($fields as $field) {
             $column = "\$table->{$field['type']}('{$field['name']}')";
@@ -104,7 +105,7 @@ class MigrationCreator extends BaseMigrationCreator
             $rows[] = "\$table->softDeletes();\n";
         }
 
-        $this->bluePrint = str_repeat(' ', 12) . join(str_repeat(' ', 12), $rows);
+        $this->bluePrint = trim(join(str_repeat(' ', 12), $rows), "\n");
 
         return $this;
     }
