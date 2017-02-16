@@ -99,13 +99,11 @@
         });
     });
 
-    $(function() {
-        $('.sidebar-menu li:not(.treeview) a').each(function() {
-            $(this).on('click', function () {
-                $(this).parent().siblings().removeClass('active')
-                $(this).parent().siblings('.treeview').children('ul.treeview-menu.menu-open').css("display", "none");
-                $(this).parent().addClass('active');
-            });
+    $(function(){
+        $('.sidebar-menu li:not(.treeview) > a').on('click', function(){
+            var $parent = $(this).parent().addClass('active');
+            $parent.siblings('.treeview.active').find('> a').trigger('click');
+            $parent.siblings().removeClass('active').find('li').removeClass('active');
         });
     });
 
