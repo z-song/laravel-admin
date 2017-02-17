@@ -32,7 +32,7 @@ class ImageUploadTest extends TestCase
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
             ->seeInElement('a[href="/admin/images"]', 'List')
-            ->seeElement('input[type=reset][value=Reset]')
+            ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
     }
 
@@ -108,7 +108,7 @@ class ImageUploadTest extends TestCase
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
             ->seeInElement('a[href="/admin/images"]', 'List')
-            ->seeElement('input[type=reset][value=Reset]')
+            ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
 
         $this->attach(__DIR__.'/assets/test.jpg', 'image3')
