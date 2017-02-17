@@ -320,7 +320,7 @@ class Field
      *
      * @return $this
      */
-    public function setForm(Form $form)
+    public function setForm(Form $form = null)
     {
         $this->form = $form;
 
