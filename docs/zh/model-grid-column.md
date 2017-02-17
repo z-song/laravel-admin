@@ -123,7 +123,7 @@ $grid->picture()->image();
 $grid->picture()->image('http://xxx.com', 100, 100);
 
 // 显示多图
-$grid->pictures()->value(function ($pictures) {
+$grid->pictures()->display(function ($pictures) {
     
     return json_decode($pictures, true);
     
@@ -307,7 +307,7 @@ $grid->images();
 "['foo.jpg', 'bar.png']"
 
 // 链式方法调用来显示多图
-$grid->images()->value(function ($images) {
+$grid->images()->display(function ($images) {
 
     return json_decode($images, true);
     

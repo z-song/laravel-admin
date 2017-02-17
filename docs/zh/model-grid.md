@@ -34,8 +34,8 @@ $grid = Admin::grid(Movie::class, function(Grid $grid){
     // 第二列显示title字段，由于title字段名和Grid对象的title方法冲突，所以用Grid的column()方法代替
     $grid->column('title');
     
-    // 第三列显示director字段，通过value($callback)方法设置这一列的显示内容为users表中对应的用户名
-    $grid->director()->value(function($userId) {
+    // 第三列显示director字段，通过display($callback)方法设置这一列的显示内容为users表中对应的用户名
+    $grid->director()->display(function($userId) {
         return User::find($userId)->name;
     });
     
@@ -45,8 +45,8 @@ $grid = Admin::grid(Movie::class, function(Grid $grid){
     // 第五列显示为rate字段
     $grid->rate();
 
-    // 第六列显示released字段，通过value($callback)方法来格式化显示输出
-    $grid->released('上映?')->value(function ($released) {
+    // 第六列显示released字段，通过display($callback)方法来格式化显示输出
+    $grid->released('上映?')->display(function ($released) {
         return $released ? '是' : '否';
     });
 

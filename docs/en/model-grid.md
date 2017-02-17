@@ -34,8 +34,8 @@ $grid = Admin::grid(Movie::class, function(Grid $grid){
     // The second column shows the title field, because the title field name and the Grid object's title method conflict, so use Grid's column () method instead
     $grid->column('title');
     
-    // The third column shows the director field, which is set by the value($callback) method to display the corresponding user name in the users table
-    $grid->director()->value(function($userId) {
+    // The third column shows the director field, which is set by the display($callback) method to display the corresponding user name in the users table
+    $grid->director()->display(function($userId) {
         return User::find($userId)->name;
     });
     
@@ -45,8 +45,8 @@ $grid = Admin::grid(Movie::class, function(Grid $grid){
     // The fifth column is displayed as the rate field
     $grid->rate();
 
-    // The sixth column shows the released field, formatting the display output through the value($callback) method
-    $grid->released('Release?')->value(function ($released) {
+    // The sixth column shows the released field, formatting the display output through the display($callback) method
+    $grid->released('Release?')->display(function ($released) {
         return $released ? 'yes' : 'no';
     });
 
@@ -338,7 +338,7 @@ return Admin::grid(Post::class, function (Grid $grid) {
     $grid->title();
     $grid->content();
 
-    $grid->comments('Comments count')->value(function ($comments) {
+    $grid->comments('Comments count')->display(function ($comments) {
         $count = count($comments);
         return "<span class='label label-warning'>{$count}</span>";
     });
@@ -425,7 +425,7 @@ return Admin::grid(User::class, function (Grid $grid) {
     $grid->username();
     $grid->name();
 
-    $grid->roles()->value(function ($roles) {
+    $grid->roles()->display(function ($roles) {
 
         $roles = array_map(function ($role) {
             return "<span class='label label-success'>{$role['name']}</span>";

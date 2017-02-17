@@ -57,19 +57,43 @@ $grid = Admin::form(Movie::class, function(Form $form){
     // 两个时间显示
     $form->display('created_at', '创建时间');
     $form->display('updated_at', '修改时间');
-    
-    // 去掉form删除功能（移除删除按钮）
-    $form->disableDeletion();
 });
 
-// 显示表单内容
-echo $form;
+```
 
+## 自定义工具
+
+表单右上角默认有返回和跳转列表两个按钮工具, 可以使用下面的方式修改它:
+
+```php
+$form->tools(function (Form\Tools $tools) {
+
+    // 去掉返回按钮
+    $tools->disableBackButton();
+    
+    // 去掉跳转列表按钮
+    $tools->disableListButton();
+
+    // 添加一个按钮, 参数可以是字符串, 或者实现了Renderable或Htmlable接口的对象实例
+    $tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
+});
 ```
 
 ## 其它方法
 
-### 忽略掉不需要保存的字段
+去掉提交按钮:
+
+```php
+$form->disableSubmit();
+```
+
+去掉重置按钮:
+```php
+$form->disableReset();
+```
+
+忽略掉不需要保存的字段
+
 ```php
 $form->ignore(['column1', 'column2', 'column3']);
 ```

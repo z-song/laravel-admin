@@ -123,7 +123,7 @@ $grid->picture()->image();
 $grid->picture()->image('http://xxx.com', 100, 100);
 
 // display multiple images
-$grid->pictures()->value(function ($pictures) {
+$grid->pictures()->display(function ($pictures) {
     
     return json_decode($pictures, true);
     
@@ -314,7 +314,7 @@ $grid->images();
 "['foo.jpg', 'bar.png']"
 
 // chain method calls to display multiple images
-$grid->images()->value(function ($images) {
+$grid->images()->display(function ($images) {
 
     return json_decode($images, true);
     

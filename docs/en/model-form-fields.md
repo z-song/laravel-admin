@@ -519,3 +519,38 @@ $form->hasMany('paintings', function (Form\NestedForm $form) {
 $form->display('created_at', 'Created At');
 $form->display('updated_at', 'Updated At');
 ```
+
+### embeds
+
+Used to handle the `JSON` type field data of `mysql` or `object` type data of `mongodb`, or the data values of multiple fields can be stored in the form of the` JSON` string in the character type of mysql
+
+Such as the `extra` column of the `JSON` or string type in the orders table, used to store data for multiple fields:
+
+```php
+class Order extends Model
+{
+    protected $casts = [
+        'extra' => 'json',
+    ];
+}
+```
+And then use in the form:
+```php
+$form->embeds('extra', function ($form) {
+
+    $form->text('extra1')->rules('required');
+    $form->email('extra2')->rules('required');
+    $form->mobile('extra3');
+    $form->datetime('extra4');
+
+    $form->dateRange('extra5', 'extra6', 'Date range')->rules('required');
+
+});
+
+// Customize the title
+$form->embeds('extra', '附加信息', function ($form) {
+    ...
+});
+```
+
+Callback function inside the form element to create the method call and the outside is the same.
