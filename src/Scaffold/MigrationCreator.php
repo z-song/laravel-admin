@@ -89,6 +89,10 @@ class MigrationCreator extends BaseMigrationCreator
                 $column .= "->default('{$field['default']}')";
             }
 
+            if (isset($field['comment']) && $field['comment']) {
+                $column .= "->comment('{$field['comment']}')";
+            }
+
             if (array_get($field, 'nullable') == 'on') {
                 $column .= '->nullable()';
             }
