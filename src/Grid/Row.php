@@ -26,25 +26,11 @@ class Row
     protected $attributes = [];
 
     /**
-     * Actions of row.
-     *
-     * @var
-     */
-    protected $actions;
-
-    /**
      * The primary key name.
      *
      * @var string
      */
     protected $keyName = 'id';
-
-    /**
-     * Action path.
-     *
-     * @var
-     */
-    protected $path;
 
     /**
      * Constructor.
@@ -67,26 +53,6 @@ class Row
     public function setKeyName($keyName)
     {
         $this->keyName = $keyName;
-    }
-
-    /**
-     * Set action path.
-     *
-     * @param $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
-     * Get action path.
-     *
-     * @return mixed
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**
@@ -142,27 +108,6 @@ class Row
         if (is_string($style)) {
             $this->attributes['style'] = $style;
         }
-    }
-
-    /**
-     * Set or Get actions.
-     *
-     * @param string $actions
-     *
-     * @return Action
-     */
-    public function actions($actions = 'edit|delete')
-    {
-        if (!is_null($this->actions)) {
-            return $this->actions;
-        }
-
-        $this->actions = new Action($actions);
-
-        $this->actions->setRow($this);
-        $this->actions->setPath($this->path);
-
-        return $this->actions;
     }
 
     /**
