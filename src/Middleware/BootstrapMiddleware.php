@@ -12,13 +12,13 @@ class BootstrapMiddleware
     {
         Form::registerBuiltinFields();
 
-        Form::collectFieldAssets();
-
-        Grid::registerColumnDisplayer();
-
         if (file_exists($bootstrap = admin_path('bootstrap.php'))) {
             require $bootstrap;
         }
+
+        Form::collectFieldAssets();
+
+        Grid::registerColumnDisplayer();
 
         return $next($request);
     }
