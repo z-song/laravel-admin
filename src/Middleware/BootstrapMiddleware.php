@@ -6,7 +6,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Illuminate\Http\Request;
 
-class BootstrapMiddleWare
+class BootstrapMiddleware
 {
     public function handle(Request $request, \Closure $next)
     {
