@@ -3,7 +3,7 @@
 - [菜单配置](/zh/menu.md)
 - [显示布局](/zh/layout.md)
 - [数据模型表格](/zh/model-grid.md)
-  - [列操作使用和扩展](/zh/model-grid-actions.md)
+  - [行的使用和扩展](/zh/model-grid-actions.md)
   - [列的使用和扩展](/zh/model-grid-column.md)
   - [自定义工具](/zh/grid-custom-tools.md)
 - [数据模型表单](/zh/model-form.md)

@@ -187,3 +187,65 @@ $form->editor('content');
 ```
 
 > 组件类中指定了`admin::form.editor`作为视图文件，视图文件路径在`vendor/encore/laravel-admin/views/form/editor.blade.php`，如果需要修改视图文件，可以将上述视图文件拷贝到`resources/views`目录下自行修改，然后在组件类`app/Admin/Extensions/WangEditor.php`的`$view`属性指定刚才修改的view即可。
+
+### 集成富文本编辑器ckeditor
+
+先下载[ckeditor](http://ckeditor.com/download) 并解压到/public目录，比如放在`/public/packages/`目录下。
+
+然后新建扩展文件`app/Admin/Extensions/Form/CKEditor.php`:
+```php
+<?php
+
+namespace App\Admin\Extensions\Form;
+
+use Encore\Admin\Form\Field;
+
+class CKEditor extends Field
+{
+    public static $js = [
+        '/packages/ckeditor/ckeditor.js',
+        '/packages/ckeditor/adapters/jquery.js',
+    ];
+
+    protected $view = 'admin.ckeditor';
+
+    public function render()
+    {
+        $this->script = "$('textarea.{$this->getElementClass()}').ckeditor();";
+
+        return parent::render();
+    }
+}
+```
+
+新建view `resources/views/admin/ckeditor.blade.php`:
+```php
+<div class="form-group {!! !$errors->has($errorKey) ?: 'has-error' !!}">
+
+    <label for="{{$id}}" class="col-sm-2 control-label">{{$label}}</label>
+
+    <div class="col-sm-6">
+
+        @include('admin::form.error')
+
+        <textarea class="form-control {{ $class }}" name="{{$name}}" placeholder="{{ $placeholder }}" {!! $attributes !!} >{{ old($column, $value) }}</textarea>
+
+        @include('admin::form.help-block')
+
+    </div>
+</div>
+
+```
+
+然后在`app/Admin/bootstrap.php`中引入扩展：
+```php
+use App\Admin\Extensions\Form\CKEditor;
+use Encore\Admin\Form;
+
+Form::extend('ckeditor', CKEditor::class);
+```
+
+然后就能在form中使用了:
+```php
+$form->ckeditor('content');
+```

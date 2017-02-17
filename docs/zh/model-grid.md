@@ -68,7 +68,7 @@ echo $grid;
 
 ```
 
-## Basic Usage
+## 基本使用方法
 
 #### 添加列
 ```php
@@ -252,7 +252,10 @@ class User extends Model
 
 class Profile extends Model
 {
-    $this->belongsTo(User::class);
+    public function user()
+    {
+        $this->belongsTo(User::class);
+    }
 }
 
 ```
@@ -336,7 +339,7 @@ return Admin::grid(Post::class, function (Grid $grid) {
     $grid->title();
     $grid->content();
 
-    $grid->comments('评论数')->value(function ($comments) {
+    $grid->comments('评论数')->display(function ($comments) {
         $count = count($comments);
         return "<span class='label label-warning'>{$count}</span>";
     });
@@ -424,7 +427,7 @@ return Admin::grid(User::class, function (Grid $grid) {
     $grid->username();
     $grid->name();
 
-    $grid->roles()->value(function ($roles) {
+    $grid->roles()->display(function ($roles) {
 
         $roles = array_map(function ($role) {
             return "<span class='label label-success'>{$role['name']}</span>";

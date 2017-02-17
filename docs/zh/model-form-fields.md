@@ -67,7 +67,7 @@ $form->tab('Basic info', function ($form) {
 
 ```
 
-## Basic Usage
+## 基本使用
 
 ### 文本输入框
 
@@ -95,7 +95,7 @@ $form->select('user_id')->options(function ($id) {
 })->ajax('/admin/api/users');
 ```
 
-url `/admin/api/users`接口的代码：
+API `/admin/api/users`接口的代码：
 
 ```php
 public function users(Request $request)
@@ -173,7 +173,7 @@ $form->select('friends')->options(function ($ids) {
 })->ajax('/admin/api/users');
 ```
 
-url `/admin/api/users`接口的代码：
+API `/admin/api/users`接口的代码：
 
 ```php
 public function users(Request $request)
@@ -257,7 +257,7 @@ $form->ip($column[, $label]);
 
 ### 电话号码输入框
 ```php
-$form->mobile($column[, $label])->format('999 9999 9999');
+$form->mobile($column[, $label])->options(['mask' => '999 9999 9999']);
 ```
 
 ### 颜色选择框
@@ -328,7 +328,7 @@ $form->rate($column[, $label]);
 
 ### 图片上传
 
-使用图片上传功能之前需要先完成上传配置，请参考:[图片/文件上传](/docs/zh/form-upload.md).
+使用图片上传功能之前需要先完成上传配置，请参考:[图片/文件上传](form-upload.md).
 
 图片上传目录在文件`config/admin.php`中的`upload.image`中配置，如果目录不存在，需要创建该目录并开放写权限。
 
@@ -353,7 +353,7 @@ $form->image($column[, $label])->multiple();
 
 ### 文件上传
 
-使用图片上传功能之前需要先完成上传配置，请参考:[图片/文件上传](/docs/zh/form-upload.md).
+使用图片上传功能之前需要先完成上传配置，请参考:[图片/文件上传](form-upload.md).
 
 文件上传目录在文件`config/admin.php`中的`upload.file`中配置，如果目录不存在，需要创建该目录并开放写权限。
 ```php
@@ -371,7 +371,7 @@ $form->file($column[, $label])->multiple();
 
 ### 地图控件
 
-地图组件引用了网络资源，默认关闭,如果要开启这个组件参考[form组件管理](/docs/zh/field-management.md)
+地图组件引用了网络资源，默认关闭,如果要开启这个组件参考[form组件管理](field-management.md)
 
 地图控件，用来选择经纬度,`$latitude`, `$longitude`为经纬度字段，`Laravel`的`locale`设置为`zh_CN`的时候使用腾讯地图，否则使用Google地图：
 ```php
@@ -386,7 +386,7 @@ $form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1
 
 ### 富文本编辑框
 
-编辑器组件引用了网络资源，默认关闭,如果要开启这个组件参考[form组件管理](/docs/zh/field-management.md).
+编辑器组件引用了网络资源，默认关闭,如果要开启这个组件参考[form组件管理](field-management.md).
 
 ```php
 $form->editor($column[, $label]);

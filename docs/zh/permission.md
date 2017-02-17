@@ -37,7 +37,7 @@ Admin::user()->id;
 Admin::user()->roles;
 ```
 
-获取用户角色
+获取用户的权限
 ```php
 Admin::user()->permissions;
 ```

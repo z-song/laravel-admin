@@ -72,7 +72,7 @@ $form->image('picture')->name(function ($file) {
 
 ### 云盘上传
 
-如果需要上传到云存储，需要安装兼容`laravel storage`操作方式的driver，拿七牛云存储举例
+如果需要上传到云存储，需要安装对应`laravel storage`的适配器，拿七牛云存储举例
 
 首先安装 [zgldh/qiniu-laravel-storage](https://github.com/zgldh/qiniu-laravel-storage)
 
