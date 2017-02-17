@@ -73,6 +73,7 @@
                         <th>Nullable</th>
                         <th>Key</th>
                         <th>Default value</th>
+                        <th>Comment</th>
                         <th>Action</th>
                     </tr>
 
@@ -99,6 +100,7 @@
                                     </select>
                                 </td>
                                 <td><input type="text" class="form-control" placeholder="default value" name="fields[{{$index}}][default]" value="{{$field['default']}}"/></td>
+                                <td><input type="text" class="form-control" placeholder="comment" name="fields[{{$index}}][comment]" value="{{$field['comment']}}" /></td>
                                 <td><a class="btn btn-sm btn-danger table-field-remove"><i class="fa fa-trash"></i> remove</a></td>
                             </tr>
                         @endforeach
@@ -124,6 +126,7 @@
                             </select>
                         </td>
                         <td><input type="text" class="form-control" placeholder="default value" name="fields[0][default]"></td>
+                        <td><input type="text" class="form-control" placeholder="comment" name="fields[0][comment]"></td>
                         <td><a class="btn btn-sm btn-danger table-field-remove"><i class="fa fa-trash"></i> remove</a></td>
                     </tr>
                     @endif
@@ -223,6 +226,7 @@
             </select>
         </td>
         <td><input type="text" class="form-control" placeholder="default value" name="fields[__index__][default]"></td>
+        <td><input type="text" class="form-control" placeholder="comment" name="fields[__index__][comment]"></td>
         <td><a class="btn btn-sm btn-danger table-field-remove"><i class="fa fa-trash"></i> remove</a></td>
     </tr>
 </template>
