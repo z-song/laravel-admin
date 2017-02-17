@@ -1,4 +1,4 @@
-<div class="form-inline" style="padding-top: 10px;">
+<div class="form-inline" style="padding-bottom: 10px;">
     <form action="{!! $action !!}" method="get" pjax-container>
         <fieldset>
 

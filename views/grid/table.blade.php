@@ -1,10 +1,17 @@
 <div class="box">
     <div class="box-header">
 
+        @if( !$grid->getFilter()->usedModal() )
+            {!! $grid->renderFilter() !!}
+        @endif
+
         {!! $grid->renderHeaderTools() !!}
         {!! $grid->renderCreateButton() !!}
         {!! $grid->renderExportButton() !!}
-        {!! $grid->renderFilter() !!}
+
+        @if( $grid->getFilter()->usedModal() )
+            {!! $grid->renderFilter() !!}
+        @endif
 
 
     </div>

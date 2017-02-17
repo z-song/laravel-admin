@@ -82,6 +82,14 @@ class Filter
     }
 
     /**
+     * return bool if it used modal.
+     */
+    public function usedModal()
+    {
+        return $this->useModal;
+    }
+
+    /**
      * Set action of search form.
      *
      * @param string $action
