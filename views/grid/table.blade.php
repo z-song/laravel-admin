@@ -1,17 +1,11 @@
 <div class="box">
     <div class="box-header">
 
-        <h3 class="box-title"></h3>
+        {!! $grid->renderHeaderTools() !!}
+        {!! $grid->renderCreateButton() !!}
+        {!! $grid->renderExportButton() !!}
+        {!! $grid->renderFilter() !!}
 
-        <span style="position: absolute;left: 10px;top: 5px;">
-            {!! $grid->renderHeaderTools() !!}
-        </span>
-
-        <div class="box-tools">
-            {!! $grid->renderFilter() !!}
-            {!! $grid->renderExportButton() !!}
-            {!! $grid->renderCreateButton() !!}
-        </div>
 
     </div>
     <!-- /.box-header -->

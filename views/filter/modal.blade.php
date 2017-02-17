@@ -1,4 +1,4 @@
-<div class="btn-group pull-right" style="margin-right: 10px">
+<div class="btn-group">
     <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#filter-modal"><i class="fa fa-filter"></i>&nbsp;&nbsp;{{ trans('admin::lang.filter') }}</a>
     <a href="{!! $action !!}" class="btn btn-sm btn-warning"><i class="fa fa-undo"></i></a>
 </div>

@@ -1,4 +1,4 @@
-<div class="form-inline pull-right">
+<div class="form-inline" style="padding-top: 10px;">
     <form action="{!! $action !!}" method="get" pjax-container>
         <fieldset>
 
@@ -6,13 +6,9 @@
                 {!! $filter->render() !!}
             @endforeach
 
-            <div class="input-group input-group-sm">
-                <div class="input-group-btn">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                </div>
-                <div class="input-group-btn">
-                    <a href="{!! $action !!}" class="btn btn-warning" ><i class="fa fa-undo"></i></a>
-                </div>
+            <div class="input-group input-group-sm gird-filter-input-btn">
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
+                <a href="{!! $action !!}" class="btn btn-sm btn-warning" ><i class="fa fa-undo"></i></a>
             </div>
 
         </fieldset>
