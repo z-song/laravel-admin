@@ -572,7 +572,6 @@ class Grid
             $row = new Row($key, $val);
 
             $row->setKeyName($this->keyName);
-            $row->setPath($this->resource());
 
             return $row;
         });
