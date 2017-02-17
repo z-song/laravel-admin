@@ -1016,9 +1016,47 @@ class Form
             $field->setWidth($fieldWidth, $labelWidth);
         });
 
+        $this->builder()->setWidth($fieldWidth, $labelWidth);
+
         return $this;
     }
 
+    /**
+     * Tools setting for form.
+     *
+     * @param Closure $callback
+     */
+    public function tools(Closure $callback)
+    {
+        $callback = $callback->bindTo($this);
+
+        call_user_func($callback, $this->builder->getTools());
+    }
+
+    /**
+     * Disable form submit
+     *
+     * @return $this
+     */
+    public function disableSubmit()
+    {
+        $this->builder()->options(['enableSubmit' => false]);
+
+        return $this;
+    }
+
+    /**
+     * Disable form reset.
+     *
+     * @return $this
+     */
+    public function disableReset()
+    {
+        $this->builder()->options(['enableReset' => false]);
+
+        return $this;
+    }
+    
     /**
      * Get current resource route url.
      *

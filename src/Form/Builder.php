@@ -41,7 +41,10 @@ class Builder
     /**
      * @var array
      */
-    protected $options = [];
+    protected $options = [
+        'enableSubmit' => true,
+        'enableReset'  => true,
+    ];
 
     /**
      * Modes constants.
@@ -63,6 +66,21 @@ class Builder
     protected $hiddenFields = [];
 
     /**
+     * @var Tools
+     */
+    protected $tools;
+
+    /**
+     * Width for label and field.
+     *
+     * @var array
+     */
+    protected $width = [
+        'label' => 2,
+        'field' => 8,
+    ];
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -72,6 +90,24 @@ class Builder
         $this->form = $form;
 
         $this->fields = new Collection();
+
+        $this->setupTools();
+    }
+
+    /**
+     * Setup grid tools.
+     */
+    public function setupTools()
+    {
+        $this->tools = new Tools($this);
+    }
+
+    /**
+     * @return Tools
+     */
+    public function getTools()
+    {
+        return $this->tools;
     }
 
     /**
@@ -120,6 +156,22 @@ class Builder
         }
 
         return $this->form->resource();
+    }
+
+    /**
+     * @param int $field
+     * @param int $label
+     *
+     * @return $this
+     */
+    public function setWidth($field = 8, $label = 2)
+    {
+        $this->width = [
+            'label' => $label,
+            'field' => $field,
+        ];
+
+        return $this;
     }
 
     /**
@@ -301,17 +353,49 @@ class Builder
     }
 
     /**
-     * Build submit button.
+     * Submit button of form..
      *
      * @return string
      */
-    public function submit()
+    public function submitButton()
     {
         if ($this->mode == self::MODE_VIEW) {
             return '';
         }
 
-        return '<button type="submit" class="btn btn-info pull-right">'.trans('admin::lang.submit').'</button>';
+        if (!$this->options['enableSubmit']) {
+            return '';
+        }
+
+        $text = trans('admin::lang.submit');
+
+        return <<<EOT
+<div class="btn-group pull-right">
+    <button type="submit" class="btn btn-info pull-right">$text</button>
+</div>
+EOT;
+
+    }
+
+    /**
+     * Reset button of form.
+     *
+     * @return string
+     */
+    public function resetButton()
+    {
+        if (!$this->options['enableReset']) {
+            return '';
+        }
+
+        $text = trans('admin::lang.reset');
+
+        return <<<EOT
+<div class="btn-group pull-left">
+    <button type="reset" class="btn btn-warning">$text</button>
+</div>
+EOT;
+
     }
 
     /**
@@ -347,17 +431,8 @@ class Builder
 
         $tabObj = $this->form->getTab();
 
-        $script = <<<'SCRIPT'
-        
-$('.form-history-back').on('click', function () {
-    event.preventDefault();
-    history.back(1);
-});
-
-SCRIPT;
-
         if (!$tabObj->isEmpty()) {
-            $script .= <<<'SCRIPT'
+            $script = <<<'SCRIPT'
 
 var url = document.location.toString();
 if (url.match('#')) {
@@ -380,19 +455,24 @@ if ($('.has-error').length) {
 }
 
 SCRIPT;
+            Admin::script($script);
         }
-
-        Admin::script($script);
-
-        $slice = $this->mode == static::MODE_CREATE ? -1 : -2;
 
         $data = [
             'form'     => $this,
-            'resource' => $this->form->resource($slice),
             'tabObj'   => $tabObj,
+            'width'    => $this->width,
         ];
 
         return view('admin::form', $data)->render();
+    }
+
+    /**
+     * @return string
+     */
+    public function renderHeaderTools()
+    {
+        return $this->tools->render();
     }
 
     /**
