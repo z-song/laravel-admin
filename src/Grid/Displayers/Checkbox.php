@@ -44,7 +44,6 @@ EOT;
     protected function script()
     {
         $name = $this->column->getName();
-        $token = csrf_token();
 
         return <<<EOT
 
@@ -58,7 +57,7 @@ $('form.grid-checkbox-$name').on('submit', function () {
         type: "POST",
         data: {
             $name: values,
-            _token: '$token',
+            _token: LA.token,
             _method: 'PUT'
         },
         success: function (data) {

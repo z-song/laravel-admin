@@ -146,7 +146,6 @@ EOT;
      */
     protected function deleteAction()
     {
-        $token = csrf_token();
         $confirm = trans('admin::lang.delete_confirm');
 
         $script = <<<SCRIPT
@@ -158,7 +157,7 @@ $('.grid-row-delete').click(function() {
             url: '{$this->getResource()}/' + $(this).data('id'),
             data: {
                 _method:'delete',
-                _token:'{$token}'
+                _token:LA.token,
             },
             success: function (data) {
                 $.pjax.reload('#pjax-container');

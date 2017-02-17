@@ -11,7 +11,6 @@ class Select extends AbstractDisplayer
         $name = $this->column->getName();
 
         $class = "grid-select-{$name}";
-        $token = csrf_token();
 
         $script = <<<EOT
 
@@ -25,7 +24,7 @@ $('.$class').select2().on('change', function(){
         type: "POST",
         data: {
             $name: value,
-            _token: '$token',
+            _token: LA.token,
             _method: 'PUT'
         },
         success: function (data) {
