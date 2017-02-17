@@ -42,8 +42,6 @@ class SwitchGroup extends AbstractDisplayer
     {
         $class = "grid-switch-{$name}";
 
-        $token = csrf_token();
-
         $script = <<<EOT
 
 $('.$class').bootstrapSwitch({
@@ -61,7 +59,7 @@ $('.$class').bootstrapSwitch({
             type: "POST",
             data: {
                 $name: value,
-                _token: '$token',
+                _token: LA.token,
                 _method: 'PUT'
             },
             success: function (data) {
