@@ -119,7 +119,7 @@ $('{$this->getElementClass()}').on('click', function() {
         method: 'post',
         url: '/{$this->resource}/release',
         data: {
-            _token:'{$this->getToken()}',
+            _token:LA.token,
             ids: selectedRows(),
             action: {$this->action}
         },

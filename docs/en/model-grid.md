@@ -1,4 +1,4 @@
-# Model-Grid
+# Model-grid
 
 Class `Encore\Admin\Grid` is used to generate tables based on the data model,for example,we have a table `movies` in database:
 
@@ -62,9 +62,6 @@ $grid = Admin::grid(Movie::class, function(Grid $grid){
         $filter->between('created_at', 'Created Time')->datetime();
     });
 });
-
-// Displays the table contents
-echo $grid;
 
 ```
 

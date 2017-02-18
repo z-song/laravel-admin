@@ -1,4 +1,4 @@
-# file/image upload
+# File/Image upload
 
 [model-form](/docs/zh/model-form.md) can build file and image upload field with following codes
 
@@ -26,7 +26,7 @@ $form->image('picture')->name(function ($file) {
 
 [model-form](/docs/zh/model-form.md) both support for local and cloud storage upload
 
-### upload to local
+### Upload to local
 
 first add storage configuration, add a disk in `config/filesystems.php`:
 
@@ -69,7 +69,7 @@ Set `disk` to the` admin` that you added above,`directory.image` and `directory.
 `host` is url prefix for your uploaded files.
 
 
-### upload to clould
+### Upload to cloud
 
 If you need to upload to the cloud storage, need to install a driver which supports `flysystem` adapter, take `qiniu` cloud storage as example.
 

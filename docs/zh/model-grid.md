@@ -63,9 +63,6 @@ $grid = Admin::grid(Movie::class, function(Grid $grid){
     });
 });
 
-// 显示表格内容
-echo $grid;
-
 ```
 
 ## 基本使用方法

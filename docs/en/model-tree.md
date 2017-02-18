@@ -1,4 +1,4 @@
-# model-tree
+# Model-tree
 
 Can be achieved through a `model-tree` to a tree-like components, you can drag the way to achieve the level of data, sorting and other operations, the following is the basic usage.
 
