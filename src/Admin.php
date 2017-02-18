@@ -9,6 +9,7 @@ use Encore\Admin\Widgets\Navbar;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;
 
 /**
@@ -37,43 +38,6 @@ class Admin
     public static $js = [];
 
     /**
-     * @var bool
-     */
-    protected static $initialized = false;
-
-    /**
-     * @var bool
-     */
-    protected static $bootstrapped = false;
-
-    /**
-     * Initialize.
-     */
-    public static function init()
-    {
-        if (!static::$initialized) {
-            Form::registerBuiltinFields();
-            Grid::registerColumnDisplayer();
-
-            static::$initialized = true;
-        }
-    }
-
-    /**
-     * Bootstrap.
-     */
-    public static function bootstrap()
-    {
-        if (!static::$bootstrapped) {
-            if (file_exists($bootstrap = admin_path('bootstrap.php'))) {
-                require $bootstrap;
-            }
-
-            static::$bootstrapped = true;
-        }
-    }
-
-    /**
      * @param $model
      * @param Closure $callable
      *
@@ -92,9 +56,6 @@ class Admin
      */
     public function form($model, Closure $callable)
     {
-        static::init();
-        static::bootstrap();
-
         return new Form($this->getModel($model), $callable);
     }
 
@@ -117,11 +78,6 @@ class Admin
      */
     public function content(Closure $callable = null)
     {
-        static::init();
-        static::bootstrap();
-
-        Form::collectFieldAssets();
-
         return new Content($callable);
     }
 
@@ -155,7 +111,7 @@ class Admin
         return ltrim(implode('\\',
               array_map('ucfirst',
                   explode(DIRECTORY_SEPARATOR, str_replace(app()->basePath(), '', $directory)))), '\\')
-              . '\\Controllers';
+              .'\\Controllers';
     }
 
     /**
@@ -288,6 +244,54 @@ class Admin
         }
 
         return $this->navbar;
+    }
 
+    public function registerAuthRoutes()
+    {
+        $attributes = [
+            'prefix'        => config('admin.prefix'),
+            'namespace'     => 'Encore\Admin\Controllers',
+            'middleware'    => ['web', 'admin'],
+        ];
+
+        Route::group($attributes, function ($router) {
+            $attributes = ['middleware' => 'admin.permission:allow,administrator'];
+
+            /* @var \Illuminate\Routing\Router $router */
+            $router->group($attributes, function ($router) {
+                $router->resources([
+                    'auth/users'       => 'UserController',
+                    'auth/roles'       => 'RoleController',
+                    'auth/permissions' => 'PermissionController',
+                    'auth/menu'        => 'MenuController',
+                    'auth/logs'        => 'LogController',
+                ]);
+            });
+
+            $router->get('auth/login', 'AuthController@getLogin');
+            $router->post('auth/login', 'AuthController@postLogin');
+            $router->get('auth/logout', 'AuthController@getLogout');
+            $router->get('auth/setting', 'AuthController@getSetting');
+            $router->put('auth/setting', 'AuthController@putSetting');
+        });
+    }
+
+    public function registerHelpersRoutes($attributes = [])
+    {
+        $attributes = array_merge([
+            'prefix'     => trim(config('admin.prefix'), '/').'/helpers',
+            'middleware' => ['web', 'admin'],
+        ], $attributes);
+
+        Route::group($attributes, function ($router) {
+
+            /* @var \Illuminate\Routing\Router $router */
+            $router->get('terminal/database', 'Encore\Admin\Controllers\TerminalController@database');
+            $router->post('terminal/database', 'Encore\Admin\Controllers\TerminalController@runDatabase');
+            $router->get('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@artisan');
+            $router->post('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@runArtisan');
+            $router->get('scaffold', 'Encore\Admin\Controllers\ScaffoldController@index');
+            $router->post('scaffold', 'Encore\Admin\Controllers\ScaffoldController@store');
+        });
     }
 }

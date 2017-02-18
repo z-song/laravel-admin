@@ -170,8 +170,6 @@ class Tree implements Renderable
      */
     protected function script()
     {
-        $token = csrf_token();
-
         $confirm = trans('admin::lang.delete_confirm');
         $saveSucceeded = trans('admin::lang.save_succeeded');
         $refreshSucceeded = trans('admin::lang.refresh_succeeded');
@@ -186,7 +184,7 @@ class Tree implements Renderable
         $('.tree_branch_delete').click(function() {
             var id = $(this).data('id');
             if(confirm("{$confirm}")) {
-                $.post('{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+                $.post('{$this->path}/' + id, {_method:'delete','_token':LA.token}, function(data){
                     $.pjax.reload('#pjax-container');
                     toastr.success('{$deleteSucceeded}');
                 });
@@ -197,7 +195,7 @@ class Tree implements Renderable
             var serialize = $('#{$this->elementId}').nestable('serialize');
 
             $.post('{$this->path}', {
-                _token: '{$token}',
+                _token: LA.token,
                 _order: JSON.stringify(serialize)
             },
             function(data){

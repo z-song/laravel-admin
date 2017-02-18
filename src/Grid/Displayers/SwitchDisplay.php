@@ -25,7 +25,6 @@ class SwitchDisplay extends AbstractDisplayer
         $name = $this->column->getName();
 
         $class = "grid-switch-{$name}";
-        $token = csrf_token();
 
         $script = <<<EOT
 
@@ -47,7 +46,7 @@ $('.$class').bootstrapSwitch({
             type: "POST",
             data: {
                 $name: value,
-                _token: '$token',
+                _token: LA.token,
                 _method: 'PUT'
             },
             success: function (data) {

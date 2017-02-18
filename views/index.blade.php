@@ -63,6 +63,9 @@
 
 <script>
 
+    function LA() {}
+    LA.token = "{{ csrf_token() }}";
+
     $.fn.editable.defaults.params = function (params) {
         params._token = '{{ csrf_token() }}';
         params._editable = 1;
@@ -93,6 +96,14 @@
             $(event.target).find("script[data-exec-on-popstate]").each(function() {
                 $.globalEval(this.text || this.textContent || this.innerHTML || '');
             });
+        });
+    });
+
+    $(function(){
+        $('.sidebar-menu li:not(.treeview) > a').on('click', function(){
+            var $parent = $(this).parent().addClass('active');
+            $parent.siblings('.treeview.active').find('> a').trigger('click');
+            $parent.siblings().removeClass('active').find('li').removeClass('active');
         });
     });
 

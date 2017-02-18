@@ -630,7 +630,9 @@ class Form
             switch (get_class($relation)) {
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
                 case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
-                    $relation->sync($prepared[$name]);
+                    if (isset($prepared[$name])) {
+                        $relation->sync($prepared[$name]);
+                    }
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
 
@@ -639,7 +641,7 @@ class Form
                     // if related is empty
                     if (is_null($related)) {
                         $related = $relation->getRelated();
-                        $related->{$relation->getForeignKey()} = $this->model->{$this->model->getKeyName()};
+                        $related->{$relation->getForeignKeyName()} = $this->model->{$this->model->getKeyName()};
                     }
 
                     foreach ($prepared[$name] as $column => $value) {
