@@ -1,13 +1,13 @@
 # 文件/图片上传
 
-[model-form](/docs/zh/model-form.md)通过以下的调用来生成form元素。
+[model-form](model-form.md)通过以下的调用来生成form元素。
 
 ```php
 $form->file('file_column');
 $form->image('image_column');
 ```
 
-### 修改存储路径或文件名
+## 修改存储路径或文件名
 
 ```php
 
@@ -24,9 +24,9 @@ $form->image('picture')->name(function ($file) {
 
 ```
 
-[model-form](/docs/zh/model-form.md)支持本地和云存储的文件上传
+[model-form](/model-form.md)支持本地和云存储的文件上传
 
-### 本地上传
+## 本地上传
 
 先添加存储配置，`config/filesystems.php` 添加一项`disk`:
 
@@ -70,7 +70,7 @@ $form->image('picture')->name(function ($file) {
 `host`为图片和文件的网络访问url前缀。
 
 
-### 云盘上传
+## 云盘上传
 
 如果需要上传到云存储，需要安装对应`laravel storage`的适配器，拿七牛云存储举例
 
