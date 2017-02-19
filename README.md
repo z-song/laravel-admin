@@ -14,7 +14,7 @@ laravel-admin
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
-[Documentation](http://z-song.github.io/laravel-admin/index.html#/) | [中文文档](http://z-song.github.io/laravel-admin/index.html#/zh/)
+[Documentation](http://z-song.github.io/laravel-admin/) | [中文文档](http://z-song.github.io/laravel-admin/#/zh/)
 
 Screenshots
 ------------
