@@ -1022,6 +1022,20 @@ class Form
     }
 
     /**
+     * Set view for form.
+     *
+     * @param string $view
+     *
+     * @return $this
+     */
+    public function setView($view)
+    {
+        $this->builder()->setView($view);
+
+        return $this;
+    }
+
+    /**
      * Tools setting for form.
      *
      * @param Closure $callback

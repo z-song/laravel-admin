@@ -81,6 +81,13 @@ class Builder
     ];
 
     /**
+     * View for this form.
+     *
+     * @var string
+     */
+    protected $view = 'admin::form';
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -207,6 +214,20 @@ class Builder
     }
 
     /**
+     * Set view for this form.
+     *
+     * @param string $view
+     *
+     * @return $this
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
+
+        return $this;
+    }
+
+    /**
      * Get fields of this builder.
      *
      * @return Collection
@@ -214,6 +235,20 @@ class Builder
     public function fields()
     {
         return $this->fields;
+    }
+
+    /**
+     * Get specify field.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function field($name)
+    {
+        return $this->fields()->first(function (Field $field) use ($name) {
+            return $field->column() == $name;
+        });
     }
 
     /**
@@ -464,7 +499,7 @@ SCRIPT;
             'width'    => $this->width,
         ];
 
-        return view('admin::form', $data)->render();
+        return view($this->view, $data)->render();
     }
 
     /**
