@@ -150,7 +150,7 @@ EOT;
 
         $script = <<<SCRIPT
 
-$('.grid-row-delete').click(function() {
+$('.grid-row-delete').unbind('click').click(function() {
     if(confirm("{$confirm}")) {
         $.ajax({
             method: 'post',
