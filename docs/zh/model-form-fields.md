@@ -412,6 +412,12 @@ $form->switch($column[, $label])->states($states);
 只显示字段，不做任何操作：
 ```php
 $form->display($column[, $label]);
+
+
+//更复杂的显示
+$form->display($column[, $label])->with(function ($value) {
+    return "<img src="$value" />";
+});
 ```
 
 ### 分割线
