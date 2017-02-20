@@ -80,7 +80,6 @@ class AdminServiceProvider extends ServiceProvider
             if (is_null(config('auth.guards.admin'))) {
                 $this->setupAuth();
             }
-
         });
 
         $this->registerRouteMiddleware();
