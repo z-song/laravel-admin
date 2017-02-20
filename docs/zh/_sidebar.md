@@ -15,3 +15,4 @@
 - [权限控制](/zh/permission.md)
 - [帮助工具](/zh/helpers.md)
 - [常见问题](/zh/qa.md)
+- [Change log](/zh/change-log.md)

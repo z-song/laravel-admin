@@ -14,3 +14,4 @@
 - [Widgets](/en/widgets.md)
 - [Permissions](/en/permission.md)
 - [Helpers](/en/helpers.md)
+- [Change log](/en/change-log.md)
