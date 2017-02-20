@@ -1048,7 +1048,7 @@ class Form
     }
 
     /**
-     * Disable form submit
+     * Disable form submit.
      *
      * @return $this
      */
@@ -1070,7 +1070,7 @@ class Form
 
         return $this;
     }
-    
+
     /**
      * Get current resource route url.
      *
