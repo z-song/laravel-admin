@@ -5,6 +5,7 @@ namespace Encore\Admin\Form;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
  *
  * @method Field default($value) set field default value
  */
-class Field
+class Field implements Renderable
 {
     /**
      * Element id.
@@ -723,6 +724,14 @@ class Field
         Admin::script($this->script);
 
         return view($this->getView(), $this->variables());
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->render()->render();
     }
 
     /**
