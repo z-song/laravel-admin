@@ -97,3 +97,15 @@ $form->disableReset();
 ```php
 $form->ignore(['column1', 'column2', 'column3']);
 ```
+
+设置宽度
+
+```php
+$form->setWidth(10, 2);
+```
+
+设置表单提交的action
+
+```php
+$form->setAction('admin/users');
+```

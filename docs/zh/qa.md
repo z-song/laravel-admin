@@ -42,3 +42,26 @@ app('translator')->addNamespace('admin', resource_path('lang/admin'));
 Admin::css('path/to/your/css');
 Admin::css('path/to/your/js');
 ```
+
+
+## 自定义登陆页面和登陆逻辑
+
+在路由文件`app/Admin/routes.php`中，覆盖掉登陆页面和登陆逻辑的路由，即可实现自定义的功能
+
+```php
+Route::group([
+    'prefix'        => config('admin.prefix'),
+    'namespace'     => Admin::controllerNamespace(),
+    'middleware'    => ['web', 'admin'],
+], function (Router $router) {
+
+    $router->get('auth/login', 'AuthController@getLogin');
+    $router->post('auth/login', 'AuthController@postLogin');
+    
+});
+
+```
+
+在自定义的路由器AuthController中的`getLogin`、`postLogin`方法里分别实现自己的登陆页面和登陆逻辑。
+
+参考控制器文件[AuthController.php](https://github.com/z-song/laravel-admin/blob/master/src/Controllers/AuthController.php)，视图文件[login.blade.php](https://github.com/z-song/laravel-admin/blob/master/views/login.blade.php)

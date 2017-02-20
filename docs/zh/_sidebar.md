@@ -7,7 +7,7 @@
 - [数据模型表单](/zh/model-form.md)
   - [图片/文件上传](/zh/model-form-upload.md)
   - [form组件使用](/zh/model-form-fields.md)
-  - [form组件管理](/zh/model-fomr-field-management.md)
+  - [form组件管理](/zh/model-form-field-management.md)
   - [保存回调](/zh/model-form-callback.md)
 - [数据模型树](/zh/model-tree.md)
 - [显示布局](/zh/layout.md)
