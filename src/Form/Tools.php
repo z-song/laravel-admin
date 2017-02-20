@@ -47,7 +47,7 @@ class Tools implements Renderable
      */
     protected function backButton()
     {
-        $script = <<<EOT
+        $script = <<<'EOT'
 $('.form-history-back').on('click', function () {
     event.preventDefault();
     history.back(1);
@@ -132,7 +132,6 @@ EOT;
         }
 
         return $this->tools->map(function ($tool) {
-
             if ($tool instanceof Renderable) {
                 return $tool->render();
             }
