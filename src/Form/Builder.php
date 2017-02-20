@@ -409,7 +409,6 @@ class Builder
     <button type="submit" class="btn btn-info pull-right">$text</button>
 </div>
 EOT;
-
     }
 
     /**
@@ -430,7 +429,6 @@ EOT;
     <button type="reset" class="btn btn-warning">$text</button>
 </div>
 EOT;
-
     }
 
     /**
