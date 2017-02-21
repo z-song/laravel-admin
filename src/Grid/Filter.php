@@ -116,10 +116,20 @@ class Filter
             return $input !== '';
         });
 
+        if (empty($inputs)) {
+            return [];
+        }
+
+        $params = [];
+
+        foreach ($inputs as $key => $value) {
+            array_set($params, $key, $value);
+        }
+
         $conditions = [];
 
         foreach ($this->filters() as $filter) {
-            $conditions[] = $filter->condition($inputs);
+            $conditions[] = $filter->condition($params);
         }
 
         return array_filter($conditions);
