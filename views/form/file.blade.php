@@ -5,8 +5,8 @@
     <div class="col-sm-{{$width['field']}}">
 
         @include('admin::form.error')
-        <input type="file" class="{{$class}}" name="{{$name}}{{$multiple ? '[]' : ''}}" {!! $attributes !!} />
-        <input type="hidden" class="{{$class}}_action" name="{{$name}}_action" value="0"/>
+
+        <input type="file" class="{{$class}}" name="{{$name}}" {!! $attributes !!} />
 
         @include('admin::form.help-block')
 
