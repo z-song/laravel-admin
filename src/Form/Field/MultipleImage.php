@@ -2,16 +2,17 @@
 
 namespace Encore\Admin\Form\Field;
 
+
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Image extends File
+class MultipleImage extends MultipleFile
 {
     use ImageField;
 
     /**
      * {@inheritdoc}
      */
-    protected $view = 'admin::form.file';
+    protected $view = 'admin::form.multiplefile';
 
     /**
      *  Validation rules.
@@ -21,20 +22,18 @@ class Image extends File
     protected $rules = 'image';
 
     /**
-     * @param array|UploadedFile $image
+     * Prepare for each file.
      *
-     * @return string
+     * @param UploadedFile $image
+     *
+     * @return mixed|string
      */
-    public function prepare($image)
+    protected function prepareForeach(UploadedFile $image = null)
     {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
-            return $this->destroy();
-        }
-
         $this->name = $this->getStoreName($image);
 
         $this->callInterventionMethods($image->getRealPath());
 
-        return $this->uploadAndDeleteOriginal($image);
+        return $this->upload($image);
     }
 }
