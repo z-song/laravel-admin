@@ -393,7 +393,7 @@ class Form
             return $response;
         }
 
-        $this->relations = $this->getRelationInputs($data);
+        $this->relations = $this->getRelationInputs($this->inputs);
 
         $updates = array_except($this->inputs, array_keys($this->relations));
 
