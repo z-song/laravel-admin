@@ -434,7 +434,7 @@ class Model
                 $relatedTable,
                 $relation->getQualifiedParentKeyName(),
                 '=',
-                $relation->getForeignKey(),
+                $relation->getQualifiedForeignKeyName(),
             ];
         }
 
