@@ -260,6 +260,8 @@ class Grid
             $relation = $this->model()->eloquent()->$relationName();
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
+
+            $name = snake_case($relationName) . '.' . $relationColumn;
         }
 
         $column = $this->addColumn($name, $label);
@@ -811,7 +813,7 @@ class Grid
         if ($relation instanceof HasOne || $relation instanceof BelongsTo) {
             $this->model()->with($method);
 
-            return $this->addColumn($method, $label)->setRelation($method);
+            return $this->addColumn($method, $label)->setRelation(snake_case($method));
         }
 
         if ($relation instanceof HasMany || $relation instanceof BelongsToMany || $relation instanceof MorphToMany) {
