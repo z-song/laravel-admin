@@ -78,13 +78,21 @@ class ImageUploadTest extends TestCase
 
         $this->assertEquals($this->fileCountInImageDir(), 6);
 
+        // remove image2
         $this->call(
             'PUT', // $method
             '/admin/images/1', // $action
-            ['image2_action' => 1, 'image5_action' => 1] // $parameters
+            ['image2' => '', '__del__' => '', 'key' => 0] // $parameters
         );
 
-        $this->assertRedirectedTo('/admin/images');
+        $this->assertEquals($this->fileCountInImageDir(), 5);
+
+        // remove image5
+        $this->call(
+            'PUT', // $method
+            '/admin/images/1', // $action
+            ['image5' => '', '__del__' => '', 'key' => 0] // $parameters
+        );
 
         $this->assertEquals($this->fileCountInImageDir(), 4);
     }
@@ -212,8 +220,6 @@ class ImageUploadTest extends TestCase
 
         $pictures = MultipleImage::first()->pictures;
 
-        $pictures = json_decode($pictures, true);
-
         $this->assertCount($size, $pictures);
 
         foreach ($pictures as $picture) {
@@ -249,10 +255,10 @@ class ImageUploadTest extends TestCase
         $this->call(
             'PUT', // $method
             '/admin/multiple-images/1', // $action
-            ['pictures_action' => 1] // $parameters
+            ['pictures' => '', '__del__' => '', 'key' => 0] // $parameters
         );
 
-        $this->assertEquals($this->fileCountInImageDir(), 0);
+        $this->assertEquals($this->fileCountInImageDir(), $size - 1);
     }
 
     protected function fileCountInImageDir($dir = 'upload/image')
