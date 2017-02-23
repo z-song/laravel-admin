@@ -23,7 +23,7 @@ abstract class BatchAction
         return csrf_token();
     }
 
-    protected function getElementClass()
+    protected function getElementClassSelector()
     {
         return '.grid-batch-'.$this->id;
     }
