@@ -145,7 +145,7 @@ class File extends Field
 
         $this->script = <<<EOT
 
-$("input.{$this->getElementClass()}").fileinput({$options});
+$("input{$this->getElementClassSelector()}").fileinput({$options});
 
 EOT;
 

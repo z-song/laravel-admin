@@ -13,7 +13,7 @@ class BatchDelete extends BatchAction
 
         return <<<EOT
 
-$('{$this->getElementClass()}').on('click', function() {
+$('{$this->getElementClassSelector()}').on('click', function() {
 
     if(confirm("{$confirm}")) {
         $.ajax({
