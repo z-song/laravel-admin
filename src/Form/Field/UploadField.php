@@ -24,13 +24,6 @@ trait UploadField
     protected $name = null;
 
     /**
-     * Options for file-upload plugin.
-     *
-     * @var array
-     */
-    protected $options = [];
-
-    /**
      * Storage instance.
      *
      * @var \Illuminate\Filesystem\Filesystem
