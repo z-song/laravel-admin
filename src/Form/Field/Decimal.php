@@ -22,7 +22,7 @@ class Decimal extends Text
     {
         $options = json_encode($this->options);
 
-        $this->script = "$('.{$this->getElementClass()}').inputmask($options);";
+        $this->script = "$('{$this->getElementClassSelector()}').inputmask($options);";
 
         $this->prepend('<i class="fa fa-terminal"></i>')
             ->defaultAttribute('style', 'width: 130px');

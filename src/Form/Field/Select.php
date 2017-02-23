@@ -20,7 +20,7 @@ class Select extends Field
     public function render()
     {
         if (empty($this->script)) {
-            $this->script = "$(\".{$this->getElementClass()}\").select2({allowClear: true});";
+            $this->script = "$(\"{$this->getElementClassSelector()}\").select2({allowClear: true});";
         }
 
         if ($this->options instanceof \Closure) {
@@ -84,7 +84,7 @@ class Select extends Field
 
         $script = <<<EOT
 
-$(document).on('change', ".{$this->getElementClass()}", function () {
+$(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
@@ -124,7 +124,7 @@ EOT;
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
-  $(".{$this->getElementClass()}").select2({data: data});
+  $("{$this->getElementClassSelector()}").select2({data: data});
 });
 
 EOT;
@@ -145,7 +145,7 @@ EOT;
     {
         $this->script = <<<EOT
 
-$(".{$this->getElementClass()}").select2({
+$("{$this->getElementClassSelector()}").select2({
   ajax: {
     url: "$url",
     dataType: 'json',
