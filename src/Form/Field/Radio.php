@@ -50,7 +50,7 @@ class Radio extends Field
      */
     public function render()
     {
-        $this->script = "$('.{$this->getElementClass()}').iCheck({radioClass:'iradio_minimal-blue'});";
+        $this->script = "$('{$this->getElementClassSelector()}').iCheck({radioClass:'iradio_minimal-blue'});";
 
         return parent::render()->with(['options' => $this->options]);
     }
