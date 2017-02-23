@@ -191,7 +191,7 @@ class MultipleFile extends Field
         $options = json_encode($this->options);
 
         $this->script = <<<EOT
-$("input.{$this->getElementClass()}").fileinput({$options});
+$("input{$this->getElementClassSelector()}").fileinput({$options});
 EOT;
 
         return parent::render();

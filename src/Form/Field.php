@@ -17,6 +17,8 @@ class Field implements Renderable
 {
     const FILE_DELETE_FLAG = '__del__';
 
+    const ELEMENT_CLASS_PREFIX = 'la-';
+
     /**
      * Element id.
      *
@@ -71,7 +73,7 @@ class Field implements Renderable
      *
      * @var string
      */
-    protected $elementClass = '';
+    protected $elementClass = [];
 
     /**
      * Variables of elements.
@@ -641,13 +643,14 @@ class Field implements Renderable
     /**
      * Set form element class.
      *
-     * @param string $class
+     * @deprecated
+     * @param array $class
      *
      * @return $this
      */
     public function setElementClass($class)
     {
-        $this->elementClass = $class;
+        $this->addElementClass($class);
 
         return $this;
     }
@@ -655,19 +658,87 @@ class Field implements Renderable
     /**
      * Get element class.
      *
-     * @return string
+     * @return array
      */
     protected function getElementClass()
     {
         if (!$this->elementClass) {
             $name = $this->elementName ?: $this->formatName($this->column);
 
-            $this->elementClass = str_replace(['[', ']'], '_', $name);
+            $this->elementClass[] = str_replace(['[', ']'], '_', $name);
         }
 
         return $this->elementClass;
     }
 
+    /**
+     * Get element class with gap
+     *
+     * @return mixed
+     */
+    protected function getElementClassWithGap()
+    {
+        return implode(' ', $this->elementClass);
+    }
+
+    /**
+     * Get element class selector
+     *
+     * @return string
+     */
+    protected function getElementClassSelector()
+    {
+        $selector = '';
+
+        foreach($this->getElementClass() as $class){
+            $selector .= ".$class";
+        }
+
+        return $selector;
+    }
+
+    /**
+     * Add the element class
+     *
+     * @param $class
+     * @return $this
+     */
+    public function addElementClass($class)
+    {
+        if(is_array($class) || is_string($class)){
+
+            $this->elementClass = array_merge($this->elementClass, (array)$class);
+
+            $this->elementClass = array_unique($this->elementClass);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Remove element class
+     *
+     * @param $class
+     * @return $this
+     */
+    public function removeElementClass($class)
+    {
+        $delClass = [];
+
+        if(is_string($class) || is_array($class)){
+            $delClass = (array)$class;
+        }
+
+        foreach($delClass as $del){
+            if(($key = array_search($del, $this->elementClass))){
+                unset($this->elementClass[$key]);
+            }
+        }
+
+        return $this;
+
+    }
     /**
      * Get the view variables of this field.
      *
@@ -679,7 +750,7 @@ class Field implements Renderable
             'id'            => $this->id,
             'name'          => $this->elementName ?: $this->formatName($this->column),
             'help'          => $this->help,
-            'class'         => $this->getElementClass(),
+            'class'         => $this->getElementClassWithGap(),
             'value'         => $this->value(),
             'label'         => $this->label,
             'width'         => $this->width,

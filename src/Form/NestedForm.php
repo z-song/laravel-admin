@@ -340,12 +340,12 @@ class NestedForm
         } else {
             $errorKey = sprintf('%s.%s.%s', $this->relationName, $key, $column);
             $elementName = sprintf('%s[%s][%s]', $this->relationName, $key, $column);
-            $elementClass = sprintf('%s_%s', $this->relationName, $column);
+            $elementClass = [$this->relationName, $column];
         }
 
         return $field->setErrorKey($errorKey)
             ->setElementName($elementName)
-            ->setElementClass($elementClass);
+            ->addElementClass($elementClass);
     }
 
     /**
