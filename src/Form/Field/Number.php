@@ -14,7 +14,7 @@ class Number extends Text
 
         $this->script = <<<EOT
 
-$('.{$this->getElementClass()}:not(.initialized)')
+$('{$this->getElementClassSelector()}:not(.initialized)')
     .addClass('initialized')
     .bootstrapNumber({
         upClass: 'success',
