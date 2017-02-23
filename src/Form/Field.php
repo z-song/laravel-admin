@@ -686,13 +686,7 @@ class Field implements Renderable
      */
     protected function getElementClassSelector()
     {
-        $selector = '';
-
-        foreach($this->getElementClass() as $class){
-            $selector .= ".$class";
-        }
-
-        return $selector;
+        return '.' . implode('.', $this->elementClass);
     }
 
     /**
