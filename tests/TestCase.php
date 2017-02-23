@@ -54,6 +54,8 @@ class TestCase extends BaseTestCase
 
         //$this->artisan('admin:install');
 
+        \Encore\Admin\Facades\Admin::registerAuthRoutes();
+
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
             //$this->app['admin.router']->register();

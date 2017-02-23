@@ -87,7 +87,7 @@ class MultipleImageController extends Controller
         return Admin::form(MultipleImage::class, function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->image('pictures')->multiple();
+            $form->multipleImage('pictures');
 
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');

@@ -143,7 +143,7 @@ class MultipleFile extends Field
      *
      * @return string
      */
-    protected function initialCaption(array $caption)
+    protected function initialCaption($caption)
     {
         if (empty($caption)) {
             return '';
