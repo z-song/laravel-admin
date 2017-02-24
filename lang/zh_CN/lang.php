@@ -33,6 +33,7 @@ return [
     'close'         => '关闭',
     'show'          => '显示',
     'entries'       => '条',
+    'captcha'       => '验证码',
 
     'action'           => '操作',
     'title'            => '标题',

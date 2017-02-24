@@ -62,6 +62,9 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
+ * @method Field\MultipleImage  multipleImage($column, $label = '')
+ * @method Field\MultipleFile   multipleFile($column, $label = '')
+ * @method Field\Captcha        captcha($column, $label = '')
  */
 class Form
 {
@@ -490,6 +493,7 @@ class Form
             return back()->withInput()->withErrors($validationMessages);
         }
 
+        /* @var Model $this->model */
         $this->model = $this->model->with($this->getRelations())->findOrFail($id);
 
         $this->setFieldOriginalValue();
@@ -502,6 +506,7 @@ class Form
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
+                /* @var Model $this->model */
                 $this->model->setAttribute($column, $value);
             }
 
@@ -820,7 +825,7 @@ class Form
      */
     public function ignore($fields)
     {
-        $this->ignored = (array) $fields;
+        $this->ignored = array_merge($this->ignored, (array) $fields);
 
         return $this;
     }
@@ -1163,6 +1168,7 @@ class Form
             'icon'              => \Encore\Admin\Form\Field\Icon::class,
             'multipleFile'      => \Encore\Admin\Form\Field\MultipleFile::class,
             'multipleImage'     => \Encore\Admin\Form\Field\MultipleImage::class,
+            'captcha'           => \Encore\Admin\Form\Field\Captcha::class,
         ];
 
         foreach ($map as $abstract => $class) {
