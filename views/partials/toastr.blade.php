@@ -3,8 +3,11 @@
         $toastr     = Session::get('toastr');
         $type       = array_get($toastr->get('type'), 0, 'success');
         $message    = array_get($toastr->get('message'), 0, '');
+        $options    = json_encode($toastr->get('options', []));
     @endphp
     <script>
-        toastr.{{$type}}('{!!  $message  !!}');
+        $(function () {
+            toastr.{{$type}}('{!!  $message  !!}', null, {!! $options !!});
+        });
     </script>
 @endif
