@@ -10,6 +10,7 @@ use Encore\Admin\Scaffold\ModelCreator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\MessageBag;
 
 class ScaffoldController extends Controller
@@ -27,7 +28,9 @@ class ScaffoldController extends Controller
                 'timestampTz', 'nullableTimestamps', 'binary', 'ipAddress', 'macAddress',
             ];
 
-            $content->row(view('admin::helpers.scaffold', compact('dbTypes')));
+            $action = URL::current();
+
+            $content->row(view('admin::helpers.scaffold', compact('dbTypes', 'action')));
         });
     }
 
