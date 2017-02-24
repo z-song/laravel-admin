@@ -5,7 +5,7 @@
     <!-- /.box-header -->
     <div class="box-body">
 
-        <form method="post" id="scaffold" pjax-container>
+        <form method="post" action="{{$action}}" id="scaffold" pjax-container>
 
             <div class="box-body">
 
