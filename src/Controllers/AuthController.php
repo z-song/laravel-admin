@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\MessageBag;
 
 class AuthController extends Controller
 {
@@ -48,7 +47,10 @@ class AuthController extends Controller
         }
 
         if (Auth::guard('admin')->attempt($credentials)) {
-            return Redirect::intended(config('admin.prefix'));
+
+            admin_toastr(trans('admin::lang.login_successful'));
+
+            return redirect()->intended(config('admin.prefix'));
         }
 
         return Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
@@ -117,12 +119,9 @@ class AuthController extends Controller
             });
 
             $form->saved(function () {
-                $success = new MessageBag([
-                    'title'   => trans('admin::lang.succeeded'),
-                    'message' => trans('admin::lang.update_succeeded'),
-                ]);
+                admin_toastr(trans('admin::lang.update_succeeded'));
 
-                return redirect(admin_url('auth/setting'))->with(compact('success'));
+                return redirect(admin_url('auth/setting'));
             });
         });
     }
