@@ -28,7 +28,9 @@ trait PlainInput
 
     protected function initPlainInput()
     {
-        $this->view = 'admin::form.input';
+        if (empty($this->view)) {
+            $this->view = 'admin::form.input';
+        }
     }
 
     protected function defaultAttribute($attribute, $value)
@@ -38,9 +40,5 @@ trait PlainInput
         }
 
         return $this;
-    }
-
-    public function hasError()
-    {
     }
 }

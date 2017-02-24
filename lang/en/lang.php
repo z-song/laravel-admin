@@ -33,6 +33,7 @@ return [
     'close'         => 'Close',
     'show'          => 'Show',
     'entries'       => 'entries',
+    'captcha'       => 'Captcha',
 
     'action'           => 'Action',
     'title'            => 'Title',
