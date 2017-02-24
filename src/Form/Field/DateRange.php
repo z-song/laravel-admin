@@ -52,16 +52,16 @@ class DateRange extends Field
         $startOptions = json_encode($this->options);
         $endOptions = json_encode($this->options + ['useCurrent' => false]);
 
-        $class = $this->getElementClass();
+        $class = $this->getElementClassSelector();
 
         $this->script = <<<EOT
-            $('.{$class['start']}').datetimepicker($startOptions);
-            $('.{$class['end']}').datetimepicker($endOptions);
-            $(".{$class['start']}").on("dp.change", function (e) {
-                $('.{$class['end']}').data("DateTimePicker").minDate(e.date);
+            $('{$class['start']}').datetimepicker($startOptions);
+            $('{$class['end']}').datetimepicker($endOptions);
+            $("{$class['start']}").on("dp.change", function (e) {
+                $('{$class['end']}').data("DateTimePicker").minDate(e.date);
             });
-            $(".{$class['end']}").on("dp.change", function (e) {
-                $('.{$class['start']}').data("DateTimePicker").maxDate(e.date);
+            $("{$class['end']}").on("dp.change", function (e) {
+                $('{$class['start']}').data("DateTimePicker").maxDate(e.date);
             });
 EOT;
 

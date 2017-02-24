@@ -40,7 +40,7 @@ class Currency extends Text
 
         $this->script = <<<EOT
 
-$('.{$this->getElementClass()}').inputmask($options);
+$('{$this->getElementClassSelector()}').inputmask($options);
 
 EOT;
 
