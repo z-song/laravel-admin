@@ -64,7 +64,7 @@ class Field implements Renderable
      *
      * @var string
      */
-    protected $elementName = '';
+    protected $elementName = [];
 
     /**
      * Form element name.
@@ -647,7 +647,7 @@ class Field implements Renderable
      */
     public function setElementClass($class)
     {
-        $this->elementClass = $class;
+        $this->elementClass = (array)$class;
 
         return $this;
     }
@@ -655,17 +655,80 @@ class Field implements Renderable
     /**
      * Get element class.
      *
-     * @return string
+     * @return array
      */
     protected function getElementClass()
     {
         if (!$this->elementClass) {
             $name = $this->elementName ?: $this->formatName($this->column);
 
-            $this->elementClass = str_replace(['[', ']'], '_', $name);
+            $this->elementClass = (array)str_replace(['[', ']'], '_', $name);
         }
 
         return $this->elementClass;
+    }
+
+    /**
+     * Get element class string
+     *
+     * @return mixed
+     */
+    protected function getElementClassString()
+    {
+        return implode(' ', $this->getElementClass());
+    }
+
+    /**
+     * Get element class selector
+     *
+     * @return string
+     */
+    protected function getElementClassSelector()
+    {
+        return '.' . implode('.', $this->getElementClass());
+    }
+
+    /**
+     * Add the element class
+     *
+     * @param $class
+     * @return $this
+     */
+    public function addElementClass($class)
+    {
+        if(is_array($class) || is_string($class)){
+
+            $this->elementClass = array_merge($this->elementClass, (array)$class);
+
+            $this->elementClass = array_unique($this->elementClass);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Remove element class
+     *
+     * @param $class
+     * @return $this
+     */
+    public function removeElementClass($class)
+    {
+        $delClass = [];
+
+        if(is_string($class) || is_array($class)){
+            $delClass = (array)$class;
+        }
+
+        foreach($delClass as $del){
+            if(($key = array_search($del, $this->elementClass))){
+                unset($this->elementClass[$key]);
+            }
+        }
+
+        return $this;
+
     }
 
     /**
@@ -679,7 +742,7 @@ class Field implements Renderable
             'id'            => $this->id,
             'name'          => $this->elementName ?: $this->formatName($this->column),
             'help'          => $this->help,
-            'class'         => $this->getElementClass(),
+            'class'         => $this->getElementClassString(),
             'value'         => $this->value(),
             'label'         => $this->label,
             'width'         => $this->width,
