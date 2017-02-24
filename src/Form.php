@@ -346,14 +346,11 @@ class Form
      */
     protected function redirectAfterStore()
     {
-        $success = new MessageBag([
-            'title'   => trans('admin::lang.succeeded'),
-            'message' => trans('admin::lang.save_succeeded'),
-        ]);
+        $toastr = new MessageBag(['message' => trans('admin::lang.save_succeeded')]);
 
         $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(0);
 
-        return redirect($url)->with(compact('success'));
+        return redirect($url)->with(compact('toastr'));
     }
 
     /**
@@ -533,14 +530,11 @@ class Form
      */
     protected function redirectAfterUpdate()
     {
-        $success = new MessageBag([
-            'title'   => trans('admin::lang.succeeded'),
-            'message' => trans('admin::lang.update_succeeded'),
-        ]);
+        $toastr = new MessageBag(['message' => trans('admin::lang.update_succeeded')]);
 
         $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
 
-        return redirect($url)->with(compact('success'));
+        return redirect($url)->with(compact('toastr'));
     }
 
     /**
