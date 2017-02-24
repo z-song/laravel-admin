@@ -23,7 +23,7 @@ class Mobile extends Text
 
         $this->script = <<<EOT
 
-$('.{$this->getElementClass()}').inputmask($options);
+$('{$this->getElementClassSelector()}').inputmask($options);
 EOT;
 
         $this->prepend('<i class="fa fa-phone"></i>')
