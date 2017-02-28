@@ -138,7 +138,7 @@ class Editable extends AbstractDisplayer
     {
         $this->options['name'] = $column = $this->column->getName();
 
-        $class = "grid-editable-$column";
+        $class = 'grid-editable-' . str_replace(['.','#','[',']'], '-',$column);
 
         $this->buildEditableOptions(func_get_args());
 
