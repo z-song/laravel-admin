@@ -335,17 +335,15 @@ class NestedForm
             foreach ($column as $k => $name) {
                 $errorKey[$k] = sprintf('%s.%s.%s', $this->relationName, $key, $name);
                 $elementName[$k] = sprintf('%s[%s][%s]', $this->relationName, $key, $name);
-                $elementClass[$k] = [$this->relationName, $name];
             }
         } else {
             $errorKey = sprintf('%s.%s.%s', $this->relationName, $key, $column);
             $elementName = sprintf('%s[%s][%s]', $this->relationName, $key, $column);
-            $elementClass = [$this->relationName, $column];
         }
 
         return $field->setErrorKey($errorKey)
             ->setElementName($elementName)
-            ->setElementClass($elementClass);
+            ->addElementClass($this->relationName);
     }
 
     /**
