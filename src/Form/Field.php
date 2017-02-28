@@ -6,6 +6,7 @@ use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -675,7 +676,13 @@ class Field implements Renderable
      */
     protected function getElementClassString()
     {
-        return implode(' ', $this->getElementClass());
+        $elementClass = $this->getElementClass();
+
+        if (Arr::isAssoc($elementClass)) {
+            return $elementClass;
+        }
+
+        return implode(' ', $elementClass);
     }
 
     /**
@@ -685,7 +692,20 @@ class Field implements Renderable
      */
     protected function getElementClassSelector()
     {
-        return '.' . implode('.', $this->getElementClass());
+        $elementClass = $this->getElementClass();
+
+        if (Arr::isAssoc($elementClass)) {
+
+            $classes = [];
+
+            foreach ($elementClass as $index => $class) {
+                $classes[$index] = '.' . $class;
+            }
+
+            return $classes;
+        }
+
+        return '.' . implode('.', $elementClass);
     }
 
     /**
