@@ -1,6 +1,6 @@
-<div class="form-group {!! ($errors->has($errorKey['start'].'start') || $errors->has($errorKey['end'].'end')) ? 'has-error' : ''  !!}">
+<div class="form-group {!! $startVars['errors']->has($startVars['errorKey']) || $endVars['errors']->has($endVars['errorKey']) ? 'has-error' : ''  !!}">
 
-    <label for="{{$id['start']}}" class="col-sm-{{$width['label']}} control-label">{{$label}}</label>
+    <label for="{{$startVars['id']}}" class="col-sm-{{$width['label']}} control-label">{{$label}}</label>
 
     <div class="col-sm-{{$width['field']}}">
 
@@ -10,14 +10,14 @@
             <div class="col-lg-6">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input type="text" name="{{$name['start']}}" value="{{ old($column['start'], $value['start']) }}" class="form-control {{$class['start']}}" style="width: 150px" {!! $attributes !!} />
+                    <input type="text" name="{{$startVars['name']}}" value="{{ old($startVars['column'], $startVars['value']) }}" class="form-control {{$startVars['class']}}" style="width: 150px" {!! $startVars['attributes'] !!} />
                 </div>
             </div>
 
             <div class="col-lg-6">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input type="text" name="{{$name['end']}}" value="{{ old($column['end'], $value['end']) }}" class="form-control {{$class['end']}}" style="width: 150px" {!! $attributes !!} />
+                    <input type="text" name="{{$endVars['name']}}" value="{{ old($endVars['column'], $endVars['value']) }}" class="form-control {{$endVars['class']}}" style="width: 150px" {!! $endVars['attributes'] !!} />
                 </div>
             </div>
         </div>

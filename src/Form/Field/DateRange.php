@@ -6,6 +6,9 @@ use Encore\Admin\Form\Field;
 
 class DateRange extends Field
 {
+
+    const COLUMN_PREFIX = 'la_daterange_';
+
     protected static $css = [
         '/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
     ];
@@ -18,16 +21,32 @@ class DateRange extends Field
     protected $format = 'YYYY-MM-DD';
 
     /**
-     * Column name.
+     * Date range set
      *
-     * @var string
+     * @var \Encore\Admin\Form\Field\Date
      */
-    protected $column = [];
+    protected $range = [];
 
+    /**
+     * Date range value
+     *
+     * @var array
+     */
+    protected $value = [];
+
+
+    /**
+     * DateRange2 constructor.
+     *
+     * @param $column
+     * @param array $arguments
+     */
     public function __construct($column, $arguments)
     {
-        $this->column['start'] = $column;
-        $this->column['end'] = $arguments[0];
+        $this->column = static::COLUMN_PREFIX . $column . '_' . $arguments[0];
+
+        $this->range['start'] = new Date($column);
+        $this->range['end']   = new Date($arguments[0]);
 
         array_shift($arguments);
         $this->label = $this->formatLabel($arguments);
@@ -36,10 +55,17 @@ class DateRange extends Field
         $this->options(['format' => $this->format]);
     }
 
+
     public function prepare($value)
     {
         if ($value === '') {
             $value = null;
+        }
+
+        $this->value = array_get($value, $this->column);
+
+        foreach($this->range as $range){
+            $range->prepare($this->value);
         }
 
         return $value;
@@ -52,19 +78,23 @@ class DateRange extends Field
         $startOptions = json_encode($this->options);
         $endOptions = json_encode($this->options + ['useCurrent' => false]);
 
-        $class = $this->getElementClass();
+        $this->range['start']->addElementClass($this->getElementClass());
+        $this->range['end']->addElementClass($this->getElementClass());
 
         $this->script = <<<EOT
-            $('.{$class['start']}').datetimepicker($startOptions);
-            $('.{$class['end']}').datetimepicker($endOptions);
-            $(".{$class['start']}").on("dp.change", function (e) {
-                $('.{$class['end']}').data("DateTimePicker").minDate(e.date);
+            $('{$this->range['start']->getElementClassSelector()}').datetimepicker($startOptions);
+            $('{$this->range['end']->getElementClassSelector()}').datetimepicker($endOptions);
+            $("{$this->range['start']->getElementClassSelector()}").on("dp.change", function (e) {
+                $('{$this->range['end']->getElementClassSelector()}').data("DateTimePicker").minDate(e.date);
             });
-            $(".{$class['end']}").on("dp.change", function (e) {
-                $('.{$class['start']}').data("DateTimePicker").maxDate(e.date);
+            $("{$this->range['end']->getElementClassSelector()}").on("dp.change", function (e) {
+                $('{$this->range['start']->getElementClassSelector()}').data("DateTimePicker").maxDate(e.date);
             });
 EOT;
 
-        return parent::render();
+        return parent::render()->with([
+            'startVars'    => $this->range['start']->variables(),
+            'endVars'      => $this->range['end']->variables()
+        ]);
     }
 }
