@@ -478,13 +478,13 @@ $('.nav-tabs a').on('shown.bs.tab', function (e) {
 });
 
 if ($('.has-error').length) {
-    $('.has-error').parent().each(function () {
-        var tabId = '#'+$(this).attr('id');
-        $('li a[href="'+tabId+'"] i').removeClass('hide');
+    $('.has-error').each(function () {
+        var tabId = '#'+$(this).closest('.tab-pane').attr('id');
+        $('li a[data-target="'+tabId+'"] i').removeClass('hide');
     });
     
-    var first = $('.has-error:first').parent().attr('id');
-    $('li a[href="#'+first+'"]').tab('show');
+    var first = $('.has-error:first').closest('.tab-pane').attr('id');
+    $('li a[data-target="#'+first+'"]').tab('show');
 }
 
 SCRIPT;
