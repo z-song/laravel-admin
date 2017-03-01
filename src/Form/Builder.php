@@ -466,27 +466,15 @@ EOT;
 
         if (!$tabObj->isEmpty()) {
             $script = <<<'SCRIPT'
-
-var url = document.location.toString();
-if (url.match('#')) {
-    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-}
-        
-// Change hash for page-reload
-$('.nav-tabs a').on('shown.bs.tab', function (e) {
-    window.location.hash = e.target.hash;
-});
-
 if ($('.has-error').length) {
-    $('.has-error').parent().each(function () {
-        var tabId = '#'+$(this).attr('id');
+    $('.has-error').each(function () {
+        var tabId = '#'+$(this).closest('.tab-pane').attr('id');
         $('li a[href="'+tabId+'"] i').removeClass('hide');
     });
     
-    var first = $('.has-error:first').parent().attr('id');
+    var first = $('.has-error:first').closest('.tab-pane').attr('id');
     $('li a[href="#'+first+'"]').tab('show');
 }
-
 SCRIPT;
             Admin::script($script);
         }
