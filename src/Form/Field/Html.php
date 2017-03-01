@@ -9,7 +9,7 @@ class Html extends Field
     /**
      * Htmlable.
      *
-     * @var string
+     * @var string|\Closure
      */
     protected $html = '';
 
@@ -38,6 +38,12 @@ class Html extends Field
      */
     public function render()
     {
+        if ($this->html instanceof \Closure) {
+            $callback = $this->html->bindTo($this->form->model());
+
+            $this->html = call_user_func($callback, $this->form);
+        }
+
         return <<<EOT
 <div class="form-group">
     <label  class="col-sm-2 control-label">{$this->label}</label>
