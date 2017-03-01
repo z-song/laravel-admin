@@ -125,7 +125,7 @@ trait UploadField
     }
 
     /**
-     * Specify the directory and name for uplaod file.
+     * Specify the directory and name for upload file.
      *
      * @param string $directory
      * @param null|string $name
@@ -134,9 +134,25 @@ trait UploadField
      */
     public function move($directory, $name = null)
     {
-        $this->directory = $directory;
+        $this->dir($directory);
 
-        $this->name = $name;
+        $this->name($name);
+
+        return $this;
+    }
+
+    /**
+     * Specify the directory upload file.
+     *
+     * @param string $dir
+     *
+     * @return $this
+     */
+    public function dir($dir)
+    {
+        if ($dir) {
+            $this->directory = $dir;
+        }
 
         return $this;
     }
@@ -150,7 +166,9 @@ trait UploadField
      */
     public function name($name)
     {
-        $this->name = $name;
+        if ($name) {
+            $this->name = $name;
+        }
 
         return $this;
     }
