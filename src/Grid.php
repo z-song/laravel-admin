@@ -841,15 +841,15 @@ class Grid
             return $this->addColumn($method, $label);
         }
 
-        if ($column = $this->handleTableColumn($method, $label)) {
-            return $column;
-        }
-
         if ($column = $this->handleGetMutatorColumn($method, $label)) {
             return $column;
         }
 
         if ($column = $this->handleRelationColumn($method, $label)) {
+            return $column;
+        }
+
+        if ($column = $this->handleTableColumn($method, $label)) {
             return $column;
         }
 
