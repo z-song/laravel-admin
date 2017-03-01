@@ -92,6 +92,13 @@ class Column
     public static $displayers = [];
 
     /**
+     * Defined columns.
+     *
+     * @var array
+     */
+    public static $defined = [];
+
+    /**
      * @param string $name
      * @param string $label
      */
@@ -111,6 +118,18 @@ class Column
     public static function extend($name, $displayer)
     {
         static::$displayers[$name] = $displayer;
+    }
+
+    /**
+     * Define a column globally.
+     *
+     * @param string $name
+     *
+     * @param mixed $definition
+     */
+    public static function define($name, $definition)
+    {
+        static::$defined[$name] = $definition;
     }
 
     /**
@@ -292,6 +311,10 @@ class Column
 
             array_set($row, $this->name, $value);
 
+            if ($this->isDefinedColumn()) {
+                $this->useDefinedColumn();
+            }
+
             if ($this->hasDisplayCallbacks()) {
                 $value = $this->callDisplayCallbacks($this->original, $key);
                 array_set($row, $this->name, $value);
@@ -299,6 +322,47 @@ class Column
         }
 
         return $data;
+    }
+
+    /**
+     * If current column is a defined column.
+     *
+     * @return bool
+     */
+    protected function isDefinedColumn()
+    {
+        return array_key_exists($this->name, static::$defined);
+    }
+
+    /**
+     * Use a defined column
+     *
+     * @throws \Exception
+     */
+    protected function useDefinedColumn()
+    {
+        // clear all display callbacks.
+        $this->displayCallbacks = [];
+
+        $class = static::$defined[$this->name];
+
+        if ($class instanceof Closure) {
+            $this->display($class);
+            return;
+        }
+
+        if (!class_exists($class) || !is_subclass_of($class, AbstractDisplayer::class)) {
+            throw new \Exception("Invalid column definition [$class]");
+        }
+
+        $grid = $this->grid;
+        $column = $this;
+
+        $this->display(function ($value) use ($grid, $column, $class) {
+            $definition = new $class($value, $grid, $column, $this);
+
+            return $definition->display();
+        });
     }
 
     /**
