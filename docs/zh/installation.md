@@ -3,7 +3,7 @@
 首先确保安装好了`laravel`，并且数据库连接设置正确。
 
 ```
-Laravel 5.1
+Laravel 5.1, 已经不维护了
 composer require encore/laravel-admin "1.1.*"
 
 Laravel 5.2
@@ -13,7 +13,7 @@ Laravel 5.3
 composer require encore/laravel-admin "1.3.*"
 
 Laravel 5.4
-composer require encore/laravel-admin "1.4.x-dev"
+composer require encore/laravel-admin "1.4.*"
 ```
 
 在`config/app.php`加入`ServiceProvider`:

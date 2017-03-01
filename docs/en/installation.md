@@ -3,7 +3,7 @@
 First, install laravel, and make sure that the database connection settings are correct.
 
 ```
-Laravel 5.1
+Laravel 5.1, not maintained
 composer require encore/laravel-admin "1.1.*"
 
 Laravel 5.2
@@ -13,7 +13,7 @@ Laravel 5.3
 composer require encore/laravel-admin "1.3.*"
 
 Laravel 5.4
-composer require encore/laravel-admin "1.4.x-dev"
+composer require encore/laravel-admin "1.4.*"
 
 ```
 
