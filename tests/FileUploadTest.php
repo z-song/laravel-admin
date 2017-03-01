@@ -92,7 +92,7 @@ class FileUploadTest extends TestCase
             ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
 
-        $this->attach(__DIR__.'/RoleTest.php', 'file3')
+        $this->attach(__DIR__.'/RolesTest.php', 'file3')
             ->attach(__DIR__.'/MenuTest.php', 'file4')
             ->attach(__DIR__.'/TestCase.php', 'file5')
             ->press('Submit');
