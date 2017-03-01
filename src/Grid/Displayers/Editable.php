@@ -159,6 +159,8 @@ class Editable extends AbstractDisplayer
             return "$name='$attribute'";
         })->implode(' ');
 
-        return "<a $attributes>{$this->value}</a>";
+        $html = $this->type === 'select' ? '' :$this->value;
+
+        return "<a $attributes>{$html}</a>";
     }
 }
