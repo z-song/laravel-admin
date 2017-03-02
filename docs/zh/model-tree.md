@@ -60,7 +60,7 @@ class Category extends Model
     }
 }
 ```
-## Usage
+## 使用
 然后就是在页面中使用`model-tree`了：
 ```php
 <?php
