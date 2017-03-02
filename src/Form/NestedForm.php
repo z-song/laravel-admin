@@ -51,7 +51,7 @@ use Illuminate\Support\Collection;
  */
 class NestedForm
 {
-    const DEFAULT_KEY_NAME = '__LA_KEY__';
+    const DEFAULT_KEY_NAME = '{key}';
 
     const REMOVE_FLAG_NAME = '_remove_';
 
