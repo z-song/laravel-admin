@@ -431,19 +431,19 @@ $form->divide();
 $form->html('你的html内容', $label = '');
 ```
 
-### tags
+### 标签
 插入逗号(,)隔开的字符串`tags`
 ```php
 $form->tags('keywords');
 ```
 
-### icon
+### 图标
 选择`font-awesome`图标
 ```php
 $form->icon('icon');
 ```
 
-### hasMany
+### 一对多
 
 一对多内嵌表格，用于处理一对多的关系，下面是个简单的例子：
 
@@ -522,7 +522,7 @@ $form->display('created_at', 'Created At');
 $form->display('updated_at', 'Updated At');
 ```
 
-### embeds
+### 内嵌
 
 用于处理`mysql`的`JSON`类型字段数据或者`mongodb`的`object`类型数据，也可以将多个field的数据值以`JSON`字符串的形式存储在`mysql`的字符创类型字段中
 
