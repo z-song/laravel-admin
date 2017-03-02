@@ -1282,6 +1282,8 @@ class Form
 
             $element = new $className($column, array_slice($arguments, 1));
 
+            $element->addElementClass('main');
+
             $this->pushField($element);
 
             return $element;
