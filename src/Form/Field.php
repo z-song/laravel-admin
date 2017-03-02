@@ -18,7 +18,7 @@ class Field implements Renderable
 {
     const FILE_DELETE_FLAG = '__del__';
 
-    const ELEMENT_PREFIX = 'LA_';
+    const ELEMENT_PREFIX = 'la_';
 
     /**
      * Element id.
