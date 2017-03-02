@@ -41,6 +41,13 @@ class Grid
     protected $columns;
 
     /**
+     * Collection of table columns.
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    protected $dbColumns;
+
+    /**
      * Collection of all data rows.
      *
      * @var \Illuminate\Support\Collection
@@ -174,6 +181,7 @@ class Grid
         $this->rows = new Collection();
         $this->builder = $builder;
 
+        $this->setDbColumns();
         $this->setupTools();
         $this->setupFilter();
         $this->setupExporter();
@@ -755,6 +763,18 @@ class Grid
     }
 
     /**
+     * Get the table columns for grid.
+     *
+     * @return void
+     */
+    protected function setDbColumns()
+    {
+        $connection = $this->model()->eloquent()->getConnectionName();
+
+        $this->dbColumns = collect(Schema::connection($connection)->getColumnListing($this->model()->getTable()));
+    }
+
+    /**
      * Handle table column for grid.
      *
      * @param string $method
@@ -764,9 +784,7 @@ class Grid
      */
     protected function handleTableColumn($method, $label)
     {
-        $connection = $this->model()->eloquent()->getConnectionName();
-
-        if (Schema::connection($connection)->hasColumn($this->model()->getTable(), $method)) {
+        if ($this->dbColumns->has($method)) {
             return $this->addColumn($method, $label);
         }
 
