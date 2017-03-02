@@ -16,16 +16,7 @@
             @else
                 <div class="fields-group">
                     @foreach($form->fields() as $field)
-                        @if( ! $field instanceof \Encore\Admin\Form\Field\HasMany)
-                            {!! $field->render() !!}
-                        @endif
-                    @endforeach
-                </div>
-                <div class="fields-group">
-                    @foreach($form->fields() as $field)
-                        @if( $field instanceof \Encore\Admin\Form\Field\HasMany)
-                            {!! $field->render() !!}
-                        @endif
+                        {!! $field->render() !!}
                     @endforeach
                 </div>
             @endif
