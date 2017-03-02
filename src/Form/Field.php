@@ -68,11 +68,11 @@ class Field implements Renderable
     protected $elementName = [];
 
     /**
-     * Form element name.
+     * Form element classes.
      *
      * @var string
      */
-    protected $elementClass = '';
+    protected $elementClass = [];
 
     /**
      * Variables of elements.
