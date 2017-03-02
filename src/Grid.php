@@ -819,7 +819,7 @@ class Grid
         if ($relation instanceof HasMany || $relation instanceof BelongsToMany || $relation instanceof MorphToMany) {
             $this->model()->with($method);
 
-            return $this->addColumn($method, $label);
+            return $this->addColumn(snake_case($method), $label);
         }
 
         return false;
