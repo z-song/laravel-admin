@@ -95,7 +95,7 @@ class MultipleFile extends Field
 
         $targets = array_map([$this, 'prepareForeach'], $files);
 
-        return array_merge($this->original(), $targets);
+        return json_encode(array_merge($this->original(), $targets));
     }
 
     /**

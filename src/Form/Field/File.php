@@ -71,7 +71,7 @@ class File extends Field
 
         $this->name = $this->getStoreName($file);
 
-        return $this->uploadAndDeleteOriginal($file);
+        return json_encode($this->uploadAndDeleteOriginal($file));
     }
 
     /**
