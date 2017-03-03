@@ -32,7 +32,7 @@
     </div>
 
     <template class="{{$column}}-tpl">
-        <div class="has-many-{{$column}}-form">
+        <div class="has-many-{{$column}}-form fields-group">
 
             {!! $template !!}
 
