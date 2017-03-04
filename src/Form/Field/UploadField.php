@@ -68,7 +68,7 @@ trait UploadField
             'browseLabel'          => trans('admin::lang.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
-            'initialCaption'   => $this->initialCaption(json_decode($this->value)),
+            'initialCaption'   => $this->initialCaption($this->value),
             'deleteUrl'        => $this->form->resource() . '/'. $this->form->model()->getKey(),
             'deleteExtraData'  => [
                 $this->column       => '',
