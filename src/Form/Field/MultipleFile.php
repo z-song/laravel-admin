@@ -95,7 +95,7 @@ class MultipleFile extends Field
 
         $targets = array_map([$this, 'prepareForeach'], $files);
 
-        return json_encode(array_merge($this->original(), $targets));
+        return array_merge($this->original(), $targets);
     }
 
     /**
@@ -131,7 +131,7 @@ class MultipleFile extends Field
      */
     protected function preview()
     {
-        $files = json_decode($this->value) ?: [];
+        $files = $this->value ?: [];
 
         return array_map([$this, 'objectUrl'], $files);
     }
@@ -159,7 +159,7 @@ class MultipleFile extends Field
      */
     protected function initialPreviewConfig()
     {
-        $files = json_decode($this->value) ?: [];
+        $files = $this->value ?: [];
 
         $config = [];
 
