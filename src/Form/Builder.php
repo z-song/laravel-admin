@@ -289,6 +289,25 @@ class Builder
     }
 
     /**
+     * Get or set option.
+     *
+     * @param string $option
+     * @param mixed $value
+     *
+     * @return $this
+     */
+    public function option($option, $value = null)
+    {
+        if (func_num_args() == 1) {
+            return array_get($this->options, $option);
+        }
+
+        $this->options[$option] = $value;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function title()
