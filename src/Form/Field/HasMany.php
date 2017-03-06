@@ -55,6 +55,8 @@ class HasMany extends Field
         'tab'       => 'admin::form.hasmanytab',
     ];
 
+    protected $keyName = '';
+
     /**
      * Create a new HasMany field instance.
      *
@@ -248,6 +250,13 @@ class HasMany extends Field
     {
         $form = $this->buildNestedForm($this->column, $this->builder);
 
+        $input = array_map(function($data){
+            if(! array_get($data, $this->getKeyName())){
+                unset($data[$this->getKeyName()]);
+            }
+            return $data;
+        }, $input);
+
         return $form->setOriginal($this->original, $this->getKeyName())->prepare($input);
     }
 
@@ -286,7 +295,11 @@ class HasMany extends Field
             return;
         }
 
-        return $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
+        if(! $this->keyName){
+            $this->keyName = $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
+        }
+
+        return $this->keyName;
     }
 
     /**

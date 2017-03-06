@@ -29,6 +29,8 @@ class MultipleFile extends Field
         '/packages/admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
     ];
 
+
+
     /**
      * Default directory for file to upload.
      *
@@ -133,26 +135,13 @@ class MultipleFile extends Field
     {
         $files = $this->value ?: [];
 
-        return array_map([$this, 'objectUrl'], $files);
+        return array_map(function($file){
+
+            return $this->objectUrl(array_get($file, 'target'));
+
+        }, $files);
     }
 
-    /**
-     * Initialize the caption.
-     *
-     * @param array $caption
-     *
-     * @return string
-     */
-    protected function initialCaption($caption)
-    {
-        if (empty($caption)) {
-            return '';
-        }
-
-        $caption = array_map('basename', $caption);
-
-        return implode(',', $caption);
-    }
 
     /**
      * @return array
@@ -165,7 +154,7 @@ class MultipleFile extends Field
 
         foreach ($files as $index => $file) {
             $config[] = [
-                'caption' => basename($file),
+                'caption' => array_get($file, 'originalName'),
                 'key'     => $index,
             ];
         }
@@ -208,8 +197,10 @@ EOT;
 
         $file = array_get($files, $key);
 
-        if ($this->storage->exists($file)) {
-            $this->storage->delete($file);
+        $target = array_get($file, 'target');
+
+        if ($this->storage->exists($target)) {
+            $this->storage->delete($target);
         }
 
         unset($files[$key]);

@@ -35,7 +35,14 @@ trait UploadField
      *
      * @var bool
      */
-    protected $useUniqueName = false;
+    protected $useUniqueName = true;
+
+    /**
+     * The file original name.
+     *
+     * @var string
+     */
+    private $originalName = '';
 
     /**
      * Create a new File instance.
@@ -68,7 +75,7 @@ trait UploadField
             'browseLabel'          => trans('admin::lang.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
-            'initialCaption'   => $this->initialCaption($this->value),
+            'initialCaption'   => array_get($this->value, 'originalName'),
             'deleteUrl'        => $this->form->resource() . '/'. $this->form->model()->getKey(),
             'deleteExtraData'  => [
                 $this->column       => '',
@@ -194,6 +201,8 @@ trait UploadField
      */
     protected function getStoreName(UploadedFile $file)
     {
+        $this->originalName = $file->getClientOriginalName();
+
         if ($this->useUniqueName) {
             return $this->generateUniqueName($file);
         }
@@ -208,7 +217,7 @@ trait UploadField
             return $this->name;
         }
 
-        return $file->getClientOriginalName();
+        return $this->originalName;
     }
 
     /**
@@ -236,11 +245,18 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        $target = $this->getDirectory() . '/' . $this->name;
+        $levelDir = date('Y-m-d').'/';
+
+        $target = $this->getDirectory() . '/' . $levelDir . $this->name;
 
         $this->storage->put($target, file_get_contents($file->getRealPath()));
 
-        return $target;
+        $info = [
+            'target'        => $target,
+            'originalName'  => $this->originalName
+        ];
+
+        return $info;
     }
 
     /**
@@ -252,8 +268,17 @@ trait UploadField
      */
     public function renameIfExists(UploadedFile $file)
     {
-        if ($this->storage->exists("{$this->getDirectory()}/$this->name")) {
-            $this->name = $this->generateUniqueName($file);
+        $dir = $this->getDirectory().'/';
+
+        list($name, $ext) = explode('.', $this->name);
+
+        $increment = 0;
+
+        while ($this->storage->exists($dir.$this->name)) {
+
+            $increment++;
+
+            $this->name = $name.' ('.$increment.').' . $ext;
         }
     }
 
