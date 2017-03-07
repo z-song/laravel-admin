@@ -72,6 +72,7 @@ trait UploadField
         $this->options([
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
+            'initialPreviewFileType' => 'object',
             'browseLabel'          => trans('admin::lang.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
