@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Form\Field;
 
-use App\Models\SysAttachment;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Models\AdminFiles;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -100,7 +100,7 @@ class MultipleFile extends Field
         $datas = array_map([$this, 'prepareForeach'], $files);
 
         try{
-            SysAttachment::insert($datas);
+            AdminFiles::insert($datas);
         }
         catch(\Exception $e){
             return $e->getMessage();
