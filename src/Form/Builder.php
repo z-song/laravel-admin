@@ -428,7 +428,7 @@ class Builder
 
         return <<<EOT
 <div class="btn-group pull-right">
-    <button type="submit" class="btn btn-info pull-right">$text</button>
+    <button type="submit" class="btn btn-info pull-right" data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
 </div>
 EOT;
     }
