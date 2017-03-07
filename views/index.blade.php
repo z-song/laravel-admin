@@ -98,6 +98,24 @@
             });
         });
     });
+    
+    $(document).on('pjax:send', function(xhr) {
+        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+            $submit_btn = $('form[pjax-container] :submit');
+            if($submit_btn) {
+                $submit_btn.button('loading')
+            }
+        }
+    })
+    
+    $(document).on('pjax:complete', function(xhr) {
+        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+            $submit_btn = $('form[pjax-container] :submit');
+            if($submit_btn) {
+                $submit_btn.button('reset')
+            }
+        }
+    })
 
     $(function(){
         $('.sidebar-menu li:not(.treeview) > a').on('click', function(){
