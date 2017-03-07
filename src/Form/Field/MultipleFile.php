@@ -2,7 +2,9 @@
 
 namespace Encore\Admin\Form\Field;
 
+use App\Models\SysAttachment;
 use Encore\Admin\Form\Field;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -95,9 +97,16 @@ class MultipleFile extends Field
             return $this->destroy(request(static::FILE_DELETE_FLAG));
         }
 
-        $targets = array_map([$this, 'prepareForeach'], $files);
+        $datas = array_map([$this, 'prepareForeach'], $files);
 
-        return array_merge($this->original(), $targets);
+        try{
+            SysAttachment::insert($datas);
+        }
+        catch(\Exception $e){
+            return $e->getMessage();
+        }
+
+        return [];
     }
 
     /**
@@ -153,9 +162,17 @@ class MultipleFile extends Field
         $config = [];
 
         foreach ($files as $index => $file) {
+
+            $originalName = array_get($file, 'original_name');
+
+            $target = public_path('upload').'/'.array_get($file, 'target');
+
+            $type = file_exists($target) ? mime_content_type($target) : 'object';
+
             $config[] = [
-                'caption' => array_get($file, 'originalName'),
-                'key'     => $index,
+                'caption' => $originalName,
+                'key'     => array_get($file, config('admin.upload.table.key')),
+                'filetype'    => $type
             ];
         }
 
@@ -193,18 +210,25 @@ EOT;
      */
     public function destroy($key)
     {
-        $files = $this->original ?: [];
+        $tableName = config('admin.upload.table.name');
 
-        $file = array_get($files, $key);
+        $table = DB::table($tableName);
 
-        $target = array_get($file, 'target');
+        $fileInfo = $table->find($key);
 
-        if ($this->storage->exists($target)) {
-            $this->storage->delete($target);
+        $target = public_path('upload').'/'.$fileInfo->target;
+
+        try{
+            $table->delete($key);
+        }
+        catch(\Exception $e){
+            return $e->getMessage();
         }
 
-        unset($files[$key]);
+        if(file_exists($target)){
+            unlink($target);
+        }
 
-        return array_values($files);
+        return [];
     }
 }

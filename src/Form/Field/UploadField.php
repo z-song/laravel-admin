@@ -252,9 +252,14 @@ trait UploadField
 
         $this->storage->put($target, file_get_contents($file->getRealPath()));
 
+        $model = $this->form->model();
+        $keyName = $model->getKeyName();
+
         $info = [
             'target'        => $target,
-            'originalName'  => $this->originalName
+            'original_name'  => $this->originalName,
+            'table'         => $model->getTable(),
+            'parent_id'     => $model->getAttribute($keyName)
         ];
 
         return $info;
