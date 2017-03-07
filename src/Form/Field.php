@@ -70,7 +70,7 @@ class Field implements Renderable
     /**
      * Form element classes.
      *
-     * @var string
+     * @var array
      */
     protected $elementClass = [];
 
