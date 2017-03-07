@@ -270,7 +270,7 @@ class HasMany extends Field
 
         $form->hidden($this->getKeyName());
 
-        $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->attribute(['class' => NestedForm::REMOVE_FLAG_CLASS]);
+        $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->addElementClass(NestedForm::REMOVE_FLAG_CLASS);
 
         return $form;
     }
