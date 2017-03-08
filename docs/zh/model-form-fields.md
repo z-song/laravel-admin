@@ -406,6 +406,7 @@ $form->map($latitude, $longitude, $label);
 ```php
 $form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
 ```
+更多options请参考:https://github.com/IonDen/ion.rangeSlider#settings
 
 ### 富文本编辑框
 

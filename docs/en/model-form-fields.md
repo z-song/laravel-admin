@@ -412,6 +412,7 @@ Can be used to select the type of digital fields, such as age:
 ```php
 $form->slider($column[, $label])->options(['max' => 100, 'min' => 1, 'step' => 1, 'postfix' => 'years old']);
 ```
+More options please ref to https://github.com/IonDen/ion.rangeSlider#settings
 
 #### rich text editor
 
@@ -430,8 +431,8 @@ $form->hidden($column);
 `On` and` off` pairs of switches with the values `1` and` 0`:
 ```php
 $states = [
-    'on'  => ['value' => 1, 'text' => '打开', 'color' => 'success'],
-    'off' => ['value' => 0, 'text' => '关闭', 'color' => 'danger'],
+    'on'  => ['value' => 1, 'text' => 'enable', 'color' => 'success'],
+    'off' => ['value' => 0, 'text' => 'disable', 'color' => 'danger'],
 ];
 
 $form->switch($column[, $label])->states($states);
