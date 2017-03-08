@@ -65,3 +65,7 @@ Route::group([
 在自定义的路由器AuthController中的`getLogin`、`postLogin`方法里分别实现自己的登陆页面和登陆逻辑。
 
 参考控制器文件[AuthController.php](https://github.com/z-song/laravel-admin/blob/master/src/Controllers/AuthController.php)，视图文件[login.blade.php](https://github.com/z-song/laravel-admin/blob/master/views/login.blade.php)
+
+## 更新静态资源
+
+如果遇到更新之后,部分组件不能正常使用,那有可能是`laravel-admin`自带的静态资源有更新了,所以需要手动去用`vendor/encore/laravel-admin/assets`的静态资源覆盖掉`public/packages`目录下的静态资源文件,覆盖完成之后不要忘记清理浏览器缓存.

@@ -345,8 +345,6 @@ $form->image($column[, $label])->crop(int $width, int $height, [int $x, int $y])
 // Add a watermark
 $form->image($column[, $label])->insert($watermark, 'center');
 
-// multiple image upload, the path of images will store in database with JSON format
-$form->image($column[, $label])->multiple();
 ```
 
 #### file upload
@@ -363,9 +361,36 @@ $form->file($column[, $label])->move($dir, $name);
 // And set the upload file type
 $form->file($column[, $label])->rules('mimes:doc,docx,xlsx');
 
-// multiple file upload, the path of files will store in database with JSON format
-$form->file($column[, $label])->multiple();
 ```
+
+### multiple image/file upload
+
+```php
+// multiple image
+$form->multipleImage($column[, $label]);
+
+// multiple file
+$form->multipleFile($column[, $label]);
+```
+
+The type of data submitted from multiple image/file field is array, if you the type of column in mysql table is array, or use mongodb, then you can save the array directly, 
+but if you use string type to store the array data ,you need to specify a string format, For example, if you want to use json string to store the array data, you need to define
+ a mutator for the column in model mutator, such as the field named `pictures`, define mutator:
+
+```php
+public function setPicturesAttribute($pictures)
+{
+    if (is_array($pictures)) {
+        $this->attributes['pictures'] = json_encode($pictures);
+    }
+}
+
+public function getPicturesAttribute($pictures)
+{
+    return json_decode($pictures, true);
+}
+```
+Of course, you can also specify any other format.
 
 #### map
 

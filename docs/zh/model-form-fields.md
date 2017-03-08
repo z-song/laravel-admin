@@ -347,8 +347,6 @@ $form->image($column[, $label])->crop(int $width, int $height, [int $x, int $y])
 // 加水印
 $form->image($column[, $label])->insert($watermark, 'center');
 
-// 多图上传，图片的路径会以JSON的格式存储在数据库中
-$form->image($column[, $label])->multiple();
 ```
 
 ### 文件上传
@@ -365,9 +363,34 @@ $form->file($column[, $label])->move($dir, $name);
 // 并设置上传文件类型
 $form->file($column[, $label])->rules('mimes:doc,docx,xlsx');
 
-// 多文件上传，文件的路径会以JSON的格式存储在数据库中
-$form->file($column[, $label])->multiple();
 ```
+
+### 多图/文件上传
+
+```php
+// 多图
+$form->multipleImage($column[, $label]);
+
+// 多文件
+$form->multipleFile($column[, $label]);
+```
+
+多图/文件上传的时候提交的数据为文件路径数组,可以直接用mysql的`JSON`类型字段存储,如果用mongodb的话也能直接存储,但是如果用字符串类型来存储的话,就需要指定数据的存储格式了,
+比如,如果要用json字符串来存储文件数据,就需要在模型中定义字段的mutator,比如字段名为`pictures`,定义mutator:
+```php
+public function setPicturesAttribute($pictures)
+{
+    if (is_array($pictures)) {
+        $this->attributes['pictures'] = json_encode($pictures);
+    }
+}
+
+public function getPicturesAttribute($pictures)
+{
+    return json_decode($pictures, true);
+}
+```
+当然你也可以指定其它任何格式.
 
 ### 地图控件
 
@@ -524,7 +547,7 @@ $form->display('updated_at', 'Updated At');
 
 ### 内嵌
 
-用于处理`mysql`的`JSON`类型字段数据或者`mongodb`的`object`类型数据，也可以将多个field的数据值以`JSON`字符串的形式存储在`mysql`的字符创类型字段中
+用于处理`mysql`的`JSON`类型字段数据或者`mongodb`的`object`类型数据，也可以将多个field的数据值以`JSON`字符串的形式存储在`mysql`的字符串类型字段中
 
 比如`orders`表中的`JSON`或字符串类型的`extra`字段，用来存储多个field的数据，先定义model:
 ```php
