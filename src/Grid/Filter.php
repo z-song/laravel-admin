@@ -111,17 +111,20 @@ class Filter
     public function conditions()
     {
         $inputs = array_dot(Input::all());
-
         $inputs = array_filter($inputs, function ($input) {
             return $input !== '';
         });
-
-        $conditions = [];
-
-        foreach ($this->filters() as $filter) {
-            $conditions[] = $filter->condition($inputs);
+        if (empty($inputs)) {
+            return [];
         }
-
+        $params = [];
+        foreach ($inputs as $key => $value) {
+            array_set($params, $key, $value);
+        }
+        $conditions = [];
+        foreach ($this->filters() as $filter) {
+            $conditions[] = $filter->condition($params);
+        }
         return array_filter($conditions);
     }
 
