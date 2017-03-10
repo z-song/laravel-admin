@@ -26,10 +26,9 @@ class MultipleSelect extends Select
             return $this->otherKey;
         }
 
-        if (method_exists($this->form->model(), $this->column) &&
-            ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
-        ) {
+        if ($this->isRelation()) {
             /* @var BelongsToMany $relation */
+            $relation = $this->form->model()->{$this->column}();
             $fullKey = $relation->getOtherKey();
 
             return $this->otherKey = substr($fullKey, strpos($fullKey, '.') + 1);
@@ -78,6 +77,16 @@ class MultipleSelect extends Select
 
     public function prepare(array $value)
     {
-        return array_filter($value);
+        $value = array_filter($value);
+        return $this->isRelation() ? $value : implode(',', $value);
+    }
+    
+    /**
+     * @return bool
+     */
+    protected function isRelation(): bool
+    {
+        return method_exists($this->form->model(), $this->column)
+            && ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany;
     }
 }
