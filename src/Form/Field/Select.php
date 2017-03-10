@@ -84,6 +84,18 @@ class Select extends Field
 
         $script = <<<EOT
 
+var current=$("{$this->getElementClassSelector()}");
+var target = current.closest('.fields-group').find(".$class");
+$.get("$sourceUrl?q="+current.val(), function (data) {
+    $(target).select2({
+        data: $.map(data, function (d) {
+            d.id = d.$idField;
+            d.text = d.$textField;
+            return d;
+        })
+    }).trigger('change');
+}
+
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
