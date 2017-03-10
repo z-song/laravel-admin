@@ -80,7 +80,7 @@ class MultipleSelect extends Select
         $value = array_filter($value);
         return $this->isRelation() ? $value : implode(',', $value);
     }
-    
+
     /**
      * @return bool
      */
