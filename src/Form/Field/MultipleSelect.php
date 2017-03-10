@@ -78,6 +78,7 @@ class MultipleSelect extends Select
     public function prepare(array $value)
     {
         $value = array_filter($value);
+
         return $this->isRelation() ? $value : implode(',', $value);
     }
 
