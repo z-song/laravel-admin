@@ -37,7 +37,7 @@ use Illuminate\Contracts\Support\Renderable;
  * @method Field\Number         number($name, $label = '')
  * @method Field\Currency       currency($name, $label = '')
  * @method Field\Json           json($name, $label = '')
- * @method Field\SwitchField    switch($name, $label = '')
+ * @method Field\SwitchField    switch ($name, $label = '')
  * @method Field\Display        display($name, $label = '')
  * @method Field\Rate           rate($name, $label = '')
  * @method Field\Divide         divide()
@@ -87,9 +87,9 @@ class Form implements Renderable
     protected function initFormAttributes()
     {
         $this->attributes = [
-            'method'         => 'POST',
-            'action'         => '',
-            'class'          => 'form-horizontal',
+            'method' => 'POST',
+            'action' => '',
+            'class' => 'form-horizontal',
             'accept-charset' => 'UTF-8',
             'pjax-container' => true,
         ];
@@ -123,7 +123,7 @@ class Form implements Renderable
      * Add form attributes.
      *
      * @param string|array $attr
-     * @param string       $value
+     * @param string $value
      *
      * @return $this
      */
@@ -162,10 +162,12 @@ class Form implements Renderable
      */
     public function setWidth($fieldWidth = 8, $labelWidth = 2)
     {
-        collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
-            /* @var Field $field  */
-            $field->setWidth($fieldWidth, $labelWidth);
-        });
+        collect($this->fields)->each(
+            function ($field) use ($fieldWidth, $labelWidth) {
+                /* @var Field $field */
+                $field->setWidth($fieldWidth, $labelWidth);
+            }
+        );
 
         return $this;
     }
@@ -214,8 +216,8 @@ class Form implements Renderable
         }
 
         return [
-            'fields'        => $this->fields,
-            'attributes'    => $this->formatAttribute(),
+            'fields' => $this->fields,
+            'attributes' => $this->formatAttribute(),
         ];
     }
 
@@ -262,7 +264,7 @@ class Form implements Renderable
      * Generate a Field object and add to form builder if Field exists.
      *
      * @param string $method
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return Field|null
      */
