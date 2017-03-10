@@ -60,30 +60,31 @@ trait UploadField
         $this->disk(config('admin.upload.disk'));
     }
 
+
     public function setupDefaultOptions()
     {
-        $this->options([
-            'overwriteInitial'     => false,
+        array_merge([
+            'overwriteInitial' => false,
             'initialPreviewAsData' => true,
-            'browseLabel'          => trans('admin::lang.browse'),
-            'showRemove'           => false,
-            'showUpload'           => false,
-            'initialCaption'   => $this->initialCaption($this->value),
-            'deleteUrl'        => $this->form->resource() . '/'. $this->form->model()->getKey(),
-            'deleteExtraData'  => [
-                $this->column       => '',
+            'browseLabel' => trans('admin::lang.browse'),
+            'showRemove' => false,
+            'showUpload' => false,
+            'initialCaption' => $this->initialCaption($this->value),
+            'deleteUrl' => $this->form->resource() . '/' . $this->form->model()->getKey(),
+            'deleteExtraData' => [
+                $this->column => '',
                 static::FILE_DELETE_FLAG => '',
-                '_token'            => csrf_token(),
-                '_method'           => 'PUT'
+                '_token' => csrf_token(),
+                '_method' => 'PUT'
             ]
-        ]);
+        ], $this->options());
     }
 
     public function setupPreviewOptions()
     {
         $this->options([
-            'initialPreview'        => $this->preview(),
-            'initialPreviewConfig'  => $this->initialPreviewConfig(),
+            'initialPreview' => $this->preview(),
+            'initialPreviewConfig' => $this->initialPreviewConfig(),
         ]);
     }
 
@@ -112,7 +113,7 @@ trait UploadField
     {
         if (!array_key_exists($disk, config('filesystems.disks'))) {
             $error = new MessageBag([
-                'title'   => 'Config error.',
+                'title' => 'Config error.',
                 'message' => "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`.",
             ]);
 
@@ -282,7 +283,7 @@ trait UploadField
      */
     protected function generateUniqueName(UploadedFile $file)
     {
-        return md5(uniqid()).'.'.$file->guessExtension();
+        return md5(uniqid()) . '.' . $file->guessExtension();
     }
 
     /**
