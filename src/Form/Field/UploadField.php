@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Encore\Admin\Form;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\MessageBag;
@@ -60,26 +61,41 @@ trait UploadField
         $this->disk(config('admin.upload.disk'));
     }
 
-    public function setupDefaultOptions()
+    /**
+     * Set default options form image field.
+     *
+     * @return void
+     */
+    protected function setupDefaultOptions()
     {
-        $this->options([
+        $defaultOptions = [
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
             'browseLabel'          => trans('admin::lang.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
             'initialCaption'   => $this->initialCaption($this->value),
-            'deleteUrl'        => $this->form->resource() . '/'. $this->form->model()->getKey(),
             'deleteExtraData'  => [
                 $this->column       => '',
                 static::FILE_DELETE_FLAG => '',
                 '_token'            => csrf_token(),
                 '_method'           => 'PUT'
             ]
-        ]);
+        ];
+
+        if ($this->form instanceof Form) {
+            $defaultOptions['deleteUrl'] = $this->form->resource() . '/'. $this->form->model()->getKey();
+        }
+
+        $this->options($defaultOptions);
     }
 
-    public function setupPreviewOptions()
+    /**
+     * Set preview options form image field.
+     *
+     * @return void
+     */
+    protected function setupPreviewOptions()
     {
         $this->options([
             'initialPreview'        => $this->preview(),
