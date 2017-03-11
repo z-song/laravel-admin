@@ -96,7 +96,7 @@ trait UploadField
      */
     public function options($options = [])
     {
-        $this->options = array_merge($this->options, $options);
+        $this->options = array_merge($options, $this->options);
 
         return $this;
     }
