@@ -51,9 +51,9 @@ class Files
 	/**
 	 * Files constructor.
 	 *
-	 * @param $attributes
+	 * @param array $attributes
 	 */
-	public function __construct($attributes)
+	public function __construct($attributes = [])
 	{
 
 		$this->initStorage();
