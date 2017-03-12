@@ -9,9 +9,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL as FacadesUrl;
 use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Http\UploadedFile;
 
-class Files extends Field
+class File2 extends Field
 {
 
 	/**
@@ -39,7 +39,6 @@ class Files extends Field
 	protected $extra;
 
 	protected $view = 'admin::form.multiplefile';
-
 
 
 	/**
@@ -88,7 +87,13 @@ class Files extends Field
 	 */
 	public function prepare($files)
 	{
-		return array_map([$this, 'prepareEach'], $files);
+		$original = $this->original();
+
+		foreach($original as $k => $ori){
+			$original[$k][Form::REMOVE_FLAG_NAME] = 1;
+		}
+
+		return array_map([$this, 'prepareEach'], array_merge($original, $files));
 	}
 
 	/**
@@ -181,8 +186,6 @@ class Files extends Field
 	 */
 	public function render()
 	{
-		$this->attribute('multiple', true);
-
 		$this->setupDefaultOptions();
 
 		if (!empty($this->value)) {
@@ -202,8 +205,8 @@ EOT;
 	protected function setupDefaultOptions()
 	{
 
-		$this->options([
-			'overwriteInitial'     => false,
+		$this->options = array_merge([
+			'overwriteInitial'     => true,
 			'initialPreviewAsData' => true,
 			'initialPreviewFileType' => 'object',
 			'browseLabel'          => trans('admin::lang.browse'),
@@ -211,7 +214,8 @@ EOT;
 			'showUpload'           => false,
 			'initialCaption'   => $this->initialCaption( $this->getFiles() ),
 			'deleteUrl'        => $this->form->resource() . '/'. $this->form->model()->getKey()
-		]);
+
+		], (array) $this->options);
 	}
 
 	public function setupPreviewOptions()
@@ -236,7 +240,7 @@ EOT;
 	/**
 	 * Prepare for each file.
 	 *
-	 * @param \Symfony\Component\HttpFoundation\File\UploadedFile|array $file
+	 * @param \Illuminate\Http\UploadedFile|array $file
 	 *
 	 * @return mixed|string
 	 */

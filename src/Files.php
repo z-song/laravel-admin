@@ -103,7 +103,7 @@ class Files
 	 *
 	 * @return mixed
 	 */
-	public function defaultDirectory()
+	protected function defaultDirectory()
 	{
 		return config('admin.upload.directory.file').'/'.date('Y-m-d').'/';
 	}
