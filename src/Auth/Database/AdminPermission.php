@@ -143,4 +143,19 @@ trait AdminPermission
 
         return false;
     }
+
+    /**
+     * 返回用户所有的权限
+     * 包括角色包含的和单独权限拥有的
+     */
+    public function allPermissionArr()
+    {
+        $roles = $this->roles;
+        $permissions = $this->permissions->toArray();
+        foreach ($roles as $role) {
+            $arr = $role->permissions->toArray();
+            $permissions = array_merge($permissions, $arr);
+        }
+        return $permissions;
+    }
 }

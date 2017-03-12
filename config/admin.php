@@ -120,4 +120,12 @@ return [
      * Version displayed in footer.
      */
     'version'   => '1.0',
+
+    /*
+     * Automatically generate a menu based on user-owned permissions.
+     *
+     * 在这种模式下,不需要根据用户角色创建菜单.只会有一份菜单,然后不同权限的人会根据自己的权限显示相应的菜单.
+     *
+     */
+    'auto_menu'=>false,
 ];

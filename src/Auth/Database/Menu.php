@@ -5,6 +5,7 @@ namespace Encore\Admin\Auth\Database;
 use Encore\Admin\Traits\AdminBuilder;
 use Encore\Admin\Traits\ModelTree;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -55,6 +56,7 @@ class Menu extends Model
         return $this->belongsToMany($relatedModel, $pivotTable, 'menu_id', 'role_id');
     }
 
+
     /**
      * @return array
      */
@@ -62,7 +64,27 @@ class Menu extends Model
     {
         $orderColumn = DB::getQueryGrammar()->wrap($this->orderColumn);
         $byOrder = $orderColumn.' = 0,'.$orderColumn;
+        if (config("admin.auto_menu")) {
+            //菜单不跟角色挂钩,只有一份菜单
+            //每个人能看到的菜单,由其拥有的权限决定
+            //如果是管理员,返回所有菜单;如果是其他账号,返回相应菜单
+            if (Auth::guard("admin")->user()->isAdministrator()) {
+                return static::orderByRaw($byOrder)->get()->toArray();
+            } else {
+                $permissionSlugArr = array_pluck(Auth::guard("admin")->user()->allPermissionArr(), 'slug');
+                $parent_ids = static::whereIn('uri', $permissionSlugArr)->get()->pluck("parent_id");
 
-        return static::with('roles')->orderByRaw($byOrder)->get()->toArray();
+                //查出来的菜单如果有父菜单也要返回
+                $result = static::whereIn('uri', $permissionSlugArr)
+                    ->orWhereIn('id', $parent_ids)
+                    ->orderByRaw($byOrder)->get()->toArray();
+
+                return $result;
+            }
+        } else {
+            return static::with('roles')->orderByRaw($byOrder)->get()->toArray();
+        }
+
+
     }
 }

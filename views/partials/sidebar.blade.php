@@ -31,7 +31,7 @@
         <ul class="sidebar-menu">
             <li class="header">{{ trans('admin::lang.menu') }}</li>
 
-            @each('admin::partials.menu', Admin::menu(), 'item')
+            @each(config("admin.auto_menu")?'admin::partials.auto_menu':'admin::partials.menu', Admin::menu(), 'item')
 
         </ul>
         <!-- /.sidebar-menu -->
