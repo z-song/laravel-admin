@@ -248,12 +248,21 @@ EOT;
 			return $file;
 		}
 
-		return array_merge((array) $this->extra, (array) $this->getFiesController()->upload($file));
+		$uploaded = $this->getFiesController()->upload($file);
+
+		$extra = call_user_func($this->extra, $file);
+
+		return array_merge((array) $extra, (array) $uploaded);
 	}
 
-	public function extra($extraData = [])
+	/**
+	 * Extra table data.
+	 *
+	 * @param \Closure $callback
+	 */
+	public function extra(\Closure $callback)
 	{
-		$this->extra = $extraData;
+		$this->extra = $callback->bindTo($this);
 	}
 
 	protected function getFiesController()
