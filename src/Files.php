@@ -165,6 +165,11 @@ class Files
 		return $this;
 	}
 
+	public function mimeTye($target)
+	{
+		return $this->storage->exists($target) ? $this->storage->mimeType($target) : 'object';
+	}
+
 	/**
 	 * Specify the directory and name for upload file.
 	 *

@@ -158,7 +158,7 @@ class File2 extends Field
 
 			$target = array_get($file, 'target');
 
-			$type = Storage::exists($target) ? Storage::mimeType($target) : 'object';
+			$type = $this->getFiesController()->mimeType($target);
 
 			$id = array_get($file, 'id');
 
