@@ -226,7 +226,7 @@ class Files
 	 */
 	protected function generateUniqueName(UploadedFile $file)
 	{
-		return md5(uniqid()).'.'.$file->guessExtension();
+		return md5(uniqid()).'.'.$file->getClientOriginalExtension();
 	}
 
 	/**
