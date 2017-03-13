@@ -35,8 +35,7 @@ class Checkbox extends MultipleSelect
     }
 
     /**
-     * Draw inline checkboxes
-     *
+     * Draw inline checkboxes.
      */
     public function inline()
     {
@@ -44,7 +43,7 @@ class Checkbox extends MultipleSelect
     }
 
     /**
-     * Draw stacked checkboxes
+     * Draw stacked checkboxes.
      */
     public function stacked()
     {
