@@ -165,7 +165,7 @@ class Files
 		return $this;
 	}
 
-	public function mimeTye($target)
+	public function mimeType($target)
 	{
 		return $this->storage->exists($target) ? $this->storage->mimeType($target) : 'object';
 	}
