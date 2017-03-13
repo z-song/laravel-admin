@@ -156,9 +156,9 @@ class File2 extends Field
 
 		foreach ($files as $index => $file) {
 
-			$target = array_get($file, 'target');
+			$path = public_path('upload').'/'.array_get($file, 'target');
 
-			$type = $this->getFiesController()->mimeType($target);
+			$type = file_exists($path)  ? mime_content_type($path) : 'object';
 
 			$id = array_get($file, 'id');
 

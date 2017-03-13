@@ -165,11 +165,6 @@ class Files
 		return $this;
 	}
 
-	public function mimeType($target)
-	{
-		return $this->storage->exists($target) ? $this->storage->mimeType($target) : 'object';
-	}
-
 	/**
 	 * Specify the directory and name for upload file.
 	 *
