@@ -6,6 +6,8 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Checkbox extends MultipleSelect
 {
+    protected $inline = true;
+
     protected static $css = [
         '/packages/admin/AdminLTE/plugins/iCheck/all.css',
     ];
@@ -33,12 +35,29 @@ class Checkbox extends MultipleSelect
     }
 
     /**
+     * Draw inline checkboxes
+     *
+     */
+    public function inline()
+    {
+        $this->inline = true;
+    }
+
+    /**
+     * Draw stacked checkboxes
+     */
+    public function stacked()
+    {
+        $this->inline = false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function render()
     {
         $this->script = "$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
 
-        return parent::render();
+        return parent::render()->with('inline', $this->inline);
     }
 }
