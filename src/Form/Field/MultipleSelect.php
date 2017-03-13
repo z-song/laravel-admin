@@ -85,7 +85,7 @@ class MultipleSelect extends Select
     /**
      * @return bool
      */
-    protected function isRelation(): bool
+    protected function isRelation()
     {
         return method_exists($this->form->model(), $this->column)
             && ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany;
