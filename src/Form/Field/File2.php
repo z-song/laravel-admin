@@ -6,9 +6,9 @@ use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Files as FilesControl;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL as FacadesUrl;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
 class File2 extends Field
@@ -156,9 +156,9 @@ class File2 extends Field
 
 		foreach ($files as $index => $file) {
 
-			$path = public_path('upload').'/'.array_get($file, 'target');
+			$target = array_get($file, 'target');
 
-			$type = file_exists($path) ? mime_content_type($path) : 'object';
+			$type = Storage::exists($target) ? Storage::mimeType($target) : 'object';
 
 			$id = array_get($file, 'id');
 
