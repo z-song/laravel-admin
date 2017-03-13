@@ -158,7 +158,7 @@ class File2 extends Field
 
 			$path = public_path('upload').'/'.array_get($file, 'target');
 
-			$type = file_exists($path)  ? $this->mimeType($path) : 'object';
+			$type = file_exists($path)  ? mime_content_type($path) : 'object';
 
 			$id = array_get($file, 'id');
 
@@ -282,14 +282,5 @@ EOT;
 	protected function getFiles()
 	{
 		return $this->value ?: new Collection();
-	}
-
-	protected function mimeType($fileName)
-	{
-		$finfo    = finfo_open(FILEINFO_MIME);
-		$mimetype = finfo_file($finfo, $fileName);
-		finfo_close($finfo);
-
-		return $mimetype;
 	}
 }
