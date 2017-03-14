@@ -39,19 +39,6 @@ trait UploadField
     protected $useUniqueName = false;
 
     /**
-     * Create a new File instance.
-     *
-     * @param string $column
-     * @param array $arguments
-     */
-    public function __construct($column, $arguments = [])
-    {
-        $this->initStorage();
-
-        parent::__construct($column, $arguments);
-    }
-
-    /**
      * Initialize the storage instance.
      *
      * @return void.
