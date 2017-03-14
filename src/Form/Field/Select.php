@@ -77,9 +77,9 @@ class Select extends Field
     {
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
-            $class = str_replace(['[', ']'], '_', $field);
+            $class = Field::ELEMENT_PREFIX.str_replace(['[', ']'], '_', $field);
         } else {
-            $class = $field;
+            $class = Field::ELEMENT_PREFIX.$field;
         }
 
         $script = <<<EOT
