@@ -271,6 +271,11 @@ class Admin
             $router->get('auth/logout', 'AuthController@getLogout');
             $router->get('auth/setting', 'AuthController@getSetting');
             $router->put('auth/setting', 'AuthController@putSetting');
+
+            //获取七牛upload token
+            $router->get('uptoken', 'FileController@getUploadToken');
+            //上传图片(富文本编辑器需要使用)
+            $router->post('upload', 'FileController@upload');
         });
     }
 

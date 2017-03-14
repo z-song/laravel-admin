@@ -39,6 +39,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\Map            map($latitude, $longitude, $label = '')
  * @method Field\Editor         editor($column, $label = '')
+ * @method Field\WangEditor     editor2($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
  * @method Field\Date           date($column, $label = '')
@@ -1133,6 +1134,7 @@ class Form
             'divide'            => \Encore\Admin\Form\Field\Divide::class,
             'embeds'            => \Encore\Admin\Form\Field\Embeds::class,
             'editor'            => \Encore\Admin\Form\Field\Editor::class,
+            'editor2'           => \Encore\Admin\Form\Field\WangEditor::class,
             'email'             => \Encore\Admin\Form\Field\Email::class,
             'file'              => \Encore\Admin\Form\Field\File::class,
             'hasMany'           => \Encore\Admin\Form\Field\HasMany::class,
