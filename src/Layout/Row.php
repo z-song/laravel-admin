@@ -11,6 +11,7 @@ class Row implements Buildable
 
     /**
      * Row constructor.
+     *
      * @param string $content
      */
     public function __construct($content = '')
@@ -23,7 +24,7 @@ class Row implements Buildable
     /**
      * Add a column.
      *
-     * @param int  $width
+     * @param int $width
      * @param $content
      */
     public function column($width, $content)
