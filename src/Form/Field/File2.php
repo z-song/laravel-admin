@@ -121,7 +121,7 @@ class File2 extends Field
 
 		foreach($this->getFiles() as $file){
 
-			$preview[] = $this->uploadUrl(array_get($file,'target'));
+			$preview[] = $this->uploadFileUrl(array_get($file,'target'));
 		}
 
 		return $preview;
@@ -134,7 +134,7 @@ class File2 extends Field
 	 *
 	 * @return string
 	 */
-	protected function uploadUrl($path)
+	public static function uploadFileUrl($path)
 	{
 		if (FacadesUrl::isValidUrl($path)) {
 			return $path;
@@ -156,16 +156,14 @@ class File2 extends Field
 
 		foreach ($files as $index => $file) {
 
-			$path = public_path('upload').'/'.array_get($file, 'target');
-
-			$type = file_exists($path)  ? mime_content_type($path) : 'object';
+			$type = $this->getFiesController()->mimetype_from_filename(array_get($file, 'target'));
 
 			$id = array_get($file, 'id');
 
 			$config[] = [
 				'caption' => array_get($file, 'original_name'),
 				'filetype'    => $type,
-				'key'       => null,
+				'key'       => $id,
 				'extra'     => [
 					"{$this->column()}[{$id}][id]" => $id,
 					"{$this->column()}[{$id}][target]" => array_get($file, 'target'),
