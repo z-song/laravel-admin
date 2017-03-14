@@ -36,7 +36,7 @@ class File2 extends Field
 
 	protected $filesController;
 
-	protected $extra;
+	protected $extraAttributes;
 
 	protected $view = 'admin::form.multiplefile';
 
@@ -252,9 +252,13 @@ EOT;
 
 		$uploaded = $this->getFiesController()->upload($file);
 
-		$extra = call_user_func($this->extra, $file);
+		$extra = [];
 
-		return array_merge((array) $extra, (array) $uploaded);
+		if($this->extraAttributes instanceof \Closure){
+			$extra = call_user_func($this->extraAttributes, $file);
+		}
+
+		return array_merge((array) $uploaded, (array) $extra);
 	}
 
 	/**
@@ -262,9 +266,9 @@ EOT;
 	 *
 	 * @param \Closure $callback
 	 */
-	public function extra(\Closure $callback)
+	public function extraAttributes(\Closure $callback)
 	{
-		$this->extra = $callback->bindTo($this);
+		$this->extraAttributes = $callback->bindTo($this);
 	}
 
 	protected function getFiesController()
