@@ -660,7 +660,7 @@ class Field implements Renderable
      */
     public function setElementClass($class)
     {
-        $this->elementClass = (array)$class;
+        $this->elementClass = (array) $class;
 
         return $this;
     }
@@ -675,14 +675,14 @@ class Field implements Renderable
         if (!$this->elementClass) {
             $name = $this->elementName ?: $this->formatName($this->column);
 
-            $this->elementClass = (array)str_replace(['[', ']'], '_', $name);
+            $this->elementClass = (array) str_replace(['[', ']'], '_', $name);
         }
 
         return $this->elementClass;
     }
 
     /**
-     * Get element class string
+     * Get element class string.
      *
      * @return mixed
      */
@@ -698,7 +698,7 @@ class Field implements Renderable
     }
 
     /**
-     * Get element class selector
+     * Get element class selector.
      *
      * @return string
      */
@@ -707,30 +707,29 @@ class Field implements Renderable
         $elementClass = $this->getElementClass();
 
         if (Arr::isAssoc($elementClass)) {
-
             $classes = [];
 
             foreach ($elementClass as $index => $class) {
-                $classes[$index] = '.' . $class;
+                $classes[$index] = '.'.$class;
             }
 
             return $classes;
         }
 
-        return '.' . implode('.', $elementClass);
+        return '.'.implode('.', $elementClass);
     }
 
     /**
-     * Add the element class
+     * Add the element class.
      *
      * @param $class
+     *
      * @return $this
      */
     public function addElementClass($class)
     {
-        if(is_array($class) || is_string($class)){
-
-            $this->elementClass = array_merge($this->elementClass, (array)$class);
+        if (is_array($class) || is_string($class)) {
+            $this->elementClass = array_merge($this->elementClass, (array) $class);
 
             $this->elementClass = array_unique($this->elementClass);
         }
@@ -738,29 +737,28 @@ class Field implements Renderable
         return $this;
     }
 
-
     /**
-     * Remove element class
+     * Remove element class.
      *
      * @param $class
+     *
      * @return $this
      */
     public function removeElementClass($class)
     {
         $delClass = [];
 
-        if(is_string($class) || is_array($class)){
-            $delClass = (array)$class;
+        if (is_string($class) || is_array($class)) {
+            $delClass = (array) $class;
         }
 
-        foreach($delClass as $del){
-            if(($key = array_search($del, $this->elementClass))){
+        foreach ($delClass as $del) {
+            if (($key = array_search($del, $this->elementClass))) {
                 unset($this->elementClass[$key]);
             }
         }
 
         return $this;
-
     }
 
     /**
