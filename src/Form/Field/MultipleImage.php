@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MultipleImage extends MultipleFile

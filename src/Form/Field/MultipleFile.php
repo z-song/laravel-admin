@@ -33,7 +33,7 @@ class MultipleFile extends Field
      * Create a new File instance.
      *
      * @param string $column
-     * @param array $arguments
+     * @param array  $arguments
      */
     public function __construct($column, $arguments = [])
     {
@@ -86,8 +86,8 @@ class MultipleFile extends Field
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
-            $rules[$this->column . $key] = $this->getRules();
-            $input[$this->column . $key] = $file;
+            $rules[$this->column.$key] = $this->getRules();
+            $input[$this->column.$key] = $file;
         }
 
         return [$rules, $input];
