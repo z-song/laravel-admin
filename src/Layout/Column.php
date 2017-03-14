@@ -18,6 +18,7 @@ class Column implements Buildable
 
     /**
      * Column constructor.
+     *
      * @param $content
      * @param int $width
      */

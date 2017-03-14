@@ -555,11 +555,12 @@ class Form
 
     /**
      * @param array $input
+     *
      * @return array
      */
     protected function handleFileDelete(array $input = [])
     {
-        if (array_key_exists(Field::FILE_DELETE_FLAG , $input)) {
+        if (array_key_exists(Field::FILE_DELETE_FLAG, $input)) {
             $input[Field::FILE_DELETE_FLAG] = $input['key'];
             unset($input['key']);
         }

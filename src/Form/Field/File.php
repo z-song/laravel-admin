@@ -33,7 +33,7 @@ class File extends Field
      * Create a new File instance.
      *
      * @param string $column
-     * @param array $arguments
+     * @param array  $arguments
      */
     public function __construct($column, $arguments = [])
     {
@@ -57,7 +57,7 @@ class File extends Field
      */
     public function getValidator(array $input)
     {
-        /**
+        /*
          * If has original value, means the form is in edit mode,
          * then remove required rule from rules.
          */
