@@ -392,11 +392,7 @@ class Form
 
         $this->relations = $this->getRelationInputs($this->inputs);
 
-        $updates = array_except($this->inputs, array_keys($this->relations));
-
-        $this->updates = array_filter($updates, function ($val) {
-            return !is_null($val);
-        });
+        $this->updates = array_except($this->inputs, array_keys($this->relations));
     }
 
     /**
