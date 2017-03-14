@@ -6,7 +6,7 @@
 
         @include('admin::form.error')
 
-        <select class="form-control {{$class}}" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
+        <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
             @foreach($value as $select)
                 <option value="{{$select}}" selected>{{$select}}</option>
             @endforeach
