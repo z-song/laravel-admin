@@ -30,6 +30,19 @@ class File extends Field
     ];
 
     /**
+     * Create a new File instance.
+     *
+     * @param string $column
+     * @param array $arguments
+     */
+    public function __construct($column, $arguments = [])
+    {
+        $this->initStorage();
+
+        parent::__construct($column, $arguments);
+    }
+
+    /**
      * Default directory for file to upload.
      *
      * @return mixed
