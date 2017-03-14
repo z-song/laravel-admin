@@ -18,6 +18,7 @@ before_script:
   - mysql -e 'create database laravel_admin;'
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
+  - php artisan key:generate
 
 script:
   - vendor/bin/phpunit
