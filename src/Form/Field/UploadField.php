@@ -42,7 +42,7 @@ trait UploadField
      * Create a new File instance.
      *
      * @param string $column
-     * @param array $arguments
+     * @param array  $arguments
      */
     public function __construct($column, $arguments = [])
     {
@@ -74,17 +74,17 @@ trait UploadField
             'browseLabel'          => trans('admin::lang.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
-            'initialCaption'   => $this->initialCaption($this->value),
-            'deleteExtraData'  => [
-                $this->column       => '',
+            'initialCaption'       => $this->initialCaption($this->value),
+            'deleteExtraData'      => [
+                $this->column            => '',
                 static::FILE_DELETE_FLAG => '',
-                '_token'            => csrf_token(),
-                '_method'           => 'PUT'
-            ]
+                '_token'                 => csrf_token(),
+                '_method'                => 'PUT',
+            ],
         ];
 
         if ($this->form instanceof Form) {
-            $defaultOptions['deleteUrl'] = $this->form->resource() . '/'. $this->form->model()->getKey();
+            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
         }
 
         $this->options($defaultOptions);
@@ -143,7 +143,7 @@ trait UploadField
     /**
      * Specify the directory and name for upload file.
      *
-     * @param string $directory
+     * @param string      $directory
      * @param null|string $name
      *
      * @return $this
@@ -252,7 +252,7 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        $target = $this->getDirectory() . '/' . $this->name;
+        $target = $this->getDirectory().'/'.$this->name;
 
         $this->storage->put($target, file_get_contents($file->getRealPath()));
 
@@ -286,7 +286,7 @@ trait UploadField
             return $path;
         }
 
-        return rtrim(config('admin.upload.host'), '/') . '/' . trim($path, '/');
+        return rtrim(config('admin.upload.host'), '/').'/'.trim($path, '/');
     }
 
     /**

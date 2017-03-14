@@ -292,7 +292,7 @@ class Builder
      * Get or set option.
      *
      * @param string $option
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return $this
      */
