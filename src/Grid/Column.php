@@ -124,8 +124,7 @@ class Column
      * Define a column globally.
      *
      * @param string $name
-     *
-     * @param mixed $definition
+     * @param mixed  $definition
      */
     public static function define($name, $definition)
     {
@@ -335,7 +334,7 @@ class Column
     }
 
     /**
-     * Use a defined column
+     * Use a defined column.
      *
      * @throws \Exception
      */
@@ -348,6 +347,7 @@ class Column
 
         if ($class instanceof Closure) {
             $this->display($class);
+
             return;
         }
 

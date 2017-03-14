@@ -269,7 +269,7 @@ class Grid
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
 
-            $name = snake_case($relationName) . '.' . $relationColumn;
+            $name = snake_case($relationName).'.'.$relationColumn;
         }
 
         $column = $this->addColumn($name, $label);

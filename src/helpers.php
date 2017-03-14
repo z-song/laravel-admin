@@ -38,7 +38,8 @@ if (!function_exists('admin_toastr')) {
      *
      * @param string $message
      * @param string $type
-     * @param array $options
+     * @param array  $options
+     *
      * @return string
      */
     function admin_toastr($message = '', $type = 'success', $options = [])
