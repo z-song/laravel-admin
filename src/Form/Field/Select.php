@@ -5,6 +5,7 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Select extends Field
@@ -57,11 +58,89 @@ class Select extends Field
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array) $options;
+            $this->options = (array)$options;
         }
 
         return $this;
     }
+
+    /**
+     * Load options for other select on change from ajax results.
+     *
+     * @param string $field
+     * @param string $sourceUrl
+     * @param string $idField
+     * @param string $textField
+     *
+     * @return $this
+     */
+    public function ajaxLoad($field, $sourceUrl, $idField = 'id', $textField = 'text')
+    {
+        if (Str::contains($field, '.')) {
+            $field = $this->formatName($field);
+            $class = str_replace(['[', ']'], '_', $field);
+        } else {
+            $class = $field;
+        }
+
+        $this->script = <<<EOT
+
+
+var init=function (){
+    var current=$("{$this->getElementClassSelector()}");
+    var target = current.closest('.fields-group').find(".$class");
+
+    current.select2({
+        ajax: {
+          url: "$sourceUrl",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+          
+            console.log(target.val());
+            
+            return {
+              father_value:target.val(),
+              q: params.term,
+              page: params.page
+            };
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 1;
+            return {
+              results: $.map(data.data, function (d) {
+                         d.id = d.$idField;
+                         d.text = d.$textField;
+                         return d;
+                      }),
+              pagination: {
+                more: data.next_page_url
+              }
+            };
+          },
+          cache: true
+        },
+        minimumInputLength: 1,
+        escapeMarkup: function (markup) {
+            return markup;
+        }
+    });
+    
+    console.log("init");
+    
+}
+
+init();
+  
+$(document).on('change', "{$this->getElementClassSelector()}", function () {
+   init();
+});
+
+EOT;
+
+        return $this;
+    }
+
 
     /**
      * Load options for other select on change.
@@ -136,8 +215,8 @@ EOT;
      * Load options from ajax results.
      *
      * @param string $url
-     * @param $idField
-     * @param $textField
+     * @param        $idField
+     * @param        $textField
      *
      * @return $this
      */

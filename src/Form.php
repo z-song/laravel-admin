@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
@@ -312,11 +313,13 @@ class Form
             return back()->withInput()->withErrors($validationMessages);
         }
 
+
         if (($response = $this->prepare($data)) instanceof Response) {
             return $response;
         }
 
         DB::transaction(function () {
+            Log::info($this->updates);
             $inserts = $this->prepareInsert($this->updates);
 
             foreach ($inserts as $column => $value) {
@@ -481,7 +484,7 @@ class Form
             ]);
         }
 
-        /* @var Model $this->model */
+//        /* @var Model $this->model */
         $this->model = $this->model->with($this->getRelations())->findOrFail($id);
 
         $this->setFieldOriginalValue();
@@ -496,7 +499,13 @@ class Form
         }
 
         DB::transaction(function () {
+            Log::info("111");
+
+            Log::info($this->updates);
+
             $updates = $this->prepareUpdate($this->updates);
+            Log::info($updates);
+
 
             foreach ($updates as $column => $value) {
                 /* @var Model $this->model */
@@ -696,7 +705,7 @@ class Form
                 $value = $field->prepare($value);
             }
 
-            if ($value != $field->original()) {
+            if ($value==null||$value != $field->original()) {
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
                         array_set($prepared, $column, $value[$name]);
