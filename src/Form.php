@@ -2,6 +2,7 @@
 
 namespace Encore\Admin;
 
+use App\Exceptions\NotFoundException;
 use Closure;
 use Encore\Admin\Exception\Handle;
 use Encore\Admin\Form\Builder;
@@ -686,9 +687,9 @@ class Form
                 continue;
             }
 
-            $value = $this->getDataByColumn($updates, $columns);
-
-            if ($value !== '' && $value !== '0' && empty($value)) {
+            try {
+                $value = $this->getDataByColumn($updates, $columns);
+            } catch (NotFoundException $e) {
                 continue;
             }
 
@@ -830,20 +831,28 @@ class Form
     protected function getDataByColumn($data, $columns)
     {
         if (is_string($columns)) {
-            return array_get($data, $columns);
+            if (array_has($data, $columns)) {
+                return array_get($data, $columns);
+            } else {
+                throw new NotFoundException();
+            }
         }
 
         if (is_array($columns)) {
             $value = [];
             foreach ($columns as $name => $column) {
-                if (!array_has($data, $column)) {
+                if (! array_has($data, $column)) {
                     continue;
                 }
                 $value[$name] = array_get($data, $column);
             }
 
+            if(empty($value)){
+                throw new NotFoundException();
+            }
             return $value;
         }
+        throw new NotFoundException();
     }
 
     /**
