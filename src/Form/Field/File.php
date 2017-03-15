@@ -68,7 +68,7 @@ class File extends Field
         /**
          * Make input data validatable if the column data is `null`.
          */
-        if (isset($input[$this->column]) && is_null($input[$this->column])) {
+        if (array_key_exists($this->column, $input) && is_null($input[$this->column])) {
             $input[$this->column] = '';
         }
 
