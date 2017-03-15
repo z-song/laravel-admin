@@ -66,7 +66,7 @@ class UserController extends Controller
      */
     protected function grid()
     {
-        return Administrator::grid(function (Grid $grid) {
+        return Admin::grid(config('admin.database.users_model'),function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->username(trans('admin::lang.username'));
             $grid->name(trans('admin::lang.name'));
@@ -97,7 +97,7 @@ class UserController extends Controller
      */
     public function form()
     {
-        return Administrator::form(function (Form $form) {
+        return Admin::form(config('admin.database.users_model'), function (Form $form) {
             $form->display('id', 'ID');
 
             $form->text('username', trans('admin::lang.username'))->rules('required');
