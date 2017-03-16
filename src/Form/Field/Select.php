@@ -5,11 +5,13 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Select extends Field
 {
+    private $sourceUrl;
+    private $idField;
+
     protected static $css = [
         '/packages/admin/AdminLTE/plugins/select2/select2.min.css',
     ];
@@ -22,7 +24,10 @@ class Select extends Field
     {
         if (empty($this->script)) {
             $this->script = "$(\"{$this->getElementClassSelector()}\").select2({allowClear: true});";
+        } else {
+            $this->initDefaultValue();
         }
+
 
         if ($this->options instanceof \Closure) {
             if ($this->form) {
@@ -34,8 +39,23 @@ class Select extends Field
 
         $this->options = array_filter($this->options);
 
+
         return parent::render()->with(['options' => $this->options]);
     }
+
+    private function initDefaultValue()
+    {
+        $script = <<<EOT
+        
+$.get("{$this->sourceUrl}?{$this->idField}={$this->value}&father_value="+target.val(), function (data) {
+    current.append("<option value='"+data.id+"' selected>"+(data.text?data.text:"")+"</option>");
+});    
+EOT;
+        if (! is_null($this->sourceUrl)) {
+            Admin::script($script);
+        }
+    }
+
 
     /**
      * Set options.
@@ -83,22 +103,22 @@ class Select extends Field
             $class = $field;
         }
 
+        $this->sourceUrl = $sourceUrl;
+        $this->idField = $idField;
+
         $this->script = <<<EOT
-
-
+        
+                
+var current=$("{$this->getElementClassSelector()}");
+var target = current.closest('.fields-group').find(".$class");
+        
 var init=function (){
-    var current=$("{$this->getElementClassSelector()}");
-    var target = current.closest('.fields-group').find(".$class");
-
     current.select2({
         ajax: {
           url: "$sourceUrl",
           dataType: 'json',
           delay: 250,
           data: function (params) {
-          
-            console.log(target.val());
-            
             return {
               father_value:target.val(),
               q: params.term,
@@ -125,9 +145,6 @@ var init=function (){
             return markup;
         }
     });
-    
-    console.log("init");
-    
 }
 
 init();
