@@ -136,7 +136,7 @@ class Column
      *
      * @param Grid $grid
      */
-    public function setGrid(Grid $grid)
+    public function setGrid(Grid &$grid)
     {
         $this->grid = $grid;
     }
