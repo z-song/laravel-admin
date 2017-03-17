@@ -181,7 +181,6 @@ class Grid
         $this->rows = new Collection();
         $this->builder = $builder;
 
-        $this->setDbColumns();
         $this->setupTools();
         $this->setupFilter();
         $this->setupExporter();
@@ -783,6 +782,10 @@ class Grid
      */
     protected function handleTableColumn($method, $label)
     {
+        if (empty($this->dbColumns)) {
+            $this->setDbColumns();
+        }
+
         if ($this->dbColumns->has($method)) {
             return $this->addColumn($method, $label);
         }
