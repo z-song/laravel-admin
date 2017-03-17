@@ -39,6 +39,13 @@ class Builder
     protected $fields;
 
     /**
+     * Ignored creating fields.
+     *
+     * @var array
+     */
+    protected $ignoredCreateFields = [];
+
+    /**
      * @var array
      */
     protected $options = [
@@ -476,12 +483,39 @@ EOT;
     }
 
     /**
+     * Ignore fields to create.
+     *
+     * @param string|array $fields
+     *
+     * @return $this
+     */
+    public function ignoreCreate($fields)
+    {
+        $this->ignoredCreateFields = array_merge($this->ignoredCreateFields, (array)$fields);
+    }
+
+    /**
+     * Remove ignoredCreate fields.
+     */
+    protected function removeNoCreateFields()
+    {
+        $ignoredCreate = $this->ignoredCreateFields;
+        $this->fields = $this->fields()->reject(function ($field) use ($ignoredCreate) {
+            return in_array($field->column(), $ignoredCreate);
+        });
+    }
+
+    /**
      * Render form.
      *
      * @return string
      */
     public function render()
     {
+        if ($this->mode == self::MODE_CREATE) {
+            $this->removeNoCreateFields();
+        }
+
         $this->removeReservedFields();
 
         $tabObj = $this->form->getTab();
