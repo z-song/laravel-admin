@@ -33,6 +33,27 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <style>
+        .loading-modal {
+            display:    none;
+            position:   fixed;
+            z-index:    800;
+            top:        0;
+            left:       0;
+            height:     100%;
+            width:      100%;
+            background: rgba( 255, 255, 255, .8 )
+            url('/packages/admin/loading.gif')
+            50% 50%
+            no-repeat;
+        }
+        body.loading {
+            overflow: hidden;
+        }
+        body.loading .loading-modal {
+            display: block;
+        }
+    </style>
 </head>
 
 <body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
@@ -49,6 +70,7 @@
 
     @include('admin::partials.footer')
 
+    <div class="modal"><!-- Place at bottom of page --></div>
 </div>
 
 <!-- ./wrapper -->
@@ -116,6 +138,13 @@
             }
         }
     })
+
+    $body = $("body");
+
+    $(document).on({
+        "pjax:start": function() { $body.addClass("loading"); },
+        "pjax:end": function() { $body.removeClass("loading"); }
+    });
 
     $(function(){
         $('.sidebar-menu li:not(.treeview) > a').on('click', function(){
