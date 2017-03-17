@@ -98,7 +98,7 @@ class AdminServiceProvider extends ServiceProvider
             'auth.guards.admin.driver'    => 'session',
             'auth.guards.admin.provider'  => 'admin',
             'auth.providers.admin.driver' => 'eloquent',
-            'auth.providers.admin.model'  => 'Encore\Admin\Auth\Database\Administrator',
+            'auth.providers.admin.model'  => config('admin.database.users_model'),
         ]);
     }
 
