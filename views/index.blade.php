@@ -37,6 +37,26 @@
         .file-drag-handle{
             display:none;
         }
+        .loading-modal {
+            display:    none;
+            position:   fixed;
+            top:        0;
+            left:       0;
+            height:     100%;
+            width:      100%;
+            background: rgba( 255, 255, 255, .8 )
+            url('/loading.gif')
+            50% 50%
+            no-repeat;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        body.loading .loading-modal {
+            display: block;
+        }
     </style>
 
 </head>
@@ -56,7 +76,7 @@
     @include('admin::partials.footer')
 
 </div>
-
+<div class="loading-modal"><!-- Place at bottom of page --></div>
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
@@ -94,6 +114,12 @@
 
     $(document).on('submit', 'form[pjax-container]', function(event) {
         $.pjax.submit(event, '#pjax-container')
+    });
+
+    $body = $('body');
+    $(document).on({
+        "pjax:start": function() { $body.addClass("loading");    },
+        "pjax:end": function() { $body.removeClass("loading"); }
     });
 
     $(document).on("pjax:popstate", function() {
