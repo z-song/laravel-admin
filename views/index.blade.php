@@ -45,7 +45,7 @@
             height:     100%;
             width:      100%;
             background: rgba( 255, 255, 255, .8 )
-            url('/loading.gif')
+            url('/packages/admin/loading.gif')
             50% 50%
             no-repeat;
         }
