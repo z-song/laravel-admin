@@ -822,6 +822,19 @@ class Form
     }
 
     /**
+     * Ignore fields to create.
+     *
+     * @param string|array $fields
+     *
+     * @return $this
+     */
+    public function ignoreCreate($fields)
+    {
+        $this->builder->ignoreCreate($fields);
+        return $this;
+    }
+
+    /**
      * @param array        $data
      * @param string|array $columns
      *
