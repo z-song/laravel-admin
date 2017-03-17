@@ -40,6 +40,7 @@
         .loading-modal {
             display:    none;
             position:   fixed;
+            z-index:    800;
             top:        0;
             left:       0;
             height:     100%;
