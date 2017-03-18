@@ -110,8 +110,10 @@
     });
 
     $(document).on({
-        "pjax:send": function() { NProgress.start();    },
-        "pjax:complete": function() { NProgress.done(); }
+        "pjax:start": function() { NProgress.start();},
+        "pjax:end": function() { NProgress.done(); },
+        "ajaxStart": function() { NProgress.start();},
+        "ajaxStop": function() { NProgress.done(); }
     });
 
     $(document).on("pjax:popstate", function() {
