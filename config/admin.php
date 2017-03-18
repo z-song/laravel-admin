@@ -68,6 +68,8 @@ return [
         'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Auth\Database\Administrator::class,
 
+        'users_username_field' => 'username',
+
         // Role table and model.
         'roles_table' => 'admin_roles',
         'roles_model' => Encore\Admin\Auth\Database\Role::class,

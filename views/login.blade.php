@@ -1,3 +1,4 @@
+<?php $username = config('admin.database.users_username_field', 'username'); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,15 +33,15 @@
     <p class="login-box-msg">{{ trans('admin::lang.login') }}</p>
 
     <form action="{{ Admin::url('auth/login') }}" method="post">
-      <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
+      <div class="form-group has-feedback {!! !$errors->has($username) ?: 'has-error' !!}">
 
-        @if($errors->has('username'))
-          @foreach($errors->get('username') as $message)
+        @if($errors->has($username))
+          @foreach($errors->get($username) as $message)
             <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label></br>
           @endforeach
         @endif
 
-        <input type="input" class="form-control" placeholder="{{ trans('admin::lang.username') }}" name="username" value="{{ old('username') }}">
+        <input type="input" class="form-control" placeholder="{{ trans("admin::lang.$username") }}" name="{{ $username }}" value="{{ old($username) }}">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
@@ -51,7 +52,7 @@
           @endforeach
         @endif
 
-        <input type="password" class="form-control" placeholder="{{ trans('admin::lang.password') }}" name="password" value="{{ old('username') }}">
+        <input type="password" class="form-control" placeholder="{{ trans('admin::lang.password') }}" name="password" value="{{ old('password') }}">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
