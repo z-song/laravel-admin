@@ -101,7 +101,7 @@ class CreateAdminTables extends Migration
     {
         $connection = config('admin.database.connection') ?: config('database.default');
 
-        if(config('admin.database.users_table') != "users") {
+        if(config('admin.database.users_table') != 'users') {
             Schema::connection($connection)->dropIfExists(config('admin.database.users_table'));
         }
         Schema::connection($connection)->dropIfExists(config('admin.database.roles_table'));
