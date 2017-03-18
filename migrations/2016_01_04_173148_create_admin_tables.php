@@ -14,15 +14,17 @@ class CreateAdminTables extends Migration
     {
         $connection = config('admin.database.connection') ?: config('database.default');
 
-        Schema::connection($connection)->create(config('admin.database.users_table'), function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('username', 190)->unique();
-            $table->string('password', 60);
-            $table->string('name');
-            $table->string('avatar')->nullable();
-            $table->string('remember_token', 100)->nullable();
-            $table->timestamps();
-        });
+        if(config('admin.database.users_table') != "users") { // user is probabl using `make:auth`, table is already there
+            Schema::connection($connection)->create(config('admin.database.users_table'), function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('username', 190)->unique();
+                $table->string('password', 60);
+                $table->string('name');
+                $table->string('avatar')->nullable();
+                $table->string('remember_token', 100)->nullable();
+                $table->timestamps();
+            });
+        }
 
         Schema::connection($connection)->create(config('admin.database.roles_table'), function (Blueprint $table) {
             $table->increments('id');
@@ -98,7 +100,9 @@ class CreateAdminTables extends Migration
     {
         $connection = config('admin.database.connection') ?: config('database.default');
 
-        Schema::connection($connection)->dropIfExists(config('admin.database.users_table'));
+        if(config('admin.database.users_table') != "users") {
+            Schema::connection($connection)->dropIfExists(config('admin.database.users_table'));
+        }
         Schema::connection($connection)->dropIfExists(config('admin.database.roles_table'));
         Schema::connection($connection)->dropIfExists(config('admin.database.permissions_table'));
         Schema::connection($connection)->dropIfExists(config('admin.database.menu_table'));
