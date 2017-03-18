@@ -14,7 +14,7 @@ class CreateAdminTables extends Migration
     {
         $connection = config('admin.database.connection') ?: config('database.default');
 
-        if(config('admin.database.users_table') != "users") { // user is probabl using `make:auth`, table is already there
+        if(config('admin.database.users_table') != "users") { // user is probably using `make:auth`, table is already there
             Schema::connection($connection)->create(config('admin.database.users_table'), function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('username', 190)->unique();
