@@ -326,7 +326,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setForm(Form $form = null)
+    public function setForm(Form &$form = null)
     {
         $this->form = $form;
 

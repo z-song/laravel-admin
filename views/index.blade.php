@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/fonts.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/nprogress/nprogress.min.css") }}">
 
     <!-- REQUIRED JS SCRIPTS -->
     <script src="{{ asset ("/packages/admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
@@ -36,27 +37,6 @@
     <style>
         .file-drag-handle{
             display:none;
-        }
-        .loading-modal {
-            display:    none;
-            position:   fixed;
-            z-index:    800;
-            top:        0;
-            left:       0;
-            height:     100%;
-            width:      100%;
-            background: rgba( 255, 255, 255, .8 )
-            url('/packages/admin/loading.gif')
-            50% 50%
-            no-repeat;
-        }
-
-        body.loading {
-            overflow: hidden;
-        }
-
-        body.loading .loading-modal {
-            display: block;
         }
     </style>
 
@@ -77,7 +57,6 @@
     @include('admin::partials.footer')
 
 </div>
-<div class="loading-modal"><!-- Place at bottom of page --></div>
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
@@ -85,13 +64,25 @@
 <script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
 <script src="{{ asset ("/packages/admin/toastr/build/toastr.min.js") }}"></script>
 <script src="{{ asset ("/packages/admin/bootstrap3-editable/js/bootstrap-editable.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/nprogress/nprogress.min.js") }}"></script>
 
 {!! Admin::js() !!}
 
 <script>
 
-    function LA() {}
+    var LA = function(){}
     LA.token = "{{ csrf_token() }}";
+
+    LA.toastr = {
+
+        info : function(message){
+
+            toastr['info'](message,null, {"positionClass": "toast-top-right"})
+        },
+
+
+
+    };
 
     $.fn.editable.defaults.params = function (params) {
         params._token = '{{ csrf_token() }}';
@@ -101,9 +92,10 @@
     };
 
     toastr.options = {
+        "newestOnTop": true,
         closeButton: true,
-        progressBar: true,
         showMethod: 'slideDown',
+        "preventDuplicates": true,
         timeOut: 4000
     };
 
@@ -117,10 +109,9 @@
         $.pjax.submit(event, '#pjax-container')
     });
 
-    $body = $('body');
     $(document).on({
-        "pjax:start": function() { $body.addClass("loading");    },
-        "pjax:end": function() { $body.removeClass("loading"); }
+        "pjax:send": function() { NProgress.start();    },
+        "pjax:complete": function() { NProgress.done(); }
     });
 
     $(document).on("pjax:popstate", function() {

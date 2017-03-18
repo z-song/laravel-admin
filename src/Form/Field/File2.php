@@ -156,13 +156,13 @@ class File2 extends Field
 
 		foreach ($files as $index => $file) {
 
-			$type = $this->getFiesController()->mimetype_from_filename(array_get($file, 'target'));
+//			$type = $this->getFiesController()->mimetype_from_filename(array_get($file, 'target'));
 
 			$id = array_get($file, 'id');
 
 			$config[] = [
 				'caption' => array_get($file, 'original_name'),
-				'filetype'    => $type,
+//				'filetype'    => $type,
 				'key'       => $id,
 				'extra'     => [
 					"{$this->column()}[{$id}][id]" => $id,

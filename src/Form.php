@@ -328,52 +328,39 @@ class Form
             $this->updateRelation($this->relations);
         });
 
+        return $this->response(trans('admin::lang.save_succeeded'));
+    }
+
+    /**
+     * Response to client.
+     *
+     * @param $status
+     * @param $message
+     * @return \Illuminate\Http\Response
+     */
+    protected function response($message, $status = true)
+    {
         if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin::lang.save_succeeded'))) {
-            return $response;
-        }
-
-        return $this->redirectAfterStore();
-    }
-
-    /**
-     * Get RedirectResponse after store.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectAfterStore()
-    {
-        admin_toastr(trans('admin::lang.save_succeeded'));
-
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(0);
-
-        return redirect($url);
-    }
-
-    /**
-     * Get ajax response.
-     *
-     * @param string $message
-     *
-     * @return bool|\Illuminate\Http\JsonResponse
-     */
-    protected function ajaxResponse($message)
-    {
         $request = Request::capture();
 
-        // ajax but not pjax
-        if ($request->ajax() && !$request->pjax()) {
+        if($this->builder->getOption('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
+
             return response()->json([
-                'status'  => true,
+                'status'  => $status,
                 'message' => $message,
             ]);
         }
 
-        return false;
+        admin_toastr($message);
+
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
+
+        return redirect($url);
     }
+
 
     /**
      * Prepare input data for insert or update.
@@ -512,29 +499,7 @@ class Form
             $this->updateRelation($this->relations);
         });
 
-        if (($result = $this->complete($this->saved)) instanceof Response) {
-            return $result;
-        }
-
-        if ($response = $this->ajaxResponse(trans('admin::lang.update_succeeded'))) {
-            return $response;
-        }
-
-        return $this->redirectAfterUpdate();
-    }
-
-    /**
-     * Get RedirectResponse after update.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectAfterUpdate()
-    {
-        admin_toastr(trans('admin::lang.update_succeeded'));
-
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
-
-        return redirect($url);
+        return $this->response(trans('admin::lang.update_succeeded'));
     }
 
     /**
@@ -1057,6 +1022,18 @@ class Form
     public function disableReset()
     {
         $this->builder()->options(['enableReset' => false]);
+
+        return $this;
+    }
+
+    /**
+     * Disable form ajax submit.
+     *
+     * @return $this
+     */
+    public function disableAjaxSubmit()
+    {
+        $this->builder()->options(['ajaxSubmit' => false]);
 
         return $this;
     }
