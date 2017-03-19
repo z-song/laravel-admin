@@ -308,7 +308,7 @@ class Column
             $this->original = $value = array_get($row, $this->name);
 
             // Don't escape if we have Relation
-            if(!($value instanceof Model)) {
+            if (!($value instanceof Model)) {
                 $value = $this->htmlEntityEncode($value);
             }
             $row->{$this->name} = $value;
