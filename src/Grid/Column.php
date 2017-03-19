@@ -6,6 +6,7 @@ use Closure;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\AbstractDisplayer;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
@@ -306,9 +307,11 @@ class Column
         foreach ($data as $key => &$row) {
             $this->original = $value = array_get($row, $this->name);
 
-            $value = $this->htmlEntityEncode($value);
-
-            array_set($row, $this->name, $value);
+            // Don't escape if we have Relation
+            if(!($value instanceof Model)) {
+                $value = $this->htmlEntityEncode($value);
+            }
+            $row->{$this->name} = $value;
 
             if ($this->isDefinedColumn()) {
                 $this->useDefinedColumn();
@@ -316,7 +319,7 @@ class Column
 
             if ($this->hasDisplayCallbacks()) {
                 $value = $this->callDisplayCallbacks($this->original, $key);
-                array_set($row, $this->name, $value);
+                $row->{$this->name} = $value;
             }
         }
 

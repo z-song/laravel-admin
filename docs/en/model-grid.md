@@ -36,7 +36,7 @@ $grid = Admin::grid(Movie::class, function(Grid $grid){
     
     // The third column shows the director field, which is set by the value($callback) method to display the corresponding user name in the users table
     $grid->director()->value(function($userId) {
-        return User::find($userId)->name;
+        return $this->director->name;
     });
     
     // The fourth column appears as the describe field
