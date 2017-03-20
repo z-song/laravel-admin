@@ -23,12 +23,24 @@ class OperationLog
                 'path'    => $request->path(),
                 'method'  => $request->method(),
                 'ip'      => $request->getClientIp(),
-                'input'   => json_encode($request->input()),
+                'input'   => $this->hidePasswords(json_encode($request->input())),
             ];
 
             \Encore\Admin\Auth\Database\OperationLog::create($log);
         }
 
         return $next($request);
+    }
+
+    /**
+     * Replace passwords with stars in operation log
+     * @see https://github.com/z-song/laravel-admin/issues/625
+     *
+     * @param string $stringToLog
+     * @return string
+     */
+    public function hidePasswords($stringToLog)
+    {
+        return preg_replace('#("(password|_token|password_confirmation)"\s*:\s*")([^"]*)"#', '\1***"', $stringToLog);
     }
 }
