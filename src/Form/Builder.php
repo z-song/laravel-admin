@@ -44,7 +44,7 @@ class Builder
     protected $options = [
         'enableSubmit' => true,
         'enableReset'  => true,
-        'ajaxSubmit'   => true,
+        'ajaxSubmit'   => false,
     ];
 
     /**
