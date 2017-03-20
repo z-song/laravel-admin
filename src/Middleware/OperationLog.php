@@ -34,6 +34,7 @@ class OperationLog
 
     /**
      * Replace passwords with stars in operation log.
+     *
      * @see https://github.com/z-song/laravel-admin/issues/625
      *
      * @param string $stringToLog
