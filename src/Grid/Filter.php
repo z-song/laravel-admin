@@ -142,7 +142,7 @@ class Filter
      *
      * @return AbstractFilter
      */
-    protected function addFilter(AbstractFilter $filter)
+    public function addFilter(AbstractFilter $filter)
     {
         $filter->setParent($this);
 

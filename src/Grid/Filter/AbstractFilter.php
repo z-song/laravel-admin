@@ -219,10 +219,12 @@ abstract class AbstractFilter
      * Datetime filter.
      *
      * @param array $options
+     *
+     * @return mixed
      */
     public function datetime($options = [])
     {
-        $this->setField(new DateTime($this, $options));
+        return $this->setField(new DateTime($this, $options));
     }
 
     /**
