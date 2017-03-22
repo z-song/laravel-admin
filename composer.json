@@ -1,5 +1,5 @@
 {
-    "name": "matedon/laravel-admin",
+    "name": "encore/laravel-admin",
     "description": "laravel admin",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "chart", "form"],
@@ -9,6 +9,10 @@
         {
             "name": "zsong",
             "email": "zosong@126.com"
+        },
+        {
+            "name": "matedon",
+            "email": "matedon@gmail.com"
         }
     ],
     "require": {
