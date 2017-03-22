@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/fonts.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/nprogress/nprogress.min.css?v=4") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/nprogress/nprogress.min.css") }}">
 
     <!-- REQUIRED JS SCRIPTS -->
     <script src="{{ asset ("/packages/admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
