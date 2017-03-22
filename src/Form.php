@@ -307,11 +307,75 @@ class Form
     {
         $data = Input::all();
 
+        $request = Request::capture();
+
+        if($this->builder->option('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
+
+            return $this->ajaxStore($data);
+        }
+
+        return $this->jumpStore($data);
+    }
+
+    /**
+     * Store in ajax mode.
+     *
+     * @param $data
+     * @return mixed|null|Response
+     */
+    protected function ajaxStore($data)
+    {
+        // Handle validation errors.
+        if ($validationMessages = $this->validationMessages($data)) {
+            return response([
+                'status'  => 'error',
+                'message' => trans('admin::lang.validate_fail'),
+                'validation' => $validationMessages
+            ]);
+        }
+
+        if( $response = $this->storeModel($data)){
+            return $response;
+        }
+
+        return response([
+            'status'  => 'Success',
+            'message' => trans('admin::lang.save_succeeded'),
+        ]);
+    }
+
+    /**
+     * Store in jump mode.
+     *
+     * @param $data
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed|null
+     */
+    protected function jumpStore($data)
+    {
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
             return back()->withInput()->withErrors($validationMessages);
         }
 
+        if($response = $this->storeModel($data)){
+            return $response;
+        }
+
+        admin_toastr(trans('admin::lang.save_succeeded'));
+
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
+
+        return redirect($url);
+    }
+
+    /**
+     * Store model.
+     *
+     * @param $data
+     * @return mixed|null
+     */
+    protected function storeModel($data)
+    {
         if (($response = $this->prepare($data)) instanceof Response) {
             return $response;
         }
@@ -332,47 +396,7 @@ class Form
             return $response;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin::lang.save_succeeded'))) {
-            return $response;
-        }
-
-        return $this->redirectAfterStore();
-    }
-
-    /**
-     * Get RedirectResponse after store.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectAfterStore()
-    {
-        admin_toastr(trans('admin::lang.save_succeeded'));
-
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(0);
-
-        return redirect($url);
-    }
-
-    /**
-     * Get ajax response.
-     *
-     * @param string $message
-     *
-     * @return bool|\Illuminate\Http\JsonResponse
-     */
-    protected function ajaxResponse($message)
-    {
-        $request = Request::capture();
-
-        // ajax but not pjax
-        if ($request->ajax() && !$request->pjax()) {
-            return response()->json([
-                'status'  => true,
-                'message' => $message,
-            ]);
-        }
-
-        return false;
+        return null;
     }
 
     /**
@@ -478,22 +502,90 @@ class Form
 
         $data = $this->handleFileDelete($data);
 
+        $request = Request::capture();
+
+        if($this->builder->getOption('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
+
+            return $this->ajaxUpdate($id, $data);
+        }
+
+        return $this->jumpUpdate($id, $data);
+
+    }
+
+    /**
+     * Update in ajax mode.
+     *
+     * @param $id
+     * @param $data
+     * @return bool|mixed|null|Response
+     */
+    protected function ajaxUpdate($id, $data)
+    {
         if ($this->handleOrderable($id, $data)) {
             return response([
-                'status'  => true,
+                'status'  => 'success',
                 'message' => trans('admin::lang.update_succeeded'),
             ]);
         }
 
-        /* @var Model $this->model */
-        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+        // Handle validation errors.
+        if ($validationMessages = $this->validationMessages($data)) {
+            return response([
+                'status'  => 'error',
+                'message' => trans('admin::lang.validate_fail'),
+                'validation' => $validationMessages
+            ]);
+        }
 
-        $this->setFieldOriginalValue();
+        if( $response = $this->updateModel($id, $data)){
+            return $response;
+        }
 
+        return response([
+            'status'  => 'success',
+            'message' => trans('admin::lang.update_succeeded'),
+        ]);
+    }
+
+    /**
+     * Update in jump mode.
+     *
+     * @param $id
+     * @param $data
+     * @return $this|bool|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed|null
+     */
+    protected function jumpUpdate($id, $data)
+    {
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
             return back()->withInput()->withErrors($validationMessages);
         }
+
+        if( $response = $this->updateModel($id, $data)){
+            return $response;
+        }
+
+        admin_toastr(trans('admin::lang.update_succeeded'));
+
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
+
+        return redirect($url);
+    }
+
+    /**
+     * Update model.
+     *
+     * @param $id
+     * @param $data
+     * @return bool|mixed|null
+     */
+    protected function updateModel($id, $data)
+    {
+        /* @var Model $this->model */
+        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+
+        $this->setFieldOriginalValue();
 
         if (($response = $this->prepare($data)) instanceof Response) {
             return $response;
@@ -512,30 +604,14 @@ class Form
             $this->updateRelation($this->relations);
         });
 
-        if (($result = $this->complete($this->saved)) instanceof Response) {
-            return $result;
-        }
-
-        if ($response = $this->ajaxResponse(trans('admin::lang.update_succeeded'))) {
+        if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
         }
 
-        return $this->redirectAfterUpdate();
+        return null;
     }
 
-    /**
-     * Get RedirectResponse after update.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectAfterUpdate()
-    {
-        admin_toastr(trans('admin::lang.update_succeeded'));
 
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
-
-        return redirect($url);
-    }
 
     /**
      * Handle editable update.
@@ -653,7 +729,7 @@ class Form
 
                         $instance = $relation->findOrNew(array_get($related, $keyName));
 
-                        if ($related[static::REMOVE_FLAG_NAME] == 1) {
+                        if (array_get($related, static::REMOVE_FLAG_NAME) == 1) {
                             $instance->delete();
 
                             continue;
@@ -1058,6 +1134,18 @@ class Form
     public function disableReset()
     {
         $this->builder()->options(['enableReset' => false]);
+
+        return $this;
+    }
+
+    /**
+     * Disable form ajax submit.
+     *
+     * @return $this
+     */
+    public function disableAjaxSubmit()
+    {
+        $this->builder()->options(['ajaxSubmit' => false]);
 
         return $this;
     }

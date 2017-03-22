@@ -2,7 +2,7 @@
 
     <label for="{{$id['lat']}}" class="col-sm-{{$width['label']}} control-label">{{$label}}</label>
 
-    <div class="col-sm-{{$width['field']}}">
+    <div class="form-group-fields col-sm-{{$width['field']}}">
 
         @include('admin::form.error')
 
