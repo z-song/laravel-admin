@@ -287,15 +287,22 @@ class Builder
     }
 
     /**
-     * Get option value.
+     * Get or set option.
      *
-     * @param $key
-     * @return mixed
-     * author Edwin Hui
+     * @param string $option
+     * @param mixed  $value
+     *
+     * @return $this
      */
-    public function getOption($key)
+    public function option($option, $value = null)
     {
-        return array_get($this->options, $key);
+        if (func_num_args() == 1) {
+            return array_get($this->options, $option);
+        }
+
+        $this->options[$option] = $value;
+
+        return $this;
     }
 
     /**

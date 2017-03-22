@@ -311,7 +311,7 @@ class Form
 
         $request = Request::capture();
 
-        if($this->builder->getOption('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
+        if($this->builder->option('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
 
             return $this->ajaxStore($data);
         }
@@ -506,7 +506,7 @@ class Form
 
         $request = Request::capture();
 
-        if($this->builder->getOption('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
+        if($this->builder->option('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
 
             return $this->ajaxUpdate($id, $data);
         }
