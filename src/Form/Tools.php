@@ -47,20 +47,18 @@ class Tools implements Renderable
      */
     protected function backButton()
     {
-        $script = <<<'EOT'
-$('.form-history-back').on('click', function () {
-    event.preventDefault();
-    history.back(1);
-});
-EOT;
-
-        Admin::script($script);
-
         $text = trans('admin::lang.back');
+
+        $url = url()->previous();
+
+        if(!$url || $url === url()->current()){
+            $url = '/'.config('admin.prefix');
+        }
+
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a class="btn btn-sm btn-default form-history-back"><i class="fa fa-arrow-left"></i>&nbsp;$text</a>
+    <a href="{$url}" class="btn btn-sm btn-default form-history-back"><i class="fa fa-arrow-left"></i>&nbsp;$text</a>
 </div>
 EOT;
     }
