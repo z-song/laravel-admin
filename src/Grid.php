@@ -34,6 +34,13 @@ class Grid
     protected $model;
 
     /**
+     * The classname of the model instance.
+     *
+     * @var string
+     */
+    protected $modelName;
+
+    /**
      * Collection of all grid columns.
      *
      * @var \Illuminate\Support\Collection
@@ -175,6 +182,7 @@ class Grid
      */
     public function __construct(Eloquent $model, Closure $builder)
     {
+        $this->modelName = get_class($model);
         $this->keyName = $model->getKeyName();
         $this->model = new Model($model);
         $this->columns = new Collection();
@@ -321,6 +329,7 @@ class Grid
      */
     protected function addColumn($column = '', $label = '')
     {
+        $label = admin_translate($this->modelName, $column, $label);
         $column = new Column($column, $label);
         $column->setGrid($this);
 
@@ -432,7 +441,7 @@ class Grid
 
         $grid = $this;
         $callback = $this->actionsCallback;
-        $column = $this->addColumn('__actions__', trans('admin::lang.action'));
+        $column = $this->addColumn('__actions__', admin_translate($this->modelName, 'action'), trans('admin::lang.action'));
 
         $column->display(function ($value) use ($grid, $column, $callback) {
             $actions = new Actions($value, $grid, $column, $this);
@@ -856,7 +865,7 @@ class Grid
      */
     public function __call($method, $arguments)
     {
-        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
+        $label = admin_translate($this->modelName, $method, isset($arguments[0]) ? $arguments[0] : null);
 
         if ($this->model()->eloquent() instanceof MongodbModel) {
             return $this->addColumn($method, $label);
