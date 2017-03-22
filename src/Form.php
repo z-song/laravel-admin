@@ -173,6 +173,8 @@ class Form
      */
     public function pushField(Field $field)
     {
+        $field->addElementClass('main');
+
         $field->setForm($this);
 
         $this->builder->fields()->push($field);
@@ -307,11 +309,75 @@ class Form
     {
         $data = Input::all();
 
+        $request = Request::capture();
+
+        if($this->builder->getOption('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
+
+            return $this->ajaxStore($data);
+        }
+
+        return $this->jumpStore($data);
+    }
+
+    /**
+     * Store in ajax mode.
+     *
+     * @param $data
+     * @return mixed|null|Response
+     */
+    protected function ajaxStore($data)
+    {
+        // Handle validation errors.
+        if ($validationMessages = $this->validationMessages($data)) {
+            return response([
+                'status'  => 'error',
+                'message' => trans('admin::lang.validate_fail'),
+                'validation' => $validationMessages
+            ]);
+        }
+
+        if( $response = $this->storeModel($data)){
+            return $response;
+        }
+
+        return response([
+            'status'  => 'Success',
+            'message' => trans('admin::lang.save_succeeded'),
+        ]);
+    }
+
+    /**
+     * Store in jump mode.
+     *
+     * @param $data
+     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed|null
+     */
+    protected function jumpStore($data)
+    {
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
             return back()->withInput()->withErrors($validationMessages);
         }
 
+        if($response = $this->storeModel($data)){
+            return $response;
+        }
+
+        admin_toastr(trans('admin::lang.save_succeeded'));
+
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
+
+        return redirect($url);
+    }
+
+    /**
+     * Store model.
+     *
+     * @param $data
+     * @return mixed|null
+     */
+    protected function storeModel($data)
+    {
         if (($response = $this->prepare($data)) instanceof Response) {
             return $response;
         }
@@ -328,39 +394,12 @@ class Form
             $this->updateRelation($this->relations);
         });
 
-        return $this->response(trans('admin::lang.save_succeeded'));
-    }
-
-    /**
-     * Response to client.
-     *
-     * @param $status
-     * @param $message
-     * @return \Illuminate\Http\Response
-     */
-    protected function response($message, $status = true)
-    {
         if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
         }
 
-        $request = Request::capture();
-
-        if($this->builder->getOption('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
-
-            return response()->json([
-                'status'  => $status,
-                'message' => $message,
-            ]);
-        }
-
-        admin_toastr($message);
-
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
-
-        return redirect($url);
+        return null;
     }
-
 
     /**
      * Prepare input data for insert or update.
@@ -465,18 +504,86 @@ class Form
 
         $data = $this->handleFileDelete($data);
 
+        $request = Request::capture();
+
+        if($this->builder->getOption('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
+
+            return $this->ajaxUpdate($id, $data);
+        }
+
+        return $this->jumpUpdate($id, $data);
+
+    }
+
+    /**
+     * Update in ajax mode.
+     *
+     * @param $id
+     * @param $data
+     * @return bool|mixed|null|Response
+     */
+    protected function ajaxUpdate($id, $data)
+    {
         if ($this->handleOrderable($id, $data)) {
             return response([
-                'status'  => true,
+                'status'  => 'success',
                 'message' => trans('admin::lang.update_succeeded'),
             ]);
         }
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
+            return response([
+                'status'  => 'error',
+                'message' => trans('admin::lang.validate_fail'),
+                'validation' => $validationMessages
+            ]);
+        }
+
+        if( $response = $this->updateModel($id, $data)){
+            return $response;
+        }
+
+        return response([
+            'status'  => 'success',
+            'message' => trans('admin::lang.update_succeeded'),
+        ]);
+    }
+
+    /**
+     * Update in jump mode.
+     *
+     * @param $id
+     * @param $data
+     * @return $this|bool|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed|null
+     */
+    protected function jumpUpdate($id, $data)
+    {
+        // Handle validation errors.
+        if ($validationMessages = $this->validationMessages($data)) {
             return back()->withInput()->withErrors($validationMessages);
         }
 
+        if( $response = $this->updateModel($id, $data)){
+            return $response;
+        }
+
+        admin_toastr(trans('admin::lang.update_succeeded'));
+
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
+
+        return redirect($url);
+    }
+
+    /**
+     * Update model.
+     *
+     * @param $id
+     * @param $data
+     * @return bool|mixed|null
+     */
+    protected function updateModel($id, $data)
+    {
         /* @var Model $this->model */
         $this->model = $this->model->with($this->getRelations())->findOrFail($id);
 
@@ -499,8 +606,14 @@ class Form
             $this->updateRelation($this->relations);
         });
 
-        return $this->response(trans('admin::lang.update_succeeded'));
+        if (($response = $this->complete($this->saved)) instanceof Response) {
+            return $response;
+        }
+
+        return null;
     }
+
+
 
     /**
      * Handle editable update.
@@ -1258,8 +1371,6 @@ class Form
             $column = array_get($arguments, 0, ''); //[0];
 
             $element = new $className($column, array_slice($arguments, 1));
-
-            $element->addElementClass('main');
 
             $this->pushField($element);
 

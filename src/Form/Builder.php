@@ -44,7 +44,7 @@ class Builder
     protected $options = [
         'enableSubmit' => true,
         'enableReset'  => true,
-        'ajaxSubmit'   => false,
+        'ajaxSubmit'   => true,
     ];
 
     /**
@@ -434,9 +434,36 @@ EOT;
     protected function ajaxSubmitBtn($text = null)
     {
         $script = <<<EOT
+
+function removeFormError(form){
+    $(form).find('.form-group.has-error').removeClass('has-error').find('.control-label.validation').remove();
+}
+
+function addFormError(form, validation){
+    var \$form = $(form);
+    $.each(validation, function(key,messages){
+        var target = \$form.find('[name="'+formatName(key)+'"]');
+        target.closest('.form-group').addClass('has-error');
+        $.each(messages, function(index, message){
+            target.closest('.form-group-fields').prepend('<label class="control-label validation" for="inputError"><i class="fa fa-times-circle-o"></i> '+ message +'</label>');
+        });
+    });
+
+}
+
+function formatName(key){
+    var names = key.split('.');
+    var name = names.shift();
+    $.each(names, function(k, n){
+        name += '['+ n + ']';
+    });
+    return name;
+}
+
 $(document).on('click', 'button.ajax-submit', function(){
     var submitBtn = $(this);
     var form = submitBtn.closest('form');
+    removeFormError(form);
     var data = new FormData(form[0]);
     var url = form[0].action;
     $.ajax({
@@ -447,10 +474,22 @@ $(document).on('click', 'button.ajax-submit', function(){
         contentType: false,
         processData: false,
         success: function (data) {
-            toastr['success'](data.message, 'Status: '+data.status, {"positionClass": "toast-top-right"});
+            switch(data.status)
+            {
+                case 'success':
+                case 'warning':
+                    toastr[data.status](data.message);
+                    break;
+                case 'error':
+                    toastr['error'](data.message, null, {"positionClass": "toast-top-full-width", "timeOut": 0});
+                    addFormError(form, data.validation);
+                    break;
+                default:
+                    toastr['info'](data.message);
+            }
         },
-        error: function (data) {
-            toastr['error'](data.message, 'Status: '+data.status, {"positionClass": "toast-top-right", "timeOut": 0});
+        error: function (XMLHttpRequest, textStatus, errorThrow) {
+            toastr['error'](errorThrow, 'Status: '+textStatus, {"positionClass": "toast-top-full-width", "timeOut": 0});
         }
     });
 });
@@ -508,6 +547,11 @@ EOT;
         });
     }
 
+    public function buildOriginal()
+    {
+
+    }
+
     /**
      * Render form.
      *
@@ -537,7 +581,7 @@ if ($('.has-error').length) {
         var tabId = '#'+$(this).closest('.tab-pane').attr('id');
         $('li a[href="'+tabId+'"] i').removeClass('hide');
     });
-    
+
     var first = $('.has-error:first').closest('.tab-pane').attr('id');
     $('li a[href="#'+first+'"]').tab('show');
 }
