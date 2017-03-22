@@ -70,19 +70,8 @@
 
 <script>
 
-    var LA = function(){}
+    function LA() {}
     LA.token = "{{ csrf_token() }}";
-
-    LA.toastr = {
-
-        info : function(message){
-
-            toastr['info'](message,null, {"positionClass": "toast-top-right"})
-        },
-
-
-
-    };
 
     $.fn.editable.defaults.params = function (params) {
         params._token = '{{ csrf_token() }}';
