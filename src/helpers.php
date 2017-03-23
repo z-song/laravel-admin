@@ -53,6 +53,16 @@ if (!function_exists('admin_toastr')) {
 if (!function_exists('admin_translate')) {
 
     /**
+     * Now you can add your own translate files for your project.
+     * The "laravel-admin" will search for the translations in these sequence:
+     * A.) admin.modelName.columnName
+     * B.) admin.columnName
+     * C.) Column name with spaces (dots and underscore replaced with spaces)
+     * D.) Fallback
+     * If you have translation A, that will be used, if not then B.
+     * If there is no translation at all:
+     * if exists the fallback D else the C will be the output.
+     *
      * @param $modelPath
      * @param $column
      * @param null $fallback
