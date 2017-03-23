@@ -12,6 +12,7 @@ return [
     'remember_me'           => '记住我',
     'user_setting'          => '用户设置',
     'avatar'                => '头像',
+    'email'                 => '电子邮件',
 
     'list'          => '列表',
     'new'           => '新增',
