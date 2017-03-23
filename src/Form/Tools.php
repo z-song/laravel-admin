@@ -7,6 +7,7 @@ use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Tools implements Renderable
 {
@@ -47,25 +48,33 @@ class Tools implements Renderable
      */
     protected function backButton()
     {
+        $script = <<<'EOT'
+$('.form-history-back').on('click', function () {
+    event.preventDefault();
+    history.back(1);
+});
+EOT;
+
+        Admin::script($script);
+
         $text = trans('admin::lang.back');
-
-        $url = url()->previous();
-
-        if(!$url || $url === url()->current()){
-            $url = '/'.config('admin.prefix');
-        }
-
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="{$url}" class="btn btn-sm btn-default form-history-back"><i class="fa fa-arrow-left"></i>&nbsp;$text</a>
+    <a class="btn btn-sm btn-default form-history-back"><i class="fa fa-arrow-left"></i>&nbsp;$text</a>
 </div>
 EOT;
     }
 
     public function listButton()
     {
-        $resource = $this->form->getResource();
+        $resource = url()->previous();
+
+        if(!$resource || url()->current() === $resource){
+
+            $slice = Str::contains($this->form->getResource(0), '/edit') ? null : -1;
+            $resource = $this->form->getResource($slice);
+        }
 
         $text = trans('admin::lang.list');
 
@@ -125,9 +134,9 @@ EOT;
             $this->add($this->listButton());
         }
 
-        if ($this->options['enableBackButton']) {
-            $this->add($this->backButton());
-        }
+//        if ($this->options['enableBackButton']) {
+//            $this->add($this->backButton());
+//        }
 
         return $this->tools->map(function ($tool) {
             if ($tool instanceof Renderable) {
