@@ -71,7 +71,11 @@ if (!function_exists('admin_translate')) {
     function admin_translate($modelPath, $column, $fallback = null)
     {
         $nameList = explode('\\', $modelPath);
-        $modelName = strtolower(end($nameList));
+        /*
+         * CamelCase model name converted to underscore name version.
+         * ExampleModel => example_model
+         */
+        $modelName = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', end($nameList)));
         $columnLower = strtolower($column);
         /*
          * The possible translate keys in priority order.
