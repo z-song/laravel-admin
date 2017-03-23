@@ -73,10 +73,14 @@ if (!function_exists('admin_translate')) {
         $nameList = explode('\\', $modelPath);
         /*
          * CamelCase model name converted to underscore name version.
-         * ExampleModel => example_model
+         * ExampleString => example_strinig
          */
-        $modelName = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', end($nameList)));
-        $columnLower = strtolower($column);
+        $modelName = ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', end($nameList))), '_');
+        /*
+         * ExampleString with banana => example_string_with_banana
+         */
+        $columnLower = ltrim(strtolower(preg_replace('/[A-Z ]([A-Z](?![a-z]))*/', '_$0', $column)), '_');
+        $columnLower = str_replace(' ', '', $columnLower);
         /*
          * The possible translate keys in priority order.
          */
