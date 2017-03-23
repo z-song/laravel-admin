@@ -28,7 +28,7 @@ class Tools implements Renderable
      */
     protected $options = [
         'enableListButton' => true,
-        'enableBackButton' => true,
+        'enableBackButton' => false,
     ];
 
     /**
@@ -134,9 +134,9 @@ EOT;
             $this->add($this->listButton());
         }
 
-//        if ($this->options['enableBackButton']) {
-//            $this->add($this->backButton());
-//        }
+        if ($this->options['enableBackButton']) {
+            $this->add($this->backButton());
+        }
 
         return $this->tools->map(function ($tool) {
             if ($tool instanceof Renderable) {
