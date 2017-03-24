@@ -26,6 +26,7 @@ $("{$this->getElementClassSelector()}").select2({
     placeholder: "{$this->label}"
 });
 EOF;
+        }
 
         if ($this->options instanceof \Closure) {
             if ($this->form) {
