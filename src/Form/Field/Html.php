@@ -43,14 +43,14 @@ class Html extends Field
 
             $this->html = call_user_func($callback, $this->form);
         }
-
-        return <<<EOT
-<div class="form-group">
-    <label  class="col-sm-2 control-label">{$this->label}</label>
-    <div class="col-sm-6">
-        {$this->html}
-    </div>
-</div>
-EOT;
+        return parent::render() -> with('html', $this->html);
+//        return <<<EOT
+//<div class="form-group">
+//    <label  class="col-sm-2 control-label">{$this->label}</label>
+//    <div class="col-sm-6">
+//        {$this->html}
+//    </div>
+//</div>
+//EOT;
     }
 }
