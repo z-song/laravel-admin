@@ -87,13 +87,15 @@ if (!function_exists('admin_translate')) {
         $transLateKeys = [
             'admin.' . $modelName . '.' . $columnLower,
             'admin.' . $columnLower,
+            'validation.attributes.' . $columnLower,
         ];
+        $label = null;
         foreach ($transLateKeys as $key) {
             if (Lang::has($key)) {
                 $label = trans($key);
             }
         }
-        if (!isset($label)) {
+        if (!$label) {
             $label = str_replace(['.', '_'], ' ', $fallback ? $fallback : ucfirst($column));
         }
         return (string)$label;
