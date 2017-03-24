@@ -20,8 +20,12 @@ class Select extends Field
     public function render()
     {
         if (empty($this->script)) {
-            $this->script = "$(\"{$this->getElementClassSelector()}\").select2({allowClear: true});";
-        }
+            $this->script = <<<EOF
+$("{$this->getElementClassSelector()}").select2({
+    allowClear: true,
+    placeholder: "{$this->label}"
+});
+EOF;
 
         if ($this->options instanceof \Closure) {
             if ($this->form) {
