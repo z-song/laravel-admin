@@ -13,6 +13,7 @@ use ReflectionClass;
  *
  * @method Filter     equal($column, $label = '')
  * @method Filter     like($column, $label = '')
+ * @method Filter     ilike($column, $label = '')
  * @method Filter     gt($column, $label = '')
  * @method Filter     lt($column, $label = '')
  * @method Filter     between($column, $label = '')
@@ -33,7 +34,7 @@ class Filter
     /**
      * @var array
      */
-    protected $supports = ['equal', 'is', 'like', 'gt', 'lt', 'between', 'where'];
+    protected $supports = ['equal', 'is', 'ilike', 'like', 'gt', 'lt', 'between', 'where'];
 
     /**
      * If use a modal to hold the filters.
