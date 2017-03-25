@@ -93,6 +93,7 @@ if (!function_exists('admin_translate')) {
         foreach ($transLateKeys as $key) {
             if (Lang::has($key)) {
                 $label = trans($key);
+                break;
             }
         }
         if (!$label) {
