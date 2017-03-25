@@ -26,6 +26,13 @@ class Filter
     protected $model;
 
     /**
+     * The classname of the model instance.
+     *
+     * @var string
+     */
+    protected $modelName;
+
+    /**
      * @var array
      */
     protected $filters = [];
@@ -65,10 +72,13 @@ class Filter
      * Create a new filter instance.
      *
      * @param Model $model
+     * @param string $modelName
      */
-    public function __construct(Model $model)
+    public function __construct(Model $model, $modelName = '')
     {
         $this->model = $model;
+
+        $this->modelName = $modelName;
 
         $this->equal($this->model->eloquent()->getKeyName());
     }
@@ -243,8 +253,12 @@ EOT;
     public function __call($method, $arguments)
     {
         if (in_array($method, $this->supports)) {
-            $className = '\\Encore\\Admin\\Grid\\Filter\\'.ucfirst($method);
+            $className = '\\Encore\\Admin\\Grid\\Filter\\' . ucfirst($method);
             $reflection = new ReflectionClass($className);
+            if (count($arguments) == 1) {
+                $arguments[] = null;
+            }
+            $arguments[] = $this->modelName;
 
             return $this->addFilter($reflection->newInstanceArgs($arguments));
         }
