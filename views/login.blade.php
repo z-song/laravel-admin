@@ -57,7 +57,7 @@
       <div class="row">
 
         <!-- /.col -->
-        <div class="col-xs-4 col-md-offset-4">
+        <div class="col-xs-8 col-md-offset-2">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <button type="submit" class="btn btn-primary btn-block btn-flat">{{ trans('admin::lang.login') }}</button>
         </div>
