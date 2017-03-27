@@ -158,7 +158,7 @@ class Tree implements Renderable
             throw new \InvalidArgumentException(json_last_error_msg());
         }
 
-        $this->model->saveOrder($tree);
+        $this->model->saveOrder($tree, $this->model->getRootID());
 
         return true;
     }

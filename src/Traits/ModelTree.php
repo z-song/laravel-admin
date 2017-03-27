@@ -29,6 +29,11 @@ trait ModelTree
     protected $orderColumn = 'order';
 
     /**
+     * @var integer|null
+     */
+    protected $rootID = 0;
+
+    /**
      * @var \Closure
      */
     protected $queryCallback;
@@ -112,6 +117,26 @@ trait ModelTree
     }
 
     /**
+     * Get value for ID of root.
+     *
+     * @return integer|null
+     */
+    public function getRootID()
+    {
+        return $this->rootID;
+    }
+
+    /**
+     * Set value for ID of root.
+     *
+     * @param integer|null $rootID
+     */
+    public function setRootID($rootID)
+    {
+        $this->rootID = $rootID;
+    }
+
+    /**
      * Set query callback to model.
      *
      * @param \Closure|null $query
@@ -132,7 +157,7 @@ trait ModelTree
      */
     public function toTree()
     {
-        return $this->buildNestedArray();
+        return $this->buildNestedArray([], $this->rootID);
     }
 
     /**
@@ -174,7 +199,7 @@ trait ModelTree
     public function allNodes()
     {
         $orderColumn = DB::getQueryGrammar()->wrap($this->orderColumn);
-        $byOrder = $orderColumn.' = 0,'.$orderColumn;
+        $byOrder = $orderColumn.' = '.($this->rootID == null ? 'null' : $this->rootID).','.$orderColumn;
 
         $self = new static();
 
@@ -302,7 +327,7 @@ trait ModelTree
 
                 Request::offsetUnset('_order');
 
-                static::tree()->saveOrder($order);
+                static::tree()->saveOrder($order, $branch->getRootID());
 
                 return false;
             }
