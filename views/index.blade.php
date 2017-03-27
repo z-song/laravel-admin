@@ -82,10 +82,10 @@
 
     toastr.options = {
         "newestOnTop": true,
-        closeButton: true,
-        showMethod: 'slideDown',
+        "closeButton": true,
+        "showMethod": 'slideDown',
         "preventDuplicates": true,
-        timeOut: 4000
+        "timeOut": 4000
     };
 
     $.pjax.defaults.timeout = 5000;
@@ -115,7 +115,7 @@
     });
 
     $(function(){
-        $('.sidebar-menu li:not(.treeview) > a').on('click', function(){
+        $('.sidebar-menu li:not(.treeview) > a').off('click').on('click', function(){
             var $parent = $(this).parent().addClass('active');
             $parent.siblings('.treeview.active').find('> a').trigger('click');
             $parent.siblings().removeClass('active').find('li').removeClass('active');
