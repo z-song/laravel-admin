@@ -1,24 +1,18 @@
 <?php
 
-use Laravel\Dusk\Browser;
-
 class AuthTest extends TestCase
 {
     public function testLoginPage()
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('admin/auth/login')
-                ->assertSee('login');
-        });
+        $this->visit('admin/auth/login')
+            ->see('login');
     }
 
     public function testVisitWithoutLogin()
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('admin')
-                ->dontSeeIsAuthenticated('admin')
-                ->seePageIs('admin/auth/login');
-        });
+        $this->visit('admin')
+            ->dontSeeIsAuthenticated('admin')
+            ->seePageIs('admin/auth/login');
     }
 
     public function testLogin()
