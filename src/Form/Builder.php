@@ -484,8 +484,11 @@ $(document).on('click', 'button.ajax-submit', function(){
             switch(data.status)
             {
                 case 'success':
+                    form.closest('.box-form').find('.btn-success-redirect').trigger('click');
+                    toastr['success'](data.message);
+                    break;
                 case 'warning':
-                    toastr[data.status](data.message);
+                    toastr['warning'](data.message);
                     break;
                 case 'error':
                     toastr['error'](data.message, null, {"positionClass": "toast-top-full-width", "timeOut": 0});

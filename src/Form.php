@@ -146,6 +146,8 @@ class Form
      */
     protected $tab = null;
 
+	protected $keyName = '';
+
     /**
      * Remove flag in `has many` form.
      */
@@ -164,7 +166,23 @@ class Form
         $this->builder = new Builder($this);
 
         $callback($this);
+
+//	    $this->hidden($this->getKeyName());
     }
+
+	/**
+	 * Get the HasMany relation key name.
+	 *
+	 * @return string
+	 */
+	protected function getKeyName()
+	{
+		if(! $this->keyName){
+			$this->keyName = $this->model->getKeyName();
+		}
+
+		return $this->keyName;
+	}
 
     /**
      * @param Field $field
@@ -336,13 +354,14 @@ class Form
             ]);
         }
 
-        if( $response = $this->storeModel($data)){
+        if( $response = $this->storeModel($data)  instanceof Response){
             return $response;
         }
 
         return response([
             'status'  => 'Success',
             'message' => trans('admin::lang.save_succeeded'),
+	        'data'    => $response
         ]);
     }
 
