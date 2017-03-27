@@ -799,7 +799,9 @@ class Form
             if ($value != $field->original()) {
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
-                        array_set($prepared, $column, $value[$name]);
+                    	if(array_key_exists($name, $value)){
+		                    array_set($prepared, $column, $value[$name]);
+	                    }
                     }
                 } elseif (is_string($columns)) {
                     array_set($prepared, $columns, $value);
