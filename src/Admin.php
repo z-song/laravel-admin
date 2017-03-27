@@ -166,7 +166,7 @@ class Admin
     public static function script($script = '')
     {
         if (!empty($script)) {
-            self::$script = array_merge(self::$script, (array) $script);
+            self::$script = array_merge( (array) $script,self::$script);
 
             return;
         }
