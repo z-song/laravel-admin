@@ -29,7 +29,7 @@ class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->app['config']->set('database.default', 'mysql');
-        $this->app['config']->set('database.connections.mysql.host', 'localhost');
+        $this->app['config']->set('database.connections.mysql.host', '127.0.0.1');
         $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
         $this->app['config']->set('database.connections.mysql.username', 'root');
         $this->app['config']->set('database.connections.mysql.password', '');
