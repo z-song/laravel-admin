@@ -115,10 +115,15 @@
     });
 
     $(function(){
+        function activeMenu( li) {
+            li.addClass('active').siblings().removeClass('active').find('ul.treeview-menu').removeClass('menu-open');
+            return li;
+        }
         $('.sidebar-menu li:not(.treeview) > a').off('click').on('click', function(){
-            var $parent = $(this).parent().addClass('active');
-            $parent.siblings('.treeview.active').find('> a').trigger('click');
-            $parent.siblings().removeClass('active').find('li').removeClass('active');
+            var li = $(this).closest('li');
+            while( activeMenu(li).size() && (! li.parent().hasClass('sidebar-menu'))){
+                li = li.parent().closest('li');
+            }
         });
     });
 
