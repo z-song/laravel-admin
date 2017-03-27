@@ -449,7 +449,7 @@ function removeFormError(form){
 function addFormError(form, validation){
     var \$form = $(form);
     $.each(validation, function(key,messages){
-        var target = \$form.find('[name="'+formatName(key)+'"]');
+        var target = \$form.find('[name="'+formatName(key)+'"]').size() ? \$form.find('[name="'+formatName(key)+'"]') : \$form.find('[name="'+formatName(key)+'[]"]');
         target.closest('.form-group').addClass('has-error');
         $.each(messages, function(index, message){
             target.closest('.form-group-fields').prepend('<label class="control-label validation" for="inputError"><i class="fa fa-times-circle-o"></i> '+ message +'</label>');
@@ -467,7 +467,7 @@ function formatName(key){
     return name;
 }
 
-$(document).on('click', 'button.ajax-submit', function(){
+$(document).on('click', 'button.ajax-submit:not(disabled)', function(){
     var submitBtn = $(this);
     submitBtn.button('loading');
     var form = submitBtn.closest('form');
