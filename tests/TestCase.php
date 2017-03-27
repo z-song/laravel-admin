@@ -2,21 +2,11 @@
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Laravel\Dusk\TestCase as BaseTestCase;
+use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-    /**
-     * Prepare for Dusk test execution.
-     *
-     * @beforeClass
-     *
-     * @return void
-     */
-    public static function prepare()
-    {
-        static::startChromeDriver();
-    }
+    protected $baseUrl = 'http://localhost:8000';
 
     /**
      * Boots the application.
@@ -38,7 +28,6 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->app['config']->set('app.url', 'http://localhost:9515');
         $this->app['config']->set('database.default', 'mysql');
         $this->app['config']->set('database.connections.mysql.host', 'localhost');
         $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
@@ -52,13 +41,12 @@ class TestCase extends BaseTestCase
 
         $this->migrate();
 
-        //$this->artisan('admin:install');
+        $this->artisan('admin:install');
 
         \Encore\Admin\Facades\Admin::registerAuthRoutes();
 
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
-            //$this->app['admin.router']->register();
         }
 
         require __DIR__.'/routes.php';
@@ -119,4 +107,5 @@ class TestCase extends BaseTestCase
 
         return $class;
     }
+
 }

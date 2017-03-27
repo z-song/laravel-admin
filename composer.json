@@ -21,7 +21,8 @@
         "laravel/laravel": "5.4.*",
         "symfony/css-selector": "2.8.*|3.0.*",
         "fzaninotto/faker": "~1.4",
-        "intervention/image": "~2.3"
+        "intervention/image": "~2.3",
+        "laravel/browser-kit-testing": "^1.0"
     },
     "autoload": {
         "psr-4": {

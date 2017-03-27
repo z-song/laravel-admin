@@ -36,7 +36,7 @@ class MenuTest extends TestCase
             ->seeInDatabase(config('admin.database.menu_table'), $item)
             ->assertEquals(12, Menu::count());
 
-        $this->setExpectedException(Illuminate\Foundation\Testing\HttpException::class);
+        $this->expectException(\Laravel\BrowserKitTesting\HttpException::class);
 
         $this->visit('admin')
             ->see('Test')
@@ -67,7 +67,7 @@ class MenuTest extends TestCase
 
     public function testEditMenuParent()
     {
-        $this->setExpectedException(Illuminate\Foundation\Testing\HttpException::class);
+        $this->expectException(\Laravel\BrowserKitTesting\HttpException::class);
 
         $this->visit('admin/auth/menu/5/edit')
             ->see('Menu')
