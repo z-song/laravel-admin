@@ -469,6 +469,7 @@ function formatName(key){
 
 $(document).on('click', 'button.ajax-submit', function(){
     var submitBtn = $(this);
+    submitBtn.button('loading');
     var form = submitBtn.closest('form');
     removeFormError(form);
     var data = new FormData(form[0]);
@@ -496,10 +497,12 @@ $(document).on('click', 'button.ajax-submit', function(){
                     break;
                 default:
                     toastr['info'](data.message);
-            }
+            };
+            submitBtn.button('reset');
         },
         error: function (XMLHttpRequest, textStatus, errorThrow) {
             toastr['error'](errorThrow, 'Status: '+textStatus, {"positionClass": "toast-top-full-width", "timeOut": 0});
+            submitBtn.button('reset');
         }
     });
 });
@@ -510,7 +513,7 @@ EOT;
 
         return <<<EOT
 <div class="btn-group pull-right">
-    <button type="button" class="btn btn-info pull-right ajax-submit">$text</button>
+    <button type="button" class="btn btn-info pull-right ajax-submit" data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
 </div>
 EOT;
     }
