@@ -426,8 +426,13 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
 });
 
 $('#has-many-{$this->column}').on('click', '.remove', function () {
-    $(this).closest('.has-many-{$this->column}-form').hide();
-    $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
+    var removeBtn = $(this);
+    var group = removeBtn.closest('.fields-group');
+    if(group.hasClass('new'){
+        group.remove();
+    }else{
+        group.hide().find('.$removeClass').val(1);
+    }
 });
 
 EOT;
