@@ -414,7 +414,7 @@ class HasMany extends Field
          */
         $script = <<<EOT
 var index = 0;
-$('#has-many-{$this->column}').on('click', '.add', function () {
+$('#has-many-{$this->column}').off('click', '.add').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
 
@@ -425,7 +425,7 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
     {$templateScript}
 });
 
-$('#has-many-{$this->column}').on('click', '.remove', function () {
+$('#has-many-{$this->column}').off('click', '.remove').on('click', '.remove', function () {
     var removeBtn = $(this);
     var group = removeBtn.closest('.fields-group');
     if(group.hasClass('new')){

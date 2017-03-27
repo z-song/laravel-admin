@@ -467,7 +467,7 @@ function formatName(key){
     return name;
 }
 
-$(document).on('click', 'button.ajax-submit:not(disabled)', function(){
+$(document).off('click', 'button.ajax-submit:not(disabled)').on('click', 'button.ajax-submit:not(disabled)', function(){
     var submitBtn = $(this);
     submitBtn.button('loading');
     var form = submitBtn.closest('form');
