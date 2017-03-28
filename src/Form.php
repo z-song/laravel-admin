@@ -408,7 +408,7 @@ class Form
      *
      * @return mixed
      */
-    protected function prepare($data = [])
+    protected function prepare_old($data = [])
     {
         $this->inputs = $this->removeIgnoredFields($data);
 
@@ -423,6 +423,34 @@ class Form
         $this->updates = array_filter($updates, function ($val) {
             return !is_null($val);
         });
+    }
+
+    protected function prepare($data = [])
+    {
+        $inputs = $this->removeIgnoredFields($data);
+
+        foreach ($this->builder->fields() as $field) {
+
+            if (method_exists($field, 'prepare')) {
+
+                $column = $field->column();
+
+                array_set($inputs, $column, $field->prepare(array_get($inputs, $column)));
+            }
+
+        }
+
+        $this->relations = $this->getRelationInputs($inputs);
+
+        $this->updates = array_except($inputs, array_keys($this->relations));
+
+        $this->inputs = $inputs;
+
+//        if (($response = $this->callSaving()) instanceof Response) {
+//            return $response;
+//        }
+
+        return $this;
     }
 
     /**
@@ -503,6 +531,8 @@ class Form
         $data = $this->handleEditable($data);
 
         $data = $this->handleFileDelete($data);
+
+        $data = $this->prepare($data);
 
         $request = Request::capture();
 
@@ -587,24 +617,27 @@ class Form
         /* @var Model $this->model */
         $this->model = $this->model->with($this->getRelations())->findOrFail($id);
 
-        $this->setFieldOriginalValue();
+        $this->model->update($this->inputs);
 
-        if (($response = $this->prepare($data)) instanceof Response) {
-            return $response;
-        }
+//        $this->setFieldOriginalValue();
+//
+//        if (($response = $this->prepare($data)) instanceof Response) {
+//            return $response;
+//        }
 
-        DB::transaction(function () {
-            $updates = $this->prepareUpdate($this->updates);
-
-            foreach ($updates as $column => $value) {
-                /* @var Model $this->model */
-                $this->model->setAttribute($column, $value);
-            }
-
-            $this->model->save();
-
-            $this->updateRelation($this->relations);
-        });
+//        DB::transaction(function () {
+//
+//            $updates = $this->prepareUpdate($this->updates);
+//
+//            foreach ($updates as $column => $value) {
+//                /* @var Model $this->model */
+//                $this->model->setAttribute($column, $value);
+//            }
+//
+//            $this->model->save();
+//
+//            $this->updateRelation($this->relations);
+//        });
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
@@ -780,14 +813,14 @@ class Form
             if ($value != $field->original()) {
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
-                        array_set($prepared, $column, $value[$name]);
+//                        array_set($prepared, $column, $value[$name]);
+                        $prepared[$column] = array_get($value, $name);
                     }
                 } elseif (is_string($columns)) {
                     array_set($prepared, $columns, $value);
                 }
             }
         }
-
         return $prepared;
     }
 
