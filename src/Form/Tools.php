@@ -68,13 +68,8 @@ EOT;
 
     public function listButton()
     {
-        $resource = url()->previous();
-
-        if(!$resource || url()->current() === $resource){
-
-            $slice = Str::contains($this->form->getResource(0), '/edit') ? null : -1;
-            $resource = $this->form->getResource($slice);
-        }
+        $slice = Str::contains($this->form->getResource(0), '/edit') ? null : -1;
+        $resource = $this->form->getResource($slice);
 
         $text = trans('admin::lang.list');
 
