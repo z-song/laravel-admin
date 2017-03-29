@@ -691,7 +691,13 @@ class Field implements Renderable
         $elementClass = $this->getElementClass();
 
         if (Arr::isAssoc($elementClass)) {
-            return $elementClass;
+            $classes = [];
+
+            foreach ($elementClass as $index => $class) {
+                $classes[$index] = is_array($class) ? implode(' ', $class) : $class;
+            }
+
+            return $classes;
         }
 
         return implode(' ', $elementClass);
@@ -710,7 +716,7 @@ class Field implements Renderable
             $classes = [];
 
             foreach ($elementClass as $index => $class) {
-                $classes[$index] = '.'.$class;
+                $classes[$index] = '.'. (is_array($class) ? implode('.', $class) : $class);
             }
 
             return $classes;
