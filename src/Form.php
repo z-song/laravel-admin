@@ -134,7 +134,7 @@ class Form
      *
      * @var array
      */
-    protected $ignored = ['_token', '_method', '_token'];
+    protected $ignored = ['_token', '_method', '_token', Builder::PREVIOUS_URL_KEY];
 
     /**
      * Collected field assets.
@@ -365,7 +365,7 @@ class Form
         }
 
         return response([
-            'status'  => 'Success',
+            'status'  => 'success',
             'message' => trans('admin::lang.save_succeeded'),
 	        'data'    => $response
         ]);
@@ -403,9 +403,6 @@ class Form
      */
     protected function prepare($data = [])
     {
-
-        $data = formatInputDatas($data);
-
         $data = $this->handleEditable($data);
 
         $data = $this->handleFileDelete($data);
@@ -418,8 +415,10 @@ class Form
 
                 $column = $field->column();
 
-                if(array_key_exists($column, $inputs)){
+                if(array_has($inputs, $column)){
+
                     array_set($inputs, $column, $field->prepare(array_get($inputs, $column)));
+
                 }
 
             }
@@ -439,25 +438,6 @@ class Form
         return $this;
     }
 
-    /**
-     * Format input datas.
-     *
-     * @param array $data
-     * @return array
-     * author Edwin Hui
-     */
-    protected function formatInputDatas($data = [])
-    {
-        $arrayDot = array_dot($data);
-
-        $formated = [];
-
-        foreach($arrayDot as $key => $value){
-            array_set($formated, $key, $value);
-        }
-
-        return $formated;
-    }
     /**
      * Remove ignored fields from input.
      *
@@ -701,26 +681,17 @@ class Form
     protected function updateRelation($relationsData)
     {
         foreach ($relationsData as $name => $values) {
-            if (!method_exists($this->model, $name)) {
+            if (empty($values) || !method_exists($this->model, $name)) {
                 continue;
             }
 
             $relation = $this->model->$name();
 
-//            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
-
-//            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
-            $prepared = $values;
-
-            if (empty($prepared)) {
-                continue;
-            }
-
             switch (get_class($relation)) {
                 case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
                 case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
-                    if (isset($prepared[$name])) {
-                        $relation->sync($prepared[$name]);
+                    if (isset($values)) {
+                        $relation->sync($values);
                     }
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasOne::class:
@@ -733,7 +704,7 @@ class Form
                         $related->{$relation->getForeignKey()} = $this->model->{$this->model->getKeyName()};
                     }
 
-                    foreach ($prepared[$name] as $column => $value) {
+                    foreach ($values as $column => $value) {
                         $related->setAttribute($column, $value);
                     }
 
@@ -741,7 +712,7 @@ class Form
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
 
-                    foreach ($prepared[$name] as $related) {
+                    foreach ($values as $related) {
                         $relation = $this->model()->$name();
 
                         $keyName = $relation->getRelated()->getKeyName();
@@ -772,17 +743,17 @@ class Form
      *
      * @return bool
      */
-    public function invalidColumn($columns, $hasDot = false)
-    {
-        foreach ((array) $columns as $column) {
-            if ((!$hasDot && Str::contains($column, '.')) ||
-                ($hasDot && !Str::contains($column, '.'))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+//    public function invalidColumn($columns, $hasDot = false)
+//    {
+//        foreach ((array) $columns as $column) {
+//            if ((!$hasDot && Str::contains($column, '.')) ||
+//                ($hasDot && !Str::contains($column, '.'))) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+//    }
 
 
     /**
@@ -792,20 +763,20 @@ class Form
      *
      * @return bool
      */
-    protected function isHasOneRelation($inserts)
-    {
-        $first = current($inserts);
-
-        if (!is_array($first)) {
-            return false;
-        }
-
-        if (is_array(current($first))) {
-            return false;
-        }
-
-        return Arr::isAssoc($first);
-    }
+//    protected function isHasOneRelation($inserts)
+//    {
+//        $first = current($inserts);
+//
+//        if (!is_array($first)) {
+//            return false;
+//        }
+//
+//        if (is_array(current($first))) {
+//            return false;
+//        }
+//
+//        return Arr::isAssoc($first);
+//    }
 
     /**
      * Set saving callback.
@@ -851,24 +822,24 @@ class Form
      *
      * @return array|mixed
      */
-    protected function getDataByColumn($data, $columns)
-    {
-        if (is_string($columns)) {
-            return array_get($data, $columns);
-        }
-
-        if (is_array($columns)) {
-            $value = [];
-            foreach ($columns as $name => $column) {
-                if (!array_has($data, $column)) {
-                    continue;
-                }
-                $value[$name] = array_get($data, $column);
-            }
-
-            return $value;
-        }
-    }
+//    protected function getDataByColumn($data, $columns)
+//    {
+//        if (is_string($columns)) {
+//            return array_get($data, $columns);
+//        }
+//
+//        if (is_array($columns)) {
+//            $value = [];
+//            foreach ($columns as $name => $column) {
+//                if (!array_has($data, $column)) {
+//                    continue;
+//                }
+//                $value[$name] = array_get($data, $column);
+//            }
+//
+//            return $value;
+//        }
+//    }
 
     /**
      * Find field object by column.
@@ -877,32 +848,32 @@ class Form
      *
      * @return mixed
      */
-    protected function getFieldByColumn($column)
-    {
-        return $this->builder->fields()->first(
-            function (Field $field) use ($column) {
-                if (is_array($field->column())) {
-                    return in_array($column, $field->column());
-                }
-
-                return $field->column() == $column;
-            }
-        );
-    }
+//    protected function getFieldByColumn($column)
+//    {
+//        return $this->builder->fields()->first(
+//            function (Field $field) use ($column) {
+//                if (is_array($field->column())) {
+//                    return in_array($column, $field->column());
+//                }
+//
+//                return $field->column() == $column;
+//            }
+//        );
+//    }
 
     /**
      * Set original data for each field.
      *
      * @return void
      */
-    protected function setFieldOriginalValue()
-    {
-        $values = $this->model->toArray();
-
-        $this->builder->fields()->each(function (Field $field) use ($values) {
-            $field->setOriginal($values);
-        });
-    }
+//    protected function setFieldOriginalValue()
+//    {
+//        $values = $this->model->toArray();
+//
+//        $this->builder->fields()->each(function (Field $field) use ($values) {
+//            $field->setOriginal($values);
+//        });
+//    }
 
     /**
      * Set all fields value in form.
