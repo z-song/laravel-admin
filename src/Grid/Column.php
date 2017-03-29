@@ -6,6 +6,7 @@ use Closure;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\AbstractDisplayer;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
@@ -99,6 +100,11 @@ class Column
     public static $defined = [];
 
     /**
+     * @var Model
+     */
+    protected static $model;
+
+    /**
      * @param string $name
      * @param string $label
      */
@@ -139,6 +145,20 @@ class Column
     public function setGrid(Grid $grid)
     {
         $this->grid = $grid;
+
+        $this->setModel($grid->model()->eloquent());
+    }
+
+    /**
+     * Set model for column.
+     *
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        if (is_null(static::$model) && ($model instanceof Model)) {
+            static::$model = $model->newInstance();
+        }
     }
 
     /**
@@ -291,7 +311,7 @@ class Column
     {
         $originalRow = static::$originalGridData[$key];
 
-        return $callback->bindTo((object) $originalRow);
+        return $callback->bindTo(static::$model->newFromBuilder($originalRow));
     }
 
     /**
