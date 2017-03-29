@@ -28,7 +28,7 @@ class Tools implements Renderable
      */
     protected $options = [
         'enableListButton' => true,
-        'enableBackButton' => false,
+        'enableBackButton' => true,
     ];
 
     /**
