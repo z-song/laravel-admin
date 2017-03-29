@@ -364,6 +364,10 @@ class Form
             return $response;
         }
 
+        if (($response = $this->complete($this->saved)) instanceof Response) {
+            return $response;
+        }
+
         return response([
             'status'  => 'success',
             'message' => trans('admin::lang.save_succeeded'),
@@ -384,6 +388,10 @@ class Form
         }
 
         if($response = $this->syncModel()){
+            return $response;
+        }
+
+        if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
         }
 
@@ -562,6 +570,10 @@ class Form
             return $response;
         }
 
+        if (($response = $this->complete($this->saved)) instanceof Response) {
+            return $response;
+        }
+
         return response([
             'status'  => 'success',
             'message' => trans('admin::lang.update_succeeded'),
@@ -586,6 +598,10 @@ class Form
             return $response;
         }
 
+        if (($response = $this->complete($this->saved)) instanceof Response) {
+            return $response;
+        }
+
         admin_toastr(trans('admin::lang.update_succeeded'));
 
         $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
@@ -607,8 +623,6 @@ class Form
         $this->model->fill($this->modelAttributes)->save();
 
         $this->updateRelation($this->relationAttributes);
-
-        return null;
     }
 
 

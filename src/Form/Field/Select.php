@@ -20,7 +20,7 @@ class Select extends Field
     public function render()
     {
         if (empty($this->script)) {
-            $this->script = "$(\"{$this->getElementClassSelector()}\").select2({allowClear: true});";
+            $this->script = "$(\"{$this->getElementClassSelector()}\").select2({allowClear: true,selectOnClose: true,});";
         }
 
         if ($this->options instanceof \Closure) {
