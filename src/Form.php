@@ -105,6 +105,7 @@ class Form
      * @var array
      */
     protected $updates = [];
+    protected $modelAttributes = [];
 
     /**
      * Data for save to model's relations from input.
@@ -112,6 +113,7 @@ class Form
      * @var array
      */
     protected $relations = [];
+    protected $relationAttributes = [];
 
     /**
      * Input data.
@@ -132,7 +134,7 @@ class Form
      *
      * @var array
      */
-    protected $ignored = [];
+    protected $ignored = ['_token', '_method', '_token'];
 
     /**
      * Collected field assets.
@@ -327,26 +329,30 @@ class Form
     {
         $data = Input::all();
 
+        if (($response = $this->prepare($data)) instanceof Response) {
+            return $response;
+        }
+
         $request = Request::capture();
 
         if($this->builder->option('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
 
-            return $this->ajaxStore($data);
+            return $this->ajaxStore();
         }
 
-        return $this->jumpStore($data);
+        return $this->jumpStore();
     }
 
     /**
      * Store in ajax mode.
      *
-     * @param $data
-     * @return mixed|null|Response
+     * @return bool|Response
+     * author Edwin Hui
      */
-    protected function ajaxStore($data)
+    protected function ajaxStore()
     {
         // Handle validation errors.
-        if ($validationMessages = $this->validationMessages($data)) {
+        if ($validationMessages = $this->validationMessages($this->inputs)) {
             return response([
                 'status'  => 'error',
                 'message' => trans('admin::lang.validate_fail'),
@@ -354,7 +360,7 @@ class Form
             ]);
         }
 
-        if( $response = $this->storeModel($data)  instanceof Response){
+        if( $response = $this->syncModel()  instanceof Response){
             return $response;
         }
 
@@ -368,17 +374,16 @@ class Form
     /**
      * Store in jump mode.
      *
-     * @param $data
      * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed|null
      */
-    protected function jumpStore($data)
+    protected function jumpStore()
     {
         // Handle validation errors.
-        if ($validationMessages = $this->validationMessages($data)) {
+        if ($validationMessages = $this->validationMessages($this->inputs)) {
             return back()->withInput()->withErrors($validationMessages);
         }
 
-        if($response = $this->storeModel($data)){
+        if($response = $this->syncModel()){
             return $response;
         }
 
@@ -390,62 +395,21 @@ class Form
     }
 
     /**
-     * Store model.
-     *
-     * @param $data
-     * @return mixed|null
-     */
-    protected function storeModel($data)
-    {
-        if (($response = $this->prepare($data)) instanceof Response) {
-            return $response;
-        }
-
-        DB::transaction(function () {
-            $inserts = $this->prepareInsert($this->updates);
-
-            foreach ($inserts as $column => $value) {
-                $this->model->setAttribute($column, $value);
-            }
-
-            $this->model->save();
-
-            $this->updateRelation($this->relations);
-        });
-
-        if (($response = $this->complete($this->saved)) instanceof Response) {
-            return $response;
-        }
-
-        return null;
-    }
-
-    /**
-     * Prepare input data for insert or update.
+     * Prepare the model attributes.
      *
      * @param array $data
-     *
-     * @return mixed
+     * @return $this|mixed
+     * author Edwin Hui
      */
-    protected function prepare_old($data = [])
-    {
-        $this->inputs = $this->removeIgnoredFields($data);
-
-        if (($response = $this->callSaving()) instanceof Response) {
-            return $response;
-        }
-
-        $this->relations = $this->getRelationInputs($this->inputs);
-
-        $updates = array_except($this->inputs, array_keys($this->relations));
-
-        $this->updates = array_filter($updates, function ($val) {
-            return !is_null($val);
-        });
-    }
-
     protected function prepare($data = [])
     {
+
+        $data = formatInputDatas($data);
+
+        $data = $this->handleEditable($data);
+
+        $data = $this->handleFileDelete($data);
+
         $inputs = $this->removeIgnoredFields($data);
 
         foreach ($this->builder->fields() as $field) {
@@ -454,24 +418,46 @@ class Form
 
                 $column = $field->column();
 
-                array_set($inputs, $column, $field->prepare(array_get($inputs, $column)));
+                if(array_key_exists($column, $inputs)){
+                    array_set($inputs, $column, $field->prepare(array_get($inputs, $column)));
+                }
+
             }
 
         }
 
-        $this->relations = $this->getRelationInputs($inputs);
+        $this->relationAttributes = $this->getRelationInputs($inputs);
 
-        $this->updates = array_except($inputs, array_keys($this->relations));
+        $this->modelAttributes = array_except($inputs, array_keys($this->relationAttributes));
 
         $this->inputs = $inputs;
 
-//        if (($response = $this->callSaving()) instanceof Response) {
-//            return $response;
-//        }
+        if (($response = $this->callSaving()) instanceof Response) {
+            return $response;
+        }
 
         return $this;
     }
 
+    /**
+     * Format input datas.
+     *
+     * @param array $data
+     * @return array
+     * author Edwin Hui
+     */
+    protected function formatInputDatas($data = [])
+    {
+        $arrayDot = array_dot($data);
+
+        $formated = [];
+
+        foreach($arrayDot as $key => $value){
+            array_set($formated, $key, $value);
+        }
+
+        return $formated;
+    }
     /**
      * Remove ignored fields from input.
      *
@@ -547,20 +533,18 @@ class Form
     {
         $data = Input::all();
 
-        $data = $this->handleEditable($data);
-
-        $data = $this->handleFileDelete($data);
-
-        $data = $this->prepare($data);
+        if (($response = $this->prepare($data)) instanceof Response) {
+            return $response;
+        }
 
         $request = Request::capture();
 
         if($this->builder->option('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
 
-            return $this->ajaxUpdate($id, $data);
+            return $this->ajaxUpdate($id);
         }
 
-        return $this->jumpUpdate($id, $data);
+        return $this->jumpUpdate($id);
 
     }
 
@@ -568,12 +552,12 @@ class Form
      * Update in ajax mode.
      *
      * @param $id
-     * @param $data
      * @return bool|mixed|null|Response
+     * author Edwin Hui
      */
-    protected function ajaxUpdate($id, $data)
+    protected function ajaxUpdate($id)
     {
-        if ($this->handleOrderable($id, $data)) {
+        if ($this->handleOrderable($id, $this->inputs)) {
             return response([
                 'status'  => 'success',
                 'message' => trans('admin::lang.update_succeeded'),
@@ -581,7 +565,7 @@ class Form
         }
 
         // Handle validation errors.
-        if ($validationMessages = $this->validationMessages($data)) {
+        if ($validationMessages = $this->validationMessages($this->inputs)) {
             return response([
                 'status'  => 'error',
                 'message' => trans('admin::lang.validate_fail'),
@@ -589,7 +573,7 @@ class Form
             ]);
         }
 
-        if( $response = $this->updateModel($id, $data)){
+        if( $response = $this->syncModel($id)){
             return $response;
         }
 
@@ -603,17 +587,17 @@ class Form
      * Update in jump mode.
      *
      * @param $id
-     * @param $data
      * @return $this|bool|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed|null
+     * author Edwin Hui
      */
-    protected function jumpUpdate($id, $data)
+    protected function jumpUpdate($id)
     {
         // Handle validation errors.
-        if ($validationMessages = $this->validationMessages($data)) {
+        if ($validationMessages = $this->validationMessages($this->inputs)) {
             return back()->withInput()->withErrors($validationMessages);
         }
 
-        if( $response = $this->updateModel($id, $data)){
+        if( $response = $this->syncModel($id)){
             return $response;
         }
 
@@ -628,35 +612,16 @@ class Form
      * Update model.
      *
      * @param $id
-     * @param $data
      * @return bool|mixed|null
      */
-    protected function updateModel($id, $data)
+    protected function syncModel($id = null)
     {
         /* @var Model $this->model */
-        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+        $this->model = $this->model->findOrNew($id);
 
-        $this->model->update($this->inputs);
+        $this->model->fill($this->modelAttributes)->save();
 
-//        $this->setFieldOriginalValue();
-//
-//        if (($response = $this->prepare($data)) instanceof Response) {
-//            return $response;
-//        }
-
-//        DB::transaction(function () {
-//
-//            $updates = $this->prepareUpdate($this->updates);
-//
-//            foreach ($updates as $column => $value) {
-//                /* @var Model $this->model */
-//                $this->model->setAttribute($column, $value);
-//            }
-//
-//            $this->model->save();
-//
-//            $this->updateRelation($this->relations);
-//        });
+        $this->updateRelation($this->relationAttributes);
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
@@ -742,9 +707,10 @@ class Form
 
             $relation = $this->model->$name();
 
-            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
+//            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
 
-            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
+//            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
+            $prepared = $values;
 
             if (empty($prepared)) {
                 continue;
@@ -801,50 +767,6 @@ class Form
     }
 
     /**
-     * Prepare input data for update.
-     *
-     * @param array $updates
-     * @param bool  $hasDot  If column name contains a 'dot', only has-one relation column use this.
-     *
-     * @return array
-     */
-    protected function prepareUpdate(array $updates, $hasDot = false)
-    {
-        $prepared = [];
-
-        foreach ($this->builder->fields() as $field) {
-            $columns = $field->column();
-
-            if ($this->invalidColumn($columns, $hasDot)) {
-                continue;
-            }
-
-            $value = $this->getDataByColumn($updates, $columns);
-
-            if ($value !== '' && $value !== '0' && empty($value)) {
-                continue;
-            }
-
-            if (method_exists($field, 'prepare')) {
-                $value = $field->prepare($value);
-            }
-
-            if ($value != $field->original()) {
-                if (is_array($columns)) {
-                    foreach ($columns as $name => $column) {
-                    	if(array_key_exists($name, $value)){
-		                    array_set($prepared, $column, $value[$name]);
-	                    }
-                    }
-                } elseif (is_string($columns)) {
-                    array_set($prepared, $columns, $value);
-                }
-            }
-        }
-        return $prepared;
-    }
-
-    /**
      * @param string|array $columns
      * @param bool         $hasDot
      *
@@ -862,38 +784,6 @@ class Form
         return false;
     }
 
-    /**
-     * Prepare input data for insert.
-     *
-     * @param $inserts
-     *
-     * @return array
-     */
-    protected function prepareInsert($inserts)
-    {
-        if ($this->isHasOneRelation($inserts)) {
-            $inserts = array_dot($inserts);
-        }
-
-        foreach ($inserts as $column => $value) {
-            if (is_null($field = $this->getFieldByColumn($column))) {
-                unset($inserts[$column]);
-                continue;
-            }
-
-            if (method_exists($field, 'prepare')) {
-                $inserts[$column] = $field->prepare($value);
-            }
-        }
-
-        $prepared = [];
-
-        foreach ($inserts as $key => $value) {
-            array_set($prepared, $key, $value);
-        }
-
-        return $prepared;
-    }
 
     /**
      * Is input data is has-one relation.
