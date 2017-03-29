@@ -41,7 +41,7 @@ class Admin
      * @param $model
      * @param Closure $callable
      *
-     * @return Grid
+     * @return \Encore\Admin\Grid
      */
     public function grid($model, Closure $callable)
     {
@@ -52,7 +52,7 @@ class Admin
      * @param $model
      * @param Closure $callable
      *
-     * @return Form
+     * @return \Encore\Admin\Form
      */
     public function form($model, Closure $callable)
     {
@@ -64,7 +64,7 @@ class Admin
      *
      * @param $model
      *
-     * @return Tree
+     * @return \Encore\Admin\Tree
      */
     public function tree($model, Closure $callable = null)
     {
@@ -74,7 +74,7 @@ class Admin
     /**
      * @param Closure $callable
      *
-     * @return Content
+     * @return \Encore\Admin\Layout\Content
      */
     public function content(Closure $callable = null)
     {
@@ -235,7 +235,7 @@ class Admin
     /**
      * Get navbar object.
      *
-     * @return Navbar
+     * @return \Encore\Admin\Widgets\Navbar
      */
     public function getNavbar()
     {
@@ -259,13 +259,11 @@ class Admin
 
             /* @var \Illuminate\Routing\Router $router */
             $router->group($attributes, function ($router) {
-                $router->resources([
-                    'auth/users'       => 'UserController',
-                    'auth/roles'       => 'RoleController',
-                    'auth/permissions' => 'PermissionController',
-                    'auth/menu'        => 'MenuController',
-                    'auth/logs'        => 'LogController',
-                ]);
+                $router->resource('auth/users', 'UserController');
+                $router->resource('auth/roles', 'RoleController');
+                $router->resource('auth/permissions', 'PermissionController');
+                $router->resource('auth/menu', 'MenuController', ['except' => ['create']]);
+                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']]);
             });
 
             $router->get('auth/login', 'AuthController@getLogin');

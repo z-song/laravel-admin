@@ -47,7 +47,6 @@ class AuthController extends Controller
         }
 
         if (Auth::guard('admin')->attempt($credentials)) {
-
             admin_toastr(trans('admin::lang.login_successful'));
 
             return redirect()->intended(config('admin.prefix'));
@@ -64,6 +63,8 @@ class AuthController extends Controller
     public function getLogout()
     {
         Auth::guard('admin')->logout();
+
+        session()->forget('url.intented');
 
         return redirect(config('admin.prefix'));
     }

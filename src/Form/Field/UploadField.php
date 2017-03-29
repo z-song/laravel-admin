@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Encore\Admin\Form;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\MessageBag;
@@ -38,26 +39,6 @@ trait UploadField
     protected $useUniqueName = true;
 
     /**
-     * The file original name.
-     *
-     * @var string
-     */
-    private $originalName = '';
-
-    /**
-     * Create a new File instance.
-     *
-     * @param string $column
-     * @param array $arguments
-     */
-    public function __construct($column, $arguments = [])
-    {
-        $this->initStorage();
-
-        parent::__construct($column, $arguments);
-    }
-
-    /**
      * Initialize the storage instance.
      *
      * @return void.
@@ -67,9 +48,14 @@ trait UploadField
         $this->disk(config('admin.upload.disk'));
     }
 
-    public function setupDefaultOptions()
+    /**
+     * Set default options form image field.
+     *
+     * @return void
+     */
+    protected function setupDefaultOptions()
     {
-        $this->options([
+        $defaultOptions = [
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
             'initialPreviewFileType' => 'object',
@@ -81,13 +67,24 @@ trait UploadField
             'deleteExtraData'  => [
                 $this->column       => '',
                 static::FILE_DELETE_FLAG => '',
-                '_token'            => csrf_token(),
-                '_method'           => 'PUT'
-            ]
-        ]);
+                '_token'                 => csrf_token(),
+                '_method'                => 'PUT',
+            ],
+        ];
+
+        if ($this->form instanceof Form) {
+            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
+        }
+
+        $this->options($defaultOptions);
     }
 
-    public function setupPreviewOptions()
+    /**
+     * Set preview options form image field.
+     *
+     * @return void
+     */
+    protected function setupPreviewOptions()
     {
         $this->options([
             'initialPreview'        => $this->preview(),
@@ -104,7 +101,7 @@ trait UploadField
      */
     public function options($options = [])
     {
-        $this->options = array_merge($this->options, $options);
+        $this->options = array_merge($options, $this->options);
 
         return $this;
     }
@@ -135,7 +132,7 @@ trait UploadField
     /**
      * Specify the directory and name for upload file.
      *
-     * @param string $directory
+     * @param string      $directory
      * @param null|string $name
      *
      * @return $this
@@ -301,7 +298,7 @@ trait UploadField
             return $path;
         }
 
-        return rtrim(config('admin.upload.host'), '/') . '/' . trim($path, '/');
+        return rtrim(config('admin.upload.host'), '/').'/'.trim($path, '/');
     }
 
     /**

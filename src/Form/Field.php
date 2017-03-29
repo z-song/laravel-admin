@@ -70,9 +70,9 @@ class Field implements Renderable
     protected $elementName = '';
 
     /**
-     * Form element name.
+     * Form element classes.
      *
-     * @var string
+     * @var array
      */
     protected $elementClass = [];
 
@@ -400,6 +400,18 @@ class Field implements Renderable
     }
 
     /**
+     * Remove a specific rule.
+     *
+     * @param string $rule
+     *
+     * @return void
+     */
+    protected function removeRule($rule)
+    {
+        $this->rules = str_replace($rule, '', $this->rules);
+    }
+
+    /**
      * Get key for error message.
      *
      * @return string
@@ -682,7 +694,7 @@ class Field implements Renderable
     }
 
     /**
-     * Get element class string
+     * Get element class string.
      *
      * @return mixed
      */
@@ -698,7 +710,7 @@ class Field implements Renderable
     }
 
     /**
-     * Get element class selector
+     * Get element class selector.
      *
      * @return string
      */
@@ -707,7 +719,6 @@ class Field implements Renderable
         $elementClass = $this->getElementClass();
 
         if (Arr::isAssoc($elementClass)) {
-
             $classes = [];
 
             foreach ($elementClass as $index => $class) {
@@ -749,7 +760,6 @@ class Field implements Renderable
         return $this;
     }
 
-
     /**
      * Remove element class.
      *
@@ -772,7 +782,6 @@ class Field implements Renderable
         }
 
         return $this;
-
     }
 
     /**

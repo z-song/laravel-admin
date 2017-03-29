@@ -544,6 +544,11 @@ class Form
             ]);
         }
 
+        /* @var Model $this->model */
+        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+
+        $this->setFieldOriginalValue();
+
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($this->inputs)) {
             return response([
@@ -603,10 +608,6 @@ class Form
 
         $this->updateRelation($this->relationAttributes);
 
-        if (($response = $this->complete($this->saved)) instanceof Response) {
-            return $response;
-        }
-
         return null;
     }
 
@@ -634,11 +635,12 @@ class Form
 
     /**
      * @param array $input
+     *
      * @return array
      */
     protected function handleFileDelete(array $input = [])
     {
-        if (array_key_exists(Field::FILE_DELETE_FLAG , $input)) {
+        if (array_key_exists(Field::FILE_DELETE_FLAG, $input)) {
             $input[Field::FILE_DELETE_FLAG] = $input['key'];
             unset($input['key']);
         }

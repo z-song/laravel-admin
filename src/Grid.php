@@ -41,6 +41,13 @@ class Grid
     protected $columns;
 
     /**
+     * Collection of table columns.
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    protected $dbColumns;
+
+    /**
      * Collection of all data rows.
      *
      * @var \Illuminate\Support\Collection
@@ -174,6 +181,7 @@ class Grid
         $this->rows = new Collection();
         $this->builder = $builder;
 
+        $this->setDbColumns();
         $this->setupTools();
         $this->setupFilter();
         $this->setupExporter();
@@ -261,7 +269,7 @@ class Grid
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
 
-            $name = snake_case($relationName) . '.' . $relationColumn;
+            $name = snake_case($relationName).'.'.$relationColumn;
         }
 
         $column = $this->addColumn($name, $label);
@@ -754,6 +762,18 @@ class Grid
     }
 
     /**
+     * Get the table columns for grid.
+     *
+     * @return void
+     */
+    protected function setDbColumns()
+    {
+        $connection = $this->model()->eloquent()->getConnectionName();
+
+        $this->dbColumns = collect(Schema::connection($connection)->getColumnListing($this->model()->getTable()));
+    }
+
+    /**
      * Handle table column for grid.
      *
      * @param string $method
@@ -763,9 +783,7 @@ class Grid
      */
     protected function handleTableColumn($method, $label)
     {
-        $connection = $this->model()->eloquent()->getConnectionName();
-
-        if (Schema::connection($connection)->hasColumn($this->model()->getTable(), $method)) {
+        if ($this->dbColumns->has($method)) {
             return $this->addColumn($method, $label);
         }
 
@@ -818,7 +836,7 @@ class Grid
         if ($relation instanceof HasMany || $relation instanceof BelongsToMany || $relation instanceof MorphToMany) {
             $this->model()->with($method);
 
-            return $this->addColumn($method, $label);
+            return $this->addColumn(snake_case($method), $label);
         }
 
         return false;
@@ -915,13 +933,26 @@ class Grid
      * @param string $view
      * @param array  $variables
      */
-    public function view($view, $variables = [])
+    public function setView($view, $variables = [])
     {
         if (!empty($variables)) {
             $this->with($variables);
         }
 
         $this->view = $view;
+    }
+
+    /**
+     * Set a view to render.
+     *
+     * @param string $view
+     * @param array  $variables
+     *
+     * @deprecated
+     */
+    public function view($view, $variables = [])
+    {
+        $this->setView($view, $variables);
     }
 
     /**

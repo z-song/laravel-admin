@@ -112,7 +112,7 @@ EOT;
     }
 
     /**
-     * Disable batch actions.
+     * Disable list button.
      *
      * @return $this
      */

@@ -113,7 +113,7 @@ class Filter
         $inputs = array_dot(Input::all());
 
         $inputs = array_filter($inputs, function ($input) {
-            return $input !== '';
+            return $input !== '' && !is_null($input);
         });
 
         if (empty($inputs)) {

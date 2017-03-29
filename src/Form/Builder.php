@@ -157,10 +157,13 @@ class Builder
     /**
      * @return string
      */
-    public function getResource()
+    public function getResource($slice = null)
     {
         if ($this->mode == self::MODE_CREATE) {
             return $this->form->resource(-1);
+        }
+        if ($slice !== null) {
+            return $this->form->resource($slice);
         }
 
         return $this->form->resource();
@@ -428,7 +431,7 @@ class Builder
 
             return <<<EOT
 <div class="btn-group pull-right">
-    <button type="submit" class="btn btn-info pull-right">$text</button>
+    <button type="submit" class="btn btn-info pull-right" data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
 </div>
 EOT;
         }else{
