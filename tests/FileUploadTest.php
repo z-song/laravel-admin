@@ -70,6 +70,24 @@ class FileUploadTest extends TestCase
         File::cleanDirectory(public_path('upload/file'));
     }
 
+    /**
+     * When uploading files with some extension - it should be kept
+     * @see src/Form/Field/UploadField.php method generateUniqueName
+     */
+    public function testExtensionDetectionOnSameFiles()
+    {
+        File::cleanDirectory(public_path('upload/file'));
+
+        $this->uploadFiles(); // uploads 5 .php files
+
+        $this->assertCount(5, glob(public_path('upload/file/*.php')));
+
+        $this->uploadFiles(); // 5 files already exists, so they should get new names with php extension
+
+        $this->assertCount(10, glob(public_path('upload/file/*.php')));
+
+    }
+
     public function testUpdateFile()
     {
         File::cleanDirectory(public_path('upload/file'));
