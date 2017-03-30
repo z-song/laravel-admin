@@ -12,11 +12,11 @@ class Row
     protected $number;
 
     /**
-     * Row data.
+     * Row model.
      *
-     * @var
+     * @var \Illuminate\Database\Eloquent\Model
      */
-    protected $data;
+    protected $model;
 
     /**
      * Attributes of row.
@@ -36,13 +36,13 @@ class Row
      * Constructor.
      *
      * @param $number
-     * @param $data
+     * @param $model
      */
-    public function __construct($number, $data)
+    public function __construct($number, $model)
     {
         $this->number = $number;
 
-        $this->data = $data;
+        $this->model = $model;
     }
 
     /**
@@ -111,13 +111,13 @@ class Row
     }
 
     /**
-     * Get data of this row.
+     * Get model of this row.
      *
      * @return mixed
      */
     public function cells()
     {
-        return $this->data;
+        return $this->model;
     }
 
     /**
@@ -129,7 +129,7 @@ class Row
      */
     public function __get($attr)
     {
-        return array_get($this->data, $attr);
+        return array_get($this->model, $attr);
     }
 
     /**
@@ -143,7 +143,7 @@ class Row
     public function column($name, $value = null)
     {
         if (is_null($value)) {
-            $column = array_get($this->data, $name);
+            $column = $this->model->getAttribute($name);
 
             return $this->dump($column);
         }
@@ -153,7 +153,7 @@ class Row
             $value = $value($this->column($name));
         }
 
-        array_set($this->data, $name, $value);
+        $this->model->{$name} = $value;
 
         return $this;
     }
@@ -167,6 +167,10 @@ class Row
      */
     protected function dump($var)
     {
+        if (method_exists($var, '__toString')) {
+            return $var->__toString();
+        }
+
         if (!is_scalar($var)) {
             return '<pre>'.var_export($var, true).'</pre>';
         }
