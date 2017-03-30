@@ -39,13 +39,25 @@ class Row
     }
 
     /**
-     * Get id of this row.
+     * Get the value of the model's primary key.
      *
-     * @return null
+     * @return mixed
+     */
+    public function getKey()
+    {
+        return $this->model->getKey();
+    }
+
+    /**
+     * Get the value of the model's primary key.
+     *
+     * @return mixed
+     *
+     * @deprecated Use `getKey()` instead.
      */
     public function id()
     {
-        return $this->model->getKey();
+        return $this->getKey();
     }
 
     /**
@@ -53,10 +65,38 @@ class Row
      *
      * @return string
      */
-    public function getHtmlAttributes()
+    public function getRowAttributes()
+    {
+        return $this->formatHtmlAttribute($this->attributes);
+    }
+
+    /**
+     * Get column attributes.
+     *
+     * @param string $column
+     *
+     * @return string
+     */
+    public function getColumnAttributes($column)
+    {
+        if ($attributes = Column::getAttributes($column)) {
+            return $this->formatHtmlAttribute($attributes);
+        }
+
+        return '';
+    }
+
+    /**
+     * Format attributes to html.
+     *
+     * @param array $attributes
+     *
+     * @return string
+     */
+    private function formatHtmlAttribute($attributes = [])
     {
         $attrArr = [];
-        foreach ($this->attributes as $name => $val) {
+        foreach ($attributes as $name => $val) {
             $attrArr[] = "$name=\"$val\"";
         }
 
@@ -98,7 +138,7 @@ class Row
      *
      * @return mixed
      */
-    public function cells()
+    public function model()
     {
         return $this->model;
     }
