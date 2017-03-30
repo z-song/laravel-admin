@@ -100,6 +100,11 @@ class Column
     public static $defined = [];
 
     /**
+     * @var array
+     */
+    protected static $htmlAttributes = [];
+
+    /**
      * @param string $name
      * @param string $label
      */
@@ -150,6 +155,41 @@ class Column
     public static function setOriginalGridData(array $input)
     {
         static::$originalGridData = $input;
+    }
+
+    /**
+     * Set column attributes.
+     *
+     * @param array $attributes
+     * @return $this
+     */
+    public function setAttributes($attributes  = [])
+    {
+        static::$htmlAttributes[$this->name] = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Get column attributes.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public static function getAttributes($name)
+    {
+        return array_get(static::$htmlAttributes, $name, '');
+    }
+
+    /**
+     * Set style of this column.
+     *
+     * @param string $style
+     * @return Column
+     */
+    public function style($style)
+    {
+        return $this->setAttributes(compact('style'));
     }
 
     /**
