@@ -71,7 +71,8 @@ class FileUploadTest extends TestCase
     }
 
     /**
-     * When uploading files with some extension - it should be kept, even if files already exist
+     * When uploading files with some extension - it should be kept, even if files already exist.
+     *
      * @see src/Form/Field/UploadField.php method generateUniqueName
      */
     public function testExtensionDetectionOnSameFiles()
@@ -87,7 +88,6 @@ class FileUploadTest extends TestCase
 
         $this->assertCount(12, glob(public_path('upload/file/*'))); // 12 in total
         $this->assertCount(12, glob(public_path('upload/file/*.php'))); // 12 of them should have .php extension
-
     }
 
     public function testUpdateFile()
