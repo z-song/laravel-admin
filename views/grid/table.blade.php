@@ -24,9 +24,11 @@
             </tr>
 
             @foreach($grid->rows() as $row)
-            <tr {!! $row->getHtmlAttributes() !!}>
+            <tr {!! $row->getRowAttributes() !!}>
                 @foreach($grid->columnNames as $name)
-                <td>{!! $row->column($name) !!}</td>
+                <td {!! $row->getColumnAttributes($name) !!}>
+                    {!! $row->column($name) !!}
+                </td>
                 @endforeach
             </tr>
             @endforeach
