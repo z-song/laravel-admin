@@ -26,13 +26,6 @@ class Row
     protected $attributes = [];
 
     /**
-     * The primary key name.
-     *
-     * @var string
-     */
-    protected $keyName = 'id';
-
-    /**
      * Constructor.
      *
      * @param $number
@@ -46,23 +39,13 @@ class Row
     }
 
     /**
-     * Set primary key name.
-     *
-     * @param $keyName
-     */
-    public function setKeyName($keyName)
-    {
-        $this->keyName = $keyName;
-    }
-
-    /**
      * Get id of this row.
      *
      * @return null
      */
     public function id()
     {
-        return $this->__get($this->keyName);
+        return $this->model->getKey();
     }
 
     /**
@@ -129,7 +112,7 @@ class Row
      */
     public function __get($attr)
     {
-        return array_get($this->model, $attr);
+        return $this->model->getAttribute($attr);
     }
 
     /**
