@@ -107,5 +107,4 @@ class TestCase extends BaseTestCase
 
         return $class;
     }
-
 }
