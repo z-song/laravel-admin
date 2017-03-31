@@ -105,6 +105,11 @@ class Column
     protected static $htmlAttributes = [];
 
     /**
+     * @var
+     */
+    protected static $model;
+
+    /**
      * @param string $name
      * @param string $label
      */
