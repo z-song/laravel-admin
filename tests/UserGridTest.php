@@ -101,11 +101,9 @@ class UserGridTest extends TestCase
         $this->assertCount(50, UserModel::all());
         $this->assertCount(50, ProfileModel::all());
 
-        $id = rand(1, 50);
+        $user = UserModel::inRandomOrder()->first();
 
-        $user = UserModel::find($id);
-
-        $this->visit('admin/users?id='.$id)
+        $this->visit('admin/users?id=' . $user->id)
             ->seeInElement('td', $user->username)
             ->seeInElement('td', $user->email)
             ->seeInElement('td', $user->mobile)
@@ -144,7 +142,7 @@ class UserGridTest extends TestCase
     {
         $this->seedsTable(50);
 
-        $user = UserModel::with('profile')->find(rand(1, 50));
+        $user = UserModel::inRandomOrder()->with('profile')->first();
 
         $this->visit('admin/users?email='.$user->email)
             ->seeInElement('td', $user->username)
@@ -164,7 +162,7 @@ class UserGridTest extends TestCase
     {
         $this->seedsTable(1);
 
-        $user = UserModel::with('profile')->find(1);
+        $user = UserModel::with('profile')->first();
 
         $this->visit('admin/users')
             ->seeInElement('th', 'Column1 not in table')

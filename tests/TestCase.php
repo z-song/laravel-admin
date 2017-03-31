@@ -8,6 +8,8 @@ class TestCase extends BaseTestCase
 {
     protected $baseUrl = 'http://localhost:8000';
 
+    protected static $firstRun = true;
+
     /**
      * Boots the application.
      *
@@ -37,11 +39,21 @@ class TestCase extends BaseTestCase
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
         $this->app['config']->set('admin', require __DIR__.'/config/admin.php');
 
-        $this->artisan('vendor:publish');
+        if(self::$firstRun) {
+            $this->rollback();
 
-        $this->migrate();
+            self::$firstRun = false;
+            $this->artisan('vendor:publish');
 
-        $this->artisan('admin:install');
+            $this->migrate();
+
+            $this->artisan('admin:install');
+        }
+
+        //\DB::unprepared('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
+
+        \DB::beginTransaction();
+
 
         \Encore\Admin\Facades\Admin::registerAuthRoutes();
 
@@ -56,7 +68,7 @@ class TestCase extends BaseTestCase
 
     public function tearDown()
     {
-        $this->rollback();
+        \DB::rollback();
 
         parent::tearDown();
     }
