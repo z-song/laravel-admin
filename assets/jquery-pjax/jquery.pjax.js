@@ -250,6 +250,10 @@ function pjax(options) {
   }
 
   options.success = function(data, status, xhr) {
+    // 如果 data 是 json string 则格式化它
+    if (typeof(data) === 'string' && data.match("^\{(.+:.+,*){1,}\}$")){
+      data = JSON.parse(data)
+    }
     // 当返回体为Object时，适为返回体JSON
     // 项目中，对于这部分请求不认为是有效可后退对象，所以全部转给success_object处理
     if (typeof(data) === 'object') {

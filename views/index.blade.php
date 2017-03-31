@@ -27,7 +27,7 @@
     <script src="{{ asset ("/packages/admin/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/dist/js/app.min.js") }}"></script>
-    <script src="{{ asset ("/packages/admin/jquery-pjax/jquery.pjax.js?v=5") }}"></script>
+    <script src="{{ asset ("/packages/admin/jquery-pjax/jquery.pjax.js?v=6") }}"></script>
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -113,7 +113,7 @@
                     name += '['+ n + ']';
                 });
                 return name;
-            },
+            }
 
         }
 
@@ -132,10 +132,8 @@
             "timeOut": 4000
         };
 
-        $.pjax.defaults = {
-            'timeout'           : 5000,
-            'maxCacheLength'    : 0
-        }
+        $.pjax.defaults.timeout = 10000
+        $.pjax.defaults.maxCacheLength = 0
 
         var $document = $(document);
 
@@ -190,12 +188,6 @@
                     }
                 }
             },
-            'pjax:success':function(event,data, status, xhr, options){
-                console.log(data);
-            },
-            'pjax:error':function(event,data, status, xhr, options){
-                console.log(data);
-            },
             "pjax:end": function(event) {
                 $(event.target).find("script[data-exec-on-popstate]").each(function() {
                     $.globalEval(this.text || this.textContent || this.innerHTML || '');
@@ -206,6 +198,23 @@
             "ajaxStop": function() { NProgress.done(); }
         });
 
+        $(document).on('pjax:error', function(event, xhr) {
+            var message = '';
+            try{
+                response = JSON.parse(xhr.responseText);
+                message = response.message || 'error';
+            }catch(e){
+                if (xhr.status == 0) {
+                    return;
+                }
+                toastr['warning'](xhr.statusText,'Warning!')
+                return false;
+            }
+            if (message) {
+                toastr['warning'](message,'Warning!')
+            }
+            return false;
+        });
 
         function activeMenu( li) {
             li.addClass('active').siblings().removeClass('active').find('ul.treeview-menu').removeClass('menu-open');
