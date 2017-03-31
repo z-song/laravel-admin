@@ -27,7 +27,7 @@
     <script src="{{ asset ("/packages/admin/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/dist/js/app.min.js") }}"></script>
-    <script src="{{ asset ("/packages/admin/jquery-pjax/jquery.pjax.js") }}"></script>
+    <script src="{{ asset ("/packages/admin/jquery-pjax/jquery.pjax.js?v=5") }}"></script>
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -77,7 +77,13 @@
             token : "{{ csrf_token() }}",
 
             removeFormErrorLabel : function (form){
-                $(form).find('.form-group.has-error').removeClass('has-error').find('.control-label.validation').remove();
+                $(form).find('.form-group.has-error').each(function(){
+                    var $this = $(this);
+                    $this.removeClass('has-error').find('.control-label.validation').remove();
+                    $this.closest('.tab-pane').each(function(){
+                        $('ul.nav a[href="#' + this.id +'"]').data('has-error', 0).find('i').remove();
+                    })
+                })
             },
 
             addFormErrorLabel : function (form, validation){
@@ -89,6 +95,14 @@
                         target.closest('.form-group-fields').prepend('<label class="control-label validation" for="inputError"><i class="fa fa-times-circle-o"></i> '+ message +'</label>');
                     });
                 });
+
+                $('.has-error').closest('.tab-pane').each(function(){
+                    var tabA = $('ul.nav a[href="#' + this.id +'"]');
+                    if(!tabA.data('has-error')){
+                        tabA.data('has-error', 1);
+                        tabA.append('<i class="fa fa-exclamation-circle text-red"></i>');
+                    }
+                })
 
             },
 
@@ -130,7 +144,7 @@
         });
 
         $document.on('submit','form[pjax-container]', function(event) {
-            $.pjax.submit(event, '#pjax-container',{'dataType': 'json'})
+            $.pjax.submit(event, '#pjax-container')
         })
 
         $document.on({
@@ -175,6 +189,12 @@
                             toastr['info'](data.message);
                     }
                 }
+            },
+            'pjax:success':function(event,data, status, xhr, options){
+                console.log(data);
+            },
+            'pjax:error':function(event,data, status, xhr, options){
+                console.log(data);
             },
             "pjax:end": function(event) {
                 $(event.target).find("script[data-exec-on-popstate]").each(function() {

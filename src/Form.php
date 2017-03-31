@@ -332,7 +332,7 @@ class Form
             return $response;
         }
 
-        if(request()->expectsJson()){
+        if($this->isAjaxMode()){
             return $this->ajaxStore();
         }
 
@@ -526,7 +526,7 @@ class Form
             return $response;
         }
 
-        if( request()->expectsJson()){
+        if( $this->isAjaxMode()){
             return $this->ajaxUpdate($id);
         }
 
@@ -540,12 +540,12 @@ class Form
      * @return bool
      * author Edwin Hui
      */
-//    protected function isAjaxMode()
-//    {
-//        $request = Request::capture();
-//
-//        return $this->builder->option('ajaxSubmit') ?: ($request->ajax() && !$request->pjax());
-//    }
+    protected function isAjaxMode()
+    {
+        $request = Request::capture();
+
+        return $this->builder->option('ajaxSubmit') ?: ($request->ajax() && !$request->pjax());
+    }
 
     /**
      * Update in ajax mode.
@@ -1061,6 +1061,18 @@ class Form
     public function disableReset()
     {
         $this->builder()->options(['enableReset' => false]);
+
+        return $this;
+    }
+
+    /**
+     * Disable ajax submit.
+     *
+     * @return $this
+     */
+    public function disableAjaxSubmit()
+    {
+        $this->builder()->options(['ajaxSubmit' => false]);
 
         return $this;
     }
