@@ -53,8 +53,8 @@ class OperationLogTest extends TestCase
 
         $id = OperationLog::first()->id;
 
-        $this->delete('admin/auth/logs/' . $id)
-            ->seeInDatabase($table, ['path' => 'admin/auth/logs/' . $id, 'method' => 'DELETE'])
+        $this->delete('admin/auth/logs/'.$id)
+            ->seeInDatabase($table, ['path' => 'admin/auth/logs/'.$id, 'method' => 'DELETE'])
             ->assertEquals(1, OperationLog::count());
     }
 
@@ -76,14 +76,14 @@ class OperationLogTest extends TestCase
 
         $ids = OperationLog::take(5)->pluck('id')->toArray();
 
-        $this->delete('admin/auth/logs/' . join(',', $ids))
+        $this->delete('admin/auth/logs/'.implode(',', $ids))
             ->notSeeInDatabase($table, ['path' => 'admin/auth/menu', 'method' => 'GET'])
             ->notSeeInDatabase($table, ['path' => 'admin/auth/users', 'method' => 'GET'])
             ->notSeeInDatabase($table, ['path' => 'admin/auth/permissions', 'method' => 'GET'])
             ->notSeeInDatabase($table, ['path' => 'admin/auth/roles', 'method' => 'GET'])
             ->notSeeInDatabase($table, ['path' => 'admin/auth/logs', 'method' => 'GET'])
 
-            ->seeInDatabase($table, ['path' => 'admin/auth/logs/' . join(',', $ids), 'method' => 'DELETE'])
+            ->seeInDatabase($table, ['path' => 'admin/auth/logs/'.implode(',', $ids), 'method' => 'DELETE'])
             ->assertEquals(1, OperationLog::count());
     }
 }

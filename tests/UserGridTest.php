@@ -103,7 +103,7 @@ class UserGridTest extends TestCase
 
         $user = UserModel::inRandomOrder()->first();
 
-        $this->visit('admin/users?id=' . $user->id)
+        $this->visit('admin/users?id='.$user->id)
             ->seeInElement('td', $user->username)
             ->seeInElement('td', $user->email)
             ->seeInElement('td', $user->mobile)

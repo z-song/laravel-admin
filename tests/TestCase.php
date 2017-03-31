@@ -39,8 +39,8 @@ class TestCase extends BaseTestCase
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
         $this->app['config']->set('admin', require __DIR__.'/config/admin.php');
 
-        if(self::$firstRun) {
-            if(Schema::hasTable('migrations')) {
+        if (self::$firstRun) {
+            if (Schema::hasTable('migrations')) {
                 $this->rollback();
             }
 

@@ -149,7 +149,7 @@ class ImageUploadTest extends TestCase
         $this->visit('admin/images')
             ->seeInElement('td', $image['id']);
 
-        $this->delete('admin/images/' . $image['id'])
+        $this->delete('admin/images/'.$image['id'])
             ->dontSeeInDatabase('test_images', ['id' => $image['id']]);
 
         foreach (range(1, 6) as $index) {
