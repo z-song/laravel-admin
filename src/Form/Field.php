@@ -169,6 +169,41 @@ class Field implements Renderable
     ];
 
     /**
+     * Start flg for prepending row.
+     *
+     * @var bool
+     */
+    protected $prependRowStart = false;
+
+    /**
+     * End flg for prepending row.
+     *
+     * @var bool
+     */
+    protected $prependRowEnd = false;
+
+    /**
+     * Flg for prepending column.
+     *
+     * @var bool
+     */
+    protected $inPrependColumn = false;
+
+    /**
+     * Coloumn width for prepending parent column.
+     *
+     * @var int
+     */
+    protected $prependColumnWidth = -1;
+
+    /**
+     * Coloumn offset for prepending parent column.
+     *
+     * @var int
+     */
+    protected $prependColumnOffset = -1;
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -845,6 +880,110 @@ class Field implements Renderable
     {
         if ($method === 'default') {
             return $this->setDefault(array_get($arguments, 0));
+        }
+    }
+
+    /**
+     * Set the start/end flg for prepending row.
+     *
+     * @return $this
+     */
+    public function prependRowStart() {
+        $this -> prependRowStart = true;
+        $this -> prependRowEnd = false;
+        return $this;
+    }
+
+    /**
+     * Set the start/end flg for prepending row.
+     *
+     * @return $this
+     */
+    public function prependRowEnd() {
+        $this -> prependRowStart = false;
+        $this -> prependRowEnd = true;
+        return $this;
+    }
+
+    /**
+     * Get the start flg for prepending row.
+     *
+     * @return bool
+     */
+    public function getPrependRowStart() {
+        return $this -> prependRowStart;
+    }
+
+    /**
+     * Get the end flg for prepending row.
+     *
+     * @return bool
+     */
+    public function getPrependRowEnd() {
+        return $this -> prependRowEnd;
+    }
+
+    /**
+     * Start prepending row.
+     */
+    public function startRow()
+    {
+        echo '<div class="row">';
+    }
+
+    /**
+     * End prepending column.
+     */
+    public function endRow()
+    {
+        echo '</div>';
+    }
+
+    /**
+     * Set the flg/column-width/column-offset for prepending column.
+     *
+     * @return $this
+     */
+    public function prependColumn($width = -1, $offset = -1) {
+        $this -> inPrependColumn = true;
+        $this -> prependColumnWidth = $width;
+        $this -> prependColumnOffset = $offset;
+        return $this;
+    }
+
+    /**
+     * Start prepending column.
+     */
+    public function startColumnOrNot()
+    {
+        if ($this -> inPrependColumn) {
+            $html = '<div class="';
+            if ($this->prependColumnWidth > 0) {
+                $html .= " col-md-{$this->prependColumnWidth}";
+            }
+            if ($this->prependColumnOffset > 0) {
+                $html .= " col-md-offset-{$this->prependColumnOffset}";
+            }
+            if ($this->prependColumnWidth > 0 || $this->prependColumnOffset > 0) {
+                $html .= '">';
+                echo $html;
+            } else {
+                echo '<div>';
+            }
+        } else {
+           echo ''; 
+        }
+    }
+
+    /**
+     * End prepending column.
+     */
+    public function endColumnOrNot()
+    {
+        if ($this -> inPrependColumn) {
+            echo '</div>';
+        } else {
+            echo ''; 
         }
     }
 }

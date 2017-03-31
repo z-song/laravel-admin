@@ -14,11 +14,21 @@
             @if(!$tabObj->isEmpty())
                 @include('admin::form.tab', compact('tabObj'))
             @else
-                <div class="fields-group">
-                    @foreach($form->fields() as $field)
-                        {!! $field->render() !!}
-                    @endforeach
-                </div>
+            <div class="fields-group">
+                @foreach($form->fields() as $field)
+                    @if($field -> getPrependRowStart() && !$field -> getPrependRowEnd())
+                        {!! $field->startRow() !!}
+                    @endif
+
+                    {!! $field->startColumnOrNot() !!}
+                    {!! $field->render() !!}
+                    {!! $field->endColumnOrNot() !!}
+
+                    @if(!$field -> getPrependRowStart() && $field -> getPrependRowEnd())
+                        {!! $field->endRow() !!}
+                    @endif
+                @endforeach
+            </div>
             @endif
 
         </div>
