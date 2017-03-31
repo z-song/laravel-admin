@@ -32,6 +32,14 @@ class Html extends Field
     }
 
     /**
+     * Fill in the data.
+     */
+    public function fill($data)
+    {
+        $this->value = $data;
+    }
+
+    /**
      * Render html field.
      *
      * @return string
@@ -41,7 +49,7 @@ class Html extends Field
         if ($this->html instanceof \Closure) {
             $callback = $this->html->bindTo($this->form->model());
 
-            $this->html = call_user_func($callback, $this->form);
+            $this->html = call_user_func($callback, $this->form, $this->value);
         }
 
         return <<<EOT
