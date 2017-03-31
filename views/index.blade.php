@@ -27,7 +27,7 @@
     <script src="{{ asset ("/packages/admin/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
     <script src="{{ asset ("/packages/admin/AdminLTE/dist/js/app.min.js") }}"></script>
-    <script src="{{ asset ("/packages/admin/jquery-pjax/jquery.pjax.js?v=6") }}"></script>
+    <script src="{{ asset ("/packages/admin/jquery-pjax/jquery.pjax.js?v=8") }}"></script>
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -98,8 +98,7 @@
 
                 $('.has-error').closest('.tab-pane').each(function(){
                     var tabA = $('ul.nav a[href="#' + this.id +'"]');
-                    if(!tabA.data('has-error')){
-                        tabA.data('has-error', 1);
+                    if(!tabA.find('i').size()){
                         tabA.append('<i class="fa fa-exclamation-circle text-red"></i>');
                     }
                 })
@@ -132,7 +131,7 @@
             "timeOut": 4000
         };
 
-        $.pjax.defaults.timeout = 10000
+        $.pjax.defaults.timeout = 5000
         $.pjax.defaults.maxCacheLength = 0
 
         var $document = $(document);
@@ -167,7 +166,7 @@
                     }
                 }
             },
-            'pjax:success_object': function(event,data, status, xhr, options){
+            'pjax:success_object': function(event, data, status, xhr, options){
                 var form = $('form[pjax-container]');
                 if(typeof(data.status) === 'string'){
                     switch(data.status.toLowerCase())
@@ -182,6 +181,9 @@
                         case 'error':
                             toastr['error'](data.message, null, {"positionClass": "toast-top-full-width", "timeOut": 0});
                             LA.addFormErrorLabel(form, data.extra);
+                            if (xhr.readyState > 0 && options.push && !options.replace) {
+                                window.history.replaceState(null, "", $.pjax.state.url)
+                            }
                             break;
                         default:
                             toastr['info'](data.message);

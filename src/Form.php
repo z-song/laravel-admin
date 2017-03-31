@@ -411,6 +411,8 @@ class Form
 
         $this->inputs = $inputs;
 
+        $this->setFieldOriginalValue();
+
         return $this;
     }
 
@@ -434,12 +436,23 @@ class Form
 
                 $column = $field->column();
 
-                if(array_has($inputs, $column)){
+                if(is_string($column)){
+                    if(array_has($inputs, $column)){
 
-                    array_set($inputs, $column, $field->prepare(array_get($inputs, $column)));
+                        array_set($inputs, $column, $field->prepare($inputs, $column));
 
+                    }
                 }
 
+                if(is_array($column)){
+                    foreach($column as $col){
+                        if(array_has($inputs, $col)){
+
+                            array_set($inputs, $col, $field->prepare($inputs, $col));
+
+                        }
+                    }
+                }
             }
 
         }
@@ -878,14 +891,14 @@ class Form
      *
      * @return void
      */
-//    protected function setFieldOriginalValue()
-//    {
-//        $values = $this->model->toArray();
-//
-//        $this->builder->fields()->each(function (Field $field) use ($values) {
-//            $field->setOriginal($values);
-//        });
-//    }
+    protected function setFieldOriginalValue()
+    {
+        $values = $this->model->toArray();
+
+        $this->builder->fields()->each(function (Field $field) use ($values) {
+            $field->setOriginal($values);
+        });
+    }
 
     /**
      * Set all fields value in form.

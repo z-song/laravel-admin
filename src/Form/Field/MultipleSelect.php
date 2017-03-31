@@ -76,8 +76,10 @@ class MultipleSelect extends Select
         }
     }
 
-    public function prepare(array $value)
+    public function prepare(array $value, $key = null)
     {
+        $value = $key ? $value[$key] : $value;
+
         return array_filter($value);
     }
 }

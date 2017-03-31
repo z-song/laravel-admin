@@ -41,8 +41,10 @@ class Embeds extends Field
      *
      * @return array
      */
-    public function prepare($input)
+    public function prepare($input, $key = null)
     {
+        $input = $key ? $input[$key] : $input;
+
         $form = $this->buildEmbeddedForm();
 
         return $form->setOriginal($this->original)->prepare($input);

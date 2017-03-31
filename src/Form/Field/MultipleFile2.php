@@ -22,8 +22,10 @@ class MultipleFile2 extends File2
 	 *
 	 * @return mixed|string
 	 */
-	public function prepare($files)
+	public function prepare($files, $key = null)
 	{
+		$files = $key ? $files[$key] : $files;
+
 		return array_map([$this, 'prepareEach'], $files);
 	}
 }

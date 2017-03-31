@@ -246,8 +246,10 @@ class HasMany extends Field
      *
      * @return array
      */
-    public function prepare($input)
+    public function prepare($input, $key = null)
     {
+        $input = $key ? $input[$key] : $input;
+
         $form = $this->buildNestedForm($this->column, $this->builder);
 
         $input = array_map(function($data){

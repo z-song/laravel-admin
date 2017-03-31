@@ -85,8 +85,10 @@ class File2 extends Field
 	 *
 	 * @return mixed|string
 	 */
-	public function prepare($files)
+	public function prepare($files, $key = null)
 	{
+		$files = $key ? $files[$key] : $files;
+
 		$original = $this->original();
 
 		foreach($original as $k => $ori){

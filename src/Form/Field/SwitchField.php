@@ -28,8 +28,10 @@ class SwitchField extends Field
         return $this;
     }
 
-    public function prepare($value)
+    public function prepare($value, $key = null)
     {
+        $value = $key ? $value[$key] : $value;
+
         if (isset($this->states[$value])) {
             return $this->states[$value]['value'];
         }

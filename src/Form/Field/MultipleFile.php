@@ -104,8 +104,10 @@ class MultipleFile extends Field
      *
      * @return mixed|string
      */
-    public function prepare($files)
+    public function prepare($files, $key = null)
     {
+        $files = $key ? $files[$key] : $files;
+
         if (request()->has(static::FILE_DELETE_FLAG)) {
             return $this->destroy(request(static::FILE_DELETE_FLAG));
         }

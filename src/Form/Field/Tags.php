@@ -27,8 +27,10 @@ class Tags extends Field
         $this->value = array_filter((array) $this->value);
     }
 
-    public function prepare($value)
+    public function prepare($value, $key = null)
     {
+        $value = $key ? $value[$key] : $value;
+
         return array_filter($value);
     }
 
