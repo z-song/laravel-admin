@@ -23,7 +23,7 @@ class PjaxMiddleware
     {
         $response = $next($request);
 
-        if (!$request->pjax() || $response->isRedirection() || Auth::guard('admin')->guest()) {
+        if (!($response instanceof Response) ||!$request->pjax() || $response->isRedirection() || Auth::guard('admin')->guest()) {
             return $response;
         }
 

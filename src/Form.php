@@ -18,6 +18,7 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Spatie\EloquentSortable\Sortable;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -100,12 +101,11 @@ class Form
     protected $saved;
 
     /**
-     * Data for save to current model from input.
+     * Data for save to model from input.
      *
      * @var array
      */
-    protected $updates = [];
-    protected $modelAttributes = [];
+    protected $attributes = [];
 
     /**
      * Data for save to model's relations from input.
@@ -113,7 +113,6 @@ class Form
      * @var array
      */
     protected $relations = [];
-    protected $relationAttributes = [];
 
     /**
      * Input data.
@@ -327,16 +326,13 @@ class Form
      */
     public function store()
     {
-        $data = Input::all();
+        $this->prepare(Input::all());
 
-        if (($response = $this->prepare($data)) instanceof Response) {
+        if (($response = $this->callSaving()) instanceof Response) {
             return $response;
         }
 
-        $request = Request::capture();
-
-        if($this->builder->option('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
-
+        if(request()->expectsJson()){
             return $this->ajaxStore();
         }
 
@@ -353,25 +349,23 @@ class Form
     {
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($this->inputs)) {
-            return response([
+            return response()->json([
                 'status'  => 'error',
                 'message' => trans('admin::lang.validate_fail'),
-                'validation' => $validationMessages
+                'extra' => $validationMessages
             ]);
         }
 
-        if( $response = $this->syncModel()  instanceof Response){
-            return $response;
-        }
+        $this->syncModel();
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
         }
 
-        return response([
+        return response()->json([
             'status'  => 'success',
             'message' => trans('admin::lang.save_succeeded'),
-	        'data'    => $response
+	        'extra'    => $response
         ]);
     }
 
@@ -387,9 +381,7 @@ class Form
             return back()->withInput()->withErrors($validationMessages);
         }
 
-        if($response = $this->syncModel()){
-            return $response;
-        }
+        $this->syncModel();
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
@@ -411,9 +403,28 @@ class Form
      */
     protected function prepare($data = [])
     {
-        $data = $this->handleEditable($data);
+        $inputs = $this->getFormatedInputs($data);
 
-        $data = $this->handleFileDelete($data);
+        $this->relations = $this->getRelationInputs($inputs);
+
+        $this->attributes = array_except($inputs, array_keys($this->relations));
+
+        $this->inputs = $inputs;
+
+        return $this;
+    }
+
+    protected function getFormatedInputs($data = [])
+    {
+        if (array_key_exists('_editable', $data)) {
+
+            return $this->handleEditable($data);
+        }
+
+        if (array_key_exists(Field::FILE_DELETE_FLAG, $data)) {
+
+            return $this->handleFileDelete($data);
+        }
 
         $inputs = $this->removeIgnoredFields($data);
 
@@ -433,17 +444,7 @@ class Form
 
         }
 
-        $this->relationAttributes = $this->getRelationInputs($inputs);
-
-        $this->modelAttributes = array_except($inputs, array_keys($this->relationAttributes));
-
-        $this->inputs = $inputs;
-
-        if (($response = $this->callSaving()) instanceof Response) {
-            return $response;
-        }
-
-        return $this;
+        return $inputs;
     }
 
     /**
@@ -519,22 +520,32 @@ class Form
      */
     public function update($id)
     {
-        $data = Input::all();
+        $this->prepare(Input::all());
 
-        if (($response = $this->prepare($data)) instanceof Response) {
+        if (($response = $this->callSaving()) instanceof Response) {
             return $response;
         }
 
-        $request = Request::capture();
-
-        if($this->builder->option('ajaxSubmit') || ($request->ajax() && !$request->pjax())){
-
+        if( request()->expectsJson()){
             return $this->ajaxUpdate($id);
         }
 
         return $this->jumpUpdate($id);
 
     }
+
+    /**
+     * Is ajax mode.
+     *
+     * @return bool
+     * author Edwin Hui
+     */
+//    protected function isAjaxMode()
+//    {
+//        $request = Request::capture();
+//
+//        return $this->builder->option('ajaxSubmit') ?: ($request->ajax() && !$request->pjax());
+//    }
 
     /**
      * Update in ajax mode.
@@ -546,35 +557,28 @@ class Form
     protected function ajaxUpdate($id)
     {
         if ($this->handleOrderable($id, $this->inputs)) {
-            return response([
+            return response()->json([
                 'status'  => 'success',
                 'message' => trans('admin::lang.update_succeeded'),
             ]);
         }
 
-        /* @var Model $this->model */
-        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
-
-        $this->setFieldOriginalValue();
-
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($this->inputs)) {
-            return response([
+            return response()->json([
                 'status'  => 'error',
                 'message' => trans('admin::lang.validate_fail'),
-                'validation' => $validationMessages
+                'extra' => $validationMessages
             ]);
         }
 
-        if( $response = $this->syncModel($id)){
-            return $response;
-        }
+        $this->syncModel($id);
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
         }
 
-        return response([
+        return response()->json([
             'status'  => 'success',
             'message' => trans('admin::lang.update_succeeded'),
         ]);
@@ -594,9 +598,7 @@ class Form
             return back()->withInput()->withErrors($validationMessages);
         }
 
-        if( $response = $this->syncModel($id)){
-            return $response;
-        }
+        $this->syncModel($id);
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
@@ -612,17 +614,17 @@ class Form
     /**
      * Update model.
      *
-     * @param $id
-     * @return bool|mixed|null
+     * @param null $id
+     * author Edwin Hui
      */
     protected function syncModel($id = null)
     {
         /* @var Model $this->model */
         $this->model = $this->model->findOrNew($id);
 
-        $this->model->fill($this->modelAttributes)->save();
+        $this->model->fill($this->attributes)->save();
 
-        $this->updateRelation($this->relationAttributes);
+        $this->syncRelation($this->relations);
     }
 
 
@@ -636,13 +638,11 @@ class Form
      */
     protected function handleEditable(array $input = [])
     {
-        if (array_key_exists('_editable', $input)) {
-            $name = $input['name'];
-            $value = $input['value'];
+        $name = $input['name'];
+        $value = $input['value'];
 
-            array_forget($input, ['pk', 'value', 'name']);
-            array_set($input, $name, $value);
-        }
+        array_forget($input, ['pk', 'value', 'name']);
+        array_set($input, $name, $value);
 
         return $input;
     }
@@ -654,12 +654,8 @@ class Form
      */
     protected function handleFileDelete(array $input = [])
     {
-        if (array_key_exists(Field::FILE_DELETE_FLAG, $input)) {
-            $input[Field::FILE_DELETE_FLAG] = $input['key'];
-            unset($input['key']);
-        }
-
-        Input::replace($input);
+        $input[Field::FILE_DELETE_FLAG] = $input['key'];
+        unset($input['key']);
 
         return $input;
     }
@@ -694,7 +690,7 @@ class Form
      *
      * @return void
      */
-    protected function updateRelation($relationsData)
+    protected function syncRelation($relationsData)
     {
         foreach ($relationsData as $name => $values) {
             if (empty($values) || !method_exists($this->model, $name)) {
@@ -1065,18 +1061,6 @@ class Form
     public function disableReset()
     {
         $this->builder()->options(['enableReset' => false]);
-
-        return $this;
-    }
-
-    /**
-     * Disable form ajax submit.
-     *
-     * @return $this
-     */
-    public function disableAjaxSubmit()
-    {
-        $this->builder()->options(['ajaxSubmit' => false]);
 
         return $this;
     }

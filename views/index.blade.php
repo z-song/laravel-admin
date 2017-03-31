@@ -70,69 +70,123 @@
 
 <script>
 
-    function LA() {}
-    LA.token = "{{ csrf_token() }}";
-
-    $.fn.editable.defaults.params = function (params) {
-        params._token = '{{ csrf_token() }}';
-        params._editable = 1;
-        params._method = 'PUT';
-        return params;
-    };
-
-    toastr.options = {
-        "newestOnTop": true,
-        "closeButton": true,
-        "showMethod": 'slideDown',
-        "preventDuplicates": true,
-        "timeOut": 4000
-    };
-
-    $.pjax.defaults.timeout = 5000;
-    $.pjax.defaults.maxCacheLength = 0;
-    $(document).pjax('a:not(a[target="_blank"])', {
-        container: '#pjax-container'
-    });
-
-    $(document).on('submit', 'form[pjax-container]', function(event) {
-        $.pjax.submit(event, '#pjax-container')
-    });
-
-    $(document).on({
-        "pjax:start": function() { NProgress.start();},
-        "pjax:end": function() { NProgress.done(); },
-        "ajaxStart": function() { NProgress.start();},
-        "ajaxStop": function() { NProgress.done(); }
-    });
-
-    $(document).on("pjax:popstate", function() {
-
-        $(document).one("pjax:end", function(event) {
-            $(event.target).find("script[data-exec-on-popstate]").each(function() {
-                $.globalEval(this.text || this.textContent || this.innerHTML || '');
-            });
-        });
-    });
-    
-    $(document).on('pjax:send', function(xhr) {
-        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-            $submit_btn = $('form[pjax-container] :submit');
-            if($submit_btn) {
-                $submit_btn.button('loading')
-            }
-        }
-    })
-    
-    $(document).on('pjax:complete', function(xhr) {
-        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-            $submit_btn = $('form[pjax-container] :submit');
-            if($submit_btn) {
-                $submit_btn.button('reset')
-            }
-        }
-    })
-
     $(function(){
+
+        var LA = {
+
+            token : "{{ csrf_token() }}",
+
+            removeFormErrorLabel : function (form){
+                $(form).find('.form-group.has-error').removeClass('has-error').find('.control-label.validation').remove();
+            },
+
+            addFormErrorLabel : function (form, validation){
+                var $form = $(form);
+                $.each(validation, function(key,messages){
+                    var target = $form.find('[name="'+LA.formatElementNameByErrorKey(key)+'"]').size() ? $form.find('[name="'+LA.formatElementNameByErrorKey(key)+'"]') : $form.find('[name="'+LA.formatElementNameByErrorKey(key)+'[]"]');
+                    target.closest('.form-group').addClass('has-error');
+                    $.each(messages, function(index, message){
+                        target.closest('.form-group-fields').prepend('<label class="control-label validation" for="inputError"><i class="fa fa-times-circle-o"></i> '+ message +'</label>');
+                    });
+                });
+
+            },
+
+            formatElementNameByErrorKey : function (key){
+                var names = key.split('.');
+                var name = names.shift();
+                $.each(names, function(k, n){
+                    name += '['+ n + ']';
+                });
+                return name;
+            },
+
+        }
+
+        $.fn.editable.defaults.params = function (params) {
+            params._token = '{{ csrf_token() }}';
+            params._editable = 1;
+            params._method = 'PUT';
+            return params;
+        };
+
+        toastr.options = {
+            "newestOnTop": true,
+            "closeButton": true,
+            "showMethod": 'slideDown',
+            "preventDuplicates": true,
+            "timeOut": 4000
+        };
+
+        $.pjax.defaults = {
+            'timeout'           : 5000,
+            'maxCacheLength'    : 0
+        }
+
+        var $document = $(document);
+
+        $document.pjax('a:not(a[target="_blank"])', {
+            container: '#pjax-container'
+        });
+
+        $document.on('submit','form[pjax-container]', function(event) {
+            $.pjax.submit(event, '#pjax-container',{'dataType': 'json'})
+        })
+
+        $document.on({
+            "pjax:start": function() {
+                NProgress.start();
+                LA.removeFormErrorLabel($('form[pjax-container]'))
+            },
+
+            "pjax:send": function(xhr) {
+                if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+                    var $submitBtn = $('form[pjax-container] :submit');
+                    if($submitBtn) {
+                        $submitBtn.button('loading')
+                    }
+                }
+            },
+            "pjax:complete": function(xhr) {
+                if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+                    var $submitBtn = $('form[pjax-container] :submit');
+                    if($submitBtn) {
+                        $submitBtn.button('reset')
+                    }
+                }
+            },
+            'pjax:success_object': function(event,data, status, xhr, options){
+                var form = $('form[pjax-container]');
+                if(typeof(data.status) === 'string'){
+                    switch(data.status.toLowerCase())
+                    {
+                        case 'success':
+                            form.closest('.box-form').find('.btn-success-redirect').trigger('click');
+                            toastr['success'](data.message);
+                            break;
+                        case 'warning':
+                            toastr['warning'](data.message);
+                            break;
+                        case 'error':
+                            toastr['error'](data.message, null, {"positionClass": "toast-top-full-width", "timeOut": 0});
+                            LA.addFormErrorLabel(form, data.extra);
+                            break;
+                        default:
+                            toastr['info'](data.message);
+                    }
+                }
+            },
+            "pjax:end": function(event) {
+                $(event.target).find("script[data-exec-on-popstate]").each(function() {
+                    $.globalEval(this.text || this.textContent || this.innerHTML || '');
+                });
+                NProgress.done();
+            },
+            "ajaxStart": function() { NProgress.start();},
+            "ajaxStop": function() { NProgress.done(); }
+        });
+
+
         function activeMenu( li) {
             li.addClass('active').siblings().removeClass('active').find('ul.treeview-menu').removeClass('menu-open');
             return li;
