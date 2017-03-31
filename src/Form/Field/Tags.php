@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
+use Illuminate\Support\Arr;
 
 class Tags extends Field
 {
@@ -29,7 +30,11 @@ class Tags extends Field
 
     public function prepare($value)
     {
-        return array_filter($value);
+        if (is_array($value) && !Arr::isAssoc($value)) {
+            $value = implode(',', array_filter($value));
+        }
+
+        return $value;
     }
 
     public function render()
