@@ -183,7 +183,7 @@ class Model
                 $collection = call_user_func($this->collectionCallback, $collection);
             }
 
-            $this->data = $collection->all();
+            $this->data = $collection->toArray();
         }
 
         return $this->data;

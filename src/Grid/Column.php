@@ -145,6 +145,20 @@ class Column
     public function setGrid(Grid $grid)
     {
         $this->grid = $grid;
+
+        $this->setModel($grid->model()->eloquent());
+    }
+
+    /**
+     * Set model for column.
+     *
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        if (is_null(static::$model) && ($model instanceof Model)) {
+            static::$model = $model->newInstance();
+        }
     }
 
     /**
@@ -332,7 +346,7 @@ class Column
     {
         $originalRow = static::$originalGridData[$key];
 
-        return $callback->bindTo($originalRow);
+        return $callback->bindTo(static::$model->newFromBuilder($originalRow));
     }
 
     /**
@@ -347,11 +361,9 @@ class Column
         foreach ($data as $key => &$row) {
             $this->original = $value = array_get($row, $this->name);
 
-            if (!($value instanceof Model)) {
-                $value = $this->htmlEntityEncode($value);
-            }
+            $value = $this->htmlEntityEncode($value);
 
-            $row->{$this->name} = $value;
+            array_set($row, $this->name, $value);
 
             if ($this->isDefinedColumn()) {
                 $this->useDefinedColumn();
@@ -359,7 +371,7 @@ class Column
 
             if ($this->hasDisplayCallbacks()) {
                 $value = $this->callDisplayCallbacks($this->original, $key);
-                $row->{$this->name} = $value;
+                array_set($row, $this->name, $value);
             }
         }
 
