@@ -31,7 +31,7 @@ class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->app['config']->set('database.default', 'mysql');
-        $this->app['config']->set('database.connections.mysql.host', 'localhost');
+        $this->app['config']->set('database.connections.mysql.host', '127.0.0.1');
         $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
         $this->app['config']->set('database.connections.mysql.username', 'root');
         $this->app['config']->set('database.connections.mysql.password', '');
@@ -40,7 +40,9 @@ class TestCase extends BaseTestCase
         $this->app['config']->set('admin', require __DIR__.'/config/admin.php');
 
         if(self::$firstRun) {
-            $this->rollback();
+            if(Schema::hasTable('migrations')) {
+                $this->rollback();
+            }
 
             self::$firstRun = false;
             $this->artisan('vendor:publish');
@@ -50,10 +52,7 @@ class TestCase extends BaseTestCase
             $this->artisan('admin:install');
         }
 
-        //\DB::unprepared('SET TRANSACTION ISOLATION LEVEL READ COMMITTED');
-
-        \DB::beginTransaction();
-
+        DB::beginTransaction();
 
         \Encore\Admin\Facades\Admin::registerAuthRoutes();
 
@@ -68,7 +67,7 @@ class TestCase extends BaseTestCase
 
     public function tearDown()
     {
-        \DB::rollback();
+        DB::rollback();
 
         parent::tearDown();
     }
