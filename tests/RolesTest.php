@@ -85,10 +85,10 @@ class RolesTest extends TestCase
 
         list($roleId1, $roleId2) = Role::take(2)->orderBy('id')->pluck('id')->toArray();
 
-        $this->delete('admin/auth/roles/' . $roleId2)
+        $this->delete('admin/auth/roles/'.$roleId2)
             ->assertEquals(1, Role::count());
 
-        $this->delete('admin/auth/roles/' . $roleId1)
+        $this->delete('admin/auth/roles/'.$roleId1)
             ->assertEquals(0, Role::count());
     }
 

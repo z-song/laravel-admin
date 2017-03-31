@@ -78,7 +78,7 @@ class FileUploadTest extends TestCase
 
         $old = FileModel::first();
 
-        $this->visit('admin/files/' . $old->id . '/edit')
+        $this->visit('admin/files/'.$old->id.'/edit')
             ->see('ID')
             ->see('Created At')
             ->see('Updated At')
@@ -122,7 +122,7 @@ class FileUploadTest extends TestCase
 
         $files = FileModel::first()->toArray();
 
-        $this->delete('admin/files/' . $files['id'])
+        $this->delete('admin/files/'.$files['id'])
             ->dontSeeInDatabase('test_files', ['id' => $files['id']]);
 
         foreach (range(1, 6) as $index) {
