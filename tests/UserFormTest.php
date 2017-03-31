@@ -113,7 +113,7 @@ class UserFormTest extends TestCase
     {
         $this->seedsTable(10);
 
-        $id = rand(1, 10);
+        $id = UserModel::inRandomOrder()->first()->id;
 
         $user = UserModel::with('profile')->find($id);
 
@@ -141,7 +141,7 @@ class UserFormTest extends TestCase
     {
         $this->seedsTable(10);
 
-        $id = rand(1, 10);
+        $id = UserModel::inRandomOrder()->first()->id;
 
         $this->visit("admin/users/$id/edit")
             ->type('hello world', 'username')
@@ -160,7 +160,7 @@ class UserFormTest extends TestCase
     {
         $this->seedsTable(10);
 
-        $id = rand(1, 10);
+        $id = UserModel::inRandomOrder()->first()->id;
 
         $this->visit("admin/users/$id/edit")
             ->type('', 'email')

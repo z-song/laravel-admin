@@ -45,6 +45,8 @@ class RolesTest extends TestCase
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.users_table'), ['username' => 'Test']);
 
+        $userId2 = Administrator::offset(1)->take(2)->orderBy('id')->pluck('id')->first();
+
         $this->assertEquals(1, Role::count());
 
         $this->visit('admin/auth/roles/create')
@@ -54,18 +56,20 @@ class RolesTest extends TestCase
             ->seeInDatabase(config('admin.database.roles_table'), ['slug' => 'developer', 'name' => 'Developer...'])
             ->assertEquals(2, Role::count());
 
-        $this->assertFalse(Administrator::find(2)->isRole('developer'));
+        $this->assertFalse(Administrator::find($userId2)->isRole('developer'));
 
-        $this->visit('admin/auth/users/2/edit')
+        $roleId2 = Role::offset(1)->take(2)->orderBy('id')->pluck('id')->first();
+
+        $this->visit('admin/auth/users/'.$userId2.'/edit')
             ->see('Edit')
-            ->submitForm('Submit', ['roles' => [2]])
+            ->submitForm('Submit', ['roles' => [$roleId2]])
             ->seePageIs('admin/auth/users')
-            ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 2]);
+            ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => $userId2, 'role_id' => $roleId2]);
 
-        $this->assertTrue(Administrator::find(2)->isRole('developer'));
+        $this->assertTrue(Administrator::find($userId2)->isRole('developer'));
 
-        $this->assertFalse(Administrator::find(2)->inRoles(['editor', 'operator']));
-        $this->assertTrue(Administrator::find(2)->inRoles(['developer', 'operator', 'editor']));
+        $this->assertFalse(Administrator::find($userId2)->inRoles(['editor', 'operator']));
+        $this->assertTrue(Administrator::find($userId2)->inRoles(['developer', 'operator', 'editor']));
     }
 
     public function testDeleteRole()
@@ -79,10 +83,12 @@ class RolesTest extends TestCase
             ->seeInDatabase(config('admin.database.roles_table'), ['slug' => 'developer', 'name' => 'Developer...'])
             ->assertEquals(2, Role::count());
 
-        $this->delete('admin/auth/roles/2')
+        list($roleId1, $roleId2) = Role::take(2)->orderBy('id')->pluck('id')->toArray();
+
+        $this->delete('admin/auth/roles/' . $roleId2)
             ->assertEquals(1, Role::count());
 
-        $this->delete('admin/auth/roles/1')
+        $this->delete('admin/auth/roles/' . $roleId1)
             ->assertEquals(0, Role::count());
     }
 

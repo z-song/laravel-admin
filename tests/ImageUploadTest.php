@@ -105,7 +105,7 @@ class ImageUploadTest extends TestCase
 
         $old = Image::first();
 
-        $this->visit('admin/images/1/edit')
+        $this->visit('admin/images/'.$old->id.'/edit')
             ->see('ID')
             ->see('Created At')
             ->see('Updated At')
@@ -144,20 +144,20 @@ class ImageUploadTest extends TestCase
 
         $this->uploadImages();
 
+        $image = Image::first()->toArray();
+
         $this->visit('admin/images')
-            ->seeInElement('td', 1);
+            ->seeInElement('td', $image['id']);
 
-        $images = Image::first()->toArray();
-
-        $this->delete('admin/images/1')
-            ->dontSeeInDatabase('test_images', ['id' => 1]);
+        $this->delete('admin/images/' . $image['id'])
+            ->dontSeeInDatabase('test_images', ['id' => $image['id']]);
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileNotExists(public_path('upload/'.$images['image'.$index]));
+            $this->assertFileNotExists(public_path('upload/'.$image['image'.$index]));
         }
 
         $this->visit('admin/images')
-            ->dontSeeInElement('td', 1);
+            ->dontSeeInElement('td', $image['id']);
     }
 
     public function testBatchDelete()
@@ -168,23 +168,25 @@ class ImageUploadTest extends TestCase
         $this->uploadImages();
         $this->uploadImages();
 
+        list($id1, $id2, $id3) = Image::take(3)->pluck('id')->toArray();
+
         $this->visit('admin/images')
-            ->seeInElement('td', 1)
-            ->seeInElement('td', 2)
-            ->seeInElement('td', 3);
+            ->seeInElement('td', $id1)
+            ->seeInElement('td', $id2)
+            ->seeInElement('td', $id3);
 
         $this->assertEquals($this->fileCountInImageDir(), 18);
 
         $this->assertEquals(Image::count(), 3);
 
-        $this->delete('admin/images/1,2,3');
+        $this->delete(sprintf('admin/images/%d,%d,%d', $id1, $id2, $id3));
 
         $this->assertEquals(Image::count(), 0);
 
         $this->visit('admin/images')
-            ->dontSeeInElement('td', 1)
-            ->dontSeeInElement('td', 2)
-            ->dontSeeInElement('td', 3);
+            ->dontSeeInElement('td', $id1)
+            ->dontSeeInElement('td', $id2)
+            ->dontSeeInElement('td', $id3);
 
         $this->assertEquals($this->fileCountInImageDir(), 0);
     }

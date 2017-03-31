@@ -78,7 +78,7 @@ class FileUploadTest extends TestCase
 
         $old = FileModel::first();
 
-        $this->visit('admin/files/1/edit')
+        $this->visit('admin/files/' . $old->id . '/edit')
             ->see('ID')
             ->see('Created At')
             ->see('Updated At')
@@ -122,8 +122,8 @@ class FileUploadTest extends TestCase
 
         $files = FileModel::first()->toArray();
 
-        $this->delete('admin/files/1')
-            ->dontSeeInDatabase('test_files', ['id' => 1]);
+        $this->delete('admin/files/' . $files['id'])
+            ->dontSeeInDatabase('test_files', ['id' => $files['id']]);
 
         foreach (range(1, 6) as $index) {
             $this->assertFileNotExists(public_path('upload/'.$files['file'.$index]));
@@ -141,10 +141,12 @@ class FileUploadTest extends TestCase
         $this->uploadFiles();
         $this->uploadFiles();
 
+        list($id1, $id2, $id3) = FileModel::take(3)->pluck('id')->toArray();
+
         $this->visit('admin/files')
-            ->seeInElement('td', 1)
-            ->seeInElement('td', 2)
-            ->seeInElement('td', 3);
+            ->seeInElement('td', $id1)
+            ->seeInElement('td', $id2)
+            ->seeInElement('td', $id3);
 
         $fi = new FilesystemIterator(public_path('upload/file'), FilesystemIterator::SKIP_DOTS);
 
@@ -152,14 +154,14 @@ class FileUploadTest extends TestCase
 
         $this->assertEquals(FileModel::count(), 3);
 
-        $this->delete('admin/files/1,2,3');
+        $this->delete(sprintf('admin/files/%d,%d,%d', $id1, $id2, $id3));
 
         $this->assertEquals(FileModel::count(), 0);
 
         $this->visit('admin/files')
-            ->dontSeeInElement('td', 1)
-            ->dontSeeInElement('td', 2)
-            ->dontSeeInElement('td', 3);
+            ->dontSeeInElement('td', $id1)
+            ->dontSeeInElement('td', $id2)
+            ->dontSeeInElement('td', $id3);
 
         $this->assertEquals(iterator_count($fi), 0);
     }
