@@ -65,7 +65,7 @@ class File extends Field
             $this->removeRule('required');
         }
 
-        /**
+        /*
          * Make input data validatable if the column data is `null`.
          */
         if (array_has($input, $this->column) && is_null($input[$this->column])) {
