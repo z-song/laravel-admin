@@ -5,7 +5,7 @@ namespace Encore\Admin\Form\Field;
 class Number extends Text
 {
     protected static $js = [
-        '/packages/admin/number-input/bootstrap-number-input.js',
+        '/packages/admin/number-input/bootstrap-number-input.min.js',
     ];
 
     public function render()

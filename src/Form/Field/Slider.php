@@ -7,8 +7,8 @@ use Encore\Admin\Form\Field;
 class Slider extends Field
 {
     protected static $css = [
-        '/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css',
-        '/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css',
+        '/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.css',
+        '/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.min.css',
     ];
 
     protected static $js = [
