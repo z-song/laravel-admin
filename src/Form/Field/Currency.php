@@ -31,7 +31,7 @@ class Currency extends Text
 
     public function prepare($value, $key = null)
     {
-        $value = $key ? $value[$key] : $value;
+        $value = $key ? array_get($value, $key) : $value;
 
         return (float) $value;
     }

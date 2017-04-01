@@ -445,7 +445,7 @@ class Field implements Renderable
     public function value($value = null)
     {
         if (is_null($value)) {
-            return is_null($this->value) ? $this->getDefault() : $this->value;
+            return $this->value = is_null($this->value) ? ($this->getDefault() ?: $this->original) : $this->value;
         }
 
         $this->value = $value;
@@ -677,7 +677,7 @@ class Field implements Renderable
     protected function getElementClass()
     {
         if (!$this->elementClass) {
-            $name = $this->formatName($this->column);
+            $name = $this->elementName ?: $this->formatName($this->column);
 
             if(is_string($name)){
                 $this->elementClass[] = static::ELEMENT_PREFIX.str_replace(['[', ']', '.', '#'], '_', $name);
@@ -703,7 +703,13 @@ class Field implements Renderable
         $elementClass = $this->getElementClass();
 
         if (Arr::isAssoc($elementClass)) {
-            return $elementClass;
+            $classes = [];
+
+            foreach ($elementClass as $index => $class) {
+                $classes[$index] = is_array($class) ? implode(' ', $class) : $class;
+            }
+
+            return $classes;
         }
 
         return implode(' ', $elementClass);
@@ -722,7 +728,7 @@ class Field implements Renderable
             $classes = [];
 
             foreach ($elementClass as $index => $class) {
-                $classes[$index] = '.'.$class;
+                $classes[$index] = '.'.(is_array($class) ? implode('.', $class) : $class);
             }
 
             return $classes;
@@ -740,7 +746,7 @@ class Field implements Renderable
      */
     public function addElementClass($class)
     {
-        if(is_array($class) || is_string($class)) {
+        if (is_array($class) || is_string($class)) {
 
             if(is_string($class)) {
                 $class = static::ELEMENT_PREFIX . $class;
@@ -771,12 +777,12 @@ class Field implements Renderable
     {
         $delClass = [];
 
-        if(is_string($class) || is_array($class)) {
-            $delClass = (array)$class;
+        if (is_string($class) || is_array($class)) {
+            $delClass = (array) $class;
         }
 
-        foreach($delClass as $del) {
-            if(($key = array_search($del, $this->elementClass))){
+        foreach ($delClass as $del) {
+            if (($key = array_search($del, $this->elementClass))) {
                 unset($this->elementClass[$key]);
             }
         }

@@ -432,9 +432,7 @@ class Builder
     <button type="submit" class="btn btn-info pull-right" data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
 </div>
 EOT;
-
     }
-
 
     /**
      * Reset button of form.

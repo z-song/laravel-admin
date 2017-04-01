@@ -121,7 +121,7 @@ class File2 extends Field
 	{
 		$preview = [];
 
-		foreach($this->getFiles() as $file){
+		foreach((array) $this->value() as $file){
 
 			$preview[] = $this->uploadFileUrl(array_get($file,'target'));
 		}
@@ -150,7 +150,7 @@ class File2 extends Field
 	 */
 	protected function initialPreviewConfig()
 	{
-		$files = $this->value ?: [];
+		$files = $this->value() ?: [];
 
 		$delFlag = Form::REMOVE_FLAG_NAME;
 
@@ -186,11 +186,11 @@ class File2 extends Field
 	 */
 	public function render()
 	{
-		$this->setupDefaultOptions();
-
-		if (!empty($this->value)) {
+		if (!empty($this->value())) {
 			$this->setupPreviewOptions();
 		}
+
+		$this->setupDefaultOptions();
 
 		$options = json_encode($this->options);
 
@@ -212,7 +212,7 @@ EOT;
 			'browseLabel'          => trans('admin::lang.browse'),
 			'showRemove'           => false,
 			'showUpload'           => false,
-			'initialCaption'   => $this->initialCaption( $this->getFiles() ),
+			'initialCaption'   => $this->initialCaption( $this->value() ),
 			'deleteUrl'        => $this->form->resource() . '/'. $this->form->model()->getKey()
 
 		], (array) $this->options);
@@ -281,10 +281,5 @@ EOT;
 		}
 
 		return $this->filesController;
-	}
-
-	protected function getFiles()
-	{
-		return $this->value ?: new Collection();
 	}
 }

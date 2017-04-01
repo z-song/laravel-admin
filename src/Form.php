@@ -18,7 +18,6 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Spatie\EloquentSortable\Sortable;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -133,7 +132,7 @@ class Form
      *
      * @var array
      */
-    protected $ignored = ['_token', '_method', '_token', Builder::PREVIOUS_URL_KEY];
+    protected $ignored = ['_token', '_method', Builder::PREVIOUS_URL_KEY];
 
     /**
      * Collected field assets.
@@ -146,8 +145,6 @@ class Form
      * @var Form\Tab
      */
     protected $tab = null;
-
-	protected $keyName = '';
 
     /**
      * Remove flag in `has many` form.
@@ -167,23 +164,7 @@ class Form
         $this->builder = new Builder($this);
 
         $callback($this);
-
-//	    $this->hidden($this->getKeyName());
     }
-
-	/**
-	 * Get the HasMany relation key name.
-	 *
-	 * @return string
-	 */
-	protected function getKeyName()
-	{
-		if(! $this->keyName){
-			$this->keyName = $this->model->getKeyName();
-		}
-
-		return $this->keyName;
-	}
 
     /**
      * @param Field $field
@@ -229,7 +210,7 @@ class Form
         $this->builder->setMode(Builder::MODE_EDIT);
         $this->builder->setResourceId($id);
 
-        $this->setFieldValue($id);
+        $this->setFieldOriginalValue($id);
 
         return $this;
     }
@@ -244,7 +225,7 @@ class Form
         $this->builder->setMode(Builder::MODE_VIEW);
         $this->builder->setResourceId($id);
 
-        $this->setFieldValue($id);
+        $this->setFieldOriginalValue($id);
 
         return $this;
     }
@@ -411,8 +392,6 @@ class Form
 
         $this->inputs = $inputs;
 
-        $this->setFieldOriginalValue();
-
         return $this;
     }
 
@@ -533,6 +512,8 @@ class Form
      */
     public function update($id)
     {
+        $this->setFieldOriginalValue($id);
+
         $this->prepare(Input::all());
 
         if (($response = $this->callSaving()) instanceof Response) {
@@ -889,25 +870,9 @@ class Form
     /**
      * Set original data for each field.
      *
-     * @return void
-     */
-    protected function setFieldOriginalValue()
-    {
-        $values = $this->model->toArray();
-
-        $this->builder->fields()->each(function (Field $field) use ($values) {
-            $field->setOriginal($values);
-        });
-    }
-
-    /**
-     * Set all fields value in form.
-     *
      * @param $id
-     *
-     * @return void
      */
-    protected function setFieldValue($id)
+    protected function setFieldOriginalValue($id)
     {
         $relations = $this->getRelations();
 
@@ -916,7 +881,7 @@ class Form
         $data = $this->model->toArray();
 
         $this->builder->fields()->each(function (Field $field) use ($data) {
-            $field->fill($data);
+            $field->setOriginal($data);
         });
     }
 
