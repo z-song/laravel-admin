@@ -183,46 +183,44 @@ class NestedForm
     /**
      * Do prepare work before store and update.
      *
-     * @param array $record
+     * @param array $inputs
      *
      * @return array
      */
-    protected function prepareRecord($record)
+    protected function prepareRecord($inputs)
     {
-        if ($record[static::REMOVE_FLAG_NAME] == 1) {
-            return $record;
+        if ($inputs[static::REMOVE_FLAG_NAME] == 1) {
+            return $inputs;
         }
 
-        $prepared = [];
-
-        /* @var Field $field */
         foreach ($this->fields as $field) {
-            $columns = $field->column();
-
-            $value = $this->fetchColumnValue($record, $columns);
-
-            if (is_null($value)) {
-                continue;
-            }
 
             if (method_exists($field, 'prepare')) {
-                $value = $field->prepare($value);
-            }
 
-            if (($field instanceof \Encore\Admin\Form\Field\Hidden) || $value != $field->original()) {
-                if (is_array($columns)) {
-                    foreach ($columns as $name => $column) {
-                        array_set($prepared, $column, $value[$name]);
+                $column = $field->column();
+
+                if(is_string($column)){
+                    if(array_has($inputs, $column)){
+
+                        array_set($inputs, $column, $field->prepare($inputs, $column));
+
                     }
-                } elseif (is_string($columns)) {
-                    array_set($prepared, $columns, $value);
+                }
+
+                if(is_array($column)){
+                    foreach($column as $col){
+                        if(array_has($inputs, $col)){
+
+                            array_set($inputs, $col, $field->prepare($inputs, $col));
+
+                        }
+                    }
                 }
             }
+
         }
 
-        $prepared[static::REMOVE_FLAG_NAME] = $record[static::REMOVE_FLAG_NAME];
-
-        return $prepared;
+        return $inputs;
     }
 
     /**
