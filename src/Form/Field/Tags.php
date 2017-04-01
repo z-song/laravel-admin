@@ -29,7 +29,7 @@ class Tags extends Field
 
     public function prepare($value, $key = null)
     {
-        $value = $key ? $value[$key] : $value;
+        $value = $key ? array_get($value, $key) : $value;
 
         return array_filter($value);
     }

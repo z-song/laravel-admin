@@ -3,8 +3,6 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
-use App\Models\AdminFiles;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -30,8 +28,6 @@ class MultipleFile extends Field
         '/packages/admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
         '/packages/admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
     ];
-
-
 
     /**
      * Create a new File instance.
@@ -112,16 +108,9 @@ class MultipleFile extends Field
             return $this->destroy(request(static::FILE_DELETE_FLAG));
         }
 
-        $datas = array_map([$this, 'prepareForeach'], $files);
+        $targets = array_map([$this, 'prepareForeach'], $files);
 
-        try{
-            AdminFiles::insert($datas);
-        }
-        catch(\Exception $e){
-            return $e->getMessage();
-        }
-
-        return [];
+        return array_merge($this->original(), $targets);
     }
 
     /**
@@ -159,13 +148,26 @@ class MultipleFile extends Field
     {
         $files = $this->value ?: [];
 
-        return array_map(function($file){
-
-            return $this->objectUrl(array_get($file, 'target'));
-
-        }, $files);
+        return array_map([$this, 'objectUrl'], $files);
     }
 
+    /**
+     * Initialize the caption.
+     *
+     * @param array $caption
+     *
+     * @return string
+     */
+    protected function initialCaption($caption)
+    {
+        if (empty($caption)) {
+            return '';
+        }
+
+        $caption = array_map('basename', $caption);
+
+        return implode(',', $caption);
+    }
 
     /**
      * @return array
@@ -177,17 +179,9 @@ class MultipleFile extends Field
         $config = [];
 
         foreach ($files as $index => $file) {
-
-            $originalName = array_get($file, 'original_name');
-
-            $target = public_path('upload').'/'.array_get($file, 'target');
-
-            $type = file_exists($target) ? mime_content_type($target) : 'object';
-
             $config[] = [
-                'caption' => $originalName,
-                'key'     => array_get($file, config('admin.upload.table.key')),
-                'filetype'    => $type
+                'caption' => basename($file),
+                'key'     => $index,
             ];
         }
 
@@ -225,25 +219,16 @@ EOT;
      */
     public function destroy($key)
     {
-        $tableName = config('admin.upload.table.name');
+        $files = $this->original ?: [];
 
-        $table = DB::table($tableName);
+        $file = array_get($files, $key);
 
-        $fileInfo = $table->find($key);
-
-        $target = public_path('upload').'/'.$fileInfo->target;
-
-        try{
-            $table->delete($key);
-        }
-        catch(\Exception $e){
-            return $e->getMessage();
+        if ($this->storage->exists($file)) {
+            $this->storage->delete($file);
         }
 
-        if(file_exists($target)){
-            unlink($target);
-        }
+        unset($files[$key]);
 
-        return [];
+        return array_values($files);
     }
 }

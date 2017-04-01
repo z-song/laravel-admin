@@ -27,7 +27,7 @@ class Image extends File
      */
     public function prepare($image, $key = null)
     {
-        $image = $key ? $image[$key] : $image;
+        $image = $key ? array_get($image, $key) : $image;
 
         if (request()->has(static::FILE_DELETE_FLAG)) {
             return $this->destroy();

@@ -30,7 +30,7 @@ class SwitchField extends Field
 
     public function prepare($value, $key = null)
     {
-        $value = $key ? $value[$key] : $value;
+        $value = $key ? array_get($value, $key) : $value;
 
         if (isset($this->states[$value])) {
             return $this->states[$value]['value'];

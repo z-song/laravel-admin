@@ -36,7 +36,7 @@ trait UploadField
      *
      * @var bool
      */
-    protected $useUniqueName = true;
+    protected $useUniqueName = false;
 
     /**
      * Initialize the storage instance.
@@ -58,14 +58,12 @@ trait UploadField
         $defaultOptions = [
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
-            'initialPreviewFileType' => 'object',
             'browseLabel'          => trans('admin::lang.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
-            'initialCaption'   => array_get($this->value, 'originalName'),
-            'deleteUrl'        => $this->form->resource() . '/'. $this->form->model()->getKey(),
-            'deleteExtraData'  => [
-                $this->column       => '',
+            'initialCaption'       => $this->initialCaption($this->value),
+            'deleteExtraData'      => [
+                $this->column            => '',
                 static::FILE_DELETE_FLAG => '',
                 '_token'                 => csrf_token(),
                 '_method'                => 'PUT',
@@ -199,8 +197,6 @@ trait UploadField
      */
     protected function getStoreName(UploadedFile $file)
     {
-        $this->originalName = $file->getClientOriginalName();
-
         if ($this->useUniqueName) {
             return $this->generateUniqueName($file);
         }
@@ -215,7 +211,7 @@ trait UploadField
             return $this->name;
         }
 
-        return $this->originalName;
+        return $file->getClientOriginalName();
     }
 
     /**
@@ -243,23 +239,11 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        $levelDir = date('Y-m-d').'/';
-
-        $target = $this->getDirectory() . '/' . $levelDir . $this->name;
+        $target = $this->getDirectory().'/'.$this->name;
 
         $this->storage->put($target, file_get_contents($file->getRealPath()));
 
-        $model = $this->form->model();
-        $keyName = $model->getKeyName();
-
-        $info = [
-            'target'        => $target,
-            'original_name'  => $this->originalName,
-            'table'         => $model->getTable(),
-            'parent_id'     => $model->getAttribute($keyName)
-        ];
-
-        return $info;
+        return $target;
     }
 
     /**

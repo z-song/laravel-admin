@@ -19,7 +19,7 @@ abstract class AbstractTool implements Renderable
      *
      * @return $this
      */
-    public function setGrid(Grid &$grid)
+    public function setGrid(Grid $grid)
     {
         $this->grid = $grid;
 

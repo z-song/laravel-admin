@@ -38,7 +38,7 @@ class DateRange extends Field
 
     public function prepare($value, $key = null)
     {
-        $value = $key ? $value[$key] : $value;
+        $value = $key ? array_get($value, $key) : $value;
 
         if ($value === '') {
             $value = null;

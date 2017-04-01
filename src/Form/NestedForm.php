@@ -152,7 +152,7 @@ class NestedForm
      */
     public function prepare($input, $key = null)
     {
-        $input = $key ? $input[$key] : $input;
+        $input = $key ? array_get($input, $key) : $input;
 
         foreach ($input as $key => $record) {
             $this->setFieldOriginalValue($key);

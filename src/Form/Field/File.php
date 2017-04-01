@@ -86,7 +86,7 @@ class File extends Field
      */
     public function prepare($file, $key = null)
     {
-        $file = $key ? $file[$key] : $file;
+        $file = $key ? array($file, $key) : $file;
 
         if (request()->has(static::FILE_DELETE_FLAG)) {
             return $this->destroy();
