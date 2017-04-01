@@ -85,7 +85,7 @@ class File2 extends Field
 	 *
 	 * @return mixed|string
 	 */
-	public function prepare($files, $key = null)
+	public function saving($files, $key = null)
 	{
 		$files = $key ? $files[$key] : $files;
 
