@@ -677,14 +677,13 @@ class Field implements Renderable
     protected function getElementClass()
     {
         if (!$this->elementClass) {
-            $name = $this->elementName ?: $this->formatName($this->column);
 
-            if(is_string($name)){
-                $this->elementClass[] = static::ELEMENT_PREFIX.str_replace(['[', ']', '.', '#'], '_', $name);
+            if(is_string($this->column)){
+                $this->elementClass[] = static::ELEMENT_PREFIX.str_replace(['[', ']', '.', '#'], '_', $this->column);
             }
 
-            if(is_array($name)){
-                foreach($name as $key=>$value){
+            if(is_array($this->column)){
+                foreach($this->column as $key=>$value){
                     $this->elementClass[$key] = static::ELEMENT_PREFIX.str_replace(['[', ']', '.', '#'], '_', $value);
                 }
             }

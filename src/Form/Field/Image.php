@@ -25,7 +25,7 @@ class Image extends File
      *
      * @return string
      */
-    public function prepare($image, $key = null)
+    public function saving($image, $key = null)
     {
         $image = $key ? array_get($image, $key) : $image;
 

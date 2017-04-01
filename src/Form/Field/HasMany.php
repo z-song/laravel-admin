@@ -35,7 +35,7 @@ class HasMany extends Field
      *
      * @var array
      */
-    protected $value = [];
+    protected $value;
 
     /**
      * View Mode.
@@ -249,7 +249,7 @@ class HasMany extends Field
      */
     public function prepare($input, $key = null)
     {
-        $input = $key ? array($input, $key) : $input;
+        $input = $key ? array_get($input, $key) : $input;
 
         $form = $this->buildNestedForm($this->column, $this->builder);
 
@@ -372,7 +372,7 @@ class HasMany extends Field
                     ->fill($data);
             }
         } else {
-            foreach ($this->value as $data) {
+            foreach ((array) $this->value() as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)

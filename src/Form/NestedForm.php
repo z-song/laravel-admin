@@ -259,6 +259,8 @@ class NestedForm
      */
     public function pushField(Field $field)
     {
+        $field = $this->formatField($field);
+
         $this->fields->push($field);
 
         return $this;
@@ -365,8 +367,6 @@ class NestedForm
             $field = new $className($column, array_slice($arguments, 1));
 
             $field->setForm($this->form);
-
-            $field = $this->formatField($field);
 
             $this->pushField($field);
 

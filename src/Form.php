@@ -307,11 +307,7 @@ class Form
      */
     public function store()
     {
-        $this->prepare(Input::all());
-
-        if (($response = $this->callSaving()) instanceof Response) {
-            return $response;
-        }
+        $this->inputs = $this->getFormatedInputs(Input::all());
 
         if($this->isAjaxMode()){
             return $this->ajaxStore();
@@ -336,6 +332,12 @@ class Form
                 'extra' => $validationMessages
             ]);
         }
+
+        if (($response = $this->callSaving()) instanceof Response) {
+            return $response;
+        }
+
+        $this->beforeModelSave();
 
         $this->syncModel();
 
@@ -362,6 +364,12 @@ class Form
             return back()->withInput()->withErrors($validationMessages);
         }
 
+        if (($response = $this->callSaving()) instanceof Response) {
+            return $response;
+        }
+
+        $this->beforeModelSave();
+
         $this->syncModel();
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
@@ -378,36 +386,23 @@ class Form
     /**
      * Prepare the model attributes.
      *
-     * @param array $data
+     * @param array $inputs
      * @return $this|mixed
      * author Edwin Hui
      */
-    protected function prepare($data = [])
+    protected function getFormatedInputs($inputs = [])
     {
-        $inputs = $this->getFormatedInputs($data);
+        if (array_key_exists('_editable', $inputs)) {
 
-        $this->relations = $this->getRelationInputs($inputs);
-
-        $this->attributes = array_except($inputs, array_keys($this->relations));
-
-        $this->inputs = $inputs;
-
-        return $this;
-    }
-
-    protected function getFormatedInputs($data = [])
-    {
-        if (array_key_exists('_editable', $data)) {
-
-            return $this->handleEditable($data);
+            return $this->handleEditable($inputs);
         }
 
-        if (array_key_exists(Field::FILE_DELETE_FLAG, $data)) {
+        if (array_key_exists(Field::FILE_DELETE_FLAG, $inputs)) {
 
-            return $this->handleFileDelete($data);
+            return $this->handleFileDelete($inputs);
         }
 
-        $inputs = $this->removeIgnoredFields($data);
+        $inputs = $this->removeIgnoredFields($inputs);
 
         foreach ($this->builder->fields() as $field) {
 
@@ -489,6 +484,42 @@ class Form
         }
     }
 
+    protected function beforeModelSave()
+    {
+
+        foreach ($this->builder->fields() as $field) {
+
+            if (method_exists($field, 'saving')) {
+
+                $column = $field->column();
+
+                if(is_string($column)){
+                    if(array_has($this->inputs, $column)){
+
+                        array_set($this->inputs, $column, $field->saving($this->inputs, $column));
+
+                    }
+                }
+
+                if(is_array($column)){
+                    foreach($column as $col){
+                        if(array_has($this->inputs, $col)){
+
+                            array_set($this->inputs, $col, $field->saving($this->inputs, $col));
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+        $this->relations = $this->getRelationInputs($this->inputs);
+
+        $this->attributes = array_except($this->inputs, array_keys($this->relations));
+
+    }
+
     /**
      * Callback after saving a Model.
      *
@@ -514,11 +545,7 @@ class Form
     {
         $this->setFieldOriginalValue($id);
 
-        $this->prepare(Input::all());
-
-        if (($response = $this->callSaving()) instanceof Response) {
-            return $response;
-        }
+        $this->inputs = $this->getFormatedInputs(Input::all());
 
         if( $this->isAjaxMode()){
             return $this->ajaxUpdate($id);
@@ -566,6 +593,12 @@ class Form
             ]);
         }
 
+        if (($response = $this->callSaving()) instanceof Response) {
+            return $response;
+        }
+
+        $this->beforeModelSave();
+
         $this->syncModel($id);
 
         if (($response = $this->complete($this->saved)) instanceof Response) {
@@ -591,6 +624,12 @@ class Form
         if ($validationMessages = $this->validationMessages($this->inputs)) {
             return back()->withInput()->withErrors($validationMessages);
         }
+
+        if (($response = $this->callSaving()) instanceof Response) {
+            return $response;
+        }
+
+        $this->beforeModelSave();
 
         $this->syncModel($id);
 
