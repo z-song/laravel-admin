@@ -78,14 +78,16 @@ class File extends Field
     }
 
     /**
-     * Prepare for saving.
+     * Saving.
      *
      * @param UploadedFile|array $file
      *
      * @return mixed|string
      */
-    public function prepare($file)
+    public function saving($file, $key = null)
     {
+        $file = $key ? array($file, $key) : $file;
+
         if (request()->has(static::FILE_DELETE_FLAG)) {
             return $this->destroy();
         }
@@ -122,7 +124,7 @@ class File extends Field
      */
     protected function preview()
     {
-        return $this->objectUrl($this->value);
+        return $this->objectUrl($this->value());
     }
 
     /**
@@ -143,7 +145,7 @@ class File extends Field
     protected function initialPreviewConfig()
     {
         return [
-            ['caption' => basename($this->value), 'key' => 0],
+            ['caption' => basename($this->value()), 'key' => 0],
         ];
     }
 
@@ -156,7 +158,7 @@ class File extends Field
     {
         $this->setupDefaultOptions();
 
-        if (!empty($this->value)) {
+        if (!empty($this->value())) {
             $this->setupPreviewOptions();
         }
 

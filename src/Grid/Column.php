@@ -142,7 +142,7 @@ class Column
      *
      * @param Grid $grid
      */
-    public function setGrid(Grid $grid)
+    public function setGrid(Grid &$grid)
     {
         $this->grid = $grid;
 
@@ -311,7 +311,7 @@ class Column
     {
         $originalRow = static::$originalGridData[$key];
 
-        return $callback->bindTo(static::$model->newFromBuilder($originalRow));
+        return $callback->bindTo((object) $originalRow);
     }
 
     /**

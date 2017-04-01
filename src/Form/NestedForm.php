@@ -112,7 +112,7 @@ class NestedForm
      *
      * @return $this
      */
-    public function setForm(Form $form = null)
+    public function setForm(Form &$form = null)
     {
         $this->form = $form;
 
@@ -150,8 +150,10 @@ class NestedForm
      *
      * @return mixed
      */
-    public function prepare($input)
+    public function prepare($input, $key = null)
     {
+        $input = $key ? array_get($input, $key) : $input;
+
         foreach ($input as $key => $record) {
             $this->setFieldOriginalValue($key);
             $input[$key] = $this->prepareRecord($record);
@@ -257,6 +259,8 @@ class NestedForm
      */
     public function pushField(Field $field)
     {
+        $field = $this->formatField($field);
+
         $this->fields->push($field);
 
         return $this;
@@ -335,17 +339,15 @@ class NestedForm
             foreach ($column as $k => $name) {
                 $errorKey[$k] = sprintf('%s.%s.%s', $this->relationName, $key, $name);
                 $elementName[$k] = sprintf('%s[%s][%s]', $this->relationName, $key, $name);
-                $elementClass[$k] = [$this->relationName, $name];
             }
         } else {
             $errorKey = sprintf('%s.%s.%s', $this->relationName, $key, $column);
             $elementName = sprintf('%s[%s][%s]', $this->relationName, $key, $column);
-            $elementClass = [$this->relationName, $column];
         }
 
         return $field->setErrorKey($errorKey)
             ->setElementName($elementName)
-            ->setElementClass($elementClass);
+            ->addElementClass($this->relationName);
     }
 
     /**
@@ -365,8 +367,6 @@ class NestedForm
             $field = new $className($column, array_slice($arguments, 1));
 
             $field->setForm($this->form);
-
-            $field = $this->formatField($field);
 
             $this->pushField($field);
 

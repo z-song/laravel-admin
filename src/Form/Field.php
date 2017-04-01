@@ -18,6 +18,8 @@ class Field implements Renderable
 {
     const FILE_DELETE_FLAG = '__del__';
 
+    const ELEMENT_PREFIX = 'la_';
+
     /**
      * Element id.
      *
@@ -65,7 +67,7 @@ class Field implements Renderable
      *
      * @var string
      */
-    protected $elementName = [];
+    protected $elementName = '';
 
     /**
      * Form element classes.
@@ -324,7 +326,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setForm(Form $form = null)
+    public function setForm(Form &$form = null)
     {
         $this->form = $form;
 
@@ -443,7 +445,7 @@ class Field implements Renderable
     public function value($value = null)
     {
         if (is_null($value)) {
-            return is_null($this->value) ? $this->getDefault() : $this->value;
+            return $this->value = is_null($this->value) ? ($this->getDefault() ?: $this->original) : $this->value;
         }
 
         $this->value = $value;
@@ -654,6 +656,8 @@ class Field implements Renderable
     /**
      * Set form element class.
      *
+     * @deprecated
+     *
      * @param string $class
      *
      * @return $this
@@ -673,9 +677,16 @@ class Field implements Renderable
     protected function getElementClass()
     {
         if (!$this->elementClass) {
-            $name = $this->elementName ?: $this->formatName($this->column);
 
-            $this->elementClass = (array) str_replace(['[', ']'], '_', $name);
+            if(is_string($this->column)){
+                $this->elementClass[] = static::ELEMENT_PREFIX.str_replace(['[', ']', '.', '#'], '_', $this->column);
+            }
+
+            if(is_array($this->column)){
+                foreach($this->column as $key=>$value){
+                    $this->elementClass[$key] = static::ELEMENT_PREFIX.str_replace(['[', ']', '.', '#'], '_', $value);
+                }
+            }
         }
 
         return $this->elementClass;
@@ -735,7 +746,18 @@ class Field implements Renderable
     public function addElementClass($class)
     {
         if (is_array($class) || is_string($class)) {
-            $this->elementClass = array_merge($this->elementClass, (array) $class);
+
+            if(is_string($class)) {
+                $class = static::ELEMENT_PREFIX . $class;
+            }
+
+            if(is_array($class)) {
+                $class = array_map(function($c) {
+                    return static::ELEMENT_PREFIX . $c ;
+                },$class);
+            }
+
+            $this->elementClass = array_merge($this->getElementClass(), (array) $class);
 
             $this->elementClass = array_unique($this->elementClass);
         }
