@@ -33,8 +33,8 @@ class Image extends File
 
         $this->name = $this->getStoreName($image);
 
-        $this->callInterventionMethods($image->getRealPath());
+        $upload_path = $this->uploadAndDeleteOriginal($image);
 
-        return $this->uploadAndDeleteOriginal($image);
+        return $this->callInterventionMethods($upload_path);
     }
 }

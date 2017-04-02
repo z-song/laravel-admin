@@ -33,13 +33,13 @@ trait ImageField
     public function callInterventionMethods($target)
     {
         if (!empty($this->interventionCalls)) {
-            $image = ImageManagerStatic::make($target);
+            $image = ImageManagerStatic::make(public_path('upload/').$target);
 
             foreach ($this->interventionCalls as $call) {
                 call_user_func_array(
                     [$image, $call['method']],
                     $call['arguments']
-                )->save($target);
+                )->save(public_path('upload/').$target);
             }
         }
 

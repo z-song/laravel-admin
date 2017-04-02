@@ -31,8 +31,8 @@ class MultipleImage extends MultipleFile
     {
         $this->name = $this->getStoreName($image);
 
-        $this->callInterventionMethods($image->getRealPath());
+        $upload_path = $this->upload($image);
 
-        return $this->upload($image);
+        return $this->callInterventionMethods($upload_path);
     }
 }
