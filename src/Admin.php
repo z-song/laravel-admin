@@ -217,7 +217,7 @@ class Admin
      */
     public static function url($url)
     {
-        $prefix = (string) config('admin.prefix');
+        $prefix = trim(config('admin.base-url-prefix'), '/').'/'.trim(config('admin.prefix'), '/');
 
         if (empty($prefix) || $prefix == '/') {
             return '/'.trim($url, '/');

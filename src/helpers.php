@@ -25,8 +25,8 @@ if (!function_exists('admin_url')) {
      */
     function admin_url($url = '')
     {
-        $prefix = trim(config('admin.prefix'), '/');
+        $prefix = trim(config('admin.base-url-prefix'), '/').'/'.trim(config('admin.prefix'), '/');
 
-        return ($prefix ? "/$prefix" : '').'/'.trim($url, '/');
+        return url($prefix ? "/$prefix" : '').'/'.trim($url, '/');
     }
 }

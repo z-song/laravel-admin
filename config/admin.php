@@ -11,6 +11,7 @@ return [
      * Laravel-admin url prefix.
      */
     'prefix'    => 'admin',
+    'base-url-prefix' => 'public/',
 
     /*
      * Laravel-admin install directory.
