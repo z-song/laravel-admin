@@ -1,0 +1,19 @@
+.login-page {
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #376390;
+  /* All rights reserved! The original photo credits: Runyai Studio www.runyaistudio.com */
+  background-image: url(/packages/admin/laravel-admin/images/login-background.jpg);
+}
+
+.login-box .login-box-body {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.login-box .login-logo,
+.login-box .login-logo a {
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
