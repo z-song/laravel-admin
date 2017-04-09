@@ -168,6 +168,8 @@ class Field implements Renderable
         'field' => 8,
     ];
 
+    protected $containerWidth = 12;
+
     /**
      * Field constructor.
      *
@@ -347,6 +349,23 @@ class Field implements Renderable
         ];
 
         return $this;
+    }
+
+    /**
+     *
+     * @param int $width
+     *
+     * @return $this
+     */
+    public function setContainerWidth($width){
+        $this->containerWidth = $width;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContainerWidth(){
+        return $this->containerWidth;
     }
 
     /**

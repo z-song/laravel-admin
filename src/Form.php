@@ -1010,6 +1010,20 @@ class Form
     }
 
     /**
+     * @param int $with
+     *
+     * @return $this
+     */
+    public function setContainerWidth($width = 12){
+        $this->builder()->fields()->each(function ($field) use ($width) {
+            /* @var Field $field  */
+            $field->setContainerWidth($width);
+        });
+        $this->builder()->setContainerWidth($width);
+        return $this;
+    }
+
+    /**
      * Set view for form.
      *
      * @param string $view

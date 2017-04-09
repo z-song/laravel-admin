@@ -81,6 +81,12 @@ class Builder
     ];
 
     /**
+     * containerWidth for the entire field width
+     */
+
+    protected $containerWidth = 12;
+
+    /**
      * View for this form.
      *
      * @var string
@@ -182,6 +188,25 @@ class Builder
         ];
 
         return $this;
+    }
+
+
+    /**
+     * @param int $width
+     *
+     * @return $width
+     */
+    public function setContainerWidth($width = 12){
+        $this->containerWidth = $width;
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getContainerWidth(){
+        return $this->containerWidth;
     }
 
     /**
@@ -427,8 +452,8 @@ class Builder
         $text = trans('admin::lang.submit');
 
         return <<<EOT
-<div class="btn-group pull-right">
-    <button type="submit" class="btn btn-info pull-right" data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
+<div class="btn-group ">
+    <button type="submit" class="btn btn-info " data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
 </div>
 EOT;
     }
@@ -447,7 +472,7 @@ EOT;
         $text = trans('admin::lang.reset');
 
         return <<<EOT
-<div class="btn-group pull-left">
+<div class="btn-group ">
     <button type="reset" class="btn btn-warning">$text</button>
 </div>
 EOT;

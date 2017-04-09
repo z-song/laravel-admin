@@ -14,9 +14,12 @@
             @if(!$tabObj->isEmpty())
                 @include('admin::form.tab', compact('tabObj'))
             @else
-                <div class="fields-group">
+                <div class="fields-group row" style=" display: flex;flex-wrap: wrap;">
                     @foreach($form->fields() as $field)
+
+                        <div class="col-md-{!!  $field->getContainerWidth() !!}">
                         {!! $field->render() !!}
+                        </div>
                     @endforeach
                 </div>
             @endif
