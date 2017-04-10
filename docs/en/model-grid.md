@@ -151,6 +151,16 @@ $grid->disableFilter();
 $grid->disableExport();
 ```
 
+#### Disable row selector
+```php
+$grid->disableRowSelector();
+```
+
+#### Disable row actions
+```php
+$grid->disableActions();
+```
+
 #### Enable orderable grid
 ```php
 $grid->orderable();

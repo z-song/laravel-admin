@@ -151,6 +151,16 @@ $grid->disableFilter();
 $grid->disableExport();
 ```
 
+#### 禁用行选择checkbox
+```php
+$grid->disableRowSelector();
+```
+
+#### 禁用行操作列
+```php
+$grid->disableActions();
+```
+
 #### 设置分页选择器选项
 ```php
 $grid->perPages([10, 20, 30, 40, 50]);
