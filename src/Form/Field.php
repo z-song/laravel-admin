@@ -359,6 +359,7 @@ class Field implements Renderable
      */
     public function setContainerWidth($width){
         $this->containerWidth = $width;
+        return $this;
     }
 
     /**
