@@ -259,7 +259,7 @@ $form->ip($column[, $label]);
 
 #### phone number input
 ```php
-$form->mobile($column[, $label])->format('999 9999 9999');
+$form->mobile($column[, $label])->options(['mask' => '999 9999 9999']);
 ```
 
 #### color select
