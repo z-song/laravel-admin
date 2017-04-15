@@ -29,7 +29,11 @@ class Tags extends Field
 
     public function prepare($value)
     {
-        return array_filter($value);
+        if (is_array($value) && !Arr::isAssoc($value)) {
+            $value = implode(',', $value);
+        }
+
+        return $value;
     }
 
     public function render()
