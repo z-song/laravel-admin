@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Auth\Database\OperationLog;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
@@ -50,7 +49,7 @@ class LogController extends Controller
                 $grid->disableCreation();
 
                 $grid->filter(function ($filter) {
-                    $filter->is('user_id', 'User')->select(Administrator::all()->pluck('name', 'id'));
+                    $filter->is('user_id', 'User')->select(config('admin.database.users_model')::all()->pluck('name', 'id'));
                     $filter->is('method')->select(array_combine(OperationLog::$methods, OperationLog::$methods));
                     $filter->like('path');
                     $filter->is('ip');

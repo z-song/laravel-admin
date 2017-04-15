@@ -1,6 +1,5 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\File;
 use Tests\Models\File as FileModel;
 
@@ -10,7 +9,7 @@ class FileUploadTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(Administrator::first(), 'admin');
+        $this->be(config('admin.database.users_model')::first(), 'admin');
     }
 
     public function testFileUploadPage()

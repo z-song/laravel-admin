@@ -3,7 +3,6 @@
 namespace Encore\Admin;
 
 use Closure;
-use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\Navbar;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
@@ -199,7 +198,9 @@ class Admin
      */
     public function menu()
     {
-        return (new Menu())->toTree();
+        $menu_model = config('admin.database.menu_model');
+
+        return (new $menu_model())->toTree();
     }
 
     /**

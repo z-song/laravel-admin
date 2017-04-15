@@ -1,15 +1,12 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
-use Encore\Admin\Auth\Database\Role;
-
 class RolesTest extends TestCase
 {
     public function setUp()
     {
         parent::setUp();
 
-        $this->be(Administrator::first(), 'admin');
+        $this->be(config('admin.database.users_model')::first(), 'admin');
     }
 
     public function testRolesIndex()
@@ -26,7 +23,7 @@ class RolesTest extends TestCase
             ->submitForm('Submit', ['slug' => 'developer', 'name' => 'Developer...'])
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.roles_table'), ['slug' => 'developer', 'name' => 'Developer...'])
-            ->assertEquals(2, Role::count());
+            ->assertEquals(2, config('admin.database.roles_model')::count());
     }
 
     public function testAddRoleToUser()
@@ -45,16 +42,16 @@ class RolesTest extends TestCase
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.users_table'), ['username' => 'Test']);
 
-        $this->assertEquals(1, Role::count());
+        $this->assertEquals(1, config('admin.database.roles_model')::count());
 
         $this->visit('admin/auth/roles/create')
             ->see('Roles')
             ->submitForm('Submit', ['slug' => 'developer', 'name' => 'Developer...'])
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.roles_table'), ['slug' => 'developer', 'name' => 'Developer...'])
-            ->assertEquals(2, Role::count());
+            ->assertEquals(2, config('admin.database.roles_model')::count());
 
-        $this->assertFalse(Administrator::find(2)->isRole('developer'));
+        $this->assertFalse(config('admin.database.users_model')::find(2)->isRole('developer'));
 
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
@@ -62,28 +59,28 @@ class RolesTest extends TestCase
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 2]);
 
-        $this->assertTrue(Administrator::find(2)->isRole('developer'));
+        $this->assertTrue(config('admin.database.users_model')::find(2)->isRole('developer'));
 
-        $this->assertFalse(Administrator::find(2)->inRoles(['editor', 'operator']));
-        $this->assertTrue(Administrator::find(2)->inRoles(['developer', 'operator', 'editor']));
+        $this->assertFalse(config('admin.database.users_model')::find(2)->inRoles(['editor', 'operator']));
+        $this->assertTrue(config('admin.database.users_model')::find(2)->inRoles(['developer', 'operator', 'editor']));
     }
 
     public function testDeleteRole()
     {
-        $this->assertEquals(1, Role::count());
+        $this->assertEquals(1, config('admin.database.roles_model')::count());
 
         $this->visit('admin/auth/roles/create')
             ->see('Roles')
             ->submitForm('Submit', ['slug' => 'developer', 'name' => 'Developer...'])
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.roles_table'), ['slug' => 'developer', 'name' => 'Developer...'])
-            ->assertEquals(2, Role::count());
+            ->assertEquals(2, config('admin.database.roles_model')::count());
 
         $this->delete('admin/auth/roles/2')
-            ->assertEquals(1, Role::count());
+            ->assertEquals(1, config('admin.database.roles_model')::count());
 
         $this->delete('admin/auth/roles/1')
-            ->assertEquals(0, Role::count());
+            ->assertEquals(0, config('admin.database.roles_model')::count());
     }
 
     public function testEditRole()
@@ -93,6 +90,6 @@ class RolesTest extends TestCase
             ->submitForm('Submit', ['name' => 'blablabla'])
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.roles_table'), ['name' => 'blablabla'])
-            ->assertEquals(1, Role::count());
+            ->assertEquals(1, config('admin.database.roles_model')::count());
     }
 }

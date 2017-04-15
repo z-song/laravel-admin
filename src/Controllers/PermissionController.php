@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Permission;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -64,7 +63,7 @@ class PermissionController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Permission::class, function (Grid $grid) {
+        return Admin::grid(config('admin.database.permissions_model'), function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->slug(trans('admin::lang.slug'));
             $grid->name(trans('admin::lang.name'));
@@ -87,7 +86,7 @@ class PermissionController extends Controller
      */
     public function form()
     {
-        return Admin::form(Permission::class, function (Form $form) {
+        return Admin::form(config('admin.database.permissions_model'), function (Form $form) {
             $form->display('id', 'ID');
 
             $form->text('slug', trans('admin::lang.slug'))->rules('required');

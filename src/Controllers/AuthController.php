@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
@@ -99,7 +98,7 @@ class AuthController extends Controller
      */
     protected function settingForm()
     {
-        return Administrator::form(function (Form $form) {
+        return config('admin.database.users_model')::form(function (Form $form) {
             $form->display('username', trans('admin::lang.username'));
             $form->text('name', trans('admin::lang.name'))->rules('required');
             $form->image('avatar', trans('admin::lang.avatar'));

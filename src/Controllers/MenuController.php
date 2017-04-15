@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Menu;
-use Encore\Admin\Auth\Database\Role;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Column;
@@ -35,11 +33,11 @@ class MenuController extends Controller
                     $form = new \Encore\Admin\Widgets\Form();
                     $form->action(admin_url('auth/menu'));
 
-                    $form->select('parent_id', trans('admin::lang.parent_id'))->options(Menu::selectOptions());
+                    $form->select('parent_id', trans('admin::lang.parent_id'))->options(config('admin.database.menu_model')::selectOptions());
                     $form->text('title', trans('admin::lang.title'))->rules('required');
                     $form->icon('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin::lang.uri'));
-                    $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+                    $form->multipleSelect('roles', trans('admin::lang.roles'))->options(config('admin.database.roles_model')::all()->pluck('name', 'id'));
 
                     $column->append((new Box(trans('admin::lang.new'), $form))->style('success'));
                 });
@@ -66,7 +64,7 @@ class MenuController extends Controller
      */
     protected function treeView()
     {
-        return Menu::tree(function (Tree $tree) {
+        return config('admin.database.menu_model')::tree(function (Tree $tree) {
             $tree->disableCreate();
 
             $tree->branch(function ($branch) {
@@ -107,14 +105,14 @@ class MenuController extends Controller
      */
     public function form()
     {
-        return Menu::form(function (Form $form) {
+        return config('admin.database.menu_model')::form(function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->select('parent_id', trans('admin::lang.parent_id'))->options(Menu::selectOptions());
+            $form->select('parent_id', trans('admin::lang.parent_id'))->options(config('admin.database.menu_model')::selectOptions());
             $form->text('title', trans('admin::lang.title'))->rules('required');
             $form->icon('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
             $form->text('uri', trans('admin::lang.uri'));
-            $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+            $form->multipleSelect('roles', trans('admin::lang.roles'))->options(config('admin.database.roles_model')::all()->pluck('name', 'id'));
 
             $form->display('created_at', trans('admin::lang.created_at'));
             $form->display('updated_at', trans('admin::lang.updated_at'));

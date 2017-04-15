@@ -1,6 +1,5 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\File;
 use Tests\Models\Image;
 use Tests\Models\MultipleImage;
@@ -11,7 +10,7 @@ class ImageUploadTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(Administrator::first(), 'admin');
+        $this->be(config('admin.database.users_model')::first(), 'admin');
     }
 
     public function testDisableFilter()

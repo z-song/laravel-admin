@@ -1,7 +1,5 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
-
 class UsersTest extends TestCase
 {
     protected $user;
@@ -10,7 +8,7 @@ class UsersTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = Administrator::first();
+        $this->user = config('admin.database.users_model')::first();
 
         $this->be($this->user, 'admin');
     }

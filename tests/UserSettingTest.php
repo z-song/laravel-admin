@@ -1,6 +1,5 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\File;
 
 class UserSettingTest extends TestCase
@@ -9,7 +8,7 @@ class UserSettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(Administrator::first(), 'admin');
+        $this->be(config('admin.database.users_model')::first(), 'admin');
     }
 
     public function testVisitSettingPage()
@@ -48,7 +47,7 @@ class UserSettingTest extends TestCase
             ->press('Submit')
             ->seePageIs('admin/auth/setting');
 
-        $avatar = Administrator::first()->avatar;
+        $avatar = config('admin.database.users_model')::first()->avatar;
 
         $this->assertEquals('http://localhost:8000/upload/image/test.jpg', $avatar);
     }
@@ -77,7 +76,7 @@ class UserSettingTest extends TestCase
             ->submitForm('Submit', $data)
             ->seePageIs('admin/auth/setting');
 
-        $this->assertTrue(app('hash')->check($data['password'], Administrator::first()->makeVisible('password')->password));
+        $this->assertTrue(app('hash')->check($data['password'], config('admin.database.users_model')::first()->makeVisible('password')->password));
 
         $this->visit('admin/auth/logout')
             ->seePageIs('admin/auth/login')

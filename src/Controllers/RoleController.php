@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Permission;
-use Encore\Admin\Auth\Database\Role;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -65,7 +63,7 @@ class RoleController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Role::class, function (Grid $grid) {
+        return Admin::grid(config('admin.database.roles_model'), function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->slug(trans('admin::lang.slug'));
             $grid->name(trans('admin::lang.name'));
@@ -94,12 +92,12 @@ class RoleController extends Controller
      */
     public function form()
     {
-        return Admin::form(Role::class, function (Form $form) {
+        return Admin::form(config('admin.database.roles_model'), function (Form $form) {
             $form->display('id', 'ID');
 
             $form->text('slug', trans('admin::lang.slug'))->rules('required');
             $form->text('name', trans('admin::lang.name'))->rules('required');
-            $form->multipleSelect('permissions', trans('admin::lang.permissions'))->options(Permission::all()->pluck('name', 'id'));
+            $form->multipleSelect('permissions', trans('admin::lang.permissions'))->options(config('admin.database.permissions_model')::all()->pluck('name', 'id'));
 
             $form->display('created_at', trans('admin::lang.created_at'));
             $form->display('updated_at', trans('admin::lang.updated_at'));

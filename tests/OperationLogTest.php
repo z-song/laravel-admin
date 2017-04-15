@@ -1,6 +1,5 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Auth\Database\OperationLog;
 
 class OperationLogTest extends TestCase
@@ -9,7 +8,7 @@ class OperationLogTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(Administrator::first(), 'admin');
+        $this->be(config('admin.database.users_model')::first(), 'admin');
     }
 
     public function testOperationLogIndex()
