@@ -8,7 +8,8 @@ class UsersTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = config('admin.database.users_model')::first();
+        $users_model = config('admin.database.users_model');
+        $this->user = $users_model::first();
 
         $this->be($this->user, 'admin');
     }

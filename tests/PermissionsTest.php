@@ -6,12 +6,14 @@ class PermissionsTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(config('admin.database.users_model')::first(), 'admin');
+        $users_model = config('admin.database.users_model');
+        $this->be($users_model::first(), 'admin');
     }
 
     public function testPermissionsIndex()
     {
-        $this->assertTrue(config('admin.database.users_model')::first()->isAdministrator());
+        $users_model = config('admin.database.users_model');
+        $this->assertTrue($users_model::first()->isAdministrator());
 
         $this->visit('admin/auth/permissions')
             ->see('Permissions');
@@ -19,6 +21,9 @@ class PermissionsTest extends TestCase
 
     public function testAddAndDeletePermissions()
     {
+        $users_model = config('admin.database.users_model');
+        $permissions_model = config('admin.database.permissions_model');
+
         $this->visit('admin/auth/permissions/create')
             ->see('Permissions')
             ->submitForm('Submit', ['slug' => 'can-edit', 'name' => 'Can edit'])
@@ -29,16 +34,16 @@ class PermissionsTest extends TestCase
             ->seePageIs('admin/auth/permissions')
             ->seeInDatabase(config('admin.database.permissions_table'), ['slug' => 'can-edit', 'name' => 'Can edit'])
             ->seeInDatabase(config('admin.database.permissions_table'), ['slug' => 'can-delete', 'name' => 'Can delete'])
-            ->assertEquals(2, config('admin.database.permissions_model')::count());
+            ->assertEquals(2, $permissions_model::count());
 
-        $this->assertTrue(config('admin.database.users_model')::first()->can('can-edit'));
-        $this->assertTrue(config('admin.database.users_model')::first()->can('can-delete'));
+        $this->assertTrue($users_model::first()->can('can-edit'));
+        $this->assertTrue($users_model::first()->can('can-delete'));
 
         $this->delete('admin/auth/permissions/1')
-            ->assertEquals(1, config('admin.database.permissions_model')::count());
+            ->assertEquals(1, $permissions_model::count());
 
         $this->delete('admin/auth/permissions/2')
-            ->assertEquals(0, config('admin.database.permissions_model')::count());
+            ->assertEquals(0, $permissions_model::count());
     }
 
     public function testAddPermissionToRole()
@@ -48,7 +53,8 @@ class PermissionsTest extends TestCase
             ->submitForm('Submit', ['slug' => 'can-create', 'name' => 'Can Create'])
             ->seePageIs('admin/auth/permissions');
 
-        $this->assertEquals(1, config('admin.database.permissions_model')::count());
+        $permissions_model = config('admin.database.permissions_model');
+        $this->assertEquals(1, $permissions_model::count());
 
         $this->visit('admin/auth/roles/1/edit')
             ->see('Edit')
@@ -64,7 +70,8 @@ class PermissionsTest extends TestCase
             ->submitForm('Submit', ['slug' => 'can-create', 'name' => 'Can Create'])
             ->seePageIs('admin/auth/permissions');
 
-        $this->assertEquals(1, config('admin.database.permissions_model')::count());
+        $permissions_model = config('admin.database.permissions_model');
+        $this->assertEquals(1, $permissions_model::count());
 
         $this->visit('admin/auth/users/1/edit')
             ->see('Edit')
@@ -89,21 +96,23 @@ class PermissionsTest extends TestCase
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.users_table'), ['username' => 'Test']);
 
-        $this->assertFalse(config('admin.database.users_model')::find(2)->isAdministrator());
+        $users_model = config('admin.database.users_model');
+        $permissions_model = config('admin.database.permissions_model');
+        $this->assertFalse($users_model::find(2)->isAdministrator());
 
         $this->visit('admin/auth/permissions/create')
             ->see('Permissions')
             ->submitForm('Submit', ['slug' => 'can-update', 'name' => 'Can Update'])
             ->seePageIs('admin/auth/permissions');
 
-        $this->assertEquals(1, config('admin.database.permissions_model')::count());
+        $this->assertEquals(1, $permissions_model::count());
 
         $this->visit('admin/auth/permissions/create')
             ->see('Permissions')
             ->submitForm('Submit', ['slug' => 'can-remove', 'name' => 'Can Remove'])
             ->seePageIs('admin/auth/permissions');
 
-        $this->assertEquals(2, config('admin.database.permissions_model')::count());
+        $this->assertEquals(2, $permissions_model::count());
 
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
@@ -111,8 +120,8 @@ class PermissionsTest extends TestCase
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.user_permissions_table'), ['user_id' => 2, 'permission_id' => 1]);
 
-        $this->assertTrue(config('admin.database.users_model')::find(2)->can('can-update'));
-        $this->assertTrue(config('admin.database.users_model')::find(2)->cannot('can-remove'));
+        $this->assertTrue($users_model::find(2)->can('can-update'));
+        $this->assertTrue($users_model::find(2)->cannot('can-remove'));
 
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
@@ -120,7 +129,7 @@ class PermissionsTest extends TestCase
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.user_permissions_table'), ['user_id' => 2, 'permission_id' => 2]);
 
-        $this->assertTrue(config('admin.database.users_model')::find(2)->can('can-remove'));
+        $this->assertTrue($users_model::find(2)->can('can-remove'));
 
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
@@ -129,8 +138,8 @@ class PermissionsTest extends TestCase
             ->missingFromDatabase(config('admin.database.user_permissions_table'), ['user_id' => 2, 'permission_id' => 1])
             ->missingFromDatabase(config('admin.database.user_permissions_table'), ['user_id' => 2, 'permission_id' => 2]);
 
-        $this->assertTrue(config('admin.database.users_model')::find(2)->cannot('can-update'));
-        $this->assertTrue(config('admin.database.users_model')::find(2)->cannot('can-remove'));
+        $this->assertTrue($users_model::find(2)->cannot('can-update'));
+        $this->assertTrue($users_model::find(2)->cannot('can-remove'));
     }
 
     public function testPermissionThroughRole()
@@ -149,7 +158,11 @@ class PermissionsTest extends TestCase
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.users_table'), ['username' => 'Test']);
 
-        $this->assertFalse(config('admin.database.users_model')::find(2)->isAdministrator());
+        $users_model = config('admin.database.users_model');
+        $roles_model = config('admin.database.roles_model');
+        $permissions_model = config('admin.database.permissions_model');
+
+        $this->assertFalse($users_model::find(2)->isAdministrator());
 
         // 2.add a role
         $this->visit('admin/auth/roles/create')
@@ -157,9 +170,9 @@ class PermissionsTest extends TestCase
             ->submitForm('Submit', ['slug' => 'developer', 'name' => 'Developer...'])
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.roles_table'), ['slug' => 'developer', 'name' => 'Developer...'])
-            ->assertEquals(2, config('admin.database.roles_model')::count());
+            ->assertEquals(2, $roles_model::count());
 
-        $this->assertFalse(config('admin.database.users_model')::find(2)->isRole('developer'));
+        $this->assertFalse($users_model::find(2)->isRole('developer'));
 
         // 3.assign role to user
         $this->visit('admin/auth/users/2/edit')
@@ -168,7 +181,7 @@ class PermissionsTest extends TestCase
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 2]);
 
-        $this->assertTrue(config('admin.database.users_model')::find(2)->isRole('developer'));
+        $this->assertTrue($users_model::find(2)->isRole('developer'));
 
         //  4.add a permission
         $this->visit('admin/auth/permissions/create')
@@ -176,9 +189,9 @@ class PermissionsTest extends TestCase
             ->submitForm('Submit', ['slug' => 'can-remove', 'name' => 'Can Remove'])
             ->seePageIs('admin/auth/permissions');
 
-        $this->assertEquals(1, config('admin.database.permissions_model')::count());
+        $this->assertEquals(1, $permissions_model::count());
 
-        $this->assertTrue(config('admin.database.users_model')::find(2)->cannot('can-remove'));
+        $this->assertTrue($users_model::find(2)->cannot('can-remove'));
 
         // 5.assign permission to role
         $this->visit('admin/auth/roles/2/edit')
@@ -187,24 +200,26 @@ class PermissionsTest extends TestCase
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.role_permissions_table'), ['role_id' => 2, 'permission_id' => 1]);
 
-        $this->assertTrue(config('admin.database.users_model')::find(2)->can('can-remove'));
+        $this->assertTrue($users_model::find(2)->can('can-remove'));
     }
 
     public function testEditPermission()
     {
+        $permissions_model = config('admin.database.permissions_model');
+
         $this->visit('admin/auth/permissions/create')
             ->see('Permissions')
             ->submitForm('Submit', ['slug' => 'can-edit', 'name' => 'Can edit'])
             ->seePageIs('admin/auth/permissions')
             ->seeInDatabase(config('admin.database.permissions_table'), ['slug' => 'can-edit'])
             ->seeInDatabase(config('admin.database.permissions_table'), ['name' => 'Can edit'])
-            ->assertEquals(1, config('admin.database.permissions_model')::count());
+            ->assertEquals(1, $permissions_model::count());
 
         $this->visit('admin/auth/permissions/1/edit')
             ->see('Permissions')
             ->submitForm('Submit', ['slug' => 'can-delete'])
             ->seePageIs('admin/auth/permissions')
             ->seeInDatabase(config('admin.database.permissions_table'), ['slug' => 'can-delete'])
-            ->assertEquals(1, config('admin.database.permissions_model')::count());
+            ->assertEquals(1, $permissions_model::count());
     }
 }

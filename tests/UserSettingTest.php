@@ -8,7 +8,8 @@ class UserSettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(config('admin.database.users_model')::first(), 'admin');
+        $users_model = config('admin.database.users_model');
+        $this->be($users_model::first(), 'admin');
     }
 
     public function testVisitSettingPage()
@@ -47,7 +48,8 @@ class UserSettingTest extends TestCase
             ->press('Submit')
             ->seePageIs('admin/auth/setting');
 
-        $avatar = config('admin.database.users_model')::first()->avatar;
+        $users_model = config('admin.database.users_model');
+        $avatar = $users_model::first()->avatar;
 
         $this->assertEquals('http://localhost:8000/upload/image/test.jpg', $avatar);
     }
@@ -76,7 +78,8 @@ class UserSettingTest extends TestCase
             ->submitForm('Submit', $data)
             ->seePageIs('admin/auth/setting');
 
-        $this->assertTrue(app('hash')->check($data['password'], config('admin.database.users_model')::first()->makeVisible('password')->password));
+        $users_model = config('admin.database.users_model');
+        $this->assertTrue(app('hash')->check($data['password'], $users_model::first()->makeVisible('password')->password));
 
         $this->visit('admin/auth/logout')
             ->seePageIs('admin/auth/login')

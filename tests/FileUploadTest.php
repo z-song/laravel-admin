@@ -8,8 +8,9 @@ class FileUploadTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+        $model = config('admin.database.users_model');
 
-        $this->be(config('admin.database.users_model')::first(), 'admin');
+        $this->be($model::first(), 'admin');
     }
 
     public function testFileUploadPage()

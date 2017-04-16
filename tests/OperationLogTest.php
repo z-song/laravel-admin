@@ -8,7 +8,8 @@ class OperationLogTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(config('admin.database.users_model')::first(), 'admin');
+        $user_model = config('admin.database.users_model');
+        $this->be($user_model::first(), 'admin');
     }
 
     public function testOperationLogIndex()

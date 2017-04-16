@@ -63,7 +63,9 @@ class UserController extends Controller
      */
     protected function grid()
     {
-        return config('admin.database.users_model')::grid(function (Grid $grid) {
+        $users_model = config('admin.database.users_model');
+
+        return $users_model::grid(function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->username(trans('admin::lang.username'));
             $grid->name(trans('admin::lang.name'));
@@ -94,7 +96,9 @@ class UserController extends Controller
      */
     public function form()
     {
-        return config('admin.database.users_model')::form(function (Form $form) {
+        $users_model = config('admin.database.users_model');
+
+        return $users_model::form(function (Form $form) {
             $form->display('id', 'ID');
 
             $form->text('username', trans('admin::lang.username'))->rules('required');
@@ -108,8 +112,10 @@ class UserController extends Controller
 
             $form->ignore(['password_confirmation']);
 
-            $form->multipleSelect('roles', trans('admin::lang.roles'))->options(config('admin.database.roles_model')::all()->pluck('name', 'id'));
-            $form->multipleSelect('permissions', trans('admin::lang.permissions'))->options(config('admin.database.permissions_model')::all()->pluck('name', 'id'));
+            $roles_model = config('admin.database.roles_model');
+            $permissions_model = config('admin.database.permissions_model');
+            $form->multipleSelect('roles', trans('admin::lang.roles'))->options($roles_model::all()->pluck('name', 'id'));
+            $form->multipleSelect('permissions', trans('admin::lang.permissions'))->options($permissions_model::all()->pluck('name', 'id'));
 
             $form->display('created_at', trans('admin::lang.created_at'));
             $form->display('updated_at', trans('admin::lang.updated_at'));

@@ -9,7 +9,8 @@ class UserGridTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(config('admin.database.users_model')::first(), 'admin');
+        $users_model = config('admin.database.users_model');
+        $this->be($users_model::first(), 'admin');
     }
 
     public function testIndexPage()

@@ -98,7 +98,9 @@ class AuthController extends Controller
      */
     protected function settingForm()
     {
-        return config('admin.database.users_model')::form(function (Form $form) {
+        $model = config('admin.database.users_model');
+
+        return $model::form(function (Form $form) {
             $form->display('username', trans('admin::lang.username'));
             $form->text('name', trans('admin::lang.name'))->rules('required');
             $form->image('avatar', trans('admin::lang.avatar'));

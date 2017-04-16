@@ -49,7 +49,8 @@ class LogController extends Controller
                 $grid->disableCreation();
 
                 $grid->filter(function ($filter) {
-                    $filter->is('user_id', 'User')->select(config('admin.database.users_model')::all()->pluck('name', 'id'));
+                    $model = config('admin.database.users_model');
+                    $filter->is('user_id', 'User')->select($model::all()->pluck('name', 'id'));
                     $filter->is('method')->select(array_combine(OperationLog::$methods, OperationLog::$methods));
                     $filter->like('path');
                     $filter->is('ip');
