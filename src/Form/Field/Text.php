@@ -17,11 +17,12 @@ class Text extends Field
     {
         $this->initPlainInput();
 
+        $elementName = $this->elementName ?: $this->formatName($this->column);
         $this->prepend('<i class="fa fa-pencil"></i>')
             ->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
-            ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
-            ->defaultAttribute('value', old($this->column, $this->value()))
+            ->defaultAttribute('name', $elementName)
+            ->defaultAttribute('value', old($elementName, $this->value()))
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder());
 
