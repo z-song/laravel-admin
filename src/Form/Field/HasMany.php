@@ -35,7 +35,7 @@ class HasMany extends Field
      *
      * @var array
      */
-    protected $value = [];
+    protected $value;
 
     /**
      * View Mode.
@@ -55,6 +55,8 @@ class HasMany extends Field
         'default'   => 'admin::form.hasmany',
         'tab'       => 'admin::form.hasmanytab',
     ];
+
+    protected $keyName = '';
 
     /**
      * Create a new HasMany field instance.
@@ -245,9 +247,19 @@ class HasMany extends Field
      *
      * @return array
      */
-    public function prepare($input)
+    public function prepare($input, $key = null)
     {
+        $input = $key ? array_get($input, $key) : $input;
+
         $form = $this->buildNestedForm($this->column, $this->builder);
+
+        // Delete empty key value input
+        $input = array_map(function($data){
+            if(! array_get($data, $this->getKeyName())){
+                unset($data[$this->getKeyName()]);
+            }
+            return $data;
+        }, $input);
 
         return $form->setOriginal($this->original, $this->getKeyName())->prepare($input);
     }
@@ -287,7 +299,11 @@ class HasMany extends Field
             return;
         }
 
-        return $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
+        if(! $this->keyName){
+            $this->keyName = $this->form->model()->{$this->relationName}()->getRelated()->getKeyName();
+        }
+
+        return $this->keyName;
     }
 
     /**
@@ -356,7 +372,7 @@ class HasMany extends Field
                     ->fill($data);
             }
         } else {
-            foreach ($this->value as $data) {
+            foreach ((array) $this->value() as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
@@ -402,7 +418,7 @@ class HasMany extends Field
          */
         $script = <<<EOT
 var index = 0;
-$('#has-many-{$this->column}').on('click', '.add', function () {
+$('#has-many-{$this->column}').off('click', '.add').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
 
@@ -413,9 +429,14 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
     {$templateScript}
 });
 
-$('#has-many-{$this->column}').on('click', '.remove', function () {
-    $(this).closest('.has-many-{$this->column}-form').hide();
-    $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
+$('#has-many-{$this->column}').off('click', '.remove').on('click', '.remove', function () {
+    var removeBtn = $(this);
+    var group = removeBtn.closest('.fields-group');
+    if(group.hasClass('new')){
+        group.remove();
+    }else{
+        group.hide().find('.$removeClass').val(1);
+    }
 });
 
 EOT;

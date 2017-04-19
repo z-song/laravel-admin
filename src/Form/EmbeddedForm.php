@@ -138,11 +138,14 @@ class EmbeddedForm
      * Prepare for insert or update.
      *
      * @param array $input
+     * @param string $key
      *
      * @return mixed
      */
-    public function prepare($input)
+    public function prepare($input, $key = null)
     {
+        $input = $key ? array_get($input,$key) : $input;
+
         foreach ($input as $key => $record) {
             $this->setFieldOriginalValue($key);
             $input[$key] = $this->prepareValue($key, $record);

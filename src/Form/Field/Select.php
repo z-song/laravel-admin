@@ -23,7 +23,8 @@ class Select extends Field
             $this->script = <<<EOF
 $("{$this->getElementClassSelector()}").select2({
     allowClear: true,
-    placeholder: "{$this->label}"
+    placeholder: "{$this->label}",
+    selectOnClose: true
 });
 EOF;
         }
@@ -82,14 +83,14 @@ EOF;
     {
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
-            $class = str_replace(['[', ']'], '_', $field);
+            $class = Field::ELEMENT_PREFIX.str_replace(['[', ']'], '_', $field);
         } else {
-            $class = $field;
+            $class = Field::ELEMENT_PREFIX.$field;
         }
 
         $script = <<<EOT
 
-$(document).on('change', "{$this->getElementClassSelector()}", function () {
+$(document).off('change', "{$this->getElementClassSelector()}").on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();

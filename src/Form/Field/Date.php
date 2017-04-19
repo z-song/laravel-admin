@@ -22,8 +22,10 @@ class Date extends Text
         return $this;
     }
 
-    public function prepare($value)
+    public function prepare($value, $key = null)
     {
+        $value = $key ? array_get($value, $key) : $value;
+
         if ($value === '') {
             $value = null;
         }

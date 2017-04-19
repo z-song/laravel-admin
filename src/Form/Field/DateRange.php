@@ -36,8 +36,10 @@ class DateRange extends Field
         $this->options(['format' => $this->format]);
     }
 
-    public function prepare($value)
+    public function prepare($value, $key = null)
     {
+        $value = $key ? array_get($value, $key) : $value;
+
         if ($value === '') {
             $value = null;
         }
