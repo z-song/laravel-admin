@@ -37,4 +37,9 @@ class Image extends File
 
         return $this->uploadAndDeleteOriginal($image);
     }
+
+    protected function preview()
+    {
+        return '<img src="'. $this->objectUrl($this->value) . '" class="file-preview-image" >';
+    }
 }
