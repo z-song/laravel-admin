@@ -122,7 +122,7 @@ class File extends Field
      */
     protected function preview()
     {
-        return $this->objectUrl($this->value);
+        return "<div class='file-preview-text'><h2><i class='glyphicon glyphicon-file'></i></h2>" . $this->objectUrl($this->value) . "</div>";
     }
 
     /**
