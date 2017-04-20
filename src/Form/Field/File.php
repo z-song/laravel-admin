@@ -163,11 +163,10 @@ class File extends Field
         $this->options(['overwriteInitial' => true]);
 
         $options = json_encode($this->options);
-	$elementName =  $this->elementName ?: $this->formatName($this->column);
 
         $this->script = <<<EOT
 
-$("input{$this->getElementClassSelector()}[name='{$elementName}']").fileinput({$options});
+$("input{$this->getElementClassSelector()}").fileinput({$options});
 
 EOT;
 

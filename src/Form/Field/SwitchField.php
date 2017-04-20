@@ -39,24 +39,23 @@ class SwitchField extends Field
 
     public function render()
     {
-	 foreach ($this->states as $state => $option) {
+        foreach ($this->states as $state => $option) {
             if ($this->value() == $option['value']) {
                 $this->value = $state;
                 break;
             }
         }
 
-        $elementName =  $this->elementName ?: $this->formatName($this->column);
         $this->script = <<<EOT
 
-$("{$this->getElementClassSelector()}[data-name='{$elementName}'].la_checkbox").bootstrapSwitch({
+$('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
     size:'small',
     onText: '{$this->states['on']['text']}',
     offText: '{$this->states['off']['text']}',
     onColor: '{$this->states['on']['color']}',
     offColor: '{$this->states['off']['color']}',
     onSwitchChange: function(event, state) {
-        $("{$this->getElementClassSelector()}[name='{$elementName}']").val(state ? 'on' : 'off');
+        $('{$this->getElementClassSelector()}').val(state ? 'on' : 'off');
     }
 });
 
