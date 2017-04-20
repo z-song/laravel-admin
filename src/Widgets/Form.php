@@ -96,6 +96,20 @@ class Form implements Renderable
     }
 
     /**
+     * Add data.
+     *
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function addData($data)
+    {
+        $this->data = array_merge($this->data, (array) $data);
+
+        return $this;
+    }
+
+    /**
      * Action uri of the form.
      *
      * @param string $action
