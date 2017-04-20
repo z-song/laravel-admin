@@ -164,6 +164,8 @@ class File extends Field
         $this->setupDefaultOptions();
 
         if (!empty($this->value)) {
+            $this->attribute('data-initial-preview', $this->preview());
+
             $this->setupPreviewOptions();
         }
 

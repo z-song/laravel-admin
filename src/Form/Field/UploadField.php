@@ -85,7 +85,7 @@ trait UploadField
     protected function setupPreviewOptions()
     {
         $this->options([
-            'initialPreview'        => $this->preview(),
+            //'initialPreview'        => $this->preview(),
             'initialPreviewConfig'  => $this->initialPreviewConfig(),
         ]);
     }
