@@ -28,7 +28,7 @@ class Tools implements Renderable
      */
     protected $options = [
         'enableListButton' => true,
-        'enableBackButton' => true,
+        'enableBackButton' => false,
     ];
 
     /**
@@ -68,8 +68,13 @@ EOT;
 
     public function listButton()
     {
+        $preUrl = url()->previous();
+
         $slice = Str::contains($this->form->getResource(0), '/edit') ? null : -1;
-        $resource = $this->form->getResource($slice);
+
+        $baseListUrl = request()->root().$this->form->getResource($slice);
+
+        $resource = (stripos($preUrl, $baseListUrl.'?', 0) === false) ?  $baseListUrl : $preUrl;
 
         $text = trans('admin::lang.list');
 
