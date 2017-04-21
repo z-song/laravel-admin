@@ -678,7 +678,7 @@ class Form
 
                         $instance = $relation->findOrNew(array_get($related, $keyName));
 
-                        if ($related[static::REMOVE_FLAG_NAME] == 1) {
+                        if (array_get($related, static::REMOVE_FLAG_NAME) == 1) {
                             $instance->delete();
 
                             continue;
