@@ -18,7 +18,7 @@ $('{$this->getElementClass()}').on('click', function() {
     if(confirm("{$confirm}")) {
         $.ajax({
             method: 'post',
-            url: '/{$this->resource}/' + selectedRows().join(),
+            url: '/{$this->resource}/' + selectedRows($(this)).join(),
             data: {
                 _method:'delete',
                 _token:'{$this->getToken()}'
