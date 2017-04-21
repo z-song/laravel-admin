@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Grid\Filter;
 
+use Encore\Admin\Grid\Filter\Field\Date;
 use Encore\Admin\Grid\Filter\Field\DateTime;
 use Encore\Admin\Grid\Filter\Field\Select;
 use Encore\Admin\Grid\Filter\Field\Text;
@@ -69,6 +70,7 @@ abstract class AbstractFilter
     public function setupField()
     {
         $this->field = new Text();
+        $this->field->setPlaceholder($this->label);
     }
 
     /**
@@ -150,6 +152,14 @@ abstract class AbstractFilter
         $this->setField(new Select($options));
     }
 
+    /**
+     * Datetime.
+     */
+    public function date()
+    {
+        $this->setField(new Date($this));
+    }
+    
     /**
      * Datetime filter.
      */
@@ -269,5 +279,22 @@ abstract class AbstractFilter
     public function __toString()
     {
         return $this->render();
+    }
+
+    /**
+     * @param $method
+     * @param $params
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    public function __call($method, $params)
+    {
+        if (method_exists($this->field, $method)) {
+            return call_user_func_array([$this->field, $method], $params);
+        }
+
+        throw new \Exception('Method "'.$method.'" not exists.');
     }
 }
