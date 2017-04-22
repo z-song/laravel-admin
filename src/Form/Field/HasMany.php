@@ -78,6 +78,16 @@ class HasMany extends Field
         }
     }
 
+	/**
+	 * fix the has many relation function name in hump type can not match data
+	 *
+	 * @param array $data
+	 */
+	public function fill($data)
+	{
+		$this->value = array_get($data, snake_case($this->column));
+	}
+
     /**
      * Get validator for this field.
      *
