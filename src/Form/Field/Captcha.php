@@ -20,13 +20,11 @@ class Captcha extends Text
         $this->label = trans('admin::lang.captcha');
     }
 
-    public function setForm(Form $form = null)
+    public function setForm(Form &$form = null)
     {
-        $this->form = $form;
+        $form->ignore($this->column);
 
-        $this->form->ignore($this->column);
-
-        return $this;
+        return parent::setForm($form);
     }
 
     public function render()
