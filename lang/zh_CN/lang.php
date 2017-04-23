@@ -52,6 +52,7 @@ return [
     'save_succeeded'   => '保存成功 !',
     'refresh_succeeded'=> '刷新成功 !',
     'login_successful' => '登陆成功 !',
+    'validate_fail'    => '验证失败 !',
 
     'choose'        => '选择',
     'choose_file'   => '选择文件',

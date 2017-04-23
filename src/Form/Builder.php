@@ -44,6 +44,7 @@ class Builder
     protected $options = [
         'enableSubmit' => true,
         'enableReset'  => true,
+        'ajaxSubmit'   => true,
     ];
 
     /**
@@ -426,9 +427,90 @@ class Builder
 
         $text = trans('admin::lang.submit');
 
+        if(!$this->options('ajaxSubmit')){
+
+            return <<<EOT
+<div class="btn-group pull-right">
+    <button type="submit" class="btn btn-info pull-right">$text</button>
+</div>
+EOT;
+        }else{
+
+            return $this->ajaxSubmitBtn($text);
+        }
+
+    }
+
+    protected function ajaxSubmitBtn($text = null)
+    {
+        $script = <<<EOT
+
+function removeFormError(form){
+    $(form).find('.form-group.has-error').removeClass('has-error').find('.control-label.validation').remove();
+}
+
+function addFormError(form, validation){
+    var \$form = $(form);
+    $.each(validation, function(key,messages){
+        var target = \$form.find('[name="'+formatName(key)+'"]');
+        target.closest('.form-group').addClass('has-error');
+        $.each(messages, function(index, message){
+            target.closest('.form-group-fields').prepend('<label class="control-label validation" for="inputError"><i class="fa fa-times-circle-o"></i> '+ message +'</label>');
+        });
+    });
+
+}
+
+function formatName(key){
+    var names = key.split('.');
+    var name = names.shift();
+    $.each(names, function(k, n){
+        name += '['+ n + ']';
+    });
+    return name;
+}
+
+$(document).on('click', 'button.ajax-submit', function(){
+    var submitBtn = $(this);
+    var form = submitBtn.closest('form');
+    removeFormError(form);
+    var data = new FormData(form[0]);
+    var url = form[0].action;
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            switch(data.status)
+            {
+                case 'success':
+                case 'warning':
+                    toastr[data.status](data.message);
+                    break;
+                case 'error':
+                    toastr['error'](data.message, null, {"positionClass": "toast-top-full-width", "timeOut": 0});
+                    addFormError(form, data.validation);
+                    break;
+                default:
+                    toastr['info'](data.message);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrow) {
+            toastr['error'](errorThrow, 'Status: '+textStatus, {"positionClass": "toast-top-full-width", "timeOut": 0});
+        }
+    });
+});
+
+EOT;
+
+        Admin::script($script);
+
         return <<<EOT
 <div class="btn-group pull-right">
-    <button type="submit" class="btn btn-info pull-right" data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
+    <button type="button" class="btn btn-info pull-right ajax-submit">$text</button>
 </div>
 EOT;
     }
