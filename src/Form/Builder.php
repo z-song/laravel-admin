@@ -44,6 +44,7 @@ class Builder
     protected $options = [
         'enableSubmit' => true,
         'enableReset'  => true,
+        'ajaxSubmit'   => true,
     ];
 
     /**
@@ -289,6 +290,18 @@ class Builder
     }
 
     /**
+     * Get option value.
+     *
+     * @param $key
+     * @return mixed
+     * author Edwin Hui
+     */
+    public function getOption($key)
+    {
+        return array_get($this->options, $key);
+    }
+
+    /**
      * Get or set option.
      *
      * @param string $option
@@ -426,9 +439,51 @@ class Builder
 
         $text = trans('admin::lang.submit');
 
+        if(!$this->options['ajaxSubmit']){
+
+            return <<<EOT
+<div class="btn-group pull-right">
+    <button type="submit" class="btn btn-info pull-right">$text</button>
+</div>
+EOT;
+        }else{
+
+            return $this->ajaxSubmitBtn($text);
+        }
+
+    }
+
+    protected function ajaxSubmitBtn($text = null)
+    {
+        $script = <<<EOT
+$(document).on('click', 'button.ajax-submit', function(){
+    var submitBtn = $(this);
+    var form = submitBtn.closest('form');
+    var data = new FormData(form[0]);
+    var url = form[0].action;
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            toastr['info'](data.message, 'Status: '+data.status, {"positionClass": "toast-top-right"});
+        },
+        error: function (data) {
+            toastr['error'](data.message, 'Status: '+data.status, {"positionClass": "toast-top-right", "timeOut": 0});
+        }
+    });
+});
+
+EOT;
+
+        Admin::script($script);
+
         return <<<EOT
 <div class="btn-group pull-right">
-    <button type="submit" class="btn btn-info pull-right" data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
+    <button type="button" class="btn btn-info pull-right" data-loading-text="<i class='fa fa-spinner fa-spin '></i> $text">$text</button>
 </div>
 EOT;
     }
