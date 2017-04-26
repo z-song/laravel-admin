@@ -235,11 +235,12 @@ SCRIPT;
     }
 
     /**
-     * Return all items of the tree
+     * Return all items of the tree.
      *
      * @param array $items
      */
-    public function getItems() {
+    public function getItems()
+    {
         return $this->model->withQuery($this->queryCallback)->toTree();
     }
 
