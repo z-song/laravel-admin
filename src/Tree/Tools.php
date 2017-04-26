@@ -9,7 +9,6 @@ use Illuminate\Support\Collection;
 
 class Tools implements Renderable
 {
-
     /**
      * Parent tree.
      *
