@@ -2,12 +2,10 @@
 
 namespace Encore\Admin\Tree;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Tree;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class Tools implements Renderable
 {

@@ -3,9 +3,7 @@
 namespace Encore\Admin;
 
 use Closure;
-
 use Encore\Admin\Tree\Tools;
-
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 
