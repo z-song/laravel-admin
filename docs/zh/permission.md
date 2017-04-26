@@ -105,3 +105,24 @@ Route::group([
 ```
 
 权限中间件和其它中间件使用方法一致。
+
+## 使用实例
+
+比如现在有一个场景，对文章发布模块做权限管理，以创建文章为例
+
+首先创建一项权限，进入http://localhost:8000/admin/auth/permissions，权限标识（slug）填写`create-post`，权限名称填写`创建文章`，这样权限就创建好了。
+第二步可以把这个权限直接附加给个人或者角色，在用户编辑页面可以直接把上面创建好的权限附加给当前编辑用户，也可以在编辑角色页面附加给某个角色。
+第三步，在创建文章控制器里面添加控制代码：
+```php
+use Encore\Admin\Auth\Permission;
+
+class PostController extends Controller
+{
+    public function create()
+    {
+        // 检查权限，有create-post权限的用户或者角色可以访问创建文章页面
+        Permission::check('create-post');
+    }
+}
+```
+这样就完成了一个页面的权限控制。
