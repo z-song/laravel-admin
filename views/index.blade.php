@@ -16,8 +16,12 @@
 
     {!! Admin::css() !!}
     <link rel="stylesheet" href="{{ asset("/packages/admin/nestable/nestable.css") }}">
+    <link rel="stylesheet" href="{{ asset("/packages/admin/toastr/build/toastr.min.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/fonts.css") }}">
+    <!--
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700,700&subset=latin-ext">
+    -->
+    <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/Source-Sans-Pro.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
 
     <!-- REQUIRED JS SCRIPTS -->
@@ -55,12 +59,15 @@
 <!-- REQUIRED JS SCRIPTS -->
 <script src="{{ asset ("/packages/admin/AdminLTE/plugins/chartjs/Chart.min.js") }}"></script>
 <script src="{{ asset ("/packages/admin/nestable/jquery.nestable.js") }}"></script>
-<script src="{{ asset ("/packages/admin/noty/jquery.noty.packaged.min.js") }}"></script>
+<script src="{{ asset ("/packages/admin/toastr/build/toastr.min.js") }}"></script>
 <script src="{{ asset ("/packages/admin/bootstrap3-editable/js/bootstrap-editable.min.js") }}"></script>
 
 {!! Admin::js() !!}
 
 <script>
+
+    function LA() {}
+    LA.token = "{{ csrf_token() }}";
 
     $.fn.editable.defaults.params = function (params) {
         params._token = '{{ csrf_token() }}';
@@ -69,10 +76,15 @@
         return params;
     };
 
-    $.noty.defaults.layout = 'topRight';
-    $.noty.defaults.theme = 'relax';
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        showMethod: 'slideDown',
+        timeOut: 4000
+    };
 
     $.pjax.defaults.timeout = 5000;
+    $.pjax.defaults.maxCacheLength = 0;
     $(document).pjax('a:not(a[target="_blank"])', {
         container: '#pjax-container'
     });
@@ -81,44 +93,38 @@
         $.pjax.submit(event, '#pjax-container')
     });
 
-    $(document).on('pjax:error', function(event, xhr) {
-
-        var message = '';
-
-        try{
-            response = JSON.parse(xhr.responseText);
-            message = response.message || 'error';
-        }catch(e){
-
-            if (xhr.status == 0) {
-                return;
-            }
-
-            noty({
-                text: "<strong>Warning!</strong><br/>"+xhr.statusText,
-                type:'warning',
-                timeout: 5000
-            });
-            return false;
-        }
-
-        if (message) {
-            noty({
-                text: "<strong>Warning!</strong><br/>"+message,
-                type:'warning',
-                timeout: 5000
-            });
-        }
-
-        return false;
-    });
-
     $(document).on("pjax:popstate", function() {
 
         $(document).one("pjax:end", function(event) {
             $(event.target).find("script[data-exec-on-popstate]").each(function() {
                 $.globalEval(this.text || this.textContent || this.innerHTML || '');
             });
+        });
+    });
+    
+    $(document).on('pjax:send', function(xhr) {
+        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+            $submit_btn = $('form[pjax-container] :submit');
+            if($submit_btn) {
+                $submit_btn.button('loading')
+            }
+        }
+    })
+    
+    $(document).on('pjax:complete', function(xhr) {
+        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
+            $submit_btn = $('form[pjax-container] :submit');
+            if($submit_btn) {
+                $submit_btn.button('reset')
+            }
+        }
+    })
+
+    $(function(){
+        $('.sidebar-menu li:not(.treeview) > a').on('click', function(){
+            var $parent = $(this).parent().addClass('active');
+            $parent.siblings('.treeview.active').find('> a').trigger('click');
+            $parent.siblings().removeClass('active').find('li').removeClass('active');
         });
     });
 

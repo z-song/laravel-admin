@@ -66,29 +66,25 @@ class UserController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Administrator::class, function (Grid $grid) {
+        return Administrator::grid(function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->username(trans('admin::lang.username'));
             $grid->name(trans('admin::lang.name'));
-
-            $grid->roles(trans('admin::lang.roles'))->value(function ($roles) {
-                $roles = array_map(function ($role) {
-                    return "<span class='label label-success'>{$role['name']}</span>";
-                }, $roles);
-
-                return implode('&nbsp;', $roles);
-            });
-
+            $grid->roles(trans('admin::lang.roles'))->pluck('name')->label();
             $grid->created_at(trans('admin::lang.created_at'));
             $grid->updated_at(trans('admin::lang.updated_at'));
 
-            $grid->rows(function ($row) {
-                if ($row->id == 1) {
-                    $row->actions('edit');
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                if ($actions->getKey() == 1) {
+                    $actions->disableDelete();
                 }
             });
 
-            $grid->disableBatchDeletion();
+            $grid->tools(function (Grid\Tools $tools) {
+                $tools->batch(function (Grid\Tools\BatchActions $actions) {
+                    $actions->disableDelete();
+                });
+            });
 
             $grid->disableExport();
         });
@@ -101,12 +97,19 @@ class UserController extends Controller
      */
     public function form()
     {
-        return Admin::form(Administrator::class, function (Form $form) {
+        return Administrator::form(function (Form $form) {
             $form->display('id', 'ID');
 
             $form->text('username', trans('admin::lang.username'))->rules('required');
             $form->text('name', trans('admin::lang.name'))->rules('required');
-            $form->password('password', trans('admin::lang.password'))->rules('required');
+            $form->image('avatar', trans('admin::lang.avatar'));
+            $form->password('password', trans('admin::lang.password'))->rules('required|confirmed');
+            $form->password('password_confirmation', trans('admin::lang.password_confirmation'))->rules('required')
+                ->default(function ($form) {
+                    return $form->model()->password;
+                });
+
+            $form->ignore(['password_confirmation']);
 
             $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
             $form->multipleSelect('permissions', trans('admin::lang.permissions'))->options(Permission::all()->pluck('name', 'id'));

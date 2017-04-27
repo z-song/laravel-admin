@@ -41,6 +41,10 @@ use Illuminate\Contracts\Support\Renderable;
  * @method Field\Display        display($name, $label = '')
  * @method Field\Rate           rate($name, $label = '')
  * @method Field\Divide         divide()
+ * @method Field\Decimal        decimal($column, $label = '')
+ * @method Field\Html           html($html)
+ * @method Field\Tags           tags($column, $label = '')
+ * @method Field\Icon           icon($column, $label = '')
  */
 class Form implements Renderable
 {
@@ -87,6 +91,7 @@ class Form implements Renderable
             'action'         => '',
             'class'          => 'form-horizontal',
             'accept-charset' => 'UTF-8',
+            'pjax-container' => true,
         ];
     }
 
@@ -131,6 +136,36 @@ class Form implements Renderable
         } else {
             $this->attributes[$attr] = $value;
         }
+
+        return $this;
+    }
+
+    /**
+     * Disable Pjax.
+     *
+     * @return $this
+     */
+    public function disablePjax()
+    {
+        array_forget($this->attributes, 'pjax-container');
+
+        return $this;
+    }
+
+    /**
+     * Set field and label width in current form.
+     *
+     * @param int $fieldWidth
+     * @param int $labelWidth
+     *
+     * @return $this
+     */
+    public function setWidth($fieldWidth = 8, $labelWidth = 2)
+    {
+        collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
+            /* @var Field $field  */
+            $field->setWidth($fieldWidth, $labelWidth);
+        });
 
         return $this;
     }

@@ -81,9 +81,10 @@ class PermissionsTest extends TestCase
     public function testAddUserAndAssignPermission()
     {
         $user = [
-            'username' => 'Test',
-            'name'     => 'Name',
-            'password' => '123456',
+            'username'              => 'Test',
+            'name'                  => 'Name',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
         ];
 
         $this->visit('admin/auth/users/create')
@@ -139,9 +140,10 @@ class PermissionsTest extends TestCase
     public function testPermissionThroughRole()
     {
         $user = [
-            'username' => 'Test',
-            'name'     => 'Name',
-            'password' => '123456',
+            'username'              => 'Test',
+            'name'                  => 'Name',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
         ];
 
         // 1.add a user

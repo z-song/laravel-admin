@@ -3,15 +3,7 @@
         <h3 class="box-title">{{ $form->title() }}</h3>
 
         <div class="box-tools">
-            @if($form->allowDeletion())
-            <div class="btn-group pull-right">
-                <a href="javascript:void(0);" class="btn btn-sm btn-warning item_delete" data-id="{{ $id }}"><i class="fa fa-trash"></i>&nbsp;{{ trans('admin::lang.delete') }}</a>
-            </div>
-            @endif
-
-            <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="{{ $resource }}" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;{{ trans('admin::lang.list') }}</a>
-            </div>
+            {!! $form->renderHeaderTools() !!}
         </div>
     </div>
     <!-- /.box-header -->
@@ -19,30 +11,40 @@
     {!! $form->open(['class' => "form-horizontal"]) !!}
         <div class="box-body">
 
-            @foreach($form->fields() as $field)
-                {!! $field->render() !!}
-            @endforeach
+            @if(!$tabObj->isEmpty())
+                @include('admin::form.tab', compact('tabObj'))
+            @else
+                <div class="fields-group">
+                    @foreach($form->fields() as $field)
+                        {!! $field->render() !!}
+                    @endforeach
+                </div>
+            @endif
 
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <div class="col-sm-2">
+
+            @if( ! $form->isMode(\Encore\Admin\Form\Builder::MODE_VIEW)  || ! $form->option('enableSubmit'))
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            @endif
+            <div class="col-sm-{{$width['label']}}">
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-{{$width['field']}}">
 
-                <div class="btn-group pull-right">
-                {!! $form->submit() !!}
-                </div>
+                {!! $form->submitButton() !!}
 
-                <div class="btn-group pull-left">
-                    <input type="reset" class="btn btn-warning" value="{{ trans('admin::lang.reset') }}"/>
-                </div>
+                {!! $form->resetButton() !!}
 
             </div>
 
         </div>
+
+        @foreach($form->getHiddenFields() as $hiddenField)
+            {!! $hiddenField->render() !!}
+        @endforeach
+
         <!-- /.box-footer -->
     {!! $form->close() !!}
 </div>

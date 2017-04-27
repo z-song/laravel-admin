@@ -1,8 +1,8 @@
 <div class="form-group">
 
-    <label class="col-sm-2 control-label"></label>
+    <label class="col-sm-{{$width['label']}} control-label"></label>
 
-    <div class="col-sm-6">
-        <input type='button' id='{{$id}}' value='{{$label}}' class="btn {{ $class }}" {!! $attributes !!} />
+    <div class="col-sm-{{$width['field']}}">
+        <input type='button' value='{{$label}}' class="btn {{ $class }}" {!! $attributes !!} />
     </div>
 </div>

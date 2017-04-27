@@ -2,6 +2,8 @@
 
 use Illuminate\Routing\Router;
 
+Admin::registerHelpersRoutes();
+
 Route::group([
     'prefix'        => config('admin.prefix'),
     'namespace'     => Admin::controllerNamespace(),

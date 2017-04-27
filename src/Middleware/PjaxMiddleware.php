@@ -4,9 +4,10 @@ namespace Encore\Admin\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpFoundation\Response;
 
 class PjaxMiddleware
 {
@@ -16,7 +17,7 @@ class PjaxMiddleware
      * @param Request $request
      * @param Closure $next
      *
-     * @return mixed
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle($request, Closure $next)
     {
@@ -26,10 +27,51 @@ class PjaxMiddleware
             return $response;
         }
 
+        if (!$response->isSuccessful()) {
+            return $this->handleErrorResponse($response);
+        }
+
         $this->filterResponse($response, $request->header('X-PJAX-CONTAINER'))
             ->setUriHeader($response, $request);
 
         return $response;
+    }
+
+    /**
+     * Send a response through this middleware.
+     *
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
+    public static function respond(\Symfony\Component\HttpFoundation\Response $response)
+    {
+        $next = function () use ($response) {
+            return $response;
+        };
+
+        (new static())->handle(Request::capture(), $next)->send();
+
+        exit;
+    }
+
+    /**
+     * Handle Response with exceptions.
+     *
+     * @param Response $response
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function handleErrorResponse(Response $response)
+    {
+        $exception = $response->exception;
+
+        $error = new MessageBag([
+            'type'      => get_class($exception),
+            'message'   => $exception->getMessage(),
+            'file'      => $exception->getFile(),
+            'line'      => $exception->getLine(),
+        ]);
+
+        return back()->withInput()->withErrors($error, 'exception');
     }
 
     /**
@@ -42,17 +84,6 @@ class PjaxMiddleware
      */
     protected function filterResponse(Response $response, $container)
     {
-        if (!$response->isSuccessful()) {
-            $crawler = new Crawler($response->getContent());
-
-            $response->setContent([
-                'status'  => false,
-                'message' => $this->fetchContents($crawler, '.exception_message'),
-            ]);
-
-            return $this;
-        }
-
         $crawler = new Crawler($response->getContent());
 
         $response->setContent(

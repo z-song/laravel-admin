@@ -24,7 +24,7 @@ class Where extends AbstractFilter
      * @param \Closure $query
      * @param string   $label
      */
-    public function __construct(\Closure $query, $label)
+    public function __construct(\Closure $query, $label = '')
     {
         $this->where = $query;
 

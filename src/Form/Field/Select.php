@@ -5,6 +5,7 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Str;
 
 class Select extends Field
 {
@@ -19,12 +20,15 @@ class Select extends Field
     public function render()
     {
         if (empty($this->script)) {
-            $this->script = "$(\"#{$this->id}\").select2({allowClear: true});";
+            $this->script = "$(\"{$this->getElementClassSelector()}\").select2({allowClear: true});";
         }
 
-        if (is_callable($this->options)) {
-            $options = call_user_func($this->options, $this->value);
-            $this->options($options);
+        if ($this->options instanceof \Closure) {
+            if ($this->form) {
+                $this->options = $this->options->bindTo($this->form->model());
+            }
+
+            $this->options(call_user_func($this->options, $this->value));
         }
 
         $this->options = array_filter($this->options);
@@ -62,22 +66,42 @@ class Select extends Field
     /**
      * Load options for other select on change.
      *
-     * @param $field
-     * @param $source
+     * @param string $field
+     * @param string $sourceUrl
+     * @param string $idField
+     * @param string $textField
+     *
+     * @return $this
      */
-    public function load($field, $source)
+    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
     {
+        if (Str::contains($field, '.')) {
+            $field = $this->formatName($field);
+            $class = str_replace(['[', ']'], '_', $field);
+        } else {
+            $class = $field;
+        }
+
         $script = <<<EOT
 
-$("#{$this->id}").change(function () {
-    $.get("$source?q="+this.value, function (data) {
-        $("#$field option").remove();
-        $("#$field").select2({data: data});
+$(document).on('change', "{$this->getElementClassSelector()}", function () {
+    var target = $(this).closest('.fields-group').find(".$class");
+    $.get("$sourceUrl?q="+this.value, function (data) {
+        target.find("option").remove();
+        $(target).select2({
+            data: $.map(data, function (d) {
+                d.id = d.$idField;
+                d.text = d.$textField;
+                return d;
+            })
+        }).trigger('change');
     });
 });
 EOT;
 
         Admin::script($script);
+
+        return $this;
     }
 
     /**
@@ -100,7 +124,7 @@ EOT;
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
-  $("#{$this->id}").select2({data: data});
+  $("{$this->getElementClassSelector()}").select2({data: data});
 });
 
 EOT;
@@ -112,14 +136,16 @@ EOT;
      * Load options from ajax results.
      *
      * @param string $url
+     * @param $idField
+     * @param $textField
      *
      * @return $this
      */
-    public function ajax($url)
+    public function ajax($url, $idField = 'id', $textField = 'text')
     {
         $this->script = <<<EOT
 
-$("#{$this->id}").select2({
+$("{$this->getElementClassSelector()}").select2({
   ajax: {
     url: "$url",
     dataType: 'json',
@@ -134,7 +160,11 @@ $("#{$this->id}").select2({
       params.page = params.page || 1;
 
       return {
-        results: data.data,
+        results: $.map(data.data, function (d) {
+                   d.id = d.$idField;
+                   d.text = d.$textField;
+                   return d;
+                }),
         pagination: {
           more: data.next_page_url
         }

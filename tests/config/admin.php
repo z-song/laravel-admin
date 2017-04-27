@@ -70,6 +70,11 @@ return [
     ],
 
     /*
+     * By setting this option to open or close operation log in laravel-admin.
+     */
+    'operation_log'   => true,
+
+    /*
     |---------------------------------------------------------|
     | SKINS         | skin-blue                               |
     |               | skin-black                              |

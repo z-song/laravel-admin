@@ -1,12 +1,22 @@
 <?php
 
-use Illuminate\Filesystem\ClassFinder;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Testing\TestCase as LaravelTestCase;
+use Illuminate\Support\Str;
+use Laravel\Dusk\TestCase as BaseTestCase;
 
-class TestCase extends LaravelTestCase
+class TestCase extends BaseTestCase
 {
-    protected $baseUrl = 'http://localhost:8000';
+    /**
+     * Prepare for Dusk test execution.
+     *
+     * @beforeClass
+     *
+     * @return void
+     */
+    public static function prepare()
+    {
+        static::startChromeDriver();
+    }
 
     /**
      * Boots the application.
@@ -28,6 +38,7 @@ class TestCase extends LaravelTestCase
     {
         parent::setUp();
 
+        $this->app['config']->set('app.url', 'http://localhost:9515');
         $this->app['config']->set('database.default', 'mysql');
         $this->app['config']->set('database.connections.mysql.host', 'localhost');
         $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
@@ -41,11 +52,13 @@ class TestCase extends LaravelTestCase
 
         $this->migrate();
 
-        $this->artisan('admin:install');
+        //$this->artisan('admin:install');
+
+        \Encore\Admin\Facades\Admin::registerAuthRoutes();
 
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
-            $this->app['admin.router']->register();
+            //$this->app['admin.router']->register();
         }
 
         require __DIR__.'/routes.php';
@@ -84,11 +97,15 @@ class TestCase extends LaravelTestCase
         $migrations = [];
 
         $fileSystem = new Filesystem();
-        $classFinder = new ClassFinder();
 
         foreach ($fileSystem->files(__DIR__.'/../migrations') as $file) {
             $fileSystem->requireOnce($file);
-            $migrations[] = $classFinder->findClass($file);
+            $migrations[] = $this->getMigrationClass($file);
+        }
+
+        foreach ($fileSystem->files(__DIR__.'/migrations') as $file) {
+            $fileSystem->requireOnce($file);
+            $migrations[] = $this->getMigrationClass($file);
         }
 
         foreach ($fileSystem->files(__DIR__.'/migrations') as $file) {
@@ -97,5 +114,14 @@ class TestCase extends LaravelTestCase
         }
 
         return $migrations;
+    }
+
+    protected function getMigrationClass($file)
+    {
+        $file = str_replace('.php', '', basename($file));
+
+        $class = Str::studly(implode('_', array_slice(explode('_', $file), 4)));
+
+        return $class;
     }
 }

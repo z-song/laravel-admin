@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/plugins/iCheck/square/blue.css") }}">
+  <!-- Laravel-admin -->
+  <link rel="stylesheet" href="{{ asset("/packages/admin/laravel-admin/styles/login.css") }}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,10 +24,11 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page"
+  {!! config('admin.login-image') ? 'style="background-image: url(' . config('admin.login-image') . ')"' : '' !!}>
 <div class="login-box">
   <div class="login-logo">
-    <a href="/{{config('admin.prefix')}}"><b>{{config('admin.name')}}</b></a>
+    <a href="{{ Admin::url('/') }}"><b>{{config('admin.name')}}</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -36,30 +39,42 @@
 
         @if($errors->has('username'))
           @foreach($errors->get('username') as $message)
-            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label></br>
+            <label class="control-label" for="inputError">
+              <i class="fa fa-times-circle-o"></i>
+              {{$message}}
+            </label>
+            </br>
           @endforeach
         @endif
 
-        <input type="input" class="form-control" placeholder="{{ trans('admin::lang.username') }}" name="username" value="{{ old('username') }}">
+        <input type="input" class="form-control" placeholder="{{ trans('admin::lang.username') }}"
+               name="username" value="{{ old('username') }}">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
 
         @if($errors->has('password'))
           @foreach($errors->get('password') as $message)
-            <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label></br>
+            <label class="control-label" for="inputError">
+              <i class="fa fa-times-circle-o"></i>
+              {{$message}}
+            </label>
+            </br>
           @endforeach
         @endif
 
-        <input type="password" class="form-control" placeholder="{{ trans('admin::lang.password') }}" name="password" value="{{ old('username') }}">
+        <input type="password" class="form-control" placeholder="{{ trans('admin::lang.password') }}"
+               name="password" value="{{ old('username') }}">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
 
         <!-- /.col -->
-        <div class="col-xs-4 col-md-offset-4">
+        <div class="col-xs-8 col-md-offset-2">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">{{ trans('admin::lang.login') }}</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat">
+            {{ trans('admin::lang.login') }}
+          </button>
         </div>
         <!-- /.col -->
       </div>

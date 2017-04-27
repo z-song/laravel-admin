@@ -5,9 +5,11 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\Navbar;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Route;
 use InvalidArgumentException;
 
 /**
@@ -15,6 +17,11 @@ use InvalidArgumentException;
  */
 class Admin
 {
+    /**
+     * @var Navbar
+     */
+    protected $navbar;
+
     /**
      * @var array
      */
@@ -31,46 +38,10 @@ class Admin
     public static $js = [];
 
     /**
-     * @var bool
-     */
-    protected static $initialized = false;
-
-    /**
-     * @var bool
-     */
-    protected static $bootstrapped = false;
-
-    /**
-     * Initialize.
-     */
-    public static function init()
-    {
-        if (!static::$initialized) {
-            Form::registerBuiltinFields();
-
-            static::$initialized = true;
-        }
-    }
-
-    /**
-     * Bootstrap.
-     */
-    public static function bootstrap()
-    {
-        if (!static::$bootstrapped) {
-            if (file_exists($bootstrap = admin_path('bootstrap.php'))) {
-                require $bootstrap;
-            }
-
-            static::$bootstrapped = true;
-        }
-    }
-
-    /**
      * @param $model
      * @param Closure $callable
      *
-     * @return Grid
+     * @return \Encore\Admin\Grid
      */
     public function grid($model, Closure $callable)
     {
@@ -81,13 +52,10 @@ class Admin
      * @param $model
      * @param Closure $callable
      *
-     * @return Form
+     * @return \Encore\Admin\Form
      */
     public function form($model, Closure $callable)
     {
-        static::init();
-        static::bootstrap();
-
         return new Form($this->getModel($model), $callable);
     }
 
@@ -96,25 +64,20 @@ class Admin
      *
      * @param $model
      *
-     * @return Tree
+     * @return \Encore\Admin\Tree
      */
-    public function tree($model)
+    public function tree($model, Closure $callable = null)
     {
-        return new Tree($this->getModel($model));
+        return new Tree($this->getModel($model), $callable);
     }
 
     /**
      * @param Closure $callable
      *
-     * @return Content
+     * @return \Encore\Admin\Layout\Content
      */
-    public function content(Closure $callable)
+    public function content(Closure $callable = null)
     {
-        static::init();
-        static::bootstrap();
-
-        Form::collectFieldAssets();
-
         return new Content($callable);
     }
 
@@ -145,7 +108,10 @@ class Admin
     {
         $directory = config('admin.directory');
 
-        return 'App\\'.ucfirst(basename($directory)).'\\Controllers';
+        return ltrim(implode('\\',
+              array_map('ucfirst',
+                  explode(DIRECTORY_SEPARATOR, str_replace(app()->basePath(), '', $directory)))), '\\')
+              .'\\Controllers';
     }
 
     /**
@@ -233,7 +199,7 @@ class Admin
      */
     public function menu()
     {
-        return Menu::toTree();
+        return (new Menu())->toTree();
     }
 
     /**
@@ -247,10 +213,83 @@ class Admin
     }
 
     /**
+     * Get current login user.
+     *
      * @return mixed
      */
     public function user()
     {
         return Auth::guard('admin')->user();
+    }
+
+    /**
+     * Set navbar.
+     *
+     * @param Closure $builder
+     */
+    public function navbar(Closure $builder)
+    {
+        call_user_func($builder, $this->getNavbar());
+    }
+
+    /**
+     * Get navbar object.
+     *
+     * @return \Encore\Admin\Widgets\Navbar
+     */
+    public function getNavbar()
+    {
+        if (is_null($this->navbar)) {
+            $this->navbar = new Navbar();
+        }
+
+        return $this->navbar;
+    }
+
+    public function registerAuthRoutes()
+    {
+        $attributes = [
+            'prefix'        => config('admin.prefix'),
+            'namespace'     => 'Encore\Admin\Controllers',
+            'middleware'    => ['web', 'admin'],
+        ];
+
+        Route::group($attributes, function ($router) {
+            $attributes = ['middleware' => 'admin.permission:allow,administrator'];
+
+            /* @var \Illuminate\Routing\Router $router */
+            $router->group($attributes, function ($router) {
+                $router->resource('auth/users', 'UserController');
+                $router->resource('auth/roles', 'RoleController');
+                $router->resource('auth/permissions', 'PermissionController');
+                $router->resource('auth/menu', 'MenuController', ['except' => ['create']]);
+                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']]);
+            });
+
+            $router->get('auth/login', 'AuthController@getLogin');
+            $router->post('auth/login', 'AuthController@postLogin');
+            $router->get('auth/logout', 'AuthController@getLogout');
+            $router->get('auth/setting', 'AuthController@getSetting');
+            $router->put('auth/setting', 'AuthController@putSetting');
+        });
+    }
+
+    public function registerHelpersRoutes($attributes = [])
+    {
+        $attributes = array_merge([
+            'prefix'     => trim(config('admin.prefix'), '/').'/helpers',
+            'middleware' => ['web', 'admin'],
+        ], $attributes);
+
+        Route::group($attributes, function ($router) {
+
+            /* @var \Illuminate\Routing\Router $router */
+            $router->get('terminal/database', 'Encore\Admin\Controllers\TerminalController@database');
+            $router->post('terminal/database', 'Encore\Admin\Controllers\TerminalController@runDatabase');
+            $router->get('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@artisan');
+            $router->post('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@runArtisan');
+            $router->get('scaffold', 'Encore\Admin\Controllers\ScaffoldController@index');
+            $router->post('scaffold', 'Encore\Admin\Controllers\ScaffoldController@store');
+        });
     }
 }

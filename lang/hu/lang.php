@@ -1,0 +1,83 @@
+<?php
+
+return [
+    'online'                => 'Online',
+    'login'                 => 'Bejelentkezés',
+    'logout'                => 'Kijelentkezés',
+    'setting'               => 'Beállítás',
+    'name'                  => 'Név',
+    'username'              => 'Felhasználónév',
+    'password'              => 'Jelszó',
+    'password_confirmation' => 'Jelszó megerősítés',
+    'remember_me'           => 'Emlékezz rám',
+    'user_setting'          => 'Felhasználó beállítás',
+    'avatar'                => 'Profilkép',
+
+    'list'          => 'Lista',
+    'new'           => 'Új',
+    'create'        => 'Létrehoz',
+    'delete'        => 'Töröl',
+    'remove'        => 'Eltávolít',
+    'edit'          => 'Szerkeszt',
+    'view'          => 'Nézet',
+    'browse'        => 'Tallóz',
+    'reset'         => 'Visszaállít',
+    'export'        => 'Export',
+    'batch_delete'  => 'Tömeges törlés',
+    'save'          => 'Ment',
+    'refresh'       => 'Frissít',
+    'order'         => 'Rendezés',
+    'expand'        => 'Kinyit',
+    'collapse'      => 'Összezár',
+    'filter'        => 'Szűrő',
+    'close'         => 'Bezár',
+    'show'          => 'Látható',
+    'entries'       => 'Bejegyzés',
+    'captcha'       => 'Captcha',
+
+    'action'           => 'Akció',
+    'title'            => 'Cím',
+    'description'      => 'Leírás',
+    'back'             => 'Vissza',
+    'back_to_list'     => 'Vissza a listához',
+    'submit'           => 'Beküld',
+    'menu'             => 'Menü',
+    'input'            => 'Mező',
+    'succeeded'        => 'Sikeres',
+    'failed'           => 'Meghiúsult',
+    'delete_confirm'   => 'Biztos hogy törlöd ezt az elemet ?',
+    'delete_succeeded' => 'Törlés sikeres !',
+    'delete_failed'    => 'Törlés meghiúsult !',
+    'update_succeeded' => 'Frissítés sikeres !',
+    'save_succeeded'   => 'Mentés sikeres !',
+    'refresh_succeeded'=> 'Frissítés sikeres !',
+    'login_successful' => 'Bejelentkezeés sikeres',
+
+    'choose'        => 'Választás',
+    'choose_file'   => 'Fájl választás',
+    'choose_image'  => 'Kép választás',
+
+    'more'          => 'Még',
+    'deny'          => 'Jog megtagadva',
+
+    'administrator' => 'Adminisztrátor',
+    'roles'         => 'Szerepek',
+    'permissions'   => 'Jogok',
+    'slug'          => 'Slug',
+
+    'created_at'    => 'Létrehozva',
+    'updated_at'    => 'Frissítve',
+
+    'alert'         => 'Figyelmeztetés',
+
+    'parent_id'     => 'Szülő',
+    'icon'          => 'Ikon',
+    'uri'           => 'URI',
+
+    'operation_log'       => 'Műveleti előzmények',
+    'parent_select_error' => 'Szülő választási hiba',
+
+    'pagination'    => [
+        'range'  => 'Látható: :first - :last Összesen: :total',
+    ],
+];

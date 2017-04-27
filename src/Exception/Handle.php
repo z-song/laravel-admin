@@ -2,22 +2,30 @@
 
 namespace Encore\Admin\Exception;
 
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
+
 class Handle
 {
-    protected $exception;
-
-    public function __construct(\Exception $e)
+    /**
+     * Render exception.
+     *
+     * @param \Exception $exception
+     *
+     * @return string
+     */
+    public static function renderException(\Exception $exception)
     {
-        $this->exception = $e;
-    }
+        $error = new MessageBag([
+            'type'      => get_class($exception),
+            'message'   => $exception->getMessage(),
+            'file'      => $exception->getFile(),
+            'line'      => $exception->getLine(),
+        ]);
 
-    public function render()
-    {
-        return view('admin::error', ['e' => $this->exception])->render();
-    }
+        $errors = new ViewErrorBag();
+        $errors->put('exception', $error);
 
-    public function __toString()
-    {
-        return $this->render();
+        return view('admin::partials.exception', compact('errors'))->render();
     }
 }

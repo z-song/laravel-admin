@@ -2,7 +2,7 @@
     @if(!isset($item['children']))
         <li>
             <a href="{{ Admin::url($item['uri']) }}"><i class="fa {{$item['icon']}}"></i>
-                <span>{{$item['title']}}</span>
+                <span>{{admin_translate('menu', $item['title'], $item['title'])}}</span>
             </a>
         </li>
     @else

@@ -1,4 +1,4 @@
-<table class="table">
+<table {!! $attributes !!}>
     <thead>
     <tr>
         @foreach($headers as $header)

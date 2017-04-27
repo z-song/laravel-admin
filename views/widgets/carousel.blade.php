@@ -1,4 +1,4 @@
-<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+<div {!! $attributes !!}>
     <ol class="carousel-indicators">
 
         @foreach($items as $key => $item)

@@ -1,20 +1,26 @@
 <?php
 
 return [
-    'online'        => 'Online',
-    'login'         => 'Login',
-    'logout'        => 'Logout',
-    'name'          => 'Name',
-    'username'      => 'Username',
-    'password'      => 'Password',
-    'remember_me'   => 'Remember me',
+    'online'                => 'Online',
+    'login'                 => 'Login',
+    'logout'                => 'Logout',
+    'setting'               => 'Setting',
+    'name'                  => 'Name',
+    'username'              => 'Username',
+    'password'              => 'Password',
+    'password_confirmation' => 'Password confirmation',
+    'remember_me'           => 'Remember me',
+    'user_setting'          => 'User setting',
+    'avatar'                => 'Avatar',
 
     'list'          => 'List',
     'new'           => 'New',
     'create'        => 'Create',
     'delete'        => 'Delete',
+    'remove'        => 'Remove',
     'edit'          => 'Edit',
     'view'          => 'View',
+    'browse'        => 'Browse',
     'reset'         => 'Reset',
     'export'        => 'Export',
     'batch_delete'  => 'Batch delete',
@@ -26,11 +32,13 @@ return [
     'filter'        => 'Filter',
     'close'         => 'Close',
     'show'          => 'Show',
-    'items'         => 'items',
+    'entries'       => 'entries',
+    'captcha'       => 'Captcha',
 
     'action'           => 'Action',
     'title'            => 'Title',
     'description'      => 'Description',
+    'back'             => 'Back',
     'back_to_list'     => 'Back to List',
     'submit'           => 'Submit',
     'menu'             => 'Menu',
@@ -40,10 +48,14 @@ return [
     'delete_confirm'   => 'Are you sure to delete this item ?',
     'delete_succeeded' => 'Delete succeeded !',
     'delete_failed'    => 'Delete failed !',
+    'update_succeeded' => 'Update succeeded !',
+    'save_succeeded'   => 'Save succeeded !',
+    'refresh_succeeded'=> 'Refresh succeeded !',
+    'login_successful' => 'Login successful',
 
-    'choose'        => 'Choose',
-    'choose_file'   => 'Choose file',
-    'choose_image'  => 'Choose image',
+    'choose'        => 'Select',
+    'choose_file'   => 'Select file',
+    'choose_image'  => 'Select image',
 
     'more'          => 'More',
     'deny'          => 'Permission denied',
@@ -64,4 +76,8 @@ return [
 
     'operation_log'       => 'Operation log',
     'parent_select_error' => 'Parent select error',
+
+    'pagination'    => [
+        'range'  => 'Showing :first to :last of :total entries',
+    ],
 ];
