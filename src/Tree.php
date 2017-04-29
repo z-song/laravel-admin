@@ -254,6 +254,16 @@ SCRIPT;
     }
 
     /**
+     * Return all items of the tree.
+     *
+     * @param array $items
+     */
+    public function getItems()
+    {
+        return $this->model->withQuery($this->queryCallback)->toTree();
+    }
+
+    /**
      * Variables in tree template.
      *
      * @return array
@@ -263,7 +273,7 @@ SCRIPT;
         return [
             'id'        => $this->elementId,
             'tools'     => $this->tools->render(),
-            'items'     => $this->model->withQuery($this->queryCallback)->toTree(),
+            'items'     => $this->getItems(),
             'useCreate' => $this->useCreate,
         ];
     }
