@@ -89,14 +89,4 @@ class Permission
     {
         return Auth::guard('admin')->user()->isRole('administrator');
     }
-
-    /**
-     * If current user is administrator.
-     *
-     * @return mixed
-     */
-    public static function isAdministrator()
-    {
-        return Auth::guard('admin')->user()->isRole('administrator');
-    }
 }
