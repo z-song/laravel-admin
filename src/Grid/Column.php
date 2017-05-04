@@ -6,6 +6,7 @@ use Closure;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\AbstractDisplayer;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
@@ -99,6 +100,16 @@ class Column
     public static $defined = [];
 
     /**
+     * @var array
+     */
+    protected static $htmlAttributes = [];
+
+    /**
+     * @var
+     */
+    protected static $model;
+
+    /**
      * @param string $name
      * @param string $label
      */
@@ -139,6 +150,20 @@ class Column
     public function setGrid(Grid $grid)
     {
         $this->grid = $grid;
+
+        $this->setModel($grid->model()->eloquent());
+    }
+
+    /**
+     * Set model for column.
+     *
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        if (is_null(static::$model) && ($model instanceof Model)) {
+            static::$model = $model->newInstance();
+        }
     }
 
     /**
@@ -149,6 +174,41 @@ class Column
     public static function setOriginalGridData(array $input)
     {
         static::$originalGridData = $input;
+    }
+
+    /**
+     * Set column attributes.
+     *
+     * @param array $attributes
+     * @return $this
+     */
+    public function setAttributes($attributes  = [])
+    {
+        static::$htmlAttributes[$this->name] = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Get column attributes.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public static function getAttributes($name)
+    {
+        return array_get(static::$htmlAttributes, $name, '');
+    }
+
+    /**
+     * Set style of this column.
+     *
+     * @param string $style
+     * @return Column
+     */
+    public function style($style)
+    {
+        return $this->setAttributes(compact('style'));
     }
 
     /**
@@ -291,7 +351,7 @@ class Column
     {
         $originalRow = static::$originalGridData[$key];
 
-        return $callback->bindTo((object) $originalRow);
+        return $callback->bindTo(static::$model->newFromBuilder($originalRow));
     }
 
     /**

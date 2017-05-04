@@ -86,6 +86,13 @@ class Form
     protected $builder;
 
     /**
+     * Submitted callback.
+     *
+     * @var Closure
+     */
+    protected $submitted;
+
+    /**
      * Saving callback.
      *
      * @var Closure
@@ -384,6 +391,11 @@ class Form
      */
     protected function prepare($data = [])
     {
+
+        if (($response = $this->callSubmitted()) instanceof Response) {
+            return $response;
+        }
+
         $this->inputs = $this->removeIgnoredFields($data);
 
         if (($response = $this->callSaving()) instanceof Response) {
@@ -431,6 +443,18 @@ class Form
         }
 
         return $relations;
+    }
+
+    /**
+     * Call submitted callback.
+     *
+     * @return mixed
+     */
+    protected function callSubmitted()
+    {
+        if ($this->submitted instanceof Closure) {
+            return call_user_func($this->submitted, $this);
+        }
     }
 
     /**
@@ -641,6 +665,7 @@ class Form
                     $related->save();
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
+                case \Illuminate\Database\Eloquent\Relations\MorphMany::class:
 
                     foreach ($prepared[$name] as $related) {
                         $relation = $this->model()->$name();
@@ -781,6 +806,18 @@ class Form
         }
 
         return Arr::isAssoc($first);
+    }
+
+    /**
+     * Set submitted callback.
+     *
+     * @param Closure $callback
+     *
+     * @return void
+     */
+    public function submitted(Closure $callback)
+    {
+        $this->submitted = $callback;
     }
 
     /**
