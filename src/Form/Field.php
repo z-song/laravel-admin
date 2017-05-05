@@ -448,7 +448,11 @@ class Field implements Renderable
             return is_null($this->value) ? $this->getDefault() : $this->value;
         }
 
-        $this->value = $value;
+        if (is_callable($value)) {
+            $this->value = $value;
+        } else {
+            $this->value = (string) $value;
+        }
 
         return $this;
     }
