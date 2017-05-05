@@ -55,7 +55,7 @@ $('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
     onColor: '{$this->states['on']['color']}',
     offColor: '{$this->states['off']['color']}',
     onSwitchChange: function(event, state) {
-        $('{$this->getElementClassSelector()}').val(state ? 'on' : 'off');
+        $('{$this->getElementClassSelector()}').val(state ? 'on' : 'off').change();
     }
 });
 
