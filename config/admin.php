@@ -25,7 +25,7 @@ return [
     /*
      * Laravel-admin install directory.
      */
-    'directory' => app_path('Admin'),
+    'directory' => app_path('Http/Admin'),
 
     /*
      * Laravel-admin html title.
