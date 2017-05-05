@@ -32,6 +32,7 @@ class UninstallCommand extends Command
         }
 
         $this->removeFilesAndDirectories();
+        $this->removeDatabase();
 
         $this->line('<info>Uninstalling laravel-admin!</info>');
     }
@@ -46,5 +47,15 @@ class UninstallCommand extends Command
         $this->laravel['files']->deleteDirectory(config('admin.directory'));
         $this->laravel['files']->deleteDirectory(public_path('packages/admin/'));
         $this->laravel['files']->delete(config_path('admin.php'));
+    }
+
+    /**
+     * Remove database
+     *
+     * @return void
+     */
+    protected function removeDatabase()
+    {
+        $this->call('migrate:rollback', ['--path' => substr(__DIR__, strlen(base_path())) . '/../../migrations/']);
     }
 }
