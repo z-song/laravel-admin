@@ -50,7 +50,7 @@ class UninstallCommand extends Command
     }
 
     /**
-     * Remove database
+     * Remove database.
      *
      * @return void
      */
