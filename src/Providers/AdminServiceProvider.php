@@ -57,7 +57,7 @@ class AdminServiceProvider extends ServiceProvider
 
         $this->publishes([__DIR__.'/../../config/admin.php' => config_path('admin.php')], 'laravel-admin');
         $this->publishes([__DIR__.'/../../assets' => public_path('packages/admin')], 'laravel-admin');
-        $this->publishes([__DIR__ . '/../../migrations' => $this->app->databasePath() . DIRECTORY_SEPARATOR . 'migrations'], 'laravel-admin');
+        $this->publishes([__DIR__.'/../../migrations' => $this->app->databasePath() . DIRECTORY_SEPARATOR . 'migrations'], 'laravel-admin');
 
         Admin::registerAuthRoutes();
 
