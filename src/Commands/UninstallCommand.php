@@ -56,6 +56,6 @@ class UninstallCommand extends Command
      */
     protected function removeDatabase()
     {
-        $this->call('migrate:rollback', ['--path' => substr(__DIR__, strlen(base_path())) . '/../../migrations/']);
+        $this->call('migrate:rollback', ['--path' => substr(__DIR__, strlen(base_path())).'/../../migrations/']);
     }
 }
