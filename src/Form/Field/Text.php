@@ -45,7 +45,7 @@ class Text extends Field
 
         if ($this->content instanceof \Closure) {
             if ($this->form) {
-                $valueAttribute = call_user_func($this->content, $this->form->model());
+                $valueAttribute = call_user_func($this->content, $this->form);
             } else {
                 $valueAttribute = call_user_func($this->content, $this->value);
             }
