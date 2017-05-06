@@ -33,7 +33,7 @@ class File extends Field
      * Create a new File instance.
      *
      * @param string $column
-     * @param array  $arguments
+     * @param array $arguments
      */
     public function __construct($column, $arguments = [])
     {
@@ -113,7 +113,7 @@ class File extends Field
     {
         $this->renameIfExists($file);
 
-        $target = $this->getDirectory().'/'.$this->name;
+        $target = $this->getDirectory() . '/' . $this->name;
 
         $this->storage->put($target, file_get_contents($file->getRealPath()));
 
@@ -147,10 +147,14 @@ class File extends Field
     /**
      * @return array
      */
-    protected function initialPreviewConfig()
+    protected function initialPreviewConfig($showDelete = false)
     {
         return [
-            ['caption' => basename($this->value), 'key' => 0],
+            [
+                'caption'    => basename($this->value),
+                'key'        => basename($this->value),
+                'showDelete' => $showDelete,
+            ],
         ];
     }
 

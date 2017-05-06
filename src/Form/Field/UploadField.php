@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\MessageBag;
@@ -84,9 +83,10 @@ trait UploadField
      */
     protected function setupPreviewOptions()
     {
+        $deleteUrl = isset($this->options['deleteUrl']) and $this->options['deleteUrl'];
         $this->options([
             'initialPreview'       => $this->preview(),
-            'initialPreviewConfig' => $this->initialPreviewConfig((bool)$this->options['deleteUrl']),
+            'initialPreviewConfig' => $this->initialPreviewConfig($deleteUrl),
         ]);
     }
 
