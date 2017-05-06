@@ -38,6 +38,10 @@ trait UploadField
      */
     protected $useUniqueName = false;
 
+    protected $deleteUrl = false;
+
+    protected $deleteExtraData = false;
+
     /**
      * Initialize the storage instance.
      *
@@ -63,16 +67,12 @@ trait UploadField
             'showUpload'           => false,
             'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
-                $this->column            => '',
+                'column'                 => $this->column,
                 static::FILE_DELETE_FLAG => '',
                 '_token'                 => csrf_token(),
                 '_method'                => 'PUT',
             ],
         ];
-
-        if ($this->form instanceof Form) {
-            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
-        }
 
         $this->options($defaultOptions);
     }
@@ -85,9 +85,23 @@ trait UploadField
     protected function setupPreviewOptions()
     {
         $this->options([
-            //'initialPreview'        => $this->preview(),
-            'initialPreviewConfig'  => $this->initialPreviewConfig(),
+            'initialPreview'       => $this->preview(),
+            'initialPreviewConfig' => $this->initialPreviewConfig((bool)$this->options['deleteUrl']),
         ]);
+    }
+
+    public function deleteUrl($url)
+    {
+        $this->options['deleteUrl'] = $url;
+
+        return $this;
+    }
+
+    public function deleteExtraData($data)
+    {
+        $this->deleteExtraData = $data;
+
+        return $this;
     }
 
     /**
@@ -99,7 +113,7 @@ trait UploadField
      */
     public function options($options = [])
     {
-        $this->options = array_merge($options, $this->options);
+        $this->options = array_merge_recursive($options, $this->options);
 
         return $this;
     }
@@ -130,7 +144,7 @@ trait UploadField
     /**
      * Specify the directory and name for upload file.
      *
-     * @param string      $directory
+     * @param string $directory
      * @param null|string $name
      *
      * @return $this
@@ -239,7 +253,7 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        $target = $this->getDirectory().'/'.$this->name;
+        $target = $this->getDirectory() . '/' . $this->name;
 
         $this->storage->put($target, file_get_contents($file->getRealPath()));
 
@@ -273,7 +287,7 @@ trait UploadField
             return $path;
         }
 
-        return rtrim(config('admin.upload.host'), '/').'/'.trim($path, '/');
+        return rtrim(config('admin.upload.host'), '/') . '/' . trim($path, '/');
     }
 
     /**
@@ -285,7 +299,7 @@ trait UploadField
      */
     protected function generateUniqueName(UploadedFile $file)
     {
-        return md5(uniqid()).'.'.$file->guessExtension();
+        return md5(uniqid()) . '.' . $file->guessExtension();
     }
 
     /**

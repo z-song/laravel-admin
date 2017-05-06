@@ -33,7 +33,7 @@ class MultipleFile extends Field
      * Create a new File instance.
      *
      * @param string $column
-     * @param array  $arguments
+     * @param array $arguments
      */
     public function __construct($column, $arguments = [])
     {
@@ -86,8 +86,8 @@ class MultipleFile extends Field
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
-            $rules[$this->column.$key] = $this->getRules();
-            $input[$this->column.$key] = $file;
+            $rules[$this->column . $key] = $this->getRules();
+            $input[$this->column . $key] = $file;
         }
 
         return [$rules, $input];
@@ -170,7 +170,7 @@ class MultipleFile extends Field
     /**
      * @return array
      */
-    protected function initialPreviewConfig()
+    protected function initialPreviewConfig($showDelete = false)
     {
         $files = $this->value ?: [];
 
@@ -178,8 +178,9 @@ class MultipleFile extends Field
 
         foreach ($files as $index => $file) {
             $config[] = [
-                'caption' => basename($file),
-                'key'     => $index,
+                'caption'    => basename($file),
+                'key'        => $this->value[$index],
+                'showDelete' => $showDelete,
             ];
         }
 
@@ -199,6 +200,15 @@ class MultipleFile extends Field
 
         if (!empty($this->value)) {
             $this->setupPreviewOptions();
+        }
+
+        if ($this->deleteExtraData instanceof \Closure) {
+            if ($this->form) {
+                $dexData = call_user_func($this->deleteExtraData, $this->form, $this->options);
+            } else {
+                $dexData = call_user_func($this->deleteExtraData, $this->value);
+            }
+            $this->options(['deleteExtraData' => $dexData]);
         }
 
         $options = json_encode($this->options);
