@@ -207,6 +207,16 @@ class Field implements Renderable
     }
 
     /**
+     * Get the id of the field element.
+     * 
+     * @return array|string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Format the label value.
      *
      * @param array $arguments
