@@ -72,11 +72,12 @@ class Menu implements Renderable
 
         $('._delete').click(function() {
             var id = $(this).data('id');
-            if(confirm("{$confirm}")) {
-                $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
-                    $.pjax.reload('#pjax-container');
-                });
+            if(!confirm("{$confirm}")) {
+                return null;
             }
+            $.post('/{$this->path}/' + id, {_method:'delete','_token':'{$token}'}, function(data){
+                $.pjax.reload('#pjax-container');
+            });
         });
 
         $('.{$this->elementId}-save').click(function () {

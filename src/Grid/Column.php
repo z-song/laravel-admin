@@ -241,15 +241,7 @@ class Column
      */
     public function button($style = 'default')
     {
-        if (is_array($style)) {
-            $style = array_map(function ($style) {
-                return 'btn-'.$style;
-            }, $style);
-
-            $style = implode(' ', $style);
-        } elseif (is_string($style)) {
-            $style = 'btn-'.$style;
-        }
+        $style = $this->_resolveClassName($style);
 
         $callback = "<span class='btn $style'>{value}</span>";
 
@@ -547,5 +539,26 @@ EOT;
 
             return $this;
         }
+    }
+
+    /**
+     * @param $style
+     * @return array|string
+     */
+    private function _resolveClassName($style)
+    {
+        if (is_array($style)) {
+            $style = array_map(function ($style) {
+                return 'btn-' . $style;
+            }, $style);
+
+            return implode(' ', $style);
+        }
+
+        if (is_string($style)) {
+            return 'btn-' . $style;
+        }
+        
+        return $style;
     }
 }

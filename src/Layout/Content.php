@@ -33,13 +33,14 @@ class Content implements Renderable
 
     public function row($content)
     {
-        if ($content instanceof Closure) {
-            $row = new Row();
-            call_user_func($content, $row);
-            $this->addRow($row);
-        } else {
+        if (!($content instanceof Closure)) {
             $this->addRow(new Row($content));
+            return $this;
         }
+
+        $row = new Row();
+        call_user_func($content, $row);
+        $this->addRow($row);
 
         return $this;
     }
