@@ -391,12 +391,12 @@ class Form
      */
     protected function prepare($data = [])
     {
-
+        $this->inputs = $data;
         if (($response = $this->callSubmitted()) instanceof Response) {
             return $response;
         }
 
-        $this->inputs = $this->removeIgnoredFields($data);
+        $this->inputs = $this->removeIgnoredFields($this->inputs);
 
         if (($response = $this->callSaving()) instanceof Response) {
             return $response;
