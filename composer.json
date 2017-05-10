@@ -1,14 +1,10 @@
 {
-    "name": "encore/laravel-admin",
+    "name": "qq447665722/laravel-admin",
     "description": "laravel admin",
-    "type": "library",
-    "keywords": ["laravel", "admin", "grid", "chart", "form"],
-    "homepage": "https://github.com/z-song/laravel-admin",
-    "license": "MIT",
     "authors": [
         {
-            "name": "zsong",
-            "email": "zosong@126.com"
+            "name": "panjianlin",
+            "email": "447665722@163.com"
         }
     ],
     "require": {
