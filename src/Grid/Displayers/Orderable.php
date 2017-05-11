@@ -41,6 +41,8 @@ $('.grid-row-orderable').on('click', function() {
         if (data.status) {
             $.pjax.reload('#pjax-container');
             toastr.success(data.message);
+        }else{
+            toastr.error(data.message);
         }
     });
 
