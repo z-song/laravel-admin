@@ -15,8 +15,9 @@ class SwitchField extends Field
     ];
 
     protected $states = [
-        'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
-        'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
+        'null' => ['value' => null, 'text' => 'UNSET', 'color' => 'warning'],
+        'on'   => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
+        'off'  => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
     ];
 
     public function __construct($column, $arguments = [], $modelName = '')
@@ -46,25 +47,55 @@ class SwitchField extends Field
 
     public function render()
     {
+        $fieldValue = $this->value();
         foreach ($this->states as $state => $option) {
-            if ($this->value() == $option['value']) {
+            if ($fieldValue === $option['value']) {
                 $this->value = $state;
                 break;
             }
         }
-
+        $indeterminate = $fieldValue === false ? 'true' : 'false';
         $this->script = <<<EOT
-
-$('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
-    size:'small',
-    onText: '{$this->states['on']['text']}',
-    offText: '{$this->states['off']['text']}',
-    onColor: '{$this->states['on']['color']}',
-    offColor: '{$this->states['off']['color']}',
-    onSwitchChange: function(event, state) {
-        $('{$this->getElementClassSelector()}').val(state ? 'on' : 'off');
-    }
-});
+(function ($) {
+    var elementClass = '{$this->getElementClassSelector()}';
+    var jInput = $(elementClass + '.la_checkbox');
+    var jUnset = $(elementClass + '.la_checkbox_unset');
+    var jOldInput = $('input[type=hidden]' + elementClass);
+    
+    jInput.bootstrapSwitch({
+        size:'small',
+        onText: '{$this->states['on']['text']}',
+        offText: '{$this->states['off']['text']}',
+        onColor: '{$this->states['on']['color']}',
+        offColor: '{$this->states['off']['color']}',
+        indeterminate: {$indeterminate},
+        onInit: function(event, state) {
+            jInput.data('la_checkbox_prev_state', jOldInput.val());
+        },
+        onSwitchChange: function(event, state) {
+            var jOldInputVal = state ? 'on' : 'off';
+            jInput.data('la_checkbox_prev_state', jOldInputVal);
+            jOldInput.val(jOldInputVal);
+        }
+    });
+    jUnset.on('click', function () {
+        var isNull = jInput.bootstrapSwitch('indeterminate');
+        var prevState = jInput.data('la_checkbox_prev_state');
+        if (isNull) {
+            jInput.bootstrapSwitch('indeterminate', false);
+            if (!prevState) {
+                prevState = 'off';
+            }
+            jInput.bootstrapSwitch('state', (prevState === 'on'));
+            jInput.val(prevState);
+            jOldInput.val(prevState);
+        } else {
+            jInput.bootstrapSwitch('indeterminate', true);
+            jOldInput.val('null');
+            jInput.val('null');
+        }
+    });
+})(jQuery);
 
 EOT;
 

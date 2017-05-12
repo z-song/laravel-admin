@@ -721,7 +721,7 @@ class Form
                 $value = $field->prepare($value);
             }
 
-            if ($value != $field->original()) {
+            if ($value !== $field->original()) {
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
                         array_set($prepared, $column, $value[$name]);
