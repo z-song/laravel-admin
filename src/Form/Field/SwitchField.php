@@ -54,50 +54,14 @@ class SwitchField extends Field
                 break;
             }
         }
-        $indeterminate = $fieldValue === false ? 'true' : 'false';
-        $this->script = <<<EOT
-(function ($) {
-    var elementClass = '{$this->getElementClassSelector()}';
-    var jInput = $(elementClass + '.la_checkbox');
-    var jUnset = $(elementClass + '.la_checkbox_unset');
-    var jOldInput = $('input[type=hidden]' + elementClass);
-    
-    jInput.bootstrapSwitch({
-        size:'small',
-        onText: '{$this->states['on']['text']}',
-        offText: '{$this->states['off']['text']}',
-        onColor: '{$this->states['on']['color']}',
-        offColor: '{$this->states['off']['color']}',
-        indeterminate: {$indeterminate},
-        onInit: function(event, state) {
-            jInput.data('la_checkbox_prev_state', jOldInput.val());
-        },
-        onSwitchChange: function(event, state) {
-            var jOldInputVal = state ? 'on' : 'off';
-            jInput.data('la_checkbox_prev_state', jOldInputVal);
-            jOldInput.val(jOldInputVal);
-        }
-    });
-    jUnset.on('click', function () {
-        var isNull = jInput.bootstrapSwitch('indeterminate');
-        var prevState = jInput.data('la_checkbox_prev_state');
-        if (isNull) {
-            jInput.bootstrapSwitch('indeterminate', false);
-            if (!prevState) {
-                prevState = 'off';
-            }
-            jInput.bootstrapSwitch('state', (prevState === 'on'));
-            jInput.val(prevState);
-            jOldInput.val(prevState);
-        } else {
-            jInput.bootstrapSwitch('indeterminate', true);
-            jOldInput.val('null');
-            jInput.val('null');
-        }
-    });
-})(jQuery);
-
-EOT;
+        $this->setDataSet([
+            'size'          => 'small',
+            'onText'        => $this->states['on']['text'],
+            'offText'       => $this->states['off']['text'],
+            'onColor'       => $this->states['on']['color'],
+            'offColor'      => $this->states['off']['color'],
+            'indeterminate' => ($fieldValue === false ? true : false),
+        ]);
 
         return parent::render();
     }

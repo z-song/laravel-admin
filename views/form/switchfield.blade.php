@@ -1,22 +1,34 @@
 <div class="form-group {!! !$errors->has($errorKey) ?: 'has-error' !!}">
 
-    <label for="{{$id}}" class="col-sm-{{$width['label']}} control-label">{{$label}}</label>
+  <label for="{{$id}}" class="col-sm-{{$width['label']}} control-label">{{$label}}</label>
 
-    <div class="col-sm-{{$width['field']}}">
+  <div
+    data-block="switchfield"
+    data-options-switchfield='{!! $dataSet !!}'
+    class="col-sm-{{$width['field']}}">
 
-        @include('admin::form.error')
+    @include('admin::form.error')
 
-        <input type="checkbox" class="{{$class}} la_checkbox" {{ old($column, $value) == 'on' ? 'checked' : '' }} {!! $attributes !!}>
-        <input type="hidden" class="{{$class}}" name="{{$name}}" class="" value="{{ old($column, $value) }}">
+    <input
+      data-element="switchfield-input"
+      type="checkbox" class="{{$class}}"
+      {{ old($column, $value) == 'on' ? 'checked' : '' }} {!! $attributes !!}>
+    <input
+      data-element="switchfield-keeper"
+      type="hidden" class="{{$class}}"
+      name="{{$name}}" class="" value="{{ old($column, $value) }}">
 
-        &nbsp;
+    &nbsp;
 
-        <button type="button" class="{{ $class }} la_checkbox_unset btn btn-default btn-sm">
-          <span class="glyphicon glyphicon-remove text-muted"
-                data-switch-toggle="disabled"></span>
-        </button>
+    <button
+      data-element="switchfield-unset"
+      type="button"
+      class="{{ $class }} btn btn-default btn-sm">
+      <span class="glyphicon glyphicon-remove text-muted"
+            data-switch-toggle="disabled"></span>
+    </button>
 
-        @include('admin::form.help-block')
+    @include('admin::form.help-block')
 
-    </div>
+  </div>
 </div>

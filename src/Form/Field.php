@@ -169,6 +169,14 @@ class Field implements Renderable
     ];
 
     /**
+     * Variable to store JavaScript dataset.
+     * jQuery.data();
+     *
+     * @var array
+     */
+    protected $dataSet = [];
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -222,6 +230,30 @@ class Field implements Renderable
         }
 
         return admin_translate($modelName, $column);
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataSet()
+    {
+        return $this->dataSet;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataSetJson()
+    {
+        return json_encode($this->dataSet);
+    }
+
+    /**
+     * @param array $dataSet
+     */
+    public function setDataSet($dataSet)
+    {
+        $this->dataSet = $dataSet;
     }
 
     /**
@@ -285,11 +317,6 @@ class Field implements Renderable
      */
     public function fill($data)
     {
-        // Field value is already setted.
-//        if (!is_null($this->value)) {
-//            return;
-//        }
-
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
                 $this->value[$key] = array_get($data, $column);
@@ -451,7 +478,7 @@ class Field implements Renderable
         if (is_callable($value)) {
             $this->value = $value;
         } else {
-            $this->value = (string) $value;
+            $this->value = (string)$value;
         }
 
         return $this;
@@ -561,9 +588,9 @@ class Field implements Renderable
                 if (!array_key_exists($column, $input)) {
                     continue;
                 }
-                $input[$column.$key] = array_get($input, $column);
-                $rules[$column.$key] = $fieldRules;
-                $attributes[$column.$key] = $this->label."[$column]";
+                $input[$column . $key] = array_get($input, $column);
+                $rules[$column . $key] = $fieldRules;
+                $attributes[$column . $key] = $this->label . "[$column]";
             }
         }
 
@@ -573,7 +600,7 @@ class Field implements Renderable
     /**
      * Sanitize input data.
      *
-     * @param array  $input
+     * @param array $input
      * @param string $column
      *
      * @return array
@@ -592,7 +619,7 @@ class Field implements Renderable
      * Add html attributes to elements.
      *
      * @param array|string $attribute
-     * @param mixed        $value
+     * @param mixed $value
      *
      * @return $this
      */
@@ -601,7 +628,7 @@ class Field implements Renderable
         if (is_array($attribute)) {
             $this->attributes = array_merge($this->attributes, $attribute);
         } else {
-            $this->attributes[$attribute] = (string) $value;
+            $this->attributes[$attribute] = (string)$value;
         }
 
         return $this;
@@ -638,7 +665,7 @@ class Field implements Renderable
      */
     public function getPlaceholder()
     {
-        return $this->placeholder ?: trans('admin::lang.input').' '.$this->label;
+        return $this->placeholder ?: trans('admin::lang.input') . ' ' . $this->label;
     }
 
     /**
@@ -651,7 +678,7 @@ class Field implements Renderable
         $html = [];
 
         foreach ($this->attributes as $name => $value) {
-            $html[] = $name.'="'.e($value).'"';
+            $html[] = $name . '="' . e($value) . '"';
         }
 
         return implode(' ', $html);
@@ -666,7 +693,7 @@ class Field implements Renderable
      */
     public function setElementClass($class)
     {
-        $this->elementClass = (array) $class;
+        $this->elementClass = (array)$class;
 
         return $this;
     }
@@ -681,7 +708,7 @@ class Field implements Renderable
         if (!$this->elementClass) {
             $name = $this->elementName ?: $this->formatName($this->column);
 
-            $this->elementClass = (array) str_replace(['[', ']'], '_', $name);
+            $this->elementClass = (array)str_replace(['[', ']'], '_', $name);
         }
 
         return $this->elementClass;
@@ -722,13 +749,13 @@ class Field implements Renderable
             $classes = [];
 
             foreach ($elementClass as $index => $class) {
-                $classes[$index] = '.'.(is_array($class) ? implode('.', $class) : $class);
+                $classes[$index] = '.' . (is_array($class) ? implode('.', $class) : $class);
             }
 
             return $classes;
         }
 
-        return '.'.implode('.', $elementClass);
+        return '.' . implode('.', $elementClass);
     }
 
     /**
@@ -741,7 +768,7 @@ class Field implements Renderable
     public function addElementClass($class)
     {
         if (is_array($class) || is_string($class)) {
-            $this->elementClass = array_merge($this->elementClass, (array) $class);
+            $this->elementClass = array_merge($this->elementClass, (array)$class);
 
             $this->elementClass = array_unique($this->elementClass);
         }
@@ -761,7 +788,7 @@ class Field implements Renderable
         $delClass = [];
 
         if (is_string($class) || is_array($class)) {
-            $delClass = (array) $class;
+            $delClass = (array)$class;
         }
 
         foreach ($delClass as $del) {
@@ -781,17 +808,18 @@ class Field implements Renderable
     protected function variables()
     {
         return array_merge($this->variables, [
-            'id'            => $this->id,
-            'name'          => $this->elementName ?: $this->formatName($this->column),
-            'help'          => $this->help,
-            'class'         => $this->getElementClassString(),
-            'value'         => $this->value(),
-            'label'         => $this->label,
-            'width'         => $this->width,
-            'column'        => $this->column,
-            'errorKey'      => $this->getErrorKey(),
-            'attributes'    => $this->formatAttributes(),
-            'placeholder'   => $this->getPlaceholder(),
+            'id'          => $this->id,
+            'name'        => $this->elementName ?: $this->formatName($this->column),
+            'help'        => $this->help,
+            'class'       => $this->getElementClassString(),
+            'value'       => $this->value(),
+            'label'       => $this->label,
+            'width'       => $this->width,
+            'column'      => $this->column,
+            'errorKey'    => $this->getErrorKey(),
+            'attributes'  => $this->formatAttributes(),
+            'placeholder' => $this->getPlaceholder(),
+            'dataSet'     => $this->getDataSetJson(),
         ]);
     }
 
@@ -808,7 +836,7 @@ class Field implements Renderable
 
         $class = explode('\\', get_called_class());
 
-        return 'admin::form.'.strtolower(end($class));
+        return 'admin::form.' . strtolower(end($class));
     }
 
     /**

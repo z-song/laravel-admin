@@ -64,6 +64,9 @@
 
 {!! Admin::js() !!}
 
+<script src="{{ asset ("/packages/admin/laravel-admin/scripts/attach.js") }}"></script>
+<script src="{{ asset ("/packages/admin/laravel-admin/scripts/field/switchField.js") }}"></script>
+
 <script>
 
     function LA() {}
