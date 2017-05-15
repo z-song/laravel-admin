@@ -3,6 +3,8 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
+use Encore\Admin\Grid;
+use Encore\Admin\Grid\Column;
 
 class SwitchDisplay extends AbstractDisplayer
 {
@@ -10,6 +12,14 @@ class SwitchDisplay extends AbstractDisplayer
         'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
         'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
     ];
+
+    public function __construct($value, Grid $grid, Column $column, $row)
+    {
+        $modelName = $grid->getModelName();
+        $this->states['on']['text'] = admin_translate($modelName, $this->states['on']['text']);
+        $this->states['off']['text'] = admin_translate($modelName, $this->states['off']['text']);
+        parent::__construct($value, $grid, $column, $row);
+    }
 
     protected function updateStates($states)
     {
