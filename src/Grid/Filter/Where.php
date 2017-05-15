@@ -43,7 +43,7 @@ class Where extends AbstractFilter
      *
      * @return string
      */
-    public static function getQueryHash(\Closure $closure, string $label = '')
+    public static function getQueryHash(\Closure $closure, $label = '')
     {
         $reflection = new \ReflectionFunction($closure);
 
