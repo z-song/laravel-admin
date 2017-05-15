@@ -17,16 +17,20 @@ class Select extends Field
         '/packages/admin/AdminLTE/plugins/select2/select2.full.min.js',
     ];
 
+    public function prepare($value)
+    {
+        if ($value === 'null') {
+            return null;
+        }
+        return $value;
+    }
+
     public function render()
     {
-        if (empty($this->script)) {
-            $this->script = <<<EOF
-$("{$this->getElementClassSelector()}").select2({
-    allowClear: true,
-    placeholder: "{$this->label}"
-});
-EOF;
-        }
+        $this->setDataSet([
+            'allowClear'  => 'true',
+            'placeholder' => $this->label,
+        ]);
 
         if ($this->options instanceof \Closure) {
             if ($this->form) {
@@ -62,7 +66,7 @@ EOF;
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array) $options;
+            $this->options = (array)$options;
         }
 
         return $this;
@@ -86,6 +90,8 @@ EOF;
         } else {
             $class = $field;
         }
+
+        // TODO: move all js code to scripts/fields/select.js
 
         $script = <<<EOT
 
@@ -113,18 +119,20 @@ EOT;
      * Load options from remote.
      *
      * @param string $url
-     * @param array  $parameters
-     * @param array  $options
+     * @param array $parameters
+     * @param array $options
      *
      * @return $this
      */
     protected function loadOptionsFromRemote($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters),
+            'url' => $url . '?' . http_build_query($parameters),
         ];
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
+
+        // TODO: move all js code to scripts/fields/select.js
 
         $this->script = <<<EOT
 
@@ -148,6 +156,8 @@ EOT;
      */
     public function ajax($url, $idField = 'id', $textField = 'text')
     {
+        // TODO: move all js code to scripts/fields/select.js
+
         $this->script = <<<EOT
 
 $("{$this->getElementClassSelector()}").select2({

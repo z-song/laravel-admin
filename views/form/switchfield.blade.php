@@ -3,25 +3,25 @@
   <label for="{{$id}}" class="col-sm-{{$width['label']}} control-label">{{$label}}</label>
 
   <div
-    data-block="switchfield"
-    data-options-switchfield='{!! $dataSet !!}'
+    data-block="field-switch"
+    data-options-field-switch='{!! $dataSet !!}'
     class="col-sm-{{$width['field']}}">
 
     @include('admin::form.error')
 
     <input
-      data-element="switchfield-input"
+      data-element="field-switch-input"
       type="checkbox" class="{{$class}}"
       {{ old($column, $value) == 'on' ? 'checked' : '' }} {!! $attributes !!}>
     <input
-      data-element="switchfield-keeper"
+      data-element="field-switch-keeper"
       type="hidden" class="{{$class}}"
       name="{{$name}}" class="" value="{{ old($column, $value) }}">
 
     &nbsp;
 
     <button
-      data-element="switchfield-unset"
+      data-element="field-switch-unset"
       type="button"
       class="{{ $class }} btn btn-default btn-sm">
       <span class="glyphicon glyphicon-remove text-muted"

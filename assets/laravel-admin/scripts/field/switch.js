@@ -1,12 +1,12 @@
 'use strict'
 ;
 (function ($) {
-  window.attach('[data-block="switchfield"]', function () {
+  window.attach('[data-block="field-switch"]', function () {
     var $block = $(this)
-    var dataSet = $block.data('optionsSwitchfield')
-    var $input = $block.find('[data-element="switchfield-input"]')
-    var $keeper = $block.find('[data-element="switchfield-keeper"]')
-    var $unset = $block.find('[data-element="switchfield-unset"]')
+    var dataSet = $block.data('optionsFieldSwitch')
+    var $input = $block.find('[data-element="field-switch-input"]')
+    var $keeper = $block.find('[data-element="field-switch-keeper"]')
+    var $unset = $block.find('[data-element="field-switch-unset"]')
     var prevState
     var options = $.extend({}, dataSet, {
       onInit: function (event, state) {
