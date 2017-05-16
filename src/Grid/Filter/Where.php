@@ -28,8 +28,8 @@ class Where extends AbstractFilter
     {
         $this->where = $query;
 
-        $this->column = static::getQueryHash($query);
         $this->label = $this->formatLabel($label);
+        $this->column = static::getQueryHash($query, $this->label);
         $this->id = $this->formatId($this->column);
 
         $this->setupField();
@@ -39,14 +39,15 @@ class Where extends AbstractFilter
      * Get the hash string of query closure.
      *
      * @param \Closure $closure
+     * @param string   $label
      *
      * @return string
      */
-    public static function getQueryHash(\Closure $closure)
+    public static function getQueryHash(\Closure $closure, $label = '')
     {
         $reflection = new \ReflectionFunction($closure);
 
-        return md5($reflection->getFileName().$reflection->getStartLine().$reflection->getEndLine());
+        return md5($reflection->getFileName().$reflection->getStartLine().$reflection->getEndLine().$label);
     }
 
     /**
@@ -58,7 +59,7 @@ class Where extends AbstractFilter
      */
     public function condition($inputs)
     {
-        $value = array_get($inputs, static::getQueryHash($this->where));
+        $value = array_get($inputs, static::getQueryHash($this->where, $this->label));
 
         if (is_array($value)) {
             $value = array_filter($value);
