@@ -1,6 +1,10 @@
 laravel-admin
 =====
 
+自用laravel-admin  由于作者的功能不适合我这边,所以做了一些相应的修改,如果z-song有更新,我这边会相应的合并
+修改内容如下:
+1.src/Form/Field/UploadField.php 88行取消注释,用于多图预览显示
+
 [![Build Status](https://travis-ci.org/z-song/laravel-admin.svg?branch=master)](https://travis-ci.org/z-song/laravel-admin)
 [![StyleCI](https://styleci.io/repos/48796179/shield)](https://styleci.io/repos/48796179)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/z-song/laravel-admin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/z-song/laravel-admin/?branch=master)
