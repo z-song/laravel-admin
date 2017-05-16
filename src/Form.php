@@ -561,7 +561,8 @@ class Form
 
             $value = $this->getDataByColumn($updates, $columns);
 
-            if ($value !== '' && $value !== '0' && !$field instanceof File && empty($value)) {
+            if (($value !== '' && $value !== '0' && !$field instanceof File && empty($value))
+                || (!key_exists($field->column(), $updates))) {
                 continue;
             }
 
