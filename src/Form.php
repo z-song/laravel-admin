@@ -1215,6 +1215,7 @@ class Form
     public static function extend($abstract, $class)
     {
         static::$availableFields[$abstract] = $class;
+        static::$collectedAssets= [];
     }
 
     /**
@@ -1225,6 +1226,7 @@ class Form
     public static function forget($abstract)
     {
         array_forget(static::$availableFields, $abstract);
+        static::$collectedAssets= [];
     }
 
     /**
