@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Checkbox       checkbox($column, $label = '')
  * @method Field\Radio          radio($column, $label = '')
  * @method Field\Select         select($column, $label = '')
+ * @method Field\SelectOrNew    selectOrNew($column, $label = '')
  * @method Field\MultipleSelect multipleSelect($column, $label = '')
  * @method Field\Textarea       textarea($column, $label = '')
  * @method Field\Hidden         hidden($column, $label = '')
@@ -1183,6 +1184,7 @@ class Form
             'radio'             => \Encore\Admin\Form\Field\Radio::class,
             'rate'              => \Encore\Admin\Form\Field\Rate::class,
             'select'            => \Encore\Admin\Form\Field\Select::class,
+            'selectOrNew'       => \Encore\Admin\Form\Field\SelectOrNew::class,
             'slider'            => \Encore\Admin\Form\Field\Slider::class,
             'switch'            => \Encore\Admin\Form\Field\SwitchField::class,
             'text'              => \Encore\Admin\Form\Field\Text::class,
