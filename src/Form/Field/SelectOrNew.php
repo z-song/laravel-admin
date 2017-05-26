@@ -68,7 +68,7 @@ class SelectOrNew extends Select
      *
      * @param string $className
      */
-    public function dataModel(string $className)
+    public function dataModel($className)
     {
         $this->dataModel = $className;
     }
@@ -78,7 +78,7 @@ class SelectOrNew extends Select
      *
      * @return $this
      */
-    public function allowClear(bool $allow = true)
+    public function allowClear($allow = true)
     {
         $this->allowClear = $allow;
 
