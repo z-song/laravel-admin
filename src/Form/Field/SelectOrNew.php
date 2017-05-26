@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-
 /**
  * Select an existing option or type a new one to create it
  */
@@ -86,7 +85,7 @@ class SelectOrNew extends Select
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function render()
     {
