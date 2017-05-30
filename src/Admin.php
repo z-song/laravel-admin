@@ -145,7 +145,7 @@ class Admin
     {
         $directory = config('admin.directory');
 
-        return 'App\\'.ucfirst(basename($directory)).'\\Controllers';
+        return app()->getNamespace().ucfirst(basename($directory)).'\\Controllers';
     }
 
     /**
