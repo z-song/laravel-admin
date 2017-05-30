@@ -19,7 +19,8 @@ class Select extends Field
     public function render()
     {
         if (empty($this->script)) {
-            $this->script = "$(\"#{$this->id}\").select2({allowClear: true});";
+            $placeholder = isset($this->placeholder) ? $this->placeholder : $this->label;
+            $this->script = "$(\"#{$this->id}\").select2({allowClear: true, placeholder: \"{$placeholder}\"});";
         }
 
         if (is_callable($this->options)) {
