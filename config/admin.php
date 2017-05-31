@@ -117,6 +117,12 @@ return [
     'layout'  => ['sidebar-mini'],
 
     /*
+     * If "login-image" is not "false", then the login cover image replaced with that resource.
+     * Else the default login image displayed.
+     */
+    'login-image' => false,
+
+    /*
      * Version displayed in footer.
      */
     'version'   => '1.0',

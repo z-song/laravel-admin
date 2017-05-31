@@ -19,6 +19,13 @@ class SwitchField extends Field
         'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
     ];
 
+    public function __construct($column, $arguments = [], $modelName = '')
+    {
+        $this->states['on']['text'] = admin_translate($modelName, $this->states['on']['text']);
+        $this->states['off']['text'] = admin_translate($modelName, $this->states['off']['text']);
+        parent::__construct($column, $arguments, $modelName);
+    }
+
     public function states($states = [])
     {
         foreach (array_dot($states) as $key => $state) {

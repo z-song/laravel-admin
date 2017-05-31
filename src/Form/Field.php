@@ -174,10 +174,10 @@ class Field implements Renderable
      * @param $column
      * @param array $arguments
      */
-    public function __construct($column, $arguments = [])
+    public function __construct($column, $arguments = [], $modelName = '')
     {
         $this->column = $column;
-        $this->label = $this->formatLabel($arguments);
+        $this->label = $this->formatLabel($arguments, $modelName);
         $this->id = $this->formatId($column);
     }
 
@@ -213,13 +213,15 @@ class Field implements Renderable
      *
      * @return string
      */
-    protected function formatLabel($arguments = [])
+    protected function formatLabel($arguments = [], $modelName = '')
     {
         $column = is_array($this->column) ? current($this->column) : $this->column;
 
-        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($column);
+        if (isset($arguments[0])) {
+            return $arguments[0];
+        }
 
-        return str_replace(['.', '_'], ' ', $label);
+        return admin_translate($modelName, $column);
     }
 
     /**

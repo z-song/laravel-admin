@@ -96,6 +96,11 @@ class TestCase extends BaseTestCase
             $migrations[] = $this->getMigrationClass($file);
         }
 
+        foreach ($fileSystem->files(__DIR__.'/migrations') as $file) {
+            $fileSystem->requireOnce($file);
+            $migrations[] = $classFinder->findClass($file);
+        }
+
         return $migrations;
     }
 

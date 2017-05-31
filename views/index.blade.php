@@ -18,7 +18,10 @@
     <link rel="stylesheet" href="{{ asset("/packages/admin/nestable/nestable.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/toastr/build/toastr.min.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
-    <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/fonts.css") }}">
+    <!--
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700,700&subset=latin-ext">
+    -->
+    <link rel="stylesheet" href="{{ asset("/packages/admin/google-fonts/Source-Sans-Pro.css") }}">
     <link rel="stylesheet" href="{{ asset("/packages/admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
 
     <!-- REQUIRED JS SCRIPTS -->
