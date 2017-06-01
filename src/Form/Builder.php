@@ -39,6 +39,13 @@ class Builder
     protected $fields;
 
     /**
+     * Ignored creating fields.
+     *
+     * @var array
+     */
+    protected $ignoredCreateFields = [];
+
+    /**
      * @var array
      */
     protected $options = [
@@ -470,9 +477,23 @@ EOT;
             $this->form->model()->getUpdatedAtColumn(),
         ];
 
+        $reservedColumns=array_merge($reservedColumns,$this->ignoredCreateFields);
+
         $this->fields = $this->fields()->reject(function (Field $field) use ($reservedColumns) {
             return in_array($field->column(), $reservedColumns);
         });
+    }
+
+    /**
+     * Ignore fields to create.
+     *
+     * @param string|array $fields
+     *
+     * @return $this
+     */
+    public function ignoreCreate($fields)
+    {
+        $this->ignoredCreateFields = array_merge($this->ignoredCreateFields, (array)$fields);
     }
 
     /**
