@@ -677,6 +677,7 @@ class Field implements Renderable
 
             $this->elementClass = (array) str_replace(['[', ']'], '_', $name);
         }
+        array_push($this->elementClass,'key'.md5(uniqid(mt_rand(),1)));
 
         return $this->elementClass;
     }
