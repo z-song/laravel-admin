@@ -96,6 +96,13 @@ class Field implements Renderable
     protected $rules = '';
 
     /**
+     * Validation rule callback.
+     *
+     * @var Closure
+     */
+    protected $ruleClosure=null;
+
+    /**
      * Css required by this field.
      *
      * @var array
@@ -388,12 +395,42 @@ class Field implements Renderable
     }
 
     /**
+     * Get or set rules.
+     *
+     * @param \Closure $rules
+     *
+     * @return mixed
+     */
+    public function ruleRelation(\Closure $rules = null)
+    {
+        if (is_null($rules)) {
+            return $this->ruleClosure;
+        }
+        if ($rules instanceof \Closure){
+            $this->ruleClosure = $rules;
+        }
+
+        return $this;
+    }
+
+
+    /**
      * Get field validation rules.
+     *
+     * @param null $input
      *
      * @return string
      */
-    protected function getRules()
+    protected function getRules($input = null)
     {
+        if (is_null($input)){
+            return $this->rules;
+        }elseif ($this->ruleClosure instanceof \Closure ){
+            $rules = call_user_func($this->ruleClosure, $input);
+            //return 'required|max:111'
+            $rules = array_filter(explode('|', "{$this->rules}|$rules"));
+            $this->rules = implode('|', $rules);
+        }
         return $this->rules;
     }
 
@@ -535,7 +572,7 @@ class Field implements Renderable
     {
         $rules = $attributes = [];
 
-        if (!$fieldRules = $this->getRules()) {
+        if (!$fieldRules = $this->getRules($input)) {
             return false;
         }
 
