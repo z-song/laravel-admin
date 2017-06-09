@@ -1,3 +1,4 @@
+
 <?php
 
 use Encore\Admin\Auth\Database\Administrator;
