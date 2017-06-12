@@ -121,10 +121,10 @@ trait AdminPermission
     {
         $grantedRoles = $this->roles->keyBy('slug');
         foreach ($roles as $role) {
-            if($grantedRoles->has($role)){
+            if ($grantedRoles->has($role)) {
                 return true;
             }
-        };
+        }
         
         return false;
     }
