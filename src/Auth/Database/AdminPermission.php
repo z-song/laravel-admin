@@ -125,7 +125,7 @@ trait AdminPermission
                 return true;
             }
         }
-        
+
         return false;
     }
 
