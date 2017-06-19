@@ -938,11 +938,10 @@ class Form
 
         if ($this->model::$snakeAttributes) {
             foreach ($this->model->getRelations() as $key => $relation) {
-                if ($key === $snake = Str::snake($key)) {
-                    continue;
+                if ($key !== $snake = Str::snake($key)) {
+                    $data[$key] = $data[$snake];
+                    unset($data[$snake]);
                 }
-                $data[$key] = $data[$snake];
-                unset($data[$snake]);
             }
         }
 
