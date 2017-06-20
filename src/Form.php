@@ -1104,7 +1104,8 @@ class Form
      */
     public function resource($slice = -2)
     {
-        $segments = explode('/', trim(app('request')->getUri(), '/'));
+        // fixed: https connection
+        $segments = explode('/', \rtrim(\request()->getRequestUri(), '/'));
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
