@@ -346,6 +346,7 @@ class HasMany extends Field
          *
          * Else get data from database.
          */
+        $field_id = 0;
         if ($values = old($this->column)) {
             foreach ($values as $key => $data) {
                 if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
@@ -353,14 +354,16 @@ class HasMany extends Field
                 }
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
-                    ->fill($data);
+                    ->fill($data, $field_id);
+                $field_id++;
             }
         } else {
             foreach ($this->value as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
-                    ->fill($data);
+                    ->fill($data, $field_id);
+                $field_id++;
             }
         }
 

@@ -279,10 +279,13 @@ class NestedForm
      *
      * @return $this
      */
-    public function fill(array $data)
+    public function fill(array $data, $field_id = 0)
     {
+        $unique = 0;
         /* @var Field $field */
         foreach ($this->fields() as $field) {
+            $field->addElementClass('hasMany-old-unique-' . $field_id . '-' . $unique);
+            $unique++;
             $field->fill($data);
         }
 
@@ -298,9 +301,13 @@ class NestedForm
     {
         $html = '';
         $scripts = [];
+        $unique = 0;
 
         /* @var Field $field */
         foreach ($this->fields() as $field) {
+
+            $field->addElementClass('hasMany-new-unique-' . $unique);
+            $unique++;
 
             //when field render, will push $script to Admin
             $html .= $field->render();
