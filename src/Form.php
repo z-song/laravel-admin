@@ -391,7 +391,6 @@ class Form
      */
     protected function prepare($data = [])
     {
-
         if (($response = $this->callSubmitted()) instanceof Response) {
             return $response;
         }
