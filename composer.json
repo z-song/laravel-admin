@@ -1,5 +1,5 @@
 {
-    "name": "encore/laravel-admin",
+    "name": "tanson/laravel-admin",
     "description": "laravel admin",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "chart", "form"],
