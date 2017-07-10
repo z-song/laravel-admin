@@ -29,6 +29,7 @@ class AdminServiceProvider extends ServiceProvider
         'admin.log'         => \Encore\Admin\Middleware\OperationLog::class,
         'admin.permission'  => \Encore\Admin\Middleware\PermissionMiddleware::class,
         'admin.bootstrap'   => \Encore\Admin\Middleware\BootstrapMiddleware::class,
+        'admin.auto_permission'=>\Encore\Admin\Middleware\AutoPermissionMiddleware::class
     ];
 
     /**
