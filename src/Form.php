@@ -391,7 +391,6 @@ class Form
      */
     protected function prepare($data = [])
     {
-
         if (($response = $this->callSubmitted()) instanceof Response) {
             return $response;
         }
@@ -633,7 +632,8 @@ class Form
 
             $relation = $this->model->$name();
 
-            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne;
+            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne
+                || $relation instanceof \Illuminate\Database\Eloquent\Relations\MorphOne;
 
             $prepared = $this->prepareUpdate([$name => $values], $hasDot);
 
@@ -662,6 +662,16 @@ class Form
                         $related->setAttribute($column, $value);
                     }
 
+                    $related->save();
+                    break;
+                case \Illuminate\Database\Eloquent\Relations\MorphOne::class:
+                    $related = $this->model->$name;
+                    if (is_null($related)) {
+                        $related = $relation->make();
+                    }
+                    foreach ($prepared[$name] as $column => $value) {
+                        $related->setAttribute($column, $value);
+                    }
                     $related->save();
                     break;
                 case \Illuminate\Database\Eloquent\Relations\HasMany::class:
