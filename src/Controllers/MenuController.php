@@ -12,6 +12,7 @@ use Encore\Admin\Layout\Row;
 use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Box;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Route;
 
 class MenuController extends Controller
 {
@@ -37,9 +38,13 @@ class MenuController extends Controller
 
                     $form->select('parent_id', trans('admin::lang.parent_id'))->options(Menu::selectOptions());
                     $form->text('title', trans('admin::lang.title'))->rules('required');
-                    $form->icon('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+                    $form->icon('icon',
+                        trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin::lang.uri'));
-                    $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+                    if (! config("admin.auto_menu")) {
+                        $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name',
+                            'id'));
+                    }
 
                     $column->append((new Box(trans('admin::lang.new'), $form))->style('success'));
                 });
@@ -72,8 +77,8 @@ class MenuController extends Controller
             $tree->branch(function ($branch) {
                 $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
 
-                if (!isset($branch['children'])) {
-                    $uri = admin_url($branch['uri']);
+                if (! isset($branch['children'])) {
+                    $uri = Route::has($branch['uri']) ? route($branch['uri']) : admin_url($branch['uri']);
 
                     $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
                 }
@@ -112,9 +117,12 @@ class MenuController extends Controller
 
             $form->select('parent_id', trans('admin::lang.parent_id'))->options(Menu::selectOptions());
             $form->text('title', trans('admin::lang.title'))->rules('required');
-            $form->icon('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+            $form->icon('icon',
+                trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
             $form->text('uri', trans('admin::lang.uri'));
-            $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+            if (! config("admin.auto_menu")) {
+                $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+            }
 
             $form->display('created_at', trans('admin::lang.created_at'));
             $form->display('updated_at', trans('admin::lang.updated_at'));
