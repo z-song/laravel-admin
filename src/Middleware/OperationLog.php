@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Middleware;
 
+use Encore\Admin\Auth\Database\OperationLog as OperationLogModel;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class OperationLog
      */
     public function handle(Request $request, \Closure $next)
     {
-        if (config('admin.operation_log') && Admin::user()) {
+        if ($this->shouldLogOperation($request)) {
             $log = [
                 'user_id' => Admin::user()->id,
                 'path'    => $request->path(),
@@ -26,9 +27,39 @@ class OperationLog
                 'input'   => json_encode($request->input()),
             ];
 
-            \Encore\Admin\Auth\Database\OperationLog::create($log);
+            OperationLogModel::create($log);
         }
 
         return $next($request);
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    protected function shouldLogOperation(Request $request)
+    {
+        return config('admin.operation_log.enable') && Admin::user() && $this->inExceptArray($request);
+    }
+
+    /**
+     * Determine if the request has a URI that should pass through CSRF verification.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function inExceptArray($request)
+    {
+        foreach (config('admin.operation_log.except') as $except) {
+            if ($except !== '/') {
+                $except = trim($except, '/');
+            }
+
+            if ($request->is($except)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

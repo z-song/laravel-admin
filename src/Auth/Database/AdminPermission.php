@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Auth\Database;
 
+use Illuminate\Support\Facades\Storage;
+
 trait AdminPermission
 {
     /**
@@ -14,10 +16,10 @@ trait AdminPermission
     public function getAvatarAttribute($avatar)
     {
         if ($avatar) {
-            return rtrim(config('admin.upload.host'), '/').'/'.trim($avatar, '/');
+            return Storage::disk(config('admin.upload.disk'))->url($avatar);
         }
 
-        return asset('/packages/admin/AdminLTE/dist/img/user2-160x160.jpg');
+        return admin_asset('/packages/admin/AdminLTE/dist/img/user2-160x160.jpg');
     }
 
     /**

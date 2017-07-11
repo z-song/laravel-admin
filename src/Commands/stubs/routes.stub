@@ -2,6 +2,8 @@
 
 use Illuminate\Routing\Router;
 
+Admin::registerAuthRoutes();
+
 Admin::registerHelpersRoutes();
 
 Route::group([

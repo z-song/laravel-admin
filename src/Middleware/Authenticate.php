@@ -3,7 +3,6 @@
 namespace Encore\Admin\Middleware;
 
 use Closure;
-use Encore\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
 
 class Authenticate
@@ -19,7 +18,7 @@ class Authenticate
     public function handle($request, Closure $next)
     {
         if (Auth::guard('admin')->guest() && !$this->shouldPassThrough($request)) {
-            return redirect()->guest(Admin::url('auth/login'));
+            return redirect()->guest(admin_url('auth/login'));
         }
 
         return $next($request);
@@ -35,8 +34,8 @@ class Authenticate
     protected function shouldPassThrough($request)
     {
         $excepts = [
-            Admin::url('auth/login'),
-            Admin::url('auth/logout'),
+            admin_url('auth/login'),
+            admin_url('auth/logout'),
         ];
 
         foreach ($excepts as $except) {

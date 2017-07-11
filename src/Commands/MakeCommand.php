@@ -35,8 +35,6 @@ class MakeCommand extends GeneratorCommand
             return false;
         }
 
-        //$this->type = $this->parseName($this->getNameInput());
-
         parent::fire();
     }
 

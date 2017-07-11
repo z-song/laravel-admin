@@ -74,14 +74,9 @@ class InstallCommand extends Command
 
         $this->createHomeController();
         $this->createExampleController();
-        //$this->createAuthController();
-        //$this->createAdministratorController();
 
-        //$this->createMenuFile();
         $this->createBootstrapFile();
         $this->createRoutesFile();
-
-        //$this->copyLanguageFiles();
     }
 
     /**
@@ -119,56 +114,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * Create AuthController.
-     *
-     * @return void
-     */
-    public function createAuthController()
-    {
-        $authController = $this->directory.'/Controllers/AuthController.php';
-        $contents = $this->getStub('AuthController');
-
-        $this->laravel['files']->put(
-            $authController,
-            str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
-        );
-        $this->line('<info>AuthController file was created:</info> '.str_replace(base_path(), '', $authController));
-    }
-
-    /**
-     * Create AdministratorController.
-     *
-     * @return void
-     */
-    public function createAdministratorController()
-    {
-        $controller = $this->directory.'/Controllers/AdministratorController.php';
-        $contents = $this->getStub('AdministratorController');
-
-        $this->laravel['files']->put(
-            $controller,
-            str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
-        );
-        $this->line(
-            '<info>AdministratorController file was created:</info> '.str_replace(base_path(), '', $controller)
-        );
-    }
-
-    /**
-     * Create menu file.
-     *
-     * @return void
-     */
-    protected function createMenuFile()
-    {
-        $file = $this->directory.'/menu.php';
-
-        $contents = $this->getStub('menu');
-        $this->laravel['files']->put($file, $contents);
-        $this->line('<info>Menu file was created:</info> '.str_replace(base_path(), '', $file));
-    }
-
-    /**
      * Create routes file.
      *
      * @return void
@@ -194,16 +139,6 @@ class InstallCommand extends Command
         $contents = $this->getStub('routes');
         $this->laravel['files']->put($file, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
         $this->line('<info>Routes file was created:</info> '.str_replace(base_path(), '', $file));
-    }
-
-    /**
-     * Copy language files to admin directory.
-     *
-     * @return void
-     */
-    protected function copyLanguageFiles()
-    {
-        $this->laravel['files']->copyDirectory(__DIR__.'/../../lang/', "{$this->directory}/lang/");
     }
 
     /**

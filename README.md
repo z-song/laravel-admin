@@ -72,7 +72,6 @@ Documentation
   - [tab](/docs/en/widgets/box.md)
   - [carousel](/docs/en/widgets/carousel.md)
   - [collapse](/docs/en/widgets/collapse.md)
-  - charts TODO
 - [RBAC](/docs/en/permission.md)
 
 Directory structure

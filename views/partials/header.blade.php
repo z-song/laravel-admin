@@ -2,7 +2,7 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="/{{ trim(config('admin.prefix'), '/') }}" class="logo">
+    <a href="{{ admin_url('/') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">{!! config('admin.logo-mini', config('admin.name')) !!}</span>
         <!-- logo for regular state and mobile devices -->
@@ -42,10 +42,10 @@
                         </li>
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="{{ Admin::url('auth/setting') }}" class="btn btn-default btn-flat">{{ trans('admin::lang.setting') }}</a>
+                                <a href="{{ admin_url('auth/setting') }}" class="btn btn-default btn-flat">{{ trans('admin::lang.setting') }}</a>
                             </div>
                             <div class="pull-right">
-                                <a href="{{ Admin::url('auth/logout') }}" class="btn btn-default btn-flat">{{ trans('admin::lang.logout') }}</a>
+                                <a href="{{ admin_url('auth/logout') }}" class="btn btn-default btn-flat">{{ trans('admin::lang.logout') }}</a>
                             </div>
                         </li>
                     </ul>

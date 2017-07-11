@@ -20,7 +20,7 @@ return [
     /*
      * Laravel-admin url prefix.
      */
-    'prefix'    => 'admin',
+    'url_root'    => 'admin',
 
     /*
      * Laravel-admin install directory.
@@ -31,6 +31,11 @@ return [
      * Laravel-admin html title.
      */
     'title'  => 'Admin',
+
+    /**
+     * Use `https`.
+     */
+    'secure' => false,
 
     /*
      * Laravel-admin auth setting.
@@ -49,11 +54,9 @@ return [
         'disk' => 'admin',
 
         'directory'  => [
-            'image'  => 'image',
-            'file'   => 'file',
-        ],
-
-        'host' => 'http://localhost:8000/upload/',
+            'image'  => 'images',
+            'file'   => 'files',
+        ]
     ],
 
     /*
@@ -91,7 +94,12 @@ return [
     /*
      * By setting this option to open or close operation log in laravel-admin.
      */
-    'operation_log'   => true,
+    'operation_log'   => [
+
+        'enable' => true,
+
+        'except' => []
+    ],
 
     /*
     |---------------------------------------------------------|

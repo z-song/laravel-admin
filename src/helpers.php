@@ -25,7 +25,7 @@ if (!function_exists('admin_url')) {
      */
     function admin_url($url = '')
     {
-        $prefix = trim(config('admin.prefix'), '/');
+        $prefix = trim(config('admin.url_root'), '/');
 
         return url($prefix ? "/$prefix" : '').'/'.trim($url, '/');
     }
@@ -48,4 +48,18 @@ if (!function_exists('admin_toastr')) {
 
         \Illuminate\Support\Facades\Session::flash('toastr', $toastr);
     }
+}
+
+if (!function_exists('admin_asset')) {
+
+    /**
+     * @param $path
+     *
+     * @return string
+     */
+    function admin_asset($path)
+    {
+        return asset($path, config('admin.secure'));
+    }
+
 }

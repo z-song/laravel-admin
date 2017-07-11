@@ -183,7 +183,7 @@ class Admin
      */
     public static function url($url)
     {
-        $prefix = (string) config('admin.prefix');
+        $prefix = (string) config('admin.url_root');
 
         if (empty($prefix) || $prefix == '/') {
             return '/'.trim($url, '/');
@@ -249,7 +249,7 @@ class Admin
     public function registerAuthRoutes()
     {
         $attributes = [
-            'prefix'        => config('admin.prefix'),
+            'prefix'        => config('admin.url_root'),
             'namespace'     => 'Encore\Admin\Controllers',
             'middleware'    => ['web', 'admin'],
         ];
@@ -277,7 +277,7 @@ class Admin
     public function registerHelpersRoutes($attributes = [])
     {
         $attributes = array_merge([
-            'prefix'     => trim(config('admin.prefix'), '/').'/helpers',
+            'prefix'     => trim(config('admin.url_root'), '/').'/helpers',
             'middleware' => ['web', 'admin'],
         ], $attributes);
 

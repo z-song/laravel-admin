@@ -273,7 +273,7 @@ trait UploadField
             return $path;
         }
 
-        return rtrim(config('admin.upload.host'), '/').'/'.trim($path, '/');
+        return Storage::disk(config('admin.upload.disk'))->url($path);
     }
 
     /**

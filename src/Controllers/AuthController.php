@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function getLogin()
     {
         if (!Auth::guard('admin')->guest()) {
-            return redirect(config('admin.prefix'));
+            return redirect(config('admin.url_root'));
         }
 
         return view('admin::login');
@@ -49,7 +49,7 @@ class AuthController extends Controller
         if (Auth::guard('admin')->attempt($credentials)) {
             admin_toastr(trans('admin::lang.login_successful'));
 
-            return redirect()->intended(config('admin.prefix'));
+            return redirect()->intended(config('admin.url_root'));
         }
 
         return Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
@@ -66,7 +66,7 @@ class AuthController extends Controller
 
         session()->forget('url.intented');
 
-        return redirect(config('admin.prefix'));
+        return redirect(config('admin.url_root'));
     }
 
     /**
