@@ -30,7 +30,7 @@ class MultipleSelect extends Select
             ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
         ) {
             /* @var BelongsToMany $relation */
-            $fullKey = $relation->getQualifiedRelatedKeyName();
+            $fullKey = $relation->getQualifiedRelatedPivotKeyName();
 
             return $this->otherKey = substr($fullKey, strpos($fullKey, '.') + 1);
         }

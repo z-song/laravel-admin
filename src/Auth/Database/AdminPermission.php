@@ -19,7 +19,7 @@ trait AdminPermission
             return Storage::disk(config('admin.upload.disk'))->url($avatar);
         }
 
-        return admin_asset('/packages/admin/AdminLTE/dist/img/user2-160x160.jpg');
+        return admin_asset('/vendor/laravel-admin/AdminLTE/dist/img/user2-160x160.jpg');
     }
 
     /**

@@ -10,11 +10,11 @@ class Tags extends Field
     protected $value = [];
 
     protected static $css = [
-        '/packages/admin/AdminLTE/plugins/select2/select2.min.css',
+        '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.min.css',
     ];
 
     protected static $js = [
-        '/packages/admin/AdminLTE/plugins/select2/select2.full.min.js',
+        '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.full.min.js',
     ];
 
     public function fill($data)

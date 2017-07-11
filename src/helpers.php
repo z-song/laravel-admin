@@ -31,6 +31,22 @@ if (!function_exists('admin_url')) {
     }
 }
 
+if (!function_exists('admin_base_path')) {
+    /**
+     * Get admin url.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    function admin_base_path($path = '')
+    {
+        $prefix = trim(config('admin.url_root'), '/');
+
+        return $prefix.'/'.trim($path, '/');
+    }
+}
+
 if (!function_exists('admin_toastr')) {
 
     /**

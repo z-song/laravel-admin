@@ -3,6 +3,7 @@
 namespace Encore\Admin\Middleware;
 
 use Closure;
+use Encore\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
 
 class Authenticate
@@ -34,8 +35,8 @@ class Authenticate
     protected function shouldPassThrough($request)
     {
         $excepts = [
-            admin_url('auth/login'),
-            admin_url('auth/logout'),
+            admin_base_path('auth/login'),
+            admin_base_path('auth/logout'),
         ];
 
         foreach ($excepts as $except) {

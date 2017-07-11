@@ -39,7 +39,7 @@ class OperationLog
      */
     protected function shouldLogOperation(Request $request)
     {
-        return config('admin.operation_log.enable') && Admin::user() && $this->inExceptArray($request);
+        return config('admin.operation_log.enable') && Admin::user() && !$this->inExceptArray($request);
     }
 
     /**
