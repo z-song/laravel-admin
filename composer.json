@@ -44,5 +44,12 @@
     "suggest": {
         "intervention/image": "Required to handling and manipulation upload images (~2.3).",
         "spatie/eloquent-sortable": "Required to built orderable gird."
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Encore\\Admin\\Providers\\AdminServiceProvider"
+            ]
+        }
     }
 }

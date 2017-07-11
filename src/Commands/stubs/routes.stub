@@ -7,7 +7,7 @@ Admin::registerAuthRoutes();
 Admin::registerHelpersRoutes();
 
 Route::group([
-    'prefix'        => config('admin.prefix'),
+    'prefix'        => config('admin.url_root'),
     'namespace'     => Admin::controllerNamespace(),
     'middleware'    => ['web', 'admin'],
 ], function (Router $router) {
