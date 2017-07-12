@@ -285,7 +285,8 @@ trait UploadField
      */
     protected function generateUniqueName(UploadedFile $file)
     {
-        return md5(uniqid()).'.'.$file->guessExtension();
+        $uniqueName = md5(uniqid().rand(10000,99999)).'.'.$file->guessExtension();
+        return $uniqueName;
     }
 
     /**
