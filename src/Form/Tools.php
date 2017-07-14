@@ -49,7 +49,7 @@ class Tools implements Renderable
     protected function backButton()
     {
         $script = <<<'EOT'
-$('.form-history-back').on('click', function () {
+$('.form-history-back').on('click', function (event) {
     event.preventDefault();
     history.back(1);
 });

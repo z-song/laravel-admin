@@ -62,7 +62,7 @@ trait AdminPermission
         }
 
         if (method_exists($this, 'permissions')) {
-            if ($this->permissions()->where('slug', $permission)->exists()) {
+            if ($this->permissions->keyBy('slug')->has($permission)) {
                 return true;
             }
         }
@@ -107,7 +107,7 @@ trait AdminPermission
      */
     public function isRole($role)
     {
-        return $this->roles()->where('slug', $role)->exists();
+        return $this->roles->keyBy('slug')->has($role);
     }
 
     /**
@@ -119,7 +119,14 @@ trait AdminPermission
      */
     public function inRoles($roles = [])
     {
-        return $this->roles()->whereIn('slug', (array) $roles)->exists();
+        $grantedRoles = $this->roles->keyBy('slug');
+        foreach ($roles as $role) {
+            if ($grantedRoles->has($role)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
