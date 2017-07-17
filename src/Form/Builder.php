@@ -255,6 +255,26 @@ class Builder
     }
 
     /**
+     * If the parant form has rows.
+     *
+     * @return bool
+     */
+    public function hasRows()
+    {
+        return ! empty($this->form->rows);
+    }
+
+    /**
+     * Get field rows of form.
+     *
+     * @return array
+     */
+    public function getRows()
+    {
+        return $this->form->rows;
+    }
+
+    /**
      * @return array
      */
     public function getHiddenFields()
@@ -313,15 +333,15 @@ class Builder
     public function title()
     {
         if ($this->mode == static::MODE_CREATE) {
-            return trans('admin::lang.create');
+            return trans('admin.create');
         }
 
         if ($this->mode == static::MODE_EDIT) {
-            return trans('admin::lang.edit');
+            return trans('admin.edit');
         }
 
         if ($this->mode == static::MODE_VIEW) {
-            return trans('admin::lang.view');
+            return trans('admin.view');
         }
 
         return '';
@@ -424,7 +444,7 @@ class Builder
             return '';
         }
 
-        $text = trans('admin::lang.submit');
+        $text = trans('admin.submit');
 
         return <<<EOT
 <div class="btn-group pull-right">
@@ -444,7 +464,7 @@ EOT;
             return '';
         }
 
-        $text = trans('admin::lang.reset');
+        $text = trans('admin.reset');
 
         return <<<EOT
 <div class="btn-group pull-left">

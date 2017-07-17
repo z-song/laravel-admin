@@ -25,23 +25,23 @@ class MenuController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header(trans('admin::lang.menu'));
-            $content->description(trans('admin::lang.list'));
+            $content->header(trans('admin.menu'));
+            $content->description(trans('admin.list'));
 
             $content->row(function (Row $row) {
                 $row->column(6, $this->treeView()->render());
 
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
-                    $form->action(admin_url('auth/menu'));
+                    $form->action(admin_base_path('auth/menu'));
 
-                    $form->select('parent_id', trans('admin::lang.parent_id'))->options(Menu::selectOptions());
-                    $form->text('title', trans('admin::lang.title'))->rules('required');
-                    $form->icon('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
-                    $form->text('uri', trans('admin::lang.uri'));
-                    $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+                    $form->select('parent_id', trans('admin.parent_id'))->options(Menu::selectOptions());
+                    $form->text('title', trans('admin.title'))->rules('required');
+                    $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+                    $form->text('uri', trans('admin.uri'));
+                    $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
 
-                    $column->append((new Box(trans('admin::lang.new'), $form))->style('success'));
+                    $column->append((new Box(trans('admin.new'), $form))->style('success'));
                 });
             });
         });
@@ -73,7 +73,7 @@ class MenuController extends Controller
                 $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
 
                 if (!isset($branch['children'])) {
-                    $uri = admin_url($branch['uri']);
+                    $uri = admin_base_path($branch['uri']);
 
                     $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
                 }
@@ -93,8 +93,8 @@ class MenuController extends Controller
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-            $content->header(trans('admin::lang.menu'));
-            $content->description(trans('admin::lang.edit'));
+            $content->header(trans('admin.menu'));
+            $content->description(trans('admin.edit'));
 
             $content->row($this->form()->edit($id));
         });
@@ -110,14 +110,14 @@ class MenuController extends Controller
         return Menu::form(function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->select('parent_id', trans('admin::lang.parent_id'))->options(Menu::selectOptions());
-            $form->text('title', trans('admin::lang.title'))->rules('required');
-            $form->icon('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
-            $form->text('uri', trans('admin::lang.uri'));
-            $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+            $form->select('parent_id', trans('admin.parent_id'))->options(Menu::selectOptions());
+            $form->text('title', trans('admin.title'))->rules('required');
+            $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+            $form->text('uri', trans('admin.uri'));
+            $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
 
-            $form->display('created_at', trans('admin::lang.created_at'));
-            $form->display('updated_at', trans('admin::lang.updated_at'));
+            $form->display('created_at', trans('admin.created_at'));
+            $form->display('updated_at', trans('admin.updated_at'));
         });
     }
 

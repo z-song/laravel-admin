@@ -49,18 +49,6 @@ class Row
     }
 
     /**
-     * Get the value of the model's primary key.
-     *
-     * @return mixed
-     *
-     * @deprecated Use `getKey()` instead.
-     */
-    public function id()
-    {
-        return $this->getKey();
-    }
-
-    /**
      * Get attributes in html format.
      *
      * @return string

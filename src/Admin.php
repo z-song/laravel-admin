@@ -100,21 +100,6 @@ class Admin
     }
 
     /**
-     * Get namespace of controllers.
-     *
-     * @return string
-     */
-    public function controllerNamespace()
-    {
-        $directory = config('admin.directory');
-
-        return ltrim(implode('\\',
-              array_map('ucfirst',
-                  explode(DIRECTORY_SEPARATOR, str_replace(app()->basePath(), '', $directory)))), '\\')
-              .'\\Controllers';
-    }
-
-    /**
      * Add css or get all css.
      *
      * @param null $css
@@ -175,24 +160,6 @@ class Admin
     }
 
     /**
-     * Admin url.
-     *
-     * @param $url
-     *
-     * @return string
-     */
-    public static function url($url)
-    {
-        $prefix = (string) config('admin.url_root');
-
-        if (empty($prefix) || $prefix == '/') {
-            return '/'.trim($url, '/');
-        }
-
-        return "/$prefix/".trim($url, '/');
-    }
-
-    /**
      * Left sider-bar menu.
      *
      * @return array
@@ -246,19 +213,25 @@ class Admin
         return $this->navbar;
     }
 
+    /**
+     * Register the auth routes.
+     *
+     * @return void
+     */
     public function registerAuthRoutes()
     {
         $attributes = [
-            'prefix'        => config('admin.url_root'),
+            'prefix'        => config('admin.route.prefix'),
             'namespace'     => 'Encore\Admin\Controllers',
-            'middleware'    => ['web', 'admin'],
+            'middleware'    => config('admin.route.middleware'),
         ];
 
         Route::group($attributes, function ($router) {
-            $attributes = ['middleware' => 'admin.permission:allow,administrator'];
 
             /* @var \Illuminate\Routing\Router $router */
-            $router->group($attributes, function ($router) {
+            $router->group([], function ($router) {
+
+                /* @var \Illuminate\Routing\Router $router */
                 $router->resource('auth/users', 'UserController');
                 $router->resource('auth/roles', 'RoleController');
                 $router->resource('auth/permissions', 'PermissionController');
@@ -274,11 +247,16 @@ class Admin
         });
     }
 
+    /**
+     * Register the helpers routes.
+     *
+     * @return void
+     */
     public function registerHelpersRoutes($attributes = [])
     {
         $attributes = array_merge([
-            'prefix'     => trim(config('admin.url_root'), '/').'/helpers',
-            'middleware' => ['web', 'admin'],
+            'prefix'     => trim(config('admin.route.prefix'), '/').'/helpers',
+            'middleware' => config('admin.route.middleware'),
         ], $attributes);
 
         Route::group($attributes, function ($router) {
@@ -290,6 +268,7 @@ class Admin
             $router->post('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@runArtisan');
             $router->get('scaffold', 'Encore\Admin\Controllers\ScaffoldController@index');
             $router->post('scaffold', 'Encore\Admin\Controllers\ScaffoldController@store');
+            $router->get('routes', 'Encore\Admin\Controllers\RouteController@index');
         });
     }
 }

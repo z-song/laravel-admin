@@ -35,7 +35,7 @@ class InstallCommand extends Command
      */
     public function fire()
     {
-        $this->publishDatabase();
+//        $this->publishDatabase();
 
         $this->initAdminDirectory();
     }
@@ -53,7 +53,7 @@ class InstallCommand extends Command
     }
 
     /**
-     * Initialize the admin directory.
+     * Initialize the admAin directory.
      *
      * @return void
      */
@@ -91,7 +91,7 @@ class InstallCommand extends Command
 
         $this->laravel['files']->put(
             $homeController,
-            str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
+            str_replace('DummyNamespace', config('admin.route.namespace'), $contents)
         );
         $this->line('<info>HomeController file was created:</info> '.str_replace(base_path(), '', $homeController));
     }
@@ -108,7 +108,7 @@ class InstallCommand extends Command
 
         $this->laravel['files']->put(
             $exampleController,
-            str_replace('DummyNamespace', Admin::controllerNamespace(), $contents)
+            str_replace('DummyNamespace', config('admin.route.namespace'), $contents)
         );
         $this->line('<info>ExampleController file was created:</info> '.str_replace(base_path(), '', $exampleController));
     }
@@ -137,7 +137,7 @@ class InstallCommand extends Command
         $file = $this->directory.'/routes.php';
 
         $contents = $this->getStub('routes');
-        $this->laravel['files']->put($file, str_replace('DummyNamespace', Admin::controllerNamespace(), $contents));
+        $this->laravel['files']->put($file, str_replace('DummyNamespace', config('admin.route.namespace'), $contents));
         $this->line('<info>Routes file was created:</info> '.str_replace(base_path(), '', $file));
     }
 

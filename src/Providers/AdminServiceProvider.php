@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Providers;
 
-use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AdminServiceProvider extends ServiceProvider
@@ -41,6 +41,7 @@ class AdminServiceProvider extends ServiceProvider
             'admin.pjax',
             'admin.log',
             'admin.bootstrap',
+            'admin.permission',
         ],
     ];
 
@@ -52,14 +53,13 @@ class AdminServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/../../views', 'admin');
-        $this->loadTranslationsFrom(__DIR__.'/../../lang/', 'admin');
+        $this->loadRoutesFrom(admin_path('routes.php'));
 
-        $this->publishes([__DIR__.'/../../config/admin.php' => config_path('admin.php')], 'laravel-admin');
-        $this->publishes([__DIR__.'/../../assets' => public_path('vendor/laravel-admin')], 'laravel-admin');
-
-        if (file_exists($routes = admin_path('routes.php'))) {
-            require $routes;
-        }
+        $this->publishes([__DIR__.'/../../config' => config_path()],                        'laravel-admin-config');
+        $this->publishes([__DIR__.'/../../lang' => resource_path('lang')],                  'laravel-admin-lang');
+//        $this->publishes([__DIR__.'/../../views' => resource_path('views/admin')],          'laravel-admin-views');
+        $this->publishes([__DIR__.'/../../migrations' => database_path('migrations')],      'laravel-admin-migrations');
+        $this->publishes([__DIR__.'/../../assets' => public_path('vendor/laravel-admin')],  'laravel-admin-assets');
     }
 
     /**
@@ -69,15 +69,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->booting(function () {
-            $loader = AliasLoader::getInstance();
-
-            $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
-
-            if (is_null(config('auth.guards.admin'))) {
-                $this->setupAuth();
-            }
-        });
+        $this->loadAdminAuthConfig();
 
         $this->registerRouteMiddleware();
 
@@ -89,14 +81,9 @@ class AdminServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function setupAuth()
+    protected function loadAdminAuthConfig()
     {
-        config([
-            'auth.guards.admin.driver'    => 'session',
-            'auth.guards.admin.provider'  => 'admin',
-            'auth.providers.admin.driver' => 'eloquent',
-            'auth.providers.admin.model'  => config('admin.database.users_model'),
-        ]);
+        config(array_dot(config('admin.auth'), 'auth.'));
     }
 
     /**

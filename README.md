@@ -36,17 +36,14 @@ Laravel 5.1
 composer require encore/laravel-admin "1.1.x-dev"
 ```
 
-In`config/app.php`add`ServiceProvider`:
-
-```
-Encore\Admin\Providers\AdminServiceProvider::class
-```
 
 Then run these commands to finnish install：
 
 ```
-php artisan vendor:publish --tag=laravel-admin
-php artisan admin:install
+$ php artisan vendor:publish --provider="Encore\Admin\Providers\AdminServiceProvider"
+$ php artisan migrate
+$ php artisan db:seed --class="Encore\Admin\Auth\Database\AdminTablesSeeder"
+$ php artisan admin:install
 ```
 
 open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.

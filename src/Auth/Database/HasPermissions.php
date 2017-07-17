@@ -4,7 +4,7 @@ namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Support\Facades\Storage;
 
-trait AdminPermission
+trait HasPermissions
 {
     /**
      * Get avatar attribute.
@@ -48,6 +48,18 @@ trait AdminPermission
         $relatedModel = config('admin.database.permissions_model');
 
         return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
+    }
+
+    /**
+     * Get all permissions of user.
+     *
+     * @return mixed
+     */
+    public function allPermissions()
+    {
+        return $this->roles->map(function ($role) {
+            return $role->permissions;
+        })->flatten()->merge($this->permissions);
     }
 
     /**

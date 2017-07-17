@@ -3,10 +3,11 @@
 namespace Encore\Admin;
 
 use Closure;
-use Encore\Admin\Exception\Handle;
+use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
+use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -65,6 +66,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\MultipleImage  multipleImage($column, $label = '')
  * @method Field\MultipleFile   multipleFile($column, $label = '')
  * @method Field\Captcha        captcha($column, $label = '')
+ * @method Field\ListBox        listbox($column, $label = '')
  */
 class Form
 {
@@ -157,6 +159,13 @@ class Form
      * Remove flag in `has many` form.
      */
     const REMOVE_FLAG_NAME = '_remove_';
+
+    /**
+     * Field rows in form.
+     *
+     * @var array
+     */
+    public $rows = [];
 
     /**
      * Create a new form instance.
@@ -339,7 +348,7 @@ class Form
             return $response;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin::lang.save_succeeded'))) {
+        if ($response = $this->ajaxResponse(trans('admin.save_succeeded'))) {
             return $response;
         }
 
@@ -353,7 +362,7 @@ class Form
      */
     protected function redirectAfterStore()
     {
-        admin_toastr(trans('admin::lang.save_succeeded'));
+        admin_toastr(trans('admin.save_succeeded'));
 
         $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(0);
 
@@ -500,7 +509,7 @@ class Form
         if ($this->handleOrderable($id, $data)) {
             return response([
                 'status'  => true,
-                'message' => trans('admin::lang.update_succeeded'),
+                'message' => trans('admin.update_succeeded'),
             ]);
         }
 
@@ -535,7 +544,7 @@ class Form
             return $result;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin::lang.update_succeeded'))) {
+        if ($response = $this->ajaxResponse(trans('admin.update_succeeded'))) {
             return $response;
         }
 
@@ -549,7 +558,7 @@ class Form
      */
     protected function redirectAfterUpdate()
     {
-        admin_toastr(trans('admin::lang.update_succeeded'));
+        admin_toastr(trans('admin.update_succeeded'));
 
         $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
 
@@ -1070,6 +1079,20 @@ class Form
     }
 
     /**
+     * Add a row in form.
+     *
+     * @param Closure $callback
+     *
+     * @return $this
+     */
+    public function row(Closure $callback)
+    {
+        $this->rows[] = new Row($callback, $this);
+
+        return $this;
+    }
+
+    /**
      * Tools setting for form.
      *
      * @param Closure $callback
@@ -1133,7 +1156,7 @@ class Form
         try {
             return $this->builder->render();
         } catch (\Exception $e) {
-            return Handle::renderException($e);
+            return Handler::renderException($e);
         }
     }
 
@@ -1207,6 +1230,7 @@ class Form
             'multipleFile'      => \Encore\Admin\Form\Field\MultipleFile::class,
             'multipleImage'     => \Encore\Admin\Form\Field\MultipleImage::class,
             'captcha'           => \Encore\Admin\Form\Field\Captcha::class,
+            'listbox'           => \Encore\Admin\Form\Field\ListBox::class,
         ];
 
         foreach ($map as $abstract => $class) {

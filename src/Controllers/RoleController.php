@@ -22,8 +22,8 @@ class RoleController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header(trans('admin::lang.roles'));
-            $content->description(trans('admin::lang.list'));
+            $content->header(trans('admin.roles'));
+            $content->description(trans('admin.list'));
             $content->body($this->grid()->render());
         });
     }
@@ -38,8 +38,8 @@ class RoleController extends Controller
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-            $content->header(trans('admin::lang.roles'));
-            $content->description(trans('admin::lang.edit'));
+            $content->header(trans('admin.roles'));
+            $content->description(trans('admin.edit'));
             $content->body($this->form()->edit($id));
         });
     }
@@ -52,8 +52,8 @@ class RoleController extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header(trans('admin::lang.roles'));
-            $content->description(trans('admin::lang.create'));
+            $content->header(trans('admin.roles'));
+            $content->description(trans('admin.create'));
             $content->body($this->form());
         });
     }
@@ -67,11 +67,13 @@ class RoleController extends Controller
     {
         return Admin::grid(Role::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
-            $grid->slug(trans('admin::lang.slug'));
-            $grid->name(trans('admin::lang.name'));
+            $grid->slug(trans('admin.slug'));
+            $grid->name(trans('admin.name'));
 
-            $grid->created_at(trans('admin::lang.created_at'));
-            $grid->updated_at(trans('admin::lang.updated_at'));
+            $grid->permissions(trans('admin.permission'))->pluck('name')->label();
+
+            $grid->created_at(trans('admin.created_at'));
+            $grid->updated_at(trans('admin.updated_at'));
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 if ($actions->row->slug == 'administrator') {
@@ -97,12 +99,12 @@ class RoleController extends Controller
         return Admin::form(Role::class, function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->text('slug', trans('admin::lang.slug'))->rules('required');
-            $form->text('name', trans('admin::lang.name'))->rules('required');
-            $form->multipleSelect('permissions', trans('admin::lang.permissions'))->options(Permission::all()->pluck('name', 'id'));
+            $form->text('slug', trans('admin.slug'))->rules('required');
+            $form->text('name', trans('admin.name'))->rules('required');
+            $form->listbox('permissions', trans('admin.permissions'))->options(Permission::all()->pluck('name', 'id'));
 
-            $form->display('created_at', trans('admin::lang.created_at'));
-            $form->display('updated_at', trans('admin::lang.updated_at'));
+            $form->display('created_at', trans('admin.created_at'));
+            $form->display('updated_at', trans('admin.updated_at'));
         });
     }
 }

@@ -1,8 +1,8 @@
-<div class="form-group">
+<div class="{{$viewClass['form-group']}}">
 
-    <label class="col-sm-{{$width['label']}} control-label"></label>
+    <label class="{{$viewClass['label']}} control-label"></label>
 
-    <div class="col-sm-{{$width['field']}}">
+    <div class="{{$viewClass['field']}}">
         <input type='button' value='{{$label}}' class="btn {{ $class }}" {!! $attributes !!} />
     </div>
 </div>

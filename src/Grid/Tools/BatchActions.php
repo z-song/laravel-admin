@@ -34,7 +34,7 @@ class BatchActions extends AbstractTool
      */
     protected function appendDefaultAction()
     {
-        $this->add(trans('admin::lang.delete'), new BatchDelete());
+        $this->add(trans('admin.delete'), new BatchDelete());
     }
 
     /**
@@ -123,7 +123,7 @@ EOT;
      */
     public function render()
     {
-        if (!$this->grid->allowBatchDeletion() || !$this->enableDelete) {
+        if (!$this->enableDelete) {
             $this->actions->shift();
         }
 

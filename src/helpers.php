@@ -19,15 +19,13 @@ if (!function_exists('admin_url')) {
     /**
      * Get admin url.
      *
-     * @param string $url
+     * @param string $path
      *
      * @return string
      */
-    function admin_url($url = '')
+    function admin_url($path = '')
     {
-        $prefix = trim(config('admin.url_root'), '/');
-
-        return url($prefix ? "/$prefix" : '').'/'.trim($url, '/');
+        return url(admin_base_path($path));
     }
 }
 
@@ -41,7 +39,7 @@ if (!function_exists('admin_base_path')) {
      */
     function admin_base_path($path = '')
     {
-        $prefix = trim(config('admin.url_root'), '/');
+        $prefix =  '/'.trim(config('admin.route.prefix'), '/');
 
         return $prefix.'/'.trim($path, '/');
     }
@@ -77,5 +75,4 @@ if (!function_exists('admin_asset')) {
     {
         return asset($path, config('admin.secure'));
     }
-
 }

@@ -3,7 +3,7 @@
 namespace Encore\Admin;
 
 use Closure;
-use Encore\Admin\Exception\Handle;
+use Encore\Admin\Exception\Handler;
 use Encore\Admin\Grid\Column;
 use Encore\Admin\Grid\Displayers\Actions;
 use Encore\Admin\Grid\Displayers\RowSelector;
@@ -164,7 +164,6 @@ class Grid
         'useActions'        => true,
         'useRowSelector'    => true,
         'allowCreate'       => true,
-        'allowBatchDelete'  => true,
     ];
 
     /**
@@ -211,12 +210,13 @@ class Grid
      */
     protected function setupExporter()
     {
-        if (Input::has(Exporter::$queryName)) {
+        if ($scope = Input::get(Exporter::$queryName)) {
+
             $this->model()->usePaginate(false);
 
             call_user_func($this->builder, $this);
 
-            (new Exporter($this))->resolve($this->exporter)->export();
+            (new Exporter($this))->resolve($this->exporter)->withScope($scope)->export();
         }
     }
 
@@ -432,7 +432,7 @@ class Grid
 
         $grid = $this;
         $callback = $this->actionsCallback;
-        $column = $this->addColumn('__actions__', trans('admin::lang.action'));
+        $column = $this->addColumn('__actions__', trans('admin.action'));
 
         $column->display(function ($value) use ($grid, $column, $callback) {
             $actions = new Actions($value, $grid, $column, $this);
@@ -469,7 +469,7 @@ class Grid
 
         $grid = $this;
 
-        $column = new Column('__row_selector__', ' ');
+        $column = new Column(Column::SELECT_COLUMN_NAME, ' ');
         $column->setGrid($this);
 
         $column->display(function ($value) use ($grid, $column) {
@@ -639,15 +639,15 @@ class Grid
     }
 
     /**
-     * Export url.
+     * Get the export url.
      *
+     * @param int $scope
+     * @param null $args
      * @return string
      */
-    public function exportUrl()
+    public function exportUrl($scope = 1, $args = null)
     {
-        $input = Input::all();
-
-        $input = array_merge($input, [Exporter::$queryName => true]);
+        $input = array_merge(Input::all(), Exporter::formatExportQuery($scope, $args));
 
         return $this->resource().'?'.http_build_query($input);
     }
@@ -683,28 +683,6 @@ class Grid
     }
 
     /**
-     * If allow batch delete.
-     *
-     * @return bool
-     */
-    public function allowBatchDeletion()
-    {
-        return $this->option('allowBatchDelete');
-    }
-
-    /**
-     * Disable batch deletion.
-     *
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function disableBatchDeletion()
-    {
-        return $this->option('allowBatchDelete', false);
-    }
-
-    /**
      * Disable creation.
      *
      * @return $this
@@ -732,6 +710,28 @@ class Grid
     public function renderCreateButton()
     {
         return new Tools\CreateButton($this);
+    }
+
+    protected $footer;
+
+    public function footer(Closure $closure = null)
+    {
+        if (!$closure) {
+            return $this->footer;
+        }
+
+        $this->footer = $closure;
+
+        return $this;
+    }
+
+    public function renderFooter()
+    {
+        if (!$this->footer) {
+            return '';
+        }
+
+        return new Tools\Footer($this);
     }
 
     /**
@@ -943,19 +943,6 @@ class Grid
     }
 
     /**
-     * Set a view to render.
-     *
-     * @param string $view
-     * @param array  $variables
-     *
-     * @deprecated
-     */
-    public function view($view, $variables = [])
-    {
-        $this->setView($view, $variables);
-    }
-
-    /**
      * Get the string contents of the grid view.
      *
      * @return string
@@ -965,7 +952,7 @@ class Grid
         try {
             $this->build();
         } catch (\Exception $e) {
-            return Handle::renderException($e);
+            return Handler::renderException($e);
         }
 
         return view($this->view, $this->variables())->render();

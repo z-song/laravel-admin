@@ -8,6 +8,13 @@ use Encore\Admin\Grid\Exporters\CsvExporter;
 class Exporter
 {
     /**
+     * Export scope constants.
+     */
+    const SCOPE_ALL             = 'all';
+    const SCOPE_CURRENT_PAGE    = 'page';
+    const SCOPE_SELECTED_ROWS   = 'selected';
+
+    /**
      * @var Grid
      */
     protected $grid;
@@ -99,5 +106,31 @@ class Exporter
     public function getDefaultExporter()
     {
         return new CsvExporter($this->grid);
+    }
+
+    /**
+     * Format query for export url.
+     *
+     * @param int $scope
+     * @param null $args
+     * @return array
+     */
+    public static function formatExportQuery($scope = '', $args = null)
+    {
+        $query = '';
+
+        if ($scope == static::SCOPE_ALL) {
+            $query = 'all';
+        }
+
+        if ($scope == static::SCOPE_CURRENT_PAGE) {
+            $query = "page:$args";
+        }
+
+        if ($scope == static::SCOPE_SELECTED_ROWS) {
+            $query = "selected:$args";
+        }
+
+        return [static::$queryName => $query];
     }
 }

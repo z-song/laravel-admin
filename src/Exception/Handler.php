@@ -5,7 +5,7 @@ namespace Encore\Admin\Exception;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ViewErrorBag;
 
-class Handle
+class Handler
 {
     /**
      * Render exception.

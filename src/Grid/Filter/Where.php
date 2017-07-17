@@ -23,13 +23,14 @@ class Where extends AbstractFilter
      *
      * @param \Closure $query
      * @param string   $label
+     * @param string   $column
      */
-    public function __construct(\Closure $query, $label)
+    public function __construct(\Closure $query, $label, $column = null)
     {
         $this->where = $query;
 
         $this->label = $this->formatLabel($label);
-        $this->column = static::getQueryHash($query, $this->label);
+        $this->column = $column ?: static::getQueryHash($query, $this->label);
         $this->id = $this->formatId($this->column);
 
         $this->setupField();
@@ -59,7 +60,7 @@ class Where extends AbstractFilter
      */
     public function condition($inputs)
     {
-        $value = array_get($inputs, static::getQueryHash($this->where, $this->label));
+        $value = array_get($inputs, $this->column ?: static::getQueryHash($this->where, $this->label));
 
         if (is_array($value)) {
             $value = array_filter($value);

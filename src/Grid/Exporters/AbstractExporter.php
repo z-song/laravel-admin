@@ -58,6 +58,33 @@ abstract class AbstractExporter implements ExporterInterface
     }
 
     /**
+     * Export data with scope.
+     *
+     * @param string $scope
+     *
+     * @return $this
+     */
+    public function withScope($scope)
+    {
+        if ($scope == Grid\Exporter::SCOPE_ALL) {
+            return $this;
+        }
+
+        list($scope, $args) = explode(':', $scope);
+
+        if ($scope == Grid\Exporter::SCOPE_CURRENT_PAGE) {
+            $this->grid->model()->usePaginate(true);
+        }
+
+        if ($scope == Grid\Exporter::SCOPE_SELECTED_ROWS) {
+            $selected = explode(',', $args);
+            $this->grid->model()->whereIn($this->grid->getKeyName(), $selected);
+        }
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     abstract public function export();

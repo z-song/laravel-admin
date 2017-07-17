@@ -5,6 +5,7 @@ namespace Encore\Admin\Middleware;
 use Encore\Admin\Auth\Database\OperationLog as OperationLogModel;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class OperationLog
 {
@@ -34,12 +35,16 @@ class OperationLog
     }
 
     /**
+     *
+     *
      * @param Request $request
      * @return bool
      */
     protected function shouldLogOperation(Request $request)
     {
-        return config('admin.operation_log.enable') && Admin::user() && !$this->inExceptArray($request);
+        return config('admin.operation_log.enable')
+            && !$this->inExceptArray($request)
+            && Admin::user();
     }
 
     /**
@@ -55,7 +60,18 @@ class OperationLog
                 $except = trim($except, '/');
             }
 
-            if ($request->is($except)) {
+            $methods = [];
+
+            if (Str::contains($except, ':')) {
+                list($methods, $except) = explode(':', $except);
+                $methods = explode(',', $methods);
+            }
+
+            $methods = array_map('strtoupper', $methods);
+
+            if ($request->is($except) &&
+                (empty($method) || in_array($request->method(), $methods)))
+            {
                 return true;
             }
         }

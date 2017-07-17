@@ -49,7 +49,11 @@
         "laravel": {
             "providers": [
                 "Encore\\Admin\\Providers\\AdminServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Admin": "Encore\\Admin\\Facades\\Admin"
+            }
+
         }
     }
 }

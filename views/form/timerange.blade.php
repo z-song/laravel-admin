@@ -1,8 +1,8 @@
-<div class="form-group {!! ($errors->has($errorKey['start'].'start') || $errors->has($errorKey['end'].'end')) ? 'has-error' : ''  !!}">
+<div class="{{$viewClass['form-group']}} {!! ($errors->has($errorKey['start'].'start') || $errors->has($errorKey['end'].'end')) ? 'has-error' : ''  !!}">
 
-    <label for="{{$id['start']}}" class="col-sm-{{$width['label']}} control-label">{{$label}}</label>
+    <label for="{{$id['start']}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
-    <div class="col-sm-{{$width['field']}}">
+    <div class="{{$viewClass['field']}}">
 
         @include('admin::form.error')
 

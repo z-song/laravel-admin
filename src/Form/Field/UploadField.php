@@ -58,7 +58,7 @@ trait UploadField
         $defaultOptions = [
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
-            'browseLabel'          => trans('admin::lang.browse'),
+            'browseLabel'          => trans('admin.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
             'initialCaption'       => $this->initialCaption($this->value),
@@ -241,7 +241,7 @@ trait UploadField
 
         $target = $this->getDirectory().'/'.$this->name;
 
-        $this->storage->put($target, file_get_contents($file->getRealPath()));
+        $this->storage->putFile($target, $file);
 
         return $target;
     }

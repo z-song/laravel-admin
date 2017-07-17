@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/AdminLTE/dist/css/skins/" . config('admin.skin') .".min.css") }}">
 
     {!! Admin::css() !!}
+    <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/laravel-admin/laravel-admin.css") }}">
+    <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/nprogress/nprogress.css") }}">
+    <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/sweetalert/dist/sweetalert.css") }}">
     <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/nestable/nestable.css") }}">
     <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/toastr/build/toastr.min.css") }}">
     <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/bootstrap3-editable/css/bootstrap-editable.css") }}">
@@ -27,6 +30,7 @@
     <script src="{{ admin_asset ("/vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
     <script src="{{ admin_asset ("/vendor/laravel-admin/AdminLTE/dist/js/app.min.js") }}"></script>
     <script src="{{ admin_asset ("/vendor/laravel-admin/jquery-pjax/jquery.pjax.js") }}"></script>
+    <script src="{{ admin_asset ("/vendor/laravel-admin/nprogress/nprogress.js") }}"></script>
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -53,78 +57,18 @@
 
 <!-- ./wrapper -->
 
+<script>
+    function LA() {}
+    LA.token = "{{ csrf_token() }}";
+</script>
+
 <!-- REQUIRED JS SCRIPTS -->
 <script src="{{ admin_asset ("/vendor/laravel-admin/nestable/jquery.nestable.js") }}"></script>
 <script src="{{ admin_asset ("/vendor/laravel-admin/toastr/build/toastr.min.js") }}"></script>
 <script src="{{ admin_asset ("/vendor/laravel-admin/bootstrap3-editable/js/bootstrap-editable.min.js") }}"></script>
-
+<script src="{{ admin_asset ("/vendor/laravel-admin/sweetalert/dist/sweetalert.min.js") }}"></script>
 {!! Admin::js() !!}
-
-<script>
-
-    function LA() {}
-    LA.token = "{{ csrf_token() }}";
-
-    $.fn.editable.defaults.params = function (params) {
-        params._token = '{{ csrf_token() }}';
-        params._editable = 1;
-        params._method = 'PUT';
-        return params;
-    };
-
-    toastr.options = {
-        closeButton: true,
-        progressBar: true,
-        showMethod: 'slideDown',
-        timeOut: 4000
-    };
-
-    $.pjax.defaults.timeout = 5000;
-    $.pjax.defaults.maxCacheLength = 0;
-    $(document).pjax('a:not(a[target="_blank"])', {
-        container: '#pjax-container'
-    });
-
-    $(document).on('submit', 'form[pjax-container]', function(event) {
-        $.pjax.submit(event, '#pjax-container')
-    });
-
-    $(document).on("pjax:popstate", function() {
-
-        $(document).one("pjax:end", function(event) {
-            $(event.target).find("script[data-exec-on-popstate]").each(function() {
-                $.globalEval(this.text || this.textContent || this.innerHTML || '');
-            });
-        });
-    });
-    
-    $(document).on('pjax:send', function(xhr) {
-        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-            $submit_btn = $('form[pjax-container] :submit');
-            if($submit_btn) {
-                $submit_btn.button('loading')
-            }
-        }
-    })
-    
-    $(document).on('pjax:complete', function(xhr) {
-        if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-            $submit_btn = $('form[pjax-container] :submit');
-            if($submit_btn) {
-                $submit_btn.button('reset')
-            }
-        }
-    })
-
-    $(function(){
-        $('.sidebar-menu li:not(.treeview) > a').on('click', function(){
-            var $parent = $(this).parent().addClass('active');
-            $parent.siblings('.treeview.active').find('> a').trigger('click');
-            $parent.siblings().removeClass('active').find('li').removeClass('active');
-        });
-    });
-
-</script>
+<script src="{{ admin_asset ("/vendor/laravel-admin/laravel-admin/laravel-admin.js") }}"></script>
 
 </body>
 </html>

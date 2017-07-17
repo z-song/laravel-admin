@@ -34,14 +34,14 @@ class Filter
     /**
      * @var array
      */
-    protected $supports = ['equal', 'is', 'ilike', 'like', 'gt', 'lt', 'between', 'where'];
+    protected $supports = ['equal', 'ilike', 'like', 'gt', 'lt', 'between', 'where'];
 
     /**
      * If use a modal to hold the filters.
      *
      * @var bool
      */
-    protected $useModal = false;
+    protected $useModal = true;
 
     /**
      * If use id filter.
@@ -60,7 +60,7 @@ class Filter
     /**
      * @var string
      */
-    protected $view = 'admin::grid.filter';
+    protected $view = 'admin::filter.modal';
 
     /**
      * Create a new filter instance.
@@ -71,7 +71,9 @@ class Filter
     {
         $this->model = $model;
 
-        $this->equal($this->model->eloquent()->getKeyName());
+        $pk = $this->model->eloquent()->getKeyName();
+
+        $this->equal($pk, strtoupper($pk));
     }
 
     /**
@@ -185,10 +187,7 @@ class Filter
             return '';
         }
 
-        if ($this->useModal) {
-            $this->view = 'admin::filter.modal';
-
-            $script = <<<'EOT'
+        $script = <<<'EOT'
 
 $("#filter-modal .submit").click(function () {
     $("#filter-modal").modal('toggle');
@@ -197,8 +196,7 @@ $("#filter-modal .submit").click(function () {
 });
 
 EOT;
-            Admin::script($script);
-        }
+        Admin::script($script);
 
         return view($this->view)->with([
             'action'    => $this->action ?: $this->urlWithoutFilters(),

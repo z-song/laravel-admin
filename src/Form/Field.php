@@ -169,6 +169,13 @@ class Field implements Renderable
     ];
 
     /**
+     * If the form horizontal layout.
+     *
+     * @var bool
+     */
+    protected $horizontal = true;
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -632,7 +639,7 @@ class Field implements Renderable
      */
     public function getPlaceholder()
     {
-        return $this->placeholder ?: trans('admin::lang.input').' '.$this->label;
+        return $this->placeholder ?: trans('admin.input').' '.$this->label;
     }
 
     /**
@@ -649,6 +656,32 @@ class Field implements Renderable
         }
 
         return implode(' ', $html);
+    }
+
+    /**
+     * @return $this
+     */
+    public function disableHorizontal()
+    {
+        $this->horizontal = false;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getViewElementClasses()
+    {
+        if ($this->horizontal) {
+            return [
+                'label'      => "col-sm-{$this->width['label']}",
+                'field'      => "col-sm-{$this->width['field']}",
+                'form-group' => 'form-group '
+            ];
+        }
+
+        return ['label' =>'', 'field' => '', 'form-group' => ''];
     }
 
     /**
@@ -781,7 +814,7 @@ class Field implements Renderable
             'class'         => $this->getElementClassString(),
             'value'         => $this->value(),
             'label'         => $this->label,
-            'width'         => $this->width,
+            'viewClass'     => $this->getViewElementClasses(),
             'column'        => $this->column,
             'errorKey'      => $this->getErrorKey(),
             'attributes'    => $this->formatAttributes(),

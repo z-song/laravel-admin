@@ -190,13 +190,13 @@ $grid->filter(function($filter){
     $filter->like('name', 'name');
 
     // sql: ... WHERE `user.email` = $email;
-    $filter->is('emial', 'Email');
+    $filter->equal('emial', 'Email');
 
     // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
     $filter->between('created_at', 'Created Time')->datetime();
     
     // sql: ... WHERE `article.author_id` = $id;
-    $filter->is('author_id', 'Author')->select(User::all()->pluck('name', 'id'));
+    $filter->equal('author_id', 'Author')->select(User::all()->pluck('name', 'id'));
 
     // sql: ... WHERE `title` LIKE "%$input" OR `content` LIKE "%$input";
     $filter->where(function ($query) {

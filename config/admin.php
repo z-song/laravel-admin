@@ -17,10 +17,17 @@ return [
      */
     'logo-mini' => '<b>La</b>',
 
-    /*
-     * Laravel-admin url prefix.
+    /**
+     * Route configration.
      */
-    'url_root'    => 'admin',
+    'route' => [
+
+        'prefix' => 'admin',
+
+        'namespace'     => 'App\\Admin\\Controllers',
+
+        'middleware'    => ['web', 'admin'],
+    ],
 
     /*
      * Laravel-admin install directory.
@@ -41,9 +48,19 @@ return [
      * Laravel-admin auth setting.
      */
     'auth' => [
-        'driver'   => 'session',
-        'provider' => '',
-        'model'    => Encore\Admin\Auth\Database\Administrator::class,
+        'guards' => [
+            'admin' => [
+                'driver' => 'session',
+                'provider' => 'admin',
+            ]
+        ],
+
+        'providers' => [
+            'admin' => [
+                'driver' => 'eloquent',
+                'model'  => Encore\Admin\Auth\Database\Administrator::class,
+            ]
+        ],
     ],
 
     /*
@@ -98,7 +115,15 @@ return [
 
         'enable' => true,
 
-        'except' => []
+        /**
+         * Routes that will not log to database.
+         *
+         * All method to path like: admin/auth/logs
+         * or specific method to path like: get:admin/auth/logs
+         */
+        'except' => [
+            'admin/auth/logs*',
+        ]
     ],
 
     /*
@@ -127,5 +152,5 @@ return [
     /*
      * Version displayed in footer.
      */
-    'version'   => '1.0',
+    'version'   => '1.5.x-dev',
 ];

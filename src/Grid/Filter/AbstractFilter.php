@@ -228,6 +228,26 @@ abstract class AbstractFilter
     }
 
     /**
+     * Date filter.
+     *
+     * @return mixed
+     */
+    public function date()
+    {
+        return $this->datetime(['format' => 'YYYY-MM-DD']);
+    }
+
+    /**
+     * Time filter.
+     *
+     * @return mixed
+     */
+    public function time()
+    {
+        return $this->datetime(['format' => 'HH:mm:ss']);
+    }
+
+    /**
      * Set field object of filter.
      *
      * @param $field

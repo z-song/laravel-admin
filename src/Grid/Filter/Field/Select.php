@@ -47,7 +47,7 @@ class Select
      */
     protected function buildOptions()
     {
-        $default = ['' => trans('admin::lang.choose')];
+        $default = ['' => trans('admin.choose')];
 
         if (is_string($this->options)) {
             $this->loadAjaxOptions($this->options);
@@ -63,6 +63,8 @@ class Select
         if ($this->options instanceof Arrayable) {
             $this->options = $this->options->toArray();
         }
+
+        Admin::script("$(\".{$this->getElementClass()}\").select2();");
 
         $options = is_array($this->options) ? $this->options : [];
 

@@ -32,6 +32,9 @@
                 @endforeach
             </tr>
             @endforeach
+
+            {!! $grid->renderFooter() !!}
+
         </table>
     </div>
     <div class="box-footer clearfix">

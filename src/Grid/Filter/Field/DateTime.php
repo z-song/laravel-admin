@@ -13,6 +13,8 @@ class DateTime
 
     protected $options = [];
 
+    protected $format = 'YYYY-MM-DD HH:mm:ss';
+
     public function __construct($filter, array $options = [])
     {
         $this->filter = $filter;
@@ -41,7 +43,7 @@ class DateTime
 
     protected function checkOptions($options)
     {
-        $options['format'] = array_get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
+        $options['format'] = array_get($options, 'format', $this->format);
         $options['locale'] = array_get($options, 'locale', config('app.locale'));
 
         return $options;

@@ -1,7 +1,7 @@
 @if(Admin::user()->visible($item['roles']))
     @if(!isset($item['children']))
         <li>
-            <a href="{{ admin_url($item['uri']) }}"><i class="fa {{$item['icon']}}"></i>
+            <a href="{{ admin_base_path($item['uri']) }}"><i class="fa {{$item['icon']}}"></i>
                 <span>{{$item['title']}}</span>
             </a>
         </li>

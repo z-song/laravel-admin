@@ -109,6 +109,8 @@ class Column
      */
     protected static $model;
 
+    const SELECT_COLUMN_NAME = '__row_selector__';
+
     /**
      * @param string $name
      * @param string $label
@@ -281,20 +283,6 @@ class Column
         $this->sortable = true;
 
         return $this;
-    }
-
-    /**
-     * Alias for `display()` method.
-     *
-     * @param Closure $callable
-     *
-     * @deprecated please use `display()` method instead.
-     *
-     * @return $this
-     */
-    public function value(Closure $callable)
-    {
-        return $this->display($callable);
     }
 
     /**

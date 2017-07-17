@@ -13,7 +13,7 @@ class RefreshButton extends AbstractTool
      */
     protected function script()
     {
-        $message = trans('admin::lang.refresh_succeeded');
+        $message = trans('admin.refresh_succeeded');
 
         return <<<EOT
 
@@ -34,7 +34,7 @@ EOT;
     {
         Admin::script($this->script());
 
-        $refresh = trans('admin::lang.refresh');
+        $refresh = trans('admin.refresh');
 
         return <<<EOT
 <a class="btn btn-sm btn-primary grid-refresh"><i class="fa fa-refresh"></i> $refresh</a>

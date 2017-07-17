@@ -9,16 +9,6 @@ class Display extends Field
 {
     protected $callback;
 
-    /**
-     * @deprecated
-     *
-     * @param Closure $callback
-     */
-    public function format(Closure $callback)
-    {
-        $this->with($callback);
-    }
-
     public function with(Closure $callback)
     {
         $this->callback = $callback;

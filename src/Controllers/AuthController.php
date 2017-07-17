@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function getLogin()
     {
         if (!Auth::guard('admin')->guest()) {
-            return redirect(config('admin.url_root'));
+            return redirect(config('admin.route.prefix'));
         }
 
         return view('admin::login');
@@ -47,9 +47,9 @@ class AuthController extends Controller
         }
 
         if (Auth::guard('admin')->attempt($credentials)) {
-            admin_toastr(trans('admin::lang.login_successful'));
+            admin_toastr(trans('admin.login_successful'));
 
-            return redirect()->intended(config('admin.url_root'));
+            return redirect()->intended(config('admin.route.prefix'));
         }
 
         return Redirect::back()->withInput()->withErrors(['username' => $this->getFailedLoginMessage()]);
@@ -66,7 +66,7 @@ class AuthController extends Controller
 
         session()->forget('url.intented');
 
-        return redirect(config('admin.url_root'));
+        return redirect(config('admin.route.prefix'));
     }
 
     /**
@@ -77,7 +77,7 @@ class AuthController extends Controller
     public function getSetting()
     {
         return Admin::content(function (Content $content) {
-            $content->header(trans('admin::lang.user_setting'));
+            $content->header(trans('admin.user_setting'));
             $content->body($this->settingForm()->edit(Admin::user()->id));
         });
     }
@@ -100,16 +100,16 @@ class AuthController extends Controller
     protected function settingForm()
     {
         return Administrator::form(function (Form $form) {
-            $form->display('username', trans('admin::lang.username'));
-            $form->text('name', trans('admin::lang.name'))->rules('required');
-            $form->image('avatar', trans('admin::lang.avatar'));
-            $form->password('password', trans('admin::lang.password'))->rules('confirmed|required');
-            $form->password('password_confirmation', trans('admin::lang.password_confirmation'))->rules('required')
+            $form->display('username', trans('admin.username'));
+            $form->text('name', trans('admin.name'))->rules('required');
+            $form->image('avatar', trans('admin.avatar'));
+            $form->password('password', trans('admin.password'))->rules('confirmed|required');
+            $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
                 ->default(function ($form) {
                     return $form->model()->password;
                 });
 
-            $form->setAction(admin_url('auth/setting'));
+            $form->setAction(admin_base_path('auth/setting'));
 
             $form->ignore(['password_confirmation']);
 
@@ -120,9 +120,9 @@ class AuthController extends Controller
             });
 
             $form->saved(function () {
-                admin_toastr(trans('admin::lang.update_succeeded'));
+                admin_toastr(trans('admin.update_succeeded'));
 
-                return redirect(admin_url('auth/setting'));
+                return redirect(admin_base_path('auth/setting'));
             });
         });
     }

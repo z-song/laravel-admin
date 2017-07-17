@@ -115,7 +115,7 @@ class File extends Field
 
         $target = $this->getDirectory().'/'.$this->name;
 
-        $this->storage->put($target, file_get_contents($file->getRealPath()));
+        $this->storage->putFile($target, $file);
 
         $this->destroy();
 

@@ -1,4 +1,4 @@
-<div class="input-group input-group-sm">
-    <span class="input-group-addon"><strong>{{$label}}&nbsp;></strong></span>
+<div class="form-group">
+    <label>{{$label}}&nbsp;(>)</label>
     @include('admin::filter.' . $field->name())
 </div>

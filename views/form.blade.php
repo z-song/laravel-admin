@@ -8,6 +8,12 @@
     </div>
     <!-- /.box-header -->
     <!-- form start -->
+    @if($form->hasRows())
+        {!! $form->open() !!}
+    @else
+        {!! $form->open(['class' => "form-horizontal"]) !!}
+    @endif
+
     {!! $form->open(['class' => "form-horizontal"]) !!}
         <div class="box-body">
 
@@ -15,9 +21,18 @@
                 @include('admin::form.tab', compact('tabObj'))
             @else
                 <div class="fields-group">
-                    @foreach($form->fields() as $field)
-                        {!! $field->render() !!}
-                    @endforeach
+
+                    @if($form->hasRows())
+                        @foreach($form->getRows() as $row)
+                            {!! $row->render() !!}
+                        @endforeach
+                    @else
+                        @foreach($form->fields() as $field)
+                            {!! $field->render() !!}
+                        @endforeach
+                    @endif
+
+
                 </div>
             @endif
 
@@ -28,10 +43,10 @@
             @if( ! $form->isMode(\Encore\Admin\Form\Builder::MODE_VIEW)  || ! $form->option('enableSubmit'))
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
             @endif
-            <div class="col-sm-{{$width['label']}}">
+            <div class="{{$width['label']}}">
 
             </div>
-            <div class="col-sm-{{$width['field']}}">
+            <div class="{{$width['field']}}">
 
                 {!! $form->submitButton() !!}
 

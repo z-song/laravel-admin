@@ -57,7 +57,7 @@ EOT;
 
         Admin::script($script);
 
-        $text = trans('admin::lang.back');
+        $text = trans('admin.back');
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 10px">
@@ -71,7 +71,7 @@ EOT;
         $slice = Str::contains($this->form->getResource(0), '/edit') ? null : -1;
         $resource = $this->form->getResource($slice);
 
-        $text = trans('admin::lang.list');
+        $text = trans('admin.list');
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 10px">
