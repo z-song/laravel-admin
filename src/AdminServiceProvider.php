@@ -85,7 +85,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected function loadAdminAuthConfig()
     {
-        config(array_dot(config('admin.auth'), 'auth.'));
+        config(array_dot(config('admin.auth', []), 'auth.'));
     }
 
     /**

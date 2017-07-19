@@ -3,7 +3,7 @@
 namespace Encore\Admin\Auth;
 
 use Encore\Admin\Facades\Admin;
-use Encore\Admin\Middleware\PjaxMiddleware;
+use Encore\Admin\Middleware\Pjax;
 use Illuminate\Support\Facades\Auth;
 
 class Permission
@@ -77,7 +77,7 @@ class Permission
     {
         $response = response(Admin::content()->withError(trans('admin.deny')));
 
-        PjaxMiddleware::respond($response);
+        Pjax::respond($response);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Grid;
 
-use Encore\Admin\Middleware\PjaxMiddleware;
+use Encore\Admin\Middleware\Pjax;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -260,7 +260,7 @@ class Model
                 $paginator->getPageName() => $paginator->lastPage(),
             ]);
 
-            PjaxMiddleware::respond(redirect($lastPageUrl));
+            Pjax::respond(redirect($lastPageUrl));
         }
     }
 
