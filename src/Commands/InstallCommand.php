@@ -34,7 +34,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         $this->initDatabase();
 

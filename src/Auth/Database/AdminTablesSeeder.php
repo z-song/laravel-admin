@@ -33,11 +33,31 @@ class AdminTablesSeeder extends Seeder
 
         //create a permission
         Permission::truncate();
-        Role::create([
-            'name'        => 'All permission',
-            'slug'        => '*',
-            'http_method' => '',
-            'http_path'   => '/admin*'
+        Permission::insert([
+            [
+                'name'        => 'All permission',
+                'slug'        => '*',
+                'http_method' => '',
+                'http_path'   => '/admin*'
+            ],
+            [
+                'name'        => 'Login',
+                'slug'        => 'auth.login',
+                'http_method' => '',
+                'http_path'   => "/admin/auth/login\r\n/admin/auth/logout"
+            ],
+            [
+                'name'        => 'User setting',
+                'slug'        => 'auth.setting',
+                'http_method' => 'GET,PUT',
+                'http_path'   => '/admin/auth/setting',
+            ],
+            [
+                'name'        => 'Auth management',
+                'slug'        => 'auth.management',
+                'http_method' => '',
+                'http_path'   => "/admin/auth/roles\r\n/admin/auth/permissions\r\n/admin/auth/menu\r\n/admin/auth/logs",
+            ],
         ]);
 
         Role::first()->permissions()->save(Permission::first());
@@ -94,38 +114,9 @@ class AdminTablesSeeder extends Seeder
                 'icon'      => 'fa-history',
                 'uri'       => 'auth/logs',
             ],
-            [
-                'parent_id' => 0,
-                'order'     => 8,
-                'title'     => 'Helpers',
-                'icon'      => 'fa-gears',
-                'uri'       => '',
-            ],
-            [
-                'parent_id' => 8,
-                'order'     => 9,
-                'title'     => 'Scaffold',
-                'icon'      => 'fa-keyboard-o',
-                'uri'       => 'helpers/scaffold',
-            ],
-            [
-                'parent_id' => 8,
-                'order'     => 10,
-                'title'     => 'Database terminal',
-                'icon'      => 'fa-database',
-                'uri'       => 'helpers/terminal/database',
-            ],
-            [
-                'parent_id' => 8,
-                'order'     => 11,
-                'title'     => 'Laravel artisan',
-                'icon'      => 'fa-terminal',
-                'uri'       => 'helpers/terminal/artisan',
-            ],
         ]);
 
         // add role to menu.
         Menu::find(2)->roles()->save(Role::first());
-        Menu::find(8)->roles()->save(Role::first());
     }
 }

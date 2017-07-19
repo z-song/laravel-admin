@@ -26,7 +26,7 @@ class MenuCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         $menu = Admin::menu();
 

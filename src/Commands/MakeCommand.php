@@ -35,7 +35,7 @@ class MakeCommand extends GeneratorCommand
             return false;
         }
 
-        parent::fire();
+        parent::handle();
     }
 
     /**

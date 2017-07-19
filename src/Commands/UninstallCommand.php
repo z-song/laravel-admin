@@ -25,7 +25,7 @@ class UninstallCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         if (!$this->confirm('Are you sure to uninstall laravel-admin?')) {
             return;

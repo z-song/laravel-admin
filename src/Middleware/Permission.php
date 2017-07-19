@@ -24,7 +24,7 @@ class Permission
         if (!Admin::user()->allPermissions()->first(function ($permission) use ($request) {
             return $permission->shouldPassThrough($request);
         })) {
-            Permission::error();
+            \Encore\Admin\Auth\Permission::error();
         };
 
         return $next($request);
