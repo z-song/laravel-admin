@@ -48,7 +48,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Encore\\Admin\\Providers\\AdminServiceProvider"
+                "Encore\\Admin\\AdminServiceProvider"
             ],
             "aliases": {
                 "Admin": "Encore\\Admin\\Facades\\Admin"

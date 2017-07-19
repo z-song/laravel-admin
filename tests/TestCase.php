@@ -17,7 +17,7 @@ class TestCase extends BaseTestCase
     {
         $app = require __DIR__.'/../vendor/laravel/laravel/bootstrap/app.php';
 
-        $app->register('Encore\Admin\Providers\AdminServiceProvider');
+        $app->register('Encore\Admin\AdminServiceProvider');
 
         $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 

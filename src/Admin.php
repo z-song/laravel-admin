@@ -194,8 +194,12 @@ class Admin
      *
      * @param Closure $builder
      */
-    public function navbar(Closure $builder)
+    public function navbar(Closure $builder = null)
     {
+        if (is_null($builder)) {
+            return $this->getNavbar();
+        }
+
         call_user_func($builder, $this->getNavbar());
     }
 
@@ -244,31 +248,6 @@ class Admin
             $router->get('auth/logout', 'AuthController@getLogout');
             $router->get('auth/setting', 'AuthController@getSetting');
             $router->put('auth/setting', 'AuthController@putSetting');
-        });
-    }
-
-    /**
-     * Register the helpers routes.
-     *
-     * @return void
-     */
-    public function registerHelpersRoutes($attributes = [])
-    {
-        $attributes = array_merge([
-            'prefix'     => trim(config('admin.route.prefix'), '/').'/helpers',
-            'middleware' => config('admin.route.middleware'),
-        ], $attributes);
-
-        Route::group($attributes, function ($router) {
-
-            /* @var \Illuminate\Routing\Router $router */
-            $router->get('terminal/database', 'Encore\Admin\Controllers\TerminalController@database');
-            $router->post('terminal/database', 'Encore\Admin\Controllers\TerminalController@runDatabase');
-            $router->get('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@artisan');
-            $router->post('terminal/artisan', 'Encore\Admin\Controllers\TerminalController@runArtisan');
-            $router->get('scaffold', 'Encore\Admin\Controllers\ScaffoldController@index');
-            $router->post('scaffold', 'Encore\Admin\Controllers\ScaffoldController@store');
-            $router->get('routes', 'Encore\Admin\Controllers\RouteController@index');
         });
     }
 }

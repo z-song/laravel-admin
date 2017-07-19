@@ -40,7 +40,7 @@ composer require encore/laravel-admin "1.1.x-dev"
 Then run these commands to finnish install：
 
 ```
-$ php artisan vendor:publish --provider="Encore\Admin\Providers\AdminServiceProvider"
+$ php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
 $ php artisan migrate
 $ php artisan db:seed --class="Encore\Admin\Auth\Database\AdminTablesSeeder"
 $ php artisan admin:install

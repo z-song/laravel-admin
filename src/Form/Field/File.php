@@ -113,13 +113,11 @@ class File extends Field
     {
         $this->renameIfExists($file);
 
-        $target = $this->getDirectory().'/'.$this->name;
-
-        $this->storage->putFile($target, $file);
+        $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
 
         $this->destroy();
 
-        return $target;
+        return $path;
     }
 
     /**

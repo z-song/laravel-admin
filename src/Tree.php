@@ -189,10 +189,12 @@ class Tree implements Renderable
      */
     protected function script()
     {
-        $confirm = trans('admin.delete_confirm');
+        $deleteConfirm = trans('admin.delete_confirm');
         $saveSucceeded = trans('admin.save_succeeded');
         $refreshSucceeded = trans('admin.refresh_succeeded');
         $deleteSucceeded = trans('admin.delete_succeeded');
+        $confirm = trans('admin.confirm');
+        $cancel = trans('admin.cancel');
 
         $nestableOptions = json_encode($this->nestableOptions);
 
@@ -202,12 +204,36 @@ class Tree implements Renderable
 
         $('.tree_branch_delete').click(function() {
             var id = $(this).data('id');
-            if(confirm("{$confirm}")) {
-                $.post('{$this->path}/' + id, {_method:'delete','_token':LA.token}, function(data){
-                    $.pjax.reload('#pjax-container');
-                    toastr.success('{$deleteSucceeded}');
+            swal({
+              title: "$deleteConfirm",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "$confirm",
+              closeOnConfirm: false,
+              cancelButtonText: "$cancel"
+            },
+            function(){
+                $.ajax({
+                    method: 'post',
+                    url: '{$this->path}/' + id,
+                    data: {
+                        _method:'delete',
+                        _token:LA.token,
+                    },
+                    success: function (data) {
+                        $.pjax.reload('#pjax-container');
+
+                        if (typeof data === 'object') {
+                            if (data.status) {
+                                swal(data.message, '', 'success');
+                            } else {
+                                swal(data.message, '', 'error');
+                            }
+                        }
+                    }
                 });
-            }
+            });
         });
 
         $('.{$this->elementId}-save').click(function () {

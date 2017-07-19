@@ -37,7 +37,7 @@ composer require encore/laravel-admin "1.1.x-dev"
 在`config/app.php`加入`ServiceProvider`:
 
 ```
-Encore\Admin\Providers\AdminServiceProvider::class
+Encore\Admin\AdminServiceProvider::class
 ```
 
 然后运行下面的命令完成安装：

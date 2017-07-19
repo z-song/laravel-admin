@@ -2,8 +2,9 @@
 
 namespace Encore\Admin\Commands;
 
-use Encore\Admin\Facades\Admin;
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 
 class InstallCommand extends Command
 {
@@ -35,7 +36,7 @@ class InstallCommand extends Command
      */
     public function fire()
     {
-//        $this->publishDatabase();
+        $this->initDatabase();
 
         $this->initAdminDirectory();
     }
@@ -45,11 +46,13 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    public function publishDatabase()
+    public function initDatabase()
     {
-        $this->call('migrate', ['--path' => str_replace(base_path(), '', __DIR__).'/../../migrations/']);
+        $this->call('migrate');
 
-        $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdminTablesSeeder::class]);
+        if (Administrator::count() == 0) {
+            $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdminTablesSeeder::class]);
+        }
     }
 
     /**
