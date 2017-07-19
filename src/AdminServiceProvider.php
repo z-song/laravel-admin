@@ -53,7 +53,10 @@ class AdminServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'admin');
-        $this->loadRoutesFrom(admin_path('routes.php'));
+
+        if (file_exists($routes = admin_path('routes.php'))) {
+            $this->loadRoutesFrom($routes);
+        }
 
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__.'/../config' => config_path()],                                   'laravel-admin-config');
