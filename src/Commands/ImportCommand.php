@@ -29,34 +29,15 @@ class ImportCommand extends Command
 
     public function handle()
     {
-        $extension = $this->argument('extension');
-
-        $psr4 = require_once base_path('vendor/composer/autoload_psr4.php');
-
-        $namespace = '';
-        foreach ($psr4 as $key => $paths) {
-            foreach ((array) $paths as $path) {
-                if (Str::startsWith($path, base_path('vendor/'.$extension.'/'))) {
-                    $namespace = $key;
-                    break;
-                }
-            }
-        }
-
-        if (empty($namespace)) {
-            $this->error("Extension [$extension] not found");
-            return;
-        }
-
-        $className = $namespace.'Extension';
+        $className = $this->argument('extension');
 
         if (!class_exists($className) || !method_exists($className, 'import')) {
-            $this->error("Invalid Extension [$extension]");
+            $this->error("Invalid Extension [$className]");
             return;
         }
 
-        (new $className)->import($this);
+        call_user_func([$className, 'import'], $this);
 
-        $this->info("Extension [$extension] imported");
+        $this->info("Extension [$className] imported");
     }
 }

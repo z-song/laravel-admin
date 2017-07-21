@@ -4,16 +4,18 @@ namespace Encore\Admin;
 
 abstract class Extension
 {
-    protected static $name = '';
-
     public static function config($key, $default = null)
     {
-        $key = sprintf('admin.extensions.%s.%s', static::$name, $key);
+        $class = explode('\\', get_called_class());
+
+        $name = array_pop($class);
+
+        $key = sprintf('admin.extensions.%s.%s', strtolower($name), $key);
 
         return config($key, $default);
     }
 
-    public function import()
+    public static function import()
     {
         
     }
