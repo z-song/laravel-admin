@@ -82,7 +82,7 @@ class PerPageSelector extends AbstractTool
 <label class="control-label pull-right" style="margin-right: 10px; font-weight: 100;">
 
         <small>$show</small>&nbsp;
-        <select class="input-sm grid-per-pager" name="per-page">
+        <select class="input-sm grid-per-pager" name="per-page" id="per-page">
             $options
         </select>
         &nbsp;<small>$entries</small>
@@ -100,6 +100,9 @@ EOT;
     {
         return <<<'EOT'
 
+$('#per-page').select2({
+  minimumResultsForSearch: Infinity
+});
 $('.grid-per-pager').on("change", function(e) {
     $.pjax({url: this.value, container: '#pjax-container'});
 });
