@@ -29,10 +29,11 @@ class ExportButton extends AbstractTool
 
         $export = trans('admin::lang.export');
 
+        $url = url($this->grid->exportUrl());
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="{$this->grid->exportUrl()}" target="_blank" class="btn btn-sm btn-twitter">
+    <a href="{$url}" target="_blank" class="btn btn-sm btn-twitter">
         <i class="fa fa-download"></i>&nbsp;&nbsp;{$export}
     </a>
 </div>

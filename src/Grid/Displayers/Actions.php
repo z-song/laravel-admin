@@ -132,8 +132,9 @@ class Actions extends AbstractDisplayer
      */
     protected function editAction()
     {
+        $url = url($this->getResource().'/'.$this->getKey().'/edit');
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}/edit">
+<a href="{$url}">
     <i class="fa fa-edit"></i>
 </a>
 EOT;
@@ -148,13 +149,14 @@ EOT;
     {
         $confirm = trans('admin::lang.delete_confirm');
 
+        $url = url($this->getResource());
         $script = <<<SCRIPT
 
 $('.grid-row-delete').unbind('click').click(function() {
     if(confirm("{$confirm}")) {
         $.ajax({
             method: 'post',
-            url: '{$this->getResource()}/' + $(this).data('id'),
+            url: '{$url}/' + $(this).data('id'),
             data: {
                 _method:'delete',
                 _token:LA.token,

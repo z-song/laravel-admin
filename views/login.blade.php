@@ -25,13 +25,13 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="{{ Admin::url('/') }}"><b>{{config('admin.name')}}</b></a>
+    <a href="{{ admin_url('/') }}"><b>{{config('admin.name')}}</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">{{ trans('admin::lang.login') }}</p>
 
-    <form action="{{ Admin::url('auth/login') }}" method="post">
+    <form action="{{ admin_url('auth/login') }}" method="post">
       <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
 
         @if($errors->has('username'))

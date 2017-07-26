@@ -196,6 +196,7 @@ class Tree implements Renderable
 
         $nestableOptions = json_encode($this->nestableOptions);
 
+        $path = url($this->path);
         return <<<SCRIPT
 
         $('#{$this->elementId}').nestable($nestableOptions);
@@ -203,7 +204,7 @@ class Tree implements Renderable
         $('.tree_branch_delete').click(function() {
             var id = $(this).data('id');
             if(confirm("{$confirm}")) {
-                $.post('{$this->path}/' + id, {_method:'delete','_token':LA.token}, function(data){
+                $.post('{$path}/' + id, {_method:'delete','_token':LA.token}, function(data){
                     $.pjax.reload('#pjax-container');
                     toastr.success('{$deleteSucceeded}');
                 });
@@ -213,7 +214,7 @@ class Tree implements Renderable
         $('.{$this->elementId}-save').click(function () {
             var serialize = $('#{$this->elementId}').nestable('serialize');
 
-            $.post('{$this->path}', {
+            $.post('{$path}', {
                 _token: LA.token,
                 _order: JSON.stringify(serialize)
             },
