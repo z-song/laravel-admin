@@ -197,6 +197,7 @@ class Tree implements Renderable
         $nestableOptions = json_encode($this->nestableOptions);
 
         $path = url($this->path);
+
         return <<<SCRIPT
 
         $('#{$this->elementId}').nestable($nestableOptions);

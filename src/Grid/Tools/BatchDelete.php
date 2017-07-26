@@ -12,6 +12,7 @@ class BatchDelete extends BatchAction
         $confirm = trans('admin::lang.delete_confirm');
 
         $url = url($this->resource);
+
         return <<<EOT
 
 $('{$this->getElementClass()}').on('click', function() {

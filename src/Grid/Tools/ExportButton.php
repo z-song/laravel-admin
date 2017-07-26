@@ -30,6 +30,7 @@ class ExportButton extends AbstractTool
         $export = trans('admin::lang.export');
 
         $url = url($this->grid->exportUrl());
+
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">

@@ -133,6 +133,7 @@ class Actions extends AbstractDisplayer
     protected function editAction()
     {
         $url = url($this->getResource().'/'.$this->getKey().'/edit');
+
         return <<<EOT
 <a href="{$url}">
     <i class="fa fa-edit"></i>
