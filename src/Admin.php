@@ -38,6 +38,11 @@ class Admin
     public static $js = [];
 
     /**
+     * @var array
+     */
+    public static $extensions = [];
+
+    /**
      * @param $model
      * @param Closure $callable
      *
@@ -249,5 +254,10 @@ class Admin
             $router->get('auth/setting', 'AuthController@getSetting');
             $router->put('auth/setting', 'AuthController@putSetting');
         });
+    }
+
+    public static function extend($name, $class)
+    {
+        static::$extensions[$name] = $class;
     }
 }

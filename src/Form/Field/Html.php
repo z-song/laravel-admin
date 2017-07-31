@@ -18,6 +18,8 @@ class Html extends Field
      */
     protected $label = '';
 
+    protected $plain = false;
+
     /**
      * Create a new Html instance.
      *
@@ -31,6 +33,13 @@ class Html extends Field
         $this->label = array_get($arguments, 0);
     }
 
+    public function plain()
+    {
+        $this->plain = true;
+
+        return $this;
+    }
+
     /**
      * Render html field.
      *
@@ -42,6 +51,10 @@ class Html extends Field
             $callback = $this->html->bindTo($this->form->model());
 
             $this->html = call_user_func($callback, $this->form);
+        }
+
+        if ($this->plain) {
+            return $this->html;
         }
 
         return <<<EOT

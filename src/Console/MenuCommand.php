@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Commands;
+namespace Encore\Admin\Console;
 
 use Encore\Admin\Facades\Admin;
 use Illuminate\Console\Command;

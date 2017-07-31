@@ -1,9 +1,9 @@
 <?php
 
-namespace Encore\Admin\Commands;
+namespace Encore\Admin\Console;
 
+use Encore\Admin\Admin;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 class ImportCommand extends Command
 {
@@ -12,7 +12,7 @@ class ImportCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'admin:import {extension}';
+    protected $signature = 'admin:import {extension?}';
 
     /**
      * The console command description.
@@ -29,7 +29,13 @@ class ImportCommand extends Command
 
     public function handle()
     {
-        $className = $this->argument('extension');
+        $extension = $this->argument('extension');
+
+        if (empty($extension) || !array_has(Admin::$extensions, $extension)) {
+            $extension = $this->choice('Please choose a extension to import', array_keys(Admin::$extensions));
+        }
+
+        $className = array_get(Admin::$extensions, $extension);
 
         if (!class_exists($className) || !method_exists($className, 'import')) {
             $this->error("Invalid Extension [$className]");

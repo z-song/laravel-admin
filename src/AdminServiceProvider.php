@@ -10,11 +10,11 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
-        'Encore\Admin\Commands\MakeCommand',
-        'Encore\Admin\Commands\MenuCommand',
-        'Encore\Admin\Commands\InstallCommand',
-        'Encore\Admin\Commands\UninstallCommand',
-        'Encore\Admin\Commands\ImportCommand',
+        'Encore\Admin\Console\MakeCommand',
+        'Encore\Admin\Console\MenuCommand',
+        'Encore\Admin\Console\InstallCommand',
+        'Encore\Admin\Console\UninstallCommand',
+        'Encore\Admin\Console\ImportCommand',
     ];
 
     /**

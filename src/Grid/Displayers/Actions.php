@@ -32,6 +32,11 @@ class Actions extends AbstractDisplayer
     protected $resource;
 
     /**
+     * @var
+     */
+    protected $key;
+
+    /**
      * Append a action.
      *
      * @param $action
@@ -123,6 +128,22 @@ class Actions extends AbstractDisplayer
         $actions = array_merge($actions, $this->appends);
 
         return implode('', $actions);
+    }
+
+    public function setKey($key)
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    public function getKey()
+    {
+        if ($this->key) {
+            return $this->key;
+        }
+
+        return parent::getKey();
     }
 
     /**

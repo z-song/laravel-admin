@@ -28,4 +28,18 @@ class Handler
 
         return view('admin::partials.exception', compact('errors'))->render();
     }
+
+    /**
+     * Flash a error message to content.
+     *
+     * @param string $title
+     * @param string $message
+     * @return mixed
+     */
+    public static function error($title = '', $message = '')
+    {
+        $error = new MessageBag(compact('title', 'message'));
+
+        return session()->flash('error', $error);
+    }
 }

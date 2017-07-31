@@ -95,4 +95,9 @@ return [
     'all'           => 'All',
     'current_page'  => 'Current page',
     'selected_rows' => 'Selected rows',
+
+    'upload'        => 'Upload',
+    'new_folder'    => 'New folder',
+    'time'          => 'Time',
+    'size'          => 'Size',
 ];

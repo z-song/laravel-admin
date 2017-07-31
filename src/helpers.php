@@ -48,7 +48,7 @@ if (!function_exists('admin_base_path')) {
 if (!function_exists('admin_toastr')) {
 
     /**
-     * Flash a toastr messaage bag to session.
+     * Flash a toastr message bag to session.
      *
      * @param string $message
      * @param string $type

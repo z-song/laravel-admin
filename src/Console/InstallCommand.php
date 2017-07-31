@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Commands;
+namespace Encore\Admin\Console;
 
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Console\Command;
