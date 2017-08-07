@@ -30,6 +30,8 @@ EOT;
 
     protected function script()
     {
+        $url = url($this->getResource());
+
         return <<<EOT
 
 $('.grid-row-orderable').on('click', function() {
@@ -37,7 +39,7 @@ $('.grid-row-orderable').on('click', function() {
     var key = $(this).data('id');
     var direction = $(this).data('direction');
 
-    $.post('{$this->getResource()}/' + key, {_method:'PUT', _token:LA.token, _orderable:direction}, function(data){
+    $.post('{$url}/' + key, {_method:'PUT', _token:LA.token, _orderable:direction}, function(data){
         if (data.status) {
             $.pjax.reload('#pjax-container');
             toastr.success(data.message);

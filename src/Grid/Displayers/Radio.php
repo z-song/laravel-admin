@@ -41,13 +41,15 @@ EOT;
     {
         $name = $this->column->getName();
 
+        $url = url($this->getResource());
+
         return <<<EOT
 
 $('form.grid-radio-$name').on('submit', function () {
     var value = $(this).find('input:radio:checked').val();
 
     $.ajax({
-        url: "{$this->getResource()}/" + $(this).data('key'),
+        url: "{$url}/" + $(this).data('key'),
         type: "POST",
         data: {
             $name: value,

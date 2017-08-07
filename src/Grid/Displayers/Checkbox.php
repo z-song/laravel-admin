@@ -45,6 +45,8 @@ EOT;
     {
         $name = $this->column->getName();
 
+        $url = url($this->getResource());
+
         return <<<EOT
 
 $('form.grid-checkbox-$name').on('submit', function () {
@@ -53,7 +55,7 @@ $('form.grid-checkbox-$name').on('submit', function () {
     }).get();
 
     $.ajax({
-        url: "{$this->getResource()}/" + $(this).data('key'),
+        url: "{$url}/" + $(this).data('key'),
         type: "POST",
         data: {
             $name: values,

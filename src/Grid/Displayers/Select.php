@@ -12,6 +12,8 @@ class Select extends AbstractDisplayer
 
         $class = "grid-select-{$name}";
 
+        $url = url($this->grid->resource());
+
         $script = <<<EOT
 
 $('.$class').select2().on('change', function(){
@@ -20,7 +22,7 @@ $('.$class').select2().on('change', function(){
     var value = $(this).val();
 
     $.ajax({
-        url: "{$this->grid->resource()}/" + pk,
+        url: "{$url}/" + pk,
         type: "POST",
         data: {
             $name: value,
