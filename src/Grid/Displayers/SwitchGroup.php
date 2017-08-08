@@ -43,7 +43,7 @@ class SwitchGroup extends AbstractDisplayer
         $class = "grid-switch-{$name}";
 
         $url = url($this->grid->resource());
-        
+
         $script = <<<EOT
 
 $('.$class').bootstrapSwitch({

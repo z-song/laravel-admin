@@ -151,7 +151,7 @@ EOT;
         $confirm = trans('admin::lang.delete_confirm');
 
         $url = url($this->getResource());
-        
+
         $script = <<<SCRIPT
 
 $('.grid-row-delete').unbind('click').click(function() {
