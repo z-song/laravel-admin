@@ -5,14 +5,13 @@ namespace Encore\Admin;
 use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Auth\Database\Permission;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 abstract class Extension
 {
     public static function config($key, $default = null)
     {
-        $class = explode('\\', get_called_class());
-
-        $name = array_pop($class);
+        $name = array_search(get_called_class(), Admin::$extensions);
 
         $key = sprintf('admin.extensions.%s.%s', strtolower($name), $key);
 
