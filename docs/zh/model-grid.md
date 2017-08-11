@@ -18,7 +18,7 @@ CREATE TABLE `movies` (
 
 ```
 
-对应的数据模型为`App\Models\Movie`，下面的代码可以生成`users`的数据表格：
+对应的数据模型为`App\Models\Movie`，下面的代码可以生成表`movies`的数据表格：
 
 ```php
 
@@ -185,7 +185,7 @@ $grid->filter(function($filter){
     // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
     $filter->between('created_at', 'Created Time')->datetime();
     
-    // sql: ... WHERE `article.author_id` = $id;
+    // sql: ... WHERE `author_id` = $id;
     $filter->is('author_id', 'Author')->select(User::all()->pluck('name', 'id'));
 
     // sql: ... WHERE `title` LIKE "%$input" OR `content` LIKE "%$input";

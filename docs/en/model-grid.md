@@ -18,7 +18,7 @@ CREATE TABLE `movies` (
 
 ```
 
-And the model of this table is `App\Models\Movie`,The following code can generate the data ggrid for `users`:
+And the model of this table is `App\Models\Movie`,The following code can generate the data grid for table `movies`:
 
 ```php
 
@@ -187,7 +187,7 @@ $grid->filter(function($filter){
     // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
     $filter->between('created_at', 'Created Time')->datetime();
     
-    // sql: ... WHERE `article.author_id` = $id;
+    // sql: ... WHERE `author_id` = $id;
     $filter->is('author_id', 'Author')->select(User::all()->pluck('name', 'id'));
 
     // sql: ... WHERE `title` LIKE "%$input" OR `content` LIKE "%$input";
