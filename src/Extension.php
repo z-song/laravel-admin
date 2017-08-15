@@ -5,7 +5,6 @@ namespace Encore\Admin;
 use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Auth\Database\Permission;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 
 abstract class Extension
 {
@@ -54,7 +53,7 @@ abstract class Extension
         Permission::create([
             'name'          => $name,
             'slug'          => $slug,
-            'http_path'     => admin_base_path($path),
+            'http_path'     => '/'.trim($path, '/'),
         ]);
     }
 }

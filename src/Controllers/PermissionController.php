@@ -87,6 +87,8 @@ class PermissionController extends Controller
                         return "<span class='label label-primary'>{$name}</span>";
                     })->implode('&nbsp;');
 
+                    $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+
                     return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
                 })->implode("");
 

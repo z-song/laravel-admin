@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Validator;
 
 /**
  * Class Field.
- *
- * @method Field default($value) set field default value
  */
 class Field implements Renderable
 {
@@ -465,7 +463,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setDefault($default)
+    public function default($default)
     {
         $this->default = $default;
 
@@ -866,18 +864,5 @@ class Field implements Renderable
     public function __toString()
     {
         return $this->render()->render();
-    }
-
-    /**
-     * @param $method
-     * @param $arguments
-     *
-     * @return $this
-     */
-    public function __call($method, $arguments)
-    {
-        if ($method === 'default') {
-            return $this->setDefault(array_get($arguments, 0));
-        }
     }
 }
