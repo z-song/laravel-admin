@@ -38,25 +38,31 @@ class AdminTablesSeeder extends Seeder
                 'name'        => 'All permission',
                 'slug'        => '*',
                 'http_method' => '',
-                'http_path'   => '/admin*'
+                'http_path'   => '*'
+            ],
+            [
+                'name'        => 'Dashboard',
+                'slug'        => 'dashboard',
+                'http_method' => 'GET',
+                'http_path'   => '/'
             ],
             [
                 'name'        => 'Login',
                 'slug'        => 'auth.login',
                 'http_method' => '',
-                'http_path'   => "/admin/auth/login\r\n/admin/auth/logout"
+                'http_path'   => "/auth/login\r\n/auth/logout"
             ],
             [
                 'name'        => 'User setting',
                 'slug'        => 'auth.setting',
                 'http_method' => 'GET,PUT',
-                'http_path'   => '/admin/auth/setting',
+                'http_path'   => '/auth/setting',
             ],
             [
                 'name'        => 'Auth management',
                 'slug'        => 'auth.management',
                 'http_method' => '',
-                'http_path'   => "/admin/auth/roles\r\n/admin/auth/permissions\r\n/admin/auth/menu\r\n/admin/auth/logs",
+                'http_path'   => "/auth/roles\r\n/auth/permissions\r\n/auth/menu\r\n/auth/logs",
             ],
         ]);
 
