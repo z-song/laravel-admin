@@ -67,8 +67,8 @@ class Pie extends Chart
 (function(){
 
     var canvas = $("#{$this->elementId}").get(0).getContext("2d");
-    var chart = new Chart(canvas).Pie($data, $options);
-
+//    var chart = new Chart(canvas).Pie($data, $options);
+    var chart = new Chart(canvas,{type:'pie',data:$data,options:$options});
 })();
 EOT;
     }

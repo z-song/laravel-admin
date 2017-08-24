@@ -46,8 +46,8 @@ class Radar extends Chart
     };
 
     var canvas = $("#{$this->elementId}").get(0).getContext("2d");
-    var chart = new Chart(canvas).Radar(data, $options);
-
+//    var chart = new Chart(canvas).Radar(data, $options);
+    var chart = new Chart(canvas,{type:'radar',data:data,options:$options});
 })();
 EOT;
     }

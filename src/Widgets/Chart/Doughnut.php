@@ -20,8 +20,8 @@ class Doughnut extends Pie
 (function(){
 
     var canvas = $("#{$this->elementId}").get(0).getContext("2d");
-    var chart = new Chart(canvas).Doughnut($data, $options);
-
+//    var chart = new Chart(canvas).Doughnut($data, $options);
+    var chart = new Chart(canvas,{type:'doughnut',data:$data,options:$options});
 })();
 EOT;
     }
