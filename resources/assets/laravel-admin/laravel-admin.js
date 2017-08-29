@@ -18,6 +18,10 @@ $(document).pjax('a:not(a[target="_blank"])', {
     container: '#pjax-container'
 });
 
+NProgress.configure({ parent: '#pjax-container' });
+
+$(document).on('pjax:timeout', function(event) { event.preventDefault(); })
+
 $(document).on('submit', 'form[pjax-container]', function(event) {
     $.pjax.submit(event, '#pjax-container')
 });
@@ -38,7 +42,8 @@ $(document).on('pjax:send', function(xhr) {
             $submit_btn.button('loading')
         }
     }
-})
+    NProgress.start();
+});
 
 $(document).on('pjax:complete', function(xhr) {
     if(xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
@@ -47,7 +52,8 @@ $(document).on('pjax:complete', function(xhr) {
             $submit_btn.button('reset')
         }
     }
-})
+    NProgress.done();
+});
 
 $(function(){
     $('.sidebar-menu li:not(.treeview) > a').on('click', function(){
@@ -55,4 +61,12 @@ $(function(){
         $parent.siblings('.treeview.active').find('> a').trigger('click');
         $parent.siblings().removeClass('active').find('li').removeClass('active');
     });
+
+    $('[data-toggle="popover"]').popover();
 });
+
+(function($){
+    $.fn.admin = LA;
+    $.admin = LA;
+
+})(jQuery);
