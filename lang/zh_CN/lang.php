@@ -2,7 +2,7 @@
 
 return [
     'online'        => '在线',
-    'login'         => '登陆',
+    'login'         => '登录',
     'logout'        => '登出',
     'name'          => '名称',
     'username'      => '用户名',
