@@ -1,6 +1,6 @@
 <div class="box box-default">
     <div class="box-header with-border">
-        <h3 class="box-title">Packages</h3>
+        <h3 class="box-title">Dependencies</h3>
 
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -13,9 +13,9 @@
     <div class="box-body">
         <div class="table-responsive">
             <table class="table table-striped">
-                @foreach($packages as $package => $version)
+                @foreach($dependencies as $dependency => $version)
                 <tr>
-                    <td width="240px">{{ $package }}</td>
+                    <td width="240px">{{ $dependency }}</td>
                     <td><span class="label label-primary">{{ $version }}</span></td>
                 </tr>
                 @endforeach
