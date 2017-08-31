@@ -103,7 +103,7 @@ class AdminTablesSeeder extends Seeder
                 'parent_id' => 2,
                 'order'     => 5,
                 'title'     => 'Permission',
-                'icon'      => 'fa-user',
+                'icon'      => 'fa-ban',
                 'uri'       => 'auth/permissions',
             ],
             [

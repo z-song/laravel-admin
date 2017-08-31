@@ -2,7 +2,7 @@
 
 return [
     'online'                => '在线',
-    'login'                 => '登陆',
+    'login'                 => '登录',
     'logout'                => '登出',
     'setting'               => '设置',
     'name'                  => '名称',
@@ -51,7 +51,7 @@ return [
     'update_succeeded'  => '更新成功 !',
     'save_succeeded'    => '保存成功 !',
     'refresh_succeeded' => '刷新成功 !',
-    'login_successful'  => '登陆成功 !',
+    'login_successful'  => '登录成功 !',
 
     'choose'       => '选择',
     'choose_file'  => '选择文件',

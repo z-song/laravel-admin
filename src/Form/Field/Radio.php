@@ -36,7 +36,7 @@ class Radio extends Field
     }
 
     /**
-     * Draw inline checkboxes.
+     * Draw inline radios.
      *
      * @return $this
      */
@@ -48,7 +48,7 @@ class Radio extends Field
     }
 
     /**
-     * Draw stacked checkboxes.
+     * Draw stacked radios.
      *
      * @return $this
      */
