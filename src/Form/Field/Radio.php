@@ -37,18 +37,26 @@ class Radio extends Field
 
     /**
      * Draw inline checkboxes.
+     *
+     * @return $this
      */
     public function inline()
     {
         $this->inline = true;
+
+        return $this;
     }
 
     /**
      * Draw stacked checkboxes.
+     *
+     * @return $this
      */
     public function stacked()
     {
         $this->inline = false;
+
+        return $this;
     }
 
     /**
