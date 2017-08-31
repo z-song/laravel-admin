@@ -56,9 +56,13 @@ class Column implements Buildable
      */
     public function row($content)
     {
-        $row = new Row();
+        if (!$content instanceof \Closure) {
+            $row = new Row($content);
+        } else {
+            $row = new Row();
 
-        call_user_func($content, $row);
+            call_user_func($content, $row);
+        }
 
         ob_start();
 

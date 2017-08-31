@@ -7,11 +7,11 @@
         @include('admin::form.error')
 
         @foreach($options as $option => $label)
-            <div class="radio">
-                <label>
+            @if(!$inline)<div class="radio">@endif
+                <label @if($inline)class="radio-inline"@endif>
                     <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value))?'checked':'' }} />&nbsp;{{$label}}&nbsp;&nbsp;
                 </label>
-            </div>
+            @if(!$inline)</div>@endif
         @endforeach
 
         @include('admin::form.help-block')

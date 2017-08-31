@@ -7,6 +7,8 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Radio extends Field
 {
+    protected $inline = true;
+
     protected static $css = [
         '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.css',
     ];
@@ -34,6 +36,22 @@ class Radio extends Field
     }
 
     /**
+     * Draw inline checkboxes.
+     */
+    public function inline()
+    {
+        $this->inline = true;
+    }
+
+    /**
+     * Draw stacked checkboxes.
+     */
+    public function stacked()
+    {
+        $this->inline = false;
+    }
+
+    /**
      * Set options.
      *
      * @param array|callable|string $values
@@ -52,6 +70,6 @@ class Radio extends Field
     {
         $this->script = "$('{$this->getElementClassSelector()}').iCheck({radioClass:'iradio_minimal-blue'});";
 
-        return parent::render()->with(['options' => $this->options]);
+        return parent::render()->with(['options' => $this->options, 'inline' => $this->inline]);
     }
 }
