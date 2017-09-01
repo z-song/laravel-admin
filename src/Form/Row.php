@@ -8,7 +8,7 @@ use Illuminate\Contracts\Support\Renderable;
 class Row implements Renderable
 {
     /**
-     * Callback for add field to current row.s
+     * Callback for add field to current row.s.
      *
      * @var \Closure
      */
@@ -39,7 +39,7 @@ class Row implements Renderable
      * Row constructor.
      *
      * @param \Closure $callback
-     * @param Form $form
+     * @param Form     $form
      */
     public function __construct(\Closure $callback, Form $form)
     {

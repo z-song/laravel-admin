@@ -17,7 +17,7 @@ return [
      */
     'logo-mini' => '<b>La</b>',
 
-    /**
+    /*
      * Route configration.
      */
     'route' => [
@@ -39,7 +39,7 @@ return [
      */
     'title'  => 'Admin',
 
-    /**
+    /*
      * Use `https`.
      */
     'secure' => false,
@@ -50,16 +50,16 @@ return [
     'auth' => [
         'guards' => [
             'admin' => [
-                'driver' => 'session',
+                'driver'   => 'session',
                 'provider' => 'admin',
-            ]
+            ],
         ],
 
         'providers' => [
             'admin' => [
                 'driver' => 'eloquent',
                 'model'  => Encore\Admin\Auth\Database\Administrator::class,
-            ]
+            ],
         ],
     ],
 
@@ -73,7 +73,7 @@ return [
         'directory'  => [
             'image'  => 'images',
             'file'   => 'files',
-        ]
+        ],
     ],
 
     /*
@@ -115,7 +115,7 @@ return [
 
         'enable' => true,
 
-        /**
+        /*
          * Routes that will not log to database.
          *
          * All method to path like: admin/auth/logs
@@ -123,10 +123,10 @@ return [
          */
         'except' => [
             'admin/auth/logs*',
-        ]
+        ],
     ],
 
-    /**
+    /*
      * @see https://adminlte.io/docs/2.4/layout
      */
     'skin'    => 'skin-blue-light',
@@ -147,10 +147,10 @@ return [
      */
     'version'   => '1.5.x-dev',
 
-    /**
+    /*
      * Settings for extensions.
      */
     'extensions' => [
 
-    ]
+    ],
 ];

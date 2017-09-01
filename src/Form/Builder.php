@@ -261,7 +261,7 @@ class Builder
      */
     public function hasRows()
     {
-        return ! empty($this->form->rows);
+        return !empty($this->form->rows);
     }
 
     /**

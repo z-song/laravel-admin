@@ -25,7 +25,7 @@ class Permission
             return $permission->shouldPassThrough($request);
         })) {
             \Encore\Admin\Auth\Permission::error();
-        };
+        }
 
         return $next($request);
     }
