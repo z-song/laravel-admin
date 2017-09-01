@@ -10,9 +10,9 @@ class Exporter
     /**
      * Export scope constants.
      */
-    const SCOPE_ALL             = 'all';
-    const SCOPE_CURRENT_PAGE    = 'page';
-    const SCOPE_SELECTED_ROWS   = 'selected';
+    const SCOPE_ALL = 'all';
+    const SCOPE_CURRENT_PAGE = 'page';
+    const SCOPE_SELECTED_ROWS = 'selected';
 
     /**
      * @var Grid
@@ -111,8 +111,9 @@ class Exporter
     /**
      * Format query for export url.
      *
-     * @param int $scope
+     * @param int  $scope
      * @param null $args
+     *
      * @return array
      */
     public static function formatExportQuery($scope = '', $args = null)

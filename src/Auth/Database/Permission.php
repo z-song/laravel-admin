@@ -17,7 +17,7 @@ class Permission extends Model
      * @var array
      */
     public static $httpMethods = [
-        'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'
+        'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD',
     ];
 
     /**
@@ -54,6 +54,7 @@ class Permission extends Model
      * If request should pass through the current permission.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public function shouldPassThrough(Request $request)
@@ -73,7 +74,6 @@ class Permission extends Model
             }
 
             return compact('method', 'path');
-
         }, explode("\r\n", $this->http_path));
 
         foreach ($matches as $match) {
@@ -90,11 +90,12 @@ class Permission extends Model
      *
      * @param array   $match
      * @param Request $request
+     *
      * @return bool
      */
     protected function matchRequest(array $match, Request $request)
     {
-        if (! $request->is(trim($match['path'], '/'))) {
+        if (!$request->is(trim($match['path'], '/'))) {
             return false;
         }
 
@@ -111,12 +112,13 @@ class Permission extends Model
     public function setHttpMethodAttribute($method)
     {
         if (is_array($method)) {
-            $this->attributes['http_method'] = join(',', $method);
+            $this->attributes['http_method'] = implode(',', $method);
         }
     }
 
     /**
      * @param $method
+     *
      * @return array
      */
     public function getHttpMethodAttribute($method)

@@ -55,7 +55,7 @@ class Footer extends AbstractTool
             $this->td();
         }
     }
-    
+
     public function render()
     {
         if ($this->hasRowSelectorColumn()) {

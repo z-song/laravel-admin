@@ -211,7 +211,6 @@ class Grid
     protected function setupExporter()
     {
         if ($scope = Input::get(Exporter::$queryName)) {
-
             $this->model()->usePaginate(false);
 
             call_user_func($this->builder, $this);
@@ -641,8 +640,9 @@ class Grid
     /**
      * Get the export url.
      *
-     * @param int $scope
+     * @param int  $scope
      * @param null $args
+     *
      * @return string
      */
     public function exportUrl($scope = 1, $args = null)
