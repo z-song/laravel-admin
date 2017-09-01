@@ -26,7 +26,6 @@ class ImportCommand extends Command
      *
      * @return void
      */
-
     public function handle()
     {
         $extension = $this->argument('extension');
@@ -39,6 +38,7 @@ class ImportCommand extends Command
 
         if (!class_exists($className) || !method_exists($className, 'import')) {
             $this->error("Invalid Extension [$className]");
+
             return;
         }
 
