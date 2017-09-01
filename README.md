@@ -10,11 +10,13 @@ laravel-admin
 
 `laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
 
-[Demo](http://laravel-admin.org/demo) use `username/password:admin/admin`
+[Demo](http://laravel-admin.org/demo)
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
 [Documentation](http://laravel-admin.org/docs) | [中文文档](http://laravel-admin.org/docs/#/zh/)
+
+[Extensions](https://github.com/laravel-admin-extensions)
 
 Screenshots
 ------------
@@ -24,7 +26,7 @@ Screenshots
 Installation
 ------------
 
-> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [docs](http://laravel-admin.org/docs/v1.4/#/) 
+> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](http://laravel-admin.org/docs/v1.4/#/) 
 
 First, install laravel 5.5, and make sure that the database connection settings are correct.
 
@@ -35,7 +37,7 @@ composer require encore/laravel-admin
 Then run these commands to publish assets and config：
 
 ```
-php artisan vendor:publish --provider=Encore\Admin\AdminServiceProvider
+php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
 ```
 After run command you can find config file in `config/admin.php`, in this file you can change the install directory,db connection or table names.
 
@@ -49,7 +51,6 @@ Open `http://localhost/admin/` in browser,use username `admin` and password `adm
 Default Settings
 ------------
 The file in `config/admin.php` contains an array of settings, you can find the default settings in there.
-
 
 Other
 ------------
