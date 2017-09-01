@@ -4,7 +4,6 @@ namespace Encore\Admin\Console;
 
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 
 class InstallCommand extends Command
 {

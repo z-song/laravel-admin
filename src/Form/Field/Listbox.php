@@ -2,15 +2,12 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
 /**
- * Class ListBox
- * @package Encore\Admin\Form\Field
+ * Class ListBox.
  *
  * @see https://github.com/istvan-ujjmeszaros/bootstrap-duallistbox
  */
-class ListBox extends MultipleSelect
+class Listbox extends MultipleSelect
 {
     protected $settings = [];
 

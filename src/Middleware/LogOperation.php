@@ -35,9 +35,8 @@ class LogOperation
     }
 
     /**
-     *
-     *
      * @param Request $request
+     *
      * @return bool
      */
     protected function shouldLogOperation(Request $request)
@@ -50,7 +49,8 @@ class LogOperation
     /**
      * Determine if the request has a URI that should pass through CSRF verification.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return bool
      */
     protected function inExceptArray($request)
@@ -70,8 +70,7 @@ class LogOperation
             $methods = array_map('strtoupper', $methods);
 
             if ($request->is($except) &&
-                (empty($method) || in_array($request->method(), $methods)))
-            {
+                (empty($method) || in_array($request->method(), $methods))) {
                 return true;
             }
         }

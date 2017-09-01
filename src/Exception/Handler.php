@@ -34,6 +34,7 @@ class Handler
      *
      * @param string $title
      * @param string $message
+     *
      * @return mixed
      */
     public static function error($title = '', $message = '')
