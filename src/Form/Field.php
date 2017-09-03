@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
  */
 class Field implements Renderable
 {
-    const FILE_DELETE_FLAG = '__del__';
+    const FILE_DELETE_FLAG = '_file_del_';
 
     /**
      * Element id.

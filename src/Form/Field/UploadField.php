@@ -63,7 +63,7 @@ trait UploadField
             'showUpload'           => false,
             'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
-                $this->column            => '',
+                $this->column            => static::FILE_DELETE_FLAG,
                 static::FILE_DELETE_FLAG => '',
                 '_token'                 => csrf_token(),
                 '_method'                => 'PUT',
@@ -239,11 +239,7 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        $target = $this->getDirectory().'/'.$this->name;
-
-        $this->storage->putFile($target, $file);
-
-        return $target;
+        return $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
     }
 
     /**

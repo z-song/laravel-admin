@@ -57,6 +57,10 @@ class File extends Field
      */
     public function getValidator(array $input)
     {
+        if (request()->has(static::FILE_DELETE_FLAG)) {
+            return false;
+        }
+
         /*
          * If has original value, means the form is in edit mode,
          * then remove required rule from rules.
