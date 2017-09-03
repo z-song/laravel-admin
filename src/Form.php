@@ -936,6 +936,15 @@ class Form
 
         $data = $this->model->toArray();
 
+        if ($this->model::$snakeAttributes) {
+            foreach ($this->model->getRelations() as $key => $relation) {
+                if ($key !== $snake = Str::snake($key)) {
+                    $data[$key] = $data[$snake];
+                    unset($data[$snake]);
+                }
+            }
+        }
+
         $this->builder->fields()->each(function (Field $field) use ($data) {
             $field->fill($data);
         });
