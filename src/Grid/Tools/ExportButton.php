@@ -24,14 +24,16 @@ class ExportButton extends AbstractTool
     {
         $script = <<<'SCRIPT'
 
-$('.export-selected').click(function () {
+$('.export-selected').click(function (e) {
+    e.preventDefault();
+    
     var rows = selectedRows().join(',');
     if (!rows) {
         return false;
     }
-
+    
     var href = $(this).attr('href').replace('__rows__', rows);
-    $(this).attr('href', href);
+    location.href = href;
 });
 
 SCRIPT;
