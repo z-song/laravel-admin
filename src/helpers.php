@@ -41,6 +41,8 @@ if (!function_exists('admin_base_path')) {
     {
         $prefix = '/'.trim(config('admin.route.prefix'), '/');
 
+        $prefix = ($prefix == '/') ? '' : $prefix;
+
         return $prefix.'/'.trim($path, '/');
     }
 }
