@@ -66,7 +66,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\MultipleImage  multipleImage($column, $label = '')
  * @method Field\MultipleFile   multipleFile($column, $label = '')
  * @method Field\Captcha        captcha($column, $label = '')
- * @method Field\ListBox        listbox($column, $label = '')
+ * @method Field\Listbox        listbox($column, $label = '')
  */
 class Form
 {
@@ -1230,7 +1230,7 @@ class Form
             'multipleFile'      => \Encore\Admin\Form\Field\MultipleFile::class,
             'multipleImage'     => \Encore\Admin\Form\Field\MultipleImage::class,
             'captcha'           => \Encore\Admin\Form\Field\Captcha::class,
-            'listbox'           => \Encore\Admin\Form\Field\ListBox::class,
+            'listbox'           => \Encore\Admin\Form\Field\Listbox::class,
         ];
 
         foreach ($map as $abstract => $class) {
