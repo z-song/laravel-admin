@@ -92,6 +92,10 @@ return [
      * By setting this option to open or close operation log in laravel-admin.
      */
     'operation_log'   => true,
+    'operation_log_settings' => [
+        'exclude_methods' => [],
+        'max_age_in_days' => null,
+    ],
 
     /*
     |---------------------------------------------------------|
