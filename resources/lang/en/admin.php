@@ -100,4 +100,12 @@ return [
     'new_folder'    => 'New folder',
     'time'          => 'Time',
     'size'          => 'Size',
+
+    'listbox' => [
+        'text_total'         => 'Showing all {0}',
+        'text_empty'         => 'Empty list',
+        'filtered'           => '{0} / {1}',
+        'filter_clear'       => 'Show all',
+        'filter_placeholder' => 'Filter',
+    ]
 ];
