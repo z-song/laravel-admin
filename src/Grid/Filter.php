@@ -37,13 +37,6 @@ class Filter
     protected $supports = ['equal', 'ilike', 'like', 'gt', 'lt', 'between', 'where'];
 
     /**
-     * If use a modal to hold the filters.
-     *
-     * @var bool
-     */
-    protected $useModal = false;
-
-    /**
      * If use id filter.
      *
      * @var bool
@@ -74,14 +67,6 @@ class Filter
         $pk = $this->model->eloquent()->getKeyName();
 
         $this->equal($pk, strtoupper($pk));
-    }
-
-    /**
-     * Use modal to show filter form.
-     */
-    public function useModal()
-    {
-        $this->useModal = true;
     }
 
     /**
