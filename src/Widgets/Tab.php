@@ -43,8 +43,9 @@ class Tab extends Widget implements Renderable
             'content' => $content,
         ];
 
-        if ($active)
+        if ($active) {
             $this->data['active'] = count($this->data['tabs']) - 1;
+        }
 
         return $this;
     }
