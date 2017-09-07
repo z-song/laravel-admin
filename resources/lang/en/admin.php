@@ -53,7 +53,7 @@ return [
     'refresh_succeeded' => 'Refresh succeeded !',
     'login_successful'  => 'Login successful',
 
-    'choose'       => 'Select',
+    'choose'       => 'Choose',
     'choose_file'  => 'Select file',
     'choose_image' => 'Select image',
 

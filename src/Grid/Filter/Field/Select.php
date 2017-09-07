@@ -47,12 +47,10 @@ class Select
      */
     protected function buildOptions()
     {
-        $default = ['' => trans('admin.choose')];
-
         if (is_string($this->options)) {
             $this->loadAjaxOptions($this->options);
 
-            return $default;
+            return [];
         }
 
         if ($this->options instanceof \Closure) {
@@ -64,11 +62,20 @@ class Select
             $this->options = $this->options->toArray();
         }
 
-        Admin::script("$(\".{$this->getElementClass()}\").select2();");
+        $placeholder = trans('admin.choose');
+
+        $script = <<<SCRIPT
+$(".{$this->getElementClass()}").select2({
+  placeholder: "$placeholder"
+});
+
+SCRIPT;
+
+        Admin::script($script);
 
         $options = is_array($this->options) ? $this->options : [];
 
-        return $default + $options;
+        return $options;
     }
 
     /**
@@ -78,9 +85,12 @@ class Select
      */
     protected function loadAjaxOptions($resourceUrl)
     {
+        $placeholder = trans('admin.choose');
+
         $script = <<<EOT
 
 $(".{$this->getElementClass()}").select2({
+  placeholder: "$placeholder",
   ajax: {
     url: "$resourceUrl",
     dataType: 'json',
