@@ -531,7 +531,7 @@ class Column
     {
         if ($abstract instanceof Closure) {
             return $this->display(function ($value) use ($abstract, $arguments) {
-                return call_user_func_array($abstract->bindTo($this), array_merge([$value], $arguments));
+                return $abstract->call($this, ...array_merge([$value], $arguments));
             });
         }
 

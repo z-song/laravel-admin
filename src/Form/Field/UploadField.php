@@ -222,10 +222,8 @@ trait UploadField
             return $this->generateUniqueName($file);
         }
 
-        if (is_callable($this->name)) {
-            $callback = $this->name->bindTo($this);
-
-            return call_user_func($callback, $file);
+        if ($this->name instanceof \Closure) {
+            return $this->name->call($this, $file);
         }
 
         if (is_string($this->name)) {

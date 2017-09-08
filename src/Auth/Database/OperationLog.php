@@ -3,6 +3,7 @@
 namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OperationLog extends Model
 {
@@ -16,7 +17,8 @@ class OperationLog extends Model
     ];
 
     public static $methods = [
-        'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'LINK', 'UNLINK', 'COPY', 'HEAD', 'PURGE',
+        'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH',
+        'LINK', 'UNLINK', 'COPY', 'HEAD', 'PURGE',
     ];
 
     /**
@@ -38,9 +40,9 @@ class OperationLog extends Model
     /**
      * Log belongs to users.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function user()
+    public function user() : BelongsTo
     {
         return $this->belongsTo(Administrator::class);
     }

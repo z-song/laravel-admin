@@ -54,8 +54,7 @@ class Select
         }
 
         if ($this->options instanceof \Closure) {
-            $this->options = $this->options->bindTo($this->parent);
-            $this->options = call_user_func($this->options, $this->parent->getValue());
+            $this->options = $this->options->call($this->parent, $this->parent->getValue());
         }
 
         if ($this->options instanceof Arrayable) {
