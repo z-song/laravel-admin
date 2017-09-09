@@ -1099,9 +1099,7 @@ class Form
      */
     public function tools(Closure $callback)
     {
-        $callback = $callback->bindTo($this);
-
-        call_user_func($callback, $this->builder->getTools());
+        $callback->call($this, $this->builder->getTools());
     }
 
     /**

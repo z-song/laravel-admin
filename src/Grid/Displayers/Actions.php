@@ -112,8 +112,7 @@ class Actions extends AbstractDisplayer
     public function display($callback = null)
     {
         if ($callback instanceof \Closure) {
-            $callback = $callback->bindTo($this);
-            call_user_func($callback, $this);
+            $callback->call($this, $this);
         }
 
         $actions = $this->prepends;
