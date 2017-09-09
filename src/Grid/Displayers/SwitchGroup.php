@@ -44,6 +44,9 @@ class SwitchGroup extends AbstractDisplayer
 
         $script = <<<EOT
 
+var onValue = '{$this->states['on']['value']}',
+    offValue = '{$this->states['off']['value']}';
+
 $('.$class').bootstrapSwitch({
     size:'mini',
     onText: '{$this->states['on']['text']}',
