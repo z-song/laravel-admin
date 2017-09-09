@@ -39,6 +39,11 @@ trait UploadField
     protected $useUniqueName = false;
 
     /**
+     * @var bool
+     */
+    protected $removable = false;
+
+    /**
      * Initialize the storage instance.
      *
      * @return void.
@@ -84,10 +89,26 @@ trait UploadField
      */
     protected function setupPreviewOptions()
     {
+        if (!$this->removable) {
+            return;
+        }
+
         $this->options([
             //'initialPreview'        => $this->preview(),
             'initialPreviewConfig'  => $this->initialPreviewConfig(),
         ]);
+    }
+
+    /**
+     * Allow use to remove file.
+     *
+     * @return $this
+     */
+    public function removable()
+    {
+        $this->removable = true;
+
+        return $this;
     }
 
     /**
@@ -201,10 +222,8 @@ trait UploadField
             return $this->generateUniqueName($file);
         }
 
-        if (is_callable($this->name)) {
-            $callback = $this->name->bindTo($this);
-
-            return call_user_func($callback, $file);
+        if ($this->name instanceof \Closure) {
+            return $this->name->call($this, $file);
         }
 
         if (is_string($this->name)) {

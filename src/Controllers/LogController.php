@@ -57,8 +57,6 @@ class LogController extends Controller
                     $filter->equal('method')->select(array_combine(OperationLog::$methods, OperationLog::$methods));
                     $filter->like('path');
                     $filter->equal('ip');
-
-                    $filter->useModal();
                 });
             });
 

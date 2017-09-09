@@ -100,4 +100,12 @@ return [
     'new_folder'    => '新建文件夹',
     'time'          => '时间',
     'size'          => '大小',
+
+    'listbox' => [
+        'text_total'         => '总共 {0} 项',
+        'text_empty'         => '空列表',
+        'filtered'           => '{0} / {1}',
+        'filter_clear'       => '显示全部',
+        'filter_placeholder' => '过滤',
+    ]
 ];

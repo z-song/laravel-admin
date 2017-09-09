@@ -29,11 +29,11 @@ class Listbox extends MultipleSelect
     public function render()
     {
         $settings = array_merge($this->settings, [
-            'infoTextEmpty'     => '空列表',
-            'infoText'          => '总共 {0} 项',
-            'infoTextFiltered'  => '{0} / {1}',
-            'filterTextClear'   => '显示全部',
-            'filterPlaceHolder' => '过滤',
+            'infoText'          => trans('admin.listbox.text_total'),
+            'infoTextEmpty'     => trans('admin.listbox.text_empty'),
+            'infoTextFiltered'  => trans('admin.listbox.filtered'),
+            'filterTextClear'   => trans('admin.listbox.filter_clear'),
+            'filterPlaceHolder' => trans('admin.listbox.filter_placeholder'),
         ]);
 
         $settings = json_encode($settings);
