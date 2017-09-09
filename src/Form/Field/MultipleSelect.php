@@ -61,6 +61,10 @@ class MultipleSelect extends Select
     {
         $relations = array_get($data, $this->column);
 
+        if (is_null($relations)) {
+            $relations = array_get($data, snake_case($this->column));
+        }
+
         if (is_string($relations)) {
             $this->original = explode(',', $relations);
         }

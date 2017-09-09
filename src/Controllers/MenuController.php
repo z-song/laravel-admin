@@ -56,9 +56,7 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        return redirect()->action(
-            '\Encore\Admin\Controllers\MenuController@edit', ['id' => $id]
-        );
+        return redirect()->route('menu.edit', ['id' => $id]);
     }
 
     /**

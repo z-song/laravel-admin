@@ -53,7 +53,7 @@ return [
     'refresh_succeeded' => 'Refresh succeeded !',
     'login_successful'  => 'Login successful',
 
-    'choose'       => 'Select',
+    'choose'       => 'Choose',
     'choose_file'  => 'Select file',
     'choose_image' => 'Select image',
 
@@ -100,4 +100,12 @@ return [
     'new_folder'    => 'New folder',
     'time'          => 'Time',
     'size'          => 'Size',
+
+    'listbox' => [
+        'text_total'         => 'Showing all {0}',
+        'text_empty'         => 'Empty list',
+        'filtered'           => '{0} / {1}',
+        'filter_clear'       => 'Show all',
+        'filter_placeholder' => 'Filter',
+    ]
 ];
