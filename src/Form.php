@@ -641,10 +641,10 @@ class Form
 
             $relation = $this->model->$name();
 
-            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne
+            $oneToOneRelation = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne
                 || $relation instanceof \Illuminate\Database\Eloquent\Relations\MorphOne;
 
-            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
+            $prepared = $this->prepareUpdate([$name => $values], $oneToOneRelation);
 
             if (empty($prepared)) {
                 continue;
@@ -715,22 +715,22 @@ class Form
      * Prepare input data for update.
      *
      * @param array $updates
-     * @param bool  $hasDot  If column name contains a 'dot', only has-one relation column use this.
+     * @param bool  $oneToOneRelation If column is one-to-one relation.
      *
      * @return array
      */
-    protected function prepareUpdate(array $updates, $hasDot = false)
+    protected function prepareUpdate(array $updates, $oneToOneRelation = false)
     {
         $prepared = [];
 
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
-            if ($this->invalidColumn($columns, $hasDot)) {
+            if ($this->columnNotInData($columns, $updates, $oneToOneRelation)) {
                 continue;
             }
 
-            if ($this->columnNotInData($columns, $updates)) {
+            if ($this->invalidColumn($columns, $oneToOneRelation)) {
                 continue;
             }
 
@@ -752,15 +752,15 @@ class Form
 
     /**
      * @param string|array $columns
-     * @param bool         $hasDot
+     * @param bool         $oneToOneRelation
      *
      * @return bool
      */
-    protected function invalidColumn($columns, $hasDot = false)
+    protected function invalidColumn($columns, $oneToOneRelation = false)
     {
         foreach ((array) $columns as $column) {
-            if ((!$hasDot && Str::contains($column, '.')) ||
-                ($hasDot && !Str::contains($column, '.'))) {
+            if ((!$oneToOneRelation && Str::contains($column, '.')) ||
+                ($oneToOneRelation && !Str::contains($column, '.'))) {
                 return true;
             }
         }
@@ -773,11 +773,19 @@ class Form
      *
      * @param string $column
      * @param array  $data
+     * @param bool   $oneToOneRelation
+     *
      * @return bool
      */
-    protected function columnNotInData($column, $data)
+    protected function columnNotInData($column, $data, $oneToOneRelation = false)
     {
-        $intersect = array_intersect((array)$column, array_keys($data));
+        if ($oneToOneRelation) {
+            $keys = array_keys(array_dot($data));
+        } else {
+            $keys = array_keys($data);
+        }
+
+        $intersect = array_intersect((array) $column, $keys);
 
         return empty($intersect);
     }

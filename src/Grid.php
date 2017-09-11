@@ -721,6 +721,7 @@ class Grid
      * Set grid footer.
      *
      * @param Closure|null $closure
+     *
      * @return $this|Tools\Footer
      */
     public function footer(Closure $closure = null)
