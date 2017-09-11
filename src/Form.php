@@ -73,7 +73,7 @@ class Form
     /**
      * Eloquent model of the form.
      *
-     * @var
+     * @var Model
      */
     protected $model;
 
@@ -730,24 +730,20 @@ class Form
                 continue;
             }
 
-            $value = $this->getDataByColumn($updates, $columns);
-
-            if ($value !== '' && $value !== '0' && empty($value)) {
+            if ($this->columnNotInData($columns, $updates)) {
                 continue;
             }
 
-            if (method_exists($field, 'prepare')) {
-                $value = $field->prepare($value);
-            }
+            $value = $this->getDataByColumn($updates, $columns);
 
-            if ($value != $field->original()) {
-                if (is_array($columns)) {
-                    foreach ($columns as $name => $column) {
-                        array_set($prepared, $column, $value[$name]);
-                    }
-                } elseif (is_string($columns)) {
-                    array_set($prepared, $columns, $value);
+            $value = $field->prepare($value);
+
+            if (is_array($columns)) {
+                foreach ($columns as $name => $column) {
+                    array_set($prepared, $column, $value[$name]);
                 }
+            } elseif (is_string($columns)) {
+                array_set($prepared, $columns, $value);
             }
         }
 
@@ -760,7 +756,7 @@ class Form
      *
      * @return bool
      */
-    public function invalidColumn($columns, $hasDot = false)
+    protected function invalidColumn($columns, $hasDot = false)
     {
         foreach ((array) $columns as $column) {
             if ((!$hasDot && Str::contains($column, '.')) ||
@@ -770,6 +766,20 @@ class Form
         }
 
         return false;
+    }
+
+    /**
+     * Check if a column in a giving data.
+     *
+     * @param string $column
+     * @param array  $data
+     * @return bool
+     */
+    protected function columnNotInData($column, $data)
+    {
+        $intersect = array_intersect((array)$column, array_keys($data));
+
+        return empty($intersect);
     }
 
     /**
@@ -791,9 +801,7 @@ class Form
                 continue;
             }
 
-            if (method_exists($field, 'prepare')) {
-                $inserts[$column] = $field->prepare($value);
-            }
+            $inserts[$column] = $field->prepare($value);
         }
 
         $prepared = [];

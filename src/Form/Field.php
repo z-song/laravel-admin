@@ -54,7 +54,7 @@ class Field implements Renderable
     /**
      * Column name.
      *
-     * @var string
+     * @var string|array
      */
     protected $column = '';
 
@@ -508,7 +508,7 @@ class Field implements Renderable
     /**
      * Get column of the field.
      *
-     * @return string
+     * @return string|array
      */
     public function column()
     {
@@ -644,6 +644,17 @@ class Field implements Renderable
     public function getPlaceholder()
     {
         return $this->placeholder ?: trans('admin.input').' '.$this->label;
+    }
+
+    /**
+     * Prepare for a field value before update or insert.
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function prepare($value)
+    {
+        return $value;
     }
 
     /**
