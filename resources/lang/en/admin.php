@@ -107,5 +107,5 @@ return [
         'filtered'           => '{0} / {1}',
         'filter_clear'       => 'Show all',
         'filter_placeholder' => 'Filter',
-    ]
+    ],
 ];

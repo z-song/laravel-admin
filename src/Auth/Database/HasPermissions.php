@@ -2,9 +2,9 @@
 
 namespace Encore\Admin\Auth\Database;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 trait HasPermissions
 {

@@ -107,5 +107,5 @@ return [
         'filtered'           => '{0} / {1}',
         'filter_clear'       => '显示全部',
         'filter_placeholder' => '过滤',
-    ]
+    ],
 ];
