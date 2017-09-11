@@ -715,7 +715,7 @@ class Form
      * Prepare input data for update.
      *
      * @param array $updates
-     * @param bool  $oneToOneRelation  If column is one-to-one relation.
+     * @param bool  $oneToOneRelation If column is one-to-one relation.
      *
      * @return array
      */
@@ -773,7 +773,7 @@ class Form
      *
      * @param string $column
      * @param array  $data
-     * @param bool         $oneToOneRelation
+     * @param bool   $oneToOneRelation
      *
      * @return bool
      */
@@ -785,7 +785,7 @@ class Form
             $keys = array_keys($data);
         }
 
-        $intersect = array_intersect((array)$column, $keys);
+        $intersect = array_intersect((array) $column, $keys);
 
         return empty($intersect);
     }

@@ -223,6 +223,7 @@ abstract class AbstractFilter
 
     /**
      * @param array $options
+     *
      * @return mixed
      */
     public function multipleSelect($options = [])
@@ -300,6 +301,7 @@ abstract class AbstractFilter
      * Set field object of filter.
      *
      * @param $field
+     *
      * @return mixed
      */
     protected function setField($field)
