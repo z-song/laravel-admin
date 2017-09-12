@@ -965,11 +965,27 @@ class Form
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
+        static::doNotSnakeAttributes($this->model);
+
         $data = $this->model->toArray();
 
         $this->builder->fields()->each(function (Field $field) use ($data) {
             $field->fill($data);
         });
+    }
+
+    /**
+     * Don't snake case attributes
+     *
+     * @param Model $model
+     *
+     * @return void
+     */
+    protected static function doNotSnakeAttributes(Model $model)
+    {
+        $class = get_class($model);
+
+        $class::$snakeAttributes = false;
     }
 
     /**
