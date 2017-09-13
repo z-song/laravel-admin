@@ -68,7 +68,7 @@ trait UploadField
             'showUpload'           => false,
             'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
-                $this->column            => static::FILE_DELETE_FLAG,
+                $this->formatName($this->column) => static::FILE_DELETE_FLAG,
                 static::FILE_DELETE_FLAG => '',
                 '_token'                 => csrf_token(),
                 '_method'                => 'PUT',
