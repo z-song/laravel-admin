@@ -31,8 +31,12 @@ class Pjax
             return $this->handleErrorResponse($response);
         }
 
-        $this->filterResponse($response, $request->header('X-PJAX-CONTAINER'))
-            ->setUriHeader($response, $request);
+        try {
+            $this->filterResponse($response, $request->header('X-PJAX-CONTAINER'))
+                ->setUriHeader($response, $request);
+        } catch (\Exception $exception) {
+
+        }
 
         return $response;
     }
