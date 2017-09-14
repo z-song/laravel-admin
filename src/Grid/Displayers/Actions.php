@@ -37,6 +37,11 @@ class Actions extends AbstractDisplayer
     protected $key;
 
     /**
+     * @var string
+     */
+    protected $deleteText = '';
+
+    /**
      * Append a action.
      *
      * @param $action
@@ -146,6 +151,17 @@ class Actions extends AbstractDisplayer
     }
 
     /**
+     * set delete text
+     * @param $text
+     * @return $this
+     */
+    public function setDeleteText($text)
+    {
+        $this->deleteText = $text;
+        return $this;
+    }
+
+    /**
      * Built edit action.
      *
      * @return string
@@ -178,6 +194,7 @@ $('.grid-row-delete').unbind('click').click(function() {
 
     swal({
       title: "$deleteConfirm",
+      text: "$this->deleteText",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
