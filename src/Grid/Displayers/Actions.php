@@ -151,13 +151,16 @@ class Actions extends AbstractDisplayer
     }
 
     /**
-     * set delete text
+     * set delete text.
+     *
      * @param $text
+     *
      * @return $this
      */
     public function setDeleteText($text)
     {
         $this->deleteText = $text;
+
         return $this;
     }
 
