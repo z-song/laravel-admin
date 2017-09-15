@@ -43,7 +43,7 @@ class Map extends Field
          * Google map is blocked in mainland China
          * people in China can use Tencent map instead(;
          */
-        if (config('app.locale') == 'zh_CN') {
+        if (config('app.locale') == 'zh-CN') {
             $this->useTencentMap();
         } else {
             $this->useGoogleMap();
