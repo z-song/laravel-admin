@@ -20,34 +20,36 @@ $('{$this->getElementClass()}').on('click', function() {
     var id = selectedRows().join();
 
     swal({
-      title: "$deleteConfirm",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "$confirm",
-      closeOnConfirm: false,
-      cancelButtonText: "$cancel"
-    },
-    function(){
-        $.ajax({
-            method: 'post',
-            url: '{$this->resource}/' + id,
-            data: {
-                _method:'delete',
-                _token:'{$this->getToken()}'
-            },
-            success: function (data) {
-                $.pjax.reload('#pjax-container');
+        title: "$deleteConfirm",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "$confirm",
+        cancelButtonText: "$cancel",
+        showLoaderOnConfirm: true,
+        preConfirm: function(){
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    method: 'post',
+                    url: '{$this->resource}/' + id,
+                    data: {
+                        _method:'delete',
+                        _token:'{$this->getToken()}'
+                    },
+                    success: function (data) {
+                        $.pjax.reload('#pjax-container');
 
-                if (typeof data === 'object') {
-                    if (data.status) {
-                        swal(data.message, '', 'success');
-                    } else {
-                        swal(data.message, '', 'error');
+                        if (typeof data === 'object') {
+                            if (data.status) {
+                                swal(data.message, '', 'success');
+                            } else {
+                                swal(data.message, '', 'error');
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
+            });
+        }
     });
 });
 
