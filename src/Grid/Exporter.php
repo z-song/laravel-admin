@@ -54,7 +54,7 @@ class Exporter
             'Content-Disposition' => "attachment; filename=\"$filename\"",
         ];
 
-        response(rtrim($output, "\n"), 200, $headers)->send();
+        response(chr(0xEF).chr(0xBB).chr(0xBF).rtrim($output, "\n"), 200, $headers)->send();
 
         exit;
     }
