@@ -25,18 +25,14 @@ class ImageUploadTest extends TestCase
         $this->visit('admin/images/create')
             ->see('Upload image')
             ->seeInElement('h3[class=box-title]', 'Create')
-            ->see('ID')
-            ->see('Created At')
-            ->see('Updated At')
             ->seeElement('input[name=image1]')
             ->seeElement('input[name=image2]')
             ->seeElement('input[name=image3]')
             ->seeElement('input[name=image4]')
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
-            ->seeInElement('a[href="/admin/images"]', 'List')
-            ->dontSeeElement('a[class*=item_delete]')
-            ->seeElement('input[type=reset][value=Reset]')
+//            ->seeInElement('a[href="/admin/images"]', 'List')
+            ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
     }
 
@@ -82,15 +78,23 @@ class ImageUploadTest extends TestCase
 
         $this->assertEquals($this->fileCountInImageDir(), 6);
 
-        $this->call(
-            'PUT', // $method
-            '/admin/images/1', // $action
-            ['image2_action' => 1, 'image5_action' => 1] // $parameters
-        );
-
-        $this->assertRedirectedTo('/admin/images');
-
-        $this->assertEquals($this->fileCountInImageDir(), 4);
+        // remove image2
+//        $this->call(
+//            'PUT', // $method
+//            '/admin/images/1', // $action
+//            ['image2' => '', '__del__' => '', 'key' => 0] // $parameters
+//        );
+//
+//        $this->assertEquals($this->fileCountInImageDir(), 5);
+//
+//        // remove image5
+//        $this->call(
+//            'PUT', // $method
+//            '/admin/images/1', // $action
+//            ['image5' => '', '__del__' => '', 'key' => 0] // $parameters
+//        );
+//
+//        $this->assertEquals($this->fileCountInImageDir(), 4);
     }
 
     public function testUpdateImage()
@@ -111,9 +115,8 @@ class ImageUploadTest extends TestCase
             ->seeElement('input[name=image4]')
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
-            ->seeInElement('a[href="/admin/images"]', 'List')
-            ->seeInElement('a[class*=item_delete]', 'Delete')
-            ->seeElement('input[type=reset][value=Reset]')
+//            ->seeInElement('a[href="/admin/images"]', 'List')
+            ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
 
         $this->attach(__DIR__.'/assets/test.jpg', 'image3')
@@ -217,8 +220,6 @@ class ImageUploadTest extends TestCase
 
         $pictures = MultipleImage::first()->pictures;
 
-        $pictures = json_decode($pictures, true);
-
         $this->assertCount($size, $pictures);
 
         foreach ($pictures as $picture) {
@@ -250,14 +251,14 @@ class ImageUploadTest extends TestCase
 
         $this->assertEquals($this->fileCountInImageDir(), $size);
 
-        // remove files
-        $this->call(
-            'PUT', // $method
-            '/admin/multiple-images/1', // $action
-            ['pictures_action' => 1] // $parameters
-        );
-
-        $this->assertEquals($this->fileCountInImageDir(), 0);
+//        // remove files
+//        $this->call(
+//            'PUT', // $method
+//            '/admin/multiple-images/1', // $action
+//            ['pictures' => '', '__del__' => '', 'key' => 0] // $parameters
+//        );
+//
+//        $this->assertEquals($this->fileCountInImageDir(), $size - 1);
     }
 
     protected function fileCountInImageDir($dir = 'upload/image')

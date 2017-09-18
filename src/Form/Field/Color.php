@@ -2,16 +2,14 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Color extends Field
+class Color extends Text
 {
     protected static $css = [
-        '/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css',
+        '/vendor/laravel-admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css',
     ];
 
     protected static $js = [
-        '/packages/admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js',
+        '/vendor/laravel-admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js',
     ];
 
     /**
@@ -53,7 +51,10 @@ class Color extends Field
     {
         $options = json_encode($this->options);
 
-        $this->script = "$('#{$this->id}').colorpicker($options);";
+        $this->script = "$('{$this->getElementClassSelector()}').parent().colorpicker($options);";
+
+        $this->prepend('<i></i>')
+            ->defaultAttribute('style', 'width: 140px');
 
         return parent::render();
     }

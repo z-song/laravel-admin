@@ -6,57 +6,58 @@ use Encore\Admin\Form\Field;
 
 class SwitchField extends Field
 {
-    const STATE_ON = 1;
-    const STATE_OFF = 0;
-
     protected static $css = [
-        '/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
+        '/vendor/laravel-admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
     ];
 
     protected static $js = [
-        '/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+        '/vendor/laravel-admin/bootstrap-switch/dist/js/bootstrap-switch.min.js',
     ];
 
-    protected $states = [];
-
-    public function __construct($column, $arguments = [])
-    {
-        $this->initStates();
-
-        parent::__construct($column, $arguments);
-    }
-
-    protected function initStates()
-    {
-        $this->states = ['on' => static::STATE_ON, 'off' => static::STATE_OFF];
-    }
+    protected $states = [
+        'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
+        'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
+    ];
 
     public function states($states = [])
     {
-        $this->states = $states;
+        foreach (array_dot($states) as $key => $state) {
+            array_set($this->states, $key, $state);
+        }
+
+        return $this;
     }
 
     public function prepare($value)
     {
         if (isset($this->states[$value])) {
-            return $this->states[$value];
+            return $this->states[$value]['value'];
         }
+
+        return $value;
     }
 
     public function render()
     {
-        $key = array_search($this->value, $this->states);
-
-        $this->value = ($key == 'on') ? 'on' : 'off';
+        foreach ($this->states as $state => $option) {
+            if ($this->value() == $option['value']) {
+                $this->value = $state;
+                break;
+            }
+        }
 
         $this->script = <<<EOT
 
-$('#{$this->id}_checkbox').bootstrapSwitch({
+$('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
     size:'small',
+    onText: '{$this->states['on']['text']}',
+    offText: '{$this->states['off']['text']}',
+    onColor: '{$this->states['on']['color']}',
+    offColor: '{$this->states['off']['color']}',
     onSwitchChange: function(event, state) {
-        $('#{$this->id}').val(state ? 'on' : 'off');
+        $('{$this->getElementClassSelector()}').val(state ? 'on' : 'off').change();
     }
-});;
+});
 
 EOT;
 

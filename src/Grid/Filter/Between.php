@@ -7,9 +7,9 @@ use Encore\Admin\Admin;
 class Between extends AbstractFilter
 {
     /**
-     * @var null
+     * {@inheritdoc}
      */
-    protected $view = null;
+    protected $view = 'admin::filter.between';
 
     /**
      * Format id.
@@ -54,7 +54,7 @@ class Between extends AbstractFilter
      *
      * @param array $inputs
      *
-     * @return array|mixed|void
+     * @return mixed
      */
     public function condition($inputs)
     {
@@ -85,17 +85,25 @@ class Between extends AbstractFilter
         return $this->buildCondition($this->column, $this->value);
     }
 
-    public function datetime()
+    /**
+     * @param array $options
+     *
+     * @return void
+     */
+    public function datetime($options = [])
     {
         $this->view = 'admin::filter.betweenDatetime';
 
-        $this->prepareForDatetime();
+        $this->setupDatetime($options);
     }
 
-    protected function prepareForDatetime()
+    /**
+     * @param array $options
+     */
+    protected function setupDatetime($options = [])
     {
-        $options['format'] = 'YYYY-MM-DD HH:mm:ss';
-        $options['locale'] = config('app.locale');
+        $options['format'] = array_get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
+        $options['locale'] = array_get($options, 'locale', config('app.locale'));
 
         $startOptions = json_encode($options);
         $endOptions = json_encode($options + ['useCurrent' => false]);
@@ -112,14 +120,5 @@ class Between extends AbstractFilter
 EOT;
 
         Admin::script($script);
-    }
-
-    public function render()
-    {
-        if (isset($this->view)) {
-            return view($this->view, $this->variables());
-        }
-
-        return parent::render();
     }
 }

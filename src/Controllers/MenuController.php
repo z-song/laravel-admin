@@ -2,21 +2,21 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Menu as MenuModel;
+use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Auth\Database\Role;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
-use Encore\Admin\Menu\Menu;
+use Encore\Admin\Tree;
 use Encore\Admin\Widgets\Box;
-use Encore\Admin\Widgets\Callout;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Request;
 
 class MenuController extends Controller
 {
+    use ModelForm;
+
     /**
      * Index interface.
      *
@@ -25,32 +25,25 @@ class MenuController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header(trans('admin::lang.menu'));
-            $content->description(trans('admin::lang.list'));
+            $content->header(trans('admin.menu'));
+            $content->description(trans('admin.list'));
 
             $content->row(function (Row $row) {
-                $row->column(5, function (Column $column) {
-                    $column->append($this->callout());
+                $row->column(6, $this->treeView()->render());
 
+                $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
-                    $form->action(admin_url('auth/menu'));
+                    $form->action(admin_base_path('auth/menu'));
 
-                    $options = [0 => 'Root'] + MenuModel::buildSelectOptions();
-                    $form->select('parent_id', trans('admin::lang.parent_id'))->options($options);
-                    $form->text('title', trans('admin::lang.title'))->rules('required');
-                    $form->text('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required');
-                    $form->text('uri', trans('admin::lang.uri'));
-                    $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
+                    $form->select('parent_id', trans('admin.parent_id'))->options(Menu::selectOptions());
+                    $form->text('title', trans('admin.title'))->rules('required');
+                    $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+                    $form->text('uri', trans('admin.uri'));
+                    $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
 
-                    $column->append((new Box(trans('admin::lang.new'), $form))->style('success'));
+                    $column->append((new Box(trans('admin.new'), $form))->style('success'));
                 });
-
-                $menu = new Menu(new MenuModel());
-
-                $row->column(7, $menu);
             });
-
-            Admin::script($this->script());
         });
     }
 
@@ -63,77 +56,46 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        return redirect()->action(
-            '\Encore\Admin\Controllers\MenuController@edit', ['id' => $id]
-        );
+        return redirect()->route('menu.edit', ['id' => $id]);
+    }
+
+    /**
+     * @return \Encore\Admin\Tree
+     */
+    protected function treeView()
+    {
+        return Menu::tree(function (Tree $tree) {
+            $tree->disableCreate();
+
+            $tree->branch(function ($branch) {
+                $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
+
+                if (!isset($branch['children'])) {
+                    $uri = admin_base_path($branch['uri']);
+
+                    $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
+                }
+
+                return $payload;
+            });
+        });
     }
 
     /**
      * Edit interface.
      *
-     * @param $id
+     * @param string $id
      *
      * @return Content
      */
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-            $content->header(trans('admin::lang.menu'));
-            $content->description(trans('admin::lang.edit'));
+            $content->header(trans('admin.menu'));
+            $content->description(trans('admin.edit'));
 
-            $content->row($this->callout());
             $content->row($this->form()->edit($id));
         });
-    }
-
-    /**
-     * @param $id
-     *
-     * @return $this|\Illuminate\Http\RedirectResponse
-     */
-    public function update($id)
-    {
-        if (Request::input('parent_id') == $id) {
-            throw new \Exception(trans('admin::lang.parent_select_error'));
-        }
-
-        return $this->form()->update($id);
-    }
-
-    /**
-     * @param $id
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy($id)
-    {
-        if ($this->form()->destroy($id)) {
-            return response()->json([
-                'status'  => true,
-                'message' => trans('admin::lang.delete_succeeded'),
-            ]);
-        } else {
-            return response()->json([
-                'status'  => false,
-                'message' => trans('admin::lang.delete_failed'),
-            ]);
-        }
-    }
-
-    /**
-     * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store()
-    {
-        if (Request::has('_order')) {
-            $menu = new Menu(new MenuModel());
-
-            return response()->json([
-                'status' => $menu->saveTree(Request::input('_order')),
-            ]);
-        }
-
-        return $this->form()->store();
     }
 
     /**
@@ -143,46 +105,27 @@ class MenuController extends Controller
      */
     public function form()
     {
-        return Admin::form(MenuModel::class, function (Form $form) {
+        return Menu::form(function (Form $form) {
             $form->display('id', 'ID');
 
-            $options = [0 => 'Root'] + MenuModel::buildSelectOptions();
+            $form->select('parent_id', trans('admin.parent_id'))->options(Menu::selectOptions());
+            $form->text('title', trans('admin.title'))->rules('required');
+            $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+            $form->text('uri', trans('admin.uri'));
+            $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
 
-            $form->select('parent_id', trans('admin::lang.parent_id'))->options($options);
-            $form->text('title', trans('admin::lang.title'))->rules('required');
-            $form->text('icon', trans('admin::lang.icon'))->default('fa-bars')->rules('required');
-            $form->text('uri', trans('admin::lang.uri'));
-            $form->multipleSelect('roles', trans('admin::lang.roles'))->options(Role::all()->pluck('name', 'id'));
-
-            $form->display('created_at', trans('admin::lang.created_at'));
-            $form->display('updated_at', trans('admin::lang.updated_at'));
+            $form->display('created_at', trans('admin.created_at'));
+            $form->display('updated_at', trans('admin.updated_at'));
         });
     }
 
-    protected function script()
-    {
-        return <<<'EOT'
-
-$('.menu-tools').on('click', function(e){
-    var target = $(e.target),
-        action = target.data('action');
-    if (action === 'expand-all') {
-        $('.dd').nestable('expandAll');
-    }
-    if (action === 'collapse-all') {
-        $('.dd').nestable('collapseAll');
-    }
-});
-EOT;
-    }
-
     /**
-     * @return Callout
+     * Help message for icon field.
+     *
+     * @return string
      */
-    protected function callout()
+    protected function iconHelp()
     {
-        $text = 'For icons please see <a href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>';
-
-        return new Callout($text, 'Tips', 'info');
+        return 'For more icons please see <a href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>';
     }
 }

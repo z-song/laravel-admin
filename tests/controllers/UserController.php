@@ -85,11 +85,11 @@ class UserController extends Controller
             $grid->profile()->start_at('开始时间');
             $grid->profile()->end_at('结束时间');
 
-            $grid->column('column1_not_in_table')->display(function ($row) {
-                return 'full name:'.$row['full_name'];
+            $grid->column('column1_not_in_table')->display(function () {
+                return 'full name:'.$this->full_name;
             });
 
-            $grid->column('column2_not_in_table')->display(function ($row) {
+            $grid->column('column2_not_in_table')->display(function () {
                 return $this->email.'#'.$this->profile['color'];
             });
 
@@ -112,11 +112,9 @@ class UserController extends Controller
                 $filter->between('profile.end_at')->datetime();
             });
 
-            $grid->rows(function (Grid\Row $row) {
-                if ($row->id % 2 == 0) {
-                    $row->actions()->add(function ($row) {
-                        return '<a href="/" class="btn btn-xs btn-danger">detail</a>';
-                    });
+            $grid->actions(function ($actions) {
+                if ($actions->getKey() % 2 == 0) {
+                    $actions->append('<a href="/" class="btn btn-xs btn-danger">detail</a>');
                 }
             });
         });
@@ -129,6 +127,9 @@ class UserController extends Controller
      */
     protected function form()
     {
+        Form::extend('map', Form\Field\Map::class);
+        Form::extend('editor', Form\Field\Editor::class);
+
         return Admin::form(User::class, function (Form $form) {
             $form->disableDeletion();
 
@@ -137,7 +138,9 @@ class UserController extends Controller
             $form->email('email')->rules('required');
             $form->mobile('mobile');
             $form->image('avatar')->help('上传头像', 'fa-image');
-            $form->password('password');
+            $form->ignore(['password_confirmation']);
+            $form->password('password')->rules('confirmed');
+            $form->password('password_confirmation');
 
             $form->divide();
 

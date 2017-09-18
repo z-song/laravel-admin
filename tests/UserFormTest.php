@@ -34,17 +34,17 @@ class UserFormTest extends TestCase
             ->seeElement('span[class=help-block] i[class*=fa-image]')
             ->seeInElement('span[class=help-block]', '上传头像')
             ->seeElement("select[name='tags[]'][multiple=multiple]")
-            ->dontSeeElement('a[class*=item_delete]')
             ->seeInElement('a[html-field]', 'html...');
     }
 
     public function testSubmitForm()
     {
         $data = [
-            'username' => 'John Doe',
-            'email'    => 'hello@world.com',
-            'mobile'   => '13421234123',
-            'password' => 123456,
+            'username'              => 'John Doe',
+            'email'                 => 'hello@world.com',
+            'mobile'                => '13421234123',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
             //"avatar"   => "test.jpg",
             'profile'  => [
                 'first_name' => 'John',
@@ -131,8 +131,7 @@ class UserFormTest extends TestCase
             ->seeElement("input[type=text][name='profile[color]'][value='{$user->profile->color}']")
             ->seeElement("input[type=text][name='profile[start_at]'][value='{$user->profile->start_at}']")
             ->seeElement("input[type=text][name='profile[end_at]'][value='{$user->profile->end_at}']")
-            ->seeElement("select[name='tags[]'][multiple=multiple]")
-            ->dontSeeElement('a[class*=item_delete]');
+            ->seeElement("select[name='tags[]'][multiple=multiple]");
 
         $this->assertCount(50, $this->crawler()->filter("select[name='tags[]'] option"));
         $this->assertCount(5, $this->crawler()->filter("select[name='tags[]'] option[selected]"));
@@ -146,6 +145,8 @@ class UserFormTest extends TestCase
 
         $this->visit("admin/users/$id/edit")
             ->type('hello world', 'username')
+            ->type('123', 'password')
+            ->type('123', 'password_confirmation')
             ->press('Submit')
             ->seePageIs('admin/users')
             ->seeInDatabase('test_users', ['username' => 'hello world']);
@@ -172,7 +173,16 @@ class UserFormTest extends TestCase
             ->seePageIs("admin/users/$id/edit")
             ->see('The email must be a valid email address.');
 
+        $this->visit("admin/users/$id/edit")
+            ->type('123', 'password')
+            ->type('1234', 'password_confirmation')
+            ->press('Submit')
+            ->seePageIs("admin/users/$id/edit")
+            ->see('The Password confirmation does not match.');
+
         $this->type('xx@xx.xx', 'email')
+            ->type('123', 'password')
+            ->type('123', 'password_confirmation')
             ->press('Submit')
             ->seePageIs('admin/users')
             ->seeInDatabase('test_users', ['email' => 'xx@xx.xx']);

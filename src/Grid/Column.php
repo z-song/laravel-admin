@@ -4,7 +4,11 @@ namespace Encore\Admin\Grid;
 
 use Closure;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Displayers\AbstractDisplayer;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class Column
 {
@@ -56,20 +60,6 @@ class Column
     protected $attributes = [];
 
     /**
-     * Value callback.
-     *
-     * @var \Closure
-     */
-    protected $valueCallback;
-
-    /**
-     * Html callback.
-     *
-     * @var array
-     */
-    protected $htmlCallbacks = [];
-
-    /**
      * Relation name.
      *
      * @var bool
@@ -91,6 +81,37 @@ class Column
     protected static $originalGridData = [];
 
     /**
+     * @var []Closure
+     */
+    protected $displayCallbacks = [];
+
+    /**
+     * Displayers for grid column.
+     *
+     * @var array
+     */
+    public static $displayers = [];
+
+    /**
+     * Defined columns.
+     *
+     * @var array
+     */
+    public static $defined = [];
+
+    /**
+     * @var array
+     */
+    protected static $htmlAttributes = [];
+
+    /**
+     * @var
+     */
+    protected static $model;
+
+    const SELECT_COLUMN_NAME = '__row_selector__';
+
+    /**
      * @param string $name
      * @param string $label
      */
@@ -102,11 +123,97 @@ class Column
     }
 
     /**
+     * Extend column displayer.
+     *
+     * @param $name
+     * @param $displayer
+     */
+    public static function extend($name, $displayer)
+    {
+        static::$displayers[$name] = $displayer;
+    }
+
+    /**
+     * Define a column globally.
+     *
+     * @param string $name
+     * @param mixed  $definition
+     */
+    public static function define($name, $definition)
+    {
+        static::$defined[$name] = $definition;
+    }
+
+    /**
+     * Set grid instance for column.
+     *
      * @param Grid $grid
      */
     public function setGrid(Grid $grid)
     {
         $this->grid = $grid;
+
+        $this->setModel($grid->model()->eloquent());
+    }
+
+    /**
+     * Set model for column.
+     *
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        if (is_null(static::$model) && ($model instanceof Model)) {
+            static::$model = $model->newInstance();
+        }
+    }
+
+    /**
+     * Set original data for column.
+     *
+     * @param array $input
+     */
+    public static function setOriginalGridData(array $input)
+    {
+        static::$originalGridData = $input;
+    }
+
+    /**
+     * Set column attributes.
+     *
+     * @param array $attributes
+     *
+     * @return $this
+     */
+    public function setAttributes($attributes = [])
+    {
+        static::$htmlAttributes[$this->name] = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Get column attributes.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public static function getAttributes($name)
+    {
+        return array_get(static::$htmlAttributes, $name, '');
+    }
+
+    /**
+     * Set style of this column.
+     *
+     * @param string $style
+     *
+     * @return Column
+     */
+    public function style($style)
+    {
+        return $this->setAttributes(compact('style'));
     }
 
     /**
@@ -146,13 +253,15 @@ class Column
     /**
      * Set relation.
      *
-     * @param $relation
+     * @param string $relation
+     * @param string $relationColumn
      *
      * @return $this
      */
-    public function setRelation($relation)
+    public function setRelation($relation, $relationColumn = null)
     {
         $this->relation = $relation;
+        $this->relationColumn = $relationColumn;
 
         return $this;
     }
@@ -180,267 +289,45 @@ class Column
     }
 
     /**
-     * Wrap value with badge.
+     * Add a display callback.
      *
-     * @param string $style
+     * @param Closure $callback
      *
      * @return $this
      */
-    public function badge($style = 'red')
+    public function display(Closure $callback)
     {
-        $callback = "<span class='badge bg-{$style}'>{value}</span>";
-
-        $this->htmlCallback($callback);
+        $this->displayCallbacks[] = $callback;
 
         return $this;
     }
 
     /**
-     * Wrap value with label.
-     *
-     * @param string $style
-     *
-     * @return $this
-     */
-    public function label($style = 'success')
-    {
-        $callback = "<span class='label label-{$style}'>{value}</span>";
-
-        $this->htmlCallback($callback);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a link.
-     *
-     * @param $href
-     * @param string $target
-     *
-     * @return $this
-     */
-    public function link($href = '', $target = '_blank')
-    {
-        if (empty($href)) {
-            $href = '{$value}';
-        }
-
-        $callback = "<a href='$href' target='$target'>{value}</a>";
-
-        $this->htmlCallback($callback);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a button.
-     *
-     * @param string $style
-     *
-     * @return $this
-     */
-    public function button($style = 'default')
-    {
-        if (is_array($style)) {
-            $style = array_map(function ($style) {
-                return 'btn-'.$style;
-            }, $style);
-
-            $style = implode(' ', $style);
-        } elseif (is_string($style)) {
-            $style = 'btn-'.$style;
-        }
-
-        $callback = "<span class='btn $style'>{value}</span>";
-
-        $this->htmlCallback($callback);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a progressbar.
-     *
-     * @param string $style
-     * @param string $size
-     * @param int    $max
-     *
-     * @return $this
-     */
-    public function progressBar($style = 'primary', $size = 'sm', $max = 100)
-    {
-        if (is_array($style)) {
-            $style = array_map(function ($style) {
-                return 'progress-bar-'.$style;
-            }, $style);
-
-            $style = implode(' ', $style);
-        } elseif (is_string($style)) {
-            $style = 'progress-bar-'.$style;
-        }
-
-        $callback = <<<EOT
-
-<div class="progress progress-$size">
-    <div class="progress-bar $style" role="progressbar" aria-valuenow="{value}" aria-valuemin="0" aria-valuemax="$max" style="width: {value}%">
-      <span class="sr-only">{value}</span>
-    </div>
-</div>
-
-EOT;
-
-        $this->htmlCallback($callback);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a image.
-     *
-     * @param string $server
-     * @param int    $width
-     * @param int    $height
-     *
-     * @return $this
-     */
-    public function image($server = '', $width = 200, $height = 200)
-    {
-        $server = $server ?: config('admin.upload.host');
-
-        $callback = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
-
-        $this->htmlCallback($callback);
-
-        return $this;
-    }
-
-    /**
-     * Make the column editable.
-     *
-     * @return $this
-     */
-    public function editable()
-    {
-        $editable = new Editable($this->name, func_get_args());
-        $editable->setResource($this->grid->resource());
-
-        $this->htmlCallback($editable->html());
-
-        return $this;
-    }
-
-    /**
-     * Add a value callback.
-     *
-     * @param callable $callable
-     *
-     * @return $this
-     */
-    public function value(Closure $callable)
-    {
-        $this->valueCallback = $callable;
-
-        return $this;
-    }
-
-    /**
-     * Alias for value method.
-     *
-     * @param callable $callable
-     *
-     * @return $this
-     */
-    public function display(Closure $callable)
-    {
-        return $this->value($callable);
-    }
-
-    /**
-     * If has a value callback.
+     * If has display callbacks.
      *
      * @return bool
      */
-    protected function hasValueCallback()
+    protected function hasDisplayCallbacks()
     {
-        return (bool) $this->valueCallback;
+        return !empty($this->displayCallbacks);
     }
 
     /**
-     * Set html callback.
+     * Call all of the "display" callbacks column.
      *
-     * @param $callback
-     */
-    protected function htmlCallback($callback)
-    {
-        $this->htmlCallbacks[] = $callback;
-    }
-
-    /**
-     * If column has html callback.
-     *
-     * @return bool
-     */
-    protected function hasHtmlCallback()
-    {
-        return !empty($this->htmlCallbacks);
-    }
-
-    /**
-     * Wrap value with callback.
-     *
-     * @param $value
+     * @param mixed $value
+     * @param int   $key
      *
      * @return mixed
      */
-    protected function htmlWrap($value, $row = [])
+    protected function callDisplayCallbacks($value, $key)
     {
-        foreach ($this->htmlCallbacks as $callback) {
-            $value = str_replace('{value}', $value, $callback);
+        foreach ($this->displayCallbacks as $callback) {
+            $callback = $this->bindOriginalRow($callback, $key);
+            $value = call_user_func($callback, $value);
         }
-
-        $value = str_replace(
-            '{$value}',
-            is_null($this->original) ? 'NULL' : $this->htmlEntityEncode($this->original),
-            $value
-        );
-        $value = str_replace('{pk}', array_get($row, $this->grid->getKeyName()), $value);
 
         return $value;
-    }
-
-    /**
-     * Fill all data to every column.
-     *
-     * @param array $data
-     *
-     * @return mixed
-     */
-    public function fill(array $data)
-    {
-        foreach ($data as $key => &$row) {
-            $this->original = $value = array_get($row, $this->name);
-
-            $isCustomColumn = !array_has($row, $this->name);
-
-            $value = $this->htmlEntityEncode($value);
-
-            array_set($row, $this->name, $value);
-
-            if ($this->hasValueCallback()) {
-                $input = $isCustomColumn ? $row : $this->original;
-
-                $callback = $this->bindOriginalRow($this->valueCallback, $key);
-                $value = call_user_func($callback, $input);
-                array_set($row, $this->name, $value);
-            }
-
-            if ($this->hasHtmlCallback()) {
-                $value = $this->htmlWrap($value, $row);
-                array_set($row, $this->name, $value);
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -455,17 +342,78 @@ EOT;
     {
         $originalRow = static::$originalGridData[$key];
 
-        return $callback->bindTo((object) $originalRow);
+        return $callback->bindTo(static::$model->newFromBuilder($originalRow));
     }
 
     /**
-     * Set original data for column.
+     * Fill all data to every column.
      *
-     * @param array $input
+     * @param array $data
+     *
+     * @return mixed
      */
-    public static function setOriginalGridData(array $input)
+    public function fill(array $data)
     {
-        static::$originalGridData = $input;
+        foreach ($data as $key => &$row) {
+            $this->original = $value = array_get($row, $this->name);
+
+            $value = $this->htmlEntityEncode($value);
+
+            array_set($row, $this->name, $value);
+
+            if ($this->isDefinedColumn()) {
+                $this->useDefinedColumn();
+            }
+
+            if ($this->hasDisplayCallbacks()) {
+                $value = $this->callDisplayCallbacks($this->original, $key);
+                array_set($row, $this->name, $value);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * If current column is a defined column.
+     *
+     * @return bool
+     */
+    protected function isDefinedColumn()
+    {
+        return array_key_exists($this->name, static::$defined);
+    }
+
+    /**
+     * Use a defined column.
+     *
+     * @throws \Exception
+     */
+    protected function useDefinedColumn()
+    {
+        // clear all display callbacks.
+        $this->displayCallbacks = [];
+
+        $class = static::$defined[$this->name];
+
+        if ($class instanceof Closure) {
+            $this->display($class);
+
+            return;
+        }
+
+        if (!class_exists($class) || !is_subclass_of($class, AbstractDisplayer::class)) {
+            throw new \Exception("Invalid column definition [$class]");
+        }
+
+        $grid = $this->grid;
+        $column = $this;
+
+        $this->display(function ($value) use ($grid, $column, $class) {
+            $definition = new $class($value, $grid, $column, $this);
+
+            return $definition->display();
+        });
     }
 
     /**
@@ -510,7 +458,7 @@ EOT;
         $query = app('request')->all();
         $query = array_merge($query, [$this->grid->model()->getSortName() => ['column' => $this->name, 'type' => $type]]);
 
-        $url = Url::current().'?'.http_build_query($query);
+        $url = URL::current().'?'.http_build_query($query);
 
         return "<a class=\"fa fa-fw $icon\" href=\"$url\"></a>";
     }
@@ -532,6 +480,80 @@ EOT;
     }
 
     /**
+     * Find a displayer to display column.
+     *
+     * @param string $abstract
+     * @param array  $arguments
+     *
+     * @return Column
+     */
+    protected function resolveDisplayer($abstract, $arguments)
+    {
+        if (array_key_exists($abstract, static::$displayers)) {
+            return $this->callBuiltinDisplayer(static::$displayers[$abstract], $arguments);
+        }
+
+        return $this->callSupportDisplayer($abstract, $arguments);
+    }
+
+    /**
+     * Call Illuminate/Support displayer.
+     *
+     * @param string $abstract
+     * @param array  $arguments
+     *
+     * @return Column
+     */
+    protected function callSupportDisplayer($abstract, $arguments)
+    {
+        return $this->display(function ($value) use ($abstract, $arguments) {
+            if (is_array($value) || $value instanceof Arrayable) {
+                return call_user_func_array([collect($value), $abstract], $arguments);
+            }
+
+            if (is_string($value)) {
+                return call_user_func_array([Str::class, $abstract], array_merge([$value], $arguments));
+            }
+
+            return $value;
+        });
+    }
+
+    /**
+     * Call Builtin displayer.
+     *
+     * @param string $abstract
+     * @param array  $arguments
+     *
+     * @return Column
+     */
+    protected function callBuiltinDisplayer($abstract, $arguments)
+    {
+        if ($abstract instanceof Closure) {
+            return $this->display(function ($value) use ($abstract, $arguments) {
+                return $abstract->call($this, ...array_merge([$value], $arguments));
+            });
+        }
+
+        if (class_exists($abstract) && is_subclass_of($abstract, AbstractDisplayer::class)) {
+            $grid = $this->grid;
+            $column = $this;
+
+            return $this->display(function ($value) use ($abstract, $grid, $column, $arguments) {
+                $displayer = new $abstract($value, $grid, $column, $this);
+
+                return call_user_func_array([$displayer, 'display'], $arguments);
+            });
+        }
+
+        return $this;
+    }
+
+    /**
+     * Passes through all unknown calls to builtin displayer or supported displayer.
+     *
+     * Allow fluent calls on the Column object.
+     *
      * @param string $method
      * @param array  $arguments
      *
@@ -539,7 +561,7 @@ EOT;
      */
     public function __call($method, $arguments)
     {
-        if ($this->isRelation()) {
+        if ($this->isRelation() && !$this->relationColumn) {
             $this->name = "{$this->relation}.$method";
             $this->label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
@@ -547,5 +569,7 @@ EOT;
 
             return $this;
         }
+
+        return $this->resolveDisplayer($method, $arguments);
     }
 }

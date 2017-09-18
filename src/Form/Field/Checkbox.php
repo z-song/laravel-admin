@@ -2,56 +2,61 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
+use Illuminate\Contracts\Support\Arrayable;
 
-class Checkbox extends Field
+class Checkbox extends MultipleSelect
 {
-    protected $values;
+    protected $inline = true;
 
     protected static $css = [
-        '/packages/admin/AdminLTE/plugins/iCheck/all.css',
+        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.css',
     ];
 
     protected static $js = [
-        'packages/admin/AdminLTE/plugins/iCheck/icheck.min.js',
+        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',
     ];
 
-    public function fill($data)
+    /**
+     * Set options.
+     *
+     * @param array|callable|string $options
+     *
+     * @return $this|mixed
+     */
+    public function options($options = [])
     {
-        $relations = array_get($data, $this->column);
-
-        foreach ($relations as $relation) {
-            $this->value[] = array_pop($relation['pivot']);
+        if ($options instanceof Arrayable) {
+            $options = $options->toArray();
         }
-    }
 
-    public function setOriginal($data)
-    {
-        $relations = array_get($data, $this->column);
-
-        foreach ($relations as $relation) {
-            $this->original[] = array_pop($relation['pivot']);
-        }
-    }
-
-    public function render()
-    {
-        $this->options['checkboxClass'] = 'icheckbox_minimal-blue';
-
-        $this->script = "$('.{$this->column}').iCheck(".json_encode($this->options).');';
-
-        return parent::render()->with(['values' => $this->values]);
-    }
-
-    public function values($values)
-    {
-        $this->values = $values;
+        $this->options = (array) $options;
 
         return $this;
     }
 
-    public function prepare($value)
+    /**
+     * Draw inline checkboxes.
+     */
+    public function inline()
     {
-        return array_filter($value);
+        $this->inline = true;
+    }
+
+    /**
+     * Draw stacked checkboxes.
+     */
+    public function stacked()
+    {
+        $this->inline = false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function render()
+    {
+        $this->script = "$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
+
+        return parent::render()->with('inline', $this->inline);
     }
 }

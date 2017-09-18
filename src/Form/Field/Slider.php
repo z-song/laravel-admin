@@ -7,12 +7,12 @@ use Encore\Admin\Form\Field;
 class Slider extends Field
 {
     protected static $css = [
-        '/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css',
-        '/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css',
+        '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css',
+        '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css',
     ];
 
     protected static $js = [
-        '/packages/admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js',
+        '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js',
     ];
 
     protected $options = [
@@ -25,7 +25,7 @@ class Slider extends Field
     {
         $option = json_encode($this->options);
 
-        $this->script = "$('#{$this->id}').ionRangeSlider($option)";
+        $this->script = "$('{$this->getElementClassSelector()}').ionRangeSlider($option)";
 
         return parent::render();
     }

@@ -3,28 +3,30 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Facades\Admin;
-use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter\AbstractFilter;
 use Illuminate\Support\Facades\Input;
-use ReflectionClass;
+use Illuminate\Support\Facades\Request;
 
 /**
  * Class Filter.
  *
- * @method Filter     is($column, $label = '')
- * @method Filter     like($column, $label = '')
- * @method Filter     gt($column, $label = '')
- * @method Filter     lt($column, $label = '')
- * @method Filter     between($column, $label = '')
- * @method Filter     where(\Closure $callback, $label)
+ * @method AbstractFilter     equal($column, $label = '')
+ * @method AbstractFilter     notEqual($column, $label = '')
+ * @method AbstractFilter     like($column, $label = '')
+ * @method AbstractFilter     ilike($column, $label = '')
+ * @method AbstractFilter     gt($column, $label = '')
+ * @method AbstractFilter     lt($column, $label = '')
+ * @method AbstractFilter     between($column, $label = '')
+ * @method AbstractFilter     in($column, $label = '')
+ * @method AbstractFilter     notIn($column, $label = '')
+ * @method AbstractFilter     where($callback, $label)
+ * @method AbstractFilter     date($column, $label = '')
+ * @method AbstractFilter     day($column, $label = '')
+ * @method AbstractFilter     month($column, $label = '')
+ * @method AbstractFilter     year($column, $label = '')
  */
 class Filter
 {
-    /**
-     * @var Grid
-     */
-    protected $grid;
-
     /**
      * @var Model
      */
@@ -38,14 +40,10 @@ class Filter
     /**
      * @var array
      */
-    protected $supports = ['is', 'like', 'gt', 'lt', 'between', 'where'];
-
-    /**
-     * If use a modal to hold the filters.
-     *
-     * @var bool
-     */
-    protected $useModal = false;
+    protected $supports = [
+        'equal', 'notEqual', 'ilike', 'like', 'gt', 'lt', 'between',
+        'where', 'in', 'notIn', 'date', 'day', 'month', 'year',
+    ];
 
     /**
      * If use id filter.
@@ -55,26 +53,43 @@ class Filter
     protected $useIdFilter = true;
 
     /**
+     * Action of search form.
+     *
+     * @var string
+     */
+    protected $action;
+
+    /**
+     * @var string
+     */
+    protected $view = 'admin::filter.modal';
+
+    /**
      * Create a new filter instance.
      *
-     * @param Grid  $grid
      * @param Model $model
      */
-    public function __construct(Grid $grid, Model $model)
+    public function __construct(Model $model)
     {
-        $this->grid = $grid;
-
         $this->model = $model;
 
-        $this->is($this->model->eloquent()->getKeyName());
+        $pk = $this->model->eloquent()->getKeyName();
+
+        $this->equal($pk, strtoupper($pk));
     }
 
     /**
-     * Use modal to show filter form.
+     * Set action of search form.
+     *
+     * @param string $action
+     *
+     * @return $this
      */
-    public function useModal()
+    public function setAction($action)
     {
-        $this->useModal = true;
+        $this->action = $action;
+
+        return $this;
     }
 
     /**
@@ -92,14 +107,26 @@ class Filter
      */
     public function conditions()
     {
-        $inputs = array_filter(Input::all(), function ($input) {
-            return $input !== '';
+        $inputs = array_dot(Input::all());
+
+        $inputs = array_filter($inputs, function ($input) {
+            return $input !== '' && !is_null($input);
         });
+
+        if (empty($inputs)) {
+            return [];
+        }
+
+        $params = [];
+
+        foreach ($inputs as $key => $value) {
+            array_set($params, $key, $value);
+        }
 
         $conditions = [];
 
         foreach ($this->filters() as $filter) {
-            $conditions[] = $filter->condition($inputs);
+            $conditions[] = $filter->condition($params);
         }
 
         return array_filter($conditions);
@@ -112,8 +139,10 @@ class Filter
      *
      * @return AbstractFilter
      */
-    protected function addFilter(AbstractFilter $filter)
+    public function addFilter(AbstractFilter $filter)
     {
+        $filter->setParent($this);
+
         return $this->filters[] = $filter;
     }
 
@@ -122,7 +151,7 @@ class Filter
      *
      * @return AbstractFilter[]
      */
-    protected function filters()
+    public function filters()
     {
         return $this->filters;
     }
@@ -134,19 +163,7 @@ class Filter
      */
     public function execute()
     {
-        $this->model->addConditions($this->conditions());
-
-        return $this->model->buildData();
-    }
-
-    /**
-     * Get parent grid instance.
-     *
-     * @return Grid
-     */
-    public function getGrid()
-    {
-        return $this->grid;
+        return $this->model->addConditions($this->conditions())->buildData();
     }
 
     /**
@@ -164,20 +181,6 @@ class Filter
             return '';
         }
 
-        if ($this->useModal) {
-            return $this->renderModalFilter();
-        }
-
-        return view('admin::grid.filter')->with(['filters' => $this->filters, 'grid' => $this->grid]);
-    }
-
-    /**
-     * Render modal filter.
-     *
-     * @return $this
-     */
-    public function renderModalFilter()
-    {
         $script = <<<'EOT'
 
 $("#filter-modal .submit").click(function () {
@@ -189,7 +192,37 @@ $("#filter-modal .submit").click(function () {
 EOT;
         Admin::script($script);
 
-        return view('admin::filter.modal')->with(['filters' => $this->filters(), 'grid' => $this->grid]);
+        return view($this->view)->with([
+            'action'    => $this->action ?: $this->urlWithoutFilters(),
+            'filters'   => $this->filters,
+        ]);
+    }
+
+    /**
+     * Get url without filter queryString.
+     *
+     * @return string
+     */
+    protected function urlWithoutFilters()
+    {
+        $columns = [];
+
+        /** @var Filter\AbstractFilter $filter * */
+        foreach ($this->filters as $filter) {
+            $columns[] = $filter->getColumn();
+        }
+
+        /** @var \Illuminate\Http\Request $request * */
+        $request = Request::instance();
+
+        $query = $request->query();
+        array_forget($query, $columns);
+
+        $question = $request->getBaseUrl().$request->getPathInfo() == '/' ? '/?' : '?';
+
+        return count($request->query()) > 0
+            ? $request->url().$question.http_build_query($query)
+            : $request->fullUrl();
     }
 
     /**
@@ -198,16 +231,17 @@ EOT;
      * @param string $method
      * @param array  $arguments
      *
-     * @return $this
+     * @return AbstractFilter|$this
      */
     public function __call($method, $arguments)
     {
         if (in_array($method, $this->supports)) {
             $className = '\\Encore\\Admin\\Grid\\Filter\\'.ucfirst($method);
-            $reflection = new ReflectionClass($className);
 
-            return $this->addFilter($reflection->newInstanceArgs($arguments));
+            return $this->addFilter(new $className(...$arguments));
         }
+
+        return $this;
     }
 
     /**

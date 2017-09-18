@@ -3,6 +3,7 @@
 namespace Encore\Admin\Auth;
 
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Middleware\Pjax;
 use Illuminate\Support\Facades\Auth;
 
 class Permission
@@ -72,14 +73,11 @@ class Permission
     /**
      * Send error response page.
      */
-    protected static function error()
+    public static function error()
     {
-        $content = Admin::content(function ($content) {
-            $content->body(view('admin::deny'));
-        });
+        $response = response(Admin::content()->withError(trans('admin.deny')));
 
-        response($content)->send();
-        exit;
+        Pjax::respond($response);
     }
 
     /**
