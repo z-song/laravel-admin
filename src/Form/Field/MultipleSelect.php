@@ -26,7 +26,7 @@ class MultipleSelect extends Select
             return $this->otherKey;
         }
 
-        if (is_callable($this->form->model(), $this->column) &&
+        if (is_callable([$this->form->model(), $this->column]) &&
             ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
         ) {
             /* @var BelongsToMany $relation */
