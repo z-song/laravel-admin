@@ -38,9 +38,11 @@ class OperationLogTest extends TestCase
             ->seeInDatabase($table, ['path' => 'admin/auth/menu', 'method' => 'GET'])
             ->seeInDatabase($table, ['path' => 'admin/auth/users', 'method' => 'GET'])
             ->seeInDatabase($table, ['path' => 'admin/auth/permissions', 'method' => 'GET'])
-            ->seeInDatabase($table, ['path' => 'admin/auth/roles', 'method' => 'GET'])
-            ->seeInDatabase($table, ['path' => 'admin/auth/logs', 'method' => 'GET'])
-            ->assertEquals(5, OperationLog::count());
+            ->seeInDatabase($table, ['path' => 'admin/auth/roles', 'method' => 'GET']);
+
+            $this->assertEquals(4, OperationLog::count());
+
+
     }
 
     public function testDeleteLogs()
@@ -49,11 +51,14 @@ class OperationLogTest extends TestCase
 
         $this->visit('admin/auth/logs')
             ->seePageIs('admin/auth/logs')
-            ->assertEquals(1, OperationLog::count());
+            ->assertEquals(0, OperationLog::count());
+
+        $this->visit('admin/auth/users');
+
+        $this->seeInDatabase($table, ['path' => 'admin/auth/users', 'method' => 'GET']);
 
         $this->delete('admin/auth/logs/1')
-            ->seeInDatabase($table, ['path' => 'admin/auth/logs/1', 'method' => 'DELETE'])
-            ->assertEquals(1, OperationLog::count());
+            ->assertEquals(0, OperationLog::count());
     }
 
     public function testDeleteMultipleLogs()
@@ -64,22 +69,18 @@ class OperationLogTest extends TestCase
             ->visit('admin/auth/users')
             ->visit('admin/auth/permissions')
             ->visit('admin/auth/roles')
-            ->visit('admin/auth/logs')
             ->seeInDatabase($table, ['path' => 'admin/auth/menu', 'method' => 'GET'])
             ->seeInDatabase($table, ['path' => 'admin/auth/users', 'method' => 'GET'])
             ->seeInDatabase($table, ['path' => 'admin/auth/permissions', 'method' => 'GET'])
             ->seeInDatabase($table, ['path' => 'admin/auth/roles', 'method' => 'GET'])
-            ->seeInDatabase($table, ['path' => 'admin/auth/logs', 'method' => 'GET'])
-            ->assertEquals(5, OperationLog::count());
+            ->assertEquals(4, OperationLog::count());
 
-        $this->delete('admin/auth/logs/1,2,3,4,5')
+        $this->delete('admin/auth/logs/1,2,3,4')
             ->notSeeInDatabase($table, ['path' => 'admin/auth/menu', 'method' => 'GET'])
             ->notSeeInDatabase($table, ['path' => 'admin/auth/users', 'method' => 'GET'])
             ->notSeeInDatabase($table, ['path' => 'admin/auth/permissions', 'method' => 'GET'])
             ->notSeeInDatabase($table, ['path' => 'admin/auth/roles', 'method' => 'GET'])
-            ->notSeeInDatabase($table, ['path' => 'admin/auth/logs', 'method' => 'GET'])
 
-            ->seeInDatabase($table, ['path' => 'admin/auth/logs/1,2,3,4,5', 'method' => 'DELETE'])
-            ->assertEquals(1, OperationLog::count());
+            ->assertEquals(0, OperationLog::count());
     }
 }

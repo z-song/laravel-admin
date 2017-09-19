@@ -17,9 +17,14 @@ class TestCase extends BaseTestCase
     {
         $app = require __DIR__.'/../vendor/laravel/laravel/bootstrap/app.php';
 
-        $app->register('Encore\Admin\AdminServiceProvider');
+        $app->booting(function () {
+            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+            $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
+        });
 
         $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+
+        $app->register('Encore\Admin\AdminServiceProvider');
 
         return $app;
     }
@@ -37,13 +42,11 @@ class TestCase extends BaseTestCase
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
         $this->app['config']->set('admin', require __DIR__.'/config/admin.php');
 
-        $this->artisan('vendor:publish');
+        $this->artisan('vendor:publish', ['--provider' => 'Encore\Admin\AdminServiceProvider']);
 
         $this->migrate();
 
         $this->artisan('admin:install');
-
-        \Encore\Admin\Facades\Admin::registerAuthRoutes();
 
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
@@ -86,7 +89,7 @@ class TestCase extends BaseTestCase
 
         $fileSystem = new Filesystem();
 
-        foreach ($fileSystem->files(__DIR__.'/../migrations') as $file) {
+        foreach ($fileSystem->files(__DIR__.'/../database/migrations') as $file) {
             $fileSystem->requireOnce($file);
             $migrations[] = $this->getMigrationClass($file);
         }
