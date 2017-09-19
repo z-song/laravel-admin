@@ -53,7 +53,7 @@ return [
     'refresh_succeeded' => 'Refresh succeeded !',
     'login_successful'  => 'Login successful',
 
-    'choose'       => 'Select',
+    'choose'       => 'Choose',
     'choose_file'  => 'Select file',
     'choose_image' => 'Select image',
 
@@ -107,5 +107,5 @@ return [
         'filtered'           => '{0} / {1}',
         'filter_clear'       => 'Show all',
         'filter_placeholder' => 'Filter',
-    ]
+    ],
 ];

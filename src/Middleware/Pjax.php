@@ -4,10 +4,10 @@ namespace Encore\Admin\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\Response;
 
 class Pjax
 {
@@ -31,8 +31,12 @@ class Pjax
             return $this->handleErrorResponse($response);
         }
 
-        $this->filterResponse($response, $request->header('X-PJAX-CONTAINER'))
-            ->setUriHeader($response, $request);
+        try {
+            $this->filterResponse($response, $request->header('X-PJAX-CONTAINER'))
+                ->setUriHeader($response, $request);
+        } catch (\Exception $exception) {
+
+        }
 
         return $response;
     }

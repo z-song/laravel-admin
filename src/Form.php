@@ -73,7 +73,7 @@ class Form
     /**
      * Eloquent model of the form.
      *
-     * @var
+     * @var Model
      */
     protected $model;
 
@@ -641,10 +641,10 @@ class Form
 
             $relation = $this->model->$name();
 
-            $hasDot = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne
+            $oneToOneRelation = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne
                 || $relation instanceof \Illuminate\Database\Eloquent\Relations\MorphOne;
 
-            $prepared = $this->prepareUpdate([$name => $values], $hasDot);
+            $prepared = $this->prepareUpdate([$name => $values], $oneToOneRelation);
 
             if (empty($prepared)) {
                 continue;
@@ -715,39 +715,36 @@ class Form
      * Prepare input data for update.
      *
      * @param array $updates
-     * @param bool  $hasDot  If column name contains a 'dot', only has-one relation column use this.
+     * @param bool  $oneToOneRelation If column is one-to-one relation.
      *
      * @return array
      */
-    protected function prepareUpdate(array $updates, $hasDot = false)
+    protected function prepareUpdate(array $updates, $oneToOneRelation = false)
     {
         $prepared = [];
 
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
-            if ($this->invalidColumn($columns, $hasDot)) {
+            // If column not in input array data, then continue.
+            if (!array_has($updates, $columns)) {
+                continue;
+            }
+
+            if ($this->invalidColumn($columns, $oneToOneRelation)) {
                 continue;
             }
 
             $value = $this->getDataByColumn($updates, $columns);
 
-            if ($value !== '' && $value !== '0' && empty($value)) {
-                continue;
-            }
+            $value = $field->prepare($value);
 
-            if (method_exists($field, 'prepare')) {
-                $value = $field->prepare($value);
-            }
-
-            if ($value != $field->original()) {
-                if (is_array($columns)) {
-                    foreach ($columns as $name => $column) {
-                        array_set($prepared, $column, $value[$name]);
-                    }
-                } elseif (is_string($columns)) {
-                    array_set($prepared, $columns, $value);
+            if (is_array($columns)) {
+                foreach ($columns as $name => $column) {
+                    array_set($prepared, $column, $value[$name]);
                 }
+            } elseif (is_string($columns)) {
+                array_set($prepared, $columns, $value);
             }
         }
 
@@ -756,15 +753,15 @@ class Form
 
     /**
      * @param string|array $columns
-     * @param bool         $hasDot
+     * @param bool         $oneToOneRelation
      *
      * @return bool
      */
-    public function invalidColumn($columns, $hasDot = false)
+    protected function invalidColumn($columns, $oneToOneRelation = false)
     {
         foreach ((array) $columns as $column) {
-            if ((!$hasDot && Str::contains($column, '.')) ||
-                ($hasDot && !Str::contains($column, '.'))) {
+            if ((!$oneToOneRelation && Str::contains($column, '.')) ||
+                ($oneToOneRelation && !Str::contains($column, '.'))) {
                 return true;
             }
         }
@@ -791,9 +788,7 @@ class Form
                 continue;
             }
 
-            if (method_exists($field, 'prepare')) {
-                $inserts[$column] = $field->prepare($value);
-            }
+            $inserts[$column] = $field->prepare($value);
         }
 
         $prepared = [];
@@ -929,6 +924,8 @@ class Form
      */
     protected function setFieldOriginalValue()
     {
+        static::doNotSnakeAttributes($this->model);
+
         $values = $this->model->toArray();
 
         $this->builder->fields()->each(function (Field $field) use ($values) {
@@ -949,11 +946,27 @@ class Form
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
+        static::doNotSnakeAttributes($this->model);
+
         $data = $this->model->toArray();
 
         $this->builder->fields()->each(function (Field $field) use ($data) {
             $field->fill($data);
         });
+    }
+
+    /**
+     * Don't snake case attributes
+     *
+     * @param Model $model
+     *
+     * @return void
+     */
+    protected static function doNotSnakeAttributes(Model $model)
+    {
+        $class = get_class($model);
+
+        $class::$snakeAttributes = false;
     }
 
     /**
@@ -1099,9 +1112,7 @@ class Form
      */
     public function tools(Closure $callback)
     {
-        $callback = $callback->bindTo($this);
-
-        call_user_func($callback, $this->builder->getTools());
+        $callback->call($this, $this->builder->getTools());
     }
 
     /**
