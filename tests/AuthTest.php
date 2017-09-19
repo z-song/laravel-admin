@@ -38,7 +38,6 @@ class AuthTest extends TestCase
             ->seeLink('laravel-admin-ext/backup', 'https://github.com/laravel-admin-extensions/backup')
             ->seeLink('laravel-admin-ext/media-manager', 'https://github.com/laravel-admin-extensions/media-manager')
 
-
             ->see('Dependencies')
             ->see('php')
             ->see('>=7.0.0')

@@ -90,7 +90,7 @@ class Model
     }
 
     /**
-     * Don't snake case attributes
+     * Don't snake case attributes.
      *
      * @param EloquentModel $model
      *
