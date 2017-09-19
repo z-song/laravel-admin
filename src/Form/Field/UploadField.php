@@ -68,10 +68,10 @@ trait UploadField
             'showUpload'           => false,
             'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
-                $this->column            => static::FILE_DELETE_FLAG,
-                static::FILE_DELETE_FLAG => '',
-                '_token'                 => csrf_token(),
-                '_method'                => 'PUT',
+                $this->formatName($this->column) => static::FILE_DELETE_FLAG,
+                static::FILE_DELETE_FLAG         => '',
+                '_token'                         => csrf_token(),
+                '_method'                        => 'PUT',
             ],
         ];
 
@@ -300,7 +300,7 @@ trait UploadField
      */
     protected function generateUniqueName(UploadedFile $file)
     {
-        return md5(uniqid()).'.'.$file->guessExtension();
+        return md5(uniqid()).'.'.$file->getClientOriginalExtension();
     }
 
     /**

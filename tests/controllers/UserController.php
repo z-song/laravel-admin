@@ -75,7 +75,7 @@ class UserController extends Controller
             $grid->email();
             $grid->mobile();
             $grid->full_name();
-            $grid->avatar()->value(function ($avatar) {
+            $grid->avatar()->display(function ($avatar) {
                 return "<img src='{$avatar}' />";
             });
             $grid->profile()->postcode('Post code');
@@ -93,7 +93,7 @@ class UserController extends Controller
                 return $this->email.'#'.$this->profile['color'];
             });
 
-            $grid->tags()->value(function ($tags) {
+            $grid->tags()->display(function ($tags) {
                 $tags = collect($tags)->map(function ($tag) {
                     return "<code>{$tag['name']}</code>";
                 })->toArray();

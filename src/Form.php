@@ -726,7 +726,8 @@ class Form
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
-            if ($this->columnNotInData($columns, $updates, $oneToOneRelation)) {
+            // If column not in input array data, then continue.
+            if (!array_has($updates, $columns)) {
                 continue;
             }
 
@@ -766,28 +767,6 @@ class Form
         }
 
         return false;
-    }
-
-    /**
-     * Check if a column in a giving data.
-     *
-     * @param string $column
-     * @param array  $data
-     * @param bool   $oneToOneRelation
-     *
-     * @return bool
-     */
-    protected function columnNotInData($column, $data, $oneToOneRelation = false)
-    {
-        if ($oneToOneRelation) {
-            $keys = array_keys(array_dot($data));
-        } else {
-            $keys = array_keys($data);
-        }
-
-        $intersect = array_intersect((array) $column, $keys);
-
-        return empty($intersect);
     }
 
     /**
@@ -945,6 +924,8 @@ class Form
      */
     protected function setFieldOriginalValue()
     {
+        static::doNotSnakeAttributes($this->model);
+
         $values = $this->model->toArray();
 
         $this->builder->fields()->each(function (Field $field) use ($values) {
@@ -965,11 +946,27 @@ class Form
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
+        static::doNotSnakeAttributes($this->model);
+
         $data = $this->model->toArray();
 
         $this->builder->fields()->each(function (Field $field) use ($data) {
             $field->fill($data);
         });
+    }
+
+    /**
+     * Don't snake case attributes.
+     *
+     * @param Model $model
+     *
+     * @return void
+     */
+    protected static function doNotSnakeAttributes(Model $model)
+    {
+        $class = get_class($model);
+
+        $class::$snakeAttributes = false;
     }
 
     /**
