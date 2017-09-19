@@ -956,7 +956,7 @@ class Form
     }
 
     /**
-     * Don't snake case attributes
+     * Don't snake case attributes.
      *
      * @param Model $model
      *

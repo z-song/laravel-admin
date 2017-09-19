@@ -35,7 +35,6 @@ class Pjax
             $this->filterResponse($response, $request->header('X-PJAX-CONTAINER'))
                 ->setUriHeader($response, $request);
         } catch (\Exception $exception) {
-
         }
 
         return $response;

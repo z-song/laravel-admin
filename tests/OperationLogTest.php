@@ -40,9 +40,7 @@ class OperationLogTest extends TestCase
             ->seeInDatabase($table, ['path' => 'admin/auth/permissions', 'method' => 'GET'])
             ->seeInDatabase($table, ['path' => 'admin/auth/roles', 'method' => 'GET']);
 
-            $this->assertEquals(4, OperationLog::count());
-
-
+        $this->assertEquals(4, OperationLog::count());
     }
 
     public function testDeleteLogs()
