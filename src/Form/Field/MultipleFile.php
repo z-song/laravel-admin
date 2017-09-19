@@ -134,7 +134,9 @@ class MultipleFile extends Field
     {
         $this->name = $this->getStoreName($file);
 
-        return $this->upload($file);
+        return tap($this->upload($file), function () {
+            $this->name = null;
+        });
     }
 
     /**
