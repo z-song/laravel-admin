@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
@@ -33,6 +34,8 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        $adminConfig = require __DIR__.'/config/admin.php';
+
         $this->app['config']->set('database.default', 'mysql');
         $this->app['config']->set('database.connections.mysql.host', env('MYSQL_HOST', 'localhost'));
         $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
@@ -40,13 +43,19 @@ class TestCase extends BaseTestCase
         $this->app['config']->set('database.connections.mysql.password', '');
         $this->app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
-        $this->app['config']->set('admin', require __DIR__.'/config/admin.php');
+        $this->app['config']->set('admin', $adminConfig);
+
+        foreach (array_dot(array_get($adminConfig, 'auth'), 'auth.') as $key => $value) {
+            $this->app['config']->set($key, $value);
+        }
 
         $this->artisan('vendor:publish', ['--provider' => 'Encore\Admin\AdminServiceProvider']);
 
-        $this->migrate();
+        Schema::defaultStringLength(191);
 
         $this->artisan('admin:install');
+
+        $this->migrateTestTables();
 
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
@@ -59,7 +68,11 @@ class TestCase extends BaseTestCase
 
     public function tearDown()
     {
-        $this->rollback();
+        (new CreateAdminTables())->down();
+
+        (new CreateTestTables())->down();
+
+        DB::select("delete from `migrations` where `migration` = '2016_01_04_173148_create_admin_tables'");
 
         parent::tearDown();
     }
@@ -69,45 +82,12 @@ class TestCase extends BaseTestCase
      *
      * @return void
      */
-    public function migrate()
+    public function migrateTestTables()
     {
-        foreach ($this->getMigrations() as $migration) {
-            (new $migration())->up();
-        }
-    }
-
-    public function rollback()
-    {
-        foreach ($this->getMigrations() as $migration) {
-            (new $migration())->down();
-        }
-    }
-
-    protected function getMigrations()
-    {
-        $migrations = [];
-
         $fileSystem = new Filesystem();
 
-        foreach ($fileSystem->files(__DIR__.'/../database/migrations') as $file) {
-            $fileSystem->requireOnce($file);
-            $migrations[] = $this->getMigrationClass($file);
-        }
+        $fileSystem->requireOnce(__DIR__.'/migrations/2016_11_22_093148_create_test_tables.php');
 
-        foreach ($fileSystem->files(__DIR__.'/migrations') as $file) {
-            $fileSystem->requireOnce($file);
-            $migrations[] = $this->getMigrationClass($file);
-        }
-
-        return $migrations;
-    }
-
-    protected function getMigrationClass($file)
-    {
-        $file = str_replace('.php', '', basename($file));
-
-        $class = Str::studly(implode('_', array_slice(explode('_', $file), 4)));
-
-        return $class;
+        (new CreateTestTables())->up();
     }
 }

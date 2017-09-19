@@ -96,7 +96,7 @@ class UserFormTest extends TestCase
 
         $avatar = UserModel::first()->avatar;
 
-        $this->assertFileExists(public_path('upload/'.$avatar));
+        $this->assertFileExists(public_path('uploads/'.$avatar));
     }
 
     protected function seedsTable($count = 100)
