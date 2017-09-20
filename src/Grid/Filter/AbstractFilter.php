@@ -3,11 +3,27 @@
 namespace Encore\Admin\Grid\Filter;
 
 use Encore\Admin\Grid\Filter;
-use Encore\Admin\Grid\Filter\Field\DateTime;
-use Encore\Admin\Grid\Filter\Field\MultipleSelect;
-use Encore\Admin\Grid\Filter\Field\Select;
-use Encore\Admin\Grid\Filter\Field\Text;
+use Encore\Admin\Grid\Filter\Presenter\ {
+    Presenter, Checkbox, DateTime, MultipleSelect, Radio, Select, Text
+};
 
+/**
+ * Class AbstractFilter
+ * @package Encore\Admin\Grid\Filter
+ *
+ * @method Text url()
+ * @method Text email()
+ * @method Text integer()
+ * @method Text decimal($options = [])
+ * @method Text currency($options = [])
+ * @method Text percentage($options = [])
+ * @method Text ip()
+ * @method Text mac()
+ * @method Text mobile($mask = '19999999999')
+ * @method Text inputmask($options = [], $icon = '')
+ * @method Text placeholder($placeholder = '')
+ *
+ */
 abstract class AbstractFilter
 {
     /**
@@ -18,7 +34,7 @@ abstract class AbstractFilter
     protected $id;
 
     /**
-     * Label of field.
+     * Label of presenter.
      *
      * @var string
      */
@@ -35,11 +51,11 @@ abstract class AbstractFilter
     protected $column;
 
     /**
-     * Field object.
+     * Presenter object.
      *
-     * @var
+     * @var Presenter
      */
-    protected $field;
+    protected $presenter;
 
     /**
      * Query for filter.
@@ -70,18 +86,17 @@ abstract class AbstractFilter
         $this->label = $this->formatLabel($label);
         $this->id = $this->formatId($column);
 
-        $this->setupField();
+        $this->setupDefaultPresenter();
     }
 
     /**
-     * Setup field.
+     * Setup default presenter.
      *
      * @return void
      */
-    public function setupField()
+    protected function setupDefaultPresenter()
     {
-        $this->field = new Text();
-        $this->field->setPlaceholder($this->label);
+        $this->setPresenter(new Text($this->label));
     }
 
     /**
@@ -128,7 +143,7 @@ abstract class AbstractFilter
      *
      * @return array|string
      */
-    public function formatId($columns)
+    protected function formatId($columns)
     {
         return str_replace('.', '_', $columns);
     }
@@ -210,29 +225,41 @@ abstract class AbstractFilter
      *
      * @param array $options
      *
-     * @return $this
+     * @return Select
      */
     public function select($options = [])
     {
-        $select = new Select($options);
-
-        $select->setParent($this);
-
-        return $this->setField($select);
+        return $this->setPresenter(new Select($options));
     }
 
     /**
      * @param array $options
      *
-     * @return mixed
+     * @return MultipleSelect
      */
     public function multipleSelect($options = [])
     {
-        $select = new MultipleSelect($options);
+        return $this->setPresenter(new MultipleSelect($options));
+    }
 
-        $select->setParent($this);
+    /**
+     * @param array $options
+     *
+     * @return Radio
+     */
+    public function radio($options = [])
+    {
+        return $this->setPresenter(new Radio($options));
+    }
 
-        return $this->setField($select);
+    /**
+     * @param array $options
+     *
+     * @return Checkbox
+     */
+    public function checkbox($options = [])
+    {
+        return $this->setPresenter(new Checkbox($options));
     }
 
     /**
@@ -240,17 +267,17 @@ abstract class AbstractFilter
      *
      * @param array $options
      *
-     * @return mixed
+     * @return DateTime
      */
     public function datetime($options = [])
     {
-        return $this->setField(new DateTime($this, $options));
+        return $this->setPresenter(new DateTime($options));
     }
 
     /**
      * Date filter.
      *
-     * @return mixed
+     * @return DateTime
      */
     public function date()
     {
@@ -260,7 +287,7 @@ abstract class AbstractFilter
     /**
      * Time filter.
      *
-     * @return mixed
+     * @return DateTime
      */
     public function time()
     {
@@ -270,7 +297,7 @@ abstract class AbstractFilter
     /**
      * Day filter.
      *
-     * @return mixed
+     * @return DateTime
      */
     public function day()
     {
@@ -280,7 +307,7 @@ abstract class AbstractFilter
     /**
      * Month filter.
      *
-     * @return mixed
+     * @return DateTime
      */
     public function month()
     {
@@ -290,7 +317,7 @@ abstract class AbstractFilter
     /**
      * Year filter.
      *
-     * @return mixed
+     * @return DateTime
      */
     public function year()
     {
@@ -298,25 +325,27 @@ abstract class AbstractFilter
     }
 
     /**
-     * Set field object of filter.
+     * Set presenter object of filter.
      *
-     * @param $field
+     * @param Presenter $presenter
      *
      * @return mixed
      */
-    protected function setField($field)
+    protected function setPresenter(Presenter $presenter)
     {
-        return $this->field = $field;
+        $presenter->setParent($this);
+
+        return $this->presenter = $presenter;
     }
 
     /**
-     * Get field object of filter.
+     * Get presenter object of filter.
      *
-     * @return mixed
+     * @return Presenter
      */
-    public function field()
+    protected function presenter()
     {
-        return $this->field;
+        return $this->presenter;
     }
 
     /**
@@ -384,10 +413,10 @@ abstract class AbstractFilter
     /**
      * @return array
      */
-    protected function fieldVars()
+    protected function presenterVars()
     {
-        if (method_exists($this->field(), 'variables')) {
-            return $this->field()->variables();
+        if (method_exists($this->presenter(), 'variables')) {
+            return $this->presenter()->variables();
         }
 
         return [];
@@ -401,14 +430,14 @@ abstract class AbstractFilter
     protected function variables()
     {
         $variables = [
-            'id'    => $this->id,
-            'name'  => $this->formatName($this->column),
-            'label' => $this->label,
-            'value' => $this->value,
-            'field' => $this->field(),
+            'id'        => $this->id,
+            'name'      => $this->formatName($this->column),
+            'label'     => $this->label,
+            'value'     => $this->value,
+            'presenter' => $this->presenter(),
         ];
 
-        return array_merge($variables, $this->fieldVars());
+        return array_merge($variables, $this->presenterVars());
     }
 
     /**
@@ -439,8 +468,8 @@ abstract class AbstractFilter
      */
     public function __call($method, $params)
     {
-        if (method_exists($this->field, $method)) {
-            return call_user_func_array([$this->field, $method], $params);
+        if (method_exists($this->presenter, $method)) {
+            return call_user_func_array([$this->presenter, $method], $params);
         }
 
         throw new \Exception('Method "'.$method.'" not exists.');

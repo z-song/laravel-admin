@@ -1,4 +1,4 @@
 <div class="form-group">
     <label>{{$label}}</label>
-    @include('admin::filter.' . $field->name())
+    @include($presenter->view())
 </div>
