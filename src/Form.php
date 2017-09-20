@@ -1035,7 +1035,9 @@ class Form
                 ) {
                     $relations[] = $relation;
                 }
-            } elseif (method_exists($this->model, $column)) {
+            } elseif (method_exists($this->model, $column) &&
+                !method_exists(Model::class, $column)
+            ) {
                 $relations[] = $column;
             }
         }
