@@ -51,7 +51,7 @@ $('.$class').bootstrapSwitch({
     onColor: '{$this->states['on']['color']}',
     offColor: '{$this->states['off']['color']}',
     onSwitchChange: function(event, state){
-        $(this).val(state ? 'on' : 'off');
+        $(this).val(state ? {$this->states['on']['value']} : {$this->states['off']['value']});
         var pk = $(this).data('key');
         var value = $(this).val();
         $.ajax({
