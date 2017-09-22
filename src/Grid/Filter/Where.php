@@ -12,7 +12,7 @@ class Where extends AbstractFilter
     protected $where;
 
     /**
-     * Input value from field.
+     * Input value from presenter.
      *
      * @var
      */
@@ -33,7 +33,7 @@ class Where extends AbstractFilter
         $this->column = $column ?: static::getQueryHash($query, $this->label);
         $this->id = $this->formatId($this->column);
 
-        $this->setupField();
+        $this->setupDefaultPresenter();
     }
 
     /**

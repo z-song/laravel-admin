@@ -94,6 +94,13 @@ class Field implements Renderable
     protected $rules = '';
 
     /**
+     * Validation messages.
+     *
+     * @var array
+     */
+    protected $validationMessages = [];
+
+    /**
      * Css required by this field.
      *
      * @var array
@@ -375,11 +382,12 @@ class Field implements Renderable
     /**
      * Get or set rules.
      *
-     * @param null $rules
+     * @param null  $rules
+     * @param array $messages
      *
      * @return mixed
      */
-    public function rules($rules = null)
+    public function rules($rules = null, $messages = [])
     {
         if ($rules instanceof \Closure) {
             $this->rules = $rules;
@@ -390,6 +398,8 @@ class Field implements Renderable
 
             $this->rules = implode('|', $rules);
         }
+
+        $this->validationMessages = $messages;
 
         return $this;
     }
@@ -572,7 +582,7 @@ class Field implements Renderable
             }
         }
 
-        return Validator::make($input, $rules, [], $attributes);
+        return Validator::make($input, $rules, $this->validationMessages, $attributes);
     }
 
     /**

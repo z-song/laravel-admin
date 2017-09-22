@@ -71,7 +71,7 @@ class MultipleFile extends Field
 
         list($rules, $input) = $this->hydrateFiles(array_get($input, $this->column, []));
 
-        return Validator::make($input, $rules, [], $attributes);
+        return Validator::make($input, $rules, $this->validationMessages, $attributes);
     }
 
     /**
