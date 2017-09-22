@@ -391,7 +391,7 @@ abstract class AbstractFilter
             return [$this->query => func_get_args()];
         }
 
-        return call_user_func_array([$this, 'buildRelationCondition'], func_get_args());
+        return $this->buildRelationQuery(...func_get_args());
     }
 
     /**
@@ -399,7 +399,7 @@ abstract class AbstractFilter
      *
      * @return array
      */
-    protected function buildRelationCondition()
+    protected function buildRelationQuery()
     {
         $args = func_get_args();
 
@@ -411,33 +411,19 @@ abstract class AbstractFilter
     }
 
     /**
-     * @return array
-     */
-    protected function presenterVars()
-    {
-        if (method_exists($this->presenter(), 'variables')) {
-            return $this->presenter()->variables();
-        }
-
-        return [];
-    }
-
-    /**
      * Variables for filter view.
      *
      * @return array
      */
     protected function variables()
     {
-        $variables = [
+        return array_merge([
             'id'        => $this->id,
             'name'      => $this->formatName($this->column),
             'label'     => $this->label,
             'value'     => $this->value,
             'presenter' => $this->presenter(),
-        ];
-
-        return array_merge($variables, $this->presenterVars());
+        ], $this->presenter()->variables());
     }
 
     /**
@@ -451,6 +437,8 @@ abstract class AbstractFilter
     }
 
     /**
+     * Render this filter.
+     *
      * @return \Illuminate\View\View|string
      */
     public function __toString()
@@ -469,7 +457,7 @@ abstract class AbstractFilter
     public function __call($method, $params)
     {
         if (method_exists($this->presenter, $method)) {
-            return call_user_func_array([$this->presenter, $method], $params);
+            return $this->presenter()->{$method}(...$params);
         }
 
         throw new \Exception('Method "'.$method.'" not exists.');

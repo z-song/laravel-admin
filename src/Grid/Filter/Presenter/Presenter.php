@@ -32,4 +32,14 @@ abstract class Presenter
 
         return 'admin::filter.'.strtolower($reflect->getShortName());
     }
+
+    /**
+     * Blade template variables for this presenter.
+     *
+     * @return array
+     */
+    public function variables() : array
+    {
+        return [];
+    }
 }
