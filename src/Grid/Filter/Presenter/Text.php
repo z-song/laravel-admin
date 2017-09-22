@@ -152,7 +152,7 @@ class Text extends Presenter
     }
 
     /**
-     * @param array $options
+     * @param array  $options
      * @param string $icon
      *
      * @return $this

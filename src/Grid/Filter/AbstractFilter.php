@@ -3,13 +3,16 @@
 namespace Encore\Admin\Grid\Filter;
 
 use Encore\Admin\Grid\Filter;
-use Encore\Admin\Grid\Filter\Presenter\ {
-    Presenter, Checkbox, DateTime, MultipleSelect, Radio, Select, Text
-};
+use Encore\Admin\Grid\Filter\Presenter\ Checkbox;
+use Encore\Admin\Grid\Filter\Presenter\ DateTime;
+use Encore\Admin\Grid\Filter\Presenter\ MultipleSelect;
+use Encore\Admin\Grid\Filter\Presenter\ Presenter;
+use Encore\Admin\Grid\Filter\Presenter\ Radio;
+use Encore\Admin\Grid\Filter\Presenter\ Select;
+use Encore\Admin\Grid\Filter\Presenter\ Text;
 
 /**
- * Class AbstractFilter
- * @package Encore\Admin\Grid\Filter
+ * Class AbstractFilter.
  *
  * @method Text url()
  * @method Text email()
@@ -22,7 +25,6 @@ use Encore\Admin\Grid\Filter\Presenter\ {
  * @method Text mobile($mask = '19999999999')
  * @method Text inputmask($options = [], $icon = '')
  * @method Text placeholder($placeholder = '')
- *
  */
 abstract class AbstractFilter
 {
