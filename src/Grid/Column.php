@@ -180,9 +180,10 @@ class Column
      * Set column attributes.
      *
      * @param array $attributes
+     *
      * @return $this
      */
-    public function setAttributes($attributes  = [])
+    public function setAttributes($attributes = [])
     {
         static::$htmlAttributes[$this->name] = $attributes;
 
@@ -193,6 +194,7 @@ class Column
      * Get column attributes.
      *
      * @param string $name
+     *
      * @return mixed
      */
     public static function getAttributes($name)
@@ -204,6 +206,7 @@ class Column
      * Set style of this column.
      *
      * @param string $style
+     *
      * @return Column
      */
     public function style($style)
