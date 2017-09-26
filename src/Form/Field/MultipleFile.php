@@ -83,6 +83,10 @@ class MultipleFile extends Field
      */
     protected function hydrateFiles(array $value)
     {
+        if (empty($value)) {
+            return [[$this->column => $this->getRules()], []];
+        }
+
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
