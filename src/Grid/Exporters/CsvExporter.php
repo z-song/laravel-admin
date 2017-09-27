@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Grid\Exporters;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class CsvExporter extends AbstractExporter
@@ -28,20 +30,15 @@ class CsvExporter extends AbstractExporter
             $this->chunk(function ($records) use ($handle, &$titles) {
 
                 if (empty($titles)) {
-                    $titles = collect(array_dot($records->first()->toArray()))->keys()->map(function ($key) {
-                        $key = str_replace('.', ' ', $key);
-
-                        return Str::ucfirst($key);
-                    });
+                    $titles = $this->getHeaderRowFromRecords($records);
 
                     // Add CSV headers
-                    fputcsv($handle, $titles->toArray());
+                    fputcsv($handle, $titles);
                 }
 
                 foreach ($records as $record) {
-                    fputcsv($handle, array_dot($record->toArray()));
+                    fputcsv($handle, $this->getFormattedRecord($record));
                 }
-
             });
 
             // Close the output stream
@@ -50,5 +47,33 @@ class CsvExporter extends AbstractExporter
         }, 200, $headers)->send();
 
         exit;
+    }
+
+    /**
+     * @param Collection $records
+     *
+     * @return array
+     */
+    public function getHeaderRowFromRecords(Collection $records): array
+    {
+        $titles = collect(array_dot($records->first()->toArray()))->keys()->map(
+            function ($key) {
+                $key = str_replace('.', ' ', $key);
+
+                return Str::ucfirst($key);
+            }
+        );
+
+        return $titles->toArray();
+    }
+
+    /**
+     * @param Model $record
+     *
+     * @return array
+     */
+    public function getFormattedRecord(Model $record)
+    {
+        return array_dot($record->getAttributes());
     }
 }
