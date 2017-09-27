@@ -62,11 +62,7 @@ class Where extends AbstractFilter
     {
         $value = array_get($inputs, $this->column ?: static::getQueryHash($this->where, $this->label));
 
-        if (is_array($value)) {
-            $value = array_filter($value);
-        }
-
-        if (is_null($value) || empty($value)) {
+        if (is_null($value)) {
             return;
         }
 
