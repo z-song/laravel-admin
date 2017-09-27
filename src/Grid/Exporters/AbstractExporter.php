@@ -58,6 +58,16 @@ abstract class AbstractExporter implements ExporterInterface
     }
 
     /**
+     * @param callable $callback
+     * @param integer  $count
+     * @return bool
+     */
+    public function chunk(callable $callback, $count = 100)
+    {
+        return $this->grid->getFilter()->chunk($callback, $count);
+    }
+
+    /**
      * Export data with scope.
      *
      * @param string $scope
