@@ -167,6 +167,16 @@ class Filter
     }
 
     /**
+     * @param callable $callback
+     * @param integer  $count
+     * @return bool
+     */
+    public function chunk(callable $callback, $count = 100)
+    {
+        return $this->model->addConditions($this->conditions())->chunk($callback, $count);
+    }
+
+    /**
      * Get the string contents of the filter view.
      *
      * @return \Illuminate\View\View|string
