@@ -332,7 +332,7 @@ SCRIPT;
             'items'     => $this->getItems(),
             'useCreate' => $this->useCreate,
             'useSave'   => $this->useSave,
-            'useRefresh'=> $this->useRefresh
+            'useRefresh'=> $this->useRefresh,
         ];
     }
 
