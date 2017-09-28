@@ -61,6 +61,10 @@ class MultipleFile extends Field
             return false;
         }
 
+        if ($this->validator) {
+            return $this->validator->call($this, $input);
+        }
+
         $attributes = [];
 
         if (!$fieldRules = $this->getRules()) {

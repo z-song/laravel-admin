@@ -94,6 +94,11 @@ class Field implements Renderable
     protected $rules = '';
 
     /**
+     * @var callable
+     */
+    protected $validator;
+
+    /**
      * Validation messages.
      *
      * @var array
@@ -385,7 +390,7 @@ class Field implements Renderable
      * @param null  $rules
      * @param array $messages
      *
-     * @return mixed
+     * @return $this
      */
     public function rules($rules = null, $messages = [])
     {
@@ -428,6 +433,20 @@ class Field implements Renderable
     protected function removeRule($rule)
     {
         $this->rules = str_replace($rule, '', $this->rules);
+    }
+
+    /**
+     * Set field validator
+     *
+     * @param callable $validator
+     *
+     * @return $this
+     */
+    public function validator(callable $validator)
+    {
+        $this->validator = $validator;
+
+        return $this;
     }
 
     /**
@@ -554,6 +573,10 @@ class Field implements Renderable
      */
     public function getValidator(array $input)
     {
+        if ($this->validator) {
+            return $this->validator->call($this, $input);
+        }
+
         $rules = $attributes = [];
 
         if (!$fieldRules = $this->getRules()) {
