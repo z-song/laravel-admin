@@ -39,7 +39,7 @@ class DateTime extends Presenter
         return $options;
     }
 
-    protected function prepare() : void
+    protected function prepare()
     {
         $script = "$('#{$this->filter->getId()}').datetimepicker(".json_encode($this->options).');';
 
