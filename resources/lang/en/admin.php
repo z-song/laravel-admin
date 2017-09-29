@@ -91,6 +91,7 @@ return [
         'method' => 'HTTP method',
         'path'   => 'HTTP path',
     ],
+    'all_methods_if_empty' => 'All methods if empty',
 
     'all'           => 'All',
     'current_page'  => 'Current page',
