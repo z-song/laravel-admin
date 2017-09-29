@@ -86,7 +86,7 @@ class Model
 
         $this->queries = collect();
 
-        static::doNotSnakeAttributes($this->model);
+//        static::doNotSnakeAttributes($this->model);
     }
 
     /**
