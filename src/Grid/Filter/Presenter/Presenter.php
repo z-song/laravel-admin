@@ -34,6 +34,20 @@ abstract class Presenter
     }
 
     /**
+     * Set default value for filter.
+     *
+     * @param $default
+     *
+     * @return $this
+     */
+    public function default($default)
+    {
+        $this->filter->default($default);
+
+        return $this;
+    }
+
+    /**
      * Blade template variables for this presenter.
      *
      * @return array
