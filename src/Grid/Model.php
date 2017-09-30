@@ -213,7 +213,7 @@ class Model
 
     /**
      * @param callable $callback
-     * @param integer  $count
+     * @param int      $count
      *
      * @return bool
      */
@@ -226,13 +226,9 @@ class Model
         $this->setSort();
 
         $this->queries->reject(function ($query) {
-
             return $query['method'] == 'paginate';
-
         })->each(function ($query) {
-
             $this->model = $this->model->{$query['method']}(...$query['arguments']);
-
         });
 
         return $this->model->chunk($count, $callback);

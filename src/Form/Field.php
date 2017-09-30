@@ -436,7 +436,7 @@ class Field implements Renderable
     }
 
     /**
-     * Set field validator
+     * Set field validator.
      *
      * @param callable $validator
      *

@@ -22,13 +22,11 @@ class CsvExporter extends AbstractExporter
         ];
 
         response()->stream(function () {
-
             $handle = fopen('php://output', 'w');
 
             $titles = [];
 
             $this->chunk(function ($records) use ($handle, &$titles) {
-
                 if (empty($titles)) {
                     $titles = $this->getHeaderRowFromRecords($records);
 
@@ -43,7 +41,6 @@ class CsvExporter extends AbstractExporter
 
             // Close the output stream
             fclose($handle);
-
         }, 200, $headers)->send();
 
         exit;
