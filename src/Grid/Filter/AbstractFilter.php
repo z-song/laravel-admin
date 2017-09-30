@@ -359,6 +359,7 @@ abstract class AbstractFilter
      * Set default value for filter.
      *
      * @param null $default
+     *
      * @return $this
      */
     public function default($default = null)
@@ -366,7 +367,7 @@ abstract class AbstractFilter
         if ($default) {
             $this->defaultValue = $default;
         }
-        
+
         return $this;
     }
 

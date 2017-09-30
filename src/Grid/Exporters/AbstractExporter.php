@@ -59,7 +59,8 @@ abstract class AbstractExporter implements ExporterInterface
 
     /**
      * @param callable $callback
-     * @param integer  $count
+     * @param int      $count
+     *
      * @return bool
      */
     public function chunk(callable $callback, $count = 100)
