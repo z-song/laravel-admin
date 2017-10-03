@@ -924,7 +924,7 @@ class Form
      */
     protected function setFieldOriginalValue()
     {
-        static::doNotSnakeAttributes($this->model);
+//        static::doNotSnakeAttributes($this->model);
 
         $values = $this->model->toArray();
 
@@ -946,7 +946,7 @@ class Form
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
-        static::doNotSnakeAttributes($this->model);
+//        static::doNotSnakeAttributes($this->model);
 
         $data = $this->model->toArray();
 

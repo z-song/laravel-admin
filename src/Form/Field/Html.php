@@ -18,6 +18,9 @@ class Html extends Field
      */
     protected $label = '';
 
+    /**
+     * @var bool
+     */
     protected $plain = false;
 
     /**
@@ -33,6 +36,9 @@ class Html extends Field
         $this->label = array_get($arguments, 0);
     }
 
+    /**
+     * @return $this
+     */
     public function plain()
     {
         $this->plain = true;
@@ -55,10 +61,12 @@ class Html extends Field
             return $this->html;
         }
 
+        $viewClass = $this->getViewElementClasses();
+
         return <<<EOT
 <div class="form-group">
-    <label  class="col-sm-{$this->width['label']} control-label">{$this->label}</label>
-    <div class="col-sm-{$this->width['field']}">
+    <label  class="{$viewClass['label']} control-label">{$this->label}</label>
+    <div class="{$viewClass['field']}">
         {$this->html}
     </div>
 </div>

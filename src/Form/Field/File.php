@@ -61,6 +61,10 @@ class File extends Field
             return false;
         }
 
+        if ($this->validator) {
+            return $this->validator->call($this, $input);
+        }
+
         /*
          * If has original value, means the form is in edit mode,
          * then remove required rule from rules.

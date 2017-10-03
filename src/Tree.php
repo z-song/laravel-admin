@@ -55,6 +55,16 @@ class Tree implements Renderable
     public $useCreate = true;
 
     /**
+     * @var bool
+     */
+    public $useSave = true;
+
+    /**
+     * @var bool
+     */
+    public $useRefresh = true;
+
+    /**
      * @var array
      */
     protected $nestableOptions = [];
@@ -160,6 +170,26 @@ class Tree implements Renderable
     public function disableCreate()
     {
         $this->useCreate = false;
+    }
+
+    /**
+     * Disable save.
+     *
+     * @return void
+     */
+    public function disableSave()
+    {
+        $this->useSave = false;
+    }
+
+    /**
+     * Disable refresh.
+     *
+     * @return void
+     */
+    public function disableRefresh()
+    {
+        $this->useRefresh = false;
     }
 
     /**
@@ -301,6 +331,8 @@ SCRIPT;
             'tools'     => $this->tools->render(),
             'items'     => $this->getItems(),
             'useCreate' => $this->useCreate,
+            'useSave'   => $this->useSave,
+            'useRefresh'=> $this->useRefresh,
         ];
     }
 

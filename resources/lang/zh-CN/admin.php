@@ -91,6 +91,7 @@ return [
         'method' => 'HTTP方法',
         'path'   => 'HTTP路径',
     ],
+    'all_methods_if_empty' => '为空默认为所有方法',
 
     'all'           => '全部',
     'current_page'  => '当前页',

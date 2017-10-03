@@ -36,7 +36,7 @@ class CreateAdminTables extends Migration
             $table->string('name', 50)->unique();
             $table->string('slug', 50);
             $table->string('http_method')->nullable();
-            $table->text('http_path');
+            $table->text('http_path')->nullable();
             $table->timestamps();
         });
 
