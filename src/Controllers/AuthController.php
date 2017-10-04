@@ -78,7 +78,14 @@ class AuthController extends Controller
     {
         return Admin::content(function (Content $content) {
             $content->header(trans('admin.user_setting'));
-            $content->body($this->settingForm()->edit(Admin::user()->id));
+            $form = $this->settingForm();
+            $form->tools(
+                function (Form\Tools $tools) {
+                    $tools->disableBackButton();
+                    $tools->disableListButton();
+                }
+            );
+            $content->body($form->edit(Admin::user()->id));
         });
     }
 
