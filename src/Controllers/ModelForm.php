@@ -49,12 +49,9 @@ trait ModelForm
             ];
         }
 
-        if (request()->ajax())
-        {
+        if (request()->ajax()) {
             $return = response()->json($response);
-        }
-        else
-        {
+        } else {
             admin_toastr($response['message'], $response['status']?'success':'error');
             $return = redirect()->back();
         }
