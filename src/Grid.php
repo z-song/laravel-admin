@@ -654,7 +654,9 @@ class Grid
     {
         $input = array_merge(Input::all(), Exporter::formatExportQuery($scope, $args));
 
-        return $this->resource().'?'.http_build_query($input);
+        $base_url = config('app.url');
+
+        return $base_url.$this->resource().'?'.http_build_query($input);
     }
 
     /**
