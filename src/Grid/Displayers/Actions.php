@@ -152,8 +152,9 @@ class Actions extends AbstractDisplayer
      */
     protected function editAction()
     {
+        $base_url = config('app.url').'/';
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}/edit">
+<a href="{$base_url}{$this->getResource()}/{$this->getKey()}/edit">
     <i class="fa fa-edit"></i>
 </a>
 EOT;
@@ -169,6 +170,8 @@ EOT;
         $deleteConfirm = trans('admin.delete_confirm');
         $confirm = trans('admin.confirm');
         $cancel = trans('admin.cancel');
+
+        $base_url = config('app.url').'/';
 
         $script = <<<SCRIPT
 
@@ -188,7 +191,7 @@ $('.grid-row-delete').unbind('click').click(function() {
     function(){
         $.ajax({
             method: 'post',
-            url: '{$this->getResource()}/' + id,
+            url: '{$base_url}{$this->getResource()}/' + id,
             data: {
                 _method:'delete',
                 _token:LA.token,
