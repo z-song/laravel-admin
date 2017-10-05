@@ -29,7 +29,7 @@ class CreateButton extends AbstractTool
 
         $new = trans('admin.new');
 
-        $base_url = config('app.url').'/';
+        $base_url = config('app.url');
 
         return <<<EOT
 

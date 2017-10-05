@@ -152,7 +152,7 @@ class Actions extends AbstractDisplayer
      */
     protected function editAction()
     {
-        $base_url = config('app.url').'/';
+        $base_url = config('app.url');
         return <<<EOT
 <a href="{$base_url}{$this->getResource()}/{$this->getKey()}/edit">
     <i class="fa fa-edit"></i>
@@ -171,7 +171,7 @@ EOT;
         $confirm = trans('admin.confirm');
         $cancel = trans('admin.cancel');
 
-        $base_url = config('app.url').'/';
+        $base_url = config('app.url');
         $token = csrf_token();
 
         $script = <<<SCRIPT
