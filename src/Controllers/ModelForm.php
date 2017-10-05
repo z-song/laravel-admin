@@ -52,7 +52,7 @@ trait ModelForm
         if (request()->ajax()) {
             $return = response()->json($response);
         } else {
-            admin_toastr($response['message'], $response['status']?'success':'error');
+            admin_toastr($response['message'], $response['status'] ? 'success' : 'error');
             $return = redirect()->back();
         }
 
