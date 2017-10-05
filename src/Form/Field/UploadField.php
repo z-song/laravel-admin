@@ -310,7 +310,7 @@ trait UploadField
      */
     public function destroy()
     {
-        if ($this->storage->exists($this->original)) {
+        if ($this->storage && $this->storage->exists($this->original)) {
             $this->storage->delete($this->original);
         }
     }

@@ -172,10 +172,13 @@ EOT;
         $cancel = trans('admin.cancel');
 
         $base_url = config('app.url').'/';
+        $token = csrf_token();
 
         $script = <<<SCRIPT
 
-$('.grid-row-delete').unbind('click').click(function() {
+$('.grid-row-delete').unbind('click').click(function(e) {
+
+    e.preventDefault();
 
     var id = $(this).data('id');
 
@@ -216,9 +219,13 @@ SCRIPT;
         Admin::script($script);
 
         return <<<EOT
-<a href="javascript:void(0);" data-id="{$this->getKey()}" class="grid-row-delete">
-    <i class="fa fa-trash"></i>
-</a>
+        <form style="display:inline;" action="{$base_url}{$this->getResource()}/{$this->getKey()}" method="POST">
+            <input name="_token" value="{$token}" type="hidden" />
+            <input name="_method" value="DELETE" type="hidden" />
+            <button style="margin: 0px; padding: 0px; margin-top: -5px;" type="submit" data-id="{$this->getKey()}" class="grid-row-delete btn btn-link">
+                <i class="fa fa-trash"></i>
+            </button>
+        </form>
 EOT;
     }
 }

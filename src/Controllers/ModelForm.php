@@ -38,16 +38,28 @@ trait ModelForm
     public function destroy($id)
     {
         if ($this->form()->destroy($id)) {
-            return response()->json([
+            $response = [
                 'status'  => true,
                 'message' => trans('admin.delete_succeeded'),
-            ]);
+            ];
         } else {
-            return response()->json([
+            $response = [
                 'status'  => false,
                 'message' => trans('admin.delete_failed'),
-            ]);
+            ];
         }
+
+        if (request()->ajax())
+        {
+            $return = response()->json($response);
+        }
+        else
+        {
+            admin_toastr($response['message'], $response['status']?'success':'error');
+            $return = redirect()->back();
+        }
+
+        return $return;
     }
 
     /**
