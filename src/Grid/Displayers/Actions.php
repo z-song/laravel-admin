@@ -153,7 +153,7 @@ class Actions extends AbstractDisplayer
     protected function editAction()
     {
         $base_url = config('app.url');
-        
+
         return <<<EOT
 <a href="{$base_url}{$this->getResource()}/{$this->getKey()}/edit">
     <i class="fa fa-edit"></i>
