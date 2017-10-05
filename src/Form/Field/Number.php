@@ -12,15 +12,17 @@ class Number extends Text
     {
         $this->default((int) $this->default);
 
+		$options = array_merge([
+			'upClass' => 'success',
+			'downClass' => 'primary',
+			'center' => true], $this->options);
+        $options = json_encode($options);
+
         $this->script = <<<EOT
 
 $('{$this->getElementClassSelector()}:not(.initialized)')
     .addClass('initialized')
-    .bootstrapNumber({
-        upClass: 'success',
-        downClass: 'primary',
-        center: true
-    });
+    .bootstrapNumber({$options});
 
 EOT;
 
