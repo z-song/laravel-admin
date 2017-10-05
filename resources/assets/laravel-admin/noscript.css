@@ -1,0 +1,4 @@
+*:hover > ul.dropdown-menu {
+    display: block;
+    margin-top: 0px;
+}
