@@ -342,7 +342,12 @@ class Column
     {
         $originalRow = static::$originalGridData[$key];
 
-        return $callback->bindTo(static::$model->newFromBuilder($originalRow));
+        if (is_array($originalRow)) {
+            // Convert array data to model instance.
+            $originalRow = static::$model->newFromBuilder($originalRow);
+        }
+
+        return $callback->bindTo($originalRow);
     }
 
     /**
