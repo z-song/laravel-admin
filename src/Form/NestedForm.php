@@ -119,6 +119,16 @@ class NestedForm
         return $this;
     }
 
+	/**
+	 * Get Form.
+	 *
+	 * @return Form
+	 */
+	public function getForm()
+	{
+		return $this->form;
+	}
+
     /**
      * Set original values for fields.
      *
