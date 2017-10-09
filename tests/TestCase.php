@@ -34,7 +34,7 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-	config(['app.url' => $this->baseUrl]);
+        config(['app.url' => $this->baseUrl]);
 
         $adminConfig = require __DIR__.'/config/admin.php';
 
