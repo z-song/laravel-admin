@@ -74,7 +74,7 @@ class TestCase extends BaseTestCase
 
         (new CreateTestTables())->down();
 
-        DB::select('delete from "migrations" where "migration" = \'2016_01_04_173148_create_admin_tables\'');
+        DB::select('delete from migrations where migration = \'2016_01_04_173148_create_admin_tables\'');
 
         parent::tearDown();
     }
