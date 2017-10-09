@@ -192,7 +192,7 @@ class UserGridTest extends TestCase
         $this->visit('admin/users');
 
         $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-edit]'));
-        $this->assertCount(15, $this->crawler()->filter('td a i[class*=fa-trash]'));
+        $this->assertCount(15, $this->crawler()->filter('td form button i[class*=fa-trash]'));
     }
 
     public function testGridRows()
