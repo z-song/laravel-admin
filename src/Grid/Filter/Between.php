@@ -88,13 +88,15 @@ class Between extends AbstractFilter
     /**
      * @param array $options
      *
-     * @return void
+     * @return $this
      */
     public function datetime($options = [])
     {
         $this->view = 'admin::filter.betweenDatetime';
 
         $this->setupDatetime($options);
+
+        return $this;
     }
 
     /**

@@ -47,7 +47,7 @@ class Radio extends Presenter
         return $this;
     }
 
-    protected function prepare() : void
+    protected function prepare()
     {
         $script = "$('.{$this->filter->getId()}').iCheck({radioClass:'iradio_minimal-blue'});";
 

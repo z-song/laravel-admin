@@ -1,7 +1,7 @@
 
 <div class="row">
-    <div class="col-md-{{$viewClass['label']}}"><h4 class="pull-right">{{ $label }}</h4></div>
-    <div class="col-md-{{$viewClass['field']}}"></div>
+    <div class="{{$viewClass['label']}}"><h4 class="pull-right">{{ $label }}</h4></div>
+    <div class="{{$viewClass['field']}}"></div>
 </div>
 
 <hr style="margin-top: 0px;">

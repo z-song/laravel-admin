@@ -14,7 +14,6 @@
         {!! $form->open(['class' => "form-horizontal"]) !!}
     @endif
 
-    {!! $form->open(['class' => "form-horizontal"]) !!}
         <div class="box-body">
 
             @if(!$tabObj->isEmpty())
@@ -43,10 +42,10 @@
             @if( ! $form->isMode(\Encore\Admin\Form\Builder::MODE_VIEW)  || ! $form->option('enableSubmit'))
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
             @endif
-            <div class="{{$width['label']}}">
+            <div class="col-md-{{$width['label']}}">
 
             </div>
-            <div class="{{$width['field']}}">
+            <div class="col-md-{{$width['field']}}">
 
                 {!! $form->submitButton() !!}
 
