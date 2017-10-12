@@ -70,7 +70,7 @@ class LogOperation
             $methods = array_map('strtoupper', $methods);
 
             if ($request->is($except) &&
-                (empty($method) || in_array($request->method(), $methods))) {
+                (empty($methods) || in_array($request->method(), $methods))) {
                 return true;
             }
         }
