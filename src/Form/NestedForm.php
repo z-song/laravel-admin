@@ -337,7 +337,7 @@ class NestedForm
     {
         $column = $field->column();
 
-        $elementName = $elementClass = $errorKey = '';
+        $elementName = $elementClass = $errorKey = [];
 
         $key = $this->key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
