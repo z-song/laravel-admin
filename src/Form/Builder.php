@@ -403,6 +403,7 @@ class Builder
         $attributes['accept-charset'] = 'UTF-8';
 
         $attributes['class'] = array_get($options, 'class');
+        $attributes['id'] = array_get($options, 'id');
 
         if ($this->hasFile()) {
             $attributes['enctype'] = 'multipart/form-data';
