@@ -80,7 +80,7 @@ class Form
     /**
      * @var \Illuminate\Validation\Validator
      */
-    public $validator;
+    protected $validator;
 
     /**
      * @var Builder
