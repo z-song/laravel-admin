@@ -80,7 +80,7 @@ class Form
     /**
      * @var \Illuminate\Validation\Validator
      */
-    protected $validator;
+    public $validator;
 
     /**
      * @var Builder
@@ -1332,7 +1332,9 @@ class Form
     {
         $rules = [];
         foreach ($this->builder()->fields() as $item) {
-            $rules[$item->id] = $item->getRules();
+            if(!empty($item->getRules())){
+                $rules[$item->id] = $item->getRules();
+            }
         }
         return $rules;
     }
@@ -1352,7 +1354,7 @@ class Form
         }
         return $rules;
     }
-    
+
     /**
      * Getter.
      *
