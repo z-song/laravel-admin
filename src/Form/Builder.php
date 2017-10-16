@@ -21,7 +21,7 @@ class Builder
     /**
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * @var Form
@@ -494,42 +494,6 @@ EOT;
             return in_array($field->column(), $reservedColumns);
         });
     }
-    public $Rules = [];
-    public $RuleMessages = [];
-
-    /**
-     * Collect rules of all fields.
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        $rules = [];
-        foreach ($this->fields() as $item) {
-            if(!empty($item->getRules())){
-                $rules[$item->id] = $item->getRules();
-            }
-        }
-        $this->Rules = $rules;
-        return $rules;
-    }
-
-    /**
-     * Collect validationMessages of all fields.
-     *
-     * @return array
-     */
-    public function getRuleMessages()
-    {
-        $rules = [];
-        foreach ($this->fields() as $item ) {
-            foreach ($item->validationMessages as $key => $value) {
-                $rules[$key] = $value;
-            }
-        }
-        $this->RuleMessages = $rules;
-        return $rules;
-    }
 
     /**
      * Render form.
@@ -539,8 +503,6 @@ EOT;
     public function render()
     {
         $this->removeReservedFields();
-        $this->getRuleMessages();
-        $this->getRules();
 
         $tabObj = $this->form->getTab();
 
