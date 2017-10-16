@@ -21,7 +21,7 @@ class Field implements Renderable
      *
      * @var array|string
      */
-    protected $id;
+    public $id;
 
     /**
      * Element value.
@@ -103,7 +103,7 @@ class Field implements Renderable
      *
      * @var array
      */
-    protected $validationMessages = [];
+    public $validationMessages = [];
 
     /**
      * Css required by this field.
@@ -414,7 +414,7 @@ class Field implements Renderable
      *
      * @return string
      */
-    protected function getRules()
+    public function getRules()
     {
         if ($this->rules instanceof \Closure) {
             return $this->rules->call($this, $this->form);
