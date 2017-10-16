@@ -1324,6 +1324,38 @@ class Form
     }
 
     /**
+     * Collect rules of all fields.
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        $rules = [];
+        foreach ($this->builder()->fields() as $item) {
+            if(!empty($item->getRules())){
+                $rules[$item->id] = $item->getRules();
+            }
+        }
+        return $rules;
+    }
+
+    /**
+     * Collect validationMessages of all fields.
+     *
+     * @return array
+     */
+    public function getRuleMessages()
+    {
+        $rules = [];
+        foreach ($this->builder()->fields() as $item ) {
+            foreach ($item->validationMessages as $key => $value) {
+                $rules[$key] = $value;
+            }
+        }
+        return $rules;
+    }
+
+    /**
      * Getter.
      *
      * @param string $name
