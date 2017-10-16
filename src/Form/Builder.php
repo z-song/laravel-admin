@@ -391,6 +391,7 @@ class Builder
     public function open($options = [])
     {
         $attributes = [];
+
         if ($this->mode == self::MODE_EDIT) {
             $this->addHiddenField((new Form\Field\Hidden('_method'))->value('PUT'));
         }
@@ -402,7 +403,6 @@ class Builder
         $attributes['accept-charset'] = 'UTF-8';
 
         $attributes['class'] = array_get($options, 'class');
-        $attributes['id'] = array_get($options, 'id');
 
         if ($this->hasFile()) {
             $attributes['enctype'] = 'multipart/form-data';
