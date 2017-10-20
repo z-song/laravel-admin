@@ -7,7 +7,6 @@ use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -235,14 +234,7 @@ class Field implements Renderable
     {
         $column = is_array($this->column) ? current($this->column) : $this->column;
 
-        $trans_key = 'validation.attributes.' . $column;
-        if (isset($arguments[0])) {
-            $label = $arguments[0];
-        } else if (Lang::has($trans_key)) {
-            $label = Lang::get($trans_key);
-        } else {
-            $label = isset($arguments[0]) ? $arguments[0] : ucfirst($column);
-        }
+        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($column);
 
         return str_replace(['.', '_'], ' ', $label);
     }
