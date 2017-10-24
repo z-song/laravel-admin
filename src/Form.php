@@ -1322,7 +1322,6 @@ class Form
             'js'  => $js->flatten()->unique()->filter()->toArray(),
         ];
     }
-
     /**
      * Collect rules of all fields.
      *
@@ -1330,29 +1329,17 @@ class Form
      */
     public function getRules()
     {
-        $rules = [];
-        foreach ($this->builder()->fields() as $item) {
-            if(!empty($item->getRules())){
-                $rules[$item->id] = $item->getRules();
-            }
-        }
-        return $rules;
+        $this->builder()->getRules();
     }
 
     /**
-     * Collect validationMessages of all fields.
+     * Collect validation Messages of all fields.
      *
      * @return array
      */
     public function getRuleMessages()
     {
-        $rules = [];
-        foreach ($this->builder()->fields() as $item ) {
-            foreach ($item->validationMessages as $key => $value) {
-                $rules[$key] = $value;
-            }
-        }
-        return $rules;
+        $this->builder()->getRuleMessages();
     }
 
     /**

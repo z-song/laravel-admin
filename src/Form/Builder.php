@@ -88,6 +88,16 @@ class Builder
     protected $view = 'admin::form';
 
     /**
+     * @var
+     */
+    public $Rules = [];
+
+    /**
+     * @var
+     */
+    public $RuleMessages = [];
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -477,12 +487,13 @@ EOT;
     /**
      * Remove reserved fields like `id` `created_at` `updated_at` in form fields.
      *
-     * @return void
+     * @return $this
      */
-    protected function removeReservedFields()
+    public function removeReservedFields()
     {
+
         if (!$this->isMode(static::MODE_CREATE)) {
-            return;
+            return $this;
         }
 
         $reservedColumns = [
@@ -494,6 +505,52 @@ EOT;
         $this->fields = $this->fields()->reject(function (Field $field) use ($reservedColumns) {
             return in_array($field->column(), $reservedColumns);
         });
+
+        return $this;
+    }
+
+    /**
+     * get form.
+     *
+     * @return Form
+     */
+    public function getForm()
+    {
+        return $this->form;
+    }
+
+    /**
+     * Collect rules of all fields.
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        $rules = [];
+        foreach ($this->fields() as $item) {
+            if(!empty($item->getRules())){
+                $rules[$item->id] = $item->getRules();
+            }
+        }
+        $this->Rules = $rules;
+        return $rules;
+    }
+
+    /**
+     * Collect validationMessages of all fields.
+     *
+     * @return array
+     */
+    public function getRuleMessages()
+    {
+        $rules = [];
+        foreach ($this->fields() as $item ) {
+            foreach ($item->validationMessages as $key => $value) {
+                $rules[$key] = $value;
+            }
+        }
+        $this->RuleMessages = $rules;
+        return $rules;
     }
 
     /**
@@ -504,6 +561,8 @@ EOT;
     public function render()
     {
         $this->removeReservedFields();
+        $this->getRules();
+        $this->getRuleMessages();
 
         $tabObj = $this->form->getTab();
 
