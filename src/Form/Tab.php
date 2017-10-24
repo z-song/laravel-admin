@@ -64,8 +64,7 @@ class Tab
     protected function collectFields(\Closure $content)
     {
         call_user_func($content, $this->form);
-
-        $all = $this->form->builder()->fields();
+        $all =  $this->form->builder()->removeReservedFields()->fields();
 
         $fields = $all->slice($this->offset);
 
