@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 
 class Select extends Field
 {
+
+    protected $direction = "ltr";
+
     protected static $css = [
         '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.min.css',
     ];
@@ -22,6 +25,8 @@ class Select extends Field
         if (empty($this->script)) {
             $this->script = <<<EOF
 $("{$this->getElementClassSelector()}").select2({
+    dir: "$this->direction",
+    language : "$this->local",
     allowClear: true,
     placeholder: "{$this->label}"
 });
@@ -52,7 +57,10 @@ EOF;
     {
         // remote options
         if (is_string($options)) {
-            return call_user_func_array([$this, 'loadOptionsFromRemote'], func_get_args());
+            return call_user_func_array([
+                $this,
+                'loadOptionsFromRemote'
+            ], func_get_args());
         }
 
         if ($options instanceof Arrayable) {
@@ -62,8 +70,19 @@ EOF;
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array) $options;
+            $this->options = (array)$options;
         }
+
+        return $this;
+    }
+
+    /**
+     * Set direction setting of select2.
+     *
+     */
+    public function dir($dir = 'ltr')
+    {
+        $this->direction = $dir;
 
         return $this;
     }
@@ -82,7 +101,10 @@ EOF;
     {
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
-            $class = str_replace(['[', ']'], '_', $field);
+            $class = str_replace([
+                '[',
+                ']'
+            ], '_', $field);
         } else {
             $class = $field;
         }
@@ -94,6 +116,8 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
         $(target).select2({
+            dir: "$this->direction",
+            language : "$this->local",
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
@@ -121,7 +145,7 @@ EOT;
     protected function loadOptionsFromRemote($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters),
+            'url' => $url . '?' . http_build_query($parameters),
         ];
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
@@ -129,7 +153,11 @@ EOT;
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
-  $("{$this->getElementClassSelector()}").select2({data: data});
+  $("{$this->getElementClassSelector()}").select2({
+      dir: "$this->direction",
+      language : "$this->local",
+      data: data
+      });
 });
 
 EOT;
@@ -141,8 +169,8 @@ EOT;
      * Load options from ajax results.
      *
      * @param string $url
-     * @param $idField
-     * @param $textField
+     * @param        $idField
+     * @param        $textField
      *
      * @return $this
      */
@@ -151,6 +179,8 @@ EOT;
         $this->script = <<<EOT
 
 $("{$this->getElementClassSelector()}").select2({
+  dir: "$this->direction",
+  language : "$this->local",
   ajax: {
     url: "$url",
     dataType: 'json',
