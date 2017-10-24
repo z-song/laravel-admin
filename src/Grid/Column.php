@@ -549,18 +549,6 @@ class Column
         return $this;
     }
 
-    public function setLabel($label , $relationColumn)
-    {
-        $trans_key = 'validation.attributes.' . strtolower($relationColumn);
-
-        if (empty($label) && Lang::has($trans_key)) {
-            $label = Lang::get($trans_key);
-        }else if (empty($label)) {
-            $label = ucfirst($relationColumn);
-        }
-        return $label;
-    }
-
     /**
      * Passes through all unknown calls to builtin displayer or supported displayer.
      *
@@ -575,10 +563,7 @@ class Column
     {
         if ($this->isRelation() && !$this->relationColumn) {
             $this->name = "{$this->relation}.$method";
-//            $this->label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
-            $this->label = isset($arguments[0]) ? $arguments[0] : NULL;
-            $this->label = $this->setLabel($this->label, $method);
-
+            $this->label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
             $this->relationColumn = $method;
 
