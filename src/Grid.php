@@ -879,6 +879,7 @@ class Grid
      */
     public function __call($method, $arguments)
     {
+//        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
         $label = isset($arguments[0]) ? $arguments[0] : null;
         $label = $this->setLabel($label,$method);
 
