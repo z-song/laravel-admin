@@ -37,6 +37,17 @@ class Tags extends Field
         return $value;
     }
 
+    public function value($value = null)
+    {
+        if (is_null($value)) {
+            return empty($this->value) ? $this->getDefault() : $this->value;
+        }
+
+        $this->value = $value;
+
+        return $this;
+    }
+
     public function render()
     {
         $this->script = "$(\"{$this->getElementClassSelector()}\").select2({
