@@ -90,6 +90,7 @@ EOF;
         $script = <<<EOT
 
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
+    var value = "{$this->value}";
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
@@ -98,10 +99,13 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
                 d.id = d.$idField;
                 d.text = d.$textField;
                 return d;
-            })
-        }).trigger('change');
+            }),
+            allowClear: true,
+            placeholder: "{$this->label}"
+        }).val(value !== "" ? value : (data.length > 0 ? data[0].id : null)).trigger('change');
     });
 });
+$("{$this->getElementClassSelector()}").trigger('change');
 EOT;
 
         Admin::script($script);
