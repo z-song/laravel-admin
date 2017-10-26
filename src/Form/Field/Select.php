@@ -89,10 +89,13 @@ EOF;
 
         $script = <<<EOT
 
-$(document).on('change', "{$this->getElementClassSelector()}", function () {
-    var value = "{$this->value}";
-    var target = $(this).closest('.fields-group').find(".$class");
+$("{$this->getElementClassSelector()}").change(function () {
+    var target_group = $(this).closest('.fields-group');
+    var target = target_group.find(".$class");
+    var value = target.data("value");
+    var label = target_group.find("[for=$class]").text();
     $.get("$sourceUrl?q="+this.value, function (data) {
+        console.log("$");
         target.find("option").remove();
         $(target).select2({
             data: $.map(data, function (d) {
@@ -101,7 +104,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
                 return d;
             }),
             allowClear: true,
-            placeholder: "{$this->label}"
+            placeholder: label
         }).val(value !== "" ? value : (data.length > 0 ? data[0].id : null)).trigger('change');
     });
 });
