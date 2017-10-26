@@ -102,6 +102,16 @@ class Filter
     }
 
     /**
+     * Remove ID filter if needed.
+     */
+    public function removeIDFilterIfNeeded()
+    {
+        if (!$this->useIdFilter) {
+            array_shift($this->filters);
+        }
+    }
+
+    /**
      * Get all conditions of the filters.
      *
      * @return array
@@ -125,6 +135,8 @@ class Filter
         }
 
         $conditions = [];
+
+        $this->removeIDFilterIfNeeded();
 
         foreach ($this->filters() as $filter) {
             $conditions[] = $filter->condition($params);
@@ -185,9 +197,7 @@ class Filter
      */
     public function render()
     {
-        if (!$this->useIdFilter) {
-            array_shift($this->filters);
-        }
+        $this->removeIDFilterIfNeeded();
 
         if (empty($this->filters)) {
             return '';
