@@ -285,6 +285,17 @@ class Builder
     }
 
     /**
+     * set field rows of form.
+     *
+     * @return $this
+     */
+    public function setRows($rows)
+    {
+        $this->form->rows = $rows;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getHiddenFields()

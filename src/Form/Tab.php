@@ -47,9 +47,11 @@ class Tab
     {
         $fields = $this->collectFields($content);
 
-        $id = 'form-'.($this->tabs->count() + 1);
-
-        $this->tabs->push(compact('id', 'title', 'fields', 'active'));
+        $id = 'form-' . ($this->tabs->count() + 1);
+        //if define tab and row inside of tab ,you cant define row in form or simple field in tab
+        $rows = $this->form->builder()->getRows();
+        $this->form->builder()->setRows([]);
+        $this->tabs->push(compact('id', 'title', 'fields', 'active', 'rows'));
 
         return $this;
     }
@@ -64,7 +66,8 @@ class Tab
     protected function collectFields(\Closure $content)
     {
         call_user_func($content, $this->form);
-        $all =  $this->form->builder()->removeReservedFields()->fields();
+
+        $all = $this->form->builder()->removeReservedFields()->fields();
 
         $fields = $all->slice($this->offset);
 

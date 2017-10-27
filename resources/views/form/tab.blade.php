@@ -14,9 +14,15 @@
 
         @foreach($tabObj->getTabs() as $tab)
             <div class="tab-pane {{ $tab['active'] ? 'active' : '' }}" id="tab-{{ $tab['id'] }}">
-                @foreach($tab['fields'] as $field)
-                    {!! $field->render() !!}
-                @endforeach
+                @if(!empty($tab['rows']))
+                    @foreach($tab['rows'] as $row)
+                        {!! $row->render() !!}
+                    @endforeach
+                @else
+                    @foreach($tab['fields'] as $field)
+                        {!! $field->render() !!}
+                    @endforeach
+                @endif
             </div>
         @endforeach
 
