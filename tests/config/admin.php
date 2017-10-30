@@ -5,12 +5,12 @@ return [
     /*
      * Laravel-admin name.
      */
-    'name'  => 'Laravel-admin',
+    'name' => 'Laravel-admin',
 
     /*
      * Laravel-admin url prefix.
      */
-    'prefix'    => 'admin',
+    'prefix' => 'admin',
 
     /*
      * Laravel-admin install directory.
@@ -20,7 +20,7 @@ return [
     /*
      * Laravel-admin title.
      */
-    'title'  => 'Admin',
+    'title' => 'Admin',
 
     /*
      * Laravel-admin auth setting.
@@ -34,13 +34,13 @@ return [
     /*
      * Laravel-admin upload setting.
      */
-    'upload'  => [
+    'upload' => [
 
         'disk' => 'admin',
 
-        'directory'  => [
-            'image'  => 'image',
-            'file'   => 'file',
+        'directory' => [
+            'image' => 'image',
+            'file'  => 'file',
         ],
 
         'host' => 'http://localhost:8000/upload/',
@@ -59,8 +59,8 @@ return [
         'permissions_table' => 'admin_permissions',
         'permissions_model' => Encore\Admin\Auth\Database\Permission::class,
 
-        'menu_table'  => 'admin_menu',
-        'menu_model'  => Encore\Admin\Auth\Database\Menu::class,
+        'menu_table' => 'admin_menu',
+        'menu_model' => Encore\Admin\Auth\Database\Menu::class,
 
         'operation_log_table'    => 'admin_operation_log',
         'user_permissions_table' => 'admin_user_permissions',
@@ -72,7 +72,7 @@ return [
     /*
      * By setting this option to open or close operation log in laravel-admin.
      */
-    'operation_log'   => true,
+    'operation_log' => true,
 
     /*
     |---------------------------------------------------------|
@@ -84,7 +84,7 @@ return [
     |               | skin-green                              |
     |---------------------------------------------------------|
      */
-    'skin'    => 'skin-blue',
+    'skin' => 'skin-blue',
 
     /*
     |---------------------------------------------------------|
@@ -95,7 +95,7 @@ return [
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
      */
-    'layout'  => ['sidebar-mini'],
+    'layout' => ['sidebar-mini'],
 
-    'version'   => '1.0',
+    'version' => '1.0',
 ];

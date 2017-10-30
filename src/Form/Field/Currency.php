@@ -16,10 +16,10 @@ class Currency extends Text
      * @var array
      */
     protected $options = [
-        'alias'                 => 'currency',
-        'radixPoint'            => '.',
-        'prefix'                => '',
-        'removeMaskOnSubmit'    => true,
+        'alias'              => 'currency',
+        'radixPoint'         => '.',
+        'prefix'             => '',
+        'removeMaskOnSubmit' => true,
     ];
 
     public function symbol($symbol)

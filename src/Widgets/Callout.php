@@ -64,9 +64,9 @@ class Callout extends Widget implements Renderable
         $this->class("callout callout-{$this->style}");
 
         return [
-            'title'         => $this->title,
-            'content'       => $this->content,
-            'attributes'    => $this->formatAttributes(),
+            'title'      => $this->title,
+            'content'    => $this->content,
+            'attributes' => $this->formatAttributes(),
         ];
     }
 

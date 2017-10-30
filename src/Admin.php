@@ -249,9 +249,9 @@ class Admin
     public function registerAuthRoutes()
     {
         $attributes = [
-            'prefix'        => config('admin.prefix'),
-            'namespace'     => 'Encore\Admin\Controllers',
-            'middleware'    => ['web', 'admin'],
+            'prefix'     => config('admin.prefix'),
+            'namespace'  => 'Encore\Admin\Controllers',
+            'middleware' => ['web', 'admin'],
         ];
 
         Route::group($attributes, function ($router) {

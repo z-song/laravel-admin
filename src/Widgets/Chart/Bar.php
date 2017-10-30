@@ -32,9 +32,9 @@ class Bar extends Chart
         }
 
         $this->data['datasets'][] = [
-            'label'         => $label,
-            'data'          => $data,
-            'fillColor'     => $fillColor,
+            'label'     => $label,
+            'data'      => $data,
+            'fillColor' => $fillColor,
         ];
 
         return $this;
