@@ -95,7 +95,6 @@ $("{$this->getElementClassSelector()}").change(function () {
     var value = target.data("value");
     var label = target_group.find("[for=$class]").text();
     $.get("$sourceUrl?q="+this.value, function (data) {
-        console.log("$");
         target.find("option").remove();
         $(target).select2({
             data: $.map(data, function (d) {
