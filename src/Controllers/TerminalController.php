@@ -93,8 +93,8 @@ class TerminalController extends Controller
 
         foreach ($connections as $name => $_) {
             $redis[] = [
-                'value'     => "redis:$name",
-                'option'    => $name,
+                'value'  => "redis:$name",
+                'option' => $name,
             ];
         }
 

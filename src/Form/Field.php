@@ -775,17 +775,17 @@ class Field implements Renderable
     protected function variables()
     {
         return array_merge($this->variables, [
-            'id'            => $this->id,
-            'name'          => $this->elementName ?: $this->formatName($this->column),
-            'help'          => $this->help,
-            'class'         => $this->getElementClassString(),
-            'value'         => $this->value(),
-            'label'         => $this->label,
-            'width'         => $this->width,
-            'column'        => $this->column,
-            'errorKey'      => $this->getErrorKey(),
-            'attributes'    => $this->formatAttributes(),
-            'placeholder'   => $this->getPlaceholder(),
+            'id'          => $this->id,
+            'name'        => $this->elementName ?: $this->formatName($this->column),
+            'help'        => $this->help,
+            'class'       => $this->getElementClassString(),
+            'value'       => $this->value(),
+            'label'       => $this->label,
+            'width'       => $this->width,
+            'column'      => $this->column,
+            'errorKey'    => $this->getErrorKey(),
+            'attributes'  => $this->formatAttributes(),
+            'placeholder' => $this->getPlaceholder(),
         ]);
     }
 

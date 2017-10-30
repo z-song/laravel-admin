@@ -68,6 +68,6 @@ return [
     'operation_log'         => 'לוג מערכת',
     'parent_select_error'   => 'בעייה בבחירת האב',
     'pagination'            => [
-        'range'  => ':last מ :total תוצאות',
+        'range' => ':last מ :total תוצאות',
     ],
 ];
