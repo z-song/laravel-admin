@@ -534,9 +534,9 @@ SCRIPT;
         }
 
         $data = [
-            'form'     => $this,
-            'tabObj'   => $tabObj,
-            'width'    => $this->width,
+            'form'   => $this,
+            'tabObj' => $tabObj,
+            'width'  => $this->width,
         ];
 
         return view($this->view, $data)->render();

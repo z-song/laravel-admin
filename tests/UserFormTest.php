@@ -46,7 +46,7 @@ class UserFormTest extends TestCase
             'password'              => '123456',
             'password_confirmation' => '123456',
             //"avatar"   => "test.jpg",
-            'profile'  => [
+            'profile' => [
                 'first_name' => 'John',
                 'last_name'  => 'Doe',
                 'postcode'   => '123456',

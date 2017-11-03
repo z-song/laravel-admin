@@ -67,7 +67,7 @@ trait UploadField
             'showRemove'           => false,
             'showUpload'           => false,
 //            'initialCaption'       => $this->initialCaption($this->value),
-            'deleteExtraData'      => [
+            'deleteExtraData' => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
                 static::FILE_DELETE_FLAG         => '',
                 '_token'                         => csrf_token(),
@@ -95,7 +95,7 @@ trait UploadField
 
         $this->options([
             //'initialPreview'        => $this->preview(),
-            'initialPreviewConfig'  => $this->initialPreviewConfig(),
+            'initialPreviewConfig' => $this->initialPreviewConfig(),
         ]);
     }
 

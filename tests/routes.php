@@ -1,9 +1,9 @@
 <?php
 
 Route::group([
-    'prefix'        => config('admin.route.prefix'),
-    'namespace'     => 'Tests\Controllers',
-    'middleware'    => ['web', 'admin'],
+    'prefix'     => config('admin.route.prefix'),
+    'namespace'  => 'Tests\Controllers',
+    'middleware' => ['web', 'admin'],
 ], function ($router) {
     $router->resource('images', ImageController::class);
     $router->resource('multiple-images', MultipleImageController::class);

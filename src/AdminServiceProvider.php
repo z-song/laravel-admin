@@ -23,11 +23,11 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $routeMiddleware = [
-        'admin.auth'        => \Encore\Admin\Middleware\Authenticate::class,
-        'admin.pjax'        => \Encore\Admin\Middleware\Pjax::class,
-        'admin.log'         => \Encore\Admin\Middleware\LogOperation::class,
-        'admin.permission'  => \Encore\Admin\Middleware\Permission::class,
-        'admin.bootstrap'   => \Encore\Admin\Middleware\Bootstrap::class,
+        'admin.auth'       => \Encore\Admin\Middleware\Authenticate::class,
+        'admin.pjax'       => \Encore\Admin\Middleware\Pjax::class,
+        'admin.log'        => \Encore\Admin\Middleware\LogOperation::class,
+        'admin.permission' => \Encore\Admin\Middleware\Permission::class,
+        'admin.bootstrap'  => \Encore\Admin\Middleware\Bootstrap::class,
     ];
 
     /**
