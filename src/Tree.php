@@ -35,8 +35,8 @@ class Tree implements Renderable
      * @var string
      */
     protected $view = [
-        'tree'      => 'admin::tree',
-        'branch'    => 'admin::tree.branch',
+        'tree'   => 'admin::tree',
+        'branch' => 'admin::tree.branch',
     ];
 
     /**
@@ -327,12 +327,12 @@ SCRIPT;
     public function variables()
     {
         return [
-            'id'        => $this->elementId,
-            'tools'     => $this->tools->render(),
-            'items'     => $this->getItems(),
-            'useCreate' => $this->useCreate,
-            'useSave'   => $this->useSave,
-            'useRefresh'=> $this->useRefresh,
+            'id'         => $this->elementId,
+            'tools'      => $this->tools->render(),
+            'items'      => $this->getItems(),
+            'useCreate'  => $this->useCreate,
+            'useSave'    => $this->useSave,
+            'useRefresh' => $this->useRefresh,
         ];
     }
 

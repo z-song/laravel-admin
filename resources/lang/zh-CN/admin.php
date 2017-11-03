@@ -97,10 +97,10 @@ return [
     'current_page'  => '当前页',
     'selected_rows' => '选择的行',
 
-    'upload'        => '上传',
-    'new_folder'    => '新建文件夹',
-    'time'          => '时间',
-    'size'          => '大小',
+    'upload'     => '上传',
+    'new_folder' => '新建文件夹',
+    'time'       => '时间',
+    'size'       => '大小',
 
     'listbox' => [
         'text_total'         => '总共 {0} 项',

@@ -105,9 +105,9 @@ class Text extends Presenter
     public function currency($options = []) : Text
     {
         return $this->inputmask(array_merge($options, [
-            'alias'                 => 'currency',
-            'prefix'                => '',
-            'removeMaskOnSubmit'    => true,
+            'alias'              => 'currency',
+            'prefix'             => '',
+            'removeMaskOnSubmit' => true,
         ]));
     }
 

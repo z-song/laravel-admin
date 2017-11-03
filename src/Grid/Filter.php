@@ -215,8 +215,8 @@ EOT;
         Admin::script($script);
 
         return view($this->view)->with([
-            'action'    => $this->action ?: $this->urlWithoutFilters(),
-            'filters'   => $this->filters,
+            'action'  => $this->action ?: $this->urlWithoutFilters(),
+            'filters' => $this->filters,
         ]);
     }
 

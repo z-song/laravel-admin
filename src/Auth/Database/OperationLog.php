@@ -10,10 +10,10 @@ class OperationLog extends Model
     protected $fillable = ['user_id', 'path', 'method', 'ip', 'input'];
 
     public static $methodColors = [
-        'GET'       => 'green',
-        'POST'      => 'yellow',
-        'PUT'       => 'blue',
-        'DELETE'    => 'red',
+        'GET'    => 'green',
+        'POST'   => 'yellow',
+        'PUT'    => 'blue',
+        'DELETE' => 'red',
     ];
 
     public static $methods = [
