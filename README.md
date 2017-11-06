@@ -1,22 +1,42 @@
-laravel-admin
-=====
+<p align="center">
+<a href="http://laravel-admin.org/">
+<img src="http://laravel-admin.org/img/logo004.png" alt="laravel-admin" width="160">
+</a>
 
-[![Build Status](https://travis-ci.org/z-song/laravel-admin.svg?branch=master)](https://travis-ci.org/z-song/laravel-admin)
-[![StyleCI](https://styleci.io/repos/48796179/shield)](https://styleci.io/repos/48796179)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/z-song/laravel-admin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/z-song/laravel-admin/?branch=master)
-[![Packagist](https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000)](https://packagist.org/packages/encore/laravel-admin)
-[![Total Downloads](https://img.shields.io/packagist/dt/encore/laravel-admin.svg?style=flat-square)](https://packagist.org/packages/encore/laravel-admin)
-[![Awesome Laravel](https://img.shields.io/badge/Awesome-Laravel-brightgreen.svg)](https://github.com/z-song/laravel-admin)
+<p align="center">⛵<code>laravel-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
 
-`laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
+<p align="center">
+<a href="http://laravel-admin.org/docs">Documentation</a> | 
+<a href="http://laravel-admin.org/docs/#/zh/">中文文档</a> | 
+<a href="http://laravel-admin.org/demo">Demo</a> | 
+<a href="https://github.com/z-song/laravel-admin.org">Demo source code</a> | 
+<a href="https://github.com/laravel-admin-extensions">Extensions</a>
+</p>
 
-[Demo](http://laravel-admin.org/demo)
+<p align="center">
+    <a href="https://travis-ci.org/z-song/laravel-admin">
+        <img src="https://travis-ci.org/z-song/laravel-admin.svg?branch=master" alt="Build Status">
+    </a>
+    <a href="https://styleci.io/repos/48796179">
+        <img src="https://styleci.io/repos/48796179/shield" alt="StyleCI">
+    </a>
+    <a href="https://scrutinizer-ci.com/g/z-song/laravel-admin/?branch=master">
+        <img src="https://scrutinizer-ci.com/g/z-song/laravel-admin/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality">
+    </a>
+    <a href="https://packagist.org/packages/encore/laravel-admin">
+        <img src="https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000&&style=flat-square" alt="Packagist">
+    </a>
+    <a href="https://packagist.org/packages/encore/laravel-admin">
+        <img src="https://img.shields.io/packagist/dt/encore/laravel-admin.svg?style=flat-square" alt="Total Downloads">
+    </a>
+    <a href="https://github.com/z-song/laravel-admin">
+        <img src="https://img.shields.io/badge/Awesome-Laravel-brightgreen.svg?style=flat-square" alt="Awesome Laravel">
+    </a>
+</div>
 
-Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
-
-[Documentation](http://laravel-admin.org/docs) | [中文文档](http://laravel-admin.org/docs/#/zh/)
-
-[Extensions](https://github.com/laravel-admin-extensions)
+<p align="center">
+    Inspired by <a href="https://github.com/sleeping-owl/admin" target="_blank">SleepingOwlAdmin</a> and <a href="https://github.com/zofe/rapyd-laravel" target="_blank">rapyd-laravel</a>.
+</p>
 
 Screenshots
 ------------
