@@ -52,7 +52,7 @@ class Text extends Presenter
      *
      * @return $this
      */
-    public function placeholder($placeholder = '') : Text
+    public function placeholder($placeholder = '') : self
     {
         $this->placeholder = $placeholder;
 
@@ -62,7 +62,7 @@ class Text extends Presenter
     /**
      * @return Text
      */
-    public function url() : Text
+    public function url() : self
     {
         return $this->inputmask(['alias' => 'url'], 'internet-explorer');
     }
@@ -70,7 +70,7 @@ class Text extends Presenter
     /**
      * @return Text
      */
-    public function email() : Text
+    public function email() : self
     {
         return $this->inputmask(['alias' => 'email'], 'envelope');
     }
@@ -78,7 +78,7 @@ class Text extends Presenter
     /**
      * @return Text
      */
-    public function integer() : Text
+    public function integer() : self
     {
         return $this->inputmask(['alias' => 'integer']);
     }
@@ -90,7 +90,7 @@ class Text extends Presenter
      *
      * @return Text
      */
-    public function decimal($options = []) : Text
+    public function decimal($options = []) : self
     {
         return $this->inputmask(array_merge($options, ['alias' => 'decimal']));
     }
@@ -102,12 +102,12 @@ class Text extends Presenter
      *
      * @return Text
      */
-    public function currency($options = []) : Text
+    public function currency($options = []) : self
     {
         return $this->inputmask(array_merge($options, [
-            'alias'                 => 'currency',
-            'prefix'                => '',
-            'removeMaskOnSubmit'    => true,
+            'alias'              => 'currency',
+            'prefix'             => '',
+            'removeMaskOnSubmit' => true,
         ]));
     }
 
@@ -128,7 +128,7 @@ class Text extends Presenter
     /**
      * @return Text
      */
-    public function ip() : Text
+    public function ip() : self
     {
         return $this->inputmask(['alias' => 'ip'], 'laptop');
     }
@@ -136,7 +136,7 @@ class Text extends Presenter
     /**
      * @return Text
      */
-    public function mac() : Text
+    public function mac() : self
     {
         return $this->inputmask(['alias' => 'mac'], 'laptop');
     }
@@ -146,7 +146,7 @@ class Text extends Presenter
      *
      * @return Text
      */
-    public function mobile($mask = '19999999999') : Text
+    public function mobile($mask = '19999999999') : self
     {
         return $this->inputmask(compact('mask'), 'phone');
     }
@@ -157,7 +157,7 @@ class Text extends Presenter
      *
      * @return $this
      */
-    public function inputmask($options = [], $icon = 'pencil') : Text
+    public function inputmask($options = [], $icon = 'pencil') : self
     {
         $options = json_encode($options);
 

@@ -118,10 +118,10 @@ class Editable extends AbstractDisplayer
         $this->type = 'combodate';
 
         $this->addOptions([
-            'format'        => $format,
-            'viewformat'    => $format,
-            'template'      => $format,
-            'combodate'     => [
+            'format'     => $format,
+            'viewformat' => $format,
+            'template'   => $format,
+            'combodate'  => [
                 'maxYear' => 2035,
             ],
         ]);

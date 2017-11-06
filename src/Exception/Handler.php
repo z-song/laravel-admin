@@ -17,10 +17,10 @@ class Handler
     public static function renderException(\Exception $exception)
     {
         $error = new MessageBag([
-            'type'      => get_class($exception),
-            'message'   => $exception->getMessage(),
-            'file'      => $exception->getFile(),
-            'line'      => $exception->getLine(),
+            'type'    => get_class($exception),
+            'message' => $exception->getMessage(),
+            'file'    => $exception->getFile(),
+            'line'    => $exception->getLine(),
         ]);
 
         $errors = new ViewErrorBag();

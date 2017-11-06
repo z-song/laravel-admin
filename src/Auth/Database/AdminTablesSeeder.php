@@ -16,16 +16,16 @@ class AdminTablesSeeder extends Seeder
         // create a user.
         Administrator::truncate();
         Administrator::create([
-            'username'  => 'admin',
-            'password'  => bcrypt('admin'),
-            'name'      => 'Administrator',
+            'username' => 'admin',
+            'password' => bcrypt('admin'),
+            'name'     => 'Administrator',
         ]);
 
         // create a role.
         Role::truncate();
         Role::create([
-            'name'  => 'Administrator',
-            'slug'  => 'administrator',
+            'name' => 'Administrator',
+            'slug' => 'administrator',
         ]);
 
         // add role to user.

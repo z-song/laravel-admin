@@ -18,8 +18,8 @@ class Navbar implements Renderable
     public function __construct()
     {
         $this->elements = [
-            'left'   => collect(),
-            'right'  => collect(),
+            'left'  => collect(),
+            'right' => collect(),
         ];
     }
 

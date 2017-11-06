@@ -40,7 +40,7 @@ class Radio extends Presenter
      *
      * @return $this
      */
-    public function stacked() : Radio
+    public function stacked() : self
     {
         $this->inline = false;
 

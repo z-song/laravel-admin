@@ -49,9 +49,9 @@ abstract class Extension
     protected static function createPermission($name, $slug, $path)
     {
         Permission::create([
-            'name'          => $name,
-            'slug'          => $slug,
-            'http_path'     => '/'.trim($path, '/'),
+            'name'      => $name,
+            'slug'      => $slug,
+            'http_path' => '/'.trim($path, '/'),
         ]);
     }
 }

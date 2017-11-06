@@ -210,12 +210,13 @@ EOT;
     }
 
     /**
-     * Set config for select2
+     * Set config for select2.
      *
      * all configurations see https://select2.org/configuration/options-api
      *
      * @param string $key
      * @param mixed  $val
+     *
      * @return $this
      */
     public function config($key, $val)
@@ -231,7 +232,7 @@ EOT;
     public function render()
     {
         $configs = array_merge([
-            'allowClear' => true,
+            'allowClear'  => true,
             'placeholder' => $this->label,
         ], $this->config);
 
