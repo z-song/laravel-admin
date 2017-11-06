@@ -1,6 +1,6 @@
 <p align="center">
 <a href="http://laravel-admin.org/">
-<img src="http://laravel-admin.org/img/logo004.png" alt="laravel-admin" width="160">
+<img src="http://laravel-admin.org/img/logo004.png" alt="laravel-admin">
 </a>
 
 <p align="center">⛵<code>laravel-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
