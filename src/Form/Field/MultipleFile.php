@@ -208,7 +208,7 @@ class MultipleFile extends Field
         $this->setupDefaultOptions();
 
         if (!empty($this->value)) {
-            $this->options(['initialPreview' =>$this->preview()]);
+            $this->options(['initialPreview' => $this->preview()]);
             $this->setupPreviewOptions();
         }
 
