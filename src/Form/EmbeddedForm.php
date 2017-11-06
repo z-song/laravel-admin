@@ -217,7 +217,7 @@ class EmbeddedForm
     {
         $jsonKey = $field->column();
 
-        $elementName = $elementClass = $errorKey = '';
+        $elementName = $elementClass = $errorKey = [];
 
         if (is_array($jsonKey)) {
             foreach ($jsonKey as $index => $name) {
