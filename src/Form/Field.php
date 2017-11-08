@@ -736,7 +736,7 @@ class Field implements Renderable
     /**
      * Set form element class.
      *
-     * @param string $class
+     * @param string|array $class
      *
      * @return $this
      */
