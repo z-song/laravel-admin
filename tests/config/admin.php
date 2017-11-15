@@ -18,7 +18,7 @@ return [
     'logo-mini' => '<b>La</b>',
 
     /*
-     * Route configration.
+     * Route configuration.
      */
     'route' => [
 
