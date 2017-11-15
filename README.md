@@ -43,6 +43,12 @@ Screenshots
 
 ![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625297/3b3deb64-9947-11e6-807c-cffa999004be.jpg)
 
+Requirements
+------------
+ - PHP >= 7.0.0
+ - Laravel >= 5.5.0
+ - Fileinfo PHP Extension
+ 
 Installation
 ------------
 
@@ -68,9 +74,9 @@ php artisan admin:install
 
 Open `http://localhost/admin/` in browser,use username `admin` and password `admin` to login.
 
-Default Settings
+Configurations
 ------------
-The file in `config/admin.php` contains an array of settings, you can find the default settings in there.
+The file `config/admin.php` contains an array of configurations, you can find the default configurations in there.
 
 Other
 ------------
