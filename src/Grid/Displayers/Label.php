@@ -14,6 +14,6 @@ class Label extends AbstractDisplayer
 
         return collect((array) $this->value)->map(function ($name) use ($style) {
             return "<span class='label label-{$style}'>$name</span>";
-        })->implode('&nbsp;');
+        })->implode(' ');
     }
 }
