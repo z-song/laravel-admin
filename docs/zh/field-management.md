@@ -1,6 +1,8 @@
 # 组件管理
 
-> 目前暂时只支持Larave 5.3
+> 目前暂时只支持Laravel 5.3
+
+> Laravel 5.5可以安装uEditor（百度编辑器）
 
 ## 移除已有组件
 
@@ -189,3 +191,100 @@ $form->editor('content');
 ```
 
 > 组件类中指定了`admin::form.editor`作为视图文件，视图文件路径在`vendor/encore/laravel-admin/views/form/editor.blade.php`，如果需要修改视图文件，可以将上述视图文件拷贝到`resources/views`目录下自行修改，然后在组件类`app/Admin/Extensions/WangEditor.php`的`$view`属性指定刚才修改的view即可。
+
+
+### 集成百度富文本编辑器uEditor的Laravel composer版本
+
+[laravel-u-editor](https://github.com/stevenyangecho/laravel-u-editor)
+UEditor 是由百度web前端研发部开发所见即所得富文本web编辑器。
+此包为laravel5的支持,新增多语言配置,可自由部署前端代码,默认基于 UEditor 1.4.3.3。
+UEditor 前台文件完全无修改,可自由gulp等工具部署到生产环境。
+根据系统的config.app.locale自动切换多语言. 暂时只支持 en,zh_CN,zh_TW。
+支持本地和七牛云存储,默认为本地上传 public/uploads。
+
+##### composer安装
+在composer.json中增加：
+```json
+"stevenyangecho/laravel-u-editor": "~1.4"
+```
+
+然后执行：
+```bash
+$ composer update
+```
+
+在config/app.php的providers下增加行：
+```php
+Stevenyangecho\UEditor\UEditorServiceProvider::class,
+```
+然后执行:
+```bash
+$ php artisan vendor:publish
+```
+
+##### 增加laravel-admin组件文件、视图文件等
+app/Admin/Extensions/uEditor.php:
+```php
+<?php
+namespace App\Admin\Extensions;
+use Encore\Admin\Form\Field;
+
+/**
+ * 百度编辑器
+ * Class uEditor
+ * @package App\Admin\Extensions
+ */
+class uEditor extends Field
+{
+    // 定义视图
+    protected $view = 'admin.uEditor';
+
+    // css资源
+    protected static $css = [];
+
+    // js资源
+    protected static $js = [
+        '/laravel-u-editor/ueditor.config.js',
+        '/laravel-u-editor/ueditor.all.min.js',
+        '/laravel-u-editor/lang/zh-cn/zh-cn.js'
+    ];
+
+    public function render()
+    {
+        $this->script = <<<EOT
+        var ue = UE.getEditor('ueditor'); // 默认id是ueditor
+        ue.ready(function () {
+            ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');
+        });
+EOT;
+        return parent::render();
+    }
+}
+```
+增加视图文件：
+resources/views/admin/uEditor.blade.php
+```html
+<div class="form-group {!! !$errors->has($errorKey) ?: 'has-error' !!}">
+    <label for="{{$id}}" class="col-sm-2 control-label">{{$label}}</label>
+    <div class="col-sm-8">
+        @include('admin::form.error')
+        <script type='text/plain'  id='ueditor' id="{{$id}}" name="{{$name}}" placeholder="{{ $placeholder }}" {!! $attributes !!}  class='ueditor'>
+            {!! old($column, $value) !!}
+        </script>
+        @include('admin::form.help-block')
+    </div>
+</div>
+```
+
+然后注册进`laravel-admin`,在`app/Admin/bootstrap.php`中添加以下代码：
+```php
+use App\Admin\Extensions\uEditor;
+use Encore\Admin\Form;
+
+Form::extend('editor', uEditor::class); // 覆盖editor
+```
+
+调用:
+```
+$form->editor('content', '内容');
+```
