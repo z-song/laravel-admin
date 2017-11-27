@@ -67,6 +67,7 @@ return [
 
     'created_at' => 'Utworzono',
     'updated_at' => 'zmieniono',
+	'deleted_at' => 'Usunięte',
 
     'alert' => 'Alarm',
 

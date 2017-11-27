@@ -61,6 +61,7 @@ return [
     'slug'                  => 'טקסט',
     'created_at'            => 'נוצר ב',
     'updated_at'            => 'עודכן ב',
+	'deleted_at' 			=> 'שנמחקו ב',
     'alert'                 => 'אזהרה',
     'parent_id'             => 'אב',
     'icon'                  => 'אייקון',
