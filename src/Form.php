@@ -283,7 +283,7 @@ class Form
 			 * @var \Illuminate\Database\Eloquent\Model $model
 			 */
 			$model = $this->model;
-			if (method_exists($model, 'withTrashed')) {
+			if (method_exists($model, 'trashed')) {
 				$model = $model->withTrashed();
 			}
 			$model = $model->with($this->getRelations())
