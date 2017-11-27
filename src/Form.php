@@ -279,8 +279,26 @@ class Form
             if (empty($id)) {
                 continue;
             }
-            $this->deleteFilesAndImages($id);
-            $this->model->find($id)->delete();
+			/**
+			 * @var \Illuminate\Database\Eloquent\Model $model
+			 */
+			$model = $this->model;
+			if (method_exists($model, 'withTrashed')) {
+				$model = $model->withTrashed();
+			}
+			$model = $model->with($this->getRelations())
+				->find($id);
+			if (is_null($model)) continue;
+
+			/**
+			 * Check if model has softDelete and was trashed
+			*/
+			if (empty($model->deleted_at))
+				$model->delete();
+			else {
+				$this->deleteFilesAndImages($model);
+				$model->forceDelete();
+			}
         }
 
         return true;
@@ -289,12 +307,11 @@ class Form
     /**
      * Remove files or images in record.
      *
-     * @param $id
+     * @param \Illuminate\Database\Eloquent\Model $model
      */
-    protected function deleteFilesAndImages($id)
+    protected function deleteFilesAndImages($model)
     {
-        $data = $this->model->with($this->getRelations())
-            ->findOrFail($id)->toArray();
+		$data = $model->toArray();
 
         $this->builder->fields()->filter(function ($field) {
             return $field instanceof Field\File;
