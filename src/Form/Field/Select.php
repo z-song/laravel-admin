@@ -28,6 +28,16 @@ $("{$this->getElementClassSelector()}").select2({
 EOF;
         }
 
+        if (!empty($this->orderField)) {
+            $this->script .= <<<EOF
+$("{$this->getElementClassSelector()}").on('select2:select', function(e) {
+    var element = $(this).find('[value="' + e.params.data.id + '"]');
+    $(this).append(element);
+    $(this).trigger('change');
+});
+EOF;
+        }
+
         if ($this->options instanceof \Closure) {
             if ($this->form) {
                 $this->options = $this->options->bindTo($this->form->model());
@@ -37,6 +47,7 @@ EOF;
         }
 
         $this->options = array_filter($this->options);
+        $this->options = $this->sortOptions($this->options, $this->value);
 
         return parent::render()->with(['options' => $this->options]);
     }
@@ -186,5 +197,25 @@ $("{$this->getElementClassSelector()}").select2({
 EOT;
 
         return $this;
+    }
+
+    /**
+     * sort select options based on stored value
+     *
+     * @param array $options
+     * @param array $value
+     *
+     * @return array
+     */
+    private function sortOptions($options, $value)
+    {
+        $sorted = [];
+        foreach ($value as $tv) {
+            $sorted[$tv] = $options[$tv];
+            unset($options[$tv]);
+        }
+        $sorted = $sorted + $options;
+
+        return $sorted;
     }
 }
