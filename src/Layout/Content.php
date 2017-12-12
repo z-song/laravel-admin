@@ -94,13 +94,15 @@ class Content implements Renderable
      * Validate content breadcrumb.
      *
      * @param array $breadcrumb
-     * @return bool
+     *
      * @throws \Exception
+     *
+     * @return bool
      */
     protected function validateBreadcrumb(array $breadcrumb)
     {
         foreach ($breadcrumb as $item) {
-            if (! is_array($item) || !array_has($item, 'text')) {
+            if (!is_array($item) || !array_has($item, 'text')) {
                 throw new  \Exception('Breadcrumb format error!');
             }
         }
