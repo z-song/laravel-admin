@@ -56,6 +56,7 @@ class Tags extends Field
      * Get or set value for this field.
      *
      * @param mixed $value
+     *
      * @return $this|array|mixed
      */
     public function value($value = null)
