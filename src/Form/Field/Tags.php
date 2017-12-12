@@ -7,16 +7,28 @@ use Illuminate\Support\Arr;
 
 class Tags extends Field
 {
+    /**
+     * @var array
+     */
     protected $value = [];
 
+    /**
+     * @var array
+     */
     protected static $css = [
         '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.min.css',
     ];
 
+    /**
+     * @var array
+     */
     protected static $js = [
         '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.full.min.js',
     ];
 
+    /**
+     * {@inheritdoc}
+     */
     public function fill($data)
     {
         $this->value = array_get($data, $this->column);
@@ -28,6 +40,9 @@ class Tags extends Field
         $this->value = array_filter((array) $this->value);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function prepare($value)
     {
         if (is_array($value) && !Arr::isAssoc($value)) {
@@ -37,10 +52,16 @@ class Tags extends Field
         return $value;
     }
 
+    /**
+     * Get or set value for this field.
+     *
+     * @param mixed $value
+     * @return $this|array|mixed
+     */
     public function value($value = null)
     {
         if (is_null($value)) {
-            return empty($this->value) ? $this->getDefault() : $this->value;
+            return empty($this->value) ? ($this->getDefault() ?? []) : $this->value;
         }
 
         $this->value = $value;
@@ -48,6 +69,9 @@ class Tags extends Field
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function render()
     {
         $this->script = "$(\"{$this->getElementClassSelector()}\").select2({
