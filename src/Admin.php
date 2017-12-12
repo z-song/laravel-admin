@@ -198,6 +198,7 @@ class Admin
      * Set navbar.
      *
      * @param Closure|null $builder
+     *
      * @return Navbar
      */
     public function navbar(Closure $builder = null)
