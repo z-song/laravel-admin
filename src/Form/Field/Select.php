@@ -109,7 +109,7 @@ class Select extends Field
         }
 
         $script = <<<EOT
-
+$(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
