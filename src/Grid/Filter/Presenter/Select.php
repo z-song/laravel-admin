@@ -84,7 +84,7 @@ SCRIPT;
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
-  $("{$this->getElementClass()}").select2({data: data});
+  $(".{$this->getElementClass()}").select2({data: data});
 });
 
 EOT;
