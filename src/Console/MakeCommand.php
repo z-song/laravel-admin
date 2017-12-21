@@ -98,9 +98,9 @@ class MakeCommand extends GeneratorCommand
     {
         $directory = config('admin.directory');
 
-        $namespace = ucfirst(basename($directory));
+        $namespace = str_replace($this->laravel['path'], '', $directory);
 
-        return $rootNamespace."\\$namespace\Controllers";
+        return $rootNamespace . "$namespace\Controllers";
     }
 
     /**
