@@ -103,7 +103,7 @@ class Select extends Field
     {
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
-            $class = str_replace(['[', ']'], '_', $field);
+            $class = rtrim(str_replace(['[', ']'], '_', $field), '_');
         } else {
             $class = $field;
         }
