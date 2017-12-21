@@ -100,7 +100,7 @@ class MakeCommand extends GeneratorCommand
 
         $namespace = str_replace($this->laravel['path'], '', $directory);
 
-        return $rootNamespace . "$namespace\Controllers";
+        return $rootNamespace."$namespace\Controllers";
     }
 
     /**
