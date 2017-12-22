@@ -522,9 +522,9 @@ class Form
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-            if(!$isEditable){
+            if (!$isEditable) {
                 return back()->withInput()->withErrors($validationMessages);
-            }else{
+            } else {
                 return response(['errors' => array_dot($validationMessages->getMessages())], 422);
             }
         }
