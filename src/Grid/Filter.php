@@ -160,11 +160,22 @@ class Filter
      *
      * @return AbstractFilter
      */
-    public function addFilter(AbstractFilter $filter)
+    protected function addFilter(AbstractFilter $filter)
     {
         $filter->setParent($this);
 
         return $this->filters[] = $filter;
+    }
+
+    /**
+     * Use a custom filter.
+     *
+     * @param AbstractFilter $filter
+     * @return AbstractFilter
+     */
+    public function use(AbstractFilter $filter)
+    {
+        return $this->addFilter($filter);
     }
 
     /**
