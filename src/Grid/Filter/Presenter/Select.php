@@ -15,6 +15,11 @@ class Select extends Presenter
     protected $options = [];
 
     /**
+     * @var string
+     */
+    protected $script = '';
+
+    /**
      * Select constructor.
      *
      * @param mixed $options
@@ -32,9 +37,7 @@ class Select extends Presenter
     protected function buildOptions() : array
     {
         if (is_string($this->options)) {
-            $this->loadAjaxOptions($this->options);
-
-            return [];
+            $this->loadRemoteOptions($this->options);
         }
 
         if ($this->options instanceof \Closure) {
@@ -45,20 +48,46 @@ class Select extends Presenter
             $this->options = $this->options->toArray();
         }
 
-        $placeholder = trans('admin.choose');
+        if (empty($this->script)) {
+            $placeholder = trans('admin.choose');
 
-        $script = <<<SCRIPT
+            $this->script = <<<SCRIPT
 $(".{$this->getElementClass()}").select2({
   placeholder: "$placeholder"
 });
 
 SCRIPT;
+        }
 
-        Admin::script($script);
+        Admin::script($this->script);
 
-        $options = is_array($this->options) ? $this->options : [];
+        return is_array($this->options) ? $this->options : [];
+    }
 
-        return $options;
+    /**
+     * Load options from remote.
+     *
+     * @param string $url
+     * @param array  $parameters
+     * @param array  $options
+     *
+     * @return $this
+     */
+    protected function loadRemoteOptions($url, $parameters = [], $options = [])
+    {
+        $ajaxOptions = [
+            'url' => $url.'?'.http_build_query($parameters),
+        ];
+
+        $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
+
+        $this->script = <<<EOT
+
+$.ajax($ajaxOptions).done(function(data) {
+  $(".{$this->getElementClass()}").select2({data: data});
+});
+
+EOT;
     }
 
     /**
@@ -66,11 +95,11 @@ SCRIPT;
      *
      * @param string $resourceUrl
      */
-    protected function loadAjaxOptions($resourceUrl)
+    public function ajax($resourceUrl)
     {
         $placeholder = trans('admin.choose');
 
-        $script = <<<EOT
+        $this->script = <<<EOT
 
 $(".{$this->getElementClass()}").select2({
   placeholder: "$placeholder",
@@ -103,8 +132,6 @@ $(".{$this->getElementClass()}").select2({
 });
 
 EOT;
-
-        Admin::script($script);
     }
 
     /**
