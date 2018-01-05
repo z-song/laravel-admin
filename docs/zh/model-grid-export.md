@@ -46,23 +46,23 @@ php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"
 	            $excel->sheet($this->tablename, function ($sheet) {
 	                $this->grid->build();
 	                // 这段逻辑是从表格数据中取出需要导出的字段
-	                $dbcolumnnames = [];
-	                $titlenames = [];
-	                $this->grid->columns()->map(function (Column $column) use (&$dbcolumnnames, &$titlenames) {
+	                $modelColumnNames = [];
+	                $titleNames = [];
+	                $this->grid->columns()->map(function (Column $column) use (&$modelColumnNames, &$titleNames) {
 	                    if ($column->getName() != '__row_selector__') {
-	                        array_push($dbcolumnnames, $column->getName());
-	                        array_push($titlenames, $column->getLabel());
+	                        array_push($modelColumnNames, $column->getName());
+	                        array_push($titleNames, $column->getLabel());
 	                    }
 	                });
-	                $dbcolumnnames = array_unique($dbcolumnnames);
-	                $titlenames = array_unique($titlenames);
-	                $sheet->rows([$titlenames]);
+	                $modelColumnNames = array_unique($modelColumnNames);
+	                $titleNames = array_unique($titleNames);
+	                $sheet->rows([$titleNames]);
 	
 	                $rows = $this->grid->rows();
-	                $datas = $rows->map(function ($item) use ($dbcolumnnames) {
+	                $datas = $rows->map(function ($item) use ($modelColumnNames) {
 	                    $row = array();
 	                    $model = $item->model();
-	                    foreach ($dbcolumnnames as $key) {
+	                    foreach ($modelColumnNames as $key) {
 	                        $row[$key] = $this->cutstr_html($model[$key]);
 	                    }
 	                    return $row;                 
