@@ -252,9 +252,19 @@ class uEditor extends Field
     public function render()
     {
         $this->script = <<<EOT
+        //解决第二次进入加载不出来的问题
+        UE.delEditor("ueditor");
         var ue = UE.getEditor('ueditor'); // 默认id是ueditor
         ue.ready(function () {
             ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');
+        });
+        //解决第一次编辑之后返回列表，再次编辑时会展示上次修改之前的数据
+        //有点丑可以应急，保存的时候会闪一下textarea
+        $(document).on('pjax:send', function(xhr) {
+                if(typeof(UE.getEditor("ueditor")) !='undefined'){
+                    console.log('destroy ue');
+                    UE.getEditor("ueditor").destroy();
+                }
         });
 EOT;
         return parent::render();
@@ -268,7 +278,8 @@ resources/views/admin/uEditor.blade.php
     <label for="{{$id}}" class="col-sm-2 control-label">{{$label}}</label>
     <div class="col-sm-8">
         @include('admin::form.error')
-        <script type='text/plain'  id='ueditor' id="{{$id}}" name="{{$name}}" placeholder="{{ $placeholder }}" {!! $attributes !!}  class='ueditor'>
+        {{-- 这个style可以限制他的高度，不会随着内容变长 --}}
+        <script type='text/plain' style="height:400px;" id='ueditor' id="{{$id}}" name="{{$name}}" placeholder="{{ $placeholder }}" {!! $attributes !!}  class='ueditor'>
             {!! old($column, $value) !!}
         </script>
         @include('admin::form.help-block')
