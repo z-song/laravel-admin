@@ -16,6 +16,10 @@ class Display extends Field
 
     public function render()
     {
+        if (is_null($this->value) AND is_null($this->default)){
+            return '';
+        }
+        
         if ($this->callback instanceof Closure) {
             $this->value = $this->callback->call($this->form->model(), $this->value);
         }
