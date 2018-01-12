@@ -12,7 +12,6 @@
     @if( ! $method == 'GET')
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
     @endif
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="col-md-2"></div>
 
         <div class="col-md-8">
