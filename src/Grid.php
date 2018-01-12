@@ -688,7 +688,7 @@ class Grid
     }
 
     /**
-     * Alias for method `disableCreateButton`
+     * Alias for method `disableCreateButton`.
      *
      * @return $this
      *

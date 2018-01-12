@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Middleware;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Auth\Permission as Checker;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -44,10 +44,10 @@ class Permission
 
     /**
      * If the route of current request contains a middleware prefixed with 'admin.permission:',
-     *
      * then it has a manually set permission middleware, we need to handle it first.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public function checkRoutePermission(Request $request)
