@@ -64,5 +64,4 @@ class MenuTest extends TestCase
         $this->visit('admin/auth/menu/1')
             ->seePageIs('admin/auth/menu/1/edit');
     }
-
 }
