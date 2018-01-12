@@ -65,12 +65,4 @@ class MenuTest extends TestCase
             ->seePageIs('admin/auth/menu/1/edit');
     }
 
-    public function testEditMenuParent()
-    {
-        $this->expectException(\Laravel\BrowserKitTesting\HttpException::class);
-
-        $this->visit('admin/auth/menu/5/edit')
-            ->see('Menu')
-            ->submitForm('Submit', ['parent_id' => 5]);
-    }
 }
