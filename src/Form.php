@@ -525,7 +525,7 @@ class Form
             if (!$isEditable) {
                 return back()->withInput()->withErrors($validationMessages);
             } else {
-                return response(['errors' => array_dot($validationMessages->getMessages())], 422);
+                return response()->json(['errors' => array_dot($validationMessages->getMessages())], 422);
             }
         }
 
