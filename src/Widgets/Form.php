@@ -216,6 +216,7 @@ class Form implements Renderable
         return [
             'fields'     => $this->fields,
             'attributes' => $this->formatAttribute(),
+            'method'     => $this->attributes['method'],
         ];
     }
 
