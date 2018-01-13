@@ -70,10 +70,10 @@ return [
 
     'alert' => 'Alert',
 
-    'parent_id' => 'Parent',
-    'icon'      => 'Icon',
+    'parent_id'       => 'Parent',
+    'icon'            => 'Icon',
     'icon_color'      => 'Icon color',
-    'uri'       => 'URI',
+    'uri'             => 'URI',
 
     'operation_log'       => 'Operation log',
     'parent_select_error' => 'Parent select error',

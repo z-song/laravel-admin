@@ -70,10 +70,10 @@ return [
 
     'alert' => 'Ошибка',
 
-    'parent_id' => 'Родительский',
-    'icon'      => 'Иконка',
+    'parent_id'       => 'Родительский',
+    'icon'            => 'Иконка',
     'icon_color'      => 'Цвет иконки',
-    'uri'       => 'URI',
+    'uri'             => 'URI',
 
     'operation_log'       => 'Журнал событий',
     'parent_select_error' => 'Ошибок при выборе родителя',
