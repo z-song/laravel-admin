@@ -502,6 +502,8 @@ class Form
     {
         $data = Input::all();
 
+        $isEditable = $this->isEditable($data);
+
         $data = $this->handleEditable($data);
 
         $data = $this->handleFileDelete($data);
@@ -520,7 +522,11 @@ class Form
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-            return back()->withInput()->withErrors($validationMessages);
+            if (!$isEditable) {
+                return back()->withInput()->withErrors($validationMessages);
+            } else {
+                return response()->json(['errors' => array_dot($validationMessages->getMessages())], 422);
+            }
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -563,6 +569,18 @@ class Form
         $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
 
         return redirect($url);
+    }
+
+    /**
+     * Check if request is from editable.
+     *
+     * @param array $input
+     *
+     * @return bool
+     */
+    protected function isEditable(array $input = [])
+    {
+        return array_key_exists('_editable', $input);
     }
 
     /**

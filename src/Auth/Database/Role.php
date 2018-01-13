@@ -76,4 +76,20 @@ class Role extends Model
     {
         return !$this->can($permission);
     }
+
+    /**
+     * Detach models from the relationship.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            $model->administrators()->detach();
+
+            $model->permissions()->detach();
+        });
+    }
 }
