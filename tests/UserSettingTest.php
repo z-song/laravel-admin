@@ -33,7 +33,7 @@ class UserSettingTest extends TestCase
         ];
 
         $this->visit('admin/auth/setting')
-            ->submitForm('Submit', $data)
+            ->submitForm('Save', $data)
             ->seePageIs('admin/auth/setting');
 
         $this->seeInDatabase('admin_users', ['name' => $data['name']]);
@@ -45,7 +45,7 @@ class UserSettingTest extends TestCase
 
         $this->visit('admin/auth/setting')
             ->attach(__DIR__.'/assets/test.jpg', 'avatar')
-            ->press('Submit')
+            ->press('Save')
             ->seePageIs('admin/auth/setting');
 
         $avatar = Administrator::first()->avatar;
@@ -61,7 +61,7 @@ class UserSettingTest extends TestCase
         ];
 
         $this->visit('admin/auth/setting')
-            ->submitForm('Submit', $data)
+            ->submitForm('Save', $data)
             ->seePageIs('admin/auth/setting')
             ->see('The Password confirmation does not match.');
     }
@@ -74,7 +74,7 @@ class UserSettingTest extends TestCase
         ];
 
         $this->visit('admin/auth/setting')
-            ->submitForm('Submit', $data)
+            ->submitForm('Save', $data)
             ->seePageIs('admin/auth/setting');
 
         $this->assertTrue(app('hash')->check($data['password'], Administrator::first()->makeVisible('password')->password));
