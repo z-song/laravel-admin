@@ -63,7 +63,7 @@ class Permission
         $method = array_shift($args);
 
         if (!method_exists(Checker::class, $method)) {
-            throw new \InvalidArgumentException("Invaild permission method [$method].");
+            throw new \InvalidArgumentException("Invalid permission method [$method].");
         }
 
         call_user_func_array([Checker::class, $method], [$args]);
