@@ -72,6 +72,7 @@ return [
 
     'parent_id' => 'Parent',
     'icon'      => 'Icon',
+    'icon_color'      => 'Icon color',
     'uri'       => 'URI',
 
     'operation_log'       => 'Operation log',

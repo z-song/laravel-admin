@@ -46,6 +46,7 @@ class CreateAdminTables extends Migration
             $table->integer('order')->default(0);
             $table->string('title', 50);
             $table->string('icon', 50);
+            $table->string('icon_color', 7)->default('#FFFFFF');
             $table->string('uri', 50)->nullable();
 
             $table->timestamps();

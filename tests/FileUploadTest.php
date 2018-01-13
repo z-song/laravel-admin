@@ -90,12 +90,12 @@ class FileUploadTest extends TestCase
             ->seeElement('input[name=file6]')
 //            ->seeInElement('a[href="/admin/files"]', 'List')
             ->seeInElement('button[type=reset]', 'Reset')
-            ->seeInElement('button[type=submit]', 'Submit');
+            ->seeInElement('button[type=submit]', 'Save');
 
         $this->attach(__DIR__.'/RolesTest.php', 'file3')
             ->attach(__DIR__.'/MenuTest.php', 'file4')
             ->attach(__DIR__.'/TestCase.php', 'file5')
-            ->press('Submit');
+            ->press('Save');
 
         $new = FileModel::first();
 

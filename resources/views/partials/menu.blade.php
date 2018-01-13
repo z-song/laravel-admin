@@ -6,14 +6,14 @@
             @else
                  <a href="{{ admin_base_path($item['uri']) }}">
             @endif
-                <i class="fa {{$item['icon']}}"></i>
+                <i class="fa {{$item['icon']}}" @if(!empty($item['icon_color'])) style="color:{{$item['icon_color']}}" @endif></i>
                 <span>{{$item['title']}}</span>
             </a>
         </li>
     @else
         <li class="treeview">
             <a href="#">
-                <i class="fa {{$item['icon']}}"></i>
+                <i class="fa {{$item['icon']}}"  @if(!empty($item['icon_color'])) style="color:{{$item['icon_color']}}" @endif></i>
                 <span>{{$item['title']}}</span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
