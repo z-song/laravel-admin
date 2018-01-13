@@ -171,6 +171,7 @@ class Filter
      * Use a custom filter.
      *
      * @param AbstractFilter $filter
+     *
      * @return AbstractFilter
      */
     public function use(AbstractFilter $filter)
