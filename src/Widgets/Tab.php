@@ -19,6 +19,7 @@ class Tab extends Widget implements Renderable
         'title'    => '',
         'tabs'     => [],
         'dropDown' => [],
+        'active'   => 0,
     ];
 
     public function __construct()
@@ -34,13 +35,17 @@ class Tab extends Widget implements Renderable
      *
      * @return $this
      */
-    public function add($title, $content)
+    public function add($title, $content, $active = false)
     {
         $this->data['tabs'][] = [
             'id'      => mt_rand(),
             'title'   => $title,
             'content' => $content,
         ];
+
+        if ($active) {
+            $this->data['active'] = count($this->data['tabs']) - 1;
+        }
 
         return $this;
     }
