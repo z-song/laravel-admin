@@ -580,11 +580,7 @@ class Form
      */
     protected function isEditable(array $input = [])
     {
-        if (array_key_exists('_editable', $input)) {
-            return true;
-        }
-
-        return false;
+        return array_key_exists('_editable', $input);
     }
 
     /**

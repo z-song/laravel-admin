@@ -130,4 +130,18 @@ class Permission extends Model
 
         return $method;
     }
+
+    /**
+     * Detach models from the relationship.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            $model->roles()->detach();
+        });
+    }
 }
