@@ -899,6 +899,20 @@ class Field implements Renderable
     }
 
     /**
+     * popover data-popover
+     * @param null $title
+     * @param      $content
+     * @return Field
+     */
+    public function popover($title = null, $content)
+    {
+      return  $this->attribute([
+            'data-popover-title' => $title,
+            'data-popover'       => $content,
+        ]);
+    }
+
+    /**
      * Get view of this field.
      *
      * @return string
