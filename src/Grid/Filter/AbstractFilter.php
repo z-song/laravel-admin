@@ -10,6 +10,7 @@ use Encore\Admin\Grid\Filter\Presenter\Presenter;
 use Encore\Admin\Grid\Filter\Presenter\Radio;
 use Encore\Admin\Grid\Filter\Presenter\Select;
 use Encore\Admin\Grid\Filter\Presenter\Text;
+use Lang;
 
 /**
  * Class AbstractFilter.
@@ -105,6 +106,20 @@ abstract class AbstractFilter
     {
         $this->setPresenter(new Text($this->label));
     }
+    public function setLabel($label)
+    {
+        $trans_key = 'validation.attributes.' . $label;
+        $trans_key_low = strtolower($trans_key);
+        if (Lang::has($trans_key)) {
+            $label = Lang::get($trans_key);
+        }
+        if (Lang::has($trans_key_low)) {
+            $label = Lang::get($trans_key_low);
+        }else {
+            $label = ucfirst($label);
+        }
+        return $label;
+    }
 
     /**
      * Format label.
@@ -115,8 +130,7 @@ abstract class AbstractFilter
      */
     protected function formatLabel($label)
     {
-        $label = $label ?: ucfirst($this->column);
-
+        $label = $label ?: $this->setLabel($this->column);
         return str_replace(['.', '_'], ' ', $label);
     }
 
