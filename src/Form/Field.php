@@ -212,7 +212,7 @@ class Field implements Renderable
         $this->column = $column;
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($column);
-        $this->local = config('app.locale', 'en');
+        $this->local = config('app.locale');
     }
 
     /**
@@ -947,7 +947,7 @@ class Field implements Renderable
      * @param string $dir ltr or rtl
      * @return $this
      */
-    public function dir($dir = 'ltr')
+    public function direction($dir = 'ltr')
     {
         $this->direction = $dir;
 
