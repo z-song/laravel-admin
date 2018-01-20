@@ -187,7 +187,8 @@ class Admin
     /**
      * Get current login user.
      *
-     * @return mixed
+     *  @-return mixed
+     * @return \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
      */
     public function user()
     {
