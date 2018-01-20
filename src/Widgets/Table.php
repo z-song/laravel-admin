@@ -101,10 +101,10 @@ class Table extends Widget implements Renderable
     public function render()
     {
         $vars = [
-            'headers'       => $this->headers,
-            'rows'          => $this->rows,
-            'style'         => $this->style,
-            'attributes'    => $this->formatAttributes(),
+            'headers'    => $this->headers,
+            'rows'       => $this->rows,
+            'style'      => $this->style,
+            'attributes' => $this->formatAttributes(),
         ];
 
         return view($this->view, $vars)->render();

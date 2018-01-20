@@ -47,9 +47,9 @@ class Collapse extends Widget implements Renderable
     protected function variables()
     {
         return [
-            'id'            => $this->id,
-            'items'         => $this->items,
-            'attributes'    => $this->formatAttributes(),
+            'id'         => $this->id,
+            'items'      => $this->items,
+            'attributes' => $this->formatAttributes(),
         ];
     }
 

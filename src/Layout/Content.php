@@ -23,6 +23,13 @@ class Content implements Renderable
     protected $description = '';
 
     /**
+     * Page breadcrumb.
+     *
+     * @var array
+     */
+    protected $breadcrumb = [];
+
+    /**
      * @var Row[]
      */
     protected $rows = [];
@@ -65,6 +72,42 @@ class Content implements Renderable
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * Set breadcrumb of content.
+     *
+     * @param array ...$breadcrumb
+     *
+     * @return $this
+     */
+    public function breadcrumb(...$breadcrumb)
+    {
+        $this->validateBreadcrumb($breadcrumb);
+
+        $this->breadcrumb = (array) $breadcrumb;
+
+        return $this;
+    }
+
+    /**
+     * Validate content breadcrumb.
+     *
+     * @param array $breadcrumb
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    protected function validateBreadcrumb(array $breadcrumb)
+    {
+        foreach ($breadcrumb as $item) {
+            if (!is_array($item) || !array_has($item, 'text')) {
+                throw new  \Exception('Breadcrumb format error!');
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -156,6 +199,7 @@ class Content implements Renderable
         $items = [
             'header'      => $this->header,
             'description' => $this->description,
+            'breadcrumb'  => $this->breadcrumb,
             'content'     => $this->build(),
         ];
 

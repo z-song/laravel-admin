@@ -66,4 +66,18 @@ class Menu extends Model
 
         return static::with('roles')->orderByRaw($byOrder)->get()->toArray();
     }
+
+    /**
+     * Detach models from the relationship.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            $model->roles()->detach();
+        });
+    }
 }

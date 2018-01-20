@@ -198,7 +198,9 @@ class Admin
     /**
      * Set navbar.
      *
-     * @param Closure $builder
+     * @param Closure|null $builder
+     *
+     * @return Navbar
      */
     public function navbar(Closure $builder = null)
     {
@@ -231,9 +233,9 @@ class Admin
     public function registerAuthRoutes()
     {
         $attributes = [
-            'prefix'        => config('admin.route.prefix'),
-            'namespace'     => 'Encore\Admin\Controllers',
-            'middleware'    => config('admin.route.middleware'),
+            'prefix'     => config('admin.route.prefix'),
+            'namespace'  => 'Encore\Admin\Controllers',
+            'middleware' => config('admin.route.middleware'),
         ];
 
         Route::group($attributes, function ($router) {
@@ -257,6 +259,14 @@ class Admin
         });
     }
 
+    /**
+     * Extend a extension.
+     *
+     * @param string $name
+     * @param string $class
+     *
+     * @return void
+     */
     public static function extend($name, $class)
     {
         static::$extensions[$name] = $class;

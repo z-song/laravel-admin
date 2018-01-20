@@ -54,6 +54,13 @@ class Filter
     protected $useIdFilter = true;
 
     /**
+     * Id filter was removed.
+     *
+     * @var bool
+     */
+    protected $idFilterRemoved = false;
+
+    /**
      * Action of search form.
      *
      * @var string
@@ -102,6 +109,17 @@ class Filter
     }
 
     /**
+     * Remove ID filter if needed.
+     */
+    public function removeIDFilterIfNeeded()
+    {
+        if (!$this->useIdFilter && !$this->idFilterRemoved) {
+            array_shift($this->filters);
+            $this->idFilterRemoved = true;
+        }
+    }
+
+    /**
      * Get all conditions of the filters.
      *
      * @return array
@@ -126,6 +144,8 @@ class Filter
 
         $conditions = [];
 
+        $this->removeIDFilterIfNeeded();
+
         foreach ($this->filters() as $filter) {
             $conditions[] = $filter->condition($params);
         }
@@ -140,11 +160,23 @@ class Filter
      *
      * @return AbstractFilter
      */
-    public function addFilter(AbstractFilter $filter)
+    protected function addFilter(AbstractFilter $filter)
     {
         $filter->setParent($this);
 
         return $this->filters[] = $filter;
+    }
+
+    /**
+     * Use a custom filter.
+     *
+     * @param AbstractFilter $filter
+     *
+     * @return AbstractFilter
+     */
+    public function use(AbstractFilter $filter)
+    {
+        return $this->addFilter($filter);
     }
 
     /**
@@ -185,9 +217,7 @@ class Filter
      */
     public function render()
     {
-        if (!$this->useIdFilter) {
-            array_shift($this->filters);
-        }
+        $this->removeIDFilterIfNeeded();
 
         if (empty($this->filters)) {
             return '';
@@ -205,8 +235,8 @@ EOT;
         Admin::script($script);
 
         return view($this->view)->with([
-            'action'    => $this->action ?: $this->urlWithoutFilters(),
-            'filters'   => $this->filters,
+            'action'  => $this->action ?: $this->urlWithoutFilters(),
+            'filters' => $this->filters,
         ]);
     }
 

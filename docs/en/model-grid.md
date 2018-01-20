@@ -180,7 +180,7 @@ $grid->filter(function($filter){
     $filter->like('name', 'name');
 
     // sql: ... WHERE `user.email` = $email;
-    $filter->equal('emial', 'Email');
+    $filter->equal('email', 'Email');
 
     // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
     $filter->between('created_at', 'Created Time')->datetime();
