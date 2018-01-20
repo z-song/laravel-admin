@@ -288,10 +288,13 @@ class Grid
 
     public function setLabel($label , $relationColumn)
     {
-        $trans_key = 'validation.attributes.' . strtolower($relationColumn);
-
+        $trans_key = 'validation.attributes.' . $relationColumn;
+        $trans_key_low = strtolower($trans_key);
          if (empty($label) && Lang::has($trans_key)) {
-            $label = Lang::get($trans_key);
+             $label = Lang::get($trans_key);
+         }
+         if (empty($label) && Lang::has($trans_key_low)) {
+            $label = Lang::get($trans_key_low);
         }else if (empty($label)) {
              $label = ucfirst($relationColumn);
          }
@@ -879,7 +882,6 @@ class Grid
      */
     public function __call($method, $arguments)
     {
-//        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
         $label = isset($arguments[0]) ? $arguments[0] : null;
         $label = $this->setLabel($label,$method);
 
