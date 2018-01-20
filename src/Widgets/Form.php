@@ -37,7 +37,7 @@ use Illuminate\Contracts\Support\Renderable;
  * @method Field\Number         number($name, $label = '')
  * @method Field\Currency       currency($name, $label = '')
  * @method Field\Json           json($name, $label = '')
- * @method Field\SwitchField    switch($name, $label = '')
+ * @method Field\SwitchField    switch ($name, $label = '')
  * @method Field\Display        display($name, $label = '')
  * @method Field\Rate           rate($name, $label = '')
  * @method Field\Divide         divide()
@@ -45,6 +45,7 @@ use Illuminate\Contracts\Support\Renderable;
  * @method Field\Html           html($html)
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
+ * @method \App\Admin\Extensions\Form\Script script($script, $arguments)
  */
 class Form implements Renderable
 {
@@ -92,6 +93,8 @@ class Form implements Renderable
             'class'          => 'form-horizontal',
             'accept-charset' => 'UTF-8',
             'pjax-container' => true,
+            'fieldWidth'     => 8,
+            'labelWidth'     => 2,
         ];
     }
 
@@ -163,9 +166,11 @@ class Form implements Renderable
     public function setWidth($fieldWidth = 8, $labelWidth = 2)
     {
         collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
-            /* @var Field $field  */
+            /* @var Field $field */
             $field->setWidth($fieldWidth, $labelWidth);
         });
+        $this->attributes['fieldWidth'] = $fieldWidth;
+        $this->attributes['labelWidth'] = $labelWidth;
 
         return $this;
     }
@@ -214,8 +219,10 @@ class Form implements Renderable
         }
 
         return [
-            'fields'        => $this->fields,
-            'attributes'    => $this->formatAttribute(),
+            'fields'     => $this->fields,
+            'attributes' => $this->formatAttribute(),
+            'fieldWidth' => $this->attributes['fieldWidth'],
+            'labelWidth' => $this->attributes['labelWidth']
         ];
     }
 
