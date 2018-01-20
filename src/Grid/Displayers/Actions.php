@@ -2,10 +2,12 @@
 
 namespace Encore\Admin\Grid\Displayers;
 
+use App\Admin\Extensions\Grid\Displayers\TCustomActions;
 use Encore\Admin\Admin;
 
 class Actions extends AbstractDisplayer
 {
+    use TCustomActions;
     /**
      * @var array
      */
@@ -150,7 +152,7 @@ class Actions extends AbstractDisplayer
      *
      * @return string
      */
-    protected function editAction()
+    protected function ___editAction()
     {
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getKey()}/edit">
@@ -164,7 +166,7 @@ EOT;
      *
      * @return string
      */
-    protected function deleteAction()
+    protected function ___deleteAction()
     {
         $deleteConfirm = trans('admin.delete_confirm');
         $confirm = trans('admin.confirm');
@@ -218,4 +220,27 @@ SCRIPT;
 </a>
 EOT;
     }
+
+    protected function editAction()
+    {
+        $_edit =  trans('admin.edit');
+        return <<<EOT
+<a class="btn btn-xs btn-default" href="{$this->getResource()}/{$this->getKey()}/edit">
+    <i class="fa fa-edit"></i> $_edit
+</a>
+EOT;
+
+    }
+
+    protected function deleteAction()
+    {
+        $this->___deleteAction();
+        $_delete =  trans('admin.delete');
+        return <<<EOT
+<a href="javascript:void(0);" data-id="{$this->getKey()}" class="grid-row-delete btn btn-xs btn-danger">
+    <i class="fa fa-trash"></i> $_delete
+</a>
+EOT;
+    }
+
 }
