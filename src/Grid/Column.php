@@ -9,6 +9,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Lang;
 
 class Column
 {
@@ -548,6 +549,20 @@ class Column
 
         return $this;
     }
+    public function setLabel($label)
+    {
+        $trans_key = 'validation.attributes.' . $label;
+        $trans_key_low = strtolower($trans_key);
+        if (Lang::has($trans_key)) {
+            $label = Lang::get($trans_key);
+        }
+        if (Lang::has($trans_key_low)) {
+            $label = Lang::get($trans_key_low);
+        }else {
+            $label = ucfirst($label);
+        }
+        return $label;
+    }
 
     /**
      * Passes through all unknown calls to builtin displayer or supported displayer.
@@ -564,6 +579,7 @@ class Column
         if ($this->isRelation() && !$this->relationColumn) {
             $this->name = "{$this->relation}.$method";
             $this->label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
+            $this->label = $this->setLabel($this->label);
 
             $this->relationColumn = $method;
 
