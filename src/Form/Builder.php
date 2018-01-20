@@ -98,6 +98,11 @@ class Builder
     public $RuleMessages = [];
 
     /**
+     * @var string
+     */
+    public $Title = '';
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -351,8 +356,18 @@ class Builder
     /**
      * @return string
      */
+    public function setTitle($title)
+    {
+        return $this->Title = $title;
+    }
+
+    /**
+     * @return string
+     */
     public function title()
     {
+        if ($this->Title != "") return $this->Title;
+
         if ($this->mode == static::MODE_CREATE) {
             return trans('admin.create');
         }
