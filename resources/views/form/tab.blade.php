@@ -11,7 +11,6 @@
 
     </ul>
     <div class="tab-content fields-group">
-
         @foreach($tabObj->getTabs() as $tab)
             <div class="tab-pane {{ $tab['active'] ? 'active' : '' }}" id="tab-{{ $tab['id'] }}">
                 @if(!empty($tab['rows']))
@@ -23,6 +22,7 @@
                         {!! $field->render() !!}
                     @endforeach
                 @endif
+
             </div>
         @endforeach
 

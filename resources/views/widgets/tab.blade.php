@@ -17,7 +17,7 @@
             </ul>
         </li>
         @endif
-        <li class="pull-right header">{{ $title }}</li>
+        <li class="pull-left header">{{ $title }}</li>
     </ul>
     <div class="tab-content">
         @foreach($tabs as $id => $tab)

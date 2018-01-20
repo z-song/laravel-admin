@@ -1,7 +1,7 @@
 <div {!! $attributes !!}>
     <div class="box-header with-border">
         <h3 class="box-title">{{ $title }}</h3>
-        <div class="box-tools pull-right">
+        <div class="box-tools pull-left">
             @foreach($tools as $tool)
                 {!! $tool !!}
                 @endforeach
