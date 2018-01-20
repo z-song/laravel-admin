@@ -9,7 +9,9 @@
 
     <!-- /.box-body -->
     <div class="box-footer">
+    @if( ! $method == 'GET')
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+<<<<<<< HEAD
         <div class="form-group">
             <div class="col-md-{{ $labelWidth }}"></div>
             <div class="col-md-{{ $fieldWidth }}">
@@ -19,6 +21,10 @@
                 <div class="btn-group pull-right">
                     <button type="submit" class="btn btn-info pull-left">{{ trans('admin.submit') }}</button>
                 </div>
+=======
+    @endif
+        <div class="col-md-2"></div>
+>>>>>>> 1.5
 
             </div>
         </div>

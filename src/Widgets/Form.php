@@ -221,8 +221,12 @@ class Form implements Renderable
         return [
             'fields'     => $this->fields,
             'attributes' => $this->formatAttribute(),
+<<<<<<< HEAD
             'fieldWidth' => $this->attributes['fieldWidth'],
             'labelWidth' => $this->attributes['labelWidth']
+=======
+            'method'     => $this->attributes['method'],
+>>>>>>> 1.5
         ];
     }
 
