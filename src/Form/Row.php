@@ -23,6 +23,9 @@ use Illuminate\Contracts\Support\Renderable;
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\Map            map($latitude, $longitude, $label = '')
+ * @method \App\Admin\Extensions\Form\GeoCompleteMap  geocompletemap($latitude, $longitude, $label = '')
+ * @method \App\Admin\Extensions\Form\multiSelectTag  multiselect_tags($column, $label = '')
+ * @method \App\Admin\Extensions\Form\InstagramAddSelect2  instagram_add_select2($column, $label = '',$select2_class = '')
  * @method Field\Editor         editor($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
@@ -133,7 +136,7 @@ class Row implements Renderable
     {
         $field = $this->form->__call($method, $arguments);
 
-        $field->disableHorizontal();
+//        $field->disableHorizontal();
 
         $this->fields[] = [
             'width'   => $this->defaultFieldWidth,
