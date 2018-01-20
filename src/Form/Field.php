@@ -212,7 +212,7 @@ class Field implements Renderable
         $this->column = $column;
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($column);
-        $this->local = config('app.locale');
+        $this->local = config('app.locale', 'en');
     }
 
     /**

@@ -14,8 +14,8 @@ class Editor extends Field
     {
         parent::__construct($column, $arguments);
 
-        $this->options(['contentsLangDirection' => 'ltr']);
-        $this->options(['language' => config('app.locale', 'en')]);
+        $this->options(['contentsLangDirection' => $this->direction]);
+        $this->options(['language' => $this->local]);
 
     }
 
@@ -28,7 +28,7 @@ class Editor extends Field
      * @param string $dir
      * @return $this
      */
-    public function dir($dir)
+    public function ckdir($dir ='ltr')
     {
         return $this->options(['contentsLangDirection' => $dir]);
     }
