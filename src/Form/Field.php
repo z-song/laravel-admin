@@ -195,6 +195,13 @@ class Field implements Renderable
     protected $local = "en";
 
     /**
+     * ltr or rtl
+     *
+     * @var string
+     */
+    protected $direction = "ltr";
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -750,17 +757,13 @@ class Field implements Renderable
             ];
         }
 
-        return [
-            'label'      => '',
-            'field'      => '',
-            'form-group' => ''
-        ];
+        return ['label' => '', 'field' => '', 'form-group' => ''];
     }
 
     /**
      * Set form element class.
      *
-     * @param string $class
+     * @param string|array $class
      *
      * @return $this
      */
@@ -895,6 +898,7 @@ class Field implements Renderable
             'errorKey'    => $this->getErrorKey(),
             'attributes'  => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),
+
         ]);
     }
 
@@ -936,6 +940,30 @@ class Field implements Renderable
     public function getScript()
     {
         return $this->script;
+    }
+
+    /**
+     * Set direction setting.
+     * @param string $dir ltr or rtl
+     * @return $this
+     */
+    public function dir($dir = 'ltr')
+    {
+        $this->direction = $dir;
+
+        return $this;
+    }
+
+    /**
+     * set local
+     * @param string $local
+     * @return $this
+     */
+    public function setLocal($local = 'en')
+    {
+        $this->local = $local;
+
+        return $this;
     }
 
     /**

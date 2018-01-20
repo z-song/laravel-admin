@@ -9,42 +9,29 @@ use Illuminate\Support\Str;
 
 class Select extends Field
 {
-
-    protected $direction = "ltr";
-
+    /**
+     * @var array
+     */
     protected static $css = [
         '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.min.css',
     ];
 
+    /**
+     * @var array
+     */
     protected static $js = [
         '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.full.min.js',
     ];
 
-    public function render()
-    {
-        if (empty($this->script)) {
-            $this->script = <<<EOF
-$("{$this->getElementClassSelector()}").select2({
-    dir: "$this->direction",
-    language : "$this->local",
-    allowClear: true,
-    placeholder: "{$this->label}"
-});
-EOF;
-        }
+    /**
+     * @var array
+     */
+    protected $groups = [];
 
-        if ($this->options instanceof \Closure) {
-            if ($this->form) {
-                $this->options = $this->options->bindTo($this->form->model());
-            }
-
-            $this->options(call_user_func($this->options, $this->value));
-        }
-
-        $this->options = array_filter($this->options);
-
-        return parent::render()->with(['options' => $this->options]);
-    }
+    /**
+     * @var array
+     */
+    protected $config = [];
 
     /**
      * Set options.
@@ -57,10 +44,7 @@ EOF;
     {
         // remote options
         if (is_string($options)) {
-            return call_user_func_array([
-                $this,
-                'loadOptionsFromRemote'
-            ], func_get_args());
+            return $this->loadRemoteOptions(...func_get_args());
         }
 
         if ($options instanceof Arrayable) {
@@ -70,19 +54,37 @@ EOF;
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array)$options;
+            $this->options = (array) $options;
         }
 
         return $this;
     }
 
     /**
-     * Set direction setting of select2.
-     *
+     * @param array $groups
      */
-    public function dir($dir = 'ltr')
+
+    /**
+     * Set option groups.
+     *
+     * eg: $group = [
+     *        [
+     *        'label' => 'xxxx',
+     *        'options' => [
+     *            1 => 'foo',
+     *            2 => 'bar',
+     *            ...
+     *        ],
+     *        ...
+     *     ]
+     *
+     * @param array $groups
+     *
+     * @return $this
+     */
+    public function groups(array $groups)
     {
-        $this->direction = $dir;
+        $this->groups = $groups;
 
         return $this;
     }
@@ -101,16 +103,13 @@ EOF;
     {
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
-            $class = str_replace([
-                '[',
-                ']'
-            ], '_', $field);
+            $class = str_replace(['[', ']'], '_', $field);
         } else {
             $class = $field;
         }
 
         $script = <<<EOT
-
+$(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
@@ -142,10 +141,10 @@ EOT;
      *
      * @return $this
      */
-    protected function loadOptionsFromRemote($url, $parameters = [], $options = [])
+    protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url . '?' . http_build_query($parameters),
+            'url' => $url.'?'.http_build_query($parameters),
         ];
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
@@ -154,10 +153,10 @@ EOT;
 
 $.ajax($ajaxOptions).done(function(data) {
   $("{$this->getElementClassSelector()}").select2({
-      dir: "$this->direction",
-      language : "$this->local",
-      data: data
-      });
+     dir: "$this->direction",
+     language : "$this->local",
+     data: data
+  });
 });
 
 EOT;
@@ -169,8 +168,8 @@ EOT;
      * Load options from ajax results.
      *
      * @param string $url
-     * @param        $idField
-     * @param        $textField
+     * @param $idField
+     * @param $textField
      *
      * @return $this
      */
@@ -179,8 +178,6 @@ EOT;
         $this->script = <<<EOT
 
 $("{$this->getElementClassSelector()}").select2({
-  dir: "$this->direction",
-  language : "$this->local",
   ajax: {
     url: "$url",
     dataType: 'json',
@@ -210,11 +207,64 @@ $("{$this->getElementClassSelector()}").select2({
   minimumInputLength: 1,
   escapeMarkup: function (markup) {
       return markup;
-  }
+  },
+  dir: "$this->direction",
+  language : "$this->local",
 });
 
 EOT;
 
         return $this;
+    }
+
+    /**
+     * Set config for select2.
+     *
+     * all configurations see https://select2.org/configuration/options-api
+     *
+     * @param string $key
+     * @param mixed  $val
+     *
+     * @return $this
+     */
+    public function config($key, $val)
+    {
+        $this->config[$key] = $val;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function render()
+    {
+        $configs = array_merge([
+            'allowClear'  => true,
+            'placeholder' => $this->label,
+            'dir'=> "$this->direction",
+            'language' => "$this->local"
+        ], $this->config);
+
+        $configs = json_encode($configs);
+
+        if (empty($this->script)) {
+            $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
+        }
+
+        if ($this->options instanceof \Closure) {
+            if ($this->form) {
+                $this->options = $this->options->bindTo($this->form->model());
+            }
+
+            $this->options(call_user_func($this->options, $this->value));
+        }
+
+        $this->options = array_filter($this->options);
+
+        return parent::render()->with([
+            'options' => $this->options,
+            'groups'  => $this->groups,
+        ]);
     }
 }
