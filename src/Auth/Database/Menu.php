@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\DB;
  */
 class Menu extends Model
 {
-    use ModelTree, AdminBuilder;
+    use AdminBuilder, ModelTree {
+        ModelTree::boot as treeBoot;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -74,7 +76,7 @@ class Menu extends Model
      */
     protected static function boot()
     {
-        parent::boot();
+        static::treeBoot();
 
         static::deleting(function ($model) {
             $model->roles()->detach();

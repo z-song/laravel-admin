@@ -40,6 +40,7 @@ class MenuController extends Controller
                     $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin.uri'));
                     $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
+                    $form->hidden('_token')->default(csrf_token());
 
                     $column->append((new Box(trans('admin.new'), $form))->style('success'));
                 });
