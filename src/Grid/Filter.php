@@ -73,6 +73,14 @@ class Filter
     protected $view = 'admin::filter.modal';
 
     /**
+     * optional data
+     *
+     * @var null|Closure|Collection
+     */
+    protected $data;
+
+
+    /**
      * Create a new filter instance.
      *
      * @param Model $model
@@ -196,7 +204,15 @@ class Filter
      */
     public function execute()
     {
-        return $this->model->addConditions($this->conditions())->buildData();
+        if ($this->data instanceof Closure) {
+            $data = call_user_func($this->data, $this);
+        } elseif ($this->data instanceof Collection) {
+            $data = $this->data->toArray();
+        } else {
+            $data = $this->model->addConditions($this->conditions())->buildData();
+        }
+
+        return $data;
     }
 
     /**
@@ -265,6 +281,18 @@ EOT;
         return count($request->query()) > 0
             ? $request->url().$question.http_build_query($query)
             : $request->fullUrl();
+    }
+
+    /**
+     * Set optional data
+     *
+     * @param $data
+     *
+     * @author HaiXin
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
     }
 
     /**
