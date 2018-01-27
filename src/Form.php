@@ -502,17 +502,10 @@ class Form
     {
         $data = Input::all();
 
-        $isEditable = $this->isEditable($data);
-
         $data = $this->handleEditable($data);
 
-        $data = $this->handleFileDelete($data);
-
-        if ($this->handleOrderable($id, $data)) {
-            return response([
-                'status'  => true,
-                'message' => trans('admin.update_succeeded'),
-            ]);
+        if (!$this->validate($data)) {
+            return back()->withInput()->withErrors($this->validator->messages());
         }
 
         /* @var Model $this->model */
@@ -641,6 +634,25 @@ class Form
         }
 
         return false;
+    }
+
+    /**
+     * Handle editable update.
+     *
+     * @param $data
+     * @return array
+     */
+    protected function handleEditable(array $data = [])
+    {
+        if (array_key_exists('_editable', $data)) {
+            $name  = $data['name'];
+            $value = $data['value'];
+
+            array_forget($data, ['pk', 'value', 'name']);
+            array_set($data, $name, $value);
+        }
+
+        return $data;
     }
 
     /**

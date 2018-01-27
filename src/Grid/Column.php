@@ -3,25 +3,15 @@
 namespace Encore\Admin\Grid;
 
 use Closure;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
-use Encore\Admin\Grid\Displayers\AbstractDisplayer;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 class Column
 {
-    /**
-     * @var Grid
-     */
     protected $grid;
 
-    /**
-     * Name of column.
-     *
-     * @var string
-     */
     protected $name;
 
     /**
@@ -120,6 +110,11 @@ class Column
         $this->name = $name;
 
         $this->label = $this->formatLabel($label);
+    }
+
+    public function setGrid(Grid $grid)
+    {
+        $this->grid = $grid;
     }
 
     /**
@@ -276,6 +271,25 @@ class Column
         return (bool) $this->relation;
     }
 
+    public function map($data)
+    {
+        foreach ($data as &$item) {
+            $this->original = $value = array_get($item, $this->name);
+
+            if ($this->hasValueWrapper()) {
+                $value = call_user_func($this->valueWrapper, $value);
+                array_set($item, $this->name, $value);
+            }
+
+            if ($this->hasHtmlWrapper()) {
+                $value = $this->htmlWrap($value, $item);
+                array_set($item, $this->name, $value);
+            }
+        }
+
+        return $data;
+    }
+
     /**
      * Mark this column as sortable.
      *
@@ -385,7 +399,22 @@ class Column
     }
 
     /**
-     * Use a defined column.
+     * Make the column editable.
+     *
+     * @return $this
+     */
+    public function editable()
+    {
+        $editable = new Editable($this->name, func_get_args());
+        $editable->setResource($this->grid->resource());
+
+        $this->htmlWrapper($editable->html());
+
+        return $this;
+    }
+
+    /**
+     * Set html wrapper.
      *
      * @throws \Exception
      */
@@ -423,7 +452,7 @@ class Column
      *
      * @return mixed
      */
-    protected function htmlEntityEncode($item)
+    protected function htmlWrap($value, $row = [])
     {
         if (is_array($item)) {
             array_walk_recursive($item, function (&$value) {
@@ -433,7 +462,10 @@ class Column
             $item = htmlentities($item);
         }
 
-        return $item;
+        $value = str_replace('{$value}', is_null($this->original) ? 'NULL' : $this->original , $value);
+        $value = str_replace('{pk}', array_get($row, $this->grid->getKeyName()), $value);
+
+        return $value;
     }
 
     /**

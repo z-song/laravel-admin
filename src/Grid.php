@@ -191,60 +191,7 @@ class Grid
     }
 
     /**
-     * Setup grid tools.
-     */
-    public function setupTools()
-    {
-        $this->tools = new Tools($this);
-    }
-
-    /**
-     * Setup grid filter.
-     *
-     * @return void
-     */
-    protected function setupFilter()
-    {
-        $this->filter = new Filter($this->model());
-    }
-
-    /**
-     * Setup grid exporter.
-     *
-     * @return void
-     */
-    protected function setupExporter()
-    {
-        if ($scope = Input::get(Exporter::$queryName)) {
-            $this->model()->usePaginate(false);
-
-            call_user_func($this->builder, $this);
-
-            (new Exporter($this))->resolve($this->exporter)->withScope($scope)->export();
-        }
-    }
-
-    /**
-     * Get or set option for grid.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return $this|mixed
-     */
-    public function option($key, $value = null)
-    {
-        if (is_null($value)) {
-            return $this->options[$key];
-        }
-
-        $this->options[$key] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get primary key name of model.
+     * Get primary key name of model
      *
      * @return string
      */
@@ -325,8 +272,13 @@ class Grid
      */
     protected function addColumn($column = '', $label = '')
     {
+        //$label = $label ?: Str::upper($column);
+
         $column = new Column($column, $label);
         $column->setGrid($this);
+
+        return $this->columns[] = $column;
+    }
 
         return $this->columns[] = $column;
     }
