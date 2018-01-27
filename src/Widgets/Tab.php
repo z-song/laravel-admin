@@ -6,27 +6,67 @@ use Illuminate\Contracts\Support\Renderable;
 
 class Tab extends Widget implements Renderable
 {
-    protected $attributes = [
+    /**
+     * @var string
+     */
+    protected $view = 'admin::widgets.tab';
+
+    /**
+     * @var array
+     */
+    protected $data = [
+        'id'       => '',
         'title'    => '',
         'tabs'     => [],
         'dropDown' => [],
+        'active'   => 0,
     ];
 
-    public function add($title, $content)
+    public function __construct()
     {
-        $this->attributes['tabs'][] = [
+        $this->class('nav-tabs-custom');
+    }
+
+    /**
+     * Add a tab and its contents.
+     *
+     * @param string            $title
+     * @param string|Renderable $content
+     *
+     * @return $this
+     */
+    public function add($title, $content, $active = false)
+    {
+        $this->data['tabs'][] = [
+            'id'      => mt_rand(),
             'title'   => $title,
             'content' => $content,
         ];
 
+        if ($active) {
+            $this->data['active'] = count($this->data['tabs']) - 1;
+        }
+
         return $this;
     }
 
+    /**
+     * Set title.
+     *
+     * @param string $title
+     */
     public function title($title = '')
     {
-        $this->attributes['title'] = $title;
+        $this->data['title'] = $title;
     }
 
+    /**
+     * Set drop-down items.
+     *
+     * @param array $links
+     *
+     * @return $this
+     */
     public function dropDown(array $links)
     {
         if (is_array($links[0])) {
@@ -37,7 +77,7 @@ class Tab extends Widget implements Renderable
             return $this;
         }
 
-        $this->attributes['dropDown'][] = [
+        $this->data['dropDown'][] = [
             'name' => $links[0],
             'href' => $links[1],
         ];
@@ -45,8 +85,15 @@ class Tab extends Widget implements Renderable
         return $this;
     }
 
+    /**
+     * Render Tab.
+     *
+     * @return string
+     */
     public function render()
     {
-        return view('admin::widgets.tab', $this->attributes)->render();
+        $variables = array_merge($this->data, ['attributes' => $this->formatAttributes()]);
+
+        return view($this->view, $variables)->render();
     }
 }

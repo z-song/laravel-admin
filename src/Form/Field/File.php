@@ -3,78 +3,117 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
 {
-    const ACTION_KEEP = 0;
-    const ACTION_REMOVE = 1;
+    use UploadField;
 
-    protected $directory = '';
+    /**
+     * Css.
+     *
+     * @var array
+     */
+    protected static $css = [
+        '/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.3.7',
+    ];
 
-    protected $name = null;
+    /**
+     * Js.
+     *
+     * @var array
+     */
+    protected static $js = [
+        '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
+        '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
+    ];
 
-    protected $options = [];
-
-    protected $storage = '';
-
+    /**
+     * Create a new File instance.
+     *
+     * @param string $column
+     * @param array  $arguments
+     */
     public function __construct($column, $arguments = [])
     {
-        $this->initOptions();
         $this->initStorage();
 
         parent::__construct($column, $arguments);
     }
 
-    protected function initOptions()
-    {
-        $this->options = [
-            'overwriteInitial'  => true,
-            'showUpload'        => false,
-            'language'          => config('app.locale'),
-        ];
-    }
-
-    protected function initStorage()
-    {
-        $this->storage = Storage::disk(config('admin.upload.disk'));
-    }
-
-    public function defaultStorePath()
+    /**
+     * Default directory for file to upload.
+     *
+     * @return mixed
+     */
+    public function defaultDirectory()
     {
         return config('admin.upload.directory.file');
     }
 
-    public function move($directory, $name = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidator(array $input)
     {
-        $this->directory = $directory;
-
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function prepare(UploadedFile $file = null)
-    {
-        if (is_null($file)) {
-            if ($this->isDeleteRequest()) {
-                return '';
-            }
-
-            return $this->original;
+        if (request()->has(static::FILE_DELETE_FLAG)) {
+            return false;
         }
 
-        $this->directory = $this->directory ?: $this->defaultStorePath();
+        if ($this->validator) {
+            return $this->validator->call($this, $input);
+        }
 
-        $this->name = $this->name ?: $file->getClientOriginalName();
+        /*
+         * If has original value, means the form is in edit mode,
+         * then remove required rule from rules.
+         */
+        if ($this->original()) {
+            $this->removeRule('required');
+        }
+
+        /*
+         * Make input data validatable if the column data is `null`.
+         */
+        if (array_has($input, $this->column) && is_null(array_get($input, $this->column))) {
+            $input[$this->column] = '';
+        }
+
+        $rules = $attributes = [];
+
+        if (!$fieldRules = $this->getRules()) {
+            return false;
+        }
+
+        $rules[$this->column] = $fieldRules;
+        $attributes[$this->column] = $this->label;
+
+        return Validator::make($input, $rules, $this->validationMessages, $attributes);
+    }
+
+    /**
+     * Prepare for saving.
+     *
+     * @param UploadedFile|array $file
+     *
+     * @return mixed|string
+     */
+    public function prepare($file)
+    {
+        if (request()->has(static::FILE_DELETE_FLAG)) {
+            return $this->destroy();
+        }
+
+        $this->name = $this->getStoreName($file);
 
         return $this->uploadAndDeleteOriginal($file);
     }
 
     /**
-     * @param $file
+     * Upload file and delete original file.
+     *
+     * @param UploadedFile $file
      *
      * @return mixed
      */
@@ -82,100 +121,71 @@ class File extends Field
     {
         $this->renameIfExists($file);
 
-        $target = $this->directory.'/'.$this->name;
-
-        $this->storage->put($target, file_get_contents($file->getRealPath()));
+        $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
 
         $this->destroy();
 
-        return $target;
+        return $path;
     }
 
+    /**
+     * Preview html for file-upload plugin.
+     *
+     * @return string
+     */
     protected function preview()
     {
-        $fileName = basename($this->value);
-
-        return <<<EOT
-<div class="file-preview-other-frame">
-   <div class="file-preview-other">
-   <span class="file-icon-4x"><i class="fa fa-file"></i></span>
-</div>
-   </div>
-   <div class="file-preview-other-footer"><div class="file-thumbnail-footer">
-    <div class="file-footer-caption">{$fileName}</div>
-</div></div>
-EOT;
+        return $this->objectUrl($this->value);
     }
 
-    public function options($options = [])
+    /**
+     * Initialize the caption.
+     *
+     * @param string $caption
+     *
+     * @return string
+     */
+    protected function initialCaption($caption)
     {
-        $this->options = array_merge($this->options, $options);
-
-        return $this;
+        return basename($caption);
     }
 
-    public function objectUrl($path)
+    /**
+     * @return array
+     */
+    protected function initialPreviewConfig()
     {
-        return trim(config('admin.upload.host'), '/').'/'.trim($path, '/');
+        return [
+            ['caption' => basename($this->value), 'key' => 0],
+        ];
     }
 
+    /**
+     * Render file upload field.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render()
     {
-        $this->js[] = 'bootstrap-fileinput/js/fileinput_locale_'.config('app.locale').'.js';
-
-        $this->options['initialCaption'] = basename($this->value);
+        $this->setupDefaultOptions();
 
         if (!empty($this->value)) {
-            $this->options['initialPreview'] = $this->preview();
+            $this->attribute('data-initial-preview', $this->preview());
+            $this->attribute('data-initial-caption', $this->initialCaption($this->value));
+
+            $this->setupPreviewOptions();
         }
+
+        $this->options(['overwriteInitial' => true]);
 
         $options = json_encode($this->options);
 
         $this->script = <<<EOT
 
-$("#{$this->id}").fileinput({$options});
-
-$("#{$this->id}").on('filecleared', function(event) {
-    $("#{$this->id}_action").val(1);
-});
+$("input{$this->getElementClassSelector()}").fileinput({$options});
 
 EOT;
 
         return parent::render();
-    }
-
-    /**
-     * If is delete request then delete original image.
-     *
-     * @return bool
-     */
-    public function isDeleteRequest()
-    {
-        $action = Input::get($this->id.'_action');
-
-        if ($action == static::ACTION_REMOVE) {
-            $this->destroy();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $file
-     *
-     * @return void
-     */
-    public function renameIfExists(UploadedFile $file)
-    {
-        if ($this->storage->exists("$this->directory/$this->name")) {
-            $this->name = md5(uniqid()).'.'.$file->guessExtension();
-        }
-    }
-
-    public function destroy()
-    {
-        $this->storage->delete($this->original);
     }
 }

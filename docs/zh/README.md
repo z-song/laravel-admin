@@ -21,6 +21,8 @@ Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd
 安装
 ------------
 
+首先确保安装好了`laravel`，并且数据库连接设置正确。
+
 ```
 Laravel 5.2
 composer require encore/laravel-admin "dev-master"
@@ -35,7 +37,7 @@ composer require encore/laravel-admin "1.1.x-dev"
 在`config/app.php`加入`ServiceProvider`:
 
 ```
-Encore\Admin\Providers\AdminServiceProvider::class
+Encore\Admin\AdminServiceProvider::class
 ```
 
 然后运行下面的命令完成安装：
@@ -47,6 +49,11 @@ php artisan admin:install
 
 启动服务后，在浏览器打开 `http://localhost/admin/` ,使用用户名 `admin` 和密码 `admin`登陆.
 
+默认配置
+------------
+
+安装完成之后，`laravel-admin`所有的配置都在`config/admin.php`文件中。
+
 使用文档
 ------------
 
@@ -57,6 +64,7 @@ php artisan admin:install
 - [数据模型表格](/docs/zh/model-grid.md)
 - [数据模型表单](/docs/zh/model-form.md)
   - [图片/文件上传](/docs/zh/form-upload.md)
+  - [form组件管理](/docs/zh/field-management.md)
 - [组件](/docs/zh/widgets/table.md)
   - [表格](/docs/zh/widgets/table.md)
   - [表单](/docs/zh/widgets/form.md)
@@ -71,6 +79,14 @@ php artisan admin:install
 目录结构
 ------------
 安装完成之后，后台的安装目录为`app/Admin`，之后大部分的后台开发编码工作都是在这个目录下进行。
+
+```
+app/Admin
+├── Controllers
+│   ├── ExampleController.php
+│   └── HomeController.php
+└── routes.php
+```
 
 `app/Admin/routes.php`文件用来配置后台路由，详细使用请阅读[路由配置](/docs/zh/router.md)。
 
@@ -119,7 +135,9 @@ $router->resource('users', UserController::class);
 
 然后就能在后台管理页面的左侧边栏看到用户管理页面的链接入口了。
 
-对于数据表格(model-grid)和数据表单(model-form)的详细使用请查看[model-grid](/docs/zh/model-grid.md)和[model-form](/docs/zh/model-form.md)。
+### 4.创建表格表单
+
+剩下的工作就是构建数据表格和表单了，打开 `app/Admin/Contollers/UserController.php`,找到`form()`和`grid()`方法，然添加构建代码,更多详细使用请查看[model-grid](/docs/zh/model-grid.md)和[model-form](/docs/zh/model-form.md)。
 
 其它
 ------------
@@ -127,7 +145,6 @@ $router->resource('users', UserController::class);
 
 + [Laravel](https://laravel.com/)
 + [AdminLTE](https://almsaeedstudio.com/)
-+ [Bootstrap Markdown](http://toopay.github.io/bootstrap-markdown/)
 + [Datetimepicker](http://eonasdan.github.io/bootstrap-datetimepicker/)
 + [CodeMirror](https://codemirror.net/)
 + [font-awesome](http://fontawesome.io)
@@ -138,6 +155,8 @@ $router->resource('users', UserController::class);
 + [jquery-pjax](https://github.com/defunkt/jquery-pjax)
 + [Nestable](http://dbushell.github.io/Nestable/)
 + [noty](http://ned.im/noty/)
++ [X-editable](http://github.com/vitalets/x-editable)
++ [bootstrap-number-input](https://github.com/wpic/bootstrap-number-input)
 
 交流
 ------------

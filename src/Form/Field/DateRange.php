@@ -6,7 +6,23 @@ use Encore\Admin\Form\Field;
 
 class DateRange extends Field
 {
+    protected static $css = [
+        '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+    ];
+
+    protected static $js = [
+        '/vendor/laravel-admin/moment/min/moment-with-locales.min.js',
+        '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+    ];
+
     protected $format = 'YYYY-MM-DD';
+
+    /**
+     * Column name.
+     *
+     * @var string
+     */
+    protected $column = [];
 
     public function __construct($column, $arguments)
     {
@@ -20,6 +36,15 @@ class DateRange extends Field
         $this->options(['format' => $this->format]);
     }
 
+    public function prepare($value)
+    {
+        if ($value === '') {
+            $value = null;
+        }
+
+        return $value;
+    }
+
     public function render()
     {
         $this->options['locale'] = config('app.locale');
@@ -27,14 +52,16 @@ class DateRange extends Field
         $startOptions = json_encode($this->options);
         $endOptions = json_encode($this->options + ['useCurrent' => false]);
 
+        $class = $this->getElementClassSelector();
+
         $this->script = <<<EOT
-            $('#{$this->id['start']}').datetimepicker($startOptions);
-            $('#{$this->id['end']}').datetimepicker($endOptions);
-            $("#{$this->id['start']}").on("dp.change", function (e) {
-                $('#{$this->id['end']}').data("DateTimePicker").minDate(e.date);
+            $('{$class['start']}').datetimepicker($startOptions);
+            $('{$class['end']}').datetimepicker($endOptions);
+            $("{$class['start']}").on("dp.change", function (e) {
+                $('{$class['end']}').data("DateTimePicker").minDate(e.date);
             });
-            $("#{$this->id['end']}").on("dp.change", function (e) {
-                $('#{$this->id['start']}').data("DateTimePicker").maxDate(e.date);
+            $("{$class['end']}").on("dp.change", function (e) {
+                $('{$class['start']}').data("DateTimePicker").maxDate(e.date);
             });
 EOT;
 

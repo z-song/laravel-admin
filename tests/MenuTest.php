@@ -29,16 +29,14 @@ class MenuTest extends TestCase
         $item = ['parent_id' => '0', 'title' => 'Test', 'uri' => 'test'];
 
         $this->visit('admin/auth/menu')
-            ->click('New')
-            ->seePageIs('admin/auth/menu/create')
+            ->seePageIs('admin/auth/menu')
             ->see('Menu')
-            ->see('Tips')
             ->submitForm('Submit', $item)
             ->seePageIs('admin/auth/menu')
             ->seeInDatabase(config('admin.database.menu_table'), $item)
             ->assertEquals(8, Menu::count());
 
-        $this->setExpectedException(Illuminate\Foundation\Testing\HttpException::class);
+        $this->expectException(\Laravel\BrowserKitTesting\HttpException::class);
 
         $this->visit('admin')
             ->see('Test')
@@ -59,5 +57,20 @@ class MenuTest extends TestCase
             ->seePageIs('admin/auth/menu')
             ->seeInDatabase(config('admin.database.menu_table'), ['title' => 'blablabla'])
             ->assertEquals(7, Menu::count());
+    }
+
+    public function testShowPage()
+    {
+        $this->visit('admin/auth/menu/1')
+            ->seePageIs('admin/auth/menu/1/edit');
+    }
+
+    public function testEditMenuParent()
+    {
+        $this->expectException(\Laravel\BrowserKitTesting\HttpException::class);
+
+        $this->visit('admin/auth/menu/5/edit')
+            ->see('Menu')
+            ->submitForm('Save', ['parent_id' => 5]);
     }
 }

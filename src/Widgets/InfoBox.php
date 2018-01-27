@@ -6,7 +6,15 @@ use Illuminate\Contracts\Support\Renderable;
 
 class InfoBox extends Widget implements Renderable
 {
-    protected $attributes = [];
+    /**
+     * @var string
+     */
+    protected $view = 'admin::widgets.info-box';
+
+    /**
+     * @var array
+     */
+    protected $data = [];
 
     /**
      * InfoBox constructor.
@@ -16,20 +24,17 @@ class InfoBox extends Widget implements Renderable
      * @param string $color
      * @param string $link
      * @param string $info
-     *
-     * @return InfoBox
      */
     public function __construct($name, $icon, $color, $link, $info)
     {
-        $this->attributes = [
-            'name'  => $name,
-            'icon'  => $icon,
-            'color' => $color,
-            'link'  => $link,
-            'info'  => $info,
+        $this->data = [
+            'name' => $name,
+            'icon' => $icon,
+            'link' => $link,
+            'info' => $info,
         ];
 
-        return $this;
+        $this->class("small-box bg-$color");
     }
 
     /**
@@ -37,6 +42,8 @@ class InfoBox extends Widget implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.infoBox', $this->attributes)->render();
+        $variables = array_merge($this->data, ['attributes' => $this->formatAttributes()]);
+
+        return view($this->view, $variables)->render();
     }
 }

@@ -6,6 +6,7 @@ use Closure;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class Column
 {
@@ -13,24 +14,97 @@ class Column
 
     protected $name;
 
+    /**
+     * Label of column.
+     *
+     * @var string
+     */
     protected $label;
 
+    /**
+     * Original value of column.
+     *
+     * @var mixed
+     */
     protected $original;
 
+    /**
+     * Is column sortable.
+     *
+     * @var bool
+     */
     protected $sortable = false;
 
+    /**
+     * Sort arguments.
+     *
+     * @var array
+     */
     protected $sort;
 
+    /**
+     * Attributes of column.
+     *
+     * @var array
+     */
     protected $attributes = [];
 
-    protected $valueWrapper;
-
-    protected $htmlWrappers = [];
-
+    /**
+     * Relation name.
+     *
+     * @var bool
+     */
     protected $relation = false;
 
+    /**
+     * Relation column.
+     *
+     * @var string
+     */
     protected $relationColumn;
 
+    /**
+     * Original grid data.
+     *
+     * @var array
+     */
+    protected static $originalGridData = [];
+
+    /**
+     * @var []Closure
+     */
+    protected $displayCallbacks = [];
+
+    /**
+     * Displayers for grid column.
+     *
+     * @var array
+     */
+    public static $displayers = [];
+
+    /**
+     * Defined columns.
+     *
+     * @var array
+     */
+    public static $defined = [];
+
+    /**
+     * @var array
+     */
+    protected static $htmlAttributes = [];
+
+    /**
+     * @var
+     */
+    protected static $model;
+
+    const SELECT_COLUMN_NAME = '__row_selector__';
+
+    /**
+     * @param string $name
+     * @param string $label
+     */
     public function __construct($name, $label)
     {
         $this->name = $name;
@@ -41,6 +115,100 @@ class Column
     public function setGrid(Grid $grid)
     {
         $this->grid = $grid;
+    }
+
+    /**
+     * Extend column displayer.
+     *
+     * @param $name
+     * @param $displayer
+     */
+    public static function extend($name, $displayer)
+    {
+        static::$displayers[$name] = $displayer;
+    }
+
+    /**
+     * Define a column globally.
+     *
+     * @param string $name
+     * @param mixed  $definition
+     */
+    public static function define($name, $definition)
+    {
+        static::$defined[$name] = $definition;
+    }
+
+    /**
+     * Set grid instance for column.
+     *
+     * @param Grid $grid
+     */
+    public function setGrid(Grid $grid)
+    {
+        $this->grid = $grid;
+
+        $this->setModel($grid->model()->eloquent());
+    }
+
+    /**
+     * Set model for column.
+     *
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        if (is_null(static::$model) && ($model instanceof Model)) {
+            static::$model = $model->newInstance();
+        }
+    }
+
+    /**
+     * Set original data for column.
+     *
+     * @param array $input
+     */
+    public static function setOriginalGridData(array $input)
+    {
+        static::$originalGridData = $input;
+    }
+
+    /**
+     * Set column attributes.
+     *
+     * @param array $attributes
+     *
+     * @return $this
+     */
+    public function setAttributes($attributes = [])
+    {
+        static::$htmlAttributes[$this->name] = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Get column attributes.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public static function getAttributes($name)
+    {
+        return array_get(static::$htmlAttributes, $name, '');
+    }
+
+    /**
+     * Set style of this column.
+     *
+     * @param string $style
+     *
+     * @return Column
+     */
+    public function style($style)
+    {
+        return $this->setAttributes(compact('style'));
     }
 
     /**
@@ -78,39 +246,17 @@ class Column
     }
 
     /**
-     * Add a value wrapper.
-     *
-     * @param callable $callable
-     *
-     * @return $this
-     */
-    public function value(Closure $callable)
-    {
-        $this->valueWrapper = $callable;
-
-        return $this;
-    }
-
-    /**
-     * If has a value wrapper.
-     *
-     * @return bool
-     */
-    protected function hasValueWrapper()
-    {
-        return (bool) $this->valueWrapper;
-    }
-
-    /**
      * Set relation.
      *
-     * @param $relation
+     * @param string $relation
+     * @param string $relationColumn
      *
      * @return $this
      */
-    public function setRelation($relation)
+    public function setRelation($relation, $relationColumn = null)
     {
         $this->relation = $relation;
+        $this->relationColumn = $relationColumn;
 
         return $this;
     }
@@ -157,138 +303,99 @@ class Column
     }
 
     /**
-     * Wrap value with badge.
+     * Add a display callback.
      *
-     * @param string $style
+     * @param Closure $callback
      *
      * @return $this
      */
-    public function badge($style = 'red')
+    public function display(Closure $callback)
     {
-        $wrapper = "<span class='badge bg-{$style}'>{value}</span>";
-
-        $this->htmlWrapper($wrapper);
+        $this->displayCallbacks[] = $callback;
 
         return $this;
     }
 
     /**
-     * Wrap value with label.
+     * If has display callbacks.
      *
-     * @param string $style
-     *
-     * @return $this
+     * @return bool
      */
-    public function label($style = 'success')
+    protected function hasDisplayCallbacks()
     {
-        $wrapper = "<span class='label label-{$style}'>{value}</span>";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
+        return !empty($this->displayCallbacks);
     }
 
     /**
-     * Wrap value as a link.
+     * Call all of the "display" callbacks column.
      *
-     * @param $href
-     * @param string $target
+     * @param mixed $value
+     * @param int   $key
      *
-     * @return $this
+     * @return mixed
      */
-    public function link($href = '', $target = '_blank')
+    protected function callDisplayCallbacks($value, $key)
     {
-        if (empty($href)) {
-            $href = '{$value}';
+        foreach ($this->displayCallbacks as $callback) {
+            $callback = $this->bindOriginalRow($callback, $key);
+            $value = call_user_func($callback, $value);
         }
 
-        $wrapper = "<a href='$href' target='$target'>{value}</a>";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
+        return $value;
     }
 
     /**
-     * Wrap value as a button.
+     * Set original grid data to column.
      *
-     * @param string $style
+     * @param Closure $callback
+     * @param int     $key
      *
-     * @return $this
+     * @return Closure
      */
-    public function button($style = 'default')
+    protected function bindOriginalRow(Closure $callback, $key)
     {
-        if (is_array($style)) {
-            $style = array_map(function ($style) {
-                return 'btn-'.$style;
-            }, $style);
+        $originalRow = static::$originalGridData[$key];
 
-            $style = implode(' ', $style);
-        } elseif (is_string($style)) {
-            $style = 'btn-'.$style;
+        return $callback->bindTo(static::$model->newFromBuilder($originalRow));
+    }
+
+    /**
+     * Fill all data to every column.
+     *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function fill(array $data)
+    {
+        foreach ($data as $key => &$row) {
+            $this->original = $value = array_get($row, $this->name);
+
+            $value = $this->htmlEntityEncode($value);
+
+            array_set($row, $this->name, $value);
+
+            if ($this->isDefinedColumn()) {
+                $this->useDefinedColumn();
+            }
+
+            if ($this->hasDisplayCallbacks()) {
+                $value = $this->callDisplayCallbacks($this->original, $key);
+                array_set($row, $this->name, $value);
+            }
         }
 
-        $wrapper = "<span class='btn $style'>{value}</span>";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
+        return $data;
     }
 
     /**
-     * Wrap value as a progressbar.
+     * If current column is a defined column.
      *
-     * @param string $style
-     * @param string $size
-     * @param int    $max
-     *
-     * @return $this
+     * @return bool
      */
-    public function progressBar($style = 'primary', $size = 'sm', $max = 100)
+    protected function isDefinedColumn()
     {
-        if (is_array($style)) {
-            $style = array_map(function ($style) {
-                return 'progress-bar-'.$style;
-            }, $style);
-
-            $style = implode(' ', $style);
-        } elseif (is_string($style)) {
-            $style = 'progress-bar-'.$style;
-        }
-
-        $wrapper = <<<EOT
-
-<div class="progress progress-$size">
-    <div class="progress-bar $style" role="progressbar" aria-valuenow="{value}" aria-valuemin="0" aria-valuemax="$max" style="width: {value}%">
-      <span class="sr-only">{value}</span>
-    </div>
-</div>
-
-EOT;
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
-    }
-
-    /**
-     * Wrap value as a image.
-     *
-     * @param string $server
-     * @param int    $width
-     * @param int    $height
-     *
-     * @return $this
-     */
-    public function image($server = '', $width = 200, $height = 200)
-    {
-        $server = $server ?: config('admin.upload.host');
-
-        $wrapper = "<img src='$server/{\$value}' style='max-width:{$width}px;max-height:{$height}px' class=\'img\' />";
-
-        $this->htmlWrapper($wrapper);
-
-        return $this;
+        return array_key_exists($this->name, static::$defined);
     }
 
     /**
@@ -309,34 +416,50 @@ EOT;
     /**
      * Set html wrapper.
      *
-     * @param $wrapper
+     * @throws \Exception
      */
-    protected function htmlWrapper($wrapper)
+    protected function useDefinedColumn()
     {
-        $this->htmlWrappers[] = $wrapper;
+        // clear all display callbacks.
+        $this->displayCallbacks = [];
+
+        $class = static::$defined[$this->name];
+
+        if ($class instanceof Closure) {
+            $this->display($class);
+
+            return;
+        }
+
+        if (!class_exists($class) || !is_subclass_of($class, AbstractDisplayer::class)) {
+            throw new \Exception("Invalid column definition [$class]");
+        }
+
+        $grid = $this->grid;
+        $column = $this;
+
+        $this->display(function ($value) use ($grid, $column, $class) {
+            $definition = new $class($value, $grid, $column, $this);
+
+            return $definition->display();
+        });
     }
 
     /**
-     * If column has html wrapper.
+     * Convert characters to HTML entities recursively.
      *
-     * @return bool
-     */
-    protected function hasHtmlWrapper()
-    {
-        return !empty($this->htmlWrappers);
-    }
-
-    /**
-     * Wrap value with wrapper.
-     *
-     * @param $value
+     * @param array|string $item
      *
      * @return mixed
      */
     protected function htmlWrap($value, $row = [])
     {
-        foreach ($this->htmlWrappers as $wrapper) {
-            $value = str_replace('{value}', $value, $wrapper);
+        if (is_array($item)) {
+            array_walk_recursive($item, function (&$value) {
+                $value = htmlentities($value);
+            });
+        } else {
+            $item = htmlentities($item);
         }
 
         $value = str_replace('{$value}', is_null($this->original) ? 'NULL' : $this->original , $value);
@@ -365,9 +488,9 @@ EOT;
         }
 
         $query = app('request')->all();
-        $query = array_merge($query, ['_sort' => ['column' => $this->name, 'type' => $type]]);
+        $query = array_merge($query, [$this->grid->model()->getSortName() => ['column' => $this->name, 'type' => $type]]);
 
-        $url = Url::current().'?'.http_build_query($query);
+        $url = URL::current().'?'.http_build_query($query);
 
         return "<a class=\"fa fa-fw $icon\" href=\"$url\"></a>";
     }
@@ -379,7 +502,7 @@ EOT;
      */
     protected function isSorted()
     {
-        $this->sort = app('request')->get('_sort');
+        $this->sort = app('request')->get($this->grid->model()->getSortName());
 
         if (empty($this->sort)) {
             return false;
@@ -389,6 +512,80 @@ EOT;
     }
 
     /**
+     * Find a displayer to display column.
+     *
+     * @param string $abstract
+     * @param array  $arguments
+     *
+     * @return Column
+     */
+    protected function resolveDisplayer($abstract, $arguments)
+    {
+        if (array_key_exists($abstract, static::$displayers)) {
+            return $this->callBuiltinDisplayer(static::$displayers[$abstract], $arguments);
+        }
+
+        return $this->callSupportDisplayer($abstract, $arguments);
+    }
+
+    /**
+     * Call Illuminate/Support displayer.
+     *
+     * @param string $abstract
+     * @param array  $arguments
+     *
+     * @return Column
+     */
+    protected function callSupportDisplayer($abstract, $arguments)
+    {
+        return $this->display(function ($value) use ($abstract, $arguments) {
+            if (is_array($value) || $value instanceof Arrayable) {
+                return call_user_func_array([collect($value), $abstract], $arguments);
+            }
+
+            if (is_string($value)) {
+                return call_user_func_array([Str::class, $abstract], array_merge([$value], $arguments));
+            }
+
+            return $value;
+        });
+    }
+
+    /**
+     * Call Builtin displayer.
+     *
+     * @param string $abstract
+     * @param array  $arguments
+     *
+     * @return Column
+     */
+    protected function callBuiltinDisplayer($abstract, $arguments)
+    {
+        if ($abstract instanceof Closure) {
+            return $this->display(function ($value) use ($abstract, $arguments) {
+                return $abstract->call($this, ...array_merge([$value], $arguments));
+            });
+        }
+
+        if (class_exists($abstract) && is_subclass_of($abstract, AbstractDisplayer::class)) {
+            $grid = $this->grid;
+            $column = $this;
+
+            return $this->display(function ($value) use ($abstract, $grid, $column, $arguments) {
+                $displayer = new $abstract($value, $grid, $column, $this);
+
+                return call_user_func_array([$displayer, 'display'], $arguments);
+            });
+        }
+
+        return $this;
+    }
+
+    /**
+     * Passes through all unknown calls to builtin displayer or supported displayer.
+     *
+     * Allow fluent calls on the Column object.
+     *
      * @param string $method
      * @param array  $arguments
      *
@@ -396,7 +593,7 @@ EOT;
      */
     public function __call($method, $arguments)
     {
-        if ($this->isRelation()) {
+        if ($this->isRelation() && !$this->relationColumn) {
             $this->name = "{$this->relation}.$method";
             $this->label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
 
@@ -404,5 +601,7 @@ EOT;
 
             return $this;
         }
+
+        return $this->resolveDisplayer($method, $arguments);
     }
 }
