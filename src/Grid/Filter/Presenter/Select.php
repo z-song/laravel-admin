@@ -173,7 +173,7 @@ $(document).on('change', ".{$this->getClass($column)}", function () {
     var target = $(this).closest('form').find(".{$this->getClass($target)}");
     $.get("$resourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
-        $.each(data, function (i, item) {
+        $.each(JSON.parse(data), function (i, item) {
             $(target).append($('<option>', {
                 value: item.$idField,
                 text : item.$textField
