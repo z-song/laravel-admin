@@ -26,7 +26,7 @@ class FileUploadTest extends TestCase
             ->seeElement('input[name=file6]')
 //            ->seeInElement('a[href="/admin/files"]', 'List')
             ->seeInElement('button[type=reset]', 'Reset')
-            ->seeInElement('button[type=submit]', 'Submit');
+            ->seeInElement('button[type=submit]', '');
     }
 
     protected function uploadFiles()
@@ -90,7 +90,7 @@ class FileUploadTest extends TestCase
             ->seeElement('input[name=file6]')
 //            ->seeInElement('a[href="/admin/files"]', 'List')
             ->seeInElement('button[type=reset]', 'Reset')
-            ->seeInElement('button[type=submit]', 'Submit');
+            ->seeInElement('button[type=submit]', '');
 
         $this->attach(__DIR__.'/RolesTest.php', 'file3')
             ->attach(__DIR__.'/MenuTest.php', 'file4')
