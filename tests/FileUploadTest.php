@@ -26,7 +26,7 @@ class FileUploadTest extends TestCase
             ->seeElement('input[name=file6]')
 //            ->seeInElement('a[href="/admin/files"]', 'List')
             ->seeInElement('button[type=reset]', 'Reset')
-            ->seeInElement('button[type=submit]', 'Save');
+            ->seeInElement('button[type=submit]', 'Submit');
     }
 
     protected function uploadFiles()
@@ -38,7 +38,7 @@ class FileUploadTest extends TestCase
             ->attach(__DIR__.'/LaravelTest.php', 'file4')
             ->attach(__DIR__.'/routes.php', 'file5')
             ->attach(__DIR__.'/migrations/2016_11_22_093148_create_test_tables.php', 'file6')
-            ->press('Save');
+            ->press('Submit');
     }
 
     public function testUploadFile()
@@ -90,12 +90,12 @@ class FileUploadTest extends TestCase
             ->seeElement('input[name=file6]')
 //            ->seeInElement('a[href="/admin/files"]', 'List')
             ->seeInElement('button[type=reset]', 'Reset')
-            ->seeInElement('button[type=submit]', 'Save');
+            ->seeInElement('button[type=submit]', 'Submit');
 
         $this->attach(__DIR__.'/RolesTest.php', 'file3')
             ->attach(__DIR__.'/MenuTest.php', 'file4')
             ->attach(__DIR__.'/TestCase.php', 'file5')
-            ->press('Save');
+            ->press('Submit');
 
         $new = FileModel::first();
 
