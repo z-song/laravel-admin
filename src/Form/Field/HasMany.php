@@ -333,7 +333,9 @@ class HasMany extends Field
 
         $relation = call_user_func([$model, $this->relationName]);
 
-        if (!$relation instanceof Relation && !$relation instanceof MorphMany) {
+          if (!$relation instanceof Relation
+            && !$relation instanceof MorphMany
+            && !$relation instanceof BelongsToMany) {
             throw new \Exception('hasMany field must be a HasMany or MorphMany relation.');
         }
 
