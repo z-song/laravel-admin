@@ -71,6 +71,11 @@ class Filter
      * @var string
      */
     protected $view = 'admin::filter.modal';
+    
+    /**
+     * @var string
+     */
+    protected $filterModalId = 'filter-modal';
 
     /**
      * Create a new filter instance.
@@ -97,6 +102,20 @@ class Filter
     {
         $this->action = $action;
 
+        return $this;
+    }
+    
+    /**
+     * Set modalId of search form.
+     *
+     * @param string $filterModalId
+     *
+     * @return $this
+     */
+    public function setModalId($filterModalId)
+    {
+        $this->filterModalId = $filterModalId;
+        
         return $this;
     }
 
@@ -237,6 +256,7 @@ EOT;
         return view($this->view)->with([
             'action'  => $this->action ?: $this->urlWithoutFilters(),
             'filters' => $this->filters,
+            'modalId' => $this->filterModalId,
         ]);
     }
 
