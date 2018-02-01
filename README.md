@@ -2,7 +2,7 @@
 <a href="http://laravel-admin.org/">
 <img src="http://laravel-admin.org/img/logo004.png" alt="laravel-admin">
 </a>
-hello
+hellos
 <p align="center">⛵<code>laravel-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
 
 <p align="center">
