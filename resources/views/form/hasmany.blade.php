@@ -19,7 +19,7 @@
                 @endforeach
 
                 <div class="form-group">
-                    <label class="{{$viewClass['label']}} control-label"></label>
+                    <label class="{{$viewClass['label']}}{{$controlLabel ? ' control-label' : ''}}"></label>
                     <div class="{{$viewClass['field']}}">
                         <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
                     </div>
@@ -37,7 +37,7 @@
             {!! $template !!}
 
             <div class="form-group">
-                <label class="{{$viewClass['label']}} control-label"></label>
+                <label class="{{$viewClass['label']}}{{$controlLabel ? ' control-label' : ''}}"></label>
                 <div class="{{$viewClass['field']}}">
                     <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash"></i>&nbsp;{{ trans('admin.remove') }}</div>
                 </div>
@@ -47,7 +47,7 @@
     </template>
 
     <div class="form-group">
-        <label class="{{$viewClass['label']}} control-label"></label>
+        <label class="{{$viewClass['label']}}{{$controlLabel ? ' control-label' : ''}}"></label>
         <div class="{{$viewClass['field']}}">
             <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>
         </div>

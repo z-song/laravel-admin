@@ -1,3 +1,6 @@
+@if($fieldWidth)
+    <div class="col-md-{{$fieldWidth}}">
+@endif
 <div class="{{$viewClass['form-group']}} {!! ($errors->has($errorKey['start'].'start') || $errors->has($errorKey['end'].'end')) ? 'has-error' : ''  !!}">
 
     <label for="{{$id['start']}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
@@ -26,3 +29,6 @@
 
     </div>
 </div>
+@if($fieldWidth)
+    </div>
+@endif
