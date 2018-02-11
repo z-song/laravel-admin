@@ -26,7 +26,7 @@ class Menu extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'order', 'title', 'icon','icon_color', 'uri'];
+    protected $fillable = ['parent_id', 'order', 'title', 'icon', 'icon_color', 'uri'];
 
     /**
      * Create a new Eloquent model instance.
