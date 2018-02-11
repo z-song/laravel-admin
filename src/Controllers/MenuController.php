@@ -41,6 +41,7 @@ class MenuController extends Controller
                     $form->color('icon_color', trans('admin.icon_color'))->default('#ffffff');
                     $form->text('uri', trans('admin.uri'));
                     $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
+                    $form->hidden('_token')->default(csrf_token());
 
                     $column->append((new Box(trans('admin.new'), $form))->style('success'));
                 });
