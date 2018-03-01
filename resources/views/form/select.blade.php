@@ -15,7 +15,7 @@
                         @foreach($group['options'] as $select => $option)
                             <option value="{{$select}}" {{ $select == old($column, $value) ?'selected':'' }}>{{$option}}</option>
                         @endforeach
-                    </optgroup>>
+                    </optgroup>
                 @endforeach
              @else
                 <option value=""></option>
