@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use function is_array;
 
 /**
  * Class Field.
@@ -402,6 +403,10 @@ class Field implements Renderable
             $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
             $this->rules = implode('|', $rules);
+        }
+
+        if(is_array($rules)) {
+            $this->rules = $rules;
         }
 
         $this->validationMessages = $messages;
