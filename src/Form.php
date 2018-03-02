@@ -496,7 +496,7 @@ class Form
     /**
      * Handle update.
      *
-     * @param int $id
+     * @param int        $id
      * @param array|null $inputData
      *
      * @return \Symfony\Component\HttpFoundation\Response
