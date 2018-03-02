@@ -404,7 +404,7 @@ class Field implements Renderable
             $this->rules = implode('|', $rules);
         }
 
-        if(is_array($rules)) {
+        if (is_array($rules)) {
             $this->rules = $rules;
         }
 
