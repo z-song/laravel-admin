@@ -317,11 +317,13 @@ class Form
     /**
      * Store a new record.
      *
+     * @param null $inputData
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\Http\JsonResponse
      */
-    public function store()
+    public function store($inputData = null)
     {
-        $data = Input::all();
+        $data = $inputData ?: Input::all();
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
@@ -494,13 +496,14 @@ class Form
     /**
      * Handle update.
      *
-     * @param int $id
+     * @param int        $id
+     * @param array|null $inputData
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function update($id)
+    public function update($id, $inputData = null)
     {
-        $data = Input::all();
+        $data = $inputData ?: Input::all();
 
         $isEditable = $this->isEditable($data);
 
