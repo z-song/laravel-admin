@@ -91,7 +91,7 @@ return [
         'method' => 'Método HTTP',
         'path'   => 'Caminho HTTP',
     ],
-    'all_methods_if_empty' => 'All methods if empty',
+    'all_methods_if_empty' => 'Todos os métodos por defeito caso vazio.',
 
     'all'           => 'Tudo',
     'current_page'  => 'Página Actual',
