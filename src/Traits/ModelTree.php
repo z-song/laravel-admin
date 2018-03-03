@@ -234,6 +234,7 @@ trait ModelTree
     public static function selectOptions()
     {
         $options = (new static())->buildSelectOptions();
+        $options = str_replace('&nbsp;', '', $options);
 
         return collect($options)->prepend('Root', 0)->all();
     }
