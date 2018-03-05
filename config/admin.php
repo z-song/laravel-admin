@@ -23,6 +23,8 @@ return [
     'route' => [
 
         'prefix' => 'admin',
+        
+        'base-url-prefix' => 'public/',
 
         'namespace' => 'App\\Admin\\Controllers',
 
