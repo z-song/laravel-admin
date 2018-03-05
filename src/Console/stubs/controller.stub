@@ -15,6 +15,8 @@ class DummyClass extends Controller
 {
     use ModelForm;
 
+    const PAGE_HEADER = 'header';
+
     /**
      * Index interface.
      *
@@ -23,9 +25,8 @@ class DummyClass extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
+            $content->header(self::PAGE_HEADER);
+            $content->description(trans('admin::lang.list'));
 
             $content->body($this->grid());
         });
@@ -40,11 +41,10 @@ class DummyClass extends Controller
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
+            $content->header(self::PAGE_HEADER);
+            $content->description(trans('admin::lang.edit'));
 
-            $content->header('header');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
+            $content->body($this->form($id)->edit($id));
         });
     }
 
@@ -56,9 +56,8 @@ class DummyClass extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
+            $content->header(self::PAGE_HEADER);
+            $content->description(trans('admin::lang.new'));
 
             $content->body($this->form());
         });
@@ -72,11 +71,10 @@ class DummyClass extends Controller
     protected function grid()
     {
         return Admin::grid(DummyModel::class, function (Grid $grid) {
+            $grid->column('id', 'ID')->sortable();
 
-            $grid->id('ID')->sortable();
-
-            $grid->created_at();
-            $grid->updated_at();
+            $grid->colmun('created_at', trans('admin::lang.created_at'));
+            $grid->colmun('updated_at', trans('admin::lang.updated_at'));
         });
     }
 
@@ -85,14 +83,13 @@ class DummyClass extends Controller
      *
      * @return Form
      */
-    protected function form()
+    protected function form($id = null)
     {
         return Admin::form(DummyModel::class, function (Form $form) {
-
             $form->display('id', 'ID');
 
-            $form->display('created_at', 'Created At');
-            $form->display('updated_at', 'Updated At');
+            $form->display('created_at', trans('admin::lang.created_at'));
+            $form->display('updated_at', trans('admin::lang.updated_at'));
         });
     }
 }

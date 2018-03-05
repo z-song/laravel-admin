@@ -25,7 +25,7 @@ trait ModelForm
      */
     public function update($id)
     {
-        return $this->form()->update($id);
+        return $this->form($id)->update($id);
     }
 
     /**
@@ -37,7 +37,7 @@ trait ModelForm
      */
     public function destroy($id)
     {
-        if ($this->form()->destroy($id)) {
+        if ($this->form($id)->destroy($id)) {
             return response()->json([
                 'status'  => true,
                 'message' => trans('admin.delete_succeeded'),
