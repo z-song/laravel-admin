@@ -44,7 +44,7 @@ class Authenticate
                 $except = trim($except, '/');
             }
 
-            if ($request->is($except)) {
+            if ($request->url() === $except) {
                 return true;
             }
         }
