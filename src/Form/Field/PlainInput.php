@@ -8,24 +8,6 @@ trait PlainInput
 
     protected $append;
 
-    public function prependIcon($icon, $class = "")
-    {
-        if (is_null($this->prepend)) {
-            $this->prepend = '<i class="fa fa-' . $icon . " " . $class . '"></i>';
-        }
-
-        return $this;
-    }
-
-    public function appendIcon($icon, $class = "")
-    {
-        if (is_null($this->append)) {
-            $this->append = '<i class="fa fa-' . $icon . " " . $class . '"></i>';
-        }
-
-        return $this;
-    }
-
     public function prepend($string)
     {
         if (is_null($this->prepend)) {
