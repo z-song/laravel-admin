@@ -27,6 +27,7 @@ class MultipleFile extends Field
     protected static $js = [
         '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
         '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
+        "/vendor/laravel-admin/bootstrap-fileinput/js/locales/fa.js"
     ];
 
     /**
@@ -37,9 +38,13 @@ class MultipleFile extends Field
      */
     public function __construct($column, $arguments = [])
     {
+//        $local = "/vendor/laravel-admin/bootstrap-fileinput/js/locales/$this->local.js";
+//        if (file_exists(public_path($local))) array_push(self::$js, $local);
         $this->initStorage();
 
         parent::__construct($column, $arguments);
+
+
     }
 
     /**
@@ -88,17 +93,23 @@ class MultipleFile extends Field
     protected function hydrateFiles(array $value)
     {
         if (empty($value)) {
-            return [[$this->column => $this->getRules()], []];
+            return [
+                [$this->column => $this->getRules()],
+                []
+            ];
         }
 
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
-            $rules[$this->column.$key] = $this->getRules();
-            $input[$this->column.$key] = $file;
+            $rules[$this->column . $key] = $this->getRules();
+            $input[$this->column . $key] = $file;
         }
 
-        return [$rules, $input];
+        return [
+            $rules,
+            $input
+        ];
     }
 
     /**
@@ -114,7 +125,10 @@ class MultipleFile extends Field
             return $this->destroy(request(static::FILE_DELETE_FLAG));
         }
 
-        $targets = array_map([$this, 'prepareForeach'], $files);
+        $targets = array_map([
+            $this,
+            'prepareForeach'
+        ], $files);
 
         return array_merge($this->original(), $targets);
     }
@@ -156,7 +170,10 @@ class MultipleFile extends Field
     {
         $files = $this->value ?: [];
 
-        return array_map([$this, 'objectUrl'], $files);
+        return array_map([
+            $this,
+            'objectUrl'
+        ], $files);
     }
 
     /**

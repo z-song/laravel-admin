@@ -62,7 +62,20 @@ class Box extends Widget implements Renderable
 
         return $this;
     }
+    /**
+     * add tools .
+     *
+     * @param $content
+     * @return $this
+     * @internal param string $title
+     *
+     */
+    public function addTools($content)
+    {
+        $this->tools[] = $content;
 
+        return $this;
+    }
     /**
      * Set box title.
      *

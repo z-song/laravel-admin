@@ -4,10 +4,16 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
 
+/**
+ * add class 'ckeditor' for each ckeditor if you want jquery validation
+ * Class Editor
+ * @package Encore\Admin\Form\Field
+ */
 class Editor extends Field
 {
     protected static $js = [
-        '//cdn.ckeditor.com/4.5.10/standard/ckeditor.js',
+        '/js/plugins/ckeditor/ckeditor.js',
+//        '//cdn.ckeditor.com/4.5.10/standard/ckeditor.js',
     ];
 
     public function __construct($column, array $arguments = [])
@@ -16,6 +22,8 @@ class Editor extends Field
 
         $this->options(['contentsLangDirection' => 'ltr']);
         $this->options(['language' => config('app.locale', 'en')]);
+        //for jquery validation
+        $this->addElementClass(['validate','ckeditor']);
 
     }
 
@@ -28,10 +36,12 @@ class Editor extends Field
      * @param string $dir
      * @return $this
      */
-    public function dir($dir)
+    public function direction($dir ='ltr')
     {
-        return $this->options(['contentsLangDirection' => $dir]);
-    }
+         $this->options(['contentsLangDirection' => $dir]);
+        $this->direction = $dir;
+
+        return $this;    }
 
     /**
      * set language for editor

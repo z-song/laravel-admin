@@ -42,7 +42,9 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Map            map($latitude, $longitude, $label = '')
  * @method \App\Admin\Extensions\Form\GeoCompleteMap  geocompletemap($latitude, $longitude, $label = '')
  * @method \App\Admin\Extensions\Form\multiSelectTag  multiselect_tags($column, $label = '')
-* @method \App\Admin\Extensions\Form\InstagramAddSelect2  instagram_add_select2($column, $label = '',$ajax_url,$type)
+ * @method \App\Admin\Extensions\Form\InstagramAddSelect2  instagram_add_select2($column, $label = '', $ajax_url, $type)
+ * @method \App\Admin\Extensions\Form\Cropper  cropper($column, $label = '')
+ * @method \App\Admin\Extensions\Form\PersianDate  pdate($column, $label = '')
  * @method Field\Editor         editor($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
@@ -57,7 +59,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Number         number($column, $label = '')
  * @method Field\Currency       currency($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
- * @method Field\SwitchField    switch($column, $label = '')
+ * @method Field\SwitchField    switch ($column, $label = '')
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
  * @method Field\Divide         divider()
@@ -174,7 +176,7 @@ class Form
     /**
      * Create a new form instance.
      *
-     * @param $model
+     * @param          $model
      * @param \Closure $callback
      */
     public function __construct($model, Closure $callback)
@@ -223,9 +225,11 @@ class Form
      *
      * @return $this
      */
-    public function edit($id)
+    public function edit($id, $show_mode = false)
     {
-        $this->builder->setMode(Builder::MODE_EDIT);
+        $mode = Builder::MODE_EDIT;
+        if ($show_mode) $mode = Builder::MODE_SHOW;
+        $this->builder->setMode($mode);
         $this->builder->setResourceId($id);
 
         $this->setFieldValue($id);
@@ -241,6 +245,21 @@ class Form
     public function view($id)
     {
         $this->builder->setMode(Builder::MODE_VIEW);
+        $this->builder->setResourceId($id);
+
+        $this->setFieldValue($id);
+
+        return $this;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return $this
+     */
+    public function show($id)
+    {
+        $this->builder->setMode(Builder::MODE_SHOW);
         $this->builder->setResourceId($id);
 
         $this->setFieldValue($id);
@@ -446,7 +465,10 @@ class Form
 
         foreach ($inputs as $column => $value) {
             if (method_exists($this->model, $column)) {
-                $relation = call_user_func([$this->model, $column]);
+                $relation = call_user_func([
+                    $this->model,
+                    $column
+                ]);
 
                 if ($relation instanceof Relation) {
                     $relations[$column] = $value;
@@ -519,7 +541,7 @@ class Form
             ]);
         }
 
-        /* @var Model $this->model */
+        /* @var Model $this ->model */
         $this->model = $this->model->with($this->getRelations())->findOrFail($id);
 
         $this->setFieldOriginalValue();
@@ -541,7 +563,7 @@ class Form
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
-                /* @var Model $this->model */
+                /* @var Model $this ->model */
                 $this->model->setAttribute($column, $value);
             }
 
@@ -600,7 +622,11 @@ class Form
             $name = $input['name'];
             $value = $input['value'];
 
-            array_forget($input, ['pk', 'value', 'name']);
+            array_forget($input, [
+                'pk',
+                'value',
+                'name'
+            ]);
             array_set($input, $name, $value);
         }
 
@@ -781,9 +807,10 @@ class Form
      */
     protected function invalidColumn($columns, $oneToOneRelation = false)
     {
-        foreach ((array) $columns as $column) {
+        foreach ((array)$columns as $column) {
             if ((!$oneToOneRelation && Str::contains($column, '.')) ||
-                ($oneToOneRelation && !Str::contains($column, '.'))) {
+                ($oneToOneRelation && !Str::contains($column, '.'))
+            ) {
                 return true;
             }
         }
@@ -889,7 +916,7 @@ class Form
      */
     public function ignore($fields)
     {
-        $this->ignored = array_merge($this->ignored, (array) $fields);
+        $this->ignored = array_merge($this->ignored, (array)$fields);
 
         return $this;
     }
@@ -1092,7 +1119,7 @@ class Form
     public function setWidth($fieldWidth = 8, $labelWidth = 2)
     {
         $this->builder()->fields()->each(function ($field) use ($fieldWidth, $labelWidth) {
-            /* @var Field $field  */
+            /* @var Field $field */
             $field->setWidth($fieldWidth, $labelWidth);
         });
 
@@ -1333,7 +1360,10 @@ class Form
                 continue;
             }
 
-            $assets = call_user_func([$field, 'getAssets']);
+            $assets = call_user_func([
+                $field,
+                'getAssets'
+            ]);
 
             $css->push(array_get($assets, 'css'));
             $js->push(array_get($assets, 'js'));
@@ -1344,6 +1374,7 @@ class Form
             'js'  => $js->flatten()->unique()->filter()->toArray(),
         ];
     }
+
     /**
      * Collect rules of all fields.
      *
@@ -1380,7 +1411,7 @@ class Form
      * Setter.
      *
      * @param string $name
-     * @param $value
+     * @param        $value
      */
     public function __set($name, $value)
     {

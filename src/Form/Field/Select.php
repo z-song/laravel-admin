@@ -34,6 +34,11 @@ class Select extends Field
     protected $config = [];
 
     /**
+     * @var array
+     */
+    protected $button = null;
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -111,7 +116,9 @@ class Select extends Field
         $script = <<<EOT
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
+
     var target = $(this).closest('.fields-group').find(".$class");
+     $(target).prop("disabled", true);
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
         $(target).select2({
@@ -123,6 +130,8 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
                 return d;
             })
         }).trigger('change');
+        $(target).prop("disabled", false);
+
     });
 });
 EOT;
@@ -235,6 +244,45 @@ EOT;
     }
 
     /**
+     * add btn group for select2.
+     *
+     * @param $text
+     * @param $btn_url
+     * @param $ajax_url
+     * @return $this
+     * @internal param string $key
+     * @internal param mixed $val
+     *
+     */
+    public function addButton($text, $btn_url ,$ajax_url)
+    {
+        $this->button['text'] = $text;
+        $this->button['class'] = $this->getElementClassString() . "_btn";
+        $this->button['script'] = <<<EOT
+        $(".{$this->button['class']}").on("click",function(){
+            window.open("{$btn_url}")
+    });
+    //instagram
+        $('{$this->getElementClassSelector()}').change(function(){
+            $.ajax({
+        method: 'post',
+        url: '{$ajax_url}',
+        data: {
+                _token: LA.token,
+            id: $(this).val()
+        },
+        success: function (data) {
+//            $.pjax.reload('#pjax-container');
+                toastr.success(data.message);
+            }
+    });
+    
+    });
+EOT;
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function render()
@@ -249,7 +297,7 @@ EOT;
         $configs = json_encode($configs);
 
         if (empty($this->script)) {
-            $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
+            $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);" . $this->button['script'];
         }
 
         if ($this->options instanceof \Closure) {
@@ -265,6 +313,7 @@ EOT;
         return parent::render()->with([
             'options' => $this->options,
             'groups'  => $this->groups,
+            'add_button'  => $this->button,
         ]);
     }
 }

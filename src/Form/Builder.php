@@ -52,6 +52,7 @@ class Builder
     const MODE_VIEW = 'view';
     const MODE_EDIT = 'edit';
     const MODE_CREATE = 'create';
+    const MODE_SHOW = 'show';
 
     /**
      * Form action mode, could be create|view|edit.

@@ -5,6 +5,10 @@ namespace Encore\Admin\Widgets;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\MessageBag;
+use phpDocumentor\Reflection\Types\This;
 
 /**
  * Class Form.
@@ -49,6 +53,9 @@ use Illuminate\Contracts\Support\Renderable;
  */
 class Form implements Renderable
 {
+
+    public static $VALID = "valid";
+
     /**
      * @var Field[]
      */
@@ -223,7 +230,9 @@ class Form implements Renderable
             'attributes' => $this->formatAttribute(),
             'method'     => $this->attributes['method'],
             'fieldWidth' => $this->attributes['fieldWidth'],
-            'labelWidth' => $this->attributes['labelWidth']
+            'labelWidth' => $this->attributes['labelWidth'],
+            'rules' => $this->getRules(),
+            'rules_message' => $this->getRuleMessages()
         ];
     }
 
@@ -264,6 +273,97 @@ class Form implements Renderable
         }
 
         return false;
+    }
+
+    /**
+     * Get validation messages.
+     *
+     * @param array $input
+     *
+     * @return MessageBag|bool
+     */
+    protected function validationMessages($input)
+    {
+        $failedValidators = [];
+
+        foreach ($this->fields as $field) {
+            if (!$validator = $field->getValidator($input)) {
+                continue;
+            }
+
+            if (($validator instanceof Validator) && !$validator->passes()) {
+                $failedValidators[] = $validator;
+            }
+        }
+
+        $message = $this->mergeValidationMessages($failedValidators);
+
+        return $message->any() ? $message : false;
+    }
+
+    /**
+     * Merge validation messages from input validators.
+     *
+     * @param \Illuminate\Validation\Validator[] $validators
+     *
+     * @return MessageBag
+     */
+    protected function mergeValidationMessages($validators)
+    {
+        $messageBag = new MessageBag();
+
+        foreach ($validators as $validator) {
+            $messageBag = $messageBag->merge($validator->messages());
+        }
+
+        return $messageBag;
+    }
+
+    /**
+     * @return bool|Form|\Illuminate\Http\RedirectResponse
+     */
+    public function validate()
+    {
+        $data = Input::all();
+
+        // Handle validation errors.
+        if ($validationMessages = $this->validationMessages($data)) {
+            return back()->withInput()->withErrors($validationMessages);
+        }
+        return self::$VALID;
+    }
+    /**
+     * Collect rules of all fields.
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        $rules = [];
+        foreach ($this->fields as $item) {
+            if(!empty($item->getRules())){
+                $rules[$item->id] = $item->getRules();
+            }
+        }
+        $this->Rules = $rules;
+        return $rules;
+    }
+
+    /**
+     * Collect validationMessages of all fields.
+     *
+     * @return array
+     */
+    public function getRuleMessages()
+    {
+        $rules = [];
+        foreach ($this->fields as $item ) {
+            foreach ($item->validationMessages as $key => $value) {
+                $rules[$key] = $value;
+            }
+        }
+        $this->RuleMessages = $rules;
+        return $rules;
     }
 
     /**
