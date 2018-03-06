@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Administrator.
- * @mixin \Eloquent
+ *
  * @property Role[] $roles
  */
 class Administrator extends Model implements AuthenticatableContract
