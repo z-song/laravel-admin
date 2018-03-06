@@ -188,7 +188,7 @@ class Admin
      * Get current login user.
      *
      *  @-return mixed
-     * @return \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable
+     * @return \Encore\Admin\Auth\Database\Administrator|\Illuminate\Contracts\Auth\Authenticatable
      */
     public function user()
     {
