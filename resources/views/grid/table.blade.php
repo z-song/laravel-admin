@@ -1,9 +1,9 @@
 <div class="box">
     <div class="box-header">
 
-        <h3 class="box-title"></h3>
+        <h3 class="box-title">{!! $grid->title !!}</h3>
 
-        <div class="pull-right">
+        <div class="box-tools pull-right">
             {!! $grid->renderFilter() !!}
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}

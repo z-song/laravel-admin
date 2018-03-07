@@ -139,6 +139,11 @@ class Grid
     public $perPage = 20;
 
     /**
+     * Grid's box-title
+     */
+    public $title = '';
+
+    /**
      * Header tools.
      *
      * @var Tools
@@ -339,6 +344,16 @@ class Grid
     public function model()
     {
         return $this->model;
+    }
+
+    /**
+     * Set the Grid's box-title
+     *
+     * @param string $title
+     */
+    public function title($title)
+    {
+        $this->title = $title;
     }
 
     /**

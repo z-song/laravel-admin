@@ -152,9 +152,10 @@ class Actions extends AbstractDisplayer
      */
     protected function editAction()
     {
+        $editTitle = __('admin.edit');
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}/edit">
-    <i class="fa fa-edit"></i>
+<a href="{$this->getResource()}/{$this->getKey()}/edit" class="btn btn-xs btn-default">
+    <i class="fa fa-edit"></i> $editTitle
 </a>
 EOT;
     }
@@ -213,7 +214,7 @@ SCRIPT;
         Admin::script($script);
 
         return <<<EOT
-<a href="javascript:void(0);" data-id="{$this->getKey()}" class="grid-row-delete">
+<a href="javascript:void(0);" data-id="{$this->getKey()}" class="btn btn-xs btn-danger grid-row-delete">
     <i class="fa fa-trash"></i>
 </a>
 EOT;
