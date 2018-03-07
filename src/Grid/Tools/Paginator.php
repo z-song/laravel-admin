@@ -76,7 +76,9 @@ class Paginator extends AbstractTool
             return [$key => "<b>$parameter</b>"];
         });
 
-        return trans('admin.pagination.range', $parameters->all());
+        $text = trans('admin.pagination.range', $parameters->all());
+
+        return "<span class='page-range'>$text</span>";
     }
 
     /**
