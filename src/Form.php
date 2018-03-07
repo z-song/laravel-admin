@@ -1174,7 +1174,7 @@ class Form
             $segments = array_slice($segments, 0, $slice);
         }
 
-        return implode('/', $segments);
+        return url(implode('/', $segments));
     }
 
     /**

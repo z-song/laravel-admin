@@ -1,0 +1,83 @@
+<?php
+
+return [
+    'online'                => 'آنلاین',
+    'login'                 => 'ورود',
+    'logout'                => 'خروج',
+    'setting'               => 'تنظیمات',
+    'name'                  => 'نام',
+    'username'              => 'نام کاربری',
+    'password'              => 'رمز عبور',
+    'password_confirmation' => 'تکرار رمز عبور',
+    'remember_me'           => 'مرا به خاطر بسپار',
+    'user_setting'          => 'تنظیمات کاربری',
+    'avatar'                => 'تصویر حساب کاربری',
+
+    'list'          => 'لیست',
+    'new'           => 'جدید',
+    'create'        => 'ایجاد',
+    'delete'        => 'حذف',
+    'remove'        => 'حذف',
+    'edit'          => 'ویرایش',
+    'view'          => 'مشاهده',
+    'browse'        => 'انتخاب',
+    'reset'         => 'لغو',
+    'export'        => 'گزارش گیری',
+    'batch_delete'  => 'حذف جامع',
+    'save'          => 'ذخیره',
+    'refresh'       => 'بروز رسانی',
+    'order'         => 'ترتیب',
+    'expand'        => 'باز کردن',
+    'collapse'      => 'جمع کردن',
+    'filter'        => 'فیلتر',
+    'close'         => 'بستن',
+    'show'          => 'نمایش',
+    'entries'       => 'مورد',
+    'captcha'       => 'حروف تصویر',
+
+    'action'           => 'عمل',
+    'title'            => 'عنوان',
+    'description'      => 'توضیح',
+    'back'             => 'بازگشت',
+    'back_to_list'     => 'بازگشت به لیست',
+    'submit'           => 'ثبت',
+    'menu'             => 'فهرست',
+    'input'            => 'فیلد',
+    'succeeded'        => 'با موفقیت انجام شد.',
+    'failed'           => 'خطا!',
+    'delete_confirm'   => 'آیا مطمئن هستید که این مورد را می‌خواهید حذف کنید؟',
+    'delete_succeeded' => 'حذف با موفقیت انجام شد!',
+    'delete_failed'    => 'خطا در حذف!',
+    'update_succeeded' => 'ویرایش با موفقیت انجام شد!',
+    'save_succeeded'   => 'ذخیره سازی با موفقیت انجام شد!',
+    'refresh_succeeded'=> 'بروز رسانی با موفقیت انجام شد!',
+    'login_successful' => 'ورود با موفقیت انجام شد!',
+
+    'choose'        => 'انتخاب',
+    'choose_file'   => 'انتخاب فایل',
+    'choose_image'  => 'انتخاب تصویر',
+
+    'more'          => 'بیشتر',
+    'deny'          => 'عدم دسترسی!',
+
+    'administrator' => 'مدیر',
+    'roles'         => 'سمت ها',
+    'permissions'   => 'دسترسی ها',
+    'slug'          => 'عنوان',
+
+    'created_at'    => 'تاریخ ایجاد',
+    'updated_at'    => 'تاریخ بروز رسانی',
+
+    'alert'         => 'هشدار',
+
+    'parent_id'     => 'سرگروه',
+    'icon'          => 'نماد',
+    'uri'           => 'آدرس',
+
+    'operation_log'       => 'تاریخچه فعالیت ها',
+    'parent_select_error' => 'خطا در انتخاب سرگروه',
+
+    'pagination'    => [
+        'range'  => 'نمایش :first تا :last از :total مورد',
+    ],
+];

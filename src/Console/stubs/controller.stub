@@ -26,7 +26,7 @@ class DummyClass extends Controller
     {
         return Admin::content(function (Content $content) {
             $content->header(self::PAGE_HEADER);
-            $content->description(trans('admin::lang.list'));
+            $content->description(__('admin.list'));
 
             $content->body($this->grid());
         });
@@ -42,7 +42,7 @@ class DummyClass extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
             $content->header(self::PAGE_HEADER);
-            $content->description(trans('admin::lang.edit'));
+            $content->description(__('admin.edit'));
 
             $content->body($this->form($id)->edit($id));
         });
@@ -57,7 +57,7 @@ class DummyClass extends Controller
     {
         return Admin::content(function (Content $content) {
             $content->header(self::PAGE_HEADER);
-            $content->description(trans('admin::lang.new'));
+            $content->description(__('admin.new'));
 
             $content->body($this->form());
         });
@@ -73,8 +73,8 @@ class DummyClass extends Controller
         return Admin::grid(DummyModel::class, function (Grid $grid) {
             $grid->column('id', 'ID')->sortable();
 
-            $grid->colmun('created_at', trans('admin::lang.created_at'));
-            $grid->colmun('updated_at', trans('admin::lang.updated_at'));
+            $grid->column('created_at', __('admin.created_at'));
+            $grid->column('updated_at', __('admin.updated_at'));
         });
     }
 
@@ -88,8 +88,8 @@ class DummyClass extends Controller
         return Admin::form(DummyModel::class, function (Form $form) {
             $form->display('id', 'ID');
 
-            $form->display('created_at', trans('admin::lang.created_at'));
-            $form->display('updated_at', trans('admin::lang.updated_at'));
+            $form->display('created_at', __('admin.created_at'));
+            $form->display('updated_at', __('admin.updated_at'));
         });
     }
 }
