@@ -29,6 +29,7 @@ class Tools implements Renderable
     protected $options = [
         'enableListButton' => true,
         'enableBackButton' => true,
+        'enableSaveButton' => true
     ];
 
     /**
@@ -61,7 +62,7 @@ EOT;
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a class="btn btn-sm btn-default form-history-back"><i class="fa fa-arrow-left"></i>&nbsp;$text</a>
+    <a class="btn btn btn-default form-history-back"><i class="fa fa-arrow-left"></i>&nbsp;$text</a>
 </div>
 EOT;
     }
@@ -75,7 +76,7 @@ EOT;
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="$resource" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;$text</a>
+    <a href="$resource" class="btn btn btn-default"><i class="fa fa-list"></i>&nbsp;$text</a>
 </div>
 EOT;
     }
@@ -119,12 +120,28 @@ EOT;
     }
 
     /**
+     * Disasble save button.
+     * an extra save button at the top (made specially for long forms)
+     * @return $this
+     */
+    public function disableSaveButton()
+    {
+        $this->options['enableSaveButton'] = false;
+
+        return $this;
+    }
+
+    /**
      * Render header tools bar.
      *
      * @return string
      */
     public function render()
     {
+
+        if ($this->options['enableSaveButton']) {
+            $this->add($this->form->submitButton());
+        }
         if ($this->options['enableListButton']) {
             $this->add($this->listButton());
         }
