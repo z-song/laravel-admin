@@ -71,7 +71,7 @@ class Filter
      * @var string
      */
     protected $view = 'admin::filter.modal';
-    
+
     /**
      * @var string
      */
@@ -104,7 +104,7 @@ class Filter
 
         return $this;
     }
-    
+
     /**
      * Set modalId of search form.
      *
@@ -115,7 +115,7 @@ class Filter
     public function setModalId($filterModalId)
     {
         $this->filterModalId = $filterModalId;
-        
+
         return $this;
     }
 
