@@ -2,17 +2,15 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Date extends Field
+class Date extends Text
 {
     protected static $css = [
-        '/packages/admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+        '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
     ];
 
     protected static $js = [
-        '/packages/admin/moment/min/moment-with-locales.min.js',
-        '/packages/admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+        '/vendor/laravel-admin/moment/min/moment-with-locales.min.js',
+        '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
     ];
 
     protected $format = 'YYYY-MM-DD';
@@ -38,7 +36,10 @@ class Date extends Field
         $this->options['format'] = $this->format;
         $this->options['locale'] = config('app.locale');
 
-        $this->script = "$('#{$this->id}').datetimepicker(".json_encode($this->options).');';
+        $this->script = "$('{$this->getElementClassSelector()}').datetimepicker(".json_encode($this->options).');';
+
+        $this->prepend('<i class="fa fa-calendar"></i>')
+            ->defaultAttribute('style', 'width: 110px');
 
         return parent::render();
     }

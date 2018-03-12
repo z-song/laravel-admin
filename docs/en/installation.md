@@ -1,32 +1,18 @@
 # Installation
 
+> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](http://laravel-admin.org/docs/v1.4/#/)
+
 First, install laravel, and make sure that the database connection settings are correct.
 
 ```
-Laravel 5.1, not maintained
-composer require encore/laravel-admin "1.1.*"
+composer require encore/laravel-admin "1.5.*"
 
-Laravel 5.2
-composer require encore/laravel-admin "1.2.*"
-
-Laravel 5.3
-composer require encore/laravel-admin "1.3.*"
-
-Laravel 5.4
-composer require encore/laravel-admin "1.4.*"
-
-```
-
-In`config/app.php`add`ServiceProvider`:
-
-```
-Encore\Admin\Providers\AdminServiceProvider::class
 ```
 
 Then run these commands to publish assets and config：
 
 ```
-php artisan vendor:publish --tag=laravel-admin
+php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
 ```
 After run command you can find config file in `config/admin.php`, in this file you can change the install directory,db connection or table names.
 
@@ -43,7 +29,7 @@ After the installation is complete, the following files are generated in the pro
 
 ### Configuration file
 
-After the installation is complete，all configurations are in the `config/admin.php` file.
+After the installation is complete,all configurations are in the `config/admin.php` file.
 
 ### Admin files
 After install,you can find directory`app/Admin`,and then most of our develop work is under this directory.

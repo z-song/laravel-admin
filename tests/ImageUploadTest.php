@@ -25,18 +25,13 @@ class ImageUploadTest extends TestCase
         $this->visit('admin/images/create')
             ->see('Upload image')
             ->seeInElement('h3[class=box-title]', 'Create')
-            ->see('ID')
-            ->see('Created At')
-            ->see('Updated At')
             ->seeElement('input[name=image1]')
             ->seeElement('input[name=image2]')
             ->seeElement('input[name=image3]')
             ->seeElement('input[name=image4]')
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
-            ->seeInElement('a[href="/admin/images"]', 'List')
-            ->dontSeeElement('a[class*=item_delete]')
-            ->seeElement('input[type=reset][value=Reset]')
+            ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
     }
 
@@ -54,48 +49,38 @@ class ImageUploadTest extends TestCase
 
     public function testUploadImage()
     {
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
 
         $this->uploadImages()
             ->seePageIs('admin/images');
 
         $this->assertEquals(Image::count(), 1);
 
-        $this->seeInDatabase('test_images', ['image4' => 'image/renamed.jpeg']);
+        $this->seeInDatabase('test_images', ['image4' => 'images/renamed.jpeg']);
 
         $images = Image::first()->toArray();
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileExists(public_path('upload/'.$images['image'.$index]));
+            $this->assertFileExists(public_path('uploads/'.$images['image'.$index]));
         }
 
-        $this->assertFileExists(public_path('upload/image/asdasdasdasdasd.jpeg'));
+        $this->assertFileExists(public_path('uploads/images/asdasdasdasdasd.jpeg'));
 
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
     }
 
     public function testRemoveImage()
     {
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
 
         $this->uploadImages();
 
         $this->assertEquals($this->fileCountInImageDir(), 6);
-
-        $this->call(
-            'PUT', // $method
-            '/admin/images/1', // $action
-            ['image2_action' => 1, 'image5_action' => 1] // $parameters
-        );
-
-        $this->assertRedirectedTo('/admin/images');
-
-        $this->assertEquals($this->fileCountInImageDir(), 4);
     }
 
     public function testUpdateImage()
     {
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
 
         $this->uploadImages();
 
@@ -111,9 +96,7 @@ class ImageUploadTest extends TestCase
             ->seeElement('input[name=image4]')
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
-            ->seeInElement('a[href="/admin/images"]', 'List')
-            ->seeInElement('a[class*=item_delete]', 'Delete')
-            ->seeElement('input[type=reset][value=Reset]')
+            ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
 
         $this->attach(__DIR__.'/assets/test.jpg', 'image3')
@@ -132,12 +115,12 @@ class ImageUploadTest extends TestCase
         $this->assertNotEquals($old->image4, $new->image4);
         $this->assertNotEquals($old->image5, $new->image5);
 
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
     }
 
     public function testDeleteImages()
     {
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
 
         $this->uploadImages();
 
@@ -150,7 +133,7 @@ class ImageUploadTest extends TestCase
             ->dontSeeInDatabase('test_images', ['id' => 1]);
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileNotExists(public_path('upload/'.$images['image'.$index]));
+            $this->assertFileNotExists(public_path('uploads/'.$images['image'.$index]));
         }
 
         $this->visit('admin/images')
@@ -159,7 +142,7 @@ class ImageUploadTest extends TestCase
 
     public function testBatchDelete()
     {
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
 
         $this->uploadImages();
         $this->uploadImages();
@@ -188,7 +171,7 @@ class ImageUploadTest extends TestCase
 
     public function testUploadMultipleImage()
     {
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
 
         $this->visit('admin/multiple-images/create')
             ->seeElement('input[type=file][name="pictures[]"][multiple=1]');
@@ -217,18 +200,16 @@ class ImageUploadTest extends TestCase
 
         $pictures = MultipleImage::first()->pictures;
 
-        $pictures = json_decode($pictures, true);
-
         $this->assertCount($size, $pictures);
 
         foreach ($pictures as $picture) {
-            $this->assertFileExists(public_path('upload/'.$picture));
+            $this->assertFileExists(public_path('uploads/'.$picture));
         }
     }
 
     public function testRemoveMultipleFiles()
     {
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
 
         // upload files
         $path = __DIR__.'/assets/test.jpg';
@@ -249,18 +230,9 @@ class ImageUploadTest extends TestCase
         );
 
         $this->assertEquals($this->fileCountInImageDir(), $size);
-
-        // remove files
-        $this->call(
-            'PUT', // $method
-            '/admin/multiple-images/1', // $action
-            ['pictures_action' => 1] // $parameters
-        );
-
-        $this->assertEquals($this->fileCountInImageDir(), 0);
     }
 
-    protected function fileCountInImageDir($dir = 'upload/image')
+    protected function fileCountInImageDir($dir = 'uploads/images')
     {
         $file = new FilesystemIterator(public_path($dir), FilesystemIterator::SKIP_DOTS);
 

@@ -18,18 +18,14 @@ class FileUploadTest extends TestCase
         $this->visit('admin/files/create')
             ->see('Upload file')
             ->seeInElement('h3[class=box-title]', 'Create')
-            ->see('ID')
-            ->see('Created At')
-            ->see('Updated At')
             ->seeElement('input[name=file1]')
             ->seeElement('input[name=file2]')
             ->seeElement('input[name=file3]')
             ->seeElement('input[name=file4]')
             ->seeElement('input[name=file5]')
             ->seeElement('input[name=file6]')
-            ->seeInElement('a[href="/admin/files"]', 'List')
-            ->dontSeeElement('a[class*=item_delete]')
-            ->seeElement('input[type=reset][value=Reset]')
+//            ->seeInElement('a[href="/admin/files"]', 'List')
+            ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
     }
 
@@ -47,7 +43,7 @@ class FileUploadTest extends TestCase
 
     public function testUploadFile()
     {
-        File::cleanDirectory(public_path('upload/file'));
+        File::cleanDirectory(public_path('uploads/files'));
 
         $this->uploadFiles()
             ->seePageIs('admin/files');
@@ -55,12 +51,12 @@ class FileUploadTest extends TestCase
         $this->assertEquals(FileModel::count(), 1);
 
         $where = [
-            'file1' => 'file/AuthTest.php',
-            'file2' => 'file/InstallTest.php',
-            'file3' => 'file/IndexTest.php',
-            'file4' => 'file/LaravelTest.php',
-            'file5' => 'file/routes.php',
-            'file6' => 'file/2016_11_22_093148_create_test_tables.php',
+            'file1' => 'files/AuthTest.php',
+            'file2' => 'files/InstallTest.php',
+            'file3' => 'files/IndexTest.php',
+            'file4' => 'files/LaravelTest.php',
+            'file5' => 'files/routes.php',
+            'file6' => 'files/2016_11_22_093148_create_test_tables.php',
         ];
 
         $this->seeInDatabase('test_files', $where);
@@ -68,15 +64,15 @@ class FileUploadTest extends TestCase
         $files = FileModel::first()->toArray();
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileExists(public_path('upload/'.$files['file'.$index]));
+            $this->assertFileExists(public_path('uploads/'.$files['file'.$index]));
         }
 
-        File::cleanDirectory(public_path('upload/file'));
+        File::cleanDirectory(public_path('uploads/files'));
     }
 
     public function testUpdateFile()
     {
-        File::cleanDirectory(public_path('upload/file'));
+        File::cleanDirectory(public_path('uploads/files'));
 
         $this->uploadFiles();
 
@@ -92,12 +88,11 @@ class FileUploadTest extends TestCase
             ->seeElement('input[name=file4]')
             ->seeElement('input[name=file5]')
             ->seeElement('input[name=file6]')
-            ->seeInElement('a[href="/admin/files"]', 'List')
-            ->seeInElement('a[class*=item_delete]', 'Delete')
-            ->seeElement('input[type=reset][value=Reset]')
+//            ->seeInElement('a[href="/admin/files"]', 'List')
+            ->seeInElement('button[type=reset]', 'Reset')
             ->seeInElement('button[type=submit]', 'Submit');
 
-        $this->attach(__DIR__.'/RoleTest.php', 'file3')
+        $this->attach(__DIR__.'/RolesTest.php', 'file3')
             ->attach(__DIR__.'/MenuTest.php', 'file4')
             ->attach(__DIR__.'/TestCase.php', 'file5')
             ->press('Submit');
@@ -113,12 +108,12 @@ class FileUploadTest extends TestCase
         $this->assertNotEquals($old->file4, $new->file4);
         $this->assertNotEquals($old->file5, $new->file5);
 
-        File::cleanDirectory(public_path('upload/file'));
+        File::cleanDirectory(public_path('uploads/files'));
     }
 
     public function testDeleteFiles()
     {
-        File::cleanDirectory(public_path('upload/file'));
+        File::cleanDirectory(public_path('uploads/files'));
 
         $this->uploadFiles();
 
@@ -131,7 +126,7 @@ class FileUploadTest extends TestCase
             ->dontSeeInDatabase('test_files', ['id' => 1]);
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileNotExists(public_path('upload/'.$files['file'.$index]));
+            $this->assertFileNotExists(public_path('uploads/'.$files['file'.$index]));
         }
 
         $this->visit('admin/files')
@@ -140,7 +135,7 @@ class FileUploadTest extends TestCase
 
     public function testBatchDelete()
     {
-        File::cleanDirectory(public_path('upload/file'));
+        File::cleanDirectory(public_path('uploads/files'));
 
         $this->uploadFiles();
         $this->uploadFiles();
@@ -151,7 +146,7 @@ class FileUploadTest extends TestCase
             ->seeInElement('td', 2)
             ->seeInElement('td', 3);
 
-        $fi = new FilesystemIterator(public_path('upload/file'), FilesystemIterator::SKIP_DOTS);
+        $fi = new FilesystemIterator(public_path('uploads/files'), FilesystemIterator::SKIP_DOTS);
 
         $this->assertEquals(iterator_count($fi), 18);
 

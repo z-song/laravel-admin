@@ -7,13 +7,25 @@ use Illuminate\Contracts\Support\Renderable;
 class Tab extends Widget implements Renderable
 {
     /**
+     * @var string
+     */
+    protected $view = 'admin::widgets.tab';
+
+    /**
      * @var array
      */
-    protected $attributes = [
+    protected $data = [
+        'id'       => '',
         'title'    => '',
         'tabs'     => [],
         'dropDown' => [],
+        'active'   => 0,
     ];
+
+    public function __construct()
+    {
+        $this->class('nav-tabs-custom');
+    }
 
     /**
      * Add a tab and its contents.
@@ -23,12 +35,17 @@ class Tab extends Widget implements Renderable
      *
      * @return $this
      */
-    public function add($title, $content)
+    public function add($title, $content, $active = false)
     {
-        $this->attributes['tabs'][] = [
+        $this->data['tabs'][] = [
+            'id'      => mt_rand(),
             'title'   => $title,
             'content' => $content,
         ];
+
+        if ($active) {
+            $this->data['active'] = count($this->data['tabs']) - 1;
+        }
 
         return $this;
     }
@@ -40,7 +57,7 @@ class Tab extends Widget implements Renderable
      */
     public function title($title = '')
     {
-        $this->attributes['title'] = $title;
+        $this->data['title'] = $title;
     }
 
     /**
@@ -60,7 +77,7 @@ class Tab extends Widget implements Renderable
             return $this;
         }
 
-        $this->attributes['dropDown'][] = [
+        $this->data['dropDown'][] = [
             'name' => $links[0],
             'href' => $links[1],
         ];
@@ -75,6 +92,8 @@ class Tab extends Widget implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.tab', $this->attributes)->render();
+        $variables = array_merge($this->data, ['attributes' => $this->formatAttributes()]);
+
+        return view($this->view, $variables)->render();
     }
 }

@@ -97,7 +97,7 @@ echo $infoBox->render();
 
 ```
 
-Refer to the section on the `InfoBox` in the` index()`method of the home page layout file [HomeController.php](/src/Commands/stubs/ExampleController.stub).
+Refer to the section on the `InfoBox` in the` index()`method of the home page layout file [HomeController.php](https://github.com/z-song/laravel-admin/blob/master/src/Console/stubs/HomeController.stub).
 
 ## Tab component
 

@@ -7,16 +7,23 @@ use Encore\Admin\Form\Field;
 class Map extends Field
 {
     /**
+     * Column name.
+     *
+     * @var array
+     */
+    protected $column = [];
+
+    /**
      * Get assets required by this field.
      *
      * @return array
      */
     public static function getAssets()
     {
-        if (config('app.locale') == 'zh_CN') {
-            $js = 'http://map.qq.com/api/js?v=2.exp';
+        if (config('app.locale') == 'zh-CN') {
+            $js = '//map.qq.com/api/js?v=2.exp';
         } else {
-            $js = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='.env('GOOGLE_API_KEY');
+            $js = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='.env('GOOGLE_API_KEY');
         }
 
         return compact('js');
@@ -36,7 +43,7 @@ class Map extends Field
          * Google map is blocked in mainland China
          * people in China can use Tencent map instead(;
          */
-        if (config('app.locale') == 'zh_CN') {
+        if (config('app.locale') == 'zh-CN') {
             $this->useTencentMap();
         } else {
             $this->useGoogleMap();

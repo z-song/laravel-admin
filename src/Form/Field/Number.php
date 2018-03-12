@@ -2,27 +2,29 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Number extends Field
+class Number extends Text
 {
     protected static $js = [
-        '/packages/admin/number-input/bootstrap-number-input.js',
+        '/vendor/laravel-admin/number-input/bootstrap-number-input.js',
     ];
 
     public function render()
     {
-        $this->default(0);
+        $this->default((int) $this->default);
 
         $this->script = <<<EOT
 
-$('#{$this->id}').bootstrapNumber({
-	upClass: 'success',
-	downClass: 'primary',
-	center: true
-});
+$('{$this->getElementClassSelector()}:not(.initialized)')
+    .addClass('initialized')
+    .bootstrapNumber({
+        upClass: 'success',
+        downClass: 'primary',
+        center: true
+    });
 
 EOT;
+
+        $this->prepend('')->defaultAttribute('style', 'width: 100px');
 
         return parent::render();
     }

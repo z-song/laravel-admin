@@ -2,11 +2,15 @@
 
 namespace Encore\Admin\Grid;
 
+use Encore\Admin\Middleware\Pjax;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 
 class Model
 {
@@ -65,6 +69,13 @@ class Model
     protected $sortName = '_sort';
 
     /**
+     * Collection callback.
+     *
+     * @var \Closure
+     */
+    protected $collectionCallback;
+
+    /**
      * Create a new grid model instance.
      *
      * @param EloquentModel $model
@@ -74,6 +85,22 @@ class Model
         $this->model = $model;
 
         $this->queries = collect();
+
+//        static::doNotSnakeAttributes($this->model);
+    }
+
+    /**
+     * Don't snake case attributes.
+     *
+     * @param EloquentModel $model
+     *
+     * @return void
+     */
+    protected static function doNotSnakeAttributes(EloquentModel $model)
+    {
+        $class = get_class($model);
+
+        $class::$snakeAttributes = false;
     }
 
     /**
@@ -145,17 +172,66 @@ class Model
     }
 
     /**
+     * Set collection callback.
+     *
+     * @param \Closure $callback
+     *
+     * @return $this
+     */
+    public function collection(\Closure $callback = null)
+    {
+        $this->collectionCallback = $callback;
+
+        return $this;
+    }
+
+    /**
      * Build.
      *
-     * @return array
+     * @param bool $toArray
+     *
+     * @return array|Collection|mixed
      */
-    public function buildData()
+    public function buildData($toArray = true)
     {
         if (empty($this->data)) {
-            $this->data = $this->get()->toArray();
+            $collection = $this->get();
+
+            if ($this->collectionCallback) {
+                $collection = call_user_func($this->collectionCallback, $collection);
+            }
+
+            if ($toArray) {
+                $this->data = $collection->toArray();
+            } else {
+                $this->data = $collection;
+            }
         }
 
         return $this->data;
+    }
+
+    /**
+     * @param callable $callback
+     * @param int      $count
+     *
+     * @return bool
+     */
+    public function chunk($callback, $count = 100)
+    {
+        if ($this->usePaginate) {
+            return $this->buildData(false)->chunk($count)->each($callback);
+        }
+
+        $this->setSort();
+
+        $this->queries->reject(function ($query) {
+            return $query['method'] == 'paginate';
+        })->each(function ($query) {
+            $this->model = $this->model->{$query['method']}(...$query['arguments']);
+        });
+
+        return $this->model->chunk($count, $callback);
     }
 
     /**
@@ -163,13 +239,15 @@ class Model
      *
      * @param array $conditions
      *
-     * @return void
+     * @return $this
      */
     public function addConditions(array $conditions)
     {
         foreach ($conditions as $condition) {
             call_user_func_array([$this, key($condition)], current($condition));
         }
+
+        return $this;
     }
 
     /**
@@ -189,7 +267,7 @@ class Model
      */
     protected function get()
     {
-        if ($this->model instanceof AbstractPaginator) {
+        if ($this->model instanceof LengthAwarePaginator) {
             return $this->model;
         }
 
@@ -204,11 +282,31 @@ class Model
             return $this->model;
         }
 
-        if ($this->model instanceof AbstractPaginator) {
+        if ($this->model instanceof LengthAwarePaginator) {
+            $this->handleInvalidPage($this->model);
+
             return $this->model->getCollection();
         }
 
         throw new \Exception('Grid query error');
+    }
+
+    /**
+     * If current page is greater than last page, then redirect to last page.
+     *
+     * @param LengthAwarePaginator $paginator
+     *
+     * @return void
+     */
+    protected function handleInvalidPage(LengthAwarePaginator $paginator)
+    {
+        if ($paginator->lastPage() && $paginator->currentPage() > $paginator->lastPage()) {
+            $lastPageUrl = Request::fullUrlWithQuery([
+                $paginator->getPageName() => $paginator->lastPage(),
+            ]);
+
+            Pjax::respond(redirect($lastPageUrl));
+        }
     }
 
     /**
@@ -250,12 +348,16 @@ class Model
     {
         if ($perPage = app('request')->input($this->perPageName)) {
             if (is_array($paginate)) {
-                $paginate['arguments'][0] = $perPage;
+                $paginate['arguments'][0] = (int) $perPage;
 
                 return $paginate['arguments'];
             }
 
-            $this->perPage = $perPage;
+            $this->perPage = (int) $perPage;
+        }
+
+        if (isset($paginate['arguments'][0])) {
+            return $paginate['arguments'];
         }
 
         return [$this->perPage];
@@ -349,20 +451,39 @@ class Model
     }
 
     /**
-     * Build join parameters.
+     * Build join parameters for related model.
+     *
+     * `HasOne` and `BelongsTo` relation has different join parameters.
      *
      * @param Relation $relation
+     *
+     * @throws \Exception
      *
      * @return array
      */
     protected function joinParameters(Relation $relation)
     {
-        return [
-            $relation->getRelated()->getTable(),
-            $relation->getQualifiedParentKeyName(),
-            '=',
-            $relation->getForeignKey(),
-        ];
+        $relatedTable = $relation->getRelated()->getTable();
+
+        if ($relation instanceof BelongsTo) {
+            return [
+                $relatedTable,
+                $relation->getForeignKey(),
+                '=',
+                $relatedTable.'.'.$relation->getRelated()->getKeyName(),
+            ];
+        }
+
+        if ($relation instanceof HasOne) {
+            return [
+                $relatedTable,
+                $relation->getQualifiedParentKeyName(),
+                '=',
+                $relation->getQualifiedForeignKeyName(),
+            ];
+        }
+
+        throw new \Exception('Related sortable only support `HasOne` and `BelongsTo` relation.');
     }
 
     /**

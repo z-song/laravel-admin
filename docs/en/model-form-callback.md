@@ -25,6 +25,15 @@ $form->saving(function (Form $form) {
 
 ```
 
+Get data in model
+```php
+$form->saved(function (Form $form) {
+
+    $form->model()->id;
+
+});
+```
+
 Can redirect other urls by returning an instance of `Symfony\Component\HttpFoundation\Response` directly in the callback:
 
 ```php

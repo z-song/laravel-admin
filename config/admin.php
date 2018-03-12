@@ -5,12 +5,29 @@ return [
     /*
      * Laravel-admin name.
      */
-    'name'  => 'Laravel-admin',
+    'name' => 'Laravel-admin',
 
     /*
-     * Laravel-admin url prefix.
+     * Logo in admin panel header.
      */
-    'prefix'    => 'admin',
+    'logo' => '<b>Laravel</b> admin',
+
+    /*
+     * Mini-logo in admin panel header.
+     */
+    'logo-mini' => '<b>La</b>',
+
+    /*
+     * Route configuration.
+     */
+    'route' => [
+
+        'prefix' => 'admin',
+
+        'namespace' => 'App\\Admin\\Controllers',
+
+        'middleware' => ['web', 'admin'],
+    ],
 
     /*
      * Laravel-admin install directory.
@@ -18,32 +35,45 @@ return [
     'directory' => app_path('Admin'),
 
     /*
-     * Laravel-admin title.
+     * Laravel-admin html title.
      */
-    'title'  => 'Admin',
+    'title' => 'Admin',
+
+    /*
+     * Use `https`.
+     */
+    'secure' => false,
 
     /*
      * Laravel-admin auth setting.
      */
     'auth' => [
-        'driver'   => 'session',
-        'provider' => '',
-        'model'    => Encore\Admin\Auth\Database\Administrator::class,
+        'guards' => [
+            'admin' => [
+                'driver'   => 'session',
+                'provider' => 'admin',
+            ],
+        ],
+
+        'providers' => [
+            'admin' => [
+                'driver' => 'eloquent',
+                'model'  => Encore\Admin\Auth\Database\Administrator::class,
+            ],
+        ],
     ],
 
     /*
      * Laravel-admin upload setting.
      */
-    'upload'  => [
+    'upload' => [
 
         'disk' => 'admin',
 
-        'directory'  => [
-            'image'  => 'image',
-            'file'   => 'file',
+        'directory' => [
+            'image' => 'images',
+            'file'  => 'files',
         ],
-
-        'host' => 'http://localhost:8000/upload/',
     ],
 
     /*
@@ -52,7 +82,7 @@ return [
     'database' => [
 
         // Database connection for following tables.
-        'connection'  => '',
+        'connection' => '',
 
         // User tables and model.
         'users_table' => 'admin_users',
@@ -67,8 +97,8 @@ return [
         'permissions_model' => Encore\Admin\Auth\Database\Permission::class,
 
         // Menu table and model.
-        'menu_table'  => 'admin_menu',
-        'menu_model'  => Encore\Admin\Auth\Database\Menu::class,
+        'menu_table' => 'admin_menu',
+        'menu_model' => Encore\Admin\Auth\Database\Menu::class,
 
         // Pivot table for table above.
         'operation_log_table'    => 'admin_operation_log',
@@ -79,16 +109,27 @@ return [
     ],
 
     /*
-    |---------------------------------------------------------|
-    | SKINS         | skin-blue                               |
-    |               | skin-black                              |
-    |               | skin-purple                             |
-    |               | skin-yellow                             |
-    |               | skin-red                                |
-    |               | skin-green                              |
-    |---------------------------------------------------------|
+     * By setting this option to open or close operation log in laravel-admin.
      */
-    'skin'    => 'skin-blue',
+    'operation_log' => [
+
+        'enable' => true,
+
+        /*
+         * Routes that will not log to database.
+         *
+         * All method to path like: admin/auth/logs
+         * or specific method to path like: get:admin/auth/logs
+         */
+        'except' => [
+            'admin/auth/logs*',
+        ],
+    ],
+
+    /*
+     * @see https://adminlte.io/docs/2.4/layout
+     */
+    'skin' => 'skin-blue-light',
 
     /*
     |---------------------------------------------------------|
@@ -99,7 +140,17 @@ return [
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
      */
-    'layout'  => ['sidebar-mini'],
+    'layout' => ['sidebar-mini', 'sidebar-collapse'],
 
-    'version'   => '1.0',
+    /*
+     * Version displayed in footer.
+     */
+    'version' => '1.5.x-dev',
+
+    /*
+     * Settings for extensions.
+     */
+    'extensions' => [
+
+    ],
 ];

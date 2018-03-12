@@ -3,16 +3,39 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Grid;
-use Illuminate\Support\Arr;
+use Encore\Admin\Grid\Exporters\CsvExporter;
 
 class Exporter
 {
+    /**
+     * Export scope constants.
+     */
+    const SCOPE_ALL = 'all';
+    const SCOPE_CURRENT_PAGE = 'page';
+    const SCOPE_SELECTED_ROWS = 'selected';
+
     /**
      * @var Grid
      */
     protected $grid;
 
     /**
+     * Available exporter drivers.
+     *
+     * @var array
+     */
+    protected static $drivers = [];
+
+    /**
+     * Export query name.
+     *
+     * @var string
+     */
+    public static $queryName = '_export_';
+
+    /**
+     * Create a new Exporter instance.
+     *
      * @param Grid $grid
      */
     public function __construct(Grid $grid)
@@ -23,53 +46,92 @@ class Exporter
     }
 
     /**
-     * Export csv file.
+     * Set export query name.
      *
-     * @return mixed
+     * @param $name
      */
-    public function export()
+    public static function setQueryName($name)
     {
-        $titles = [];
-
-        $filename = $this->grid->model()->eloquent()->getTable().'.csv';
-
-        $data = $this->grid->processFilter();
-
-        if (!empty($data)) {
-            $columns = array_dot($this->sanitize($data[0]));
-
-            $titles = array_keys($columns);
-        }
-
-        $output = implode(',', $titles)."\n";
-
-        foreach ($data as $row) {
-            $row = array_only($row, $titles);
-            $output .= implode(',', array_dot($row))."\n";
-        }
-
-        $headers = [
-            'Content-Encoding'    => 'UTF-8',
-            'Content-Type'        => 'text/csv;charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"$filename\"",
-        ];
-
-        response(rtrim($output, "\n"), 200, $headers)->send();
-
-        exit;
+        static::$queryName = $name;
     }
 
     /**
-     * Remove indexed array.
+     * Extends new exporter driver.
      *
-     * @param array $row
+     * @param $driver
+     * @param $extend
+     */
+    public static function extend($driver, $extend)
+    {
+        static::$drivers[$driver] = $extend;
+    }
+
+    /**
+     * Resolve export driver.
+     *
+     * @param string $driver
+     *
+     * @return CsvExporter
+     */
+    public function resolve($driver)
+    {
+        if ($driver instanceof Grid\Exporters\AbstractExporter) {
+            return $driver->setGrid($this->grid);
+        }
+
+        return $this->getExporter($driver);
+    }
+
+    /**
+     * Get export driver.
+     *
+     * @param string $driver
+     *
+     * @return CsvExporter
+     */
+    protected function getExporter($driver)
+    {
+        if (!array_key_exists($driver, static::$drivers)) {
+            return $this->getDefaultExporter();
+        }
+
+        return new static::$drivers[$driver]($this->grid);
+    }
+
+    /**
+     * Get default exporter.
+     *
+     * @return CsvExporter
+     */
+    public function getDefaultExporter()
+    {
+        return new CsvExporter($this->grid);
+    }
+
+    /**
+     * Format query for export url.
+     *
+     * @param int  $scope
+     * @param null $args
      *
      * @return array
      */
-    protected function sanitize(array $row)
+    public static function formatExportQuery($scope = '', $args = null)
     {
-        return collect($row)->reject(function ($val, $_) {
-            return is_array($val) && !Arr::isAssoc($val);
-        })->toArray();
+        $query = '';
+
+        if ($scope == static::SCOPE_ALL) {
+            $query = 'all';
+        }
+
+        if ($scope == static::SCOPE_CURRENT_PAGE) {
+            $query = "page:$args";
+        }
+
+        if ($scope == static::SCOPE_SELECTED_ROWS) {
+            $query = "selected:$args";
+        }
+
+        return [static::$queryName => $query];
     }
 }

@@ -10,11 +10,11 @@ laravel-admin
 
 `laravel-admin` is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.
 
-[Demo](http://120.26.143.106/admin) use `username/password:admin/admin`
+[Demo](http://laravel-admin.org/demo) use `username/password:admin/admin`
 
 Inspired by [SleepingOwlAdmin](https://github.com/sleeping-owl/admin) and [rapyd-laravel](https://github.com/zofe/rapyd-laravel).
 
-[Documentation](http://z-song.github.io/laravel-admin/) | [中文文档](http://z-song.github.io/laravel-admin/#/zh/)
+[Documentation](http://laravel-admin.org/docs) | [中文文档](http://laravel-admin.org/docs/#/zh/)
 
 Screenshots
 ------------
@@ -24,33 +24,18 @@ Screenshots
 Installation
 ------------
 
-First, install laravel, and make sure that the database connection settings are correct.
+> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](http://laravel-admin.org/docs/v1.4/#/) 
+
+First, install laravel 5.5, and make sure that the database connection settings are correct.
 
 ```
-Laravel 5.1
-composer require encore/laravel-admin "1.1.*"
-
-Laravel 5.2
-composer require encore/laravel-admin "1.2.*"
-
-Laravel 5.3
-composer require encore/laravel-admin "1.3.*"
-
-Laravel 5.4
-composer require encore/laravel-admin "1.4.x-dev"
-
-```
-
-In`config/app.php`add`ServiceProvider`:
-
-```
-Encore\Admin\Providers\AdminServiceProvider::class
+composer require encore/laravel-admin 1.5.*
 ```
 
 Then run these commands to publish assets and config：
 
 ```
-php artisan vendor:publish --tag=laravel-admin
+php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
 ```
 After run command you can find config file in `config/admin.php`, in this file you can change the install directory,db connection or table names.
 

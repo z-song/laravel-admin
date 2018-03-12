@@ -53,6 +53,8 @@ $grid->column('day')->editable('day');
 
 ### switch
 
+> notice: If set up a switch for a column the grid, then need to set the column in the form of the same switch
+
 Quickly turn a column into a switch component using the following methods:
 ```php
 $grid->status()->switch();
@@ -67,6 +69,8 @@ $grid->status()->switch($states);
 ```
 
 ### switchGroup
+
+> notice: If set up switch for some columns the grid, then need to set these columns in the form of the same switch
 
 To quickly change a column into a switch component group, use the following method:
 ```php
@@ -134,7 +138,7 @@ $grid->pictures()->display(function ($pictures) {
 ```php
 $grid->name()->label();
 
-//Set color，defaults to `success`, other options `danger`、`warning`、`info`、`primary`、`default`、`success`
+//Set color,defaults to `success`, other options `danger`、`warning`、`info`、`primary`、`default`、`success`
 $grid->name()->label('danger');
 
 // can handle a array
@@ -146,7 +150,7 @@ $grid->keywords()->label();
 ```php
 $grid->name()->badge();
 
-//Set color，defaults to `success`, other options `danger`、`warning`、`info`、`primary`、`default`、`success`
+//Set color,defaults to `success`, other options `danger`、`warning`、`info`、`primary`、`default`、`success`
 $grid->name()->badge('danger');
 
 // can handle a array
