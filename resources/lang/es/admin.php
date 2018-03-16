@@ -2,9 +2,9 @@
 
 return [
     'online'                => 'en línea',
-    'login'                 => 'Inicar sesión',
+    'login'                 => 'Iniciar sesión',
     'logout'                => 'Cerrar sesión',
-    'setting'               => 'Ajuste',
+    'setting'               => 'Ajustes',
     'name'                  => 'Nombre',
     'username'              => 'Nombre de usuario',
     'password'              => 'Contraseña',
@@ -45,17 +45,17 @@ return [
     'input'             => 'Entrada',
     'succeeded'         => 'Exitoso',
     'failed'            => 'Fallido',
-    'delete_confirm'    => '¿ Esta seguro de eliminar este ítem ?',
-    'delete_succeeded'  => 'Eliminación exitosa !',
-    'delete_failed'     => 'Eliminación fallida !',
-    'update_succeeded'  => 'Actualización correcta !',
-    'save_succeeded'    => 'Guardar con éxito !',
-    'refresh_succeeded' => 'Actualizar correctamente !',
+    'delete_confirm'    => '¿ Esta seguro de eliminar este elemento ?',
+    'delete_succeeded'  => '¡ Eliminación exitosa !',
+    'delete_failed'     => '¡ Eliminación fallida !',
+    'update_succeeded'  => '¡ Actualización correcta !',
+    'save_succeeded'    => '¡ Guardar con éxito !',
+    'refresh_succeeded' => '¡ Actualizar correctamente !',
     'login_successful'  => 'Inicio de sesión correcto',
 
-    'choose'       => 'Escoger',
-    'choose_file'  => 'Escoger archivo',
-    'choose_image' => 'Escoger imagen',
+    'choose'       => 'Elegir',
+    'choose_file'  => 'Elegir archivo',
+    'choose_image' => 'Elegir imagen',
 
     'more' => 'Más',
     'deny' => 'Permiso denegado',
@@ -75,13 +75,13 @@ return [
     'uri'       => 'URI',
 
     'operation_log'       => 'Registro',
-    'parent_select_error' => 'Error al seleccionar Padre',
+    'parent_select_error' => 'Error al seleccionar el elemento padre',
 
     'pagination' => [
-        'range' => 'Showing :first to :last of :total entries',
+        'range' => 'Mostrando :first a :last de :total elementos',
     ],
 
-    'role'       => 'Papel',
+    'role'       => 'Rol',
     'permission' => 'Permiso',
     'route'      => 'Route',
     'confirm'    => 'Confirmar',
