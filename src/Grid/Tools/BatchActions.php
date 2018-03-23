@@ -128,11 +128,10 @@ EOT;
         }
 
         $this->setUpScripts();
-        
-        if ($this->actions->isEmpty()) {
-            return view('admin::grid.empty-batch-actions', ['actions' => $this->actions])->render();
-        }
 
+        if ($this->actions->isEmpty()) {
+            return view('admin::grid.empty-batch-actions')->render();
+        }
 
         return view('admin::grid.batch-actions', ['actions' => $this->actions])->render();
     }
