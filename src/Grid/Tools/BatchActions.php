@@ -127,11 +127,12 @@ EOT;
             $this->actions->shift();
         }
 
+        $this->setUpScripts();
+        
         if ($this->actions->isEmpty()) {
-            return '';
+            return view('admin::grid.empty-batch-actions', ['actions' => $this->actions])->render();
         }
 
-        $this->setUpScripts();
 
         return view('admin::grid.batch-actions', ['actions' => $this->actions])->render();
     }
