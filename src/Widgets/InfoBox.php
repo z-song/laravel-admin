@@ -25,13 +25,17 @@ class InfoBox extends Widget implements Renderable
      * @param string $link
      * @param string $info
      */
-    public function __construct($name, $icon, $color, $link, $info)
+    public function __construct($name, $icon, $color, $link, $info, $more_text =null )
     {
+        if ($more_text == null) $more_text = trans('admin.more');
+
+
         $this->data = [
             'name' => $name,
             'icon' => $icon,
             'link' => $link,
             'info' => $info,
+            'more_text' => $more_text,
         ];
 
         $this->class("small-box bg-$color");

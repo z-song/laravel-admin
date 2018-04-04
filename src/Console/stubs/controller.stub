@@ -83,6 +83,8 @@ class DummyClass extends Controller
     /**
      * Make a form builder.
      *
+     * @see CreateDummyModelTable for migration
+     *
      * @return Form
      */
     protected function form()

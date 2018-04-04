@@ -44,10 +44,10 @@
                             </p>
                         </li>
                         <li class="user-footer">
-                            <div class="pull-left">
+                            <div class="pull-right">
                                 <a href="{{ admin_base_path('auth/setting') }}" class="btn btn-default btn-flat">{{ trans('admin.setting') }}</a>
                             </div>
-                            <div class="pull-right">
+                            <div class="pull-left">
                                 <a href="{{ admin_base_path('auth/logout') }}" class="btn btn-default btn-flat">{{ trans('admin.logout') }}</a>
                             </div>
                         </li>

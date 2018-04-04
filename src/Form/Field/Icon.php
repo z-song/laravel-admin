@@ -14,11 +14,36 @@ class Icon extends Text
         '/vendor/laravel-admin/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js',
     ];
 
+    public function __construct($column, array $arguments = [])
+    {
+        parent::__construct($column, $arguments);
+        $this->options(['placement' => 'bottomLeft']);
+
+    }
+
+    /**
+     * Set placement setting of iconpicker.
+     * second word must be upper case
+     * example bottomLeft or bottomRight
+     *
+     * @param string $placement
+     *
+     * @return $this
+     */
+    public function placement($placement)
+    {
+        $this->options(['placement' => $placement]);
+        return $this;
+    }
+
     public function render()
     {
+
+        $startOptions = json_encode($this->options);
+
         $this->script = <<<EOT
 
-$('{$this->getElementClassSelector()}').iconpicker({placement:'bottomLeft'});
+$('{$this->getElementClassSelector()}').iconpicker($startOptions);
 
 EOT;
 

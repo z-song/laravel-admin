@@ -3,7 +3,7 @@
 
         <h3 class="box-title"></h3>
 
-        <div class="pull-right">
+        <div class="pull-left">
             {!! $grid->renderFilter() !!}
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}

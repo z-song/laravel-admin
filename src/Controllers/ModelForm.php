@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Form\Builder;
+
 trait ModelForm
 {
     /**
@@ -13,7 +15,7 @@ trait ModelForm
      */
     public function show($id)
     {
-        return $this->edit($id);
+        return $this->edit($id, true);
     }
 
     /**
@@ -25,7 +27,7 @@ trait ModelForm
      */
     public function update($id)
     {
-        return $this->form()->update($id);
+        return $this->form(Builder::MODE_EDIT)->update($id);
     }
 
     /**
@@ -57,6 +59,6 @@ trait ModelForm
      */
     public function store()
     {
-        return $this->form()->store();
+        return $this->form(Builder::MODE_CREATE)->store();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Auth\Database;
 
+use App\Models\Traits\TAdmin;
 use Encore\Admin\Traits\AdminBuilder;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -9,12 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Administrator.
- *
+ * @mixin \Eloquent
  * @property Role[] $roles
  */
 class Administrator extends Model implements AuthenticatableContract
 {
-    use Authenticatable, AdminBuilder, HasPermissions;
+    use Authenticatable, AdminBuilder, HasPermissions, TAdmin;
 
     protected $fillable = ['username', 'password', 'name', 'avatar'];
 

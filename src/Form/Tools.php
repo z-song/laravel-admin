@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form;
 
+use App\Admin\Extensions\Form\Tools\TFormTools;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Htmlable;
@@ -11,6 +12,7 @@ use Illuminate\Support\Str;
 
 class Tools implements Renderable
 {
+    use TFormTools;
     /**
      * @var Builder
      */
