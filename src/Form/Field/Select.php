@@ -140,10 +140,10 @@ EOT;
      *
      * @return $this
      */
-    public function loads($fields = [], $sourceUrls = [] , $idField = 'id', $textField = 'text')
+    public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text')
     {
-        $fieldsStr = join(".", $fields);
-        $urlsStr = join("^", $sourceUrls);
+        $fieldsStr = implode('.', $fields);
+        $urlsStr = implode('^', $sourceUrls);
         $script = <<<EOT
 var fields = '$fieldsStr'.split('.');
 var urls = '$urlsStr'.split('^');
