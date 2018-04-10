@@ -8,7 +8,7 @@ class Email extends Text
 
     public function render()
     {
-        $this->prepend('<i class="fa fa-envelope"></i>')
+        $this->prepend('<i class="fa fa-envelope fa-fw"></i>')
             ->defaultAttribute('type', 'email');
 
         return parent::render();
