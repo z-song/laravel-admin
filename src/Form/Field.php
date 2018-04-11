@@ -404,6 +404,12 @@ class Field implements Renderable
             $this->rules = implode('|', $rules);
         }
 
+        if (is_array($rules)) {
+            $thisRuleArr = array_filter(explode('|', $this->rules));
+
+            $this->rules = array_merge($thisRuleArr, $this->rules);
+        }
+
         $this->validationMessages = $messages;
 
         return $this;
