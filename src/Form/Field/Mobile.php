@@ -26,7 +26,7 @@ class Mobile extends Text
 $('{$this->getElementClassSelector()}').inputmask($options);
 EOT;
 
-        $this->prepend('<i class="fa fa-phone"></i>')
+        $this->prepend('<i class="fa fa-phone fa-fw"></i>')
             ->defaultAttribute('style', 'width: 150px');
 
         return parent::render();
