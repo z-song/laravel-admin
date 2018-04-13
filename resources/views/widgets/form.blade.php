@@ -9,7 +9,7 @@
 
     <!-- /.box-body -->
     <div class="box-footer">
-    @if( ! $method == 'GET')
+    @if ($method != 'GET')
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
     @endif
         <div class="col-md-2"></div>
