@@ -167,6 +167,7 @@ class File extends Field
      */
     public function render()
     {
+        $this->options(['overwriteInitial' => true]);
         $this->setupDefaultOptions();
 
         if (!empty($this->value)) {
@@ -175,8 +176,6 @@ class File extends Field
 
             $this->setupPreviewOptions();
         }
-
-        $this->options(['overwriteInitial' => true]);
 
         $options = json_encode($this->options);
 
