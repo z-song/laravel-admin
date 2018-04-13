@@ -85,10 +85,10 @@ class Dashboard
                 'link' => 'https://github.com/laravel-admin-extensions/reporter',
                 'icon' => 'bug',
             ],
-            'translation' => [
-                'name' => 'laravel-admin-ext/translation',
-                'link' => 'https://github.com/laravel-admin-extensions/translation',
-                'icon' => 'language',
+            'redis-manager' => [
+                'name' => 'laravel-admin-ext/redis-manager',
+                'link' => 'https://github.com/laravel-admin-extensions/redis-manager',
+                'icon' => 'flask',
             ],
         ];
 
