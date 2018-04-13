@@ -170,7 +170,7 @@ class File extends Field
         $this->setupDefaultOptions();
 
         if (!empty($this->value)) {
-            $this->attribute('data-initial-preview', $this->preview());
+            $this->attribute('data-initial-preview', addslashes($this->preview()));
             $this->attribute('data-initial-caption', $this->initialCaption($this->value));
 
             $this->setupPreviewOptions();
