@@ -446,7 +446,7 @@ class Model
     public function resetOrderBy()
     {
         $this->queries = $this->queries->reject(function ($query) {
-            return $query['method'] == 'orderBy';
+            return $query['method'] == 'orderBy' || $query['method'] == 'orderByDesc';
         });
     }
 
