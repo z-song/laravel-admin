@@ -147,7 +147,7 @@ class UserFormTest extends TestCase
             ->type('hello world', 'username')
             ->type('123', 'password')
             ->type('123', 'password_confirmation')
-            ->press('Submit')
+            ->press('Save')
             ->seePageIs('admin/users')
             ->seeInDatabase('test_users', ['username' => 'hello world']);
 
@@ -164,26 +164,26 @@ class UserFormTest extends TestCase
 
         $this->visit("admin/users/$id/edit")
             ->type('', 'email')
-            ->press('Submit')
+            ->press('Save')
             ->seePageIs("admin/users/$id/edit")
             ->see('The email field is required');
 
         $this->type('xxaxx', 'email')
-            ->press('Submit')
+            ->press('Save')
             ->seePageIs("admin/users/$id/edit")
             ->see('The email must be a valid email address.');
 
         $this->visit("admin/users/$id/edit")
             ->type('123', 'password')
             ->type('1234', 'password_confirmation')
-            ->press('Submit')
+            ->press('Save')
             ->seePageIs("admin/users/$id/edit")
             ->see('The Password confirmation does not match.');
 
         $this->type('xx@xx.xx', 'email')
             ->type('123', 'password')
             ->type('123', 'password_confirmation')
-            ->press('Submit')
+            ->press('Save')
             ->seePageIs('admin/users')
             ->seeInDatabase('test_users', ['email' => 'xx@xx.xx']);
     }
