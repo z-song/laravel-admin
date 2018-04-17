@@ -53,7 +53,7 @@ class MenuTest extends TestCase
     {
         $this->visit('admin/auth/menu/1/edit')
             ->see('Menu')
-            ->submitForm('Submit', ['title' => 'blablabla'])
+            ->submitForm('Save', ['title' => 'blablabla'])
             ->seePageIs('admin/auth/menu')
             ->seeInDatabase(config('admin.database.menu_table'), ['title' => 'blablabla'])
             ->assertEquals(7, Menu::count());

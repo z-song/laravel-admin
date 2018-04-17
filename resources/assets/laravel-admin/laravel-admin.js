@@ -9,7 +9,7 @@ $.fn.editable.defaults.error = function (data) {
     var msg = '';
     if (data.responseJSON.errors) {
         $.each(data.responseJSON.errors, function (k, v) {
-            msg += v + '\\n';
+            msg += v + "\n";
         });
     }
     return msg
