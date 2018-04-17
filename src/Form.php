@@ -498,9 +498,9 @@ class Form
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function update($id)
+    public function update($id, $data = null)
     {
-        $data = Input::all();
+        $data = ($data) ?: Input::all();
 
         $isEditable = $this->isEditable($data);
 
@@ -1172,6 +1172,10 @@ class Form
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
+        }
+        // # fix #1768
+        if ($segments[0] == 'http:' && config('admin.secure') == true) {
+            $segments[0] = 'https:';
         }
 
         return implode('/', $segments);
