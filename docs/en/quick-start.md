@@ -16,7 +16,7 @@ CREATE TABLE `users` (
 ```
 And the model for this table is `App\User.php`
 
-You can follow these steps to setup `CURD` interfaces of table `users`:
+You can follow these steps to setup `CRUD` interfaces of table `users`:
 
 ## Add controller
 
