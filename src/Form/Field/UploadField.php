@@ -287,8 +287,8 @@ trait UploadField
         if (URL::isValidUrl($path)) {
             return $path;
         }
-        
-        if($this->storage){
+
+        if ($this->storage) {
             return $this->storage->url($path);
         }
 
