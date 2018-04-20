@@ -152,7 +152,7 @@ trait ModelTree
         }
 
         foreach ($nodes as $node) {
-            if ($node[$this->parentColumn] == $parentId) {
+            if ($node[$this->parentColumn] === $parentId) {
                 $children = $this->buildNestedArray($nodes, $node[$this->getKeyName()]);
 
                 if ($children) {
@@ -259,7 +259,7 @@ trait ModelTree
 
         foreach ($nodes as $node) {
             $node[$this->titleColumn] = $prefix.'&nbsp;'.$node[$this->titleColumn];
-            if ($node[$this->parentColumn] == $parentId) {
+            if ($node[$this->parentColumn] === $parentId) {
                 $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $prefix.$prefix);
 
                 $options[$node[$this->getKeyName()]] = $node[$this->titleColumn];
@@ -293,7 +293,7 @@ trait ModelTree
         static::saving(function (Model $branch) {
             $parentColumn = $branch->getParentColumn();
 
-            if (Request::has($parentColumn) && Request::input($parentColumn) == $branch->getKey()) {
+            if (Request::has($parentColumn) && Request::input($parentColumn) === $branch->getKey()) {
                 throw new \Exception(trans('admin.parent_select_error'));
             }
 
