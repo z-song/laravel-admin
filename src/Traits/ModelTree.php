@@ -259,7 +259,7 @@ trait ModelTree
 
         foreach ($nodes as $node) {
             $node[$this->titleColumn] = $prefix.'&nbsp;'.$node[$this->titleColumn];
-            if ($node[$this->parentColumn] == $parentId) {
+            if ($node[$this->parentColumn] === $parentId) {
                 $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $prefix.$prefix);
 
                 $options[$node[$this->getKeyName()]] = $node[$this->titleColumn];
