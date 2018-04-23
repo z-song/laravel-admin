@@ -27,7 +27,7 @@ $ php artisan admin:import media-manager
 
 ```
 
-`disk`为`config/filesystem.php`中设置的本地disk，然后打开`http://localhost/admin/media-manager`访问.
+`disk`为`config/filesystem.php`中设置的本地disk，然后打开`http://localhost/admin/media`访问.
 
 注意如果要预览disk中的图片，必须在disk中设置访问url前缀： 
 
