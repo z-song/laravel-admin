@@ -1,3 +1,6 @@
+@if($fieldWidth)
+    <div class="col-md-{{$fieldWidth}}">
+@endif
 <div class="{{$viewClass['form-group']}}">
     <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
@@ -12,3 +15,6 @@
 
     </div>
 </div>
+@if($fieldWidth)
+    </div>
+@endif

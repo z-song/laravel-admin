@@ -179,6 +179,23 @@ class Field implements Renderable
     ];
 
     /**
+     * Set field width
+     *
+     * @var integer
+     */
+    protected $fieldWidth;
+
+    /**
+     * @var boolean
+     */
+    protected $labelNoWidth;
+
+    /**
+     * @var boolean
+     */
+    protected $controlLabel;
+
+    /**
      * If the form horizontal layout.
      *
      * @var bool
@@ -684,6 +701,63 @@ class Field implements Renderable
     }
 
     /**
+     * @param bool $enable
+     * @return $this
+     */
+    public function controlLabel($enable = true)
+    {
+        $this->controlLabel = $enable;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getControlLabel()
+    {
+        return $this->controlLabel;
+    }
+
+    /**
+     * @param bool $enable
+     * @return $this
+     */
+    public function labelNoWidth($enable = false)
+    {
+        $this->labelNoWidth = $enable;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getLabelNoWidth()
+    {
+        return $this->labelNoWidth;
+    }
+
+    /**
+     * @param null $width
+     * @return $this
+     */
+    public function fieldWidth($width = null)
+    {
+        $this->fieldWidth = $width;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFieldWidth()
+    {
+        return $this->fieldWidth;
+    }
+
+    /**
      * Prepare for a field value before update or insert.
      *
      * @param $value
@@ -726,6 +800,14 @@ class Field implements Renderable
      */
     public function getViewElementClasses()
     {
+        if ($this->getLabelNoWidth()) {
+            return [
+                'label'      => "",
+                'field'      => "",
+                'form-group' => 'form-group ',
+            ];
+        }
+
         if ($this->horizontal) {
             return [
                 'label'      => "col-sm-{$this->width['label']}",
@@ -872,6 +954,8 @@ class Field implements Renderable
             'errorKey'    => $this->getErrorKey(),
             'attributes'  => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),
+            'controlLabel' => $this->getControlLabel(),
+            'fieldWidth'   => $this->getFieldWidth(),
         ]);
     }
 
