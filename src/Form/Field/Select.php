@@ -115,7 +115,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
         $(target).select2({
-            data: $.map(data, function (d) {
+            data: $.map(JSON.parse(data), function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
                 return d;
