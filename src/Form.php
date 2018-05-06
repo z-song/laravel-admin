@@ -1112,6 +1112,19 @@ class Form
     }
 
     /**
+     * Set title for form.
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title = '')
+    {
+        $this->builder()->setTitle($title);
+
+        return $this;
+    }
+
+    /**
      * Add a row in form.
      *
      * @param Closure $callback
