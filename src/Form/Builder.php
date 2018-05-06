@@ -241,11 +241,12 @@ class Builder
      * Set title for form.
      *
      * @param string $title
+     *
      * @return $this
      */
     public function setTitle($title)
     {
-        $this->title =  $title;
+        $this->title = $title;
 
         return $this;
     }
