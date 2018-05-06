@@ -1115,6 +1115,7 @@ class Form
      * Set title for form.
      *
      * @param string $title
+     *
      * @return $this
      */
     public function setTitle($title = '')

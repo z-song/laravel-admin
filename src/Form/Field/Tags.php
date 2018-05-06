@@ -81,7 +81,7 @@ class Tags extends Field
         });";
 
         return parent::render()->with([
-            'options' => array_unique(array_merge($this->value, $this->options))
+            'options' => array_unique(array_merge($this->value, $this->options)),
         ]);
     }
 }
