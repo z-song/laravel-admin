@@ -1233,6 +1233,8 @@ class Form
      */
     public static function registerBuiltinFields()
     {
+        static $already_registed = false;
+        if($already_registed) return;
         $map = [
             'button'         => \Encore\Admin\Form\Field\Button::class,
             'checkbox'       => \Encore\Admin\Form\Field\Checkbox::class,
@@ -1285,6 +1287,8 @@ class Form
         foreach ($map as $abstract => $class) {
             static::extend($abstract, $class);
         }
+
+        $already_registed = true;
     }
 
     /**
