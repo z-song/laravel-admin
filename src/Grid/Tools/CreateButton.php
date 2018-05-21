@@ -28,11 +28,11 @@ class CreateButton extends AbstractTool
         }
 
         $new = trans('admin.new');
-
+        $resource_url= url($this->grid->resource());
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="{$this->grid->resource()}/create" class="btn btn-sm btn-success">
+    <a href="{$resource_url}/create" class="btn btn-sm btn-success">
         <i class="fa fa-save"></i>&nbsp;&nbsp;{$new}
     </a>
 </div>
