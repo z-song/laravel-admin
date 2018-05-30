@@ -293,6 +293,15 @@ EOT;
         if (empty($this->script)) {
             $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
         }
+        if (!empty($this->orderField)) {
+            $this->script .= <<<EOF
+$("{$this->getElementClassSelector()}").on('select2:select', function(e) {
+    var element = $(this).find('[value="' + e.params.data.id + '"]');
+    $(this).append(element);
+    $(this).trigger('change');
+});
+EOF;
+        }
 
         if ($this->options instanceof \Closure) {
             if ($this->form) {
@@ -303,10 +312,33 @@ EOT;
         }
 
         $this->options = array_filter($this->options);
+        $this->options = $this->sortOptions($this->options, $this->value);
 
         return parent::render()->with([
             'options' => $this->options,
             'groups'  => $this->groups,
         ]);
+    }
+
+    /**
+     * sort select options based on stored value
+     *
+     * @param array $options
+     * @param array $value
+     *
+     * @return array
+     */
+    private function sortOptions($options, $value)
+    {
+        $sorted = [];
+        if (empty($value) || !is_array($value)) {
+            return $sorted;
+        }
+        foreach ($value as $tv) {
+            $sorted[$tv] = $options[$tv];
+            unset($options[$tv]);
+        }
+        $sorted = $sorted + $options;
+        return $sorted;
     }
 }

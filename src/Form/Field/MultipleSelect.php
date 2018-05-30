@@ -80,7 +80,25 @@ class MultipleSelect extends Select
     public function prepare($value)
     {
         $value = (array) $value;
+        $filtered = array_filter($value);
+        if (!empty($this->orderField)) {
+            $newData = [];
+            foreach ($filtered as $k => $v) {
+                $newData[$v] = [$this->orderField => $k];
+            }
+            return $newData;
+        }
+        return $filtered;
+    }
 
-        return array_filter($value);
+    /**
+     * Manually ordering
+     *
+     * @return $this
+     */
+    public function usingOrder($orderField)
+    {
+        $this->orderField = $orderField;
+        return $this;
     }
 }
