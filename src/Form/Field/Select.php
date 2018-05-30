@@ -330,10 +330,10 @@ EOF;
      */
     private function sortOptions($options, $value)
     {
-        $sorted = [];
         if (empty($value) || !is_array($value)) {
-            return $sorted;
+            return $options;
         }
+        $sorted = [];
         foreach ($value as $tv) {
             $sorted[$tv] = $options[$tv];
             unset($options[$tv]);
