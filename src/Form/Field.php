@@ -865,6 +865,7 @@ class Field implements Renderable
      * Add variables to field view.
      *
      * @param array $variables
+     *
      * @return $this
      */
     protected function addVariables(array $variables = [])
