@@ -171,7 +171,7 @@ class Filter
                 unset($input[$attr]);
             }
         }
-        
+
         $inputs = array_dot($input);
 
         $inputs = array_filter($inputs, function ($input) {
