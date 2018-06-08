@@ -78,6 +78,11 @@ class Filter
     protected $filterModalId = 'filter-modal';
 
     /**
+     * @var bool
+     */
+    protected $filterCondition = false;
+
+    /**
      * Create a new filter instance.
      *
      * @param Model $model
@@ -89,6 +94,18 @@ class Filter
         $pk = $this->model->eloquent()->getKeyName();
 
         $this->equal($pk, strtoupper($pk));
+    }
+
+    /**
+     * Filter unwanted query conditions.
+     *
+     * @param array $attributes
+     * @return $this
+     */
+    public function setNotWhere($attributes = [])
+    {
+        $this->filterCondition = $attributes;
+        return $this;
     }
 
     /**

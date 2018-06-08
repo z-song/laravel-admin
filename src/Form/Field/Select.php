@@ -309,4 +309,72 @@ EOT;
             'groups'  => $this->groups,
         ]);
     }
+
+    /**
+     * Select Level 2 linkage, support ajax paging.
+     *
+     * @param string $field    parent field name
+     * @param string $sourceUrl resource route
+     * @param string $idField
+     * @param string $textField
+     *
+     * @return $this
+     */
+    public function ajaxLoad($field, $sourceUrl, $idField = 'id', $textField = 'text')
+    {
+        if (Str::contains($field, '.')) {
+            $field = $this->formatName($field);
+            $class = str_replace(['[', ']'], '_', $field);
+        } else {
+            $class = $field;
+        }
+
+        $this->script = <<<EOT
+        var current=$("{$this->getElementClassSelector()}");
+        var target = current.closest('.fields-group').find(".$class");
+
+        var init=function (){
+            current.select2({
+                ajax: {
+                  url: "$sourceUrl",
+                  dataType: 'json',
+                  delay: 250,
+                  data: function (params) {
+                    return {
+                      father_value:target.val(),
+                      q: params.term,
+                      page: params.page
+                    };
+                  },
+                  processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                      results: $.map(data.data, function (d) {
+                                 d.id = d.$idField;
+                                 d.text = d.$textField;
+                                 return d;
+                              }),
+                      pagination: {
+                        more: data.next_page_url
+                      }
+                    };
+                  },
+                  cache: true
+                },
+                allowClear: true,
+                placeholder: "{$this->label}",
+                minimumInputLength: 1,
+                escapeMarkup: function (markup) {
+                    return markup;
+                }
+            });
+        }
+        init();
+        $(document).on('change', "{$this->getElementClassSelector()}", function () {
+           init();
+        });
+EOT;
+
+        return $this;
+    }
 }
