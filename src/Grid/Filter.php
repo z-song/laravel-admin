@@ -100,11 +100,13 @@ class Filter
      * Filter unwanted query conditions.
      *
      * @param array $attributes
+     *
      * @return $this
      */
     public function setNotWhere($attributes = [])
     {
         $this->filterCondition = $attributes;
+
         return $this;
     }
 
@@ -162,7 +164,15 @@ class Filter
      */
     public function conditions()
     {
-        $inputs = array_dot(Input::all());
+        $input = Input::all();
+
+        if ($this->filterCondition) {
+            foreach ($this->filterCondition as $attr) {
+                unset($input[$attr]);
+            }
+        }
+        
+        $inputs = array_dot($input);
 
         $inputs = array_filter($inputs, function ($input) {
             return $input !== '' && !is_null($input);

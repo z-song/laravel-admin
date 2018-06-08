@@ -313,7 +313,7 @@ EOT;
     /**
      * Select Level 2 linkage, support ajax paging.
      *
-     * @param string $field    parent field name
+     * @param string $field     parent field name
      * @param string $sourceUrl resource route
      * @param string $idField
      * @param string $textField
