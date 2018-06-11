@@ -22,7 +22,7 @@ class LogOperation
         if ($this->shouldLogOperation($request)) {
             $log = [
                 'user_id' => Admin::user()->id,
-                'path'    => $request->path(),
+                'path'    => substr($request->path(), 0, 255),
                 'method'  => $request->method(),
                 'ip'      => $request->getClientIp(),
                 'input'   => json_encode($request->input()),
