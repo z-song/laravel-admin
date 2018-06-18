@@ -52,14 +52,17 @@ $('form.grid-checkbox-$name').on('submit', function () {
         return $(el).val();
     }).get();
 
+    var data = {
+        $name: values,
+        _token: LA.token,
+        _method: 'PUT'
+    };
+    
     $.ajax({
         url: "{$this->getResource()}/" + $(this).data('key'),
         type: "POST",
-        data: {
-            $name: values,
-            _token: LA.token,
-            _method: 'PUT'
-        },
+        contentType: 'application/json;charset=utf-8',
+        data: JSON.stringify(data),
         success: function (data) {
             toastr.success(data.message);
         }
