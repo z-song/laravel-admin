@@ -194,7 +194,7 @@ class Field implements Renderable
      * @var Closure
      */
     protected $customFormat = null;
-  
+
     /**
      * @var bool
      */
