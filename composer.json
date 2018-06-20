@@ -1,14 +1,14 @@
 {
-    "name": "encore/laravel-admin",
-    "description": "laravel admin",
+    "name": "mr-zenith/laravel-admin-fa",
+    "description": "laravel admin in Persian",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "form"],
-    "homepage": "https://github.com/z-song/laravel-admin",
-    "license": "MIT",
+    "homepage": "https://github.com/mr-zenith/laravel-admin",
+    "license": "GPL2",
     "authors": [
         {
-            "name": "zsong",
-            "email": "zosong@126.com"
+            "name": "mr-zenith",
+            "email": "bahador.eng@gmail.com"
         }
     ],
     "require": {
