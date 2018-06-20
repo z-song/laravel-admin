@@ -314,7 +314,21 @@ class Field implements Renderable
         }
 
         $this->value = array_get($data, $this->column);
+        if (isset($this->format) && $this->format instanceof \Closure) {
+            $this->value = call_user_func($this->format , $this->value);
+        }
     }
+
+    /**
+     * [custom format form column data when edit]
+     * @param  Closure $call
+     * @return [null]
+     */
+    public function format(\Closure $call)
+    {
+        $this->format = $call;
+    }
+
 
     /**
      * Set original value to the field.
