@@ -186,7 +186,7 @@ class Field implements Renderable
     protected $horizontal = true;
 
     /**
-     * column data format
+     * column data format.
      *
      * @var Closure
      */
@@ -327,9 +327,9 @@ class Field implements Renderable
     }
 
     /**
-     * [custom format form column data when edit]
+     * custom format form column data when edit.
      *
-     * @param  Closure $call
+     * @param Closure $call
      *
      * @return [null]
      */
@@ -337,7 +337,6 @@ class Field implements Renderable
     {
         $this->customFormat = $call;
     }
-
 
     /**
      * Set original value to the field.
