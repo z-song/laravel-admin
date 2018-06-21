@@ -132,7 +132,7 @@ class UserController extends Controller
      */
     public function update($id)
     {
-        if($id == 1 && Admin::user()->id != 1){
+        if ($id == 1 && Admin::user()->id != 1) {
             return back();
         }
 
@@ -149,21 +149,21 @@ class UserController extends Controller
     public function destroy($id)
     {
         $ids = explode(',', $id);
-        if(in_array(1, $ids)){
+        if (in_array(1, $ids)) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => trans('admin.delete_failed'),
             ]);
         }
 
         if ($this->form()->destroy($id)) {
             return response()->json([
-                'status'  => true,
+                'status' => true,
                 'message' => trans('admin.delete_succeeded'),
             ]);
         } else {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => trans('admin.delete_failed'),
             ]);
         }
