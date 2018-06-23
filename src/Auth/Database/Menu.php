@@ -63,7 +63,9 @@ class Menu extends Model
      */
     public function allNodes() : array
     {
-        $orderColumn = DB::getQueryGrammar()->wrap($this->orderColumn);
+        $connection = config('admin.database.connection') ?: config('database.default');
+        $orderColumn = DB::connection($connection)->getQueryGrammar()->wrap($this->orderColumn);
+
         $byOrder = $orderColumn.' = 0,'.$orderColumn;
 
         return static::with('roles')->orderByRaw($byOrder)->get()->toArray();
