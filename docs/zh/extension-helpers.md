@@ -14,7 +14,7 @@ php artisan admin:import helpers
 
 ## 脚手架工具
 
-脚手架工具能帮你一键生个控制器、模型、迁移文件，并运行迁移文件，访问`http://localhost/admin/helpers/scaffold`打开。
+脚手架工具能帮你一键生成控制器、模型、迁移文件，并运行迁移文件，访问`http://localhost/admin/helpers/scaffold`打开。
 
 其中设置迁移表结构的时候，主键字段是自动生成的不需要填写。
 

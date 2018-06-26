@@ -27,7 +27,7 @@ Open  `config/admin.php` specify the disk you want to manage
 
 ```
 
-`disk` is the local disk you configured in `config/filesystem.php`, visit by access `http://localhost/admin/media-manager`.
+`disk` is the local disk you configured in `config/filesystem.php`, visit by access `http://localhost/admin/media`.
 
 Note If you want to preview the picture in the disk, you must set the access url in the disk configuration:
 

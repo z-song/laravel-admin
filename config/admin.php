@@ -143,6 +143,11 @@ return [
     'layout' => ['sidebar-mini', 'sidebar-collapse'],
 
     /*
+     * Background image in login page
+     */
+    'login_background_image' => '',
+
+    /*
      * Version displayed in footer.
      */
     'version' => '1.5.x-dev',
