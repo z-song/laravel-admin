@@ -186,6 +186,13 @@ class Field implements Renderable
     protected $horizontal = true;
 
     /**
+     * Setting label class.
+     *
+     * @var array
+     */
+    protected $labelClass = [];
+
+    /**
      * Field constructor.
      *
      * @param $column
@@ -728,13 +735,13 @@ class Field implements Renderable
     {
         if ($this->horizontal) {
             return [
-                'label'      => "col-sm-{$this->width['label']}",
+                'label'      => "col-sm-{$this->width['label']} {$this->getLabelClass()}",
                 'field'      => "col-sm-{$this->width['field']}",
                 'form-group' => 'form-group ',
             ];
         }
 
-        return ['label' => '', 'field' => '', 'form-group' => ''];
+        return ['label' => "{$this->getLabelClass()}", 'field' => '', 'form-group' => ''];
     }
 
     /**
@@ -851,6 +858,23 @@ class Field implements Renderable
         }
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLabelClass()
+    : string
+    {
+        return implode(' ', $this->labelClass);
+    }
+
+    /**
+     * @param array $labelClass
+     */
+    public function setLabelClass(array $labelClass)
+    {
+        $this->labelClass = $labelClass;
     }
 
     /**
