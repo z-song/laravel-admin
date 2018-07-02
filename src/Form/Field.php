@@ -435,8 +435,8 @@ class Field implements Renderable
         return $this->rules;
     }
 
-    /**
-     * Remove a specific rule.
+     /**
+     * Remove a specific rule by keyword.
      *
      * @param string $rule
      *
@@ -444,7 +444,8 @@ class Field implements Renderable
      */
     protected function removeRule($rule)
     {
-        $this->rules = str_replace($rule, '', $this->rules);
+        $pattern = "/{$rule}[^\|]?(\||$)/";
+        $this->rules = preg_replace($pattern, '', $this->rules, -1);
     }
 
     /**
