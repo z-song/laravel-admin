@@ -440,7 +440,7 @@ class Field implements Renderable
         return $this->rules;
     }
 
-     /**
+    /**
      * Remove a specific rule by keyword.
      *
      * @param string $rule
