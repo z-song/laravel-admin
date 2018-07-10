@@ -404,7 +404,7 @@ class Form
             return $response;
         }
 
-        $this->inputs = array_merge($this->removeIgnoredFields($data),$this->inputs);
+        $this->inputs = array_merge($this->removeIgnoredFields($data), $this->inputs);
 
         if (($response = $this->callSaving()) instanceof Response) {
             return $response;
