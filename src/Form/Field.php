@@ -398,7 +398,11 @@ class Field implements Renderable
             $this->rules = $rules;
         }
 
-        if (is_string($rules)) {
+        if (is_array($rules)) {
+            $thisRuleArr = array_filter(explode('|', $this->rules));
+
+            $this->rules = array_merge($thisRuleArr, explode('|', $this->rules));
+        } elseif (is_string($rules)) {
             $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
             $this->rules = implode('|', $rules);

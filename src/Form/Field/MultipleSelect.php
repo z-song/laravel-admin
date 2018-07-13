@@ -31,8 +31,9 @@ class MultipleSelect extends Select
         ) {
             /* @var BelongsToMany $relation */
             $fullKey = $relation->getQualifiedRelatedPivotKeyName();
+            $fullKeyArray = explode('.', $fullKey);
 
-            return $this->otherKey = substr($fullKey, strpos($fullKey, '.') + 1);
+            return $this->otherKey = end($fullKeyArray);
         }
 
         throw new \Exception('Column of this field must be a `BelongsToMany` relation.');

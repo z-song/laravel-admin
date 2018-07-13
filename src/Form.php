@@ -498,9 +498,9 @@ class Form
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function update($id)
+    public function update($id, $data = null)
     {
-        $data = Input::all();
+        $data = ($data) ?: Input::all();
 
         $isEditable = $this->isEditable($data);
 
@@ -1112,6 +1112,20 @@ class Form
     }
 
     /**
+     * Set title for form.
+     *
+     * @param string $title
+     *
+     * @return $this
+     */
+    public function setTitle($title = '')
+    {
+        $this->builder()->setTitle($title);
+
+        return $this;
+    }
+
+    /**
      * Add a row in form.
      *
      * @param Closure $callback
@@ -1172,6 +1186,10 @@ class Form
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
+        }
+        // # fix #1768
+        if ($segments[0] == 'http:' && config('admin.secure') == true) {
+            $segments[0] = 'https:';
         }
 
         return implode('/', $segments);

@@ -25,6 +25,16 @@ $('.grid-row-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifC
         $(this).closest('tr').css('background-color', '');
     }
 });
+
+var selectedRows = function () {
+    var selected = [];
+    $('.grid-row-checkbox:checked').each(function(){
+        selected.push($(this).data('id'));
+    });
+
+    return selected;
+}
+
 EOT;
     }
 }
