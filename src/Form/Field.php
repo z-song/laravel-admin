@@ -368,6 +368,16 @@ class Field implements Renderable
     }
 
     /**
+     * Get the field options.
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
      * Get or set rules.
      *
      * @param null $rules
