@@ -190,19 +190,19 @@ class Admin
     }
 
     /**
-    * @param string $subtitle
-    * @param string $sep
-    *
-    * @return void
-    */
+     * @param string $subtitle
+     * @param string $sep
+     *
+     * @return void
+     */
     public function setSubtitle($subtitle, $sep = ' - ')
     {
         $this->subtitle = $sep.$subtitle;
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function getSubtitle()
     {
         return $this->subtitle;
