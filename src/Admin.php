@@ -23,6 +23,11 @@ class Admin
     protected $navbar;
 
     /**
+     * @var Subtitle
+     */
+    protected $subtitle = '';
+
+    /**
      * @var array
      */
     public static $script = [];
@@ -182,6 +187,23 @@ class Admin
     public function title()
     {
         return config('admin.title');
+    }
+
+    /**
+    * @param string $subtitle
+    * @param string $sep
+    *
+    * @retuen void
+    */
+    public function setSubtitle($subtitle, $sep = ' - ') {
+        $this->subtitle = $sep . $subtitle;
+    }
+
+    /**
+    * @retuen string
+    */
+    public function getSubtitle() {
+        return $this->subtitle;
     }
 
     /**

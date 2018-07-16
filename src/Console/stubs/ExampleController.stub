@@ -22,6 +22,7 @@ class ExampleController extends Controller
     {
         return Admin::content(function (Content $content) {
 
+            Admin::setSubtitle('header');
             $content->header('header');
             $content->description('description');
 
@@ -39,6 +40,7 @@ class ExampleController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
+            Admin::setSubtitle('header');
             $content->header('header');
             $content->description('description');
 
@@ -55,6 +57,7 @@ class ExampleController extends Controller
     {
         return Admin::content(function (Content $content) {
 
+            Admin::setSubtitle('header');
             $content->header('header');
             $content->description('description');
 
