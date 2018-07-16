@@ -195,14 +195,16 @@ class Admin
     *
     * @retuen void
     */
-    public function setSubtitle($subtitle, $sep = ' - ') {
+    public function setSubtitle($subtitle, $sep = ' - ')
+    {
         $this->subtitle = $sep . $subtitle;
     }
 
     /**
     * @retuen string
     */
-    public function getSubtitle() {
+    public function getSubtitle()
+    {
         return $this->subtitle;
     }
 
