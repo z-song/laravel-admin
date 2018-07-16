@@ -193,15 +193,15 @@ class Admin
     * @param string $subtitle
     * @param string $sep
     *
-    * @retuen void
+    * @return void
     */
     public function setSubtitle($subtitle, $sep = ' - ')
     {
-        $this->subtitle = $sep . $subtitle;
+        $this->subtitle = $sep.$subtitle;
     }
 
     /**
-    * @retuen string
+    * @return string
     */
     public function getSubtitle()
     {
