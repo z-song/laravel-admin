@@ -66,7 +66,7 @@ class Menu extends Model
         $connection = config('admin.database.connection') ?: config('database.default');
         $orderColumn = DB::connection($connection)->getQueryGrammar()->wrap($this->orderColumn);
 
-        $byOrder = $orderColumn.' = 0,'.$orderColumn;
+        $byOrder = "case when {$orderColumn}=0 then 99 else {$orderColumn} end";
 
         return static::with('roles')->orderByRaw($byOrder)->get()->toArray();
     }
