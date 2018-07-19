@@ -229,7 +229,7 @@ class Field implements Renderable
      *
      * @return array|mixed|string
      */
-    protected function formatName($column)
+    public function formatName($column)
     {
         if (is_string($column)) {
             $name = explode('.', $column);
