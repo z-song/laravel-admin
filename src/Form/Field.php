@@ -908,7 +908,7 @@ class Field implements Renderable
      *
      * @return array
      */
-    protected function variables()
+    public function variables()
     {
         return array_merge($this->variables, [
             'id'          => $this->id,
