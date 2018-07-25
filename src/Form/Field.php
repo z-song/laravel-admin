@@ -819,6 +819,7 @@ class Field implements Renderable
      * Set view of this field.
      *
      * @param string $view
+     * 
      * @return string
      */
     public function setView($view)
