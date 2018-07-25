@@ -1254,6 +1254,7 @@ class Form
             'email'          => \Encore\Admin\Form\Field\Email::class,
             'file'           => \Encore\Admin\Form\Field\File::class,
             'hasMany'        => \Encore\Admin\Form\Field\HasMany::class,
+            'hasJson'        => \Encore\Admin\Form\Field\HasJson::class,
             'hidden'         => \Encore\Admin\Form\Field\Hidden::class,
             'id'             => \Encore\Admin\Form\Field\Id::class,
             'image'          => \Encore\Admin\Form\Field\Image::class,

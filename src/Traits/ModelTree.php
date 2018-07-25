@@ -235,7 +235,7 @@ trait ModelTree
     {
         $options = (new static())->buildSelectOptions();
 
-        return collect($options)->prepend('Root', 0)->all();
+        return collect($options)->prepend(config('admin.tree-root', 'Root'), 0)->all();
     }
 
     /**
@@ -249,7 +249,7 @@ trait ModelTree
      */
     protected function buildSelectOptions(array $nodes = [], $parentId = 0, $prefix = '')
     {
-        $prefix = $prefix ?: str_repeat('&nbsp;', 6);
+        $prefix = $prefix ?: config('admin.tree-prefix-1', str_repeat('&nbsp;', 6));
 
         $options = [];
 
@@ -258,7 +258,7 @@ trait ModelTree
         }
 
         foreach ($nodes as $node) {
-            $node[$this->titleColumn] = $prefix.'&nbsp;'.$node[$this->titleColumn];
+            $node[$this->titleColumn] = $prefix.config('admin.tree-prefix-2', '&nbsp;').$node[$this->titleColumn];
             if ($node[$this->parentColumn] == $parentId) {
                 $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $prefix.$prefix);
 

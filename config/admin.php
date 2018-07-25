@@ -13,6 +13,12 @@ return [
     'logo' => '<b>Laravel</b> admin',
 
     /*
+     * 树型选择中使用的文字前缀.
+     */
+    'tree-root' => 'Root',
+    'tree-prefix-1' => str_repeat('&nbsp;', 6),
+    'tree-prefix-2' => '&nbsp;',
+    /*
      * Mini-logo in admin panel header.
      */
     'logo-mini' => '<b>La</b>',

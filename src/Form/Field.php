@@ -880,6 +880,9 @@ class Field implements Renderable
      *
      * @return array
      */
+    public function SetID($id){
+        $this->id=$id;return $this;
+    }
     protected function variables()
     {
         return array_merge($this->variables, [
