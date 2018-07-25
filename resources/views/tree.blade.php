@@ -10,6 +10,11 @@
                 <i class="fa fa-minus-square-o"></i>&nbsp;{{ trans('admin.collapse') }}
             </a>
         </div>
+        @if($useAll)
+        <div class="btn-group">
+            <a class="btn btn-info btn-sm  {{ $id }}-save" href="{{ $path }}?id=all"><i class="fa fa-save"></i>&nbsp;全部内容</a>
+        </div>
+        @endif
 
         @if($useSave)
         <div class="btn-group">
