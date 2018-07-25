@@ -71,6 +71,11 @@ class Filter
      * @var string
      */
     protected $view = 'admin::filter.modal';
+    
+    /**
+     * @var string
+     */
+    protected $filterModalId = 'filter-modal';
 
     /**
      * @var string
@@ -103,6 +108,11 @@ class Filter
         $this->action = $action;
 
         return $this;
+    }
+    
+    public function setModalId($filterModalId)
+    {
+        $this->filterModalId = $filterModalId;
     }
 
     /**
