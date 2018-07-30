@@ -27,6 +27,8 @@ return [
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
+
+        'domain' => env('ADMIN_DOMAIN', ''), // example: admin.yourdoamin.com
     ],
 
     /*

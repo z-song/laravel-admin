@@ -233,6 +233,7 @@ class Admin
     {
         $attributes = [
             'prefix'     => config('admin.route.prefix'),
+            'domain'     => config('admin.route.domain'),
             'namespace'  => 'Encore\Admin\Controllers',
             'middleware' => config('admin.route.middleware'),
         ];
