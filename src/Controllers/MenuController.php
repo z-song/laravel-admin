@@ -33,7 +33,7 @@ class MenuController extends Controller
 
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
-                    $form->action(admin_base_path('auth/menu'));
+                    $form->action(admin_url('auth/menu'));
 
                     $form->select('parent_id', trans('admin.parent_id'))->options(Menu::selectOptions());
                     $form->text('title', trans('admin.title'))->rules('required');
@@ -75,7 +75,7 @@ class MenuController extends Controller
                     if (url()->isValidUrl($branch['uri'])) {
                         $uri = $branch['uri'];
                     } else {
-                        $uri = admin_base_path($branch['uri']);
+                        $uri = admin_url($branch['uri']);
                     }
 
                     $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
