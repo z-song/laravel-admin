@@ -1,27 +1,16 @@
 <?php
 
 return [
+    'name' => '网站管理系统',
+    'logo' => '<b>网站管理</b>系统',
 
-    /*
-     * Laravel-admin name.
-     */
-    'name' => 'Laravel-admin',
-
-    /*
-     * Logo in admin panel header.
-     */
-    'logo' => '<b>Laravel</b> admin',
-
-    /*
-     * 树型选择中使用的文字前缀.
-     */
-    'tree-root' => 'Root',
-    'tree-prefix-1' => str_repeat('&nbsp;', 6),
-    'tree-prefix-2' => '&nbsp;',
     /*
      * Mini-logo in admin panel header.
      */
-    'logo-mini' => '<b>La</b>',
+    'logo-mini' => '<b>后台</b>',
+    'tree-root' => '根目录',
+    'tree-prefix-1' => '　',
+    'tree-prefix-2' => '',
 
     /*
      * Route configuration.
@@ -43,7 +32,7 @@ return [
     /*
      * Laravel-admin html title.
      */
-    'title' => 'Admin',
+    'title' => '管理',
 
     /*
      * Use `https`.
@@ -80,6 +69,7 @@ return [
             'image' => 'images',
             'file'  => 'files',
         ],
+        'host' => '/upload/',
     ],
 
     /*
@@ -146,22 +136,19 @@ return [
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
      */
-    'layout' => ['sidebar-mini', 'sidebar-collapse'],
-
-    /*
-     * Background image in login page
-     */
-    'login_background_image' => '',
+    'layout' => ['sidebar-mini'],// ,'sidebar-collapse'
 
     /*
      * Version displayed in footer.
      */
-    'version' => '1.5.x-dev',
+    'version' => '1.6版',
 
     /*
      * Settings for extensions.
      */
     'extensions' => [
-
+        'media-manager' => [
+            'disk' => 'admin'   // 指向config/filesystem.php中设置的disk
+        ],
     ],
 ];
