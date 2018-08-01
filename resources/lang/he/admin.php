@@ -19,6 +19,7 @@ return [
     'remove'                => 'הסרה',
     'edit'                  => 'עריכה',
     'view'                  => 'צפייה',
+    'detail'                => 'פרט',
     'browse'                => 'דפדוף',
     'reset'                 => 'אתחול',
     'export'                => 'ייצוא',

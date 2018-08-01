@@ -20,6 +20,7 @@ return [
     'remove'       => '移除',
     'edit'         => '编辑',
     'view'         => '查看',
+    'detail'       => '详细',
     'browse'       => '浏览',
     'reset'        => '重置',
     'export'       => '导出',

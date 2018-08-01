@@ -20,6 +20,7 @@ return [
     'remove'       => 'Remove',
     'edit'         => 'Edit',
     'view'         => 'View',
+    'detail'       => 'Detail',
     'browse'       => 'Browse',
     'reset'        => 'Reset',
     'export'       => 'Export',

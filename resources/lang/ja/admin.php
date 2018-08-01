@@ -20,6 +20,7 @@ return [
     'remove'       => '消去',
     'edit'         => '編集',
     'view'         => '表示',
+    'detail'       => '詳細',
     'browse'       => '参照',
     'reset'        => 'リセット',
     'export'       => '出力',

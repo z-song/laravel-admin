@@ -20,6 +20,7 @@ return [
     'remove'       => 'Retirar',
     'edit'         => 'Editar',
     'view'         => 'Ver',
+    'detail'       => 'Detalle',
     'browse'       => 'vistazo',
     'reset'        => 'Restablecer',
     'export'       => 'Exportar',
