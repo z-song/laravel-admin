@@ -4,6 +4,7 @@ namespace Encore\Admin\Grid;
 
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid\Filter\AbstractFilter;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 
@@ -26,7 +27,7 @@ use Illuminate\Support\Facades\Request;
  * @method AbstractFilter     year($column, $label = '')
  * @method AbstractFilter     hidden($name, $value)
  */
-class Filter
+class Filter implements Renderable
 {
     /**
      * @var Model
@@ -78,6 +79,11 @@ class Filter
     protected $filterModalId = 'filter-modal';
 
     /**
+     * @var string
+     */
+    protected $name = '';
+
+    /**
      * Create a new filter instance.
      *
      * @param Model $model
@@ -106,6 +112,16 @@ class Filter
     }
 
     /**
+     * Get grid model.
+     *
+     * @return Model
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * Set modalId of search form.
      *
      * @param string $filterModalId
@@ -117,6 +133,27 @@ class Filter
         $this->filterModalId = $filterModalId;
 
         return $this;
+    }
+
+    /**
+     * @param $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        $this->setModalId("{$this->name}-{$this->filterModalId}");
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -151,6 +188,8 @@ class Filter
             return $input !== '' && !is_null($input);
         });
 
+        $this->sanitizeInputs($inputs);
+
         if (empty($inputs)) {
             return [];
         }
@@ -170,6 +209,25 @@ class Filter
         }
 
         return array_filter($conditions);
+    }
+
+    /**
+     * @param $inputs
+     * @return array
+     */
+    protected function sanitizeInputs(&$inputs)
+    {
+        if (!$this->name) {
+            return $inputs;
+        }
+
+        $inputs = collect($inputs)->filter(function ($input, $key) {
+            return starts_with($key, "{$this->name}_");
+        })->mapWithKeys(function ($val, $key) {
+            $key = str_replace("{$this->name}_", '', $key);
+
+            return [$key => $val];
+        })->toArray();
     }
 
     /**
@@ -242,10 +300,10 @@ class Filter
             return '';
         }
 
-        $script = <<<'EOT'
+        $script = <<<EOT
 
-$("#filter-modal .submit").click(function () {
-    $("#filter-modal").modal('toggle');
+$("#{$this->filterModalId} .submit").click(function () {
+    $("#{$this->filterModalId}").modal('toggle');
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
 });
@@ -254,10 +312,10 @@ EOT;
         Admin::script($script);
 
         return view($this->view)->with([
-            'action'  => $this->action ?: $this->urlWithoutFilters(),
-            'filters' => $this->filters,
-            'modalId' => $this->filterModalId,
-        ]);
+            'action'   => $this->action ?: $this->urlWithoutFilters(),
+            'filters'  => $this->filters,
+            'modalID'  => $this->filterModalId,
+        ])->render();
     }
 
     /**
@@ -304,15 +362,5 @@ EOT;
         }
 
         return $this;
-    }
-
-    /**
-     * Get the string contents of the filter view.
-     *
-     * @return \Illuminate\View\View|string
-     */
-    public function __toString()
-    {
-        return $this->render();
     }
 }

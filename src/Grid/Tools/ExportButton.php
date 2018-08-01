@@ -8,6 +8,11 @@ use Encore\Admin\Grid;
 class ExportButton extends AbstractTool
 {
     /**
+     * @var Grid
+     */
+    protected $grid;
+
+    /**
      * Create a new Export button instance.
      *
      * @param Grid $grid
@@ -22,12 +27,12 @@ class ExportButton extends AbstractTool
      */
     protected function setUpScripts()
     {
-        $script = <<<'SCRIPT'
+        $script = <<<SCRIPT
 
-$('.export-selected').click(function (e) {
+$('.{$this->grid->getExportSelectedName()}').click(function (e) {
     e.preventDefault();
     
-    var rows = selectedRows().join(',');
+    var rows = {$this->grid->getSelectedRowsName()}().join(',');
     if (!rows) {
         return false;
     }
@@ -70,9 +75,9 @@ SCRIPT;
         <span class="sr-only">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="{$this->grid->exportUrl('all')}" target="_blank">{$all}</a></li>
-        <li><a href="{$this->grid->exportUrl('page', $page)}" target="_blank">{$currentPage}</a></li>
-        <li><a href="{$this->grid->exportUrl('selected', '__rows__')}" target="_blank" class='export-selected'>{$selectedRows}</a></li>
+        <li><a href="{$this->grid->getExportUrl('all')}" target="_blank">{$all}</a></li>
+        <li><a href="{$this->grid->getExportUrl('page', $page)}" target="_blank">{$currentPage}</a></li>
+        <li><a href="{$this->grid->getExportUrl('selected', '__rows__')}" target="_blank" class='{$this->grid->getExportSelectedName()}'>{$selectedRows}</a></li>
     </ul>
 </div>
 &nbsp;&nbsp;

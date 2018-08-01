@@ -2,9 +2,11 @@
 
 namespace Encore\Admin\Grid;
 
+use Encore\Admin\Grid;
 use Encore\Admin\Middleware\Pjax;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -74,6 +76,16 @@ class Model
      * @var \Closure
      */
     protected $collectionCallback;
+
+    /**
+     * @var Grid
+     */
+    protected $grid;
+
+    /**
+     * @var Relation
+     */
+    protected $relation;
 
     /**
      * Create a new grid model instance.
@@ -169,6 +181,52 @@ class Model
         $this->sortName = $name;
 
         return $this;
+    }
+
+    /**
+     * @param Grid $grid
+     * @return $this
+     */
+    public function setGrid(Grid $grid)
+    {
+        $this->grid = $grid;
+
+        return $this;
+    }
+
+    /**
+     * @param Relation $relation
+     * @return $this
+     */
+    public function setRelation(Relation $relation)
+    {
+        $this->relation = $relation;
+
+        return $this;
+    }
+
+    /**
+     * @return Relation
+     */
+    public function getRelation()
+    {
+        return $this->relation;
+    }
+
+    /**
+     * Get constraints.
+     *
+     * @return array|bool
+     */
+    public function getConstraints()
+    {
+        if ($this->relation instanceof HasMany) {
+            return [
+                $this->relation->getForeignKeyName() => $this->relation->getParentKey(),
+            ];
+        }
+
+        return false;
     }
 
     /**
@@ -271,6 +329,10 @@ class Model
             return $this->model;
         }
 
+        if ($this->relation) {
+            $this->model = $this->relation->getQuery();
+        }
+
         $this->setSort();
         $this->setPaginate();
 
@@ -358,6 +420,10 @@ class Model
 
         if (isset($paginate['arguments'][0])) {
             return $paginate['arguments'];
+        }
+
+        if ($name = $this->grid->getName()) {
+            return [$this->perPage, null, "{$name}_page"];
         }
 
         return [$this->perPage];

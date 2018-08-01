@@ -3,3 +3,8 @@ input.content {
     padding: 6px 12px !important;
     margin: 0 !important;
 }
+
+.box-show {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}

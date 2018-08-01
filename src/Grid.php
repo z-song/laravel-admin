@@ -9,6 +9,7 @@ use Encore\Admin\Grid\Displayers\Actions;
 use Encore\Admin\Grid\Displayers\RowSelector;
 use Encore\Admin\Grid\Exporter;
 use Encore\Admin\Grid\Filter;
+use Encore\Admin\Grid\HasElementNames;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Tools;
@@ -26,6 +27,8 @@ use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Grid
 {
+    use HasElementNames;
+
     /**
      * The grid data model instance.
      *
@@ -184,6 +187,8 @@ class Grid
         $this->columns = new Collection();
         $this->rows = new Collection();
         $this->builder = $builder;
+
+        $this->model()->setGrid($this);
 
         $this->setupTools();
         $this->setupFilter();
@@ -650,11 +655,34 @@ class Grid
      *
      * @return string
      */
-    public function exportUrl($scope = 1, $args = null)
+    public function getExportUrl($scope = 1, $args = null)
     {
         $input = array_merge(Input::all(), Exporter::formatExportQuery($scope, $args));
 
+        if ($constraints = $this->model()->getConstraints()) {
+            $input = array_merge($input, $constraints);
+        }
+
         return $this->resource().'?'.http_build_query($input);
+    }
+
+    /**
+     * Get create url.
+     *
+     * @return string
+     */
+    public function getCreateUrl()
+    {
+        $queryString = '';
+
+        if ($constraints = $this->model()->getConstraints()) {
+            $queryString = http_build_query($constraints);
+        }
+
+        return sprintf('%s/create%s',
+            $this->resource(),
+            $queryString ? ('?' . $queryString) : ''
+        );
     }
 
     /**
@@ -680,11 +708,11 @@ class Grid
     /**
      * Render export button.
      *
-     * @return Tools\ExportButton
+     * @return string
      */
     public function renderExportButton()
     {
-        return new Tools\ExportButton($this);
+        return (new Tools\ExportButton($this))->render();
     }
 
     /**
@@ -722,11 +750,11 @@ class Grid
     /**
      * Render create button for grid.
      *
-     * @return Tools\CreateButton
+     * @return string
      */
     public function renderCreateButton()
     {
-        return new Tools\CreateButton($this);
+        return (new Tools\CreateButton($this))->render();
     }
 
     /**
@@ -977,6 +1005,19 @@ class Grid
     public function setTitle($title)
     {
         $this->variables['title'] = $title;
+
+        return $this;
+    }
+
+    /**
+     * Set relation for grid.
+     *
+     * @param Relation $relation
+     * @return $this
+     */
+    public function setRelation(Relation $relation)
+    {
+        $this->model()->setRelation($relation);
 
         return $this;
     }
