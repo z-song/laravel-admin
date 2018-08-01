@@ -681,7 +681,7 @@ class Grid
 
         return sprintf('%s/create%s',
             $this->resource(),
-            $queryString ? ('?' . $queryString) : ''
+            $queryString ? ('?'.$queryString) : ''
         );
     }
 
@@ -1000,6 +1000,7 @@ class Grid
      * Set grid title.
      *
      * @param string $title
+     *
      * @return $this
      */
     public function setTitle($title)
@@ -1013,6 +1014,7 @@ class Grid
      * Set relation for grid.
      *
      * @param Relation $relation
+     *
      * @return $this
      */
     public function setRelation(Relation $relation)

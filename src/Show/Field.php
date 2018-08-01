@@ -274,7 +274,7 @@ class Field implements Renderable
     public function __call($method, $arguments = [])
     {
         if ($this->relation) {
-            $this->name  = $method;
+            $this->name = $method;
             $this->label = $this->formatLabel(array_get($arguments, 0));
         }
 
@@ -298,7 +298,7 @@ class Field implements Renderable
         }
 
         $content = $this->value;
-        $label   = $this->getLabel();
+        $label = $this->getLabel();
 
         return view($this->view, compact('content', 'label'));
     }

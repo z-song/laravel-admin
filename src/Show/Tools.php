@@ -135,7 +135,7 @@ class Tools implements Renderable
      */
     protected function getListPath()
     {
-        return '/' . ltrim($this->getResource(), '/');
+        return '/'.ltrim($this->getResource(), '/');
     }
 
     /**
@@ -147,7 +147,7 @@ class Tools implements Renderable
     {
         $key = $this->panel->getParent()->getModel()->getKey();
 
-        return $this->getListPath() . '/' . $key . '/edit';
+        return $this->getListPath().'/'.$key.'/edit';
     }
 
     /**
@@ -159,7 +159,7 @@ class Tools implements Renderable
     {
         $key = $this->panel->getParent()->getModel()->getKey();
 
-        return $this->getListPath() . '/' . $key;
+        return $this->getListPath().'/'.$key;
     }
 
     /**
@@ -202,8 +202,8 @@ HTML;
     protected function renderDelete()
     {
         $deleteConfirm = trans('admin.delete_confirm');
-        $confirm       = trans('admin.confirm');
-        $cancel        = trans('admin.cancel');
+        $confirm = trans('admin.confirm');
+        $cancel = trans('admin.cancel');
 
         $class = uniqid();
 
@@ -266,10 +266,10 @@ HTML;
         $output = implode('', $this->prepends);
 
         foreach ($this->tools as $tool) {
-            $renderMethod = 'render' . ucfirst($tool);
+            $renderMethod = 'render'.ucfirst($tool);
             $output .= $this->$renderMethod();
         }
 
-        return $output . implode('', $this->appends);
+        return $output.implode('', $this->appends);
     }
 }

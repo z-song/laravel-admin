@@ -306,7 +306,8 @@ class Column
      * Set value mapping.
      *
      * @param array $values
-     * @param null $default
+     * @param null  $default
+     *
      * @return $this
      */
     public function values(array $values, $default = null)

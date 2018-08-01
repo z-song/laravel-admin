@@ -185,6 +185,7 @@ class Model
 
     /**
      * @param Grid $grid
+     *
      * @return $this
      */
     public function setGrid(Grid $grid)
@@ -196,6 +197,7 @@ class Model
 
     /**
      * @param Relation $relation
+     *
      * @return $this
      */
     public function setRelation(Relation $relation)
