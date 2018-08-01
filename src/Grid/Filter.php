@@ -137,6 +137,7 @@ class Filter implements Renderable
 
     /**
      * @param $name
+     *
      * @return $this
      */
     public function setName($name)
@@ -213,6 +214,7 @@ class Filter implements Renderable
 
     /**
      * @param $inputs
+     *
      * @return array
      */
     protected function sanitizeInputs(&$inputs)

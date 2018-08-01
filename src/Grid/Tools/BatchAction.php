@@ -7,7 +7,7 @@ use Encore\Admin\Grid;
 abstract class BatchAction
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $id;
 
@@ -69,6 +69,7 @@ abstract class BatchAction
 
     /**
      * @param bool $dotPrefix
+     *
      * @return string
      */
     public function getElementClass($dotPrefix = true)

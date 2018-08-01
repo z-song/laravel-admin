@@ -53,9 +53,9 @@ class Relation extends Field
      */
     public function __construct($name, $builder, $title = '')
     {
-        $this->name    = $name;
+        $this->name = $name;
         $this->builder = $builder;
-        $this->title   = $this->formatLabel($title);
+        $this->title = $this->formatLabel($title);
     }
 
     /**
@@ -79,7 +79,7 @@ class Relation extends Field
      */
     protected function getNullRenderable()
     {
-        return new class implements Renderable {
+        return new class() implements Renderable {
             public function render()
             {
             }

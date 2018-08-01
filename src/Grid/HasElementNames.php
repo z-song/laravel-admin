@@ -29,6 +29,7 @@ trait HasElementNames
      * Set name to grid.
      *
      * @param string $name
+     *
      * @return $this
      */
     public function setName($name)
@@ -100,7 +101,7 @@ trait HasElementNames
         $elementName = $this->elementNames['selected_rows'];
 
         if ($this->name) {
-            return sprintf("%s%s", $this->name, ucfirst($elementName));
+            return sprintf('%s%s', $this->name, ucfirst($elementName));
         }
 
         return $elementName;
@@ -114,7 +115,7 @@ trait HasElementNames
         $elementName = $this->elementNames[$name];
 
         if ($this->name) {
-            return sprintf("%s-%s", $this->name, $elementName);
+            return sprintf('%s-%s', $this->name, $elementName);
         }
 
         return $elementName;

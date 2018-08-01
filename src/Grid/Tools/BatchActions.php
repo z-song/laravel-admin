@@ -54,6 +54,7 @@ class BatchActions extends AbstractTool
      *
      * @param $title
      * @param BatchAction|null $action
+     *
      * @return $this
      */
     public function add($title, BatchAction $action = null)

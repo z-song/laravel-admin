@@ -106,7 +106,7 @@ class Panel implements Renderable
      */
     public function title($title)
     {
-        $this->data['title'] =  $title;
+        $this->data['title'] = $title;
 
         return $this;
     }

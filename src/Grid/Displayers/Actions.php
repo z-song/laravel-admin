@@ -128,7 +128,7 @@ class Actions extends AbstractDisplayer
         $actions = $this->prepends;
 
         foreach ($this->actions as $action) {
-            $method = 'render' . ucfirst($action);
+            $method = 'render'.ucfirst($action);
             array_push($actions, $this->{$method}());
         }
 
@@ -139,7 +139,7 @@ class Actions extends AbstractDisplayer
 
     /**
      * Render view action.
-     * 
+     *
      * @return string
      */
     protected function renderView()
