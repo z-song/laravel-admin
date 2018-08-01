@@ -9,6 +9,7 @@ use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field\File;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -68,7 +69,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Captcha        captcha($column, $label = '')
  * @method Field\Listbox        listbox($column, $label = '')
  */
-class Form
+class Form implements Renderable
 {
     /**
      * Eloquent model of the form.
