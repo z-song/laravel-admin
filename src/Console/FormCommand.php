@@ -77,6 +77,7 @@ class FormCommand extends Command
                 $comment = $column->getComment();
                 $default = $column->getDefault();
 
+                // set column fieldType
                 switch ($type) {
                     case 'boolean':
                     case 'bool':
@@ -139,13 +140,27 @@ class FormCommand extends Command
                     case 'text':
                     case 'blob':
                         $fieldType = 'textarea';
-                        $default = "''";
+                        $default = '';
                         break;
                     default:
                         $fieldType = 'text';
                 }
 
-                $adminForm .= "\$form->{$fieldType}('{$name}', '{$comment}')->default('{$default}');\n";
+                // set column comment
+                $comment = $comment ? $comment : $name;
+
+                // set column defaultValue
+                switch ($default) {
+                    case "date('Y-m-d H:i:s')":
+                    case "date('Y-m-d')":
+                    case is_numeric($default):
+                        $defaultValue = $default;
+                        break;
+                    default:
+                        $defaultValue = "{$default}";
+                }
+
+                $adminForm .= "\$form->{$fieldType}('{$name}', '{$comment}')->default({$defaultValue});\n";
             }
             $this->alert("laravel-admin form filed generator for {$modelName}:");
             $this->info($adminForm);
