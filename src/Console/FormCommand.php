@@ -151,13 +151,16 @@ class FormCommand extends Command
 
                 // set column defaultValue
                 switch ($default) {
+                    case null:
+                        $defaultValue = "''";
+                        break;
                     case "date('Y-m-d H:i:s')":
                     case "date('Y-m-d')":
                     case is_numeric($default):
                         $defaultValue = $default;
                         break;
                     default:
-                        $defaultValue = "{$default}";
+                        $defaultValue = "'{$default}'";
                 }
 
                 $adminForm .= "\$form->{$fieldType}('{$name}', '{$comment}')->default({$defaultValue});\n";
