@@ -303,14 +303,14 @@ class Column
     }
 
     /**
-     * Set value mapping.
+     * Display column using array value map.
      *
      * @param array $values
      * @param null  $default
      *
      * @return $this
      */
-    public function values(array $values, $default = null)
+    public function using(array $values, $default = null)
     {
         return $this->display(function ($value) use ($values, $default) {
             return array_get($values, $value, $default);

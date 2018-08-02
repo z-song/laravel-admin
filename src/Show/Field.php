@@ -134,14 +134,14 @@ class Field implements Renderable
     }
 
     /**
-     * Set value mapping.
+     * Display field using array value map.
      *
      * @param array $values
      * @param null  $default
      *
      * @return $this
      */
-    public function values(array $values, $default = null)
+    public function using(array $values, $default = null)
     {
         return $this->as(function ($value) use ($values, $default) {
             return array_get($values, $value, $default);
