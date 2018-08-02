@@ -229,7 +229,7 @@ class Field implements Renderable
      *
      * @return array|mixed|string
      */
-    protected function formatName($column)
+    public function formatName($column)
     {
         if (is_string($column)) {
             $name = explode('.', $column);
@@ -365,6 +365,16 @@ class Field implements Renderable
         $this->options = array_merge($this->options, $options);
 
         return $this;
+    }
+
+    /**
+     * Get the field options.
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**
@@ -803,6 +813,20 @@ class Field implements Renderable
         $class = explode('\\', get_called_class());
 
         return 'admin::form.'.strtolower(end($class));
+    }
+
+    /**
+     * Set view of this field.
+     *
+     * @param string $view
+     * 
+     * @return string
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
+
+        return $this;
     }
 
     /**

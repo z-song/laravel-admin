@@ -290,7 +290,7 @@ trait UploadField
             return $path;
         }
 
-        return rtrim(config('admin.upload.host'), '/').'/'.trim($path, '/');
+        return $this->storage->url($path);
     }
 
     /**
