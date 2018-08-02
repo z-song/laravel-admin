@@ -3,7 +3,6 @@
 namespace Encore\Admin\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 class FormCommand extends Command
@@ -25,7 +24,7 @@ class FormCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return bool
      */
     public function handle()
     {
@@ -67,7 +66,7 @@ class FormCommand extends Command
         }
         $columns = $schema->listTableColumns($table, $database);
 
-        $admin_form = '';
+        $adminForm = '';
         if ($columns) {
             foreach ($columns as $column) {
                 $name = $column->getName();
@@ -77,92 +76,91 @@ class FormCommand extends Command
                 $type = $column->getType()->getName();
                 $comment = $column->getComment();
                 $default = $column->getDefault();
-                if ($default === '') {
-                    $default = "''";
-                }
 
                 switch ($type) {
                     case 'boolean':
                     case 'bool':
-                        $field_type = 'switch';
+                        $fieldType = 'switch';
                         break;
                     case 'json':
                     case 'array':
                     case 'object':
-                        $field_type = 'text';
+                        $fieldType = 'text';
                         break;
                     case 'string':
                         switch ($name) {
-                            case $this->check_column($name, ['email']):
-                                $field_type = 'email';
+                            case $this->checkColumn($name, ['email']):
+                                $fieldType = 'email';
                                 break;
-                            case $this->check_column($name, ['password', 'pwd']):
-                                $field_type = 'password';
+                            case $this->checkColumn($name, ['password', 'pwd']):
+                                $fieldType = 'password';
                                 break;
-                            case $this->check_column($name, ['url', 'link', 'src', 'href']):
-                                $field_type = 'url';
+                            case $this->checkColumn($name, ['url', 'link', 'src', 'href']):
+                                $fieldType = 'url';
                                 break;
-                            case $this->check_column($name, ['ip']):
-                                $field_type = 'ip';
+                            case $this->checkColumn($name, ['ip']):
+                                $fieldType = 'ip';
                                 break;
-                            case $this->check_column($name, ['mobile', 'phone']):
-                                $field_type = 'mobile';
+                            case $this->checkColumn($name, ['mobile', 'phone']):
+                                $fieldType = 'mobile';
                                 break;
-                            case $this->check_column($name, ['color', 'rgb']):
-                                $field_type = 'color';
+                            case $this->checkColumn($name, ['color', 'rgb']):
+                                $fieldType = 'color';
                                 break;
-                            case $this->check_column($name, ['image', 'img', 'avatar']) :
-                                $field_type = 'image';
+                            case $this->checkColumn($name, ['image', 'img', 'avatar']) :
+                                $fieldType = 'image';
                                 break;
-                            case $this->check_column($name, ['file', 'attachment']) :
-                                $field_type = 'file';
+                            case $this->checkColumn($name, ['file', 'attachment']) :
+                                $fieldType = 'file';
                                 break;
                             default:
-                                $field_type = 'text';
+                                $fieldType = 'text';
                         }
                         break;
                     case 'integer':
                     case 'bigint':
                     case 'smallint':
                     case 'timestamp':
-                        $field_type = 'number';
+                        $fieldType = 'number';
                         break;
                     case 'decimal':
                     case 'float':
                     case 'real':
-                        $field_type = 'decimal';
+                        $fieldType = 'decimal';
                         break;
                     case 'datetime':
-                        $field_type = 'datetime';
+                        $fieldType = 'datetime';
                         $default = "date('Y-m-d H:i:s')";
                         break;
                     case 'date':
-                        $field_type = 'date';
+                        $fieldType = 'date';
                         $default = "date('Y-m-d')";
                         break;
                     case 'text':
                     case 'blob':
-                        $field_type = 'textarea';
+                        $fieldType = 'textarea';
                         $default = "''";
                         break;
                     default:
-                        $field_type = 'text';
+                        $fieldType = 'text';
                 }
-                $admin_form .= "\$form->{$field_type}('{$name}', '{$comment}')->default({$default});\n";
+
+                $adminForm .= "\$form->{$fieldType}('{$name}', '{$comment}')->default('{$default}');\n";
             }
             $this->alert("laravel-admin form filed generator for {$modelName}:");
-            $this->info($admin_form);
+            $this->info($adminForm);
         }
 
     }
 
     /**
-     * Check if the table column contains the specified keywords of the array
+     * Check if the table column contains the specified keywords of the array.
+     *
      * @param string $haystack
      * @param array $needle
      * @return bool
      */
-    private function check_column(string $haystack, array $needle)
+    private function checkColumn(string $haystack, array $needle)
     {
         foreach ($needle as $value) {
             if (strstr($haystack, $value) !== false) {
