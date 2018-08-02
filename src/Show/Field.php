@@ -144,6 +144,10 @@ class Field implements Renderable
     public function using(array $values, $default = null)
     {
         return $this->as(function ($value) use ($values, $default) {
+            if (is_null($value)) {
+                return $default;
+            }
+
             return array_get($values, $value, $default);
         });
     }
