@@ -80,8 +80,6 @@ SCRIPT;
         <li><a href="{$this->grid->getExportUrl('selected', '__rows__')}" target="_blank" class='{$this->grid->getExportSelectedName()}'>{$selectedRows}</a></li>
     </ul>
 </div>
-&nbsp;&nbsp;
-
 EOT;
     }
 }

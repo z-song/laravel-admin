@@ -6,20 +6,17 @@
     @endif
 
     <div class="box-header with-border">
-
-        <h3 class="box-title"></h3>
-
         <div class="pull-right">
-            {!! $grid->renderFilter() !!}
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}
         </div>
-
         <span>
             {!! $grid->renderHeaderTools() !!}
         </span>
-
     </div>
+
+    {!! $grid->renderFilter() !!}
+
     <!-- /.box-header -->
     <div class="box-body table-responsive no-padding">
         <table class="table table-hover">
