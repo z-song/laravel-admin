@@ -77,16 +77,18 @@ class FormCommand extends Command
                 $comment = $column->getComment();
                 $default = $column->getDefault();
 
-                // set column fieldType
+                // set column fieldType and defaultValue
                 switch ($type) {
                     case 'boolean':
                     case 'bool':
                         $fieldType = 'switch';
+                        $defaultValue = $default;
                         break;
                     case 'json':
                     case 'array':
                     case 'object':
                         $fieldType = 'text';
+                        $defaultValue = $default;
                         break;
                     case 'string':
                         switch ($name) {
@@ -117,51 +119,42 @@ class FormCommand extends Command
                             default:
                                 $fieldType = 'text';
                         }
+                        $defaultValue = "'{$default}'";
                         break;
                     case 'integer':
                     case 'bigint':
                     case 'smallint':
                     case 'timestamp':
                         $fieldType = 'number';
+                        $defaultValue = $default;
                         break;
                     case 'decimal':
                     case 'float':
                     case 'real':
                         $fieldType = 'decimal';
+                        $defaultValue = $default;
                         break;
                     case 'datetime':
                         $fieldType = 'datetime';
-                        $default = "date('Y-m-d H:i:s')";
+                        $defaultValue = "date('Y-m-d H:i:s')";
                         break;
                     case 'date':
                         $fieldType = 'date';
-                        $default = "date('Y-m-d')";
+                        $defaultValue = "date('Y-m-d')";
                         break;
                     case 'text':
                     case 'blob':
                         $fieldType = 'textarea';
-                        $default = '';
+                        $defaultValue = 'NULL';
                         break;
                     default:
                         $fieldType = 'text';
+                        $defaultValue = "''";
                 }
 
                 // set column comment
                 $comment = $comment ? $comment : $name;
 
-                // set column defaultValue
-                switch ($default) {
-                    case null:
-                        $defaultValue = "''";
-                        break;
-                    case "date('Y-m-d H:i:s')":
-                    case "date('Y-m-d')":
-                    case is_numeric($default):
-                        $defaultValue = $default;
-                        break;
-                    default:
-                        $defaultValue = "'{$default}'";
-                }
 
                 $adminForm .= "\$form->{$fieldType}('{$name}', '{$comment}')->default({$defaultValue});\n";
             }
