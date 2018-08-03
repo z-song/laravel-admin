@@ -31,6 +31,7 @@ return [
     'expand'       => 'Déplier',
     'collapse'     => 'Replier',
     'filter'       => 'Filtre',
+    'search'       => 'Chercher',
     'close'        => 'Fermer',
     'show'         => 'Affiche',
     'entries'      => 'lignes',

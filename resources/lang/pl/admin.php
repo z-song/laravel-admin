@@ -30,6 +30,7 @@ return [
     'expand'       => 'Rozwiń',
     'collapse'     => 'Zwiń',
     'filter'       => 'Filtruj',
+    'search'       => 'Szukaj',
     'close'        => 'Zamknij',
     'show'         => 'Wyświetl',
     'items'        => 'element',

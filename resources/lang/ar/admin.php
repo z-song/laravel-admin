@@ -31,6 +31,7 @@ return [
     'expand'       => 'تكبير',
     'collapse'     => 'تصغير',
     'filter'       => 'تصنيف',
+    'search'       => 'بحث',
     'close'        => 'اغلاق',
     'show'         => 'عرض',
     'entries'      => 'المدخلات',

@@ -31,6 +31,7 @@ return [
     'expand'       => 'Genişlet',
     'collapse'     => 'Daralt',
     'filter'       => 'Filtrele',
+    'search'       => 'arama',
     'close'        => 'Kapat',
     'show'         => 'Göster',
     'entries'      => 'kayıtlar',

@@ -31,6 +31,7 @@ return [
     'expand'       => 'Expandir',
     'collapse'     => 'Diminuir',
     'filter'       => 'Filtrar',
+    'search'       => 'Pesquisa',
     'close'        => 'Fechar',
     'show'         => 'Mostrar',
     'entries'      => 'Entradas',

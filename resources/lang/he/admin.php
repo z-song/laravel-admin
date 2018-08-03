@@ -30,6 +30,7 @@ return [
     'expand'                => 'הרחב',
     'collapse'              => 'פתח',
     'filter'                => 'חיפוש',
+    'search'                => 'לחפש',
     'close'                 => 'סגור',
     'show'                  => 'צפה',
     'entries'               => 'רשומות',

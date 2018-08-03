@@ -31,6 +31,7 @@ return [
     'expand'       => '展開',
     'collapse'     => '收起',
     'filter'       => '篩選',
+    'search'       => '搜索',
     'close'        => '關閉',
     'show'         => '顯示',
     'entries'      => '條',

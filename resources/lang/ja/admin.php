@@ -31,6 +31,7 @@ return [
     'expand'       => '展開',
     'collapse'     => '縮小',
     'filter'       => 'フィルタ',
+    'search'       => 'サーチ',
     'close'        => '閉じる',
     'show'         => '表示',
     'entries'      => '件',

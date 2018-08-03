@@ -31,6 +31,7 @@ return [
     'expand'       => 'Openklappen',
     'collapse'     => 'Dichtklappen',
     'filter'       => 'Filter',
+    'search'       => 'Zoeken',
     'close'        => 'Sluit',
     'show'         => 'Toon',
     'entries'      => 'rijen',
