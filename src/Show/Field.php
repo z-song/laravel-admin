@@ -57,6 +57,13 @@ class Field implements Renderable
     protected $relation;
 
     /**
+     * If show contents in box.
+     *
+     * @var bool
+     */
+    public $wrapped = true;
+
+    /**
      * Field constructor.
      *
      * @param string $name
@@ -234,6 +241,30 @@ class Field implements Renderable
     }
 
     /**
+     * Show field as json code.
+     *
+     * @return Field
+     */
+    public function json()
+    {
+        $field = $this;
+
+        return $this->as(function ($value) use ($field) {
+
+            $content = json_decode($value, true);
+
+            if (json_last_error() == 0) {
+
+                $field->wrapped = false;
+
+                return '<pre><code>'.json_encode($content, JSON_PRETTY_PRINT).'</code></pre>';
+            }
+
+            return $value;
+        });
+    }
+
+    /**
      * Set value for this field.
      *
      * @param Model $model
@@ -286,6 +317,20 @@ class Field implements Renderable
     }
 
     /**
+     * Get all variables passed to field view.
+     *
+     * @return array
+     */
+    protected function variables()
+    {
+        return [
+            'content'   => $this->value,
+            'label'     => $this->getLabel(),
+            'wrapped'   => $this->wrapped,
+        ];
+    }
+
+    /**
      * Render this field.
      *
      * @return string
@@ -301,9 +346,6 @@ class Field implements Renderable
             });
         }
 
-        $content = $this->value;
-        $label = $this->getLabel();
-
-        return view($this->view, compact('content', 'label'));
+        return view($this->view, $this->variables());
     }
 }
