@@ -3,7 +3,9 @@
 namespace Encore\Admin\Show;
 
 use Encore\Admin\Admin;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Collection;
 
 class Tools implements Renderable
 {
@@ -24,21 +26,21 @@ class Tools implements Renderable
      *
      * @var array
      */
-    protected $tools = ['delete', 'list', 'edit'];
+    protected $tools = ['delete', 'edit', 'list'];
 
     /**
      * Tools should be appends to default tools.
      *
-     * @var array
+     * @var Collection
      */
-    protected $appends = [];
+    protected $appends;
 
     /**
      * Tools should be prepends to default tools.
      *
-     * @var array
+     * @var Collection
      */
-    protected $prepends = [];
+    protected $prepends;
 
     /**
      * Tools constructor.
@@ -48,6 +50,9 @@ class Tools implements Renderable
     public function __construct(Panel $panel)
     {
         $this->panel = $panel;
+
+        $this->appends = new Collection();
+        $this->prepends = new Collection();
     }
 
     /**
@@ -59,7 +64,7 @@ class Tools implements Renderable
      */
     public function append($tool)
     {
-        $this->appends[] = $tool;
+        $this->appends->push($tool);
 
         return $this;
     }
@@ -73,7 +78,7 @@ class Tools implements Renderable
      */
     public function prepend($tool)
     {
-        $this->prepends[] = $tool;
+        $this->prepends->push($tool);
 
         return $this;
     }
@@ -169,10 +174,12 @@ class Tools implements Renderable
      */
     protected function renderList()
     {
+        $list = trans('admin.list');
+
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
     <a href="{$this->getListPath()}" class="btn btn-sm btn-default">
-        <i class="fa fa-list"></i>
+        <i class="fa fa-list"></i> {$list}
     </a>
 </div>
 HTML;
@@ -185,10 +192,12 @@ HTML;
      */
     protected function renderEdit()
     {
+        $edit = trans('admin.edit');
+
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
     <a href="{$this->getEditPath()}" class="btn btn-sm btn-primary">
-        <i class="fa fa-edit"></i>
+        <i class="fa fa-edit"></i> {$edit}
     </a>
 </div>
 HTML;
@@ -229,7 +238,7 @@ $('.{$class}-delete').unbind('click').click(function() {
                 _token:LA.token,
             },
             success: function (data) {
-                $.pjax.reload('#pjax-container');
+                $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });
 
                 if (typeof data === 'object') {
                     if (data.status) {
@@ -245,15 +254,38 @@ $('.{$class}-delete').unbind('click').click(function() {
 
 SCRIPT;
 
+        $delete = trans('admin.delete');
+
         Admin::script($script);
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
     <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete">
-        <i class="fa fa-trash"></i>
+        <i class="fa fa-trash"></i>  {$delete}
     </a>
 </div>
 HTML;
+    }
+
+    /**
+     * Render custom tools.
+     *
+     * @param Collection $tools
+     * @return mixed
+     */
+    protected function renderCustomTools($tools)
+    {
+        return $tools->map(function ($tool) {
+            if ($tool instanceof Renderable) {
+                return $tool->render();
+            }
+
+            if ($tool instanceof Htmlable) {
+                return $tool->toHtml();
+            }
+
+            return (string) $tool;
+        })->implode(' ');
     }
 
     /**
@@ -263,13 +295,13 @@ HTML;
      */
     public function render()
     {
-        $output = implode('', $this->prepends);
+        $output = $this->renderCustomTools($this->prepends);
 
         foreach ($this->tools as $tool) {
             $renderMethod = 'render'.ucfirst($tool);
             $output .= $this->$renderMethod();
         }
 
-        return $output.implode('', $this->appends);
+        return $output.$this->renderCustomTools($this->appends);
     }
 }

@@ -161,6 +161,16 @@ class Builder
     }
 
     /**
+     * Get Resource id.
+     *
+     * @return mixed
+     */
+    public function getResourceId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @return string
      */
     public function getResource($slice = null)
