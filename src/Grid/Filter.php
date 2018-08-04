@@ -87,7 +87,7 @@ class Filter implements Renderable
     /**
      * @var bool
      */
-    protected $searching = false;
+    public $searching = false;
 
     /**
      * @var Collection

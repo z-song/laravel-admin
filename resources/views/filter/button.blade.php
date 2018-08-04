@@ -1,10 +1,10 @@
-<div class="btn-group" style="margin-right: 10px">
-    <a class="btn btn-sm btn-twitter {{ $btn_class }}">
-        <i class="fa fa-filter"></i>&nbsp;&nbsp;&nbsp;{{ trans('admin.filter') }}
-    </a>
+<div class="btn-group" style="margin-right: 10px" data-toggle="buttons">
+    <label class="btn btn-sm btn-dropbox {{ $btn_class }} {{ $searching ? 'active' : '' }}">
+        <input type="checkbox"><i class="fa fa-filter"></i>&nbsp;&nbsp;{{ trans('admin.filter') }}
+    </label>
 
     @if($scopes->isNotEmpty())
-    <button type="button" class="btn btn-sm btn-twitter dropdown-toggle" data-toggle="dropdown">
+    <button type="button" class="btn btn-sm btn-dropbox dropdown-toggle" data-toggle="dropdown">
 
         <span>{{ $current_label }}</span>
         <span class="caret"></span>

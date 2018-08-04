@@ -92,6 +92,7 @@ SCRIPT;
             'current_label' => $this->getCurrentScopeLabel(),
             'url_no_scopes' => $this->filter()->urlWithoutScopes(),
             'btn_class'     => $this->getElementClassName(),
+            'searching'     => $this->filter()->searching,
         ];
 
         return view($this->view, $variables)->render();
