@@ -15,7 +15,7 @@
             {!! $scope->render() !!}
         @endforeach
         <li role="separator" class="divider"></li>
-        <li><a href="{{ $url_no_scopes }}">{{ trans('admin.none') }}</a></li>
+        <li><a href="{{ $url_no_scopes }}">{{ trans('admin.cancel') }}</a></li>
     </ul>
     @endif
 </div>
