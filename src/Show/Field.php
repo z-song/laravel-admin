@@ -8,9 +8,14 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Traits\Macroable;
 
 class Field implements Renderable
 {
+    use Macroable {
+        __call as macroCall;
+    }
+
     /**
      * @var string
      */
@@ -308,6 +313,10 @@ class Field implements Renderable
      */
     public function __call($method, $arguments = [])
     {
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $arguments);
+        }
+
         if ($this->relation) {
             $this->name = $method;
             $this->label = $this->formatLabel(array_get($arguments, 0));
