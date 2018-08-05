@@ -357,20 +357,6 @@ class Form implements Renderable
     }
 
     /**
-     * Get RedirectResponse after store.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectAfterStore()
-    {
-        admin_toastr(trans('admin.save_succeeded'));
-
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(0);
-
-        return redirect($url);
-    }
-
-    /**
      * Get ajax response.
      *
      * @param string $message
@@ -555,19 +541,56 @@ class Form implements Renderable
             return $response;
         }
 
-        return $this->redirectAfterUpdate();
+        return $this->redirectAfterUpdate($id);
+    }
+
+    /**
+     * Get RedirectResponse after store.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirectAfterStore()
+    {
+        $resourcesPath = $this->resource(0);
+
+        $key = $this->model->getKey();
+
+        return $this->redirectAfterSaving($resourcesPath, $key);
     }
 
     /**
      * Get RedirectResponse after update.
      *
+     * @param mixed $key
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectAfterUpdate()
+    protected function redirectAfterUpdate($key)
     {
-        admin_toastr(trans('admin.update_succeeded'));
+        $resourcesPath = $this->resource(-1);
 
-        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
+        return $this->redirectAfterSaving($resourcesPath, $key);
+    }
+
+    /**
+     * Get RedirectResponse after data saving.
+     *
+     * @param string $resourcesPath
+     * @param string $key
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    protected function redirectAfterSaving($resourcesPath, $key)
+    {
+        if (request('after-save') == 1) {
+            // continue editing
+            $url = rtrim($resourcesPath, '/') . "/{$key}/edit";
+        } elseif (request('after-save') == 2) {
+            // view resource
+            $url = rtrim($resourcesPath, '/') . "/{$key}";
+        } else {
+            $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
+        }
+
+        admin_toastr(trans('admin.save_succeeded'));
 
         return redirect($url);
     }
@@ -1156,10 +1179,12 @@ class Form implements Renderable
      * Disable form submit.
      *
      * @return $this
+     *
+     * @deprecated
      */
     public function disableSubmit()
     {
-        $this->builder()->options(['enableSubmit' => false]);
+        $this->builder()->getFooter()->disableSubmit();
 
         return $this;
     }
@@ -1168,12 +1193,24 @@ class Form implements Renderable
      * Disable form reset.
      *
      * @return $this
+     *
+     * @deprecated
      */
     public function disableReset()
     {
-        $this->builder()->options(['enableReset' => false]);
+        $this->builder()->getFooter()->disableReset();
 
         return $this;
+    }
+
+    /**
+     * Footer setting for form.
+     *
+     * @param Closure $callback
+     */
+    public function footer(Closure $callback)
+    {
+        call_user_func($callback, $this->builder()->getFooter());
     }
 
     /**
@@ -1404,15 +1441,5 @@ class Form implements Renderable
 
             return $element;
         }
-    }
-
-    /**
-     * Render the contents of the form when casting to string.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->render();
     }
 }
