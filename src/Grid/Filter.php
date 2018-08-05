@@ -87,7 +87,7 @@ class Filter implements Renderable
     /**
      * @var bool
      */
-    public $searching = false;
+    public $expand = false;
 
     /**
      * @var Collection
@@ -232,7 +232,9 @@ class Filter implements Renderable
         }
 
         return tap(array_filter($conditions), function ($conditions) {
-            $this->searching = !empty($conditions);
+            if (!empty($conditions)) {
+                $this->expand();
+            }
         });
     }
 
@@ -343,6 +345,18 @@ class Filter implements Renderable
     }
 
     /**
+     * Expand filter container.
+     *
+     * @return $this
+     */
+    public function expand()
+    {
+        $this->expand = true;
+
+        return $this;
+    }
+
+    /**
      * Execute the filter with conditions.
      *
      * @return array
@@ -388,7 +402,7 @@ class Filter implements Renderable
             'action'    => $this->action ?: $this->urlWithoutFilters(),
             'filters'   => $this->filters,
             'filterID'  => $this->filterID,
-            'searching' => $this->searching,
+            'expand'    => $this->expand,
         ])->render();
     }
 

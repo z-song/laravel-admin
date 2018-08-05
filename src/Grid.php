@@ -578,6 +578,18 @@ class Grid
     }
 
     /**
+     * Expand filter.
+     *
+     * @return $this
+     */
+    public function expandFilter()
+    {
+        $this->filter->expand();
+
+        return $this;
+    }
+
+    /**
      * Build the grid rows.
      *
      * @param array $data
