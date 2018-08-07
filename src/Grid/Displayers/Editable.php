@@ -23,7 +23,9 @@ class Editable extends AbstractDisplayer
      *
      * @var array
      */
-    protected $options = [];
+    protected $options = [
+        'emptytext'  => '<i class="fa fa-pencil"></i>'
+    ];
 
     /**
      * Add options for editable.

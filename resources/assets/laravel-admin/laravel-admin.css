@@ -8,3 +8,8 @@ input.content {
     border-radius: 0 !important;
     box-shadow: none !important;
 }
+
+a.editable-empty {
+    color: #3c8dbc;
+    border-bottom: none !important;
+}
