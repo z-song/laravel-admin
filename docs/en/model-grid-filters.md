@@ -235,3 +235,24 @@ $filter->equal('column')->month();
 $filter->equal('column')->year();
 
 ```
+
+## Complex query filter
+
+You can use the `$this->input` to trigger complex custom queries:
+```php
+$filter->where(function ($query) {
+    switch ($this->input) {
+        case 'yes':
+            // custom complex query if the 'yes' option is selected
+            $query->has('somerelationship');
+            break;
+        case 'no':
+            $query->doesntHave('somerelationship');
+            break;
+    }
+}, 'Label of the field', 'name_for_url_shortcut')->radio([
+    '' => 'All',
+    'yes' => 'Only with relationship',
+    'no' => 'Only without relationship',
+]);
+```
