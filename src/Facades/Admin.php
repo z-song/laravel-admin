@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Facade;
  *
  * @method static \Encore\Admin\Grid grid($model, \Closure $callable)
  * @method static \Encore\Admin\Form form($model, \Closure $callable)
+ * @method static \Encore\Admin\Show show($model, $callable = null)
  * @method static \Encore\Admin\Tree tree($model, \Closure $callable = null)
  * @method static \Encore\Admin\Layout\Content content(\Closure $callable = null)
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void css($css = null)

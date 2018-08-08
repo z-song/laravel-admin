@@ -1,4 +1,4 @@
-<input type="checkbox" class="grid-select-all" />&nbsp;
+<input type="checkbox" class="{{ $selectAllName }}" />&nbsp;
 
 <div class="btn-group">
     <a class="btn btn-sm btn-default">  {{ trans('admin.action') }}</a>
@@ -8,7 +8,7 @@
     </button>
     <ul class="dropdown-menu" role="menu">
         @foreach($actions as $action)
-            <li><a href="#" class="grid-batch-{{ $action['id'] }}">{{ $action['title'] }}</a></li>
+            <li><a href="#" class="{{ $action->getElementClass(false) }}">{{ $action->getTitle() }}</a></li>
         @endforeach
     </ul>
 </div>

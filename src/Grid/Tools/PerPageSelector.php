@@ -82,7 +82,7 @@ class PerPageSelector extends AbstractTool
 <label class="control-label pull-right" style="margin-right: 10px; font-weight: 100;">
 
         <small>$show</small>&nbsp;
-        <select class="input-sm grid-per-pager" name="per-page">
+        <select class="input-sm {$this->grid->getPerPageName()}" name="per-page">
             $options
         </select>
         &nbsp;<small>$entries</small>
@@ -98,9 +98,9 @@ EOT;
      */
     protected function script()
     {
-        return <<<'EOT'
+        return <<<EOT
 
-$('.grid-per-pager').on("change", function(e) {
+$('.{$this->grid->getPerPageName()}').on("change", function(e) {
     $.pjax({url: this.value, container: '#pjax-container'});
 });
 

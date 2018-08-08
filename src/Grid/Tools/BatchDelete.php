@@ -4,6 +4,11 @@ namespace Encore\Admin\Grid\Tools;
 
 class BatchDelete extends BatchAction
 {
+    public function __construct($title)
+    {
+        $this->title = $title;
+    }
+
     /**
      * Script of batch delete action.
      */
@@ -17,7 +22,7 @@ class BatchDelete extends BatchAction
 
 $('{$this->getElementClass()}').on('click', function() {
 
-    var id = selectedRows().join();
+    var id = {$this->grid->getSelectedRowsName()}().join();
 
     swal({
       title: "$deleteConfirm",

@@ -1,8 +1,8 @@
 <?php
 
-namespace Encore\Admin\Form;
+namespace Encore\Admin\Show;
 
-use Encore\Admin\Facades\Admin;
+use Encore\Admin\Admin;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
@@ -10,16 +10,23 @@ use Illuminate\Support\Collection;
 class Tools implements Renderable
 {
     /**
-     * @var Builder
+     * The panel that holds this tool.
+     *
+     * @var Panel
      */
-    protected $form;
+    protected $panel;
 
     /**
-     * Collection of tools.
+     * @var string
+     */
+    protected $resource;
+
+    /**
+     * Default tools.
      *
      * @var array
      */
-    protected $tools = ['delete', 'view', 'list'];
+    protected $tools = ['delete', 'edit', 'list'];
 
     /**
      * Tools should be appends to default tools.
@@ -36,13 +43,16 @@ class Tools implements Renderable
     protected $prepends;
 
     /**
-     * Create a new Tools instance.
+     * Tools constructor.
      *
-     * @param Builder $builder
+     * @param Panel $panel
      */
-    public function __construct(Builder $builder)
+    public function __construct(Panel $panel)
     {
-        $this->form = $builder;
+        $this->panel = $panel;
+
+        $this->appends = new Collection();
+        $this->prepends = new Collection();
     }
 
     /**
@@ -74,6 +84,20 @@ class Tools implements Renderable
     }
 
     /**
+     * Get resource path.
+     *
+     * @return string
+     */
+    public function getResource()
+    {
+        if (is_null($this->resource)) {
+            $this->resource = $this->panel->getParent()->getResourcePath();
+        }
+
+        return $this->resource;
+    }
+
+    /**
      * Disable `list` tool.
      *
      * @return $this
@@ -102,9 +126,9 @@ class Tools implements Renderable
      *
      * @return $this
      */
-    public function disableView()
+    public function disableEdit()
     {
-        array_delete($this->tools, 'view');
+        array_delete($this->tools, 'edit');
 
         return $this;
     }
@@ -116,7 +140,7 @@ class Tools implements Renderable
      */
     protected function getListPath()
     {
-        return $this->form->getResource();
+        return '/'.ltrim($this->getResource(), '/');
     }
 
     /**
@@ -124,9 +148,11 @@ class Tools implements Renderable
      *
      * @return string
      */
-    protected function getDeletePath()
+    protected function getEditPath()
     {
-        return $this->getViewPath();
+        $key = $this->panel->getParent()->getModel()->getKey();
+
+        return $this->getListPath().'/'.$key.'/edit';
     }
 
     /**
@@ -134,42 +160,44 @@ class Tools implements Renderable
      *
      * @return string
      */
-    protected function getViewPath()
+    protected function getDeletePath()
     {
-        $key = $this->form->getResourceId();
+        $key = $this->panel->getParent()->getModel()->getKey();
 
         return $this->getListPath().'/'.$key;
     }
 
     /**
-     * Render list button.
+     * Render `list` tool.
      *
      * @return string
      */
     protected function renderList()
     {
-        $text = trans('admin.list');
-
-        return <<<EOT
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;$text</a>
-</div>
-EOT;
-    }
-
-    /**
-     * Render list button.
-     *
-     * @return string
-     */
-    protected function renderView()
-    {
-        $view = trans('admin.view');
+        $list = trans('admin.list');
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary">
-        <i class="fa fa-eye"></i> {$view}
+    <a href="{$this->getListPath()}" class="btn btn-sm btn-default">
+        <i class="fa fa-list"></i> {$list}
+    </a>
+</div>
+HTML;
+    }
+
+    /**
+     * Render `edit` tool.
+     *
+     * @return string
+     */
+    protected function renderEdit()
+    {
+        $edit = trans('admin.edit');
+
+        return <<<HTML
+<div class="btn-group pull-right" style="margin-right: 5px">
+    <a href="{$this->getEditPath()}" class="btn btn-sm btn-primary">
+        <i class="fa fa-edit"></i> {$edit}
     </a>
 </div>
 HTML;
@@ -240,43 +268,6 @@ HTML;
     }
 
     /**
-     * Add a tool.
-     *
-     * @param string $tool
-     *
-     * @return $this
-     *
-     * @deprecated use append instead.
-     */
-    public function add($tool)
-    {
-        return $this->append($tool);
-    }
-
-    /**
-     * Disable back button.
-     *
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function disableBackButton()
-    {
-    }
-
-    /**
-     * Disable list button.
-     *
-     * @return $this
-     *
-     * @deprecated Use disableList instead.
-     */
-    public function disableListButton()
-    {
-        return $this->disableList();
-    }
-
-    /**
      * Render custom tools.
      *
      * @param Collection $tools
@@ -284,10 +275,6 @@ HTML;
      */
     protected function renderCustomTools($tools)
     {
-        if (empty($tools)) {
-            return '';
-        }
-
         return $tools->map(function ($tool) {
             if ($tool instanceof Renderable) {
                 return $tool->render();
