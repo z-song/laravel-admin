@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Traits\Macroable;
 
@@ -67,6 +68,22 @@ class Field implements Renderable
      * @var bool
      */
     public $wrapped = true;
+
+    /**
+     * @var array
+     */
+    protected $fileTypes = [
+        'image'      => 'png|jpg|jpeg|tmp|gif',
+        'word'       => 'doc|docx',
+        'excel'      => 'xls|xlsx|cvs',
+        'powerpoint' => 'ppt|pptx',
+        'pdf'        => 'pdf',
+        'code'       => 'php|js|java|python|ruby|go|c|cpp|sql|m|h|json|html|aspx',
+        'archive'    => 'zip|tar\.gz|rar|rpm',
+        'txt'        => 'txt|pac|log|md',
+        'audio'      => 'mp3|wav|flac|3pg|aa|aac|ape|au|m4a|mpc|ogg',
+        'video'      => 'mkv|rmvb|flv|mp4|avi|wmv|rm|asf|mpeg'
+    ];
 
     /**
      * Field constructor.
@@ -189,6 +206,57 @@ class Field implements Renderable
     }
 
     /**
+     * Show field as a file.
+     *
+     * @param string $server
+     * @param bool $download
+     * @return Field
+     */
+    public function file($server = '', $download = true)
+    {
+        $field = $this;
+
+        return $this->as(function ($path) use ($server, $download, $field) {
+
+            $name = basename($path);
+
+            $field->wrapped = false;
+
+            $size = $url = '';
+
+            if (url()->isValidUrl($path)) {
+                $url = $path;
+            } elseif ($server) {
+                $url = $server.$path;
+            } else {
+                $storage = Storage::disk(config('admin.upload.disk'));
+                if ($storage->exists($path)) {
+                    $url = $storage->url($path);
+                    $size = ($storage->size($path)/1000) . 'KB';
+                }
+            }
+
+            return <<<HTML
+<ul class="mailbox-attachments clearfix">
+    <li style="margin-bottom: 0;">
+      <span class="mailbox-attachment-icon"><i class="fa {$field->getFileIcon($name)}"></i></span>
+      <div class="mailbox-attachment-info">
+        <div class="mailbox-attachment-name">
+            <i class="fa fa-paperclip"></i> {$name}
+            </div>
+            <span class="mailbox-attachment-size">
+              {$size}&nbsp;
+              <a href="{$url}" class="btn btn-default btn-xs pull-right" target="_blank"><i class="fa fa-cloud-download"></i></a>
+            </span>
+      </div>
+    </li>
+  </ul>
+HTML;
+
+        });
+    }
+
+    /**
      * Show field as a link.
      *
      * @param string $href
@@ -267,6 +335,25 @@ class Field implements Renderable
 
             return $value;
         });
+    }
+
+    /**
+     * Get file icon
+     *
+     * @param string $file
+     * @return string
+     */
+    public function getFileIcon($file = '')
+    {
+        $extension = File::extension($file);
+
+        foreach ($this->fileTypes as $type => $regex) {
+            if (preg_match("/^($regex)$/i", $extension) !== 0) {
+                return "fa-file-{$type}-o";
+            }
+        }
+
+        return 'fa-file-o';
     }
 
     /**
