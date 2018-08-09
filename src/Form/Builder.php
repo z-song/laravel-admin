@@ -44,6 +44,7 @@ class Builder
     protected $options = [
         'enableSubmit' => true,
         'enableReset'  => true,
+        'enableRemoveReservedFields' => true,
     ];
 
     /**
@@ -509,7 +510,7 @@ EOT;
      */
     protected function removeReservedFields()
     {
-        if (!$this->isMode(static::MODE_CREATE)) {
+        if (!$this->options['enableRemoveReservedFields'] || !$this->isMode(static::MODE_CREATE)) {
             return;
         }
 

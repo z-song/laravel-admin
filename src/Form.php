@@ -404,7 +404,7 @@ class Form
             return $response;
         }
 
-        $this->inputs = array_merge($this->removeIgnoredFields($data), $this->inputs);
+        $this->inputs = $this->removeIgnoredFields($data);
 
         if (($response = $this->callSaving()) instanceof Response) {
             return $response;
@@ -1171,6 +1171,18 @@ class Form
     public function disableReset()
     {
         $this->builder()->options(['enableReset' => false]);
+
+        return $this;
+    }
+
+    /**
+     * Disable form remove reserved fields.
+     *
+     * @return $this
+     */
+    public function disableRemoveReservedFields()
+    {
+        $this->builder()->options(['enableRemoveReservedFields' => false]);
 
         return $this;
     }
