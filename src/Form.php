@@ -174,13 +174,15 @@ class Form implements Renderable
      * @param $model
      * @param \Closure $callback
      */
-    public function __construct($model, Closure $callback)
+    public function __construct($model, Closure $callback = null)
     {
         $this->model = $model;
 
         $this->builder = new Builder($this);
 
-        $callback($this);
+        if ($callback instanceof Closure) {
+            $callback($this);
+        }
     }
 
     /**

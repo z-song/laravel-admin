@@ -180,7 +180,7 @@ class Grid
      * @param Eloquent $model
      * @param Closure  $builder
      */
-    public function __construct(Eloquent $model, Closure $builder)
+    public function __construct(Eloquent $model, Closure $builder = null)
     {
         $this->keyName = $model->getKeyName();
         $this->model = new Model($model);
@@ -223,7 +223,9 @@ class Grid
         if ($scope = Input::get(Exporter::$queryName)) {
             $this->model()->usePaginate(false);
 
-            call_user_func($this->builder, $this);
+            if ($this->builder) {
+                call_user_func($this->builder, $this);
+            }
 
             (new Exporter($this))->resolve($this->exporter)->withScope($scope)->export();
         }
@@ -548,7 +550,9 @@ class Grid
      */
     public function processFilter()
     {
-        call_user_func($this->builder, $this);
+        if ($this->builder) {
+            call_user_func($this->builder, $this);
+        }
 
         return $this->filter->execute();
     }
