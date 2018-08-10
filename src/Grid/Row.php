@@ -177,7 +177,7 @@ class Row
      */
     protected function dump($var)
     {
-        if (!is_scalar($var)) {
+        if (!is_null($var) && !is_scalar($var)) {
             return '<pre>'.var_export($var, true).'</pre>';
         }
 
