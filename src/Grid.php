@@ -5,8 +5,7 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Grid\Column;
-use Encore\Admin\Grid\Displayers\Actions;
-use Encore\Admin\Grid\Displayers\RowSelector;
+use Encore\Admin\Grid\Displayers;
 use Encore\Admin\Grid\Exporter;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\HasElementNames;
@@ -446,7 +445,7 @@ class Grid
         $column = $this->addColumn('__actions__', trans('admin.action'));
 
         $column->display(function ($value) use ($grid, $column, $callback) {
-            $actions = new Actions($value, $grid, $column, $this);
+            $actions = new Displayers\Actions($value, $grid, $column, $this);
 
             return $actions->display($callback);
         });
@@ -484,7 +483,7 @@ class Grid
         $column->setGrid($this);
 
         $column->display(function ($value) use ($grid, $column) {
-            $actions = new RowSelector($value, $grid, $column, $this);
+            $actions = new Displayers\RowSelector($value, $grid, $column, $this);
 
             return $actions->display();
         });
@@ -951,19 +950,20 @@ class Grid
     public static function registerColumnDisplayer()
     {
         $map = [
-            'editable'    => \Encore\Admin\Grid\Displayers\Editable::class,
-            'switch'      => \Encore\Admin\Grid\Displayers\SwitchDisplay::class,
-            'switchGroup' => \Encore\Admin\Grid\Displayers\SwitchGroup::class,
-            'select'      => \Encore\Admin\Grid\Displayers\Select::class,
-            'image'       => \Encore\Admin\Grid\Displayers\Image::class,
-            'label'       => \Encore\Admin\Grid\Displayers\Label::class,
-            'button'      => \Encore\Admin\Grid\Displayers\Button::class,
-            'link'        => \Encore\Admin\Grid\Displayers\Link::class,
-            'badge'       => \Encore\Admin\Grid\Displayers\Badge::class,
-            'progressBar' => \Encore\Admin\Grid\Displayers\ProgressBar::class,
-            'radio'       => \Encore\Admin\Grid\Displayers\Radio::class,
-            'checkbox'    => \Encore\Admin\Grid\Displayers\Checkbox::class,
-            'orderable'   => \Encore\Admin\Grid\Displayers\Orderable::class,
+            'editable'    => Displayers\Editable::class,
+            'switch'      => Displayers\SwitchDisplay::class,
+            'switchGroup' => Displayers\SwitchGroup::class,
+            'select'      => Displayers\Select::class,
+            'image'       => Displayers\Image::class,
+            'label'       => Displayers\Label::class,
+            'button'      => Displayers\Button::class,
+            'link'        => Displayers\Link::class,
+            'badge'       => Displayers\Badge::class,
+            'progressBar' => Displayers\ProgressBar::class,
+            'radio'       => Displayers\Radio::class,
+            'checkbox'    => Displayers\Checkbox::class,
+            'orderable'   => Displayers\Orderable::class,
+            'table'       => Displayers\Table::class,
         ];
 
         foreach ($map as $abstract => $class) {

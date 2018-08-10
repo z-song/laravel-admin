@@ -6,12 +6,11 @@ use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
-use Encore\Admin\Form\Field\File;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -233,21 +232,6 @@ class Form implements Renderable
     }
 
     /**
-     * @param $id
-     *
-     * @return $this
-     */
-    public function view($id)
-    {
-        $this->builder->setMode(Builder::MODE_VIEW);
-        $this->builder->setResourceId($id);
-
-        $this->setFieldValue($id);
-
-        return $this;
-    }
-
-    /**
      * Use tab to split form.
      *
      * @param string  $title
@@ -310,7 +294,7 @@ class Form implements Renderable
 
         $this->builder->fields()->filter(function ($field) {
             return $field instanceof Field\File;
-        })->each(function (File $file) use ($data) {
+        })->each(function (Field\File $file) use ($data) {
             $file->setOriginal($data);
 
             $file->destroy();
@@ -433,7 +417,7 @@ class Form implements Renderable
             if (method_exists($this->model, $column)) {
                 $relation = call_user_func([$this->model, $column]);
 
-                if ($relation instanceof Relation) {
+                if ($relation instanceof Relations\Relation) {
                     $relations[$column] = $value;
                 }
             }
@@ -685,8 +669,8 @@ class Form implements Renderable
 
             $relation = $this->model->$name();
 
-            $oneToOneRelation = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne
-                || $relation instanceof \Illuminate\Database\Eloquent\Relations\MorphOne;
+            $oneToOneRelation = $relation instanceof Relations\HasOne
+                || $relation instanceof Relations\MorphOne;
 
             $prepared = $this->prepareUpdate([$name => $values], $oneToOneRelation);
 
@@ -695,13 +679,13 @@ class Form implements Renderable
             }
 
             switch (get_class($relation)) {
-                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
-                case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
+                case Relations\BelongsToMany::class:
+                case Relations\MorphToMany::class:
                     if (isset($prepared[$name])) {
                         $relation->sync($prepared[$name]);
                     }
                     break;
-                case \Illuminate\Database\Eloquent\Relations\HasOne::class:
+                case Relations\HasOne::class:
 
                     $related = $this->model->$name;
 
@@ -717,7 +701,7 @@ class Form implements Renderable
 
                     $related->save();
                     break;
-                case \Illuminate\Database\Eloquent\Relations\MorphOne::class:
+                case Relations\MorphOne::class:
                     $related = $this->model->$name;
                     if (is_null($related)) {
                         $related = $relation->make();
@@ -727,10 +711,11 @@ class Form implements Renderable
                     }
                     $related->save();
                     break;
-                case \Illuminate\Database\Eloquent\Relations\HasMany::class:
-                case \Illuminate\Database\Eloquent\Relations\MorphMany::class:
+                case Relations\HasMany::class:
+                case Relations\MorphMany::class:
 
                     foreach ($prepared[$name] as $related) {
+                        /** @var Relations\Relation $relation */
                         $relation = $this->model()->$name();
 
                         $keyName = $relation->getRelated()->getKeyName();
@@ -767,6 +752,7 @@ class Form implements Renderable
     {
         $prepared = [];
 
+        /** @var Field $field */
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
@@ -893,7 +879,7 @@ class Form implements Renderable
     /**
      * Set saved callback.
      *
-     * @param callable $callback
+     * @param Closure $callback
      *
      * @return void
      */
@@ -1026,6 +1012,7 @@ class Form implements Renderable
     {
         $failedValidators = [];
 
+        /** @var Field $field */
         foreach ($this->builder->fields() as $field) {
             if (!$validator = $field->getValidator($input)) {
                 continue;
@@ -1068,6 +1055,7 @@ class Form implements Renderable
     {
         $relations = $columns = [];
 
+        /** @var Field $field */
         foreach ($this->builder->fields() as $field) {
             $columns[] = $field->column();
         }
@@ -1077,7 +1065,7 @@ class Form implements Renderable
                 list($relation) = explode('.', $column);
 
                 if (method_exists($this->model, $relation) &&
-                    $this->model->$relation() instanceof Relation
+                    $this->model->$relation() instanceof Relations\Relation
                 ) {
                     $relations[] = $relation;
                 }
@@ -1276,52 +1264,52 @@ class Form implements Renderable
     public static function registerBuiltinFields()
     {
         $map = [
-            'button'         => \Encore\Admin\Form\Field\Button::class,
-            'checkbox'       => \Encore\Admin\Form\Field\Checkbox::class,
-            'color'          => \Encore\Admin\Form\Field\Color::class,
-            'currency'       => \Encore\Admin\Form\Field\Currency::class,
-            'date'           => \Encore\Admin\Form\Field\Date::class,
-            'dateRange'      => \Encore\Admin\Form\Field\DateRange::class,
-            'datetime'       => \Encore\Admin\Form\Field\Datetime::class,
-            'dateTimeRange'  => \Encore\Admin\Form\Field\DatetimeRange::class,
-            'datetimeRange'  => \Encore\Admin\Form\Field\DatetimeRange::class,
-            'decimal'        => \Encore\Admin\Form\Field\Decimal::class,
-            'display'        => \Encore\Admin\Form\Field\Display::class,
-            'divider'        => \Encore\Admin\Form\Field\Divide::class,
-            'divide'         => \Encore\Admin\Form\Field\Divide::class,
-            'embeds'         => \Encore\Admin\Form\Field\Embeds::class,
-            'editor'         => \Encore\Admin\Form\Field\Editor::class,
-            'email'          => \Encore\Admin\Form\Field\Email::class,
-            'file'           => \Encore\Admin\Form\Field\File::class,
-            'hasMany'        => \Encore\Admin\Form\Field\HasMany::class,
-            'hidden'         => \Encore\Admin\Form\Field\Hidden::class,
-            'id'             => \Encore\Admin\Form\Field\Id::class,
-            'image'          => \Encore\Admin\Form\Field\Image::class,
-            'ip'             => \Encore\Admin\Form\Field\Ip::class,
-            'map'            => \Encore\Admin\Form\Field\Map::class,
-            'mobile'         => \Encore\Admin\Form\Field\Mobile::class,
-            'month'          => \Encore\Admin\Form\Field\Month::class,
-            'multipleSelect' => \Encore\Admin\Form\Field\MultipleSelect::class,
-            'number'         => \Encore\Admin\Form\Field\Number::class,
-            'password'       => \Encore\Admin\Form\Field\Password::class,
-            'radio'          => \Encore\Admin\Form\Field\Radio::class,
-            'rate'           => \Encore\Admin\Form\Field\Rate::class,
-            'select'         => \Encore\Admin\Form\Field\Select::class,
-            'slider'         => \Encore\Admin\Form\Field\Slider::class,
-            'switch'         => \Encore\Admin\Form\Field\SwitchField::class,
-            'text'           => \Encore\Admin\Form\Field\Text::class,
-            'textarea'       => \Encore\Admin\Form\Field\Textarea::class,
-            'time'           => \Encore\Admin\Form\Field\Time::class,
-            'timeRange'      => \Encore\Admin\Form\Field\TimeRange::class,
-            'url'            => \Encore\Admin\Form\Field\Url::class,
-            'year'           => \Encore\Admin\Form\Field\Year::class,
-            'html'           => \Encore\Admin\Form\Field\Html::class,
-            'tags'           => \Encore\Admin\Form\Field\Tags::class,
-            'icon'           => \Encore\Admin\Form\Field\Icon::class,
-            'multipleFile'   => \Encore\Admin\Form\Field\MultipleFile::class,
-            'multipleImage'  => \Encore\Admin\Form\Field\MultipleImage::class,
-            'captcha'        => \Encore\Admin\Form\Field\Captcha::class,
-            'listbox'        => \Encore\Admin\Form\Field\Listbox::class,
+            'button'         => Field\Button::class,
+            'checkbox'       => Field\Checkbox::class,
+            'color'          => Field\Color::class,
+            'currency'       => Field\Currency::class,
+            'date'           => Field\Date::class,
+            'dateRange'      => Field\DateRange::class,
+            'datetime'       => Field\Datetime::class,
+            'dateTimeRange'  => Field\DatetimeRange::class,
+            'datetimeRange'  => Field\DatetimeRange::class,
+            'decimal'        => Field\Decimal::class,
+            'display'        => Field\Display::class,
+            'divider'        => Field\Divide::class,
+            'divide'         => Field\Divide::class,
+            'embeds'         => Field\Embeds::class,
+            'editor'         => Field\Editor::class,
+            'email'          => Field\Email::class,
+            'file'           => Field\File::class,
+            'hasMany'        => Field\HasMany::class,
+            'hidden'         => Field\Hidden::class,
+            'id'             => Field\Id::class,
+            'image'          => Field\Image::class,
+            'ip'             => Field\Ip::class,
+            'map'            => Field\Map::class,
+            'mobile'         => Field\Mobile::class,
+            'month'          => Field\Month::class,
+            'multipleSelect' => Field\MultipleSelect::class,
+            'number'         => Field\Number::class,
+            'password'       => Field\Password::class,
+            'radio'          => Field\Radio::class,
+            'rate'           => Field\Rate::class,
+            'select'         => Field\Select::class,
+            'slider'         => Field\Slider::class,
+            'switch'         => Field\SwitchField::class,
+            'text'           => Field\Text::class,
+            'textarea'       => Field\Textarea::class,
+            'time'           => Field\Time::class,
+            'timeRange'      => Field\TimeRange::class,
+            'url'            => Field\Url::class,
+            'year'           => Field\Year::class,
+            'html'           => Field\Html::class,
+            'tags'           => Field\Tags::class,
+            'icon'           => Field\Icon::class,
+            'multipleFile'   => Field\MultipleFile::class,
+            'multipleImage'  => Field\MultipleImage::class,
+            'captcha'        => Field\Captcha::class,
+            'listbox'        => Field\Listbox::class,
         ];
 
         foreach ($map as $abstract => $class) {
