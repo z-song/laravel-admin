@@ -43,6 +43,7 @@ return [
     'back'              => 'Voltar',
     'back_to_list'      => 'Voltar para Listagem',
     'submit'            => 'Submeter',
+    'continue_editing'  => 'Continuar edição',
     'menu'              => 'Menu',
     'input'             => 'Entrada',
     'succeeded'         => 'Completado com Êxito',
