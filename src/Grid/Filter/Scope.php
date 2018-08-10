@@ -27,6 +27,7 @@ class Scope implements Renderable
 
     /**
      * Scope constructor.
+     *
      * @param $key
      * @param string $label
      */
@@ -72,7 +73,7 @@ class Scope implements Renderable
 
     /**
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return $this
      */

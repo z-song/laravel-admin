@@ -581,6 +581,7 @@ class Model
      * Set the relationships that should be eager loaded.
      *
      * @param mixed $relations
+     *
      * @return $this|Model
      */
     public function with($relations)
@@ -594,7 +595,6 @@ class Model
         }
 
         if (is_string($relations)) {
-
             if (Str::contains($relations, '.')) {
                 $relations = explode('.', $relations)[0];
             }
