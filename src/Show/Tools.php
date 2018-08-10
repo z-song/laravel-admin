@@ -271,6 +271,7 @@ HTML;
      * Render custom tools.
      *
      * @param Collection $tools
+     *
      * @return mixed
      */
     protected function renderCustomTools($tools)

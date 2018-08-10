@@ -548,6 +548,7 @@ class Form implements Renderable
      * Get RedirectResponse after update.
      *
      * @param mixed $key
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     protected function redirectAfterUpdate($key)
@@ -562,16 +563,17 @@ class Form implements Renderable
      *
      * @param string $resourcesPath
      * @param string $key
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     protected function redirectAfterSaving($resourcesPath, $key)
     {
         if (request('after-save') == 1) {
             // continue editing
-            $url = rtrim($resourcesPath, '/') . "/{$key}/edit";
+            $url = rtrim($resourcesPath, '/')."/{$key}/edit";
         } elseif (request('after-save') == 2) {
             // view resource
-            $url = rtrim($resourcesPath, '/') . "/{$key}";
+            $url = rtrim($resourcesPath, '/')."/{$key}";
         } else {
             $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
         }

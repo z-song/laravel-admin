@@ -31,19 +31,20 @@ class FormCommand extends Command
         $modelName = $this->option('model');
         if (empty($modelName) || !class_exists($modelName)) {
             $this->error('Model does not exists !');
+
             return false;
         }
 
         // use doctrine/dbal
         $model = $this->laravel->make($modelName);
-        $table = $model->getConnection()->getTablePrefix() . $model->getTable();
+        $table = $model->getConnection()->getTablePrefix().$model->getTable();
         $schema = $model->getConnection()->getDoctrineSchemaManager($table);
 
         if (!method_exists($schema, 'getDatabasePlatform')) {
             $this->error('You need to require doctrine/dbal: ~2.3 in your own composer.json to get database columns. ');
             $this->info('Using install command: composer require doctrine/dbal');
-            return false;
 
+            return false;
         }
 
         // custom mapping the types that doctrine/dbal does not support
@@ -110,10 +111,10 @@ class FormCommand extends Command
                             case $this->checkColumn($name, ['color', 'rgb']):
                                 $fieldType = 'color';
                                 break;
-                            case $this->checkColumn($name, ['image', 'img', 'avatar']) :
+                            case $this->checkColumn($name, ['image', 'img', 'avatar']):
                                 $fieldType = 'image';
                                 break;
-                            case $this->checkColumn($name, ['file', 'attachment']) :
+                            case $this->checkColumn($name, ['file', 'attachment']):
                                 $fieldType = 'file';
                                 break;
                             default:
@@ -155,20 +156,19 @@ class FormCommand extends Command
                 // set column comment
                 $comment = $comment ? $comment : $name;
 
-
                 $adminForm .= "\$form->{$fieldType}('{$name}', '{$comment}')->default({$defaultValue});\n";
             }
             $this->alert("laravel-admin form filed generator for {$modelName}:");
             $this->info($adminForm);
         }
-
     }
 
     /**
      * Check if the table column contains the specified keywords of the array.
      *
      * @param string $haystack
-     * @param array $needle
+     * @param array  $needle
+     *
      * @return bool
      */
     private function checkColumn(string $haystack, array $needle)
@@ -178,9 +178,9 @@ class FormCommand extends Command
                 return true;
             }
         }
+
         return false;
     }
-
 
     /**
      * Get the console command options.
@@ -191,7 +191,7 @@ class FormCommand extends Command
     {
         return [
             ['model', null, InputOption::VALUE_REQUIRED,
-                'The eloquent model that should be use as controller data source.',],
+                'The eloquent model that should be use as controller data source.', ],
         ];
     }
 }

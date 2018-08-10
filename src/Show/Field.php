@@ -82,7 +82,7 @@ class Field implements Renderable
         'archive'    => 'zip|tar\.gz|rar|rpm',
         'txt'        => 'txt|pac|log|md',
         'audio'      => 'mp3|wav|flac|3pg|aa|aac|ape|au|m4a|mpc|ogg',
-        'video'      => 'mkv|rmvb|flv|mp4|avi|wmv|rm|asf|mpeg'
+        'video'      => 'mkv|rmvb|flv|mp4|avi|wmv|rm|asf|mpeg',
     ];
 
     /**
@@ -209,7 +209,8 @@ class Field implements Renderable
      * Show field as a file.
      *
      * @param string $server
-     * @param bool $download
+     * @param bool   $download
+     *
      * @return Field
      */
     public function file($server = '', $download = true)
@@ -217,7 +218,6 @@ class Field implements Renderable
         $field = $this;
 
         return $this->as(function ($path) use ($server, $download, $field) {
-
             $name = basename($path);
 
             $field->wrapped = false;
@@ -232,7 +232,7 @@ class Field implements Renderable
                 $storage = Storage::disk(config('admin.upload.disk'));
                 if ($storage->exists($path)) {
                     $url = $storage->url($path);
-                    $size = ($storage->size($path)/1000) . 'KB';
+                    $size = ($storage->size($path) / 1000).'KB';
                 }
             }
 
@@ -252,7 +252,6 @@ class Field implements Renderable
     </li>
   </ul>
 HTML;
-
         });
     }
 
@@ -323,11 +322,9 @@ HTML;
         $field = $this;
 
         return $this->as(function ($value) use ($field) {
-
             $content = json_decode($value, true);
 
             if (json_last_error() == 0) {
-
                 $field->wrapped = false;
 
                 return '<pre><code>'.json_encode($content, JSON_PRETTY_PRINT).'</code></pre>';
@@ -338,9 +335,10 @@ HTML;
     }
 
     /**
-     * Get file icon
+     * Get file icon.
      *
      * @param string $file
+     *
      * @return string
      */
     public function getFileIcon($file = '')

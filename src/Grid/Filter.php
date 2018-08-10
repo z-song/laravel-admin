@@ -297,6 +297,7 @@ class Filter implements Renderable
     /**
      * @param string $key
      * @param string $label
+     *
      * @return mixed
      */
     public function scope($key, $label = '')
@@ -432,6 +433,7 @@ class Filter implements Renderable
      * Get full url without query strings.
      *
      * @param Arrayable|array|string $keys
+     *
      * @return string
      */
     protected function fullUrlWithoutQuery($keys)
