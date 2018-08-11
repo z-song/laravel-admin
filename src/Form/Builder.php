@@ -510,7 +510,7 @@ EOT;
      */
     protected function removeReservedFields()
     {
-        if (!$this->options['enableRemoveReservedFields'] || !$this->isMode(static::MODE_CREATE)) {
+        if (!$this->isMode(static::MODE_CREATE)) {
             return;
         }
 

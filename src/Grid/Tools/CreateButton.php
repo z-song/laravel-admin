@@ -29,7 +29,7 @@ class CreateButton extends AbstractTool
 
         $new = trans('admin.new');
 
-        $createUrl = url("{$this->grid->resource()}/create");
+        $createUrl = url($this->grid->getCreateUrl());
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">
