@@ -12,6 +12,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected $commands = [
         'Encore\Admin\Console\MakeCommand',
+        'Encore\Admin\Console\FormCommand',
         'Encore\Admin\Console\MenuCommand',
         'Encore\Admin\Console\InstallCommand',
         'Encore\Admin\Console\UninstallCommand',

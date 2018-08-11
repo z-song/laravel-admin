@@ -3,7 +3,7 @@
     <a href="{!! $action !!}" class="btn btn-sm btn-primary" title="{{trans('admin.cancel')}}"><i class="fa fa-remove"></i></a>
 </div>
 
-<div class="modal fade" id="filter-modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="{{ $modalID }}" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

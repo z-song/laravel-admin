@@ -303,6 +303,25 @@ class Column
     }
 
     /**
+     * Display column using array value map.
+     *
+     * @param array $values
+     * @param null  $default
+     *
+     * @return $this
+     */
+    public function using(array $values, $default = null)
+    {
+        return $this->display(function ($value) use ($values, $default) {
+            if (is_null($value)) {
+                return $default;
+            }
+
+            return array_get($values, $value, $default);
+        });
+    }
+
+    /**
      * If has display callbacks.
      *
      * @return bool

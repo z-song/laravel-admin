@@ -5,18 +5,6 @@ namespace Encore\Admin\Controllers;
 trait ModelForm
 {
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        return $this->edit($id);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param int $id

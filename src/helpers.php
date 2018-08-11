@@ -86,3 +86,21 @@ if (!function_exists('admin_asset')) {
         return asset($path, config('admin.secure'));
     }
 }
+
+if (!function_exists('array_delete')) {
+
+    /**
+     * Delete from array by value.
+     *
+     * @param array $array
+     * @param mixed $value
+     */
+    function array_delete(&$array, $value)
+    {
+        foreach ($array as $index => $item) {
+            if ($value == $item) {
+                unset($array[$index]);
+            }
+        }
+    }
+}

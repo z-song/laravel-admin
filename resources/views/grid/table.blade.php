@@ -1,19 +1,22 @@
 <div class="box">
-    <div class="box-header">
+    @if(isset($title))
+    <div class="box-header with-border">
+        <h3 class="box-title"> {{ $title }}</h3>
+    </div>
+    @endif
 
-        <h3 class="box-title"></h3>
-
+    <div class="box-header with-border">
         <div class="pull-right">
-            {!! $grid->renderFilter() !!}
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}
         </div>
-
         <span>
             {!! $grid->renderHeaderTools() !!}
         </span>
-
     </div>
+
+    {!! $grid->renderFilter() !!}
+
     <!-- /.box-header -->
     <div class="box-body table-responsive no-padding">
         <table class="table table-hover">

@@ -7,6 +7,11 @@ use Encore\Admin\Grid;
 class CreateButton extends AbstractTool
 {
     /**
+     * @var Grid
+     */
+    protected $grid;
+
+    /**
      * Create a new CreateButton instance.
      *
      * @param Grid $grid
@@ -29,7 +34,7 @@ class CreateButton extends AbstractTool
 
         $new = trans('admin.new');
 
-        $createUrl = url("{$this->grid->resource()}/create");
+        $createUrl = url($this->grid->getCreateUrl());
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">

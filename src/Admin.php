@@ -77,6 +77,19 @@ class Admin
     }
 
     /**
+     * Build show page.
+     *
+     * @param $model
+     * @param mixed $callable
+     *
+     * @return Show
+     */
+    public function show($model, $callable = null)
+    {
+        return new Show($this->getModel($model), $callable);
+    }
+
+    /**
      * @param Closure $callable
      *
      * @return \Encore\Admin\Layout\Content

@@ -5,6 +5,7 @@ namespace Encore\Admin\Grid;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Tools\AbstractTool;
 use Encore\Admin\Grid\Tools\BatchActions;
+use Encore\Admin\Grid\Tools\FilterButton;
 use Encore\Admin\Grid\Tools\RefreshButton;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
@@ -44,9 +45,9 @@ class Tools implements Renderable
      */
     protected function appendDefaultTools()
     {
-        $this->append(new BatchActions());
-
-        $this->append(new RefreshButton());
+        $this->append(new BatchActions())
+            ->append(new RefreshButton())
+            ->append(new FilterButton());
     }
 
     /**
