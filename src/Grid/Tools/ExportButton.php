@@ -64,10 +64,9 @@ SCRIPT;
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a class="btn btn-sm btn-twitter"><i class="fa fa-download"></i> {$export}</a>
-    <button type="button" class="btn btn-sm btn-twitter dropdown-toggle" data-toggle="dropdown">
+    <button class="btn btn-sm btn-twitter dropdown-toggle" type="button" data-toggle="dropdown">
+        <i class="fa fa-download"></i> {$export}
         <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu" role="menu">
         <li><a href="{$this->grid->exportUrl('all')}" target="_blank">{$all}</a></li>
