@@ -2,6 +2,7 @@
 
 Route::group([
     'prefix'     => config('admin.route.prefix'),
+    'domain'     => config('admin.route.domain'),
     'namespace'  => 'Tests\Controllers',
     'middleware' => ['web', 'admin'],
 ], function ($router) {

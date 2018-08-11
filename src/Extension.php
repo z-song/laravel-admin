@@ -24,7 +24,12 @@ abstract class Extension
     protected static function routes($callback)
     {
         /* @var \Illuminate\Routing\Router $router */
-        Route::group(['prefix' => config('admin.route.prefix')], function ($router) use ($callback) {
+        Route::group(
+            [
+                'prefix' => config('admin.route.prefix'),
+                'domain' => config('admin.route.domain'),
+            ],
+            function ($router) use ($callback) {
             $attributes = array_merge([
                 'middleware' => config('admin.route.middleware'),
             ], static::config('route', []));
