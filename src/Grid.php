@@ -678,9 +678,7 @@ class Grid
             $input = array_merge($input, $constraints);
         }
 
-        $url = $this->resource().'?'.http_build_query($input);
-
-        return url($url);
+        return url($this->resource().'?'.http_build_query($input));
     }
 
     /**

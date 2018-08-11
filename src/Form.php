@@ -1211,6 +1211,18 @@ class Form implements Renderable
     }
 
     /**
+     * Disable form remove reserved fields.
+     *
+     * @return $this
+     */
+    public function disableRemoveReservedFields()
+    {
+        $this->builder()->options(['enableRemoveReservedFields' => false]);
+
+        return $this;
+    }
+
+    /**
      * Footer setting for form.
      *
      * @param Closure $callback

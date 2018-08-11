@@ -117,6 +117,14 @@ class Actions extends AbstractDisplayer
     }
 
     /**
+     * Get url of current resource.
+     * @return string
+     */
+    public function getResourceURL(){
+        return url($this->getResource());
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function display($callback = null)
@@ -158,9 +166,11 @@ EOT;
      */
     protected function renderEdit()
     {
+        $editText = trans("admin.edit");
+
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}/edit">
-    <i class="fa fa-edit"></i>
+<a href="{$this->getResourceURL()}/{$this->getKey()}/edit">
+    <i class="fa fa-edit btn btn-primary" title="{$editText}"></i>
 </a>
 EOT;
     }
@@ -194,7 +204,7 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
     function(){
         $.ajax({
             method: 'post',
-            url: '{$this->getResource()}/' + id,
+            url: '{$this->getResourceURL()}/' + id,
             data: {
                 _method:'delete',
                 _token:LA.token,
@@ -218,9 +228,10 @@ SCRIPT;
 
         Admin::script($script);
 
+        $deleteText = trans("admin.delete");
         return <<<EOT
-<a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
-    <i class="fa fa-trash"></i>
+<a href="javascript:void(0);" data-id="{$this->getKey()}" class="grid-row-delete">
+    <i class="fa fa-trash btn btn-danger" title="{$deleteText}"></i>
 </a>
 EOT;
     }
