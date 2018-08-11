@@ -75,7 +75,7 @@ class Field implements Renderable
     protected $fileTypes = [
         'image'      => 'png|jpg|jpeg|tmp|gif',
         'word'       => 'doc|docx',
-        'excel'      => 'xls|xlsx|cvs',
+        'excel'      => 'xls|xlsx|csv',
         'powerpoint' => 'ppt|pptx',
         'pdf'        => 'pdf',
         'code'       => 'php|js|java|python|ruby|go|c|cpp|sql|m|h|json|html|aspx',
