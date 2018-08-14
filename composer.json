@@ -42,6 +42,9 @@
             "tests/TestCase.php"
         ]
     },
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    },
     "suggest": {
         "intervention/image": "Required to handling and manipulation upload images (~2.3).",
         "spatie/eloquent-sortable": "Required to built orderable gird."

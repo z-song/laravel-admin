@@ -9,7 +9,7 @@
 
         @if(in_array('submit', $buttons))
         <div class="btn-group pull-right">
-            <button class="btn btn-primary">{{ trans('admin.submit') }}</button>
+            <button type="submit" class="btn btn-primary">{{ trans('admin.submit') }}</button>
         </div>
 
         <label class="pull-right" style="margin: 5px 10px 0 0;">
