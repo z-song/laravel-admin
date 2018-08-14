@@ -997,6 +997,7 @@ class Grid
      * Set resource path for grid.
      *
      * @param string $path
+     *
      * @return $this
      */
     public function setResource($path)

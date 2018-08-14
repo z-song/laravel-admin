@@ -192,18 +192,17 @@ class UserFormTest extends TestCase
     {
         $this->seedsTable(1);
 
-        $this->visit("admin/users/1/edit")
+        $this->visit('admin/users/1/edit')
             ->seeInElement('a[class*=btn-danger]', 'Delete')
             ->seeInElement('a[class*=btn-default]', 'List')
             ->seeInElement('a[class*=btn-primary]', 'View');
-
     }
 
     public function testFormFooter()
     {
         $this->seedsTable(1);
 
-        $this->visit("admin/users/1/edit")
+        $this->visit('admin/users/1/edit')
             ->seeElement('input[type=checkbox][value=1]')
             ->seeElement('input[type=checkbox][value=2]');
     }

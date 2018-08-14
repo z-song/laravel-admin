@@ -77,6 +77,7 @@ class AuthController extends Controller
      * User setting page.
      *
      * @param Content $content
+     *
      * @return Content
      */
     public function getSetting(Content $content)
@@ -91,7 +92,6 @@ class AuthController extends Controller
         return $content
             ->header(trans('admin.user_setting'))
             ->body($form->edit(Admin::user()->id));
-
     }
 
     /**

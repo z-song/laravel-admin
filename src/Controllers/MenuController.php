@@ -20,6 +20,7 @@ class MenuController extends Controller
      * Index interface.
      *
      * @param Content $content
+     *
      * @return Content
      */
     public function index(Content $content)
@@ -87,8 +88,9 @@ class MenuController extends Controller
     /**
      * Edit interface.
      *
-     * @param string $id
+     * @param string  $id
      * @param Content $content
+     *
      * @return Content
      */
     public function edit($id, Content $content)
