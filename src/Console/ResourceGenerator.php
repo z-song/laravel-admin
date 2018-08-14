@@ -28,7 +28,7 @@ class ResourceGenerator
             'enum', 'geometry', 'geometrycollection', 'linestring',
             'polygon', 'multilinestring', 'multipoint', 'multipolygon',
             'point',
-        ]
+        ],
     ];
 
     /**
@@ -42,7 +42,7 @@ class ResourceGenerator
         'mobile'   => 'mobile|phone',
         'color'    => 'color|rgb',
         'image'    => 'image|img|avatar|pic|picture|cover',
-        'file'     => 'file|attachment'
+        'file'     => 'file|attachment',
     ];
 
     /**
@@ -57,6 +57,7 @@ class ResourceGenerator
 
     /**
      * @param mixed $model
+     *
      * @return mixed
      */
     protected function getModel($model)
@@ -69,7 +70,7 @@ class ResourceGenerator
             throw new \InvalidArgumentException("Invalid model [$model] !");
         }
 
-        return new $model;
+        return new $model();
     }
 
     /**
@@ -86,7 +87,7 @@ class ResourceGenerator
             if (in_array($name, $reservedColumns)) {
                 continue;
             }
-            $type    = $column->getType()->getName();
+            $type = $column->getType()->getName();
             $default = $column->getDefault();
 
             $defaultValue = '';
@@ -124,15 +125,15 @@ class ResourceGenerator
                     $fieldType = 'decimal';
                     break;
                 case 'datetime':
-                    $fieldType    = 'datetime';
+                    $fieldType = 'datetime';
                     $defaultValue = "date('Y-m-d H:i:s')";
                     break;
                 case 'date':
-                    $fieldType    = 'date';
+                    $fieldType = 'date';
                     $defaultValue = "date('Y-m-d')";
                     break;
                 case 'time':
-                    $fieldType    = 'time';
+                    $fieldType = 'time';
                     $defaultValue = "date('H:i:s')";
                     break;
                 case 'text':
@@ -140,7 +141,7 @@ class ResourceGenerator
                     $fieldType = 'textarea';
                     break;
                 default:
-                    $fieldType    = 'text';
+                    $fieldType = 'text';
                     $defaultValue = "'{$default}'";
             }
 
@@ -165,7 +166,7 @@ class ResourceGenerator
         $output = '';
 
         foreach ($this->getTableColumns() as $column) {
-            $name    = $column->getName();
+            $name = $column->getName();
 
             // set column label
             $label = $this->formatLabel($name);
@@ -183,7 +184,7 @@ class ResourceGenerator
         $output = '';
 
         foreach ($this->getTableColumns() as $column) {
-            $name    = $column->getName();
+            $name = $column->getName();
             $label = $this->formatLabel($name);
 
             $output .= sprintf($this->formats['grid_column'], $name, $label);
@@ -206,8 +207,9 @@ class ResourceGenerator
     /**
      * Get columns of a giving model.
      *
-     * @return \Doctrine\DBAL\Schema\Column[]
      * @throws \Exception
+     *
+     * @return \Doctrine\DBAL\Schema\Column[]
      */
     protected function getTableColumns()
     {
@@ -217,7 +219,7 @@ class ResourceGenerator
             );
         }
 
-        $table = $this->model->getConnection()->getTablePrefix() . $this->model->getTable();
+        $table = $this->model->getConnection()->getTablePrefix().$this->model->getTable();
         /** @var \Doctrine\DBAL\Schema\MySqlSchemaManager $schema */
         $schema = $this->model->getConnection()->getDoctrineSchemaManager($table);
 
@@ -242,6 +244,7 @@ class ResourceGenerator
      * Format label.
      *
      * @param string $value
+     *
      * @return string
      */
     protected function formatLabel($value)

@@ -33,6 +33,7 @@ class UserController extends Controller
      *
      * @param mixed   $id
      * @param Content $content
+     *
      * @return Content
      */
     public function show($id, Content $content)
@@ -105,7 +106,8 @@ class UserController extends Controller
     /**
      * Make a show builder.
      *
-     * @param mixed   $id
+     * @param mixed $id
+     *
      * @return Show
      */
     protected function detail($id)

@@ -18,6 +18,7 @@ class PermissionController extends Controller
      * Index interface.
      *
      * @param Content $content
+     *
      * @return Content
      */
     public function index(Content $content)
@@ -33,6 +34,7 @@ class PermissionController extends Controller
      *
      * @param mixed   $id
      * @param Content $content
+     *
      * @return Content
      */
     public function show($id, Content $content)
@@ -47,8 +49,8 @@ class PermissionController extends Controller
      * Edit interface.
      *
      * @param $id
-     *
      * @param Content $content
+     *
      * @return Content
      */
     public function edit($id, Content $content)
@@ -63,6 +65,7 @@ class PermissionController extends Controller
      * Create interface.
      *
      * @param Content $content
+     *
      * @return Content
      */
     public function create(Content $content)
@@ -122,7 +125,8 @@ class PermissionController extends Controller
     /**
      * Make a show builder.
      *
-     * @param mixed   $id
+     * @param mixed $id
+     *
      * @return Show
      */
     protected function detail($id)

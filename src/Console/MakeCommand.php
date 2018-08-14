@@ -96,14 +96,14 @@ class MakeCommand extends GeneratorCommand
                 'DummyModel',
                 'DummyGrid',
                 'DummyShow',
-                'DummyForm'
+                'DummyForm',
             ],
             [
                 $this->option('model'),
                 class_basename($this->option('model')),
                 $this->indentCodes($this->generator->generateGrid()),
                 $this->indentCodes($this->generator->generateShow()),
-                $this->indentCodes($this->generator->generateForm())
+                $this->indentCodes($this->generator->generateForm()),
             ],
             $stub
         );
@@ -111,13 +111,14 @@ class MakeCommand extends GeneratorCommand
 
     /**
      * @param string $code
+     *
      * @return string
      */
     protected function indentCodes($code)
     {
-        $indent = str_repeat(' ',  8);
+        $indent = str_repeat(' ', 8);
 
-        return rtrim($indent. preg_replace("/\r\n/", "\r\n{$indent}", $code));
+        return rtrim($indent.preg_replace("/\r\n/", "\r\n{$indent}", $code));
     }
 
     /**

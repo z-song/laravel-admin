@@ -3,7 +3,8 @@
 namespace Encore\Admin\Controllers;
 
 /**
- * Trait ModelForm
+ * Trait ModelForm.
+ *
  * @deprecated Use `HasResourceActions` instead.
  */
 trait ModelForm

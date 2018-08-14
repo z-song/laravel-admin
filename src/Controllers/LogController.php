@@ -14,6 +14,7 @@ class LogController extends Controller
      * Index interface.
      *
      * @param Content $content
+     *
      * @return Content
      */
     public function index(Content $content)
@@ -29,7 +30,7 @@ class LogController extends Controller
      */
     protected function grid()
     {
-        $grid = new Grid(new OperationLog);
+        $grid = new Grid(new OperationLog());
 
         $grid->model()->orderBy('id', 'DESC');
 
@@ -73,6 +74,7 @@ class LogController extends Controller
 
     /**
      * @param mixed $id
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
