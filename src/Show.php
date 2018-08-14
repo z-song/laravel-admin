@@ -446,16 +446,16 @@ class Show implements Renderable
      */
     public function render()
     {
+        if (is_callable($this->builder)) {
+            call_user_func($this->builder, $this);
+        }
+
         if ($this->fields->isEmpty()) {
             $this->all();
         }
 
         if (is_array($this->builder)) {
             $this->fields($this->builder);
-        }
-
-        if (is_callable($this->builder)) {
-            call_user_func($this->builder, $this);
         }
 
         $this->fields->each->setValue($this->model);
