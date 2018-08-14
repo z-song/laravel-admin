@@ -4,6 +4,23 @@ input.content {
     margin: 0 !important;
 }
 
+input.label:empty {
+    display: inherit !important;
+}
+
+input.label {
+    display: inherit !important;
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+    font-weight: inherit !important;
+    line-height: 1.42857143 !important;
+    color: #555 !important;
+    text-align: inherit !important;
+    white-space: inherit !important;
+    vertical-align: inherit !important;
+    border-radius: inherit !important;
+}
+
 .box-show {
     border-radius: 0 !important;
     box-shadow: none !important;
