@@ -446,7 +446,7 @@ class Show implements Renderable
      */
     public function render()
     {
-        if (is_null($this->builder)) {
+        if ($this->fields->isEmpty()) {
             $this->all();
         }
 
