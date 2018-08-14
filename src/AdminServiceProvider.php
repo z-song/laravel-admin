@@ -18,7 +18,6 @@ class AdminServiceProvider extends ServiceProvider
         Console\InstallCommand::class,
         Console\UninstallCommand::class,
         Console\ImportCommand::class,
-        Console\GenerateCommand::class,
     ];
 
     /**

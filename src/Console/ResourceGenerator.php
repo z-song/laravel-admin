@@ -166,10 +166,9 @@ class ResourceGenerator
 
         foreach ($this->getTableColumns() as $column) {
             $name    = $column->getName();
-            $comment = $column->getComment();
 
-            // set column comment
-            $label = $this->formatLabel($comment ? $comment : $name);
+            // set column label
+            $label = $this->formatLabel($name);
 
             $output .= sprintf($this->formats['show_field'], $name, $label);
 
@@ -185,9 +184,7 @@ class ResourceGenerator
 
         foreach ($this->getTableColumns() as $column) {
             $name    = $column->getName();
-            $comment = $column->getComment();
-
-            $label = $this->formatLabel($comment ? $comment : $name);
+            $label = $this->formatLabel($name);
 
             $output .= sprintf($this->formats['grid_column'], $name, $label);
             $output .= ";\r\n";

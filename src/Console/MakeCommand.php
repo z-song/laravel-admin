@@ -3,8 +3,7 @@
 namespace Encore\Admin\Console;
 
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Illuminate\Database\Eloquent\Model;
 
 class MakeCommand extends GeneratorCommand
 {
@@ -13,7 +12,7 @@ class MakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'admin:make';
+    protected $signature = 'admin:make {name} {--model=} {--O|output}';
 
     /**
      * The console command description.
@@ -21,6 +20,11 @@ class MakeCommand extends GeneratorCommand
      * @var string
      */
     protected $description = 'Make empty admin controller';
+
+    /**
+     * @var ResourceGenerator
+     */
+    protected $generator;
 
     /**
      * Execute the console command.
@@ -35,7 +39,27 @@ class MakeCommand extends GeneratorCommand
             return false;
         }
 
+        $modelName = $this->option('model');
+
+        $this->generator = new ResourceGenerator($modelName);
+
+        if ($this->option('output')) {
+            return $this->output($modelName);
+        }
+
         parent::handle();
+    }
+
+    /**
+     * @param string $modelName
+     */
+    protected function output($modelName)
+    {
+        $this->alert("laravel-admin controller code for model [{$modelName}]");
+
+        $this->info($this->generator->generateGrid());
+        $this->info($this->generator->generateShow());
+        $this->info($this->generator->generateForm());
     }
 
     /**
@@ -51,7 +75,7 @@ class MakeCommand extends GeneratorCommand
             return true;
         }
 
-        return class_exists($model);
+        return class_exists($model) && is_subclass_of($model, Model::class);
     }
 
     /**
@@ -67,10 +91,33 @@ class MakeCommand extends GeneratorCommand
         $stub = parent::replaceClass($stub, $name);
 
         return str_replace(
-            ['DummyModelNamespace', 'DummyModel'],
-            [$this->option('model'), class_basename($this->option('model'))],
+            [
+                'DummyModelNamespace',
+                'DummyModel',
+                'DummyGrid',
+                'DummyShow',
+                'DummyForm'
+            ],
+            [
+                $this->option('model'),
+                class_basename($this->option('model')),
+                $this->indentCodes($this->generator->generateGrid()),
+                $this->indentCodes($this->generator->generateShow()),
+                $this->indentCodes($this->generator->generateForm())
+            ],
             $stub
         );
+    }
+
+    /**
+     * @param string $code
+     * @return string
+     */
+    protected function indentCodes($code)
+    {
+        $indent = str_repeat(' ',  8);
+
+        return rtrim($indent. preg_replace("/\r\n/", "\r\n{$indent}", $code));
     }
 
     /**
@@ -104,27 +151,16 @@ class MakeCommand extends GeneratorCommand
     }
 
     /**
-     * Get the console command arguments.
+     * Get the desired class name from the input.
      *
-     * @return array
+     * @return string
      */
-    protected function getArguments()
+    protected function getNameInput()
     {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the controller.'],
-        ];
-    }
+        $name = trim($this->argument('name'));
 
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['model', null, InputOption::VALUE_REQUIRED,
-                'The eloquent model that should be use as controller data source.', ],
-        ];
+        $this->type = $this->qualifyClass($name);
+
+        return $name;
     }
 }
