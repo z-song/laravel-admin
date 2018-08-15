@@ -105,6 +105,8 @@ $form->select('user_id')->options(function ($id) {
 })->ajax('/admin/api/users');
 ```
 
+<sub>注：如果你修改了`config/admin.php`配置文件中`route.prefix`的值，此处的接口路由应该修改为`config('admin.route.prefix').'/api/users'`。</sub>
+
 API `/admin/api/users`接口的代码：
 
 ```php
@@ -217,6 +219,8 @@ $form->select('friends')->options(function ($ids) {
     
 })->ajax('/admin/api/users');
 ```
+
+<sub>注：如果你修改了`config/admin.php`配置文件中`route.prefix`的值，此处的接口路由应该修改为`config('admin.route.prefix').'/api/users'`。</sub>
 
 API `/admin/api/users`接口的代码：
 
