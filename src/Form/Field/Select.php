@@ -44,12 +44,12 @@ class Select extends Field
     {
         // remote options
         if (is_string($options)) {
-            return $this->loadRemoteOptions(...func_get_args());
-        }
+            // reload selected
+            if (class_exists($options) && in_array('Illuminate\Database\Eloquent\Model', class_parents($options))) {
+                return $this->selected(...func_get_args());
+            }
 
-        // reload selected
-        if ($options instanceof Illuminate\Database\Eloquent\Model) {
-            return $this->selected(...func_get_arg());
+            return $this->loadRemoteOptions(...func_get_args());
         }
 
         if ($options instanceof Arrayable) {
@@ -191,33 +191,46 @@ EOT;
      * Load options from current selected resource(s).
      *
      * @param Illuminate\Database\Eloquent\Model $model
-     * @param string                             $column
+     * @param string                             $textField
+     * @param string                             $idField
      *
      * @return $this
      */
-    protected function selected($model, $column = 'name')
+    protected function selected($model, $textField = 'name', $idField = 'id')
     {
-        $this->options = function ($resource) use ($model, $column) {
+        $this->options = function ($resource) use ($model, $textField, $idField) {
             if (null == $resource) {
                 return [];
+            }
+
+            if (is_array($resource) && !empty($resource) && isset($resource[0]['id'])) {
+                $resource = array_map(function ($res) {
+                    return $res['id'];
+                }, $resource);
+            } else if (is_array($resource) && !empty($resource) && isset($resource['id'])) {
+                $resource = $resource['id'];
             }
 
             $model = $model::find($resource);
 
             if ($model) {
-                if ($model instanceof Illuminate\Support\Collection) {
+                if ($model instanceof \Illuminate\Support\Collection) {
                     $results = [];
 
                     foreach ($model as $result) {
-                        $results[$result->id] = $result->{$column};
+                        $results[$result->{$idField}] = $result->{$textField};
                     }
 
                     return $results;
-                } else {
-                    return [$resource => $model->{$column}];
                 }
+
+                return [$model->{$idField} => $model->{$textField}];
             }
+
+            return [];
         };
+
+        return $this;
     }
 
     /**
@@ -257,8 +270,17 @@ EOT;
      *
      * @return $this
      */
-    public function ajax($url, $idField = 'id', $textField = 'text', $minimumInputLength = 1)
+    public function ajax($url, $idField = 'id', $textField = 'text')
     {
+        $configs = array_merge([
+            'allowClear'  => true,
+            'placeholder' => $this->label,
+            'minimumInputLength' => 1,
+        ], $this->config);
+
+        $configs = json_encode($configs);
+        $configs = substr($configs, 1, strlen($configs) - 2);
+
         $this->script = <<<EOT
 
 $("{$this->getElementClassSelector()}").select2({
@@ -288,7 +310,7 @@ $("{$this->getElementClassSelector()}").select2({
     },
     cache: true
   },
-  minimumInputLength: $minimumInputLength,
+  $configs,
   escapeMarkup: function (markup) {
       return markup;
   }
