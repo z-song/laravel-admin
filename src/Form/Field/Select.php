@@ -207,7 +207,7 @@ EOT;
                 $resource = array_map(function ($res) {
                     return $res['id'];
                 }, $resource);
-            } else if (is_array($resource) && !empty($resource) && isset($resource['id'])) {
+            } elseif (is_array($resource) && !empty($resource) && isset($resource['id'])) {
                 $resource = $resource['id'];
             }
 
@@ -273,8 +273,8 @@ EOT;
     public function ajax($url, $idField = 'id', $textField = 'text')
     {
         $configs = array_merge([
-            'allowClear'  => true,
-            'placeholder' => $this->label,
+            'allowClear'         => true,
+            'placeholder'        => $this->label,
             'minimumInputLength' => 1,
         ], $this->config);
 
