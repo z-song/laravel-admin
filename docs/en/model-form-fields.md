@@ -86,6 +86,8 @@ $form->select('user_id')->options(function ($id) {
 })->ajax('/admin/api/users');
 ```
 
+<sub>Notice：if you have modified the value of the `route.prefix` in the `config/admin.php` file, this api route should be modified to `config('admin.route.prefix').'/api/users'`.</sub>
+
 The controller method for api `/admin/api/users` is:
 
 ```php
@@ -200,6 +202,8 @@ $form->select('user_id')->options(function ($id) {
     }
 })->ajax('/admin/api/users');
 ```
+
+<sub>Notice：If you have modified the value of the `route.prefix` in the `config/admin.php` file, this api route should be modified to `config('admin.route.prefix').'/api/users'`.</sub>
 
 The controller method for api `/admin/api/users` is:
 
