@@ -48,7 +48,10 @@ class MultipleSelect extends Select
         }
 
         if (is_array($relations)) {
-            if (is_string(current($relations))) {
+            if(is_null(current($relations))){
+                $this->value = null;
+            }
+            else if (is_string(current($relations))) {
                 $this->value = $relations;
             } else {
                 foreach ($relations as $relation) {
@@ -67,7 +70,10 @@ class MultipleSelect extends Select
         }
 
         if (is_array($relations)) {
-            if (is_string(current($relations))) {
+            if(is_null(current($relations))){
+                $this->original = null;
+            }
+            else if (is_string(current($relations))) {
                 $this->original = $relations;
             } else {
                 foreach ($relations as $relation) {
