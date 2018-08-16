@@ -672,7 +672,8 @@ class Form implements Renderable
             $relation = $this->model->$name();
 
             $oneToOneRelation = $relation instanceof Relations\HasOne
-                || $relation instanceof Relations\MorphOne;
+                || $relation instanceof Relations\MorphOne
+                || $relation instanceof Relations\BelongsTo;
 
             $prepared = $this->prepareUpdate([$name => $values], $oneToOneRelation);
 
@@ -688,6 +689,7 @@ class Form implements Renderable
                     }
                     break;
                 case Relations\HasOne::class:
+                case Relations\BelongsTo::class:
 
                     $related = $this->model->$name;
 
