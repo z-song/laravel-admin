@@ -333,6 +333,6 @@ trait UploadField
     public function storage_permission($permission)
     {
         $this->storage_permission = $permission;
-        return $this->storage_permission;
+        return $this;
     }
 }
