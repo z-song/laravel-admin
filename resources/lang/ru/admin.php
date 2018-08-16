@@ -82,4 +82,6 @@ return [
     'pagination' => [
         'range' => 'Записи с :first по :last из :total',
     ],
+
+    'menu_titles' => [],
 ];

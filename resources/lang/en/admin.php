@@ -97,4 +97,6 @@ return [
         'filter_clear'       => 'Show all',
         'filter_placeholder' => 'Filter',
     ],
+
+    'menu_titles' => [],
 ];
