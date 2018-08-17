@@ -18,6 +18,13 @@ use InvalidArgumentException;
 class Admin
 {
     /**
+     * The Laravel admin version.
+     *
+     * @var string
+     */
+    const VERSION = '1.5.19';
+
+    /**
      * @var Navbar
      */
     protected $navbar;
@@ -41,6 +48,16 @@ class Admin
      * @var array
      */
     public static $extensions = [];
+
+    /**
+     * Returns the long version of Laravel-admin.
+     *
+     * @return string The long application version
+     */
+    public static function getLongVersion()
+    {
+        return sprintf('Laravel-admin <comment>version</comment> <info>%s</info>', Admin::VERSION);
+    }
 
     /**
      * @param $model
