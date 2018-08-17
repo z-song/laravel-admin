@@ -191,6 +191,8 @@ class Model
     }
 
     /**
+     * Set parent grid instance.
+     *
      * @param Grid $grid
      *
      * @return $this
@@ -200,6 +202,16 @@ class Model
         $this->grid = $grid;
 
         return $this;
+    }
+
+    /**
+     * Get parent gird instance.
+     *
+     * @return Grid
+     */
+    public function getGrid()
+    {
+        return $this->grid;
     }
 
     /**

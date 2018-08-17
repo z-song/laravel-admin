@@ -414,7 +414,16 @@ class Filter implements Renderable
      */
     public function urlWithoutFilters()
     {
+        /** @var Collection $columns */
         $columns = collect($this->filters)->map->getColumn();
+
+        $pageKey = 'page';
+
+        if ($gridName = $this->model->getGrid()->getName()) {
+            $pageKey = "{$gridName}_{$pageKey}";
+        }
+
+        $columns->push($pageKey);
 
         return $this->fullUrlWithoutQuery($columns);
     }
