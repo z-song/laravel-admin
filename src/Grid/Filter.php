@@ -358,6 +358,8 @@ class Filter implements Renderable
     }
 
     /**
+     * Execute the filter with conditions.
+     *
      * @param bool $toArray
      *
      * @return array|Collection|mixed

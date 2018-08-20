@@ -48,6 +48,8 @@ abstract class AbstractExporter implements ExporterInterface
     }
 
     /**
+     * Get data with export query.
+     *
      * @param bool $toArray
      *
      * @return array|\Illuminate\Support\Collection|mixed
