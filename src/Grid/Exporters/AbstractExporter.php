@@ -48,13 +48,13 @@ abstract class AbstractExporter implements ExporterInterface
     }
 
     /**
-     * Get data with export query.
+     * @param bool $toArray
      *
-     * @return array
+     * @return array|\Illuminate\Support\Collection|mixed
      */
-    public function getData()
+    public function getData($toArray = true)
     {
-        return $this->grid->getFilter()->execute();
+        return $this->grid->getFilter()->execute($toArray);
     }
 
     /**
