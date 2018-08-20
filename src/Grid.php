@@ -516,6 +516,8 @@ class Grid
     {
         $this->option('useFilter', false);
 
+        $this->tools->disableFilterButton();
+
         return $this;
     }
 
