@@ -360,15 +360,17 @@ class Filter implements Renderable
     /**
      * Execute the filter with conditions.
      *
-     * @return array
+     * @param bool $toArray
+     *
+     * @return array|Collection|mixed
      */
-    public function execute()
+    public function execute($toArray = true)
     {
         $conditions = array_merge(
             $this->conditions(), $this->scopeConditions()
         );
 
-        return $this->model->addConditions($conditions)->buildData();
+        return $this->model->addConditions($conditions)->buildData($toArray);
     }
 
     /**
