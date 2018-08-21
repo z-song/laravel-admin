@@ -50,14 +50,14 @@ LOGO;
     }
 
     /**
-     * List all admin commands
+     * List all admin commands.
      *
      * @return void
      */
     protected function listAdminCommands()
     {
         $commands = collect(Artisan::all())->mapWithKeys(function ($command, $key) {
-            if (Str::startsWith($key,  'admin:')) {
+            if (Str::startsWith($key, 'admin:')) {
                 return [$key => $command];
             }
 
@@ -79,7 +79,7 @@ LOGO;
      */
     private function getColumnWidth(array $commands)
     {
-        $widths = array();
+        $widths = [];
 
         foreach ($commands as $command) {
             $widths[] = static::strlen($command->getName());
