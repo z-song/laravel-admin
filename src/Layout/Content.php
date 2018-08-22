@@ -4,7 +4,6 @@ namespace Encore\Admin\Layout;
 
 use Closure;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\MessageBag;
 
 class Content implements Renderable
 {
@@ -173,6 +172,21 @@ class Content implements Renderable
     }
 
     /**
+     * Set success message for content.
+     *
+     * @param string $title
+     * @param string $message
+     *
+     * @return $this
+     */
+    public function withSuccess($title = '', $message = '')
+    {
+        admin_success($title, $message);
+
+        return $this;
+    }
+
+    /**
      * Set error message for content.
      *
      * @param string $title
@@ -182,9 +196,37 @@ class Content implements Renderable
      */
     public function withError($title = '', $message = '')
     {
-        $error = new MessageBag(compact('title', 'message'));
+        admin_error($title, $message);
 
-        session()->flash('error', $error);
+        return $this;
+    }
+
+    /**
+     * Set warning message for content.
+     *
+     * @param string $title
+     * @param string $message
+     *
+     * @return $this
+     */
+    public function withWarning($title = '', $message = '')
+    {
+        admin_warning($title, $message);
+
+        return $this;
+    }
+
+    /**
+     * Set info message for content.
+     *
+     * @param string $title
+     * @param string $message
+     *
+     * @return $this
+     */
+    public function withInfo($title = '', $message = '')
+    {
+        admin_info($title, $message);
 
         return $this;
     }
@@ -204,13 +246,5 @@ class Content implements Renderable
         ];
 
         return view('admin::content', $items)->render();
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->render();
     }
 }

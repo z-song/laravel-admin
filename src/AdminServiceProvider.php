@@ -11,11 +11,14 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
+        Console\AdminCommand::class,
         Console\MakeCommand::class,
         Console\MenuCommand::class,
         Console\InstallCommand::class,
         Console\UninstallCommand::class,
         Console\ImportCommand::class,
+        Console\CreateUserCommand::class,
+        Console\ResetPasswordCommand::class,
     ];
 
     /**
