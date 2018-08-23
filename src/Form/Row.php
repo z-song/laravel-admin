@@ -53,7 +53,7 @@ class Row implements Renderable
     /**
      * Get fields of this row.
      *
-     * @return Array
+     * @return array
      */
     public function getFields()
     {
