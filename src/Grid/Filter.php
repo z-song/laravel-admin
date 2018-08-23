@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Grid\Filter\AbstractFilter;
+use Encore\Admin\Grid\Filter\Layout\Layout;
 use Encore\Admin\Grid\Filter\Scope;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
@@ -95,6 +96,11 @@ class Filter implements Renderable
     protected $scopes;
 
     /**
+     * @var Layout
+     */
+    protected $layout;
+
+    /**
      * Create a new filter instance.
      *
      * @param Model $model
@@ -105,8 +111,18 @@ class Filter implements Renderable
 
         $pk = $this->model->eloquent()->getKeyName();
 
+        $this->initLayout();
+
         $this->equal($pk, strtoupper($pk));
         $this->scopes = new Collection();
+    }
+
+    /**
+     * Initialize filter layout.
+     */
+    protected function initLayout()
+    {
+        $this->layout = new Filter\Layout\Layout($this);
     }
 
     /**
@@ -267,6 +283,8 @@ class Filter implements Renderable
      */
     protected function addFilter(AbstractFilter $filter)
     {
+        $this->layout->addFilter($filter);
+
         $filter->setParent($this);
 
         return $this->filters[] = $filter;
@@ -346,6 +364,20 @@ class Filter implements Renderable
     }
 
     /**
+     * Add a new layout column.
+     *
+     * @param int $width
+     * @param \Closure $closure
+     * @return $this
+     */
+    public function column($width, \Closure $closure)
+    {
+        $this->layout->column($width, $closure);
+
+        return $this;
+    }
+
+    /**
      * Expand filter container.
      *
      * @return $this
@@ -403,7 +435,7 @@ class Filter implements Renderable
 
         return view($this->view)->with([
             'action'    => $this->action ?: $this->urlWithoutFilters(),
-            'filters'   => $this->filters,
+            'layout'    => $this->layout,
             'filterID'  => $this->filterID,
             'expand'    => $this->expand,
         ])->render();
