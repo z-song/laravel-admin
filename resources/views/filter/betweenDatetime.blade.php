@@ -1,7 +1,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">{{$label}}</label>
     <div class="col-sm-8" style="width: 390px">
-        <div class="input-group">
+        <div class="input-group input-group-sm">
             <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
             </div>
