@@ -8,11 +8,7 @@
     </div>
     <!-- /.box-header -->
     <!-- form start -->
-    @if($form->hasRows())
-        {!! $form->open() !!}
-    @else
-        {!! $form->open(['class' => "form-horizontal"]) !!}
-    @endif
+    {!! $form->open(['class' => "form-horizontal"]) !!}
 
         <div class="box-body">
 
