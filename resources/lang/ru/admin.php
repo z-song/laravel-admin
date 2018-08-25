@@ -74,7 +74,7 @@ return [
     'alert' => 'Ошибка',
 
     'parent_id' => 'Родительский',
-    'icon'      => 'Икона',
+    'icon'      => 'Иконка',
     'uri'       => 'URI',
 
     'operation_log'       => 'Журнал событий',
