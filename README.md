@@ -6,10 +6,10 @@
 <p align="center">⛵<code>laravel-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
 
 <p align="center">
-<a href="http://laravel-admin.org/docs">Documentation</a> | 
-<a href="http://laravel-admin.org/docs/#/zh/">中文文档</a> | 
-<a href="http://laravel-admin.org/demo">Demo</a> | 
-<a href="https://github.com/z-song/laravel-admin.org">Demo source code</a> | 
+<a href="http://laravel-admin.org/docs">Documentation</a> |
+<a href="http://laravel-admin.org/docs/#/zh/">中文文档</a> |
+<a href="http://laravel-admin.org/demo">Demo</a> |
+<a href="https://github.com/z-song/laravel-admin.org">Demo source code</a> |
 <a href="https://github.com/laravel-admin-extensions">Extensions</a>
 </p>
 
@@ -48,11 +48,11 @@ Requirements
  - PHP >= 7.0.0
  - Laravel >= 5.5.0
  - Fileinfo PHP Extension
- 
+
 Installation
 ------------
 
-> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](http://laravel-admin.org/docs/v1.4/#/) 
+> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](http://laravel-admin.org/docs/v1.4/#/)
 
 First, install laravel 5.5, and make sure that the database connection settings are correct.
 
@@ -67,7 +67,7 @@ php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
 ```
 After run command you can find config file in `config/admin.php`, in this file you can change the install directory,db connection or table names.
 
-At last run following command to finish install. 
+At last run following command to finish install.
 ```
 php artisan admin:install
 ```
@@ -118,6 +118,7 @@ Other
 + [X-editable](http://github.com/vitalets/x-editable)
 + [bootstrap-number-input](https://github.com/wpic/bootstrap-number-input)
 + [fontawesome-iconpicker](https://github.com/itsjavi/fontawesome-iconpicker)
++ [sweetalert2](https://github.com/sweetalert2/sweetalert2)
 
 License
 ------------
