@@ -29,6 +29,13 @@ class Footer implements Renderable
     protected $buttons = ['reset', 'submit'];
 
     /**
+     * Available checkboxes.
+     *
+     * @var array
+     */
+    protected $checkboxes = ['view', 'continue_editing'];
+
+    /**
      * Footer constructor.
      *
      * @param Builder $builder
@@ -63,6 +70,30 @@ class Footer implements Renderable
     }
 
     /**
+     * Disable View Checkbox.
+     *
+     * @return $this
+     */
+    public function disableViewCheck()
+    {
+        array_delete($this->checkboxes, 'view');
+
+        return $this;
+    }
+
+    /**
+     * Disable Editing Checkbox.
+     *
+     * @return $this
+     */
+    public function disableEditingCheck()
+    {
+        array_delete($this->checkboxes, 'continue_editing');
+
+        return $this;
+    }
+
+    /**
      * Setup scripts.
      */
     protected function setupScript()
@@ -87,6 +118,7 @@ EOT;
 
         $data = [
             'buttons'   => $this->buttons,
+            'checkboxes'   => $this->checkboxes,
             'width'     => $this->builder->getWidth(),
         ];
 

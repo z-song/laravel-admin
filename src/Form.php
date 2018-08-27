@@ -1202,6 +1202,30 @@ class Form implements Renderable
     }
 
     /**
+     * Disable View Checkbox on footer.
+     *
+     * @return $this
+     */
+    public function disableViewCheck()
+    {
+        $this->builder()->getFooter()->disableViewCheck();
+
+        return $this;
+    }
+
+    /**
+     * Disable Editing Checkbox on footer.
+     *
+     * @return $this
+     */
+    public function disableEditingCheck()
+    {
+        $this->builder()->getFooter()->disableEditingCheck();
+
+        return $this;
+    }
+
+    /**
      * Footer setting for form.
      *
      * @param Closure $callback
