@@ -96,7 +96,7 @@ The file `config/admin.php` contains an array of configurations, you can find th
 | [backup](https://github.com/laravel-admin-extensions/backup) | An admin interface for managing backups          |
 | [log-viewer](https://github.com/laravel-admin-extensions/log-viewer) | Log viewer for laravel           |
 | [config](https://github.com/laravel-admin-extensions/config) | Config manager for laravel-admin          |
-| [exporter](https://github.com/laravel-admin-extensions/reporter) | Provides a developer-friendly web interface to view the exception          |
+| [reporter](https://github.com/laravel-admin-extensions/reporter) | Provides a developer-friendly web interface to view the exception          |
 
 
 ## Contributors
