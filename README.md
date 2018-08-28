@@ -10,7 +10,7 @@
 <a href="http://laravel-admin.org/docs/#/zh/">中文文档</a> |
 <a href="http://laravel-admin.org/demo">Demo</a> |
 <a href="https://github.com/z-song/laravel-admin.org">Demo source code</a> |
-<a href="https://github.com/laravel-admin-extensions">Extensions</a>
+<a href="#extensions">Extensions</a>
 </p>
 
 <p align="center">
@@ -83,6 +83,21 @@ Open `http://localhost/admin/` in browser,use username `admin` and password `adm
 Configurations
 ------------
 The file `config/admin.php` contains an array of configurations, you can find the default configurations in there.
+
+## Extensions
+
+| Extension                                        | Description                              |
+| ------------------------------------------------ | ---------------------------------------- |
+| [helpers](https://github.com/laravel-admin-extensions/helpers)             | Several tools to help you in development |
+| [media-manager](https://github.com/laravel-admin-extensions/media-manager) | Provides a web interface to manage local files          |
+| [api-tester](https://github.com/laravel-admin-extensions/api-tester) | Help you to test the local laravel APIs          |
+| [scheduling](https://github.com/laravel-admin-extensions/scheduling) | Scheduling task manager for laravel-admin          |
+| [redis-manager](https://github.com/laravel-admin-extensions/redis-manager) | Redis manager for laravel-admin          |
+| [backup](https://github.com/laravel-admin-extensions/backup) | An admin interface for managing backups          |
+| [log-viewer](https://github.com/laravel-admin-extensions/log-viewer) | Log viewer for laravel           |
+| [config](https://github.com/laravel-admin-extensions/config) | Config manager for laravel-admin          |
+| [exporter](https://github.com/laravel-admin-extensions/reporter) | Provides a developer-friendly web interface to view the exception          |
+
 
 ## Contributors
  This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
