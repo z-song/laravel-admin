@@ -11,6 +11,7 @@ use Encore\Admin\Form\Tab;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -271,25 +272,29 @@ class Form implements Renderable
     {
         $ids = explode(',', $id);
 
-        foreach ($ids as $id) {
-            if (empty($id)) {
-                continue;
-            }
-            $this->deleteFilesAndImages($id);
-            $this->model->find($id)->delete();
-        }
+        collect($ids)->filter()->each(function ($id) {
+            $this->deleteFiles($id);
+            $this->model()->find($id)->delete();
+        });
 
         return true;
     }
 
     /**
-     * Remove files or images in record.
+     * Remove files in record.
      *
      * @param $id
      */
-    protected function deleteFilesAndImages($id)
+    protected function deleteFiles($id)
     {
-        $data = $this->model->with($this->getRelations())
+        // If it's a soft delete, the files in the data will not be deleted.
+        if (in_array(SoftDeletes::class, class_uses($this->model))) {
+            return;
+        }
+
+        $data = $this
+            ->model()
+            ->with($this->getRelations())
             ->findOrFail($id)->toArray();
 
         $this->builder->fields()->filter(function ($field) {
