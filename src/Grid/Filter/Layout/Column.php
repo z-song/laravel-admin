@@ -24,7 +24,7 @@ class Column
      */
     public function __construct($width = 12)
     {
-        $this->width   = $width;
+        $this->width = $width;
         $this->filters = new Collection();
     }
 
@@ -51,7 +51,7 @@ class Column
     /**
      * Set column width.
      *
-     * @param integer $width
+     * @param int $width
      */
     public function setWidth($width)
     {
