@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'online'                => 'В сети',
+    'online'                => 'Онлайн',
     'login'                 => 'Войти',
     'logout'                => 'Выйти',
     'setting'               => 'Настройка',
@@ -25,14 +25,14 @@ return [
     'browse'           => 'Выбор файла',
     'reset'            => 'Сбросить',
     'export'           => 'Экспорт',
-    'batch_delete'     => 'Пакетная удаления',
+    'batch_delete'     => 'Пакетное удаление',
     'save'             => 'Сохранить',
     'refresh'          => 'Обновить',
     'order'            => 'Сортировка',
     'expand'           => 'Развернуть',
     'collapse'         => 'Свернуть',
     'filter'           => 'Фильтр',
-    'search'           => 'поиск',
+    'search'           => 'Поиск',
     'close'            => 'Закрыть',
     'show'             => 'Показать',
     'entries'          => 'записи',
@@ -78,10 +78,35 @@ return [
     'uri'       => 'URI',
 
     'operation_log'       => 'Журнал событий',
-    'parent_select_error' => 'Ошибок при выборе родителя',
+    'parent_select_error' => 'Ошибка при выборе родителя',
 
     'pagination' => [
         'range' => 'Записи с :first по :last из :total',
+    ],
+
+    'role'                  => 'Роль',
+    'permission'            => 'Доступ',
+    'route'                 => 'Путь',
+    'confirm'               => 'Подтвердить',
+    'cancel'                => 'Отмена',
+    'http'                  => [
+        'method' => 'HTTP метод',
+        'path'   => 'HTTP путь',
+    ],
+    'all_methods_if_empty'  => 'Все методы, если пусто',
+    'all'                   => 'Все',
+    'current_page'          => 'Текущая страница',
+    'selected_rows'         => 'Выбранные строки',
+    'upload'                => 'Загрузить',
+    'new_folder'            => 'Новая папка',
+    'time'                  => 'Время',
+    'size'                  => 'Размер',
+    'listbox'               => [
+        'text_total'         => 'Все: {0}',
+        'text_empty'         => 'Пустой список',
+        'filtered'           => '{0} / {1}',
+        'filter_clear'       => 'Показать все',
+        'filter_placeholder' => 'Фильтр',
     ],
 
     'menu_titles' => [],
