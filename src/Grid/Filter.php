@@ -375,6 +375,8 @@ class Filter implements Renderable
      */
     public function column($width, \Closure $closure)
     {
+        $width = $width < 1 ? round(12*$width) : $width;
+
         $this->layout->column($width, $closure);
 
         return $this;
@@ -402,7 +404,8 @@ class Filter implements Renderable
     public function execute($toArray = true)
     {
         $conditions = array_merge(
-            $this->conditions(), $this->scopeConditions()
+            $this->conditions(),
+            $this->scopeConditions()
         );
 
         return $this->model->addConditions($conditions)->buildData($toArray);
@@ -417,7 +420,8 @@ class Filter implements Renderable
     public function chunk(callable $callback, $count = 100)
     {
         $conditions = array_merge(
-            $this->conditions(), $this->scopeConditions()
+            $this->conditions(),
+            $this->scopeConditions()
         );
 
         return $this->model->addConditions($conditions)->chunk($callback, $count);
