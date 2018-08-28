@@ -12,7 +12,6 @@ return [
     'remember_me'           => 'Запомнить',
     'user_setting'          => 'Настройки пользователя',
     'avatar'                => 'Аватар',
-
     'list'             => 'Список',
     'new'              => 'Добавить',
     'create'           => 'Новая запись',
@@ -35,55 +34,45 @@ return [
     'search'           => 'Поиск',
     'close'            => 'Закрыть',
     'show'             => 'Показать',
-    'entries'          => 'записи',
+    'entries'          => 'записей',
     'captcha'          => 'Защитный код',
-
     'action'            => 'Опции',
     'title'             => 'Название',
     'description'       => 'Описание',
     'back'              => 'Назад',
     'back_to_list'      => 'Вернуться к списку',
-    'submit'            => 'Создать',
+    'submit'            => 'Отправить',
     'menu'              => 'Меню',
     'input'             => 'Ввод',
     'succeeded'         => 'Завершена',
     'failed'            => 'Ошибка',
     'delete_confirm'    => 'Вы уверены, что хотите удалить эту запись?',
-    'delete_succeeded'  => 'Запись успешно удалена!',
+    'delete_succeeded'  => 'Успешно удалено!',
     'delete_failed'     => 'Ошибка при удалении!',
-    'update_succeeded'  => 'Запись успешно изменена!',
-    'save_succeeded'    => 'Запись успешно создана!',
-    'refresh_succeeded' => 'Запись успешно обновлена!',
+    'update_succeeded'  => 'Успешно изменено!',
+    'save_succeeded'    => 'Успешно сохранено!',
+    'refresh_succeeded' => 'Успешно обновлено!',
     'login_successful'  => 'Авторизация успешна',
-
     'choose'       => 'Выбрать',
     'choose_file'  => 'Выбор файла',
     'choose_image' => 'Выбор изображения',
-
     'more' => 'Еще',
     'deny' => 'Доступ запрещен',
-
     'administrator' => 'Администратор',
     'roles'         => 'Роли',
     'permissions'   => 'Доступ',
     'slug'          => 'Слаг',
-
     'created_at' => 'Дата создания',
     'updated_at' => 'Дата обновления',
-
     'alert' => 'Ошибка',
-
     'parent_id' => 'Родитель',
     'icon'      => 'Иконка',
     'uri'       => 'URI',
-
     'operation_log'       => 'Журнал событий',
     'parent_select_error' => 'Ошибка при выборе родителя',
-
     'pagination' => [
         'range' => 'Записи с :first по :last из :total',
     ],
-
     'role'                  => 'Роль',
     'permission'            => 'Доступ',
     'route'                 => 'Путь',
@@ -93,7 +82,7 @@ return [
         'method' => 'HTTP метод',
         'path'   => 'HTTP путь',
     ],
-    'all_methods_if_empty'  => 'Все методы, если пусто',
+    'all_methods_if_empty'  => 'Все методы, если не указано',
     'all'                   => 'Все',
     'current_page'          => 'Текущая страница',
     'selected_rows'         => 'Выбранные строки',
