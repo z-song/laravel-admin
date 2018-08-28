@@ -20,10 +20,19 @@ class Map extends Field
      */
     public static function getAssets()
     {
-        if (config('app.locale') == 'zh-CN') {
-            $js = '//map.qq.com/api/js?v=2.exp';
-        } else {
-            $js = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='.env('GOOGLE_API_KEY');
+
+        switch (config('admin.map_provider')) {
+            case 'tencent':
+                $js = '//map.qq.com/api/js?v=2.exp';
+                break;
+            case 'google':
+                $js = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='.env('GOOGLE_API_KEY');
+                break;
+            case 'yandex':
+                $js = '//api-maps.yandex.ru/2.1/?lang=ru_RU';
+                break;
+            default:
+                $js = '//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='.env('GOOGLE_API_KEY');
         }
 
         return compact('js');
@@ -43,11 +52,21 @@ class Map extends Field
          * Google map is blocked in mainland China
          * people in China can use Tencent map instead(;
          */
-        if (config('app.locale') == 'zh-CN') {
-            $this->useTencentMap();
-        } else {
-            $this->useGoogleMap();
+        switch (config('admin.map_provider')) {
+            case 'tencent':
+                $this->useTencentMap();
+                break;
+            case 'google':
+                $this->useGoogleMap();
+                break;
+            case 'yandex':
+                $this->useYandexMap();
+                break;
+            default:
+                $this->useGoogleMap();
         }
+
+
     }
 
     public function useGoogleMap()
@@ -134,4 +153,38 @@ EOT;
         initTencentMap('{$this->id['lat']}{$this->id['lng']}');
 EOT;
     }
+
+    public function useYandexMap()
+    {
+        $this->script = <<<EOT
+        function initYandexMap(name) {
+            ymaps.ready(function(){
+    
+                var lat = $('#{$this->id['lat']}');
+                var lng = $('#{$this->id['lng']}');
+    
+                var myMap = new ymaps.Map("map_"+name, {
+                    center: [lat.val(), lng.val()],
+                    zoom: 18
+                }); 
+
+                var myPlacemark = new ymaps.Placemark([lat.val(), lng.val()], {
+                }, {
+                    preset: 'islands#redDotIcon',
+                    draggable: true
+                });
+
+                myPlacemark.events.add(['dragend'], function (e) {
+                    lat.val(myPlacemark.geometry.getCoordinates()[0]);
+                    lng.val(myPlacemark.geometry.getCoordinates()[1]);
+                });                
+
+                myMap.geoObjects.add(myPlacemark);
+            });
+
+        }
+        
+        initYandexMap('{$this->id['lat']}{$this->id['lng']}');
+EOT;
+    }    
 }
