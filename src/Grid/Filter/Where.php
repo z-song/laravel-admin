@@ -14,7 +14,7 @@ class Where extends AbstractFilter
     /**
      * Input value from presenter.
      *
-     * @var
+     * @var mixed
      */
     public $input;
 

@@ -6,11 +6,11 @@
 <p align="center">⛵<code>laravel-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
 
 <p align="center">
-<a href="http://laravel-admin.org/docs">Documentation</a> | 
-<a href="http://laravel-admin.org/docs/#/zh/">中文文档</a> | 
-<a href="http://laravel-admin.org/demo">Demo</a> | 
-<a href="https://github.com/z-song/laravel-admin.org">Demo source code</a> | 
-<a href="https://github.com/laravel-admin-extensions">Extensions</a>
+<a href="http://laravel-admin.org/docs">Documentation</a> |
+<a href="http://laravel-admin.org/docs/#/zh/">中文文档</a> |
+<a href="http://laravel-admin.org/demo">Demo</a> |
+<a href="https://github.com/z-song/laravel-admin.org">Demo source code</a> |
+<a href="#extensions">Extensions</a>
 </p>
 
 <p align="center">
@@ -32,6 +32,12 @@
     <a href="https://github.com/z-song/laravel-admin">
         <img src="https://img.shields.io/badge/Awesome-Laravel-brightgreen.svg?style=flat-square" alt="Awesome Laravel">
     </a>
+    <a href="#backers" alt="sponsors on Open Collective">
+        <img src="https://opencollective.com/laravel-admin/backers/badge.svg" />
+    </a> 
+    <a href="#sponsors" alt="Sponsors on Open Collective">
+        <img src="https://opencollective.com/laravel-admin/sponsors/badge.svg" />
+    </a>
 </div>
 
 <p align="center">
@@ -48,11 +54,11 @@ Requirements
  - PHP >= 7.0.0
  - Laravel >= 5.5.0
  - Fileinfo PHP Extension
- 
+
 Installation
 ------------
 
-> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](http://laravel-admin.org/docs/v1.4/#/) 
+> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](http://laravel-admin.org/docs/v1.4/#/)
 
 First, install laravel 5.5, and make sure that the database connection settings are correct.
 
@@ -67,7 +73,7 @@ php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
 ```
 After run command you can find config file in `config/admin.php`, in this file you can change the install directory,db connection or table names.
 
-At last run following command to finish install. 
+At last run following command to finish install.
 ```
 php artisan admin:install
 ```
@@ -78,18 +84,30 @@ Configurations
 ------------
 The file `config/admin.php` contains an array of configurations, you can find the default configurations in there.
 
-Backers
-------------
+## Extensions
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/laravel-admin#backer)]
+| Extension                                        | Description                              |
+| ------------------------------------------------ | ---------------------------------------- |
+| [helpers](https://github.com/laravel-admin-extensions/helpers)             | Several tools to help you in development |
+| [media-manager](https://github.com/laravel-admin-extensions/media-manager) | Provides a web interface to manage local files          |
+| [api-tester](https://github.com/laravel-admin-extensions/api-tester) | Help you to test the local laravel APIs          |
+| [scheduling](https://github.com/laravel-admin-extensions/scheduling) | Scheduling task manager for laravel-admin          |
+| [redis-manager](https://github.com/laravel-admin-extensions/redis-manager) | Redis manager for laravel-admin          |
+| [backup](https://github.com/laravel-admin-extensions/backup) | An admin interface for managing backups          |
+| [log-viewer](https://github.com/laravel-admin-extensions/log-viewer) | Log viewer for laravel           |
+| [config](https://github.com/laravel-admin-extensions/config) | Config manager for laravel-admin          |
+| [exporter](https://github.com/laravel-admin-extensions/reporter) | Provides a developer-friendly web interface to view the exception          |
 
-<a href="https://opencollective.com/laravel-admin#backers" target="_blank"><img src="https://opencollective.com/laravel-admin/backers.svg?width=890"></a>
 
-## Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/laravel-admin#sponsor)]
-
-<a href="https://opencollective.com/laravel-admin/sponsor/0/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/0/avatar.svg"></a>
+## Contributors
+ This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="graphs/contributors"><img src="https://opencollective.com/laravel-admin/contributors.svg?width=890&button=false" /></a>
+ ## Backers
+ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/laravel-admin#backer)]
+ <a href="https://opencollective.com/laravel-admin#backers" target="_blank"><img src="https://opencollective.com/laravel-admin/backers.svg?width=890"></a>
+ ## Sponsors
+ Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/laravel-admin#sponsor)]
+ <a href="https://opencollective.com/laravel-admin/sponsor/0/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/laravel-admin/sponsor/1/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/1/avatar.svg"></a>
 <a href="https://opencollective.com/laravel-admin/sponsor/2/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/2/avatar.svg"></a>
 <a href="https://opencollective.com/laravel-admin/sponsor/3/website" target="_blank"><img src="https://opencollective.com/laravel-admin/sponsor/3/avatar.svg"></a>
@@ -118,6 +136,7 @@ Other
 + [X-editable](http://github.com/vitalets/x-editable)
 + [bootstrap-number-input](https://github.com/wpic/bootstrap-number-input)
 + [fontawesome-iconpicker](https://github.com/itsjavi/fontawesome-iconpicker)
++ [sweetalert2](https://github.com/sweetalert2/sweetalert2)
 
 License
 ------------

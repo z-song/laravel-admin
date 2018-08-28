@@ -140,7 +140,11 @@ class Tools implements Renderable
     {
         $key = $this->form->getResourceId();
 
-        return $this->getListPath().'/'.$key;
+        if ($key) {
+            return $this->getListPath().'/'.$key;
+        } else {
+            return $this->getListPath();
+        }
     }
 
     /**
@@ -195,34 +199,39 @@ HTML;
 $('.{$class}-delete').unbind('click').click(function() {
 
     swal({
-      title: "$deleteConfirm",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "$confirm",
-      closeOnConfirm: false,
-      cancelButtonText: "$cancel"
-    },
-    function(){
-        $.ajax({
-            method: 'post',
-            url: '{$this->getDeletePath()}',
-            data: {
-                _method:'delete',
-                _token:LA.token,
-            },
-            success: function (data) {
-                $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });
+        title: "$deleteConfirm",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "$confirm",
+        showLoaderOnConfirm: true,
+        cancelButtonText: "$cancel",
+        preConfirm: function() {
+            return new Promise(function(resolve) {
+                $.ajax({
+                    method: 'post',
+                    url: '{$this->getDeletePath()}',
+                    data: {
+                        _method:'delete',
+                        _token:LA.token,
+                    },
+                    success: function (data) {
+                        $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });
 
-                if (typeof data === 'object') {
-                    if (data.status) {
-                        swal(data.message, '', 'success');
-                    } else {
-                        swal(data.message, '', 'error');
+                        resolve(data);
                     }
-                }
+                });
+            });
+        }
+    }).then(function(result) {
+        var data = result.value;
+        if (typeof data === 'object') {
+            if (data.status) {
+                swal(data.message, '', 'success');
+            } else {
+                swal(data.message, '', 'error');
             }
-        });
+        }
     });
 });
 

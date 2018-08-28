@@ -82,4 +82,6 @@ return [
     'pagination' => [
         'range' => 'Wyświetlono :first do :last z wszystkich :total',
     ],
+
+    'menu_titles' => [],
 ];

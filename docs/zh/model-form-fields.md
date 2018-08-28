@@ -77,6 +77,14 @@ $form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Opt
 或者从api中获取选项列表：
 ```php
 $form->select($column[, $label])->options('/api/users');
+
+// 使用ajax并显示所选项目
+
+$form->select($column[, $label])->options(Model::class)->ajax('/api/users');
+
+// 或指定名称和ID
+
+$form->select($column[, $label])->options(Model::class, 'name', 'id')->ajax('/api/users');
 ```
 其中api接口的格式必须为下面格式：
 ```php
@@ -190,6 +198,14 @@ public function city(Request $request)
 
 ```php
 $form->multipleSelect($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+
+// 使用ajax并显示所选项目：
+
+$form->multipleSelect($column[, $label])->options(Model::class)->ajax('ajax_url');
+
+// 或指定名称和ID
+
+$form->multipleSelect($column[, $label])->options(Model::class, 'name', 'id')->ajax('ajax_url');
 ```
 
 多选框可以处理两种情况，第一种是`ManyToMany`的关系。

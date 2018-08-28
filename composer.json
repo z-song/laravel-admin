@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "symfony/dom-crawler": "~3.1",
+        "symfony/dom-crawler": "~3.1|~4.0",
         "laravel/framework": "~5.5",
         "doctrine/dbal": "2.*"
     },
