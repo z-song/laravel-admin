@@ -20,7 +20,6 @@ class Map extends Field
      */
     public static function getAssets()
     {
-
         switch (config('admin.map_provider')) {
             case 'tencent':
                 $js = '//map.qq.com/api/js?v=2.exp';
@@ -65,8 +64,6 @@ class Map extends Field
             default:
                 $this->useGoogleMap();
         }
-
-
     }
 
     public function useGoogleMap()
@@ -186,5 +183,5 @@ EOT;
         
         initYandexMap('{$this->id['lat']}{$this->id['lng']}');
 EOT;
-    }    
+    }
 }
