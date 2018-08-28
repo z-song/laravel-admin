@@ -3,23 +3,23 @@
     <div class="box-header">
 
         <div class="btn-group">
-            <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="expand">
+            <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ trans('admin.expand') }}">
                 <i class="fa fa-plus-square-o"></i><span class="hidden-xs">&nbsp;{{ trans('admin.expand') }}</span>
             </a>
-            <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="collapse">
+            <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ trans('admin.collapse') }}">
                 <i class="fa fa-minus-square-o"></i><span class="hidden-xs">&nbsp;{{ trans('admin.collapse') }}</span>
             </a>
         </div>
 
         @if($useSave)
         <div class="btn-group">
-            <a class="btn btn-info btn-sm  {{ $id }}-save"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></a>
+            <a class="btn btn-info btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></a>
         </div>
         @endif
 
         @if($useRefresh)
         <div class="btn-group">
-            <a class="btn btn-warning btn-sm {{ $id }}-refresh"><i class="fa fa-refresh"></i><span class="hidden-xs">&nbsp;{{ trans('admin.refresh') }}</span></a>
+            <a class="btn btn-warning btn-sm {{ $id }}-refresh" title="{{ trans('admin.refresh') }}"><i class="fa fa-refresh"></i><span class="hidden-xs">&nbsp;{{ trans('admin.refresh') }}</span></a>
         </div>
         @endif
 
