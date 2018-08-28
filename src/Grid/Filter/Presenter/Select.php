@@ -15,6 +15,11 @@ class Select extends Presenter
     protected $options = [];
 
     /**
+     * @var array
+     */
+    protected $config = [];
+
+    /**
      * @var string
      */
     protected $script = '';
@@ -27,6 +32,23 @@ class Select extends Presenter
     public function __construct($options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * Set config for select2.
+     *
+     * all configurations see https://select2.org/configuration/options-api
+     *
+     * @param string $key
+     * @param mixed  $val
+     *
+     * @return $this
+     */
+    public function config($key, $val)
+    {
+        $this->config[$key] = $val;
+
+        return $this;
     }
 
     /**
@@ -65,6 +87,52 @@ SCRIPT;
     }
 
     /**
+     * Load options from current selected resource(s).
+     *
+     * @param Illuminate\Database\Eloquent\Model $model
+     * @param string                             $idField
+     * @param string                             $textField
+     *
+     * @return $this
+     */
+    public function model($model, $idField = 'id', $textField = 'name')
+    {
+        $this->options = function ($resource) use ($model, $idField, $textField) {
+            if (null == $resource) {
+                return [];
+            }
+
+            if (is_array($resource) && !empty($resource) && isset($resource[0]['id'])) {
+                $resource = array_map(function ($res) {
+                    return $res['id'];
+                }, $resource);
+            } elseif (is_array($resource) && !empty($resource) && isset($resource['id'])) {
+                $resource = $resource['id'];
+            }
+
+            $model = $model::find($resource);
+
+            if ($model) {
+                if ($model instanceof \Illuminate\Support\Collection) {
+                    $results = [];
+
+                    foreach ($model as $result) {
+                        $results[$result->{$idField}] = $result->{$textField};
+                    }
+
+                    return $results;
+                }
+
+                return [$model->{$idField} => $model->{$textField}];
+            }
+
+            return [];
+        };
+
+        return $this;
+    }
+
+    /**
      * Load options from remote.
      *
      * @param string $url
@@ -94,15 +162,23 @@ EOT;
      * Load options from ajax.
      *
      * @param string $resourceUrl
+     * @param $idField
+     * @param $textField
      */
-    public function ajax($resourceUrl)
+    public function ajax($resourceUrl, $idField = 'id', $textField = 'text')
     {
-        $placeholder = trans('admin.choose');
+        $configs = array_merge([
+            'allowClear'         => true,
+            'placeholder'        => trans('admin.choose'),
+            'minimumInputLength' => 1,
+        ], $this->config);
+
+        $configs = json_encode($configs);
+        $configs = substr($configs, 1, strlen($configs) - 2);
 
         $this->script = <<<EOT
 
 $(".{$this->getElementClass()}").select2({
-  placeholder: "$placeholder",
   ajax: {
     url: "$resourceUrl",
     dataType: 'json',
@@ -117,7 +193,11 @@ $(".{$this->getElementClass()}").select2({
       params.page = params.page || 1;
 
       return {
-        results: data.data,
+        results: $.map(data.data, function (d) {
+                   d.id = d.$idField;
+                   d.text = d.$textField;
+                   return d;
+                }),
         pagination: {
           more: data.next_page_url
         }
@@ -125,7 +205,7 @@ $(".{$this->getElementClass()}").select2({
     },
     cache: true
   },
-  minimumInputLength: 1,
+  $configs,
   escapeMarkup: function (markup) {
       return markup;
   }
