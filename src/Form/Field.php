@@ -449,6 +449,10 @@ class Field implements Renderable
      */
     protected function removeRule($rule)
     {
+        if (!is_string($this->rules)) {
+            return;
+        }
+
         $pattern = "/{$rule}[^\|]?(\||$)/";
         $this->rules = preg_replace($pattern, '', $this->rules, -1);
     }

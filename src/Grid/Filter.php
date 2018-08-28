@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid;
 
 use Encore\Admin\Grid\Filter\AbstractFilter;
+use Encore\Admin\Grid\Filter\Group;
 use Encore\Admin\Grid\Filter\Layout\Layout;
 use Encore\Admin\Grid\Filter\Scope;
 use Illuminate\Contracts\Support\Arrayable;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Input;
  * @method AbstractFilter     month($column, $label = '')
  * @method AbstractFilter     year($column, $label = '')
  * @method AbstractFilter     hidden($name, $value)
+ * @method AbstractFilter     group($column, $label = '', $builder = null)
  */
 class Filter implements Renderable
 {
@@ -45,7 +47,7 @@ class Filter implements Renderable
      * @var array
      */
     protected $supports = [
-        'equal', 'notEqual', 'ilike', 'like', 'gt', 'lt', 'between',
+        'equal', 'notEqual', 'ilike', 'like', 'gt', 'lt', 'between', 'group',
         'where', 'in', 'notIn', 'date', 'day', 'month', 'year', 'hidden',
     ];
 
@@ -366,12 +368,15 @@ class Filter implements Renderable
     /**
      * Add a new layout column.
      *
-     * @param int $width
+     * @param int      $width
      * @param \Closure $closure
+     *
      * @return $this
      */
     public function column($width, \Closure $closure)
     {
+        $width = $width < 1 ? round(12*$width) : $width;
+
         $this->layout->column($width, $closure);
 
         return $this;
@@ -399,7 +404,8 @@ class Filter implements Renderable
     public function execute($toArray = true)
     {
         $conditions = array_merge(
-            $this->conditions(), $this->scopeConditions()
+            $this->conditions(),
+            $this->scopeConditions()
         );
 
         return $this->model->addConditions($conditions)->buildData($toArray);
@@ -414,7 +420,8 @@ class Filter implements Renderable
     public function chunk(callable $callback, $count = 100)
     {
         $conditions = array_merge(
-            $this->conditions(), $this->scopeConditions()
+            $this->conditions(),
+            $this->scopeConditions()
         );
 
         return $this->model->addConditions($conditions)->chunk($callback, $count);
@@ -459,7 +466,15 @@ class Filter implements Renderable
 
         $columns->push($pageKey);
 
-        return $this->fullUrlWithoutQuery($columns);
+        $groupNames = collect($this->filters)->filter(function ($filter) {
+            return $filter instanceof Group;
+        })->map(function (AbstractFilter $filter) {
+            return "{$filter->getId()}_group";
+        });
+
+        return $this->fullUrlWithoutQuery(
+            $columns->merge($groupNames)
+        );
     }
 
     /**
