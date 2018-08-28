@@ -79,5 +79,5 @@ return [
 
     'pagination' => [
         'range' => 'Записи з :first по :last з :total',
-    ]
+    ],
 ];

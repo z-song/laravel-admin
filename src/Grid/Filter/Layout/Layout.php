@@ -49,7 +49,7 @@ class Layout
     /**
      * Add a new column in layout.
      *
-     * @param integer $width
+     * @param int      $width
      * @param \Closure $closure
      */
     public function column($width, \Closure $closure)

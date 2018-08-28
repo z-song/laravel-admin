@@ -379,7 +379,7 @@ EOT;
             'groups'  => $this->groups,
         ]);
 
-        $this->attribute('data-value', implode(',', (array)$this->value()));
+        $this->attribute('data-value', implode(',', (array) $this->value()));
 
         return parent::render();
     }

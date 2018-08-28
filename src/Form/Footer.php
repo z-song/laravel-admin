@@ -117,9 +117,9 @@ EOT;
         $this->setupScript();
 
         $data = [
-            'buttons'   => $this->buttons,
+            'buttons'      => $this->buttons,
             'checkboxes'   => $this->checkboxes,
-            'width'     => $this->builder->getWidth(),
+            'width'        => $this->builder->getWidth(),
         ];
 
         return view($this->view, $data)->render();

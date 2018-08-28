@@ -248,7 +248,7 @@ class Form implements Renderable
             'fields'     => $this->fields,
             'attributes' => $this->formatAttribute(),
             'method'     => $this->attributes['method'],
-            'buttons'   => $this->buttons,
+            'buttons'    => $this->buttons,
         ];
     }
 
