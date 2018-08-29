@@ -59,7 +59,7 @@ class Select extends Field
         }
 
         if (is_callable($options)) {
-            $this->options = $options;
+            $this->options = $options();
         } else {
             $this->options = (array) $options;
         }
