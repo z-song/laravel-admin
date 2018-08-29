@@ -46,7 +46,7 @@ class Select extends Field
         if (is_string($options)) {
             // reload selected
             if (class_exists($options) && in_array('Illuminate\Database\Eloquent\Model', class_parents($options))) {
-                return $this->selected(...func_get_args());
+                return $this->model(...func_get_args());
             }
 
             return $this->loadRemoteOptions(...func_get_args());
@@ -191,14 +191,14 @@ EOT;
      * Load options from current selected resource(s).
      *
      * @param Illuminate\Database\Eloquent\Model $model
-     * @param string                             $textField
      * @param string                             $idField
+     * @param string                             $textField
      *
      * @return $this
      */
-    protected function selected($model, $textField = 'name', $idField = 'id')
+    public function model($model, $idField = 'id', $textField = 'name')
     {
-        $this->options = function ($resource) use ($model, $textField, $idField) {
+        $this->options = function ($resource) use ($model, $idField, $textField) {
             if (null == $resource) {
                 return [];
             }
