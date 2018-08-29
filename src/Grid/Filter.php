@@ -375,7 +375,7 @@ class Filter implements Renderable
      */
     public function column($width, \Closure $closure)
     {
-        $width = $width < 1 ? round(12*$width) : $width;
+        $width = $width < 1 ? round(12 * $width) : $width;
 
         $this->layout->column($width, $closure);
 
