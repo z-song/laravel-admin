@@ -158,7 +158,7 @@ class Tools implements Renderable
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;$text</a>
+    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="$text"><i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
 </div>
 EOT;
     }
@@ -174,8 +174,8 @@ EOT;
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary">
-        <i class="fa fa-eye"></i> {$view}
+    <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary" title="{$view}">
+        <i class="fa fa-eye"></i><span class="hidden-xs"> {$view}</span>
     </a>
 </div>
 HTML;
@@ -243,8 +243,8 @@ SCRIPT;
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete">
-        <i class="fa fa-trash"></i>  {$delete}
+    <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$delete}">
+        <i class="fa fa-trash"></i><span class="hidden-xs">  {$delete}</span>
     </a>
 </div>
 HTML;
