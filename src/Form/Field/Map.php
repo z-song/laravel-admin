@@ -158,34 +158,36 @@ EOT;
     public function useYandexMap()
     {
         $this->script = <<<EOT
-        function initYandexMap(name) {
-            ymaps.ready(function(){
-    
-                var lat = $('#{$this->id['lat']}');
-                var lng = $('#{$this->id['lng']}');
-    
-                var myMap = new ymaps.Map("map_"+name, {
-                    center: [lat.val(), lng.val()],
-                    zoom: 18
-                }); 
-
-                var myPlacemark = new ymaps.Placemark([lat.val(), lng.val()], {
-                }, {
-                    preset: 'islands#redDotIcon',
-                    draggable: true
-                });
-
-                myPlacemark.events.add(['dragend'], function (e) {
-                    lat.val(myPlacemark.geometry.getCoordinates()[0]);
-                    lng.val(myPlacemark.geometry.getCoordinates()[1]);
-                });                
-
-                myMap.geoObjects.add(myPlacemark);
-            });
-
-        }
+        (function() {
+            function initYandexMap(name) {
+                ymaps.ready(function(){
         
-        initYandexMap('{$this->id['lat']}{$this->id['lng']}');
+                    var lat = $('#{$this->id['lat']}');
+                    var lng = $('#{$this->id['lng']}');
+        
+                    var myMap = new ymaps.Map("map_"+name, {
+                        center: [lat.val(), lng.val()],
+                        zoom: 18
+                    }); 
+    
+                    var myPlacemark = new ymaps.Placemark([lat.val(), lng.val()], {
+                    }, {
+                        preset: 'islands#redDotIcon',
+                        draggable: true
+                    });
+    
+                    myPlacemark.events.add(['dragend'], function (e) {
+                        lat.val(myPlacemark.geometry.getCoordinates()[0]);
+                        lng.val(myPlacemark.geometry.getCoordinates()[1]);
+                    });                
+    
+                    myMap.geoObjects.add(myPlacemark);
+                });
+    
+            }
+            
+            initYandexMap('{$this->id['lat']}{$this->id['lng']}');
+        })();
 EOT;
     }
 }
