@@ -300,4 +300,17 @@ class Admin
     {
         static::$extensions[$name] = $class;
     }
+
+    /*
+     * Disable Pjax for current Request
+     *
+     * @return void
+     */
+    public function noPjax()
+    {
+        $request = \Request::instance();
+        if ($request->headers->has('X-PJAX')) {
+            $request->headers->set('X-PJAX', false);
+        }
+    }
 }
