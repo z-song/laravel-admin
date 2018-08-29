@@ -4,6 +4,8 @@ namespace Encore\Admin\Grid\Filter\Presenter;
 
 use Encore\Admin\Facades\Admin;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Select extends Presenter
 {
@@ -89,44 +91,38 @@ SCRIPT;
     /**
      * Load options from current selected resource(s).
      *
-     * @param Illuminate\Database\Eloquent\Model $model
-     * @param string                             $idField
-     * @param string                             $textField
+     * @param string $model
+     * @param string $idField
+     * @param string $textField
      *
      * @return $this
      */
     public function model($model, $idField = 'id', $textField = 'name')
     {
-        $this->options = function ($resource) use ($model, $idField, $textField) {
-            if (null == $resource) {
+        if (!class_exists($model)
+            || !in_array(Model::class, class_parents($model))
+        ) {
+            throw new \InvalidArgumentException("[$model] must be a valid model class");
+        }
+
+        $this->options = function ($value) use ($model, $idField, $textField) {
+            if (empty($value)) {
                 return [];
             }
 
-            if (is_array($resource) && !empty($resource) && isset($resource[0]['id'])) {
-                $resource = array_map(function ($res) {
-                    return $res['id'];
-                }, $resource);
-            } elseif (is_array($resource) && !empty($resource) && isset($resource['id'])) {
-                $resource = $resource['id'];
-            }
+            $resources = [];
 
-            $model = $model::find($resource);
-
-            if ($model) {
-                if ($model instanceof \Illuminate\Support\Collection) {
-                    $results = [];
-
-                    foreach ($model as $result) {
-                        $results[$result->{$idField}] = $result->{$textField};
-                    }
-
-                    return $results;
+            if (is_array($value)) {
+                if (Arr::isAssoc($value)) {
+                    $resources[] = array_get($value, $idField);
+                } else {
+                    $resources = array_column($value, $idField);
                 }
-
-                return [$model->{$idField} => $model->{$textField}];
+            } else {
+                $resources[] = $value;
             }
 
-            return [];
+            return $model::find($resources)->pluck($textField, $idField)->toArray();
         };
 
         return $this;
