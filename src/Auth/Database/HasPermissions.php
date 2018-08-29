@@ -17,7 +17,9 @@ trait HasPermissions
      */
     public function getAvatarAttribute($avatar)
     {
-        if ($avatar) {
+        $disk = config('admin.upload.disk');
+
+        if ($avatar && array_key_exists($disk, config('filesystems.disks'))) {
             return Storage::disk(config('admin.upload.disk'))->url($avatar);
         }
 
