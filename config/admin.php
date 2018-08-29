@@ -85,7 +85,7 @@ return [
     | If your page is going to be accessed via https, set it to `true`.
     |
     */
-    'secure' => false,
+    'secure' => env('SECURE', false),
 
     /*
     |--------------------------------------------------------------------------
