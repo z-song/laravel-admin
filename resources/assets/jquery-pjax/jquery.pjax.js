@@ -132,9 +132,17 @@ function handleSubmit(event, container, options) {
   }
 
   if (defaults.type !== 'GET' && window.FormData !== undefined) {
+    var form_file_inputs = $(form).find(':file:not([disabled])');
+    form_file_inputs.each(function(_, input) {
+      if (input.files.length > 0) {
+        return;
+      }
+      $(input).prop('disabled', true)
+    });
     defaults.data = new FormData(form);
     defaults.processData = false;
     defaults.contentType = false;
+    form_file_inputs.prop('disabled', false);
   } else {
     // Can't handle file uploads, exit
     if ($(form).find(':file').length) {
