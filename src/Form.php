@@ -277,7 +277,9 @@ class Form implements Renderable
             $this->model()->find($id)->delete();
         });
 
-        return true;
+        $resourcesPath = $this->resource(-1);
+
+        return redirect($resourcesPath);
     }
 
     /**

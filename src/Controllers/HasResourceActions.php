@@ -35,7 +35,14 @@ trait HasResourceActions
      */
     public function destroy($id)
     {
-        if ($this->form()->destroy($id)) {
+        $type = request()->input('_type');
+
+        $status = $this->form()->destroy($id);
+
+        if ($type == 'non-ajax')
+            return $status;
+
+        if ($status) {
             $data = [
                 'status'  => true,
                 'message' => trans('admin.delete_succeeded'),
