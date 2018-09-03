@@ -87,7 +87,6 @@ class ExtendCommand extends Command
 
         InputExtensionName:
         if (!$this->validateExtensionName($this->package)) {
-
             $this->package = $this->ask("[$this->package] is not a valid package name, please input a name like (<vendor>/<name>)");
             goto InputExtensionName;
         }
@@ -107,17 +106,17 @@ class ExtendCommand extends Command
 
         // copy files
         $this->copy([
-            __DIR__ . '/stubs/extension/view.stub'       => 'resources/views/index.blade.php',
-            __DIR__ . '/stubs/extension/.gitignore.stub' => '.gitignore',
-            __DIR__ . '/stubs/extension/README.md.stub'  => 'README.md',
-            __DIR__ . '/stubs/extension/LICENSE.stub'    => 'LICENSE',
+            __DIR__.'/stubs/extension/view.stub'       => 'resources/views/index.blade.php',
+            __DIR__.'/stubs/extension/.gitignore.stub' => '.gitignore',
+            __DIR__.'/stubs/extension/README.md.stub'  => 'README.md',
+            __DIR__.'/stubs/extension/LICENSE.stub'    => 'LICENSE',
         ]);
 
         // make composer.json
         $composerContents = str_replace(
             [':package', ':namespace', ':class_name'],
             [$this->package, str_replace('\\', '\\\\', $this->namespace).'\\\\', $this->className],
-            file_get_contents(__DIR__ . '/stubs/extension/composer.json.stub')
+            file_get_contents(__DIR__.'/stubs/extension/composer.json.stub')
         );
         $this->putFile('composer.json', $composerContents);
 
@@ -125,7 +124,7 @@ class ExtendCommand extends Command
         $classContents = str_replace(
             [':namespace', ':class_name', ':title', ':path', ':base_package'],
             [$this->namespace, $this->className, title_case($this->className), basename($this->package), basename($this->package)],
-            file_get_contents(__DIR__ . '/stubs/extension/extension.stub')
+            file_get_contents(__DIR__.'/stubs/extension/extension.stub')
         );
         $this->putFile("src/{$this->className}.php", $classContents);
 
@@ -133,7 +132,7 @@ class ExtendCommand extends Command
         $providerContents = str_replace(
             [':namespace', ':class_name', ':base_package', ':package'],
             [$this->namespace, $this->className, basename($this->package), $this->package],
-            file_get_contents(__DIR__ . '/stubs/extension/service-provider.stub')
+            file_get_contents(__DIR__.'/stubs/extension/service-provider.stub')
         );
         $this->putFile("src/{$this->className}ServiceProvider.php", $providerContents);
 
@@ -141,7 +140,7 @@ class ExtendCommand extends Command
         $controllerContent = str_replace(
             [':namespace', ':class_name', ':base_package'],
             [$this->namespace, $this->className, basename($this->package)],
-            file_get_contents(__DIR__ . '/stubs/extension/controller.stub')
+            file_get_contents(__DIR__.'/stubs/extension/controller.stub')
         );
         $this->putFile("src/Http/Controllers/{$this->className}Controller.php", $controllerContent);
 
@@ -149,9 +148,9 @@ class ExtendCommand extends Command
         $routesContent = str_replace(
             [':namespace', ':class_name', ':path'],
             [$this->namespace, $this->className, basename($this->package)],
-            file_get_contents(__DIR__ . '/stubs/extension/routes.stub')
+            file_get_contents(__DIR__.'/stubs/extension/routes.stub')
         );
-        $this->putFile("routes/web.php", $routesContent);
+        $this->putFile('routes/web.php', $routesContent);
     }
 
     /**
@@ -164,7 +163,7 @@ class ExtendCommand extends Command
         if (!$namespace = $this->option('namespace')) {
             list($vendor, $name) = explode('/', $this->package);
 
-            $default = str_replace(['-', '-'], '', title_case($vendor) . '\\' . title_case($name));
+            $default = str_replace(['-', '-'], '', title_case($vendor).'\\'.title_case($name));
 
             $namespace = $this->ask('Root namespace', $default);
         }
@@ -183,11 +182,11 @@ class ExtendCommand extends Command
     }
 
     /**
-     * Create package dirs
+     * Create package dirs.
      */
     protected function makeDirs()
     {
-        $this->basePath = rtrim($this->extensionDir, '/') . '/' . ltrim($this->package, '/');
+        $this->basePath = rtrim($this->extensionDir, '/').'/'.ltrim($this->package, '/');
 
         $this->makeDir($this->dirs);
     }
@@ -196,6 +195,7 @@ class ExtendCommand extends Command
      * Validate extension name.
      *
      * @param string $name
+     *
      * @return int
      */
     protected function validateExtensionName($name)
@@ -207,6 +207,7 @@ class ExtendCommand extends Command
      * Extension path.
      *
      * @param string $path
+     *
      * @return string
      */
     protected function extensionPath($path = '')
@@ -217,7 +218,7 @@ class ExtendCommand extends Command
             return rtrim($this->basePath, '/');
         }
 
-        return rtrim($this->basePath, '/') . '/' . ltrim($path, '/');
+        return rtrim($this->basePath, '/').'/'.ltrim($path, '/');
     }
 
     /**
@@ -237,7 +238,7 @@ class ExtendCommand extends Command
      * Copy files to extension path.
      *
      * @param string|array $from
-     * @param string|null $to
+     * @param string|null  $to
      */
     protected function copy($from, $to = null)
     {
@@ -248,7 +249,6 @@ class ExtendCommand extends Command
 
             return;
         }
-
 
         if (!file_exists($from)) {
             return;
@@ -266,7 +266,7 @@ class ExtendCommand extends Command
      */
     protected function makeDir($paths)
     {
-        foreach ((array)$paths as $path) {
+        foreach ((array) $paths as $path) {
             $path = $this->extensionPath($path);
 
             $this->filesystem->makeDirectory($path, 0755, true, true);

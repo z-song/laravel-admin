@@ -5,7 +5,6 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\MessageBag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait UploadField
@@ -76,7 +75,7 @@ trait UploadField
         ];
 
         if ($this->form instanceof Form) {
-            $defaultOptions['deleteUrl'] = $this->form->resource() . '/' . $this->form->model()->getKey();
+            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
         }
 
         $this->options($defaultOptions);
@@ -130,8 +129,9 @@ trait UploadField
      *
      * @param string $disk Disks defined in `config/filesystems.php`.
      *
-     * @return $this
      * @throws \Exception
+     *
+     * @return $this
      */
     public function disk($disk)
     {
@@ -156,7 +156,7 @@ trait UploadField
     /**
      * Specify the directory and name for upload file.
      *
-     * @param string $directory
+     * @param string      $directory
      * @param null|string $name
      *
      * @return $this
@@ -309,7 +309,7 @@ trait UploadField
      */
     protected function generateUniqueName(UploadedFile $file)
     {
-        return md5(uniqid()) . '.' . $file->getClientOriginalExtension();
+        return md5(uniqid()).'.'.$file->getClientOriginalExtension();
     }
 
     /**

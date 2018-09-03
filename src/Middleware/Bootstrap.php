@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class Bootstrap
 {
-    /**
-     * {@inheritdoc}
-     */
     public function handle(Request $request, \Closure $next)
     {
         Form::registerBuiltinFields();
