@@ -4,7 +4,7 @@
             @if(url()->isValidUrl($item['uri']))
                 <a href="{{ $item['uri'] }}" target="_blank">
             @else
-                 <a href="{{ admin_base_path($item['uri']) }}">
+                 <a href="{{ config('app.url').admin_base_path($item['uri']) }}">
             @endif
                 <i class="fa {{$item['icon']}}"></i>
                 @if (Lang::has($titleTranslation = 'admin.menu_titles.' . trim(str_replace(' ', '_', strtolower($item['title'])))))
