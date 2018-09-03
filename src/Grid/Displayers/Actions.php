@@ -144,7 +144,7 @@ class Actions extends AbstractDisplayer
      */
     protected function renderView()
     {
-        $base = config('app.url');
+        $base = app_url();
 
         return <<<EOT
 <a href="{$base}{$this->getResource()}/{$this->getKey()}">
@@ -160,7 +160,7 @@ EOT;
      */
     protected function renderEdit()
     {
-        $base = config('app.url');
+        $base = app_url();
 
         return <<<EOT
 <a href="{$base}{$this->getResource()}/{$this->getKey()}/edit">
@@ -179,6 +179,8 @@ EOT;
         $deleteConfirm = trans('admin.delete_confirm');
         $confirm = trans('admin.confirm');
         $cancel = trans('admin.cancel');
+
+        $base = app_url();
 
         $script = <<<SCRIPT
 
