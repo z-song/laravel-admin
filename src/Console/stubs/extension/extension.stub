@@ -1,0 +1,18 @@
+<?php
+
+namespace :namespace;
+
+use Encore\Admin\Extension;
+
+class :class_name extends Extension
+{
+    public $name = ':base_package';
+
+    public $views = __DIR__.'/../resources/views';
+
+    public $menu = [
+        'title' => ':title',
+        'path'  => ':path',
+        'icon'  => 'fa-gears',
+    ];
+}
