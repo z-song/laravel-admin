@@ -22,6 +22,10 @@ class Bootstrap
             require $bootstrap;
         }
 
+        if (Admin::$booted) {
+            call_user_func(Admin::$booted);
+        }
+
         $this->injectFormAssets();
 
         return $next($request);

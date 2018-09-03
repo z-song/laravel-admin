@@ -51,6 +51,11 @@ class Admin
     public static $extensions = [];
 
     /**
+     * @var Closure
+     */
+    public static $booted;
+
+    /**
      * Returns the long version of Laravel-admin.
      *
      * @return string The long application version
@@ -296,6 +301,14 @@ class Admin
     public static function extend($name, $class)
     {
         static::$extensions[$name] = $class;
+    }
+
+    /**
+     * @param callable $callback
+     */
+    public static function booted(callable $callback)
+    {
+        static::$booted = $callback;
     }
 
     /*
