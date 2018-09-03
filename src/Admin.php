@@ -150,9 +150,7 @@ class Admin
             return;
         }
 
-        $css = array_get(Form::collectFieldAssets(), 'css', []);
-
-        static::$css = array_merge(static::$css, $css);
+        static::$css = array_merge(static::$css, (array) $css);
 
         return view('admin::partials.css', ['css' => array_unique(static::$css)]);
     }
@@ -172,9 +170,7 @@ class Admin
             return;
         }
 
-        $js = array_get(Form::collectFieldAssets(), 'js', []);
-
-        static::$js = array_merge(static::$js, $js);
+        static::$js = array_merge(static::$js, (array) $js);
 
         return view('admin::partials.js', ['js' => array_unique(static::$js)]);
     }
