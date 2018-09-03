@@ -60,8 +60,9 @@ if (!function_exists('admin_base_path')) {
     {
         $app_url = config('app.url');
 
-        if (!isset($_SERVER['SERVER_PORT']))
+        if (!isset($_SERVER['SERVER_PORT'])) {
             return $app_url;
+        }
 
         $parsed_url = parse_url($app_url);
         if (!isset($parsed_url['port'])
