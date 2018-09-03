@@ -181,7 +181,7 @@ abstract class Extension
     {
         return $this->permission;
     }
-    
+
     /**
      * Whether the extension is enabled.
      *
@@ -199,14 +199,15 @@ abstract class Extension
      */
     public function disabled()
     {
-        return ! $this->enabled();
+        return !$this->enabled();
     }
 
     /**
-     * Get config set in config/admin.php
+     * Get config set in config/admin.php.
      *
      * @param string $key
      * @param null   $default
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     public static function config($key, $default = null)
@@ -219,7 +220,7 @@ abstract class Extension
     }
 
     /**
-     * Import menu item and permission to laravel-admin
+     * Import menu item and permission to laravel-admin.
      */
     public static function import()
     {
@@ -244,8 +245,10 @@ abstract class Extension
      * Validate menu fields.
      *
      * @param array $menu
-     * @return bool
+     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function validateMenu(array $menu)
     {
@@ -256,7 +259,7 @@ abstract class Extension
             return true;
         }
 
-        $message = "Invalid menu:\r\n".join("\r\n", array_flatten($validator->errors()->messages()));
+        $message = "Invalid menu:\r\n".implode("\r\n", array_flatten($validator->errors()->messages()));
 
         throw new \Exception($message);
     }
@@ -265,8 +268,10 @@ abstract class Extension
      * Validate permission fields.
      *
      * @param array $permission
-     * @return bool
+     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function validatePermission(array $permission)
     {
@@ -277,7 +282,7 @@ abstract class Extension
             return true;
         }
 
-        $message = "Invalid permission:\r\n".join("\r\n", array_flatten($validator->errors()->messages()));
+        $message = "Invalid permission:\r\n".implode("\r\n", array_flatten($validator->errors()->messages()));
 
         throw new \Exception($message);
     }
@@ -288,7 +293,7 @@ abstract class Extension
      * @param string $title
      * @param string $uri
      * @param string $icon
-     * @param int $parentId
+     * @param int    $parentId
      */
     protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0)
     {
@@ -315,7 +320,7 @@ abstract class Extension
         Permission::create([
             'name'      => $name,
             'slug'      => $slug,
-            'http_path' => '/' . trim($path, '/'),
+            'http_path' => '/'.trim($path, '/'),
         ]);
     }
 

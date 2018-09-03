@@ -98,5 +98,5 @@ return [
         'filter_placeholder' => 'Filtrele',
     ],
 
-	'menu_titles' => [],
+    'menu_titles' => [],
 ];
