@@ -69,12 +69,11 @@ if (!function_exists('admin_base_path')) {
             && ($_SERVER['SERVER_PORT'] != ''
                 && $_SERVER['SERVER_PORT'] != 80
                 && $_SERVER['SERVER_PORT'] != 443)) {
-
             $add_slash = '/';
 
             preg_match('/([^\/:])(\/|$)(.*)/', $app_url, $matches);
 
-            if ($matches[3] == "") {
+            if ($matches[3] == '') {
                 $add_slash = '';
             }
 
