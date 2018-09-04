@@ -156,9 +156,11 @@ class Tools implements Renderable
     {
         $text = trans('admin.list');
 
+        $base = app_url();
+
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="$text"><i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
+    <a href="{$base}{$this->getListPath()}" class="btn btn-sm btn-default" title="$text"><i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
 </div>
 EOT;
     }
@@ -172,9 +174,11 @@ EOT;
     {
         $view = trans('admin.view');
 
+        $base = app_url();
+
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary" title="{$view}">
+    <a href="{$base}{$this->getViewPath()}" class="btn btn-sm btn-primary" title="{$view}">
         <i class="fa fa-eye"></i><span class="hidden-xs"> {$view}</span>
     </a>
 </div>

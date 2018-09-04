@@ -66,6 +66,8 @@ SCRIPT;
 
         $page = request('page', 1);
 
+	$base = app_url();
+
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">
@@ -75,9 +77,9 @@ SCRIPT;
         <span class="sr-only">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="{$this->grid->getExportUrl('all')}" target="_blank">{$all}</a></li>
-        <li><a href="{$this->grid->getExportUrl('page', $page)}" target="_blank">{$currentPage}</a></li>
-        <li><a href="{$this->grid->getExportUrl('selected', '__rows__')}" target="_blank" class='{$this->grid->getExportSelectedName()}'>{$selectedRows}</a></li>
+        <li><a href="{$base}{$this->grid->getExportUrl('all')}" target="_blank">{$all}</a></li>
+        <li><a href="{$base}{$this->grid->getExportUrl('page', $page)}" target="_blank">{$currentPage}</a></li>
+        <li><a href="{$base}{$this->grid->getExportUrl('selected', '__rows__')}" target="_blank" class='{$this->grid->getExportSelectedName()}'>{$selectedRows}</a></li>
     </ul>
 </div>
 EOT;

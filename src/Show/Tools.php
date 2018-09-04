@@ -176,9 +176,11 @@ class Tools implements Renderable
     {
         $list = trans('admin.list');
 
+        $base = app_url();
+
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="{$list}">
+    <a href="{$base}{$this->getListPath()}" class="btn btn-sm btn-default" title="{$list}">
         <i class="fa fa-list"></i><span class="hidden-xs"> {$list}</span>
     </a>
 </div>
@@ -194,9 +196,11 @@ HTML;
     {
         $edit = trans('admin.edit');
 
+        $base = app_url();
+
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getEditPath()}" class="btn btn-sm btn-primary" title="{$edit}">
+    <a href="{$base}{$this->getEditPath()}" class="btn btn-sm btn-primary" title="{$edit}">
         <i class="fa fa-edit"></i><span class="hidden-xs"> {$edit}</span>
     </a>
 </div>
