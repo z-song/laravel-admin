@@ -44,6 +44,7 @@ class TestCase extends BaseTestCase
         $this->app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
         $this->app['config']->set('admin', $adminConfig);
+        $this->app['config']->set('app.url', 'http://localhost:8000');
 
         foreach (array_dot(array_get($adminConfig, 'auth'), 'auth.') as $key => $value) {
             $this->app['config']->set($key, $value);
