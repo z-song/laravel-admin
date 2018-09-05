@@ -65,8 +65,15 @@ trait UploadField
             'browseLabel'          => trans('admin.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
+            'uploadUrl'            => '#',
+            'fileActionSettings'   => [
+                'showUpload' => false,
+                'showRemove' => $this->removable,
+                'showZoom'   => true,
+            ],
+            'defaultPreviewContent' => '（可拖动图片到此）',
 //            'initialCaption'       => $this->initialCaption($this->value),
-            'deleteExtraData'      => [
+            'deleteExtraData' => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
                 static::FILE_DELETE_FLAG         => '',
                 '_token'                         => csrf_token(),
