@@ -51,12 +51,12 @@ class Admin
     public static $extensions = [];
 
     /**
-     * @var Closure
+     * @var []Closure
      */
     public static $booting;
 
     /**
-     * @var Closure
+     * @var []Closure
      */
     public static $booted;
 
@@ -313,7 +313,7 @@ class Admin
      */
     public static function booting(callable $callback)
     {
-        static::$booting = $callback;
+        static::$booting[] = $callback;
     }
 
     /**
@@ -321,7 +321,7 @@ class Admin
      */
     public static function booted(callable $callback)
     {
-        static::$booted = $callback;
+        static::$booted[] = $callback;
     }
 
     /*

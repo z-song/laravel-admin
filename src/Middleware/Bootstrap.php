@@ -19,14 +19,18 @@ class Bootstrap
             require $bootstrap;
         }
 
-        if (Admin::$booting) {
-            call_user_func(Admin::$booting);
+        if (! empty(Admin::$booting)) {
+            foreach (Admin::$booting as $callable) {
+                call_user_func($callable);
+            }
         }
 
         $this->injectFormAssets();
 
-        if (Admin::$booted) {
-            call_user_func(Admin::$booted);
+        if (! empty(Admin::$booted)) {
+            foreach (Admin::$booted as $callable) {
+                call_user_func($callable);
+            }
         }
 
         return $next($request);
