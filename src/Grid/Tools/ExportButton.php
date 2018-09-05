@@ -66,7 +66,7 @@ SCRIPT;
 
         $page = request('page', 1);
 
-	$base = app_url();
+        $base = app_url();
 
         return <<<EOT
 
