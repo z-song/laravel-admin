@@ -85,11 +85,13 @@ abstract class Extension
      */
     protected static function getInstance()
     {
-        if (!static::$instance) {
-            static::$instance = new static();
+        $class = get_called_class();
+
+        if (!isset(self::$instance[$class]) || !self::$instance[$class] instanceof $class) {
+            self::$instance[$class] = new static();
         }
 
-        return static::$instance;
+        return static::$instance[$class];
     }
 
     /**

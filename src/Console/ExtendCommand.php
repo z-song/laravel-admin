@@ -93,6 +93,39 @@ class ExtendCommand extends Command
 
         $this->makeDirs();
         $this->makeFiles();
+
+        $this->info("The extension scaffolding generated successfully. \r\n");
+        $this->showTree();
+    }
+
+    /**
+     * Show extension scaffolding with tree structure.
+     */
+    protected function showTree()
+    {
+        $tree = <<<TREE
+{$this->extensionPath()}
+    ├── LICENSE
+    ├── README.md
+    ├── composer.json
+    ├── database
+    │   ├── migrations
+    │   └── seeds
+    ├── resources
+    │   ├── assets
+    │   └── views
+    │       └── index.blade.php
+    ├── routes
+    │   └── web.php
+    └── src
+        ├── {$this->className}.php
+        ├── {$this->className}ServiceProvider.php
+        └── Http
+            └── Controllers
+                └── {$this->className}Controller.php
+TREE;
+
+        $this->info($tree);
     }
 
     /**
