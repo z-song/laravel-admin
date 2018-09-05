@@ -1455,7 +1455,7 @@ class Form implements Renderable
      * @param string $method
      * @param array  $arguments
      *
-     * @return Field|void
+     * @return Field
      */
     public function __call($method, $arguments)
     {
@@ -1468,5 +1468,9 @@ class Form implements Renderable
 
             return $element;
         }
+
+        admin_error('Error', "Field type [$method] does not exist.");
+
+        return new Field\Nullable();
     }
 }
