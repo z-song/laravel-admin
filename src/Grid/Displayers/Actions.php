@@ -220,6 +220,7 @@ SCRIPT;
 
         Admin::script($script);
         $csrf = csrf_token();
+
         return <<<EOT
 <form action="{$base}{$this->getResource()}/{$this->getKey()}" method="post" style="display: inline;" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
     <input type="hidden" name="_token" value="{$csrf}" />

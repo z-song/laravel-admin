@@ -39,8 +39,9 @@ trait HasResourceActions
 
         $status = $this->form()->destroy($id);
 
-        if ($type == 'non-ajax')
+        if ($type == 'non-ajax') {
             return $status;
+        }
 
         if ($status) {
             $data = [
