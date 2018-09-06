@@ -138,6 +138,13 @@ class Form implements Renderable
     public static $availableFields = [];
 
     /**
+     * Form field alias.
+     *
+     * @var array
+     */
+    public static $fieldAlias = [];
+
+    /**
      * Ignored saving fields.
      *
      * @var array
@@ -1368,6 +1375,19 @@ class Form implements Renderable
     }
 
     /**
+     * Set form field alias.
+     *
+     * @param string $field
+     * @param string $alias
+     *
+     * @return void
+     */
+    public static function alias($field, $alias)
+    {
+        static::$fieldAlias[$alias] =  $field;
+    }
+
+    /**
      * Remove registered field.
      *
      * @param array|string $abstract
@@ -1386,6 +1406,11 @@ class Form implements Renderable
      */
     public static function findFieldClass($method)
     {
+        // If alias exists.
+        if (isset(static::$fieldAlias[$method])) {
+            $method = static::$fieldAlias[$method];
+        }
+
         $class = array_get(static::$availableFields, $method);
 
         if (class_exists($class)) {
