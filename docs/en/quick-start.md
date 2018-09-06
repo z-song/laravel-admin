@@ -43,6 +43,20 @@ Open `http://localhost:8000/admin/auth/menu`, add menu link and refresh the page
 
 > Where `uri` fills in the path part that does not contain the prefix of the route, such as the full path `http://localhost:8000/admin/demo/users`, just input `demo/users`, If you want to add an external link, just fill in the full url, such as `http://laravel-admin.org/`.
 
+### Menu translations
+
+append menu titles in menu_titles index at your language files.
+For example 'Work Units' title:
+
+in resources/lang/es/admin.php
+```php
+...
+// lowercase and replace spaces with _
+'menu_titles' => [
+    'work_units' => 'Unidades de trabajo'
+],
+```
+
 ## Build grid and form
 
 The rest needs to be done is open `app/Admin/Contollers/UserController.php`, find `form()` and `grid()` method and write few lines of code with `model-grid` and `model-form`,for more detail, please read [model-grid](/en/model-grid.md) and [model-form](/en/model-form.md).

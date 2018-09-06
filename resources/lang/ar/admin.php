@@ -20,6 +20,7 @@ return [
     'remove'       => 'حذف',
     'edit'         => 'تعديل',
     'view'         => 'عرض',
+    'detail'       => 'التفاصيل',
     'browse'       => 'تصفح',
     'reset'        => 'تفريغ',
     'export'       => 'تصدير',
@@ -30,6 +31,7 @@ return [
     'expand'       => 'تكبير',
     'collapse'     => 'تصغير',
     'filter'       => 'تصنيف',
+    'search'       => 'بحث',
     'close'        => 'اغلاق',
     'show'         => 'عرض',
     'entries'      => 'المدخلات',
@@ -109,4 +111,6 @@ return [
         'filter_clear'       => 'عرض الكل',
         'filter_placeholder' => 'تنقية',
     ],
+
+    'menu_titles' => [],
 ];

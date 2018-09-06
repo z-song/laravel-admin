@@ -2,15 +2,19 @@
 
 namespace Encore\Admin\Grid;
 
+use Encore\Admin\Grid;
 use Encore\Admin\Middleware\Pjax;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Str;
 
 class Model
 {
@@ -74,6 +78,21 @@ class Model
      * @var \Closure
      */
     protected $collectionCallback;
+
+    /**
+     * @var Grid
+     */
+    protected $grid;
+
+    /**
+     * @var Relation
+     */
+    protected $relation;
+
+    /**
+     * @var array
+     */
+    protected $eagerLoads = [];
 
     /**
      * Create a new grid model instance.
@@ -169,6 +188,66 @@ class Model
         $this->sortName = $name;
 
         return $this;
+    }
+
+    /**
+     * Set parent grid instance.
+     *
+     * @param Grid $grid
+     *
+     * @return $this
+     */
+    public function setGrid(Grid $grid)
+    {
+        $this->grid = $grid;
+
+        return $this;
+    }
+
+    /**
+     * Get parent gird instance.
+     *
+     * @return Grid
+     */
+    public function getGrid()
+    {
+        return $this->grid;
+    }
+
+    /**
+     * @param Relation $relation
+     *
+     * @return $this
+     */
+    public function setRelation(Relation $relation)
+    {
+        $this->relation = $relation;
+
+        return $this;
+    }
+
+    /**
+     * @return Relation
+     */
+    public function getRelation()
+    {
+        return $this->relation;
+    }
+
+    /**
+     * Get constraints.
+     *
+     * @return array|bool
+     */
+    public function getConstraints()
+    {
+        if ($this->relation instanceof HasMany) {
+            return [
+                $this->relation->getForeignKeyName() => $this->relation->getParentKey(),
+            ];
+        }
+
+        return false;
     }
 
     /**
@@ -271,6 +350,10 @@ class Model
             return $this->model;
         }
 
+        if ($this->relation) {
+            $this->model = $this->relation->getQuery();
+        }
+
         $this->setSort();
         $this->setPaginate();
 
@@ -358,6 +441,10 @@ class Model
 
         if (isset($paginate['arguments'][0])) {
             return $paginate['arguments'];
+        }
+
+        if ($name = $this->grid->getName()) {
+            return [$this->perPage, null, "{$name}_page"];
         }
 
         return [$this->perPage];
@@ -500,6 +587,42 @@ class Model
         ]);
 
         return $this;
+    }
+
+    /**
+     * Set the relationships that should be eager loaded.
+     *
+     * @param mixed $relations
+     *
+     * @return $this|Model
+     */
+    public function with($relations)
+    {
+        if (is_array($relations)) {
+            if (Arr::isAssoc($relations)) {
+                $relations = array_keys($relations);
+            }
+
+            $this->eagerLoads = array_merge($this->eagerLoads, $relations);
+        }
+
+        if (is_string($relations)) {
+            if (Str::contains($relations, '.')) {
+                $relations = explode('.', $relations)[0];
+            }
+
+            if (Str::contains($relations, ':')) {
+                $relations = explode(':', $relations)[0];
+            }
+
+            if (in_array($relations, $this->eagerLoads)) {
+                return $this;
+            }
+
+            $this->eagerLoads[] = $relations;
+        }
+
+        return $this->__call('with', (array) $relations);
     }
 
     /**

@@ -25,9 +25,11 @@ class Text extends Field
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder());
 
-        return parent::render()->with([
+        $this->addVariables([
             'prepend' => $this->prepend,
             'append'  => $this->append,
         ]);
+
+        return parent::render();
     }
 }

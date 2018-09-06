@@ -20,6 +20,7 @@ return [
     'remove'       => 'Verwijder',
     'edit'         => 'Wijzigen',
     'view'         => 'Toon',
+    'detail'       => 'Gedetailleerd',
     'browse'       => 'Selecteer',
     'reset'        => 'Reset',
     'export'       => 'Exporteer',
@@ -30,6 +31,7 @@ return [
     'expand'       => 'Openklappen',
     'collapse'     => 'Dichtklappen',
     'filter'       => 'Filter',
+    'search'       => 'Zoeken',
     'close'        => 'Sluit',
     'show'         => 'Toon',
     'entries'      => 'rijen',
@@ -109,4 +111,6 @@ return [
         'filter_clear'       => 'Toon alle',
         'filter_placeholder' => 'Filter',
     ],
+
+    'menu_titles' => [],
 ];
