@@ -48,7 +48,8 @@ class Radio extends Field
             $checked = $checked->toArray();
         }
 
-        $this->checked = (array) $checked;
+        // input radio checked should be unique
+        $this->checked = is_array($checked) ? (array) end($checked) : (array) $checked;
 
         return $this;
     }
