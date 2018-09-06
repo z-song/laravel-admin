@@ -198,7 +198,7 @@ class Field implements Renderable
     /**
      * column data format.
      *
-     * @var Closure
+     * @var \Closure
      */
     protected $customFormat = null;
 
@@ -349,13 +349,15 @@ class Field implements Renderable
     /**
      * custom format form column data when edit.
      *
-     * @param Closure $call
+     * @param \Closure $call
      *
-     * @return [null]
+     * @return $this
      */
     public function customFormat(\Closure $call)
     {
         $this->customFormat = $call;
+
+        return $this;
     }
 
     /**
@@ -879,7 +881,7 @@ class Field implements Renderable
     /**
      * Get element class selector.
      *
-     * @return string
+     * @return string|array
      */
     protected function getElementClassSelector()
     {
@@ -1025,13 +1027,27 @@ class Field implements Renderable
     }
 
     /**
+     * If this field should render.
+     *
+     * @return bool
+     */
+    protected function shouldRender()
+    {
+        if (!$this->display) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Render this filed.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
     public function render()
     {
-        if (!$this->display) {
+        if (! $this->shouldRender()) {
             return '';
         }
 

@@ -37,7 +37,7 @@
         {!! $form->renderFooter() !!}
 
         @foreach($form->getHiddenFields() as $field)
-            {!! $field !!}
+            {!! $field->render() !!}
         @endforeach
 
         <!-- /.box-footer -->
