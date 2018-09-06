@@ -90,6 +90,13 @@ class Field implements Renderable
     protected $options = [];
 
     /**
+     * Checked for specify elements.
+     *
+     * @var array
+     */
+    protected $checked = [];
+
+    /**
      * Validation rules.
      *
      * @var string|\Closure
@@ -415,6 +422,24 @@ class Field implements Renderable
         }
 
         $this->options = array_merge($this->options, $options);
+
+        return $this;
+    }
+
+    /**
+     * Set the field option checked.
+     *
+     * @param array $checked
+     *
+     * @return $this
+     */
+    public function checked($checked = [])
+    {
+        if ($checked instanceof Arrayable) {
+            $checked = $checked->toArray();
+        }
+
+        $this->checked = array_merge($this->checked, $checked);
 
         return $this;
     }
