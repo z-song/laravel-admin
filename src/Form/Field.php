@@ -667,6 +667,18 @@ class Field implements Renderable
         return $this;
     }
 
+
+    /**
+     * Set the field automatically get focus.
+     *
+     * @return Field
+     */
+    public function autofocus()
+    {
+        return $this->attribute('autofocus', true);
+    }
+
+
     /**
      * Set the field as readonly mode.
      *
