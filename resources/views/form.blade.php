@@ -3,12 +3,16 @@
         <h3 class="box-title">{{ $form->title() }}</h3>
 
         <div class="box-tools">
-            {!! $form->renderTools() !!}
+            {!! $form->renderHeaderTools() !!}
         </div>
     </div>
     <!-- /.box-header -->
     <!-- form start -->
-    {!! $form->open(['class' => "form-horizontal"]) !!}
+    @if($form->hasRows())
+        {!! $form->open() !!}
+    @else
+        {!! $form->open(['class' => "form-horizontal"]) !!}
+    @endif
 
         <div class="box-body">
 
@@ -33,11 +37,26 @@
 
         </div>
         <!-- /.box-body -->
+        <div class="box-footer">
 
-        {!! $form->renderFooter() !!}
+            @if( ! $form->isMode(\Encore\Admin\Form\Builder::MODE_VIEW)  || ! $form->option('enableSubmit'))
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            @endif
+            <div class="col-md-{{$width['label']}}">
 
-        @foreach($form->getHiddenFields() as $field)
-            {!! $field->render() !!}
+            </div>
+            <div class="col-md-{{$width['field']}}">
+
+                {!! $form->submitButton() !!}
+
+                {!! $form->resetButton() !!}
+
+            </div>
+
+        </div>
+
+        @foreach($form->getHiddenFields() as $hiddenField)
+            {!! $hiddenField->render() !!}
         @endforeach
 
         <!-- /.box-footer -->

@@ -19,7 +19,6 @@ return [
     'remove'                => 'הסרה',
     'edit'                  => 'עריכה',
     'view'                  => 'צפייה',
-    'detail'                => 'פרט',
     'browse'                => 'דפדוף',
     'reset'                 => 'אתחול',
     'export'                => 'ייצוא',
@@ -30,7 +29,6 @@ return [
     'expand'                => 'הרחב',
     'collapse'              => 'פתח',
     'filter'                => 'חיפוש',
-    'search'                => 'לחפש',
     'close'                 => 'סגור',
     'show'                  => 'צפה',
     'entries'               => 'רשומות',
@@ -72,6 +70,4 @@ return [
     'pagination'            => [
         'range' => ':last מ :total תוצאות',
     ],
-
-    'menu_titles' => [],
 ];

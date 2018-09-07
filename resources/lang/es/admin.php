@@ -20,7 +20,6 @@ return [
     'remove'       => 'Retirar',
     'edit'         => 'Editar',
     'view'         => 'Ver',
-    'detail'       => 'Detalle',
     'browse'       => 'vistazo',
     'reset'        => 'Restablecer',
     'export'       => 'Exportar',
@@ -31,7 +30,6 @@ return [
     'expand'       => 'Expandir',
     'collapse'     => 'Colapsar',
     'filter'       => 'Filtrar',
-    'search'       => 'Buscar',
     'close'        => 'Cerrar',
     'show'         => 'Mostrar',
     'entries'      => 'Entradas',
@@ -97,6 +95,4 @@ return [
     'all'           => 'Todas',
     'current_page'  => 'Página actual',
     'selected_rows' => 'Filas seleccionadas',
-
-    'menu_titles' => [],
 ];

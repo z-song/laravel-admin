@@ -23,9 +23,7 @@ class Editable extends AbstractDisplayer
      *
      * @var array
      */
-    protected $options = [
-        'emptytext'  => '<i class="fa fa-pencil"></i>',
-    ];
+    protected $options = [];
 
     /**
      * Add options for editable.
@@ -148,12 +146,13 @@ class Editable extends AbstractDisplayer
 
         Admin::script("$('.$class').editable($options);");
 
+        $url = url($this->grid->resource());
         $attributes = [
             'href'       => '#',
             'class'      => "$class",
             'data-type'  => $this->type,
             'data-pk'    => "{$this->getKey()}",
-            'data-url'   => "{$this->grid->resource()}/{$this->getKey()}",
+            'data-url'   => "{$url}/{$this->getKey()}",
             'data-value' => "{$this->value}",
         ];
 

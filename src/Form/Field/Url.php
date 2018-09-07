@@ -4,7 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 class Url extends Text
 {
-    protected $rules = 'nullable|url';
+    protected $rules = 'url';
 
     public function render()
     {

@@ -11,14 +11,14 @@ class RowSelector extends AbstractDisplayer
         Admin::script($this->script());
 
         return <<<EOT
-<input type="checkbox" class="{$this->grid->getGridRowName()}-checkbox" data-id="{$this->getKey()}" />
+<input type="checkbox" class="grid-row-checkbox" data-id="{$this->getKey()}" />
 EOT;
     }
 
     protected function script()
     {
-        return <<<EOT
-$('.{$this->grid->getGridRowName()}-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
+        return <<<'EOT'
+$('.grid-row-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
     if (this.checked) {
         $(this).closest('tr').css('background-color', '#ffffd5');
     } else {
@@ -26,9 +26,9 @@ $('.{$this->grid->getGridRowName()}-checkbox').iCheck({checkboxClass:'icheckbox_
     }
 });
 
-var {$this->grid->getSelectedRowsName()} = function () {
+var selectedRows = function () {
     var selected = [];
-    $('.{$this->grid->getGridRowName()}-checkbox:checked').each(function(){
+    $('.grid-row-checkbox:checked').each(function(){
         selected.push($(this).data('id'));
     });
 

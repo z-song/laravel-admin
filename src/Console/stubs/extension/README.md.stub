@@ -1,4 +1,0 @@
-laravel-admin extension
-======
-
-

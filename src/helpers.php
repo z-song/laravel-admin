@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\MessageBag;
-
 if (!function_exists('admin_path')) {
 
     /**
@@ -33,7 +31,7 @@ if (!function_exists('admin_url')) {
             return $path;
         }
 
-        $secure = $secure ?: (config('admin.https') || config('admin.secure'));
+        $secure = $secure ?: config('admin.secure');
 
         return url(admin_base_path($path), $parameters, $secure);
     }
@@ -53,6 +51,8 @@ if (!function_exists('admin_base_path')) {
 
         $prefix = ($prefix == '/') ? '' : $prefix;
 
+//        dd($prefix.'/'.trim($path, '/'));
+
         return $prefix.'/'.trim($path, '/');
     }
 }
@@ -65,71 +65,14 @@ if (!function_exists('admin_toastr')) {
      * @param string $message
      * @param string $type
      * @param array  $options
+     *
+     * @return string
      */
     function admin_toastr($message = '', $type = 'success', $options = [])
     {
-        $toastr = new MessageBag(get_defined_vars());
+        $toastr = new \Illuminate\Support\MessageBag(get_defined_vars());
 
-        session()->flash('toastr', $toastr);
-    }
-}
-
-if (!function_exists('admin_success')) {
-
-    /**
-     * Flash a success message bag to session.
-     *
-     * @param string $title
-     * @param string $message
-     */
-    function admin_success($title, $message = '')
-    {
-        admin_info($title, $message, 'success');
-    }
-}
-
-if (!function_exists('admin_error')) {
-
-    /**
-     * Flash a error message bag to session.
-     *
-     * @param string $title
-     * @param string $message
-     */
-    function admin_error($title, $message = '')
-    {
-        admin_info($title, $message, 'error');
-    }
-}
-
-if (!function_exists('admin_warning')) {
-
-    /**
-     * Flash a warning message bag to session.
-     *
-     * @param string $title
-     * @param string $message
-     */
-    function admin_warning($title, $message = '')
-    {
-        admin_info($title, $message, 'warning');
-    }
-}
-
-if (!function_exists('admin_info')) {
-
-    /**
-     * Flash a message bag to session.
-     *
-     * @param string $title
-     * @param string $message
-     * @param string $type
-     */
-    function admin_info($title, $message = '', $type = 'info')
-    {
-        $message = new MessageBag(get_defined_vars());
-
-        session()->flash($type, $message);
+        \Illuminate\Support\Facades\Session::flash('toastr', $toastr);
     }
 }
 
@@ -142,24 +85,6 @@ if (!function_exists('admin_asset')) {
      */
     function admin_asset($path)
     {
-        return asset($path, (config('admin.https') || config('admin.secure')));
-    }
-}
-
-if (!function_exists('array_delete')) {
-
-    /**
-     * Delete from array by value.
-     *
-     * @param array $array
-     * @param mixed $value
-     */
-    function array_delete(&$array, $value)
-    {
-        foreach ($array as $index => $item) {
-            if ($value == $item) {
-                unset($array[$index]);
-            }
-        }
+        return asset($path, config('admin.secure'));
     }
 }
