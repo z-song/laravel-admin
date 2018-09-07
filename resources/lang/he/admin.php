@@ -72,4 +72,6 @@ return [
     'pagination'            => [
         'range' => ':last מ :total תוצאות',
     ],
+
+    'menu_titles' => [],
 ];

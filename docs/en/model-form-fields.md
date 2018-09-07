@@ -84,7 +84,17 @@ $form->select('user_id')->options(function ($id) {
         return [$user->id => $user->name];
     }
 })->ajax('/admin/api/users');
+
+// using ajax and show selected item:
+
+$form->select('user_id')->options(User::class)->ajax('/admin/api/users');
+
+// or specifying the name and id
+
+$form->select('user_id')->options(User::class, 'name', 'id')->ajax('/admin/api/users');
 ```
+
+<sub>Notice：if you have modified the value of the `route.prefix` in the `config/admin.php` file, this api route should be modified to `config('admin.route.prefix').'/api/users'`.</sub>
 
 The controller method for api `/admin/api/users` is:
 
@@ -169,6 +179,14 @@ public function city(Request $request)
 ## Multiple select
 ```php
 $form->multipleSelect($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+
+// using ajax and show selected items:
+
+$form->multipleSelect($column[, $label])->options(Model::class)->ajax('ajax_url');
+
+// or specifying the name and id
+
+$form->multipleSelect($column[, $label])->options(Model::class, 'name', 'id')->ajax('ajax_url');
 ```
 
 You can store value of multiple select in two ways, one is `many-to-many` relation.
@@ -200,6 +218,8 @@ $form->select('user_id')->options(function ($id) {
     }
 })->ajax('/admin/api/users');
 ```
+
+<sub>Notice：If you have modified the value of the `route.prefix` in the `config/admin.php` file, this api route should be modified to `config('admin.route.prefix').'/api/users'`.</sub>
 
 The controller method for api `/admin/api/users` is:
 

@@ -56,7 +56,7 @@ class PermissionsTest extends TestCase
 
         $this->visit('admin/auth/roles/1/edit')
             ->see('Edit')
-            ->submitForm('Save', ['permissions' => [1]])
+            ->submitForm('Submit', ['permissions' => [1]])
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.role_permissions_table'), ['role_id' => 1, 'permission_id' => 1]);
     }
@@ -72,7 +72,7 @@ class PermissionsTest extends TestCase
 
         $this->visit('admin/auth/users/1/edit')
             ->see('Edit')
-            ->submitForm('Save', ['permissions' => [1], 'roles' => [1]])
+            ->submitForm('Submit', ['permissions' => [1], 'roles' => [1]])
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.user_permissions_table'), ['user_id' => 1, 'permission_id' => 1])
             ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 1, 'role_id' => 1]);
@@ -111,7 +111,7 @@ class PermissionsTest extends TestCase
 
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
-            ->submitForm('Save', ['permissions' => [6]])
+            ->submitForm('Submit', ['permissions' => [6]])
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.user_permissions_table'), ['user_id' => 2, 'permission_id' => 6]);
 
@@ -120,7 +120,7 @@ class PermissionsTest extends TestCase
 
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
-            ->submitForm('Save', ['permissions' => [7]])
+            ->submitForm('Submit', ['permissions' => [7]])
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.user_permissions_table'), ['user_id' => 2, 'permission_id' => 7]);
 
@@ -128,7 +128,7 @@ class PermissionsTest extends TestCase
 
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
-            ->submitForm('Save', ['permissions' => []])
+            ->submitForm('Submit', ['permissions' => []])
             ->seePageIs('admin/auth/users')
             ->missingFromDatabase(config('admin.database.user_permissions_table'), ['user_id' => 2, 'permission_id' => 6])
             ->missingFromDatabase(config('admin.database.user_permissions_table'), ['user_id' => 2, 'permission_id' => 7]);
@@ -168,7 +168,7 @@ class PermissionsTest extends TestCase
         // 3.assign role to user
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
-            ->submitForm('Save', ['roles' => [2]])
+            ->submitForm('Submit', ['roles' => [2]])
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 2]);
 
@@ -187,7 +187,7 @@ class PermissionsTest extends TestCase
         // 5.assign permission to role
         $this->visit('admin/auth/roles/2/edit')
             ->see('Edit')
-            ->submitForm('Save', ['permissions' => [6]])
+            ->submitForm('Submit', ['permissions' => [6]])
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.role_permissions_table'), ['role_id' => 2, 'permission_id' => 6]);
 
@@ -206,7 +206,7 @@ class PermissionsTest extends TestCase
 
         $this->visit('admin/auth/permissions/1/edit')
             ->see('Permissions')
-            ->submitForm('Save', ['slug' => 'can-delete'])
+            ->submitForm('Submit', ['slug' => 'can-delete'])
             ->seePageIs('admin/auth/permissions')
             ->seeInDatabase(config('admin.database.permissions_table'), ['slug' => 'can-delete'])
             ->assertEquals(6, Permission::count());

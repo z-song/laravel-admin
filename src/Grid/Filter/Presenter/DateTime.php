@@ -50,6 +50,8 @@ class DateTime extends Presenter
     {
         $this->prepare();
 
-        return [];
+        return [
+            'group' => $this->filter->group,
+        ];
     }
 }

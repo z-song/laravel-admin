@@ -3,9 +3,9 @@
 namespace DummyNamespace;
 
 use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\ModelForm;
+use Encore\Admin\Controllers\HasResourceActions;
 
 class DummyClass extends Controller
 {
-    use ModelForm;
+    use HasResourceActions;
 }

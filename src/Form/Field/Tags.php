@@ -37,7 +37,7 @@ class Tags extends Field
             $this->value = explode(',', $this->value);
         }
 
-        $this->value = array_filter((array) $this->value);
+        $this->value = array_filter((array) $this->value, 'strlen');
     }
 
     /**
@@ -46,7 +46,7 @@ class Tags extends Field
     public function prepare($value)
     {
         if (is_array($value) && !Arr::isAssoc($value)) {
-            $value = implode(',', array_filter($value));
+            $value = implode(',', array_filter($value, 'strlen'));
         }
 
         return $value;

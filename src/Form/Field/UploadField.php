@@ -5,7 +5,6 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\MessageBag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait UploadField
@@ -67,7 +66,7 @@ trait UploadField
             'showRemove'           => false,
             'showUpload'           => false,
 //            'initialCaption'       => $this->initialCaption($this->value),
-            'deleteExtraData' => [
+            'deleteExtraData'      => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
                 static::FILE_DELETE_FLAG         => '',
                 '_token'                         => csrf_token(),
@@ -130,20 +129,26 @@ trait UploadField
      *
      * @param string $disk Disks defined in `config/filesystems.php`.
      *
+     * @throws \Exception
+     *
      * @return $this
      */
     public function disk($disk)
     {
-        if (!array_key_exists($disk, config('filesystems.disks'))) {
-            $error = new MessageBag([
-                'title'   => 'Config error.',
-                'message' => "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`.",
-            ]);
+        try {
+            $this->storage = Storage::disk($disk);
+        } catch (\Exception $exception) {
+            if (!array_key_exists($disk, config('filesystems.disks'))) {
+                admin_error(
+                    'Config error.',
+                    "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`."
+                );
 
-            return session()->flash('error', $error);
+                return $this;
+            }
+
+            throw $exception;
         }
-
-        $this->storage = Storage::disk($disk);
 
         return $this;
     }

@@ -111,4 +111,6 @@ return [
         'filter_clear'       => 'عرض الكل',
         'filter_placeholder' => 'تنقية',
     ],
+
+    'menu_titles' => [],
 ];
