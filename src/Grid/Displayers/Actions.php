@@ -17,16 +17,24 @@ class Actions extends AbstractDisplayer
     protected $prepends = [];
 
     /**
-     * Default actions.
-     *
-     * @var array
+     * @var bool
      */
-    protected $actions = ['view', 'edit', 'delete'];
+    protected $allowEdit = true;
+
+    /**
+     * @var bool
+     */
+    protected $allowDelete = true;
 
     /**
      * @var string
      */
     protected $resource;
+
+    /**
+     * @var
+     */
+    protected $key;
 
     /**
      * Append a action.
@@ -57,39 +65,23 @@ class Actions extends AbstractDisplayer
     }
 
     /**
-     * Disable view action.
-     *
-     * @return $this
-     */
-    public function disableView()
-    {
-        array_delete($this->actions, 'view');
-
-        return $this;
-    }
-
-    /**
      * Disable delete.
      *
-     * @return $this.
+     * @return void.
      */
     public function disableDelete()
     {
-        array_delete($this->actions, 'delete');
-
-        return $this;
+        $this->allowDelete = false;
     }
 
     /**
      * Disable edit.
      *
-     * @return $this.
+     * @return void.
      */
     public function disableEdit()
     {
-        array_delete($this->actions, 'edit');
-
-        return $this;
+        $this->allowEdit = false;
     }
 
     /**
@@ -97,13 +89,11 @@ class Actions extends AbstractDisplayer
      *
      * @param $resource
      *
-     * @return $this
+     * @return void
      */
     public function setResource($resource)
     {
         $this->resource = $resource;
-
-        return $this;
     }
 
     /**
@@ -117,6 +107,14 @@ class Actions extends AbstractDisplayer
     }
 
     /**
+     * Get url of current resource.
+     * @return string
+     */
+    public function getResourceURL(){
+        return url($this->getResource());
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function display($callback = null)
@@ -126,10 +124,12 @@ class Actions extends AbstractDisplayer
         }
 
         $actions = $this->prepends;
+        if ($this->allowEdit) {
+            array_push($actions, $this->editAction());
+        }
 
-        foreach ($this->actions as $action) {
-            $method = 'render'.ucfirst($action);
-            array_push($actions, $this->{$method}());
+        if ($this->allowDelete) {
+            array_push($actions, $this->deleteAction());
         }
 
         $actions = array_merge($actions, $this->appends);
@@ -137,40 +137,44 @@ class Actions extends AbstractDisplayer
         return implode('', $actions);
     }
 
+    public function setKey($key)
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    public function getKey()
+    {
+        if ($this->key) {
+            return $this->key;
+        }
+
+        return parent::getKey();
+    }
+
     /**
-     * Render view action.
+     * Built edit action.
      *
      * @return string
      */
-    protected function renderView()
+    protected function editAction()
     {
+        $editText = trans("admin.edit");
+
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}">
-    <i class="fa fa-eye"></i>
+<a href="{$this->getResourceURL()}/{$this->getKey()}/edit">
+    <i class="fa fa-edit btn btn-primary" title="{$editText}"></i>
 </a>
 EOT;
     }
 
     /**
-     * Render edit action.
+     * Built delete action.
      *
      * @return string
      */
-    protected function renderEdit()
-    {
-        return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}/edit">
-    <i class="fa fa-edit"></i>
-</a>
-EOT;
-    }
-
-    /**
-     * Render delete action.
-     *
-     * @return string
-     */
-    protected function renderDelete()
+    protected function deleteAction()
     {
         $deleteConfirm = trans('admin.delete_confirm');
         $confirm = trans('admin.confirm');
@@ -178,44 +182,39 @@ EOT;
 
         $script = <<<SCRIPT
 
-$('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
+$('.grid-row-delete').unbind('click').click(function() {
 
     var id = $(this).data('id');
 
     swal({
-        title: "$deleteConfirm",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "$confirm",
-        showLoaderOnConfirm: true,
-        cancelButtonText: "$cancel",
-        preConfirm: function() {
-            return new Promise(function(resolve) {
-                $.ajax({
-                    method: 'post',
-                    url: '{$this->getResource()}/' + id,
-                    data: {
-                        _method:'delete',
-                        _token:LA.token,
-                    },
-                    success: function (data) {
-                        $.pjax.reload('#pjax-container');
+      title: "$deleteConfirm",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "$confirm",
+      closeOnConfirm: false,
+      cancelButtonText: "$cancel"
+    },
+    function(){
+        $.ajax({
+            method: 'post',
+            url: '{$this->getResourceURL()}/' + id,
+            data: {
+                _method:'delete',
+                _token:LA.token,
+            },
+            success: function (data) {
+                $.pjax.reload('#pjax-container');
 
-                        resolve(data);
+                if (typeof data === 'object') {
+                    if (data.status) {
+                        swal(data.message, '', 'success');
+                    } else {
+                        swal(data.message, '', 'error');
                     }
-                });
-            });
-        }
-    }).then(function(result) {
-        var data = result.value;
-        if (typeof data === 'object') {
-            if (data.status) {
-                swal(data.message, '', 'success');
-            } else {
-                swal(data.message, '', 'error');
+                }
             }
-        }
+        });
     });
 });
 
@@ -223,9 +222,10 @@ SCRIPT;
 
         Admin::script($script);
 
+        $deleteText = trans("admin.delete");
         return <<<EOT
-<a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
-    <i class="fa fa-trash"></i>
+<a href="javascript:void(0);" data-id="{$this->getKey()}" class="grid-row-delete">
+    <i class="fa fa-trash btn btn-danger" title="{$deleteText}"></i>
 </a>
 EOT;
     }

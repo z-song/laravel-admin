@@ -6,12 +6,11 @@ use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Form\Field\File;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -69,7 +68,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Captcha        captcha($column, $label = '')
  * @method Field\Listbox        listbox($column, $label = '')
  */
-class Form implements Renderable
+class Form
 {
     /**
      * Eloquent model of the form.
@@ -91,23 +90,23 @@ class Form implements Renderable
     /**
      * Submitted callback.
      *
-     * @var Closure[]
+     * @var Closure
      */
-    protected $submitted = [];
+    protected $submitted;
 
     /**
      * Saving callback.
      *
-     * @var Closure[]
+     * @var Closure
      */
-    protected $saving = [];
+    protected $saving;
 
     /**
      * Saved callback.
      *
-     * @var Closure[]
+     * @var Closure
      */
-    protected $saved = [];
+    protected $saved;
 
     /**
      * Data for save to current model from input.
@@ -136,13 +135,6 @@ class Form implements Renderable
      * @var array
      */
     public static $availableFields = [];
-
-    /**
-     * Form field alias.
-     *
-     * @var array
-     */
-    public static $fieldAlias = [];
 
     /**
      * Ignored saving fields.
@@ -181,15 +173,13 @@ class Form implements Renderable
      * @param $model
      * @param \Closure $callback
      */
-    public function __construct($model, Closure $callback = null)
+    public function __construct($model, Closure $callback)
     {
         $this->model = $model;
 
         $this->builder = new Builder($this);
 
-        if ($callback instanceof Closure) {
-            $callback($this);
-        }
+        $callback($this);
     }
 
     /**
@@ -240,6 +230,21 @@ class Form implements Renderable
     }
 
     /**
+     * @param $id
+     *
+     * @return $this
+     */
+    public function view($id)
+    {
+        $this->builder->setMode(Builder::MODE_VIEW);
+        $this->builder->setResourceId($id);
+
+        $this->setFieldValue($id);
+
+        return $this;
+    }
+
+    /**
      * Use tab to split form.
      *
      * @param string  $title
@@ -279,34 +284,30 @@ class Form implements Renderable
     {
         $ids = explode(',', $id);
 
-        collect($ids)->filter()->each(function ($id) {
-            $this->deleteFiles($id);
-            $this->model()->find($id)->delete();
-        });
+        foreach ($ids as $id) {
+            if (empty($id)) {
+                continue;
+            }
+            $this->deleteFilesAndImages($id);
+            $this->model->find($id)->delete();
+        }
 
         return true;
     }
 
     /**
-     * Remove files in record.
+     * Remove files or images in record.
      *
      * @param $id
      */
-    protected function deleteFiles($id)
+    protected function deleteFilesAndImages($id)
     {
-        // If it's a soft delete, the files in the data will not be deleted.
-        if (in_array(SoftDeletes::class, class_uses($this->model))) {
-            return;
-        }
-
-        $data = $this
-            ->model()
-            ->with($this->getRelations())
+        $data = $this->model->with($this->getRelations())
             ->findOrFail($id)->toArray();
 
         $this->builder->fields()->filter(function ($field) {
             return $field instanceof Field\File;
-        })->each(function (Field\File $file) use ($data) {
+        })->each(function (File $file) use ($data) {
             $file->setOriginal($data);
 
             $file->destroy();
@@ -343,7 +344,7 @@ class Form implements Renderable
             $this->updateRelation($this->relations);
         });
 
-        if (($response = $this->callSaved()) instanceof Response) {
+        if (($response = $this->complete($this->saved)) instanceof Response) {
             return $response;
         }
 
@@ -352,6 +353,20 @@ class Form implements Renderable
         }
 
         return $this->redirectAfterStore();
+    }
+
+    /**
+     * Get RedirectResponse after store.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirectAfterStore()
+    {
+        admin_toastr(trans('admin.save_succeeded'));
+
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(0);
+
+        return redirect($url);
     }
 
     /**
@@ -389,7 +404,7 @@ class Form implements Renderable
             return $response;
         }
 
-        $this->inputs = array_merge($this->removeIgnoredFields($data), $this->inputs);
+        $this->inputs = $this->removeIgnoredFields($data);
 
         if (($response = $this->callSaving()) instanceof Response) {
             return $response;
@@ -429,7 +444,7 @@ class Form implements Renderable
             if (method_exists($this->model, $column)) {
                 $relation = call_user_func([$this->model, $column]);
 
-                if ($relation instanceof Relations\Relation) {
+                if ($relation instanceof Relation) {
                     $relations[$column] = $value;
                 }
             }
@@ -445,10 +460,8 @@ class Form implements Renderable
      */
     protected function callSubmitted()
     {
-        foreach ($this->submitted as $func) {
-            if ($func instanceof Closure && ($ret = call_user_func($func, $this)) instanceof Response) {
-                return $ret;
-            }
+        if ($this->submitted instanceof Closure) {
+            return call_user_func($this->submitted, $this);
         }
     }
 
@@ -459,24 +472,22 @@ class Form implements Renderable
      */
     protected function callSaving()
     {
-        foreach ($this->saving as $func) {
-            if ($func instanceof Closure && ($ret = call_user_func($func, $this)) instanceof Response) {
-                return $ret;
-            }
+        if ($this->saving instanceof Closure) {
+            return call_user_func($this->saving, $this);
         }
     }
 
     /**
      * Callback after saving a Model.
      *
+     * @param Closure|null $callback
+     *
      * @return mixed|null
      */
-    protected function callSaved()
+    protected function complete(Closure $callback = null)
     {
-        foreach ($this->saved as $func) {
-            if ($func instanceof Closure && ($ret = call_user_func($func, $this)) instanceof Response) {
-                return $ret;
-            }
+        if ($callback instanceof Closure) {
+            return $callback($this);
         }
     }
 
@@ -535,7 +546,7 @@ class Form implements Renderable
             $this->updateRelation($this->relations);
         });
 
-        if (($result = $this->callSaved()) instanceof Response) {
+        if (($result = $this->complete($this->saved)) instanceof Response) {
             return $result;
         }
 
@@ -543,58 +554,19 @@ class Form implements Renderable
             return $response;
         }
 
-        return $this->redirectAfterUpdate($id);
-    }
-
-    /**
-     * Get RedirectResponse after store.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectAfterStore()
-    {
-        $resourcesPath = $this->resource(0);
-
-        $key = $this->model->getKey();
-
-        return $this->redirectAfterSaving($resourcesPath, $key);
+        return $this->redirectAfterUpdate();
     }
 
     /**
      * Get RedirectResponse after update.
      *
-     * @param mixed $key
-     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectAfterUpdate($key)
+    protected function redirectAfterUpdate()
     {
-        $resourcesPath = $this->resource(-1);
+        admin_toastr(trans('admin.update_succeeded'));
 
-        return $this->redirectAfterSaving($resourcesPath, $key);
-    }
-
-    /**
-     * Get RedirectResponse after data saving.
-     *
-     * @param string $resourcesPath
-     * @param string $key
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    protected function redirectAfterSaving($resourcesPath, $key)
-    {
-        if (request('after-save') == 1) {
-            // continue editing
-            $url = rtrim($resourcesPath, '/')."/{$key}/edit";
-        } elseif (request('after-save') == 2) {
-            // view resource
-            $url = rtrim($resourcesPath, '/')."/{$key}";
-        } else {
-            $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
-        }
-
-        admin_toastr(trans('admin.save_succeeded'));
+        $url = Input::get(Builder::PREVIOUS_URL_KEY) ?: $this->resource(-1);
 
         return redirect($url);
     }
@@ -687,9 +659,8 @@ class Form implements Renderable
 
             $relation = $this->model->$name();
 
-            $oneToOneRelation = $relation instanceof Relations\HasOne
-                || $relation instanceof Relations\MorphOne
-                || $relation instanceof Relations\BelongsTo;
+            $oneToOneRelation = $relation instanceof \Illuminate\Database\Eloquent\Relations\HasOne
+                || $relation instanceof \Illuminate\Database\Eloquent\Relations\MorphOne;
 
             $prepared = $this->prepareUpdate([$name => $values], $oneToOneRelation);
 
@@ -698,14 +669,13 @@ class Form implements Renderable
             }
 
             switch (get_class($relation)) {
-                case Relations\BelongsToMany::class:
-                case Relations\MorphToMany::class:
+                case \Illuminate\Database\Eloquent\Relations\BelongsToMany::class:
+                case \Illuminate\Database\Eloquent\Relations\MorphToMany::class:
                     if (isset($prepared[$name])) {
                         $relation->sync($prepared[$name]);
                     }
                     break;
-                case Relations\HasOne::class:
-                case Relations\BelongsTo::class:
+                case \Illuminate\Database\Eloquent\Relations\HasOne::class:
 
                     $related = $this->model->$name;
 
@@ -721,7 +691,7 @@ class Form implements Renderable
 
                     $related->save();
                     break;
-                case Relations\MorphOne::class:
+                case \Illuminate\Database\Eloquent\Relations\MorphOne::class:
                     $related = $this->model->$name;
                     if (is_null($related)) {
                         $related = $relation->make();
@@ -731,11 +701,10 @@ class Form implements Renderable
                     }
                     $related->save();
                     break;
-                case Relations\HasMany::class:
-                case Relations\MorphMany::class:
+                case \Illuminate\Database\Eloquent\Relations\HasMany::class:
+                case \Illuminate\Database\Eloquent\Relations\MorphMany::class:
 
                     foreach ($prepared[$name] as $related) {
-                        /** @var Relations\Relation $relation */
                         $relation = $this->model()->$name();
 
                         $keyName = $relation->getRelated()->getKeyName();
@@ -772,7 +741,6 @@ class Form implements Renderable
     {
         $prepared = [];
 
-        /** @var Field $field */
         foreach ($this->builder->fields() as $field) {
             $columns = $field->column();
 
@@ -881,7 +849,7 @@ class Form implements Renderable
      */
     public function submitted(Closure $callback)
     {
-        $this->submitted[] = $callback;
+        $this->submitted = $callback;
     }
 
     /**
@@ -893,19 +861,19 @@ class Form implements Renderable
      */
     public function saving(Closure $callback)
     {
-        $this->saving[] = $callback;
+        $this->saving = $callback;
     }
 
     /**
      * Set saved callback.
      *
-     * @param Closure $callback
+     * @param callable $callback
      *
      * @return void
      */
     public function saved(Closure $callback)
     {
-        $this->saved[] = $callback;
+        $this->saved = $callback;
     }
 
     /**
@@ -1032,7 +1000,6 @@ class Form implements Renderable
     {
         $failedValidators = [];
 
-        /** @var Field $field */
         foreach ($this->builder->fields() as $field) {
             if (!$validator = $field->getValidator($input)) {
                 continue;
@@ -1075,7 +1042,6 @@ class Form implements Renderable
     {
         $relations = $columns = [];
 
-        /** @var Field $field */
         foreach ($this->builder->fields() as $field) {
             $columns[] = $field->column();
         }
@@ -1085,7 +1051,7 @@ class Form implements Renderable
                 list($relation) = explode('.', $column);
 
                 if (method_exists($this->model, $relation) &&
-                    $this->model->$relation() instanceof Relations\Relation
+                    $this->model->$relation() instanceof Relation
                 ) {
                     $relations[] = $relation;
                 }
@@ -1189,12 +1155,10 @@ class Form implements Renderable
      * Disable form submit.
      *
      * @return $this
-     *
-     * @deprecated
      */
     public function disableSubmit()
     {
-        $this->builder()->getFooter()->disableSubmit();
+        $this->builder()->options(['enableSubmit' => false]);
 
         return $this;
     }
@@ -1203,48 +1167,24 @@ class Form implements Renderable
      * Disable form reset.
      *
      * @return $this
-     *
-     * @deprecated
      */
     public function disableReset()
     {
-        $this->builder()->getFooter()->disableReset();
+        $this->builder()->options(['enableReset' => false]);
 
         return $this;
     }
 
     /**
-     * Disable View Checkbox on footer.
+     * Disable form remove reserved fields.
      *
      * @return $this
      */
-    public function disableViewCheck()
+    public function disableRemoveReservedFields()
     {
-        $this->builder()->getFooter()->disableViewCheck();
+        $this->builder()->options(['enableRemoveReservedFields' => false]);
 
         return $this;
-    }
-
-    /**
-     * Disable Editing Checkbox on footer.
-     *
-     * @return $this
-     */
-    public function disableEditingCheck()
-    {
-        $this->builder()->getFooter()->disableEditingCheck();
-
-        return $this;
-    }
-
-    /**
-     * Footer setting for form.
-     *
-     * @param Closure $callback
-     */
-    public function footer(Closure $callback)
-    {
-        call_user_func($callback, $this->builder()->getFooter());
     }
 
     /**
@@ -1262,7 +1202,7 @@ class Form implements Renderable
             $segments = array_slice($segments, 0, $slice);
         }
         // # fix #1768
-        if ($segments[0] == 'http:' && (config('admin.https') || config('admin.secure'))) {
+        if ($segments[0] == 'http:' && config('admin.secure') == true) {
             $segments[0] = 'https:';
         }
 
@@ -1308,52 +1248,52 @@ class Form implements Renderable
     public static function registerBuiltinFields()
     {
         $map = [
-            'button'         => Field\Button::class,
-            'checkbox'       => Field\Checkbox::class,
-            'color'          => Field\Color::class,
-            'currency'       => Field\Currency::class,
-            'date'           => Field\Date::class,
-            'dateRange'      => Field\DateRange::class,
-            'datetime'       => Field\Datetime::class,
-            'dateTimeRange'  => Field\DatetimeRange::class,
-            'datetimeRange'  => Field\DatetimeRange::class,
-            'decimal'        => Field\Decimal::class,
-            'display'        => Field\Display::class,
-            'divider'        => Field\Divide::class,
-            'divide'         => Field\Divide::class,
-            'embeds'         => Field\Embeds::class,
-            'editor'         => Field\Editor::class,
-            'email'          => Field\Email::class,
-            'file'           => Field\File::class,
-            'hasMany'        => Field\HasMany::class,
-            'hidden'         => Field\Hidden::class,
-            'id'             => Field\Id::class,
-            'image'          => Field\Image::class,
-            'ip'             => Field\Ip::class,
-            'map'            => Field\Map::class,
-            'mobile'         => Field\Mobile::class,
-            'month'          => Field\Month::class,
-            'multipleSelect' => Field\MultipleSelect::class,
-            'number'         => Field\Number::class,
-            'password'       => Field\Password::class,
-            'radio'          => Field\Radio::class,
-            'rate'           => Field\Rate::class,
-            'select'         => Field\Select::class,
-            'slider'         => Field\Slider::class,
-            'switch'         => Field\SwitchField::class,
-            'text'           => Field\Text::class,
-            'textarea'       => Field\Textarea::class,
-            'time'           => Field\Time::class,
-            'timeRange'      => Field\TimeRange::class,
-            'url'            => Field\Url::class,
-            'year'           => Field\Year::class,
-            'html'           => Field\Html::class,
-            'tags'           => Field\Tags::class,
-            'icon'           => Field\Icon::class,
-            'multipleFile'   => Field\MultipleFile::class,
-            'multipleImage'  => Field\MultipleImage::class,
-            'captcha'        => Field\Captcha::class,
-            'listbox'        => Field\Listbox::class,
+            'button'         => \Encore\Admin\Form\Field\Button::class,
+            'checkbox'       => \Encore\Admin\Form\Field\Checkbox::class,
+            'color'          => \Encore\Admin\Form\Field\Color::class,
+            'currency'       => \Encore\Admin\Form\Field\Currency::class,
+            'date'           => \Encore\Admin\Form\Field\Date::class,
+            'dateRange'      => \Encore\Admin\Form\Field\DateRange::class,
+            'datetime'       => \Encore\Admin\Form\Field\Datetime::class,
+            'dateTimeRange'  => \Encore\Admin\Form\Field\DatetimeRange::class,
+            'datetimeRange'  => \Encore\Admin\Form\Field\DatetimeRange::class,
+            'decimal'        => \Encore\Admin\Form\Field\Decimal::class,
+            'display'        => \Encore\Admin\Form\Field\Display::class,
+            'divider'        => \Encore\Admin\Form\Field\Divide::class,
+            'divide'         => \Encore\Admin\Form\Field\Divide::class,
+            'embeds'         => \Encore\Admin\Form\Field\Embeds::class,
+            'editor'         => \Encore\Admin\Form\Field\Editor::class,
+            'email'          => \Encore\Admin\Form\Field\Email::class,
+            'file'           => \Encore\Admin\Form\Field\File::class,
+            'hasMany'        => \Encore\Admin\Form\Field\HasMany::class,
+            'hidden'         => \Encore\Admin\Form\Field\Hidden::class,
+            'id'             => \Encore\Admin\Form\Field\Id::class,
+            'image'          => \Encore\Admin\Form\Field\Image::class,
+            'ip'             => \Encore\Admin\Form\Field\Ip::class,
+            'map'            => \Encore\Admin\Form\Field\Map::class,
+            'mobile'         => \Encore\Admin\Form\Field\Mobile::class,
+            'month'          => \Encore\Admin\Form\Field\Month::class,
+            'multipleSelect' => \Encore\Admin\Form\Field\MultipleSelect::class,
+            'number'         => \Encore\Admin\Form\Field\Number::class,
+            'password'       => \Encore\Admin\Form\Field\Password::class,
+            'radio'          => \Encore\Admin\Form\Field\Radio::class,
+            'rate'           => \Encore\Admin\Form\Field\Rate::class,
+            'select'         => \Encore\Admin\Form\Field\Select::class,
+            'slider'         => \Encore\Admin\Form\Field\Slider::class,
+            'switch'         => \Encore\Admin\Form\Field\SwitchField::class,
+            'text'           => \Encore\Admin\Form\Field\Text::class,
+            'textarea'       => \Encore\Admin\Form\Field\Textarea::class,
+            'time'           => \Encore\Admin\Form\Field\Time::class,
+            'timeRange'      => \Encore\Admin\Form\Field\TimeRange::class,
+            'url'            => \Encore\Admin\Form\Field\Url::class,
+            'year'           => \Encore\Admin\Form\Field\Year::class,
+            'html'           => \Encore\Admin\Form\Field\Html::class,
+            'tags'           => \Encore\Admin\Form\Field\Tags::class,
+            'icon'           => \Encore\Admin\Form\Field\Icon::class,
+            'multipleFile'   => \Encore\Admin\Form\Field\MultipleFile::class,
+            'multipleImage'  => \Encore\Admin\Form\Field\MultipleImage::class,
+            'captcha'        => \Encore\Admin\Form\Field\Captcha::class,
+            'listbox'        => \Encore\Admin\Form\Field\Listbox::class,
         ];
 
         foreach ($map as $abstract => $class) {
@@ -1375,19 +1315,6 @@ class Form implements Renderable
     }
 
     /**
-     * Set form field alias.
-     *
-     * @param string $field
-     * @param string $alias
-     *
-     * @return void
-     */
-    public static function alias($field, $alias)
-    {
-        static::$fieldAlias[$alias] =  $field;
-    }
-
-    /**
      * Remove registered field.
      *
      * @param array|string $abstract
@@ -1406,11 +1333,6 @@ class Form implements Renderable
      */
     public static function findFieldClass($method)
     {
-        // If alias exists.
-        if (isset(static::$fieldAlias[$method])) {
-            $method = static::$fieldAlias[$method];
-        }
-
         $class = array_get(static::$availableFields, $method);
 
         if (class_exists($class)) {
@@ -1480,7 +1402,7 @@ class Form implements Renderable
      * @param string $method
      * @param array  $arguments
      *
-     * @return Field
+     * @return Field|void
      */
     public function __call($method, $arguments)
     {
@@ -1493,9 +1415,15 @@ class Form implements Renderable
 
             return $element;
         }
+    }
 
-        admin_error('Error', "Field type [$method] does not exist.");
-
-        return new Field\Nullable();
+    /**
+     * Render the contents of the form when casting to string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->render();
     }
 }

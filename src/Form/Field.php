@@ -90,13 +90,6 @@ class Field implements Renderable
     protected $options = [];
 
     /**
-     * Checked for specify elements.
-     *
-     * @var array
-     */
-    protected $checked = [];
-
-    /**
      * Validation rules.
      *
      * @var string|\Closure
@@ -194,13 +187,6 @@ class Field implements Renderable
      * @var bool
      */
     protected $horizontal = true;
-
-    /**
-     * column data format.
-     *
-     * @var \Closure
-     */
-    protected $customFormat = null;
 
     /**
      * @var bool
@@ -341,23 +327,6 @@ class Field implements Renderable
         }
 
         $this->value = array_get($data, $this->column);
-        if (isset($this->customFormat) && $this->customFormat instanceof \Closure) {
-            $this->value = call_user_func($this->customFormat, $this->value);
-        }
-    }
-
-    /**
-     * custom format form column data when edit.
-     *
-     * @param \Closure $call
-     *
-     * @return $this
-     */
-    public function customFormat(\Closure $call)
-    {
-        $this->customFormat = $call;
-
-        return $this;
     }
 
     /**
@@ -429,24 +398,6 @@ class Field implements Renderable
     }
 
     /**
-     * Set the field option checked.
-     *
-     * @param array $checked
-     *
-     * @return $this
-     */
-    public function checked($checked = [])
-    {
-        if ($checked instanceof Arrayable) {
-            $checked = $checked->toArray();
-        }
-
-        $this->checked = array_merge($this->checked, $checked);
-
-        return $this;
-    }
-
-    /**
      * Get or set rules.
      *
      * @param null  $rules
@@ -498,10 +449,6 @@ class Field implements Renderable
      */
     protected function removeRule($rule)
     {
-        if (!is_string($this->rules)) {
-            return;
-        }
-
         $pattern = "/{$rule}[^\|]?(\||$)/";
         $this->rules = preg_replace($pattern, '', $this->rules, -1);
     }
@@ -716,34 +663,12 @@ class Field implements Renderable
         return $this;
     }
 
-
-    /**
-     * Set the field automatically get focus.
-     *
-     * @return Field
-     */
-    public function autofocus()
-    {
-        return $this->attribute('autofocus', true);
-    }
-
-
     /**
      * Set the field as readonly mode.
      *
      * @return Field
      */
     public function readOnly()
-    {
-        return $this->attribute('readonly', true);
-    }
-
-    /**
-     * Set field as disabled.
-     *
-     * @return Field
-     */
-    public function disable()
     {
         return $this->attribute('disabled', true);
     }
@@ -881,7 +806,7 @@ class Field implements Renderable
     /**
      * Get element class selector.
      *
-     * @return string|array
+     * @return string
      */
     protected function getElementClassSelector()
     {
@@ -983,7 +908,7 @@ class Field implements Renderable
      *
      * @return array
      */
-    public function variables()
+    protected function variables()
     {
         return array_merge($this->variables, [
             'id'          => $this->id,
@@ -1027,27 +952,13 @@ class Field implements Renderable
     }
 
     /**
-     * If this field should render.
-     *
-     * @return bool
-     */
-    protected function shouldRender()
-    {
-        if (!$this->display) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Render this filed.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function render()
     {
-        if (! $this->shouldRender()) {
+        if (!$this->display) {
             return '';
         }
 

@@ -65,33 +65,11 @@ class Tab
     {
         call_user_func($content, $this->form);
 
-        $fields = clone $this->form->builder()->fields();
+        $all = $this->form->builder()->fields();
 
-        $all = $fields->toArray();
+        $fields = $all->slice($this->offset);
 
-        foreach ($this->form->rows as $row) {
-            $rowFields = array_map(function ($field) {
-                return $field['element'];
-            }, $row->getFields());
-
-            $match = false;
-
-            foreach ($rowFields as $field) {
-                if (($index = array_search($field, $all)) !== false) {
-                    if (!$match) {
-                        $fields->put($index, $row);
-                    } else {
-                        $fields->pull($index);
-                    }
-
-                    $match = true;
-                }
-            }
-        }
-
-        $fields = $fields->slice($this->offset);
-
-        $this->offset += $fields->count();
+        $this->offset = $all->count();
 
         return $fields;
     }

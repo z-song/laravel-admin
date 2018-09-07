@@ -1,14 +1,14 @@
 {
-    "name": "encore/laravel-admin",
-    "description": "laravel admin",
+    "name": "moyisoft/laravel-admin",
+    "description": "moyisoft laravel admin",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "form"],
-    "homepage": "https://github.com/z-song/laravel-admin",
+    "homepage": "https://github.com/dy86/laravel-admin",
     "license": "MIT",
     "authors": [
         {
-            "name": "zsong",
-            "email": "zosong@126.com"
+            "name": "dy86",
+            "email": "devyang@qq.com"
         }
     ],
     "require": {
@@ -57,7 +57,6 @@
             "aliases": {
                 "Admin": "Encore\\Admin\\Facades\\Admin"
             }
-
         }
     }
 }

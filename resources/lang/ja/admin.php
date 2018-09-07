@@ -20,7 +20,6 @@ return [
     'remove'       => '消去',
     'edit'         => '編集',
     'view'         => '表示',
-    'detail'       => '詳細',
     'browse'       => '参照',
     'reset'        => 'リセット',
     'export'       => '出力',
@@ -31,7 +30,6 @@ return [
     'expand'       => '展開',
     'collapse'     => '縮小',
     'filter'       => 'フィルタ',
-    'search'       => 'サーチ',
     'close'        => '閉じる',
     'show'         => '表示',
     'entries'      => '件',
@@ -111,6 +109,4 @@ return [
         'filter_clear'       => '全て表示',
         'filter_placeholder' => 'フィルタ',
     ],
-
-    'menu_titles' => [],
 ];

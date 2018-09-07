@@ -42,7 +42,6 @@ class Text extends Presenter
             'placeholder' => $this->placeholder,
             'icon'        => $this->icon,
             'type'        => $this->type,
-            'group'       => $this->filter->group,
         ];
     }
 

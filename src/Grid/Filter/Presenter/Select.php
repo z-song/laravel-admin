@@ -4,8 +4,6 @@ namespace Encore\Admin\Grid\Filter\Presenter;
 
 use Encore\Admin\Facades\Admin;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 
 class Select extends Presenter
 {
@@ -15,11 +13,6 @@ class Select extends Presenter
      * @var array
      */
     protected $options = [];
-
-    /**
-     * @var array
-     */
-    protected $config = [];
 
     /**
      * @var string
@@ -34,23 +27,6 @@ class Select extends Presenter
     public function __construct($options)
     {
         $this->options = $options;
-    }
-
-    /**
-     * Set config for select2.
-     *
-     * all configurations see https://select2.org/configuration/options-api
-     *
-     * @param string $key
-     * @param mixed  $val
-     *
-     * @return $this
-     */
-    public function config($key, $val)
-    {
-        $this->config[$key] = $val;
-
-        return $this;
     }
 
     /**
@@ -89,46 +65,6 @@ SCRIPT;
     }
 
     /**
-     * Load options from current selected resource(s).
-     *
-     * @param string $model
-     * @param string $idField
-     * @param string $textField
-     *
-     * @return $this
-     */
-    public function model($model, $idField = 'id', $textField = 'name')
-    {
-        if (!class_exists($model)
-            || !in_array(Model::class, class_parents($model))
-        ) {
-            throw new \InvalidArgumentException("[$model] must be a valid model class");
-        }
-
-        $this->options = function ($value) use ($model, $idField, $textField) {
-            if (empty($value)) {
-                return [];
-            }
-
-            $resources = [];
-
-            if (is_array($value)) {
-                if (Arr::isAssoc($value)) {
-                    $resources[] = array_get($value, $idField);
-                } else {
-                    $resources = array_column($value, $idField);
-                }
-            } else {
-                $resources[] = $value;
-            }
-
-            return $model::find($resources)->pluck($textField, $idField)->toArray();
-        };
-
-        return $this;
-    }
-
-    /**
      * Load options from remote.
      *
      * @param string $url
@@ -158,23 +94,15 @@ EOT;
      * Load options from ajax.
      *
      * @param string $resourceUrl
-     * @param $idField
-     * @param $textField
      */
-    public function ajax($resourceUrl, $idField = 'id', $textField = 'text')
+    public function ajax($resourceUrl)
     {
-        $configs = array_merge([
-            'allowClear'         => true,
-            'placeholder'        => trans('admin.choose'),
-            'minimumInputLength' => 1,
-        ], $this->config);
-
-        $configs = json_encode($configs);
-        $configs = substr($configs, 1, strlen($configs) - 2);
+        $placeholder = trans('admin.choose');
 
         $this->script = <<<EOT
 
 $(".{$this->getElementClass()}").select2({
+  placeholder: "$placeholder",
   ajax: {
     url: "$resourceUrl",
     dataType: 'json',
@@ -189,11 +117,7 @@ $(".{$this->getElementClass()}").select2({
       params.page = params.page || 1;
 
       return {
-        results: $.map(data.data, function (d) {
-                   d.id = d.$idField;
-                   d.text = d.$textField;
-                   return d;
-                }),
+        results: data.data,
         pagination: {
           more: data.next_page_url
         }
@@ -201,7 +125,7 @@ $(".{$this->getElementClass()}").select2({
     },
     cache: true
   },
-  $configs,
+  minimumInputLength: 1,
   escapeMarkup: function (markup) {
       return markup;
   }

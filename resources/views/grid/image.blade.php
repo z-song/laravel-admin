@@ -1,23 +1,22 @@
 <div class="box">
-    @if(isset($title))
-        <div class="box-header with-border">
-            <h3 class="box-title"> {{ $title }}</h3>
-        </div>
-    @endif
+    <div class="box-header">
 
-    <div class="box-header with-border">
-        <div class="pull-right">
+        <h3 class="box-title"></h3>
+
+        <span style="position: absolute;left: 10px;top: 5px;">
+            {!! $grid->renderHeaderTools() !!}
+        </span>
+
+        <div class="box-tools">
+            {!! $grid->renderFilter() !!}
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}
         </div>
-        <span>
-            {!! $grid->renderHeaderTools() !!}
-        </span>
+
     </div>
+    <!-- /.box-header -->
 
-    {!! $grid->renderFilter() !!}
-
-    <div class="box-body table-responsive no-padding">
+    <div class="box-footer">
         <ul class="mailbox-attachments clearfix">
             @foreach($grid->rows() as $row)
                 <li>

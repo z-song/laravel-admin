@@ -4,7 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 class Email extends Text
 {
-    protected $rules = 'nullable|email';
+    protected $rules = 'email';
 
     public function render()
     {

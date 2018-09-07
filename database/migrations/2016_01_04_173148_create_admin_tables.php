@@ -84,7 +84,7 @@ class CreateAdminTables extends Migration
             $table->integer('user_id');
             $table->string('path');
             $table->string('method', 10);
-            $table->string('ip');
+            $table->string('ip', 15);
             $table->text('input');
             $table->index('user_id');
             $table->timestamps();

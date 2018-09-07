@@ -1,4 +1,4 @@
-<div class="input-group input-group-sm">
+<div class="input-group">
     @foreach($options as $option => $label)
         @if(!$inline)<div class="radio">@endif
             <label @if($inline)class="radio-inline"@endif>

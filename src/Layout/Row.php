@@ -29,8 +29,6 @@ class Row implements Buildable
      */
     public function column($width, $content)
     {
-        $width = $width < 1 ? round(12 * $width) : $width;
-
         $column = new Column($content, $width);
 
         $this->addColumn($column);

@@ -34,7 +34,7 @@ class BatchActions extends AbstractTool
      */
     protected function appendDefaultAction()
     {
-        $this->add(new BatchDelete(trans('admin.delete')));
+        $this->add(trans('admin.delete'), new BatchDelete());
     }
 
     /**
@@ -52,24 +52,18 @@ class BatchActions extends AbstractTool
     /**
      * Add a batch action.
      *
-     * @param $title
-     * @param BatchAction|null $action
+     * @param string      $title
+     * @param BatchAction $abstract
      *
      * @return $this
      */
-    public function add($title, BatchAction $action = null)
+    public function add($title, BatchAction $abstract)
     {
         $id = $this->actions->count();
 
-        if (func_num_args() == 1) {
-            $action = $title;
-            $action->setId($id);
-        } elseif (func_num_args() == 2) {
-            $action->setId($id);
-            $action->setTitle($title);
-        }
+        $abstract->setId($id);
 
-        $this->actions->push($action);
+        $this->actions->push(compact('id', 'title', 'abstract'));
 
         return $this;
     }
@@ -84,9 +78,10 @@ class BatchActions extends AbstractTool
         Admin::script($this->script());
 
         foreach ($this->actions as $action) {
-            $action->setGrid($this->grid);
+            $abstract = $action['abstract'];
+            $abstract->setResource($this->grid->resource());
 
-            Admin::script($action->script());
+            Admin::script($abstract->script());
         }
     }
 
@@ -97,15 +92,15 @@ class BatchActions extends AbstractTool
      */
     protected function script()
     {
-        return <<<EOT
+        return <<<'EOT'
 
-$('.{$this->grid->getSelectAllName()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});
+$('.grid-select-all').iCheck({checkboxClass:'icheckbox_minimal-blue'});
 
-$('.{$this->grid->getSelectAllName()}').on('ifChanged', function(event) {
+$('.grid-select-all').on('ifChanged', function(event) {
     if (this.checked) {
-        $('.{$this->grid->getGridRowName()}-checkbox').iCheck('check');
+        $('.grid-row-checkbox').iCheck('check');
     } else {
-        $('.{$this->grid->getGridRowName()}-checkbox').iCheck('uncheck');
+        $('.grid-row-checkbox').iCheck('uncheck');
     }
 });
 
@@ -129,11 +124,6 @@ EOT;
 
         $this->setUpScripts();
 
-        $data = [
-            'actions'       => $this->actions,
-            'selectAllName' => $this->grid->getSelectAllName(),
-        ];
-
-        return view('admin::grid.batch-actions', $data)->render();
+        return view('admin::grid.batch-actions', ['actions' => $this->actions])->render();
     }
 }

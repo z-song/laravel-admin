@@ -4,19 +4,23 @@ namespace DummyNamespace;
 
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\Dashboard;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
 
 class HomeController extends Controller
 {
-    public function index(Content $content)
+    public function index()
     {
-        return $content
-            ->header('Dashboard')
-            ->description('Description...')
-            ->row(Dashboard::title())
-            ->row(function (Row $row) {
+        return Admin::content(function (Content $content) {
+
+            $content->header('Dashboard');
+            $content->description('Description...');
+
+            $content->row(Dashboard::title());
+
+            $content->row(function (Row $row) {
 
                 $row->column(4, function (Column $column) {
                     $column->append(Dashboard::environment());
@@ -30,5 +34,6 @@ class HomeController extends Controller
                     $column->append(Dashboard::dependencies());
                 });
             });
+        });
     }
 }

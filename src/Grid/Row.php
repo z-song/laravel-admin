@@ -2,11 +2,6 @@
 
 namespace Encore\Admin\Grid;
 
-use Closure;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Renderable;
-
 class Row
 {
     /**
@@ -100,6 +95,8 @@ class Row
      * Set attributes.
      *
      * @param array $attributes
+     *
+     * @return null
      */
     public function setAttributes(array $attributes)
     {
@@ -109,7 +106,7 @@ class Row
     /**
      * Set style of the row.
      *
-     * @param array|string $style
+     * @param $style
      */
     public function style($style)
     {
@@ -137,9 +134,9 @@ class Row
     /**
      * Getter.
      *
-     * @param mixed $attr
+     * @param $attr
      *
-     * @return mixed
+     * @return null
      */
     public function __get($attr)
     {
@@ -149,8 +146,8 @@ class Row
     /**
      * Get or set value of column in this row.
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param $name
+     * @param null $value
      *
      * @return $this|mixed
      */
@@ -159,10 +156,10 @@ class Row
         if (is_null($value)) {
             $column = array_get($this->data, $name);
 
-            return $this->output($column);
+            return $this->dump($column);
         }
 
-        if ($value instanceof Closure) {
+        if ($value instanceof \Closure) {
             $value = $value->call($this, $this->column($name));
         }
 
@@ -172,30 +169,18 @@ class Row
     }
 
     /**
-     * Output column value.
+     * Dump output column vars.
      *
-     * @param mixed $value
+     * @param mixed $var
      *
      * @return mixed|string
      */
-    protected function output($value)
+    protected function dump($var)
     {
-        if ($value instanceof Renderable) {
-            $value = $value->render();
+        if (!is_scalar($var)) {
+            return '<pre>'.var_export($var, true).'</pre>';
         }
 
-        if ($value instanceof Htmlable) {
-            $value = $value->toHtml();
-        }
-
-        if ($value instanceof Jsonable) {
-            $value = $value->toJson();
-        }
-
-        if (!is_null($value) && !is_scalar($value)) {
-            return sprintf('<pre>%s</pre>', var_export($value, true));
-        }
-
-        return $value;
+        return $var;
     }
 }

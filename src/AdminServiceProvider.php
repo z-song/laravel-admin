@@ -11,15 +11,11 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
-        Console\AdminCommand::class,
-        Console\MakeCommand::class,
-        Console\MenuCommand::class,
-        Console\InstallCommand::class,
-        Console\UninstallCommand::class,
-        Console\ImportCommand::class,
-        Console\CreateUserCommand::class,
-        Console\ResetPasswordCommand::class,
-        Console\ExtendCommand::class,
+        'Encore\Admin\Console\MakeCommand',
+        'Encore\Admin\Console\MenuCommand',
+        'Encore\Admin\Console\InstallCommand',
+        'Encore\Admin\Console\UninstallCommand',
+        'Encore\Admin\Console\ImportCommand',
     ];
 
     /**
@@ -28,11 +24,11 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $routeMiddleware = [
-        'admin.auth'       => Middleware\Authenticate::class,
-        'admin.pjax'       => Middleware\Pjax::class,
-        'admin.log'        => Middleware\LogOperation::class,
-        'admin.permission' => Middleware\Permission::class,
-        'admin.bootstrap'  => Middleware\Bootstrap::class,
+        'admin.auth'       => \Encore\Admin\Middleware\Authenticate::class,
+        'admin.pjax'       => \Encore\Admin\Middleware\Pjax::class,
+        'admin.log'        => \Encore\Admin\Middleware\LogOperation::class,
+        'admin.permission' => \Encore\Admin\Middleware\Permission::class,
+        'admin.bootstrap'  => \Encore\Admin\Middleware\Bootstrap::class,
     ];
 
     /**

@@ -20,7 +20,6 @@ return [
     'remove'       => 'Remover',
     'edit'         => 'Editar',
     'view'         => 'Visualizar',
-    'detail'       => 'Detalhe',
     'browse'       => 'Escolher',
     'reset'        => 'Resetar',
     'export'       => 'Exportar',
@@ -31,7 +30,6 @@ return [
     'expand'       => 'Expandir',
     'collapse'     => 'Diminuir',
     'filter'       => 'Filtrar',
-    'search'       => 'Pesquisa',
     'close'        => 'Fechar',
     'show'         => 'Mostrar',
     'entries'      => 'Entradas',
@@ -43,7 +41,6 @@ return [
     'back'              => 'Voltar',
     'back_to_list'      => 'Voltar para Listagem',
     'submit'            => 'Submeter',
-    'continue_editing'  => 'Continuar editando',
     'menu'              => 'Menu',
     'input'             => 'Entrada',
     'succeeded'         => 'Completado com Êxito',
@@ -112,6 +109,4 @@ return [
         'filter_clear'       => 'Mostrar tudo',
         'filter_placeholder' => 'Filtrar',
     ],
-
-    'menu_titles' => [],
 ];

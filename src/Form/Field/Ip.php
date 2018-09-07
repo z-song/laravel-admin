@@ -4,7 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 class Ip extends Text
 {
-    protected $rules = 'nullable|ip';
+    protected $rules = 'ip';
 
     protected static $js = [
         '/vendor/laravel-admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',

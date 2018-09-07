@@ -8,11 +8,6 @@ use Encore\Admin\Grid;
 class ExportButton extends AbstractTool
 {
     /**
-     * @var Grid
-     */
-    protected $grid;
-
-    /**
      * Create a new Export button instance.
      *
      * @param Grid $grid
@@ -27,12 +22,12 @@ class ExportButton extends AbstractTool
      */
     protected function setUpScripts()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 
-$('.{$this->grid->getExportSelectedName()}').click(function (e) {
+$('.export-selected').click(function (e) {
     e.preventDefault();
     
-    var rows = {$this->grid->getSelectedRowsName()}().join(',');
+    var rows = selectedRows().join(',');
     if (!rows) {
         return false;
     }
@@ -69,17 +64,18 @@ SCRIPT;
         return <<<EOT
 
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a class="btn btn-sm btn-twitter" title="{$export}"><i class="fa fa-download"></i><span class="hidden-xs"> {$export}</span></a>
-    <button type="button" class="btn btn-sm btn-twitter dropdown-toggle" data-toggle="dropdown">
+    <button class="btn btn-sm btn-twitter dropdown-toggle" type="button" data-toggle="dropdown">
+        <i class="fa fa-download"></i> {$export}
         <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="{$this->grid->getExportUrl('all')}" target="_blank">{$all}</a></li>
-        <li><a href="{$this->grid->getExportUrl('page', $page)}" target="_blank">{$currentPage}</a></li>
-        <li><a href="{$this->grid->getExportUrl('selected', '__rows__')}" target="_blank" class='{$this->grid->getExportSelectedName()}'>{$selectedRows}</a></li>
+        <li><a href="{$this->grid->exportUrl('all')}" target="_blank">{$all}</a></li>
+        <li><a href="{$this->grid->exportUrl('page', $page)}" target="_blank">{$currentPage}</a></li>
+        <li><a href="{$this->grid->exportUrl('selected', '__rows__')}" target="_blank" class='export-selected'>{$selectedRows}</a></li>
     </ul>
 </div>
+&nbsp;&nbsp;
+
 EOT;
     }
 }
