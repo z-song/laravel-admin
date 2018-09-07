@@ -20,6 +20,7 @@ return [
     'remove'       => 'Usuń',
     'edit'         => 'Edytuj',
     'view'         => 'Zobacz',
+    'detail'       => 'Szczegół',
     'reset'        => 'Resetuj',
     'export'       => 'Eksportuj',
     'batch_delete' => 'Usuń wsadowo',
@@ -29,6 +30,7 @@ return [
     'expand'       => 'Rozwiń',
     'collapse'     => 'Zwiń',
     'filter'       => 'Filtruj',
+    'search'       => 'Szukaj',
     'close'        => 'Zamknij',
     'show'         => 'Wyświetl',
     'items'        => 'element',
@@ -80,4 +82,6 @@ return [
     'pagination' => [
         'range' => 'Wyświetlono :first do :last z wszystkich :total',
     ],
+
+    'menu_titles' => [],
 ];

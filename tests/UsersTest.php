@@ -40,7 +40,7 @@ class UsersTest extends TestCase
         // assign role to user
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
-            ->submitForm('Save', ['roles' => [1]])
+            ->submitForm('Submit', ['roles' => [1]])
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 1]);
 
@@ -65,7 +65,7 @@ class UsersTest extends TestCase
     {
         $this->visit('admin/auth/users/'.$this->user->id.'/edit')
             ->see('Create')
-            ->submitForm('Save', ['name' => 'test', 'roles' => [1]])
+            ->submitForm('Submit', ['name' => 'test', 'roles' => [1]])
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.users_table'), ['name' => 'test']);
     }
@@ -82,7 +82,7 @@ class UsersTest extends TestCase
 
         $this->visit('admin/auth/users/'.$this->user->id.'/edit')
             ->see('Create')
-            ->submitForm('Save', $data)
+            ->submitForm('Submit', $data)
             ->seePageIs('admin/auth/users')
             ->visit('admin/auth/logout')
             ->dontSeeIsAuthenticated('admin')

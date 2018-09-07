@@ -44,6 +44,20 @@ $router->resource('users', UserController::class);
 
 > 其中`uri`填写不包含路由前缀的的路径部分，比如完整路径是`http://localhost:8000/admin/demo/users`, 那么就填`demo/users`，如果要添加外部链接，只要填写完整的url即可，比如`http://laravel-admin.org/`.
 
+### 菜单翻译
+
+在您的语言文件的menu_titles索引中追加菜单标题。
+例如“工作单位”标题：
+
+在resources/lang/es/admin.php中
+```php
+...
+// 用_小写并用_替换空格
+'menu_titles' => [
+    'work_units' => 'Unidades de trabajo'
+],
+```
+
 ## 创建表格表单
 
 剩下的工作就是构建数据表格和表单了，打开 `app/Admin/Contollers/UserController.php`,找到`form()`和`grid()`方法，然添加构建代码更多详细使用请查看[model-grid](/zh/model-grid.md)和[model-form](/zh/model-form.md)。

@@ -10,6 +10,7 @@ use Encore\Admin\Grid\Filter\Presenter\Presenter;
 use Encore\Admin\Grid\Filter\Presenter\Radio;
 use Encore\Admin\Grid\Filter\Presenter\Select;
 use Encore\Admin\Grid\Filter\Presenter\Text;
+use Illuminate\Support\Collection;
 
 /**
  * Class AbstractFilter.
@@ -82,6 +83,11 @@ abstract class AbstractFilter
     protected $view = 'admin::filter.where';
 
     /**
+     * @var Collection
+     */
+    public $group;
+
+    /**
      * AbstractFilter constructor.
      *
      * @param $column
@@ -132,15 +138,17 @@ abstract class AbstractFilter
         $columns = explode('.', $column);
 
         if (count($columns) == 1) {
-            return $columns[0];
+            $name = $columns[0];
+        } else {
+            $name = array_shift($columns);
+            foreach ($columns as $column) {
+                $name .= "[$column]";
+            }
         }
 
-        $name = array_shift($columns);
-        foreach ($columns as $column) {
-            $name .= "[$column]";
-        }
+        $parenName = $this->parent->getName();
 
-        return $name;
+        return $parenName ? "{$parenName}_{$name}" : $name;
     }
 
     /**
@@ -388,7 +396,9 @@ abstract class AbstractFilter
      */
     public function getColumn()
     {
-        return $this->column;
+        $parenName = $this->parent->getName();
+
+        return $parenName ? "{$parenName}_{$this->column}" : $this->column;
     }
 
     /**

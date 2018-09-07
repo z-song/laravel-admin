@@ -97,12 +97,12 @@ class ImageUploadTest extends TestCase
             ->seeElement('input[name=image5]')
             ->seeElement('input[name=image6]')
             ->seeInElement('button[type=reset]', 'Reset')
-            ->seeInElement('button[type=submit]', 'Save');
+            ->seeInElement('button[type=submit]', 'Submit');
 
         $this->attach(__DIR__.'/assets/test.jpg', 'image3')
             ->attach(__DIR__.'/assets/test.jpg', 'image4')
             ->attach(__DIR__.'/assets/test.jpg', 'image5')
-            ->press('Save');
+            ->press('Submit');
 
         $new = Image::first();
 

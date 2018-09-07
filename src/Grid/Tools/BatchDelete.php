@@ -4,6 +4,11 @@ namespace Encore\Admin\Grid\Tools;
 
 class BatchDelete extends BatchAction
 {
+    public function __construct($title)
+    {
+        $this->title = $title;
+    }
+
     /**
      * Script of batch delete action.
      */
@@ -17,37 +22,42 @@ class BatchDelete extends BatchAction
 
 $('{$this->getElementClass()}').on('click', function() {
 
-    var id = selectedRows().join();
+    var id = {$this->grid->getSelectedRowsName()}().join();
 
     swal({
-      title: "$deleteConfirm",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "$confirm",
-      closeOnConfirm: false,
-      cancelButtonText: "$cancel"
-    },
-    function(){
-        $.ajax({
-            method: 'post',
-            url: '{$this->resource}/' + id,
-            data: {
-                _method:'delete',
-                _token:'{$this->getToken()}'
-            },
-            success: function (data) {
-                $.pjax.reload('#pjax-container');
+        title: "$deleteConfirm",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "$confirm",
+        showLoaderOnConfirm: true,
+        cancelButtonText: "$cancel",
+        preConfirm: function() {
+            return new Promise(function(resolve) {
+                $.ajax({
+                    method: 'post',
+                    url: '{$this->resource}/' + id,
+                    data: {
+                        _method:'delete',
+                        _token:'{$this->getToken()}'
+                    },
+                    success: function (data) {
+                        $.pjax.reload('#pjax-container');
 
-                if (typeof data === 'object') {
-                    if (data.status) {
-                        swal(data.message, '', 'success');
-                    } else {
-                        swal(data.message, '', 'error');
+                        resolve(data);
                     }
-                }
+                });
+            });
+        }
+    }).then(function(result) {
+        var data = result.value;
+        if (typeof data === 'object') {
+            if (data.status) {
+                swal(data.message, '', 'success');
+            } else {
+                swal(data.message, '', 'error');
             }
-        });
+        }
     });
 });
 

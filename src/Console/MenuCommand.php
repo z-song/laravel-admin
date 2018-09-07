@@ -19,7 +19,7 @@ class MenuCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Show the admin menu.';
+    protected $description = 'Show the admin menu';
 
     /**
      * Execute the console command.

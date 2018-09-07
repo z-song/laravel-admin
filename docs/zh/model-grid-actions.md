@@ -1,11 +1,12 @@
 # 模型表格行操作
 
-`model-grid`默认有两个行操作`编辑`和`删除`，可以通过下面的方式关闭它们：
+`model-grid`默认有三个行操作`编辑`、`删除`和`详情`，可以通过下面的方式关闭它们：
 
 ```php
  $grid->actions(function ($actions) {
     $actions->disableDelete();
     $actions->disableEdit();
+    $actions->disableView();
 });
 ```
 可以通过传入的`$actions`参数来获取当前行的数据：

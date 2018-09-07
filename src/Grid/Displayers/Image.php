@@ -17,7 +17,7 @@ class Image extends AbstractDisplayer
             if (url()->isValidUrl($path)) {
                 $src = $path;
             } elseif ($server) {
-                $src = $server.$path;
+                $src = rtrim($server, '/').'/'.ltrim($path, '/');
             } else {
                 $src = Storage::disk(config('admin.upload.disk'))->url($path);
             }

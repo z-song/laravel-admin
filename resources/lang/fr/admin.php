@@ -20,6 +20,7 @@ return [
     'remove'       => 'Enlèver',
     'edit'         => 'Editer',
     'view'         => 'Voir',
+    'detail'       => 'Détail',
     'browse'       => 'Naviguer',
     'reset'        => 'Reset',
     'export'       => 'Exporter',
@@ -30,6 +31,7 @@ return [
     'expand'       => 'Déplier',
     'collapse'     => 'Replier',
     'filter'       => 'Filtre',
+    'search'       => 'Chercher',
     'close'        => 'Fermer',
     'show'         => 'Affiche',
     'entries'      => 'lignes',
@@ -109,4 +111,6 @@ return [
         'filter_clear'       => 'Affichez tous',
         'filter_placeholder' => 'Filtre',
     ],
+
+    'menu_titles' => [],
 ];

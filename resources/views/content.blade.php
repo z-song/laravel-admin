@@ -3,8 +3,8 @@
 @section('content')
     <section class="content-header">
         <h1>
-            {{ $header or trans('admin.title') }}
-            <small>{{ $description or trans('admin.description') }}</small>
+            {{ $header ?: trans('admin.title') }}
+            <small>{{ $description ?: trans('admin.description') }}</small>
         </h1>
 
         <!-- breadcrumb start -->
@@ -38,8 +38,7 @@
 
     <section class="content">
 
-        @include('admin::partials.error')
-        @include('admin::partials.success')
+        @include('admin::partials.alerts')
         @include('admin::partials.exception')
         @include('admin::partials.toastr')
 
