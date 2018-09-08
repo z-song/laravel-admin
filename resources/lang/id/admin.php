@@ -3,7 +3,7 @@
 return [
     'online'                => 'Daring',
     'login'                 => 'Masuk',
-    'logout'                => 'Daftar',
+    'logout'                => 'Keluar',
     'setting'               => 'Pengaturan',
     'name'                  => 'Nama',
     'username'              => 'Username',
