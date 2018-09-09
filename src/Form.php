@@ -1384,7 +1384,7 @@ class Form implements Renderable
      */
     public static function alias($field, $alias)
     {
-        static::$fieldAlias[$alias] =  $field;
+        static::$fieldAlias[$alias] = $field;
     }
 
     /**

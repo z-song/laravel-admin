@@ -716,7 +716,6 @@ class Field implements Renderable
         return $this;
     }
 
-
     /**
      * Set the field automatically get focus.
      *
@@ -726,7 +725,6 @@ class Field implements Renderable
     {
         return $this->attribute('autofocus', true);
     }
-
 
     /**
      * Set the field as readonly mode.
@@ -1047,7 +1045,7 @@ class Field implements Renderable
      */
     public function render()
     {
-        if (! $this->shouldRender()) {
+        if (!$this->shouldRender()) {
             return '';
         }
 
