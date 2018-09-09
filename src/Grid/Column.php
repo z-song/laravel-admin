@@ -366,6 +366,7 @@ class Column
             if (($value instanceof static) &&
                 ($last = array_pop($this->displayCallbacks))
             ) {
+                $last = $this->bindOriginalRow($last, $key);
                 $value = call_user_func($last, $previous);
             }
         }
