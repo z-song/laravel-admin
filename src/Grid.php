@@ -156,7 +156,7 @@ class Grid
     ];
 
     /**
-     * @var Tools\Footer
+     * @var Closure
      */
     protected $footer;
 
@@ -769,7 +769,7 @@ class Grid
      *
      * @param Closure|null $closure
      *
-     * @return $this|Tools\Footer
+     * @return Closure
      */
     public function footer(Closure $closure = null)
     {
@@ -793,7 +793,7 @@ class Grid
             return '';
         }
 
-        return new Tools\Footer($this);
+        return (new Tools\Footer($this))->render();
     }
 
     /**
