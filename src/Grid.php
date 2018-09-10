@@ -489,12 +489,14 @@ class Grid
             return;
         }
 
-        $data = $this->processFilter();
+        $collection = $this->processFilter(false);
+
+        $data = $collection->toArray();
 
         $this->prependRowSelectorColumn();
         $this->appendActionsColumn();
 
-        Column::setOriginalGridData($data);
+        Column::setOriginalGridModels($collection);
 
         $this->columns->map(function (Column $column) use (&$data) {
             $data = $column->fill($data);
@@ -534,15 +536,16 @@ class Grid
     /**
      * Process the grid filter.
      *
-     * @return array
+     * @param bool $toArray
+     * @return array|Collection|mixed
      */
-    public function processFilter()
+    public function processFilter($toArray = true)
     {
         if ($this->builder) {
             call_user_func($this->builder, $this);
         }
 
-        return $this->filter->execute();
+        return $this->filter->execute($toArray);
     }
 
     /**

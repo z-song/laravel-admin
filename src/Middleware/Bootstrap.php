@@ -19,7 +19,7 @@ class Bootstrap
             require $bootstrap;
         }
 
-        if (! empty(Admin::$booting)) {
+        if (!empty(Admin::$booting)) {
             foreach (Admin::$booting as $callable) {
                 call_user_func($callable);
             }
@@ -27,7 +27,7 @@ class Bootstrap
 
         $this->injectFormAssets();
 
-        if (! empty(Admin::$booted)) {
+        if (!empty(Admin::$booted)) {
             foreach (Admin::$booted as $callable) {
                 call_user_func($callable);
             }
