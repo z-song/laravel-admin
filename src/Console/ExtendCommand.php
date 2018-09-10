@@ -80,7 +80,7 @@ class ExtendCommand extends Command
         }
 
         if (!file_exists($this->extensionDir)) {
-            goto InputExtensionDir;
+            $this->makeDir();
         }
 
         $this->package = $this->argument('extension');
@@ -297,7 +297,7 @@ TREE;
      *
      * @param array|string $paths
      */
-    protected function makeDir($paths)
+    protected function makeDir($paths = '')
     {
         foreach ((array) $paths as $path) {
             $path = $this->extensionPath($path);

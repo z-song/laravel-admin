@@ -8,8 +8,8 @@
 <p align="center">
 <a href="http://laravel-admin.org/docs">Documentation</a> |
 <a href="http://laravel-admin.org/docs/#/zh/">中文文档</a> |
-<a href="http://laravel-admin.org/demo">Demo</a> |
-<a href="https://github.com/z-song/laravel-admin.org">Demo source code</a> |
+<a href="http://demo.laravel-admin.org">Demo</a> |
+<a href="https://github.com/z-song/demo.laravel-admin.org">Demo source code</a> |
 <a href="#extensions">Extensions</a>
 </p>
 
@@ -86,17 +86,22 @@ The file `config/admin.php` contains an array of configurations, you can find th
 
 ## Extensions
 
-| Extension                                        | Description                              |
-| ------------------------------------------------ | ---------------------------------------- |
-| [helpers](https://github.com/laravel-admin-extensions/helpers)             | Several tools to help you in development |
-| [media-manager](https://github.com/laravel-admin-extensions/media-manager) | Provides a web interface to manage local files          |
-| [api-tester](https://github.com/laravel-admin-extensions/api-tester) | Help you to test the local laravel APIs          |
-| [scheduling](https://github.com/laravel-admin-extensions/scheduling) | Scheduling task manager for laravel-admin          |
-| [redis-manager](https://github.com/laravel-admin-extensions/redis-manager) | Redis manager for laravel-admin          |
-| [backup](https://github.com/laravel-admin-extensions/backup) | An admin interface for managing backups          |
-| [log-viewer](https://github.com/laravel-admin-extensions/log-viewer) | Log viewer for laravel           |
-| [config](https://github.com/laravel-admin-extensions/config) | Config manager for laravel-admin          |
-| [reporter](https://github.com/laravel-admin-extensions/reporter) | Provides a developer-friendly web interface to view the exception          |
+| Extension                                        | Description                              | laravel-admin                              |
+| ------------------------------------------------ | ---------------------------------------- |---------------------------------------- |
+| [helpers](https://github.com/laravel-admin-extensions/helpers)             | Several tools to help you in development | ~1.5 |
+| [media-manager](https://github.com/laravel-admin-extensions/media-manager) | Provides a web interface to manage local files          | ~1.5 |
+| [api-tester](https://github.com/laravel-admin-extensions/api-tester) | Help you to test the local laravel APIs          |~1.5 |
+| [scheduling](https://github.com/laravel-admin-extensions/scheduling) | Scheduling task manager for laravel-admin          |~1.5 |
+| [redis-manager](https://github.com/laravel-admin-extensions/redis-manager) | Redis manager for laravel-admin          |~1.5 |
+| [backup](https://github.com/laravel-admin-extensions/backup) | An admin interface for managing backups          |~1.5 |
+| [log-viewer](https://github.com/laravel-admin-extensions/log-viewer) | Log viewer for laravel           |~1.5 |
+| [config](https://github.com/laravel-admin-extensions/config) | Config manager for laravel-admin          |~1.5 |
+| [reporter](https://github.com/laravel-admin-extensions/reporter) | Provides a developer-friendly web interface to view the exception          |~1.5 |
+| [wangEditor](https://github.com/laravel-admin-extensions/wangEditor) | A rich text editor based on [wangeditor](http://www.wangeditor.com/)         |~1.6 |
+| [summernote](https://github.com/laravel-admin-extensions/summernote) | A rich text editor based on [summernote](https://summernote.org/)          |~1.6 |
+| [china-distpicker](https://github.com/laravel-admin-extensions/china-distpicker) | 一个基于[distpicker](https://github.com/fengyuanchen/distpicker)的中国省市区选择器          |~1.6 |
+| [simplemde](https://github.com/laravel-admin-extensions/simplemde) | A markdow editor based on [simplemde](https://github.com/sparksuite/simplemde-markdown-editor)          |~1.6 |
+| [phpinfo](https://github.com/laravel-admin-extensions/phpinfo) | Integrate the `phpinfo` page into laravel-admin          |~1.6 |
 
 
 ## Contributors

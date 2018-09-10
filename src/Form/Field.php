@@ -716,7 +716,6 @@ class Field implements Renderable
         return $this;
     }
     
-    
     /**
      * Specifies a regular expression against which to validate the value of the input.
      * 
@@ -738,7 +737,6 @@ class Field implements Renderable
     {
         return $this->attribute('autofocus', true);
     }
-
 
     /**
      * Set the field as readonly mode.
@@ -1059,7 +1057,7 @@ class Field implements Renderable
      */
     public function render()
     {
-        if (! $this->shouldRender()) {
+        if (!$this->shouldRender()) {
             return '';
         }
 

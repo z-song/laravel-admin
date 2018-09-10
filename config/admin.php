@@ -245,13 +245,34 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Version
+    | Show version at footer
     |--------------------------------------------------------------------------
     |
-    | This version number set will appear in the page footer.
+    | Whether to display the version number of laravel-admim at the footer of
+    | each page
     |
     */
-    'version' => '1.5.x-dev',
+    'show_version' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Show environment at footer
+    |--------------------------------------------------------------------------
+    |
+    | Whether to display the environment at the footer of each page
+    |
+    */
+    'show_environment' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Extension Directory
+    |--------------------------------------------------------------------------
+    |
+    | When you use command `php artisan admin:extend` to generate extensions,
+    | the extension files will be generated in this directory.
+    */
+    'extension_dir' => admin_path('extensions'),
 
     /*
     |--------------------------------------------------------------------------
