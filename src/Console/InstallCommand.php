@@ -35,10 +35,23 @@ class InstallCommand extends Command
      */
     public function handle()
     {
+        $this->initResource();
+
         $this->initDatabase();
 
         $this->initAdminDirectory();
     }
+
+    /**
+     * Publish assets, configuration, language and migration files.
+     *
+     * @return void
+     */
+    public function initResource()
+    {
+        $this->call('vendor:publish', ['--provider' => 'Encore\Admin\AdminServiceProvider']);
+    }
+
 
     /**
      * Create tables and seed it.
