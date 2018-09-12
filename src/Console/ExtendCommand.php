@@ -156,15 +156,15 @@ TREE;
         // make class
         $classContents = str_replace(
             [':namespace', ':class_name', ':title', ':path', ':base_package'],
-            [$this->namespace, $this->className, title_case($this->className), basename($this->package), basename($this->package)],
+            [$this->namespace, $this->className.'Extension', title_case($this->className), basename($this->package), basename($this->package)],
             file_get_contents(__DIR__.'/stubs/extension/extension.stub')
         );
-        $this->putFile("src/{$this->className}.php", $classContents);
+        $this->putFile("src/{$this->className}Extension.php", $classContents);
 
         // make service provider
         $providerContents = str_replace(
             [':namespace', ':class_name', ':base_package', ':package'],
-            [$this->namespace, $this->className, basename($this->package), $this->package],
+            [$this->namespace, $this->className.'Extension', basename($this->package), $this->package],
             file_get_contents(__DIR__.'/stubs/extension/service-provider.stub')
         );
         $this->putFile("src/{$this->className}ServiceProvider.php", $providerContents);
