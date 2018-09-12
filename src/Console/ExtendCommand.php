@@ -156,7 +156,7 @@ TREE;
         // make class
         $classContents = str_replace(
             [':namespace', ':class_name', ':title', ':path', ':base_package'],
-            [$this->namespace, $this->className, title_case($this->className), basename($this->package), basename($this->package)],
+            [$this->namespace, $this->className.'Extension', title_case($this->className), basename($this->package), basename($this->package)],
             file_get_contents(__DIR__.'/stubs/extension/extension.stub')
         );
         $this->putFile("src/{$this->className}Extension.php", $classContents);
