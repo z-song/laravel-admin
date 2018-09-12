@@ -81,7 +81,7 @@ class Tags extends Field
         }
 
         $this->visibleColumn = $visibleColumn;
-        $this->key           = $key;
+        $this->key = $key;
 
         return $this;
     }
@@ -100,7 +100,7 @@ class Tags extends Field
         }
 
         if ($options instanceof Collection) {
-            $options = $options->pluck($this->visibleColumn, $this->key) ?? $options;
+            $options = $options->pluck($this->visibleColumn, $this->key)->toArray();
         }
 
         if ($options instanceof Arrayable) {
@@ -113,9 +113,10 @@ class Tags extends Field
     }
 
     /**
-     * Set save Action
+     * Set save Action.
      *
      * @param \Closure $saveAction
+     *
      * @return $this
      */
     public function saving(\Closure $saveAction)
@@ -179,7 +180,7 @@ class Tags extends Field
 
         return parent::render()->with([
             'options'    => $options,
-            'keyAsValue' => $this->keyAsValue
+            'keyAsValue' => $this->keyAsValue,
         ]);
     }
 }
