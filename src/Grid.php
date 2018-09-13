@@ -178,7 +178,8 @@ class Grid
 
         $this->setupTools();
         $this->setupFilter();
-        $this->setupExporter();
+
+        $this->handleExportRequest();
     }
 
     /**
@@ -200,20 +201,28 @@ class Grid
     }
 
     /**
-     * Setup grid exporter.
+     * Handle export request.
      *
-     * @return void
+     * @param bool $forceExport
      */
-    protected function setupExporter()
+    protected function handleExportRequest($forceExport = false)
     {
-        if ($scope = Input::get(Exporter::$queryName)) {
-            $this->model()->usePaginate(false);
+        if (!$scope = request(Exporter::$queryName)) {
+            return;
+        }
 
-            if ($this->builder) {
-                call_user_func($this->builder, $this);
-            }
+        $this->model()->usePaginate(false);
 
-            (new Exporter($this))->resolve($this->exporter)->withScope($scope)->export();
+        $exporter = (new Exporter($this))->resolve($this->exporter)->withScope($scope);
+
+        if ($forceExport) {
+            $exporter->export();
+        }
+
+        if ($this->builder) {
+            call_user_func($this->builder, $this);
+
+            $exporter->export();
         }
     }
 
@@ -1019,6 +1028,8 @@ class Grid
      */
     public function render()
     {
+        $this->handleExportRequest(true);
+
         try {
             $this->build();
         } catch (\Exception $e) {
