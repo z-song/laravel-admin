@@ -65,6 +65,14 @@ class MultipleFile extends Field
             return $this->validator->call($this, $input);
         }
 
+        /*
+         * If has original value, means the form is in edit mode,
+         * then remove required rule from rules.
+         */
+        if ($this->original()) {
+            $this->removeRule('required');
+        }
+
         $attributes = [];
 
         if (!$fieldRules = $this->getRules()) {
@@ -189,7 +197,7 @@ class MultipleFile extends Field
         foreach ($files as $index => $file) {
             $config[] = [
                 'caption' => basename($file),
-                'key'     => $index,
+                'key'     => $file,
             ];
         }
 
@@ -230,13 +238,11 @@ EOT;
     {
         $files = $this->original ?: [];
 
-        $file = array_get($files, $key);
-
-        if ($this->storage->exists($file)) {
-            $this->storage->delete($file);
+        if ($this->storage->exists($key)) {
+            $this->storage->delete($key);
         }
 
-        unset($files[$key]);
+        $files = array_diff($files, [$key]);
 
         return array_values($files);
     }
