@@ -222,6 +222,18 @@ trait UploadField
     }
 
     /**
+     * Use sequence name for store upload file.
+     *
+     * @return $this
+     */
+    public function sequenceName()
+    {
+        $this->useSequenceName = true;
+
+        return $this;
+    }
+
+    /**
      * Get store name of upload file.
      *
      * @param UploadedFile $file
