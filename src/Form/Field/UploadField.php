@@ -38,6 +38,13 @@ trait UploadField
     protected $useUniqueName = false;
 
     /**
+     * If use sequence name to store upload file.
+     *
+     * @var bool
+     */
+    protected $useSequenceName = false;
+
+    /**
      * @var bool
      */
     protected $removable = false;
@@ -75,7 +82,7 @@ trait UploadField
         ];
 
         if ($this->form instanceof Form) {
-            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
+            $defaultOptions['deleteUrl'] = $this->form->resource() . '/' . $this->form->model()->getKey();
         }
 
         $this->options($defaultOptions);
@@ -156,7 +163,7 @@ trait UploadField
     /**
      * Specify the directory and name for upload file.
      *
-     * @param string      $directory
+     * @param string $directory
      * @param null|string $name
      *
      * @return $this
@@ -225,6 +232,10 @@ trait UploadField
     {
         if ($this->useUniqueName) {
             return $this->generateUniqueName($file);
+        }
+
+        if ($this->useSequenceName) {
+            return $this->generateSequenceName($file);
         }
 
         if ($this->name instanceof \Closure) {
@@ -309,7 +320,29 @@ trait UploadField
      */
     protected function generateUniqueName(UploadedFile $file)
     {
-        return md5(uniqid()).'.'.$file->getClientOriginalExtension();
+        return md5(uniqid()) . '.' . $file->getClientOriginalExtension();
+    }
+
+    /**
+     * Generate a sequence name for uploaded file.
+     *
+     * @param UploadedFile $file
+     *
+     * @return string
+     */
+    protected function generateSequenceName(UploadedFile $file)
+    {
+        $index        = 1;
+        $extension    = $file->getClientOriginalExtension();
+        $originalName = $file->getClientOriginalName();
+        $newName      = $originalName . '_' . $index . '.' . $extension;
+
+        while ($this->storage->exists("{$this->getDirectory()}/$newName")) {
+            ++$index;
+            $newName = $originalName . '_' . $index . '.' . $extension;
+        }
+
+        return $newName;
     }
 
     /**
