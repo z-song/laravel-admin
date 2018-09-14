@@ -37,6 +37,13 @@ class Field implements Renderable
     protected $label;
 
     /**
+     * Escape field value or not.
+     *
+     * @var bool
+     */
+    protected $escape = true;
+
+    /**
      * Field value.
      *
      * @var mixed
@@ -365,6 +372,20 @@ HTML;
     }
 
     /**
+     * Set escape or not for this field.
+     *
+     * @param bool $escape
+     *
+     * @return $this
+     */
+    public function setEscape($escape)
+    {
+        $this->escape = $escape;
+
+        return $this;
+    }
+
+    /**
      * Set value for this field.
      *
      * @param Model $model
@@ -429,6 +450,7 @@ HTML;
     {
         return [
             'content'   => $this->value,
+            'escape'    => $this->escape,
             'label'     => $this->getLabel(),
             'wrapped'   => $this->wrapped,
         ];
