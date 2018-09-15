@@ -341,6 +341,33 @@ class Field implements Renderable
         }
 
         $this->value = array_get($data, $this->column);
+
+        # en: Solving the associated model data does not display data on the edit page..
+        # zh：解决关联模型数据在编辑页面是没显示数据
+        $arr =  explode('.', $this->column);
+        if(!$this->value && count($arr)>1) {
+            $oarr = array_get($arr,0);
+            if($oarr){
+                $b = str_split($oarr);
+                $c='';
+                foreach ($b as $key=>$v){
+                    if( preg_match('/^[A-Z]+$/',$v) ){
+                        if($c){
+                            $c = $c.'_'.strtolower($v);
+                        }else{
+                            $c = $c.strtolower($v);
+                        }
+                    }else{
+                        $c = $c.$v;
+                    }
+                }
+            }
+
+            $iarr = array_get( $data, $c);
+
+            $this->value = is_array( $iarr ) ? array_get( $iarr, array_get( $arr, 1)): null;
+        }
+
         if (isset($this->customFormat) && $this->customFormat instanceof \Closure) {
             $this->value = call_user_func($this->customFormat, $this->value);
         }
