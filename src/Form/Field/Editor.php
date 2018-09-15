@@ -7,12 +7,21 @@ use Encore\Admin\Form\Field;
 class Editor extends Field
 {
     protected static $js = [
-        '//cdn.ckeditor.com/4.5.10/standard/ckeditor.js',
+        '//cdn.ckeditor.com/ckeditor5/11.0.1/decoupled-document/ckeditor.js',
     ];
 
     public function render()
     {
-        $this->script = "CKEDITOR.replace('{$this->column}');";
+        $this->script = "DecoupledEditor
+        .create( document.querySelector( '#$this->column' ) )
+        .then( editor => {
+            const toolbarContainer = document.querySelector( '#toolbar-container' );
+
+            toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+        } )
+        .catch( error => {
+            console.error( error );
+        } );";
 
         return parent::render();
     }
