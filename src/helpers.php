@@ -142,7 +142,7 @@ if (!function_exists('admin_asset')) {
      */
     function admin_asset($path)
     {
-        return asset($path, (config('admin.https') || config('admin.secure')));
+        return (config('admin.https') || config('admin.secure')) ? secure_asset($path) : asset($path);
     }
 }
 

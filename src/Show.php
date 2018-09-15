@@ -391,7 +391,7 @@ class Show implements Renderable
                 return $this->addRelation($method, $arguments[1], $arguments[0]);
             }
 
-            return $this->addField($method)->setRelation(snake_case($method));
+            return $this->addField($method, array_get($arguments, 0))->setRelation(snake_case($method));
         }
 
         if ($relation    instanceof HasMany

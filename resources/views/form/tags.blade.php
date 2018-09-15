@@ -8,8 +8,8 @@
 
         <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
 
-            @foreach($options as $option)
-                <option value="{{$option}}" {{ in_array($option, $value) ? 'selected' : '' }}>{{$option}}</option>
+            @foreach($options as $key => $option)
+                <option value="{{ $keyAsValue ? $key : $option}}" {{ in_array($option, $value) ? 'selected' : '' }}>{{$option}}</option>
             @endforeach
 
         </select>
