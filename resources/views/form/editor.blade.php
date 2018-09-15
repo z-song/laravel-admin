@@ -6,7 +6,14 @@
 
         @include('admin::form.error')
 
-        <textarea class="form-control {{$class}}" id="{{$id}}" name="{{$name}}" placeholder="{{ $placeholder }}" {!! $attributes !!} >{{ old($column, $value) }}</textarea>
+
+        <div id="toolbar-container"></div>
+
+        <div class="form-control {{$class}}" id="{{$id}}" name="{{$name}}">
+            
+          
+            
+        </div>
 
         @include('admin::form.help-block')
 
