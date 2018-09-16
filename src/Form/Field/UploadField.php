@@ -82,7 +82,7 @@ trait UploadField
         ];
 
         if ($this->form instanceof Form) {
-            $defaultOptions['deleteUrl'] = $this->form->resource() . '/' . $this->form->model()->getKey();
+            $defaultOptions['deleteUrl'] = $this->form->resource().'/'.$this->form->model()->getKey();
         }
 
         $this->options($defaultOptions);
@@ -163,7 +163,7 @@ trait UploadField
     /**
      * Specify the directory and name for upload file.
      *
-     * @param string $directory
+     * @param string      $directory
      * @param null|string $name
      *
      * @return $this
@@ -332,7 +332,7 @@ trait UploadField
      */
     protected function generateUniqueName(UploadedFile $file)
     {
-        return md5(uniqid()) . '.' . $file->getClientOriginalExtension();
+        return md5(uniqid()).'.'.$file->getClientOriginalExtension();
     }
 
     /**
@@ -344,14 +344,14 @@ trait UploadField
      */
     protected function generateSequenceName(UploadedFile $file)
     {
-        $index        = 1;
-        $extension    = $file->getClientOriginalExtension();
+        $index = 1;
+        $extension = $file->getClientOriginalExtension();
         $originalName = $file->getClientOriginalName();
-        $newName      = $originalName . '_' . $index . '.' . $extension;
+        $newName = $originalName.'_'.$index.'.'.$extension;
 
         while ($this->storage->exists("{$this->getDirectory()}/$newName")) {
-            ++$index;
-            $newName = $originalName . '_' . $index . '.' . $extension;
+            $index++;
+            $newName = $originalName.'_'.$index.'.'.$extension;
         }
 
         return $newName;

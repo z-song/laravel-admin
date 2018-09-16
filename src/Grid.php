@@ -546,6 +546,7 @@ class Grid
      * Process the grid filter.
      *
      * @param bool $toArray
+     *
      * @return array|Collection|mixed
      */
     public function processFilter($toArray = true)

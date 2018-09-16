@@ -35,6 +35,7 @@ class Textarea extends Field
         if (is_array($this->value)) {
             $this->value = json_encode($this->value, JSON_PRETTY_PRINT);
         }
+
         return parent::render()->with(['rows' => $this->rows]);
     }
 }
