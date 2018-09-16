@@ -222,7 +222,6 @@ class Filter implements Renderable
     public function removeIDFilterIfNeeded()
     {
         if (!$this->useIdFilter && !$this->idFilterRemoved) {
-
             $this->removeFilterByID($this->primaryKey);
 
             foreach ($this->layout->columns() as $column) {
