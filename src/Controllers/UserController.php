@@ -119,10 +119,10 @@ class UserController extends Controller
         $show->name(trans('admin.name'));
         $show->roles(trans('admin.roles'))->as(function ($roles) {
             return $roles->pluck('name');
-        })->label();
+        })->label()->setEscape(false);
         $show->permissions(trans('admin.permissions'))->as(function ($permission) {
             return $permission->pluck('name');
-        })->label();
+        })->label()->setEscape(false);
         $show->created_at(trans('admin.created_at'));
         $show->updated_at(trans('admin.updated_at'));
 

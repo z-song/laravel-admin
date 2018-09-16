@@ -28,7 +28,7 @@
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
-        <ul class="sidebar-menu">
+        <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ trans('admin.menu') }}</li>
 
             @each('admin::partials.menu', Admin::menu(), 'item')
