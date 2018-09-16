@@ -736,7 +736,7 @@ class Form implements Renderable
                     $parent->save();
 
                     // When in creating, associate two models
-                    if (! $this->model->{$relation->getForeignKey()}) {
+                    if (!$this->model->{$relation->getForeignKey()}) {
                         $this->model->{$relation->getForeignKey()} = $parent->getKey();
 
                         $this->model->save();

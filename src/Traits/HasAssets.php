@@ -66,18 +66,19 @@ trait HasAssets
     public static function css($css = null)
     {
         if (!is_null($css)) {
-            self::$css = array_merge(self::$css, (array)$css);
+            self::$css = array_merge(self::$css, (array) $css);
 
             return;
         }
 
-        static::$css = array_merge(static::$css, static::baseCss(), (array)$css);
+        static::$css = array_merge(static::$css, static::baseCss(), (array) $css);
 
         return view('admin::partials.css', ['css' => array_unique(static::$css)]);
     }
 
     /**
      * @param null $css
+     *
      * @return array|void
      */
     public static function baseCss($css = null)
@@ -105,18 +106,19 @@ trait HasAssets
     public static function js($js = null)
     {
         if (!is_null($js)) {
-            self::$js = array_merge(self::$js, (array)$js);
+            self::$js = array_merge(self::$js, (array) $js);
 
             return;
         }
 
-        static::$js = array_merge(static::baseJs(), static::$js, (array)$js);
+        static::$js = array_merge(static::baseJs(), static::$js, (array) $js);
 
         return view('admin::partials.js', ['js' => array_unique(static::$js)]);
     }
 
     /**
      * @param null $js
+     *
      * @return array|void
      */
     public static function baseJs($js = null)
@@ -138,7 +140,7 @@ trait HasAssets
     public static function script($script = '')
     {
         if (!empty($script)) {
-            self::$script = array_merge(self::$script, (array)$script);
+            self::$script = array_merge(self::$script, (array) $script);
 
             return;
         }
