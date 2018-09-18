@@ -8,6 +8,10 @@ class Radio extends AbstractDisplayer
 {
     public function display($options = [])
     {
+        if ($options instanceof \Closure) {
+            $options = $options->call($this, $this->row);
+        }
+
         $radios = '';
         $name = $this->column->getName();
 
