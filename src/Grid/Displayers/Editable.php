@@ -58,6 +58,10 @@ class Editable extends AbstractDisplayer
      */
     public function select($options = [])
     {
+        if ($options instanceof \Closure) {
+            $options = $options->call($this, $this->row);
+        }
+
         $source = [];
 
         foreach ($options as $key => $value) {
