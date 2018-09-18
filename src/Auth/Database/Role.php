@@ -4,9 +4,13 @@ namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Sofa\Eloquence\Eloquence;
 
 class Role extends Model
 {
+    use Eloquence;
+    protected $searchableColumns = ['name', 'slug'];
+
     protected $fillable = ['name', 'slug'];
 
     /**

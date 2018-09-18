@@ -155,6 +155,8 @@ class Field implements Renderable
      */
     protected $help = [];
 
+    protected $custom_data = [];
+
     /**
      * Key for errors.
      *
@@ -177,6 +179,17 @@ class Field implements Renderable
     protected $width = [
         'label' => 2,
         'field' => 8,
+    ];
+
+    /**
+     * viewClass for field.
+     *
+     * @var array
+     */
+    protected $viewClass = [
+        'label'      => "",
+        'field'      => "",
+        'form-group' => "",
     ];
 
     /**
@@ -328,9 +341,9 @@ class Field implements Renderable
     public function fill($data)
     {
         // Field value is already setted.
-//        if (!is_null($this->value)) {
-//            return;
-//        }
+        //        if (!is_null($this->value)) {
+        //            return;
+        //        }
 
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
@@ -561,6 +574,13 @@ class Field implements Renderable
         return $this;
     }
 
+    public function custom_data($custom_data)
+    {
+        $this->custom_data = $custom_data;
+
+        return $this;
+    }
+
     /**
      * Get column of the field.
      *
@@ -750,14 +770,31 @@ class Field implements Renderable
     public function getViewElementClasses()
     {
         if ($this->horizontal) {
-            return [
+            $this->viewClass = [
                 'label'      => "col-sm-{$this->width['label']}",
                 'field'      => "col-sm-{$this->width['field']}",
-                'form-group' => 'form-group ',
+                'form-group' => "form-group ",
             ];
+
+            return $this->viewClass;
         }
 
-        return ['label' => '', 'field' => '', 'form-group' => ''];
+        return $this->viewClass;
+    }
+
+
+    /**
+     *  set View Element Classes
+     */
+    public function setViewElementClasses($label, $field, $form_group)
+    {
+        if ($this->horizontal) {
+            $this->viewClass = [
+                'label'      => "col-sm-{$this->width['label']} $label",
+                'field'      => "col-sm-{$this->width['field']} $field",
+                'form-group' => "form-group $form_group",
+            ];
+        }
     }
 
     /**
@@ -898,6 +935,7 @@ class Field implements Renderable
             'errorKey'    => $this->getErrorKey(),
             'attributes'  => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),
+            'custom_data' => $this->custom_data,
 
         ]);
     }
@@ -910,7 +948,7 @@ class Field implements Renderable
      */
     public function popover($title = null, $content)
     {
-      return  $this->attribute([
+        return $this->attribute([
             'data-popover-title' => $title,
             'data-popover'       => $content,
         ]);

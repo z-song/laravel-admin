@@ -26,7 +26,10 @@ class MultipleSelect extends Select
             return $this->otherKey;
         }
 
-        if (is_callable([$this->form->model(), $this->column]) &&
+        if (is_callable([
+                $this->form->model(),
+                $this->column
+            ]) &&
             ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
         ) {
             /* @var BelongsToMany $relation */
@@ -43,7 +46,7 @@ class MultipleSelect extends Select
         $relations = array_get($data, $this->column);
 
         if (is_string($relations)) {
-            $this->value = explode(',', $relations);
+            $this->value = explode($this->TokenSeparator, $relations);
         }
 
         if (is_array($relations)) {
@@ -59,10 +62,11 @@ class MultipleSelect extends Select
 
     public function setOriginal($data)
     {
+
         $relations = array_get($data, $this->column);
 
         if (is_string($relations)) {
-            $this->original = explode(',', $relations);
+            $this->original = explode($this->TokenSeparator, $relations);
         }
 
         if (is_array($relations)) {
@@ -78,7 +82,7 @@ class MultipleSelect extends Select
 
     public function prepare($value)
     {
-        $value = (array) $value;
+        $value = (array)$value;
 
         return array_filter($value);
     }

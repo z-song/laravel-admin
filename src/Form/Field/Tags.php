@@ -8,6 +8,12 @@ use Illuminate\Support\Arr;
 class Tags extends Field
 {
     /**
+     * explode and prepare data - database and form
+     * @var string
+     */
+    public $TokenSeparator = ',';
+
+    /**
      * @var array
      */
     protected $value = [];
@@ -27,6 +33,17 @@ class Tags extends Field
     ];
 
     /**
+     * set Token Separator default is ","
+     * @param string $value
+     * @return $this
+     */
+    public function setTokenSeparator($value = ",")
+    {
+        $this->TokenSeparator = $value;
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function fill($data)
@@ -34,7 +51,7 @@ class Tags extends Field
         $this->value = array_get($data, $this->column);
 
         if (is_string($this->value)) {
-            $this->value = explode(',', $this->value);
+            $this->value = explode($this->TokenSeparator, $this->value);
         }
 
         $this->value = array_filter((array) $this->value);
@@ -46,7 +63,7 @@ class Tags extends Field
     public function prepare($value)
     {
         if (is_array($value) && !Arr::isAssoc($value)) {
-            $value = implode(',', array_filter($value));
+            $value = implode($this->TokenSeparator, array_filter($value));
         }
 
         return $value;
@@ -131,7 +148,7 @@ EOT;
     {
         $this->script = "$(\"{$this->getElementClassSelector()}\").select2({
             tags: true,
-            tokenSeparators: [','],
+            tokenSeparators: [\"$this->TokenSeparator\"],
             dir: \"$this->direction\",
             language : \"$this->local\",
         });";

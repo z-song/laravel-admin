@@ -134,6 +134,7 @@ trait UploadField
      */
     public function disk($disk)
     {
+
         if (!array_key_exists($disk, config('filesystems.disks'))) {
             $error = new MessageBag([
                 'title'   => 'Config error.',
@@ -288,7 +289,8 @@ trait UploadField
             return $path;
         }
 
-        return Storage::disk(config('admin.upload.disk'))->url($path);
+        return $this->storage->url($path);
+//        return Storage::disk(config('admin.upload.disk'))->url($path);
     }
 
     /**

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -106,10 +107,13 @@ class AuthController extends Controller
      */
     protected function settingForm()
     {
+
         return Administrator::form(function (Form $form) {
             $form->display('username', trans('admin.username'));
             $form->text('name', trans('admin.name'))->rules('required');
             $form->image('avatar', trans('admin.avatar'));
+            $rule_email ='email|' . Rule::unique(config('admin.database.users_table'),'email')->ignore(auth_admin_user()->id, 'id');
+            $form->email('email', trans('admin.email'))->rules($rule_email);
             $form->password('password', trans('admin.password'))->rules('confirmed|required');
             $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
                 ->default(function ($form) {

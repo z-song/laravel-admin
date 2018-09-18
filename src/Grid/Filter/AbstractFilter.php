@@ -464,6 +464,18 @@ abstract class AbstractFilter
     }
 
     /**
+     * hide element
+     */
+    public function jqueryHide()
+    {
+        $script = "$('.{$this->getId()}').closest('.form-group').hide();";
+//        $script = "$('.{$this->getId()}').parents('.form-group').hide();";
+
+        \Admin::script($script);
+        return $this;
+    }
+
+    /**
      * Render this filter.
      *
      * @return \Illuminate\View\View|string

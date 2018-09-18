@@ -17,6 +17,7 @@ class MultipleFile extends Field
      */
     protected static $css = [
         '/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.3.7',
+        '/vendor/laravel-admin/bootstrap-fileinput/themes/explorer-fa/theme.min.css?v=4.3.7',
     ];
 
     /**
@@ -27,7 +28,8 @@ class MultipleFile extends Field
     protected static $js = [
         '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
         '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
-        "/vendor/laravel-admin/bootstrap-fileinput/js/locales/fa.js"
+        "/vendor/laravel-admin/bootstrap-fileinput/js/locales/fa.js",
+        "/vendor/laravel-admin/bootstrap-fileinput/themes/explorer-fa/theme.min.js"
     ];
 
     /**
@@ -44,9 +46,19 @@ class MultipleFile extends Field
 
         parent::__construct($column, $arguments);
 
-
     }
 
+    public function setTheme($theme_name)
+    {
+//        array_multi_push($this::$js)
+//        switch ($theme_name){
+//            case '';
+//                array_multi_push($this::$js, [])
+//                array_multi_push($this::$js)
+//            break;
+//
+//        }
+    }
     /**
      * Default directory for file to upload.
      *
@@ -169,7 +181,6 @@ class MultipleFile extends Field
     protected function preview()
     {
         $files = $this->value ?: [];
-
         return array_map([
             $this,
             'objectUrl'

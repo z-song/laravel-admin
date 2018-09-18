@@ -10,6 +10,12 @@ use Illuminate\Support\Str;
 class Select extends Field
 {
     /**
+     * explode and prepare data - database and form
+     * @var string
+     */
+    public $TokenSeparator = ',';
+
+    /**
      * @var array
      */
     protected static $css = [
@@ -37,6 +43,17 @@ class Select extends Field
      * @var array
      */
     protected $button = null;
+
+    /**
+     * set Token Separator default is ","
+     * @param string $value
+     * @return $this
+     */
+    public function setTokenSeparator($value = ",")
+    {
+        $this->TokenSeparator = $value;
+        return $this;
+    }
 
     /**
      * Set options.

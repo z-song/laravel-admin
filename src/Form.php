@@ -40,11 +40,6 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\Map            map($latitude, $longitude, $label = '')
- * @method \App\Admin\Extensions\Form\GeoCompleteMap  geocompletemap($latitude, $longitude, $label = '')
- * @method \App\Admin\Extensions\Form\multiSelectTag  multiselect_tags($column, $label = '')
- * @method \App\Admin\Extensions\Form\InstagramAddSelect2  instagram_add_select2($column, $label = '', $ajax_url, $type)
- * @method \App\Admin\Extensions\Form\Cropper  cropper($column, $label = '')
- * @method \App\Admin\Extensions\Form\PersianDate  pdate($column, $label = '')
  * @method Field\Editor         editor($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
@@ -73,6 +68,16 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\MultipleFile   multipleFile($column, $label = '')
  * @method Field\Captcha        captcha($column, $label = '')
  * @method Field\Listbox        listbox($column, $label = '')
+ * @method \App\Admin\Extensions\Form\GeoCompleteMap  geocompletemap($latitude, $longitude, $label = '')
+ * @method \App\Admin\Extensions\Form\multiSelectTag  multiselect_tags($column, $label = '')
+ * @method \App\Admin\Extensions\Form\InstagramAddSelect2  instagram_add_select2($column, $label = '', $api_url, $type,$modal_get_url)
+ * @method \App\Admin\Extensions\Form\Cropper  cropper($column, $label = '')
+ * @method \App\Admin\Extensions\Form\PersianDate  pdate($column, $label = '')
+ * @method \App\Admin\Extensions\Form\TimePicker  timepicker($column, $label = '')
+ * @method \App\Admin\Extensions\Form\PHPEditor  phpeditor($column, $label = '')
+ * @method \App\Admin\Extensions\Form\Json  json($column, $label = '')
+ * @method \App\Admin\Extensions\Form\CkEditor  ckeditor($column, $label = '')
+ * @method \App\Admin\Extensions\Form\MultipleFileConverter  multiple_file_converter($column, $label = '')
  */
 class Form
 {
@@ -172,6 +177,7 @@ class Form
      * @var array
      */
     public $rows = [];
+    private $originalInput;
 
     /**
      * Create a new form instance.
@@ -221,14 +227,13 @@ class Form
     /**
      * Generate a edit form.
      *
-     * @param $id
+     * @param        $id
      *
+     * @param string $mode
      * @return $this
      */
-    public function edit($id, $show_mode = false)
+    public function edit($id, $mode = Builder::MODE_EDIT)
     {
-        $mode = Builder::MODE_EDIT;
-        if ($show_mode) $mode = Builder::MODE_SHOW;
         $this->builder->setMode($mode);
         $this->builder->setResourceId($id);
 
@@ -423,6 +428,7 @@ class Form
      */
     protected function prepare($data = [])
     {
+        $this->originalInput = $data;
         if (($response = $this->callSubmitted()) instanceof Response) {
             return $response;
         }
@@ -532,6 +538,10 @@ class Form
 
         $data = $this->handleEditable($data);
 
+        $isColumnRelationUpdate = $this->isColumnRelationUpdate($data);
+
+        $data = $this->handleColumnRelationUpdate($data);
+
         $data = $this->handleFileDelete($data);
 
         if ($this->handleOrderable($id, $data)) {
@@ -548,7 +558,7 @@ class Form
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-            if (!$isEditable) {
+            if (!$isEditable && !$isColumnRelationUpdate) {
                 return back()->withInput()->withErrors($validationMessages);
             } else {
                 return response()->json(['errors' => array_dot($validationMessages->getMessages())], 422);
@@ -619,6 +629,34 @@ class Form
     protected function handleEditable(array $input = [])
     {
         if (array_key_exists('_editable', $input)) {
+            $name = $input['name'];
+            $value = $input['value'];
+
+            array_forget($input, [
+                'pk',
+                'value',
+                'name'
+            ]);
+            array_set($input, $name, $value);
+        }
+
+        return $input;
+    }
+
+    /**
+     * Check if request is from editable.
+     *
+     * @param array $input
+     *
+     * @return bool
+     */
+    protected function isColumnRelationUpdate(array $input = [])
+    {
+        return array_key_exists('_col_relation', $input);
+    }
+    protected function handleColumnRelationUpdate(array $input = [])
+    {
+        if (array_key_exists('_col_relation', $input)) {
             $name = $input['name'];
             $value = $input['value'];
 
@@ -1237,6 +1275,23 @@ class Form
         }
 
         return array_set($this->inputs, $key, $value);
+    }
+
+    /**
+     * Get or set input data.
+     *
+     * @param string $key
+     * @param null   $value
+     *
+     * @return array|mixed
+     */
+    public function originalInput($key, $value = null)
+    {
+        if (is_null($value)) {
+            return array_get($this->originalInput, $key);
+        }
+
+        return array_set($this->originalInput, $key, $value);
     }
 
     /**

@@ -45,8 +45,13 @@ class Editable extends AbstractDisplayer
     /**
      * Textarea type editable.
      */
-    public function textarea()
+    public function textarea($width = 200, $rows = 7, $class = '')
     {
+
+        $this->addOptions([
+            'tpl'  => "<textarea style='width: {$width}px' class='$class'></textarea>",
+            'rows' => $rows
+        ]);
     }
 
     /**
@@ -67,6 +72,30 @@ class Editable extends AbstractDisplayer
 
         $this->addOptions(['source' => $source]);
     }
+
+    public function select2($options = [])
+    {
+        $source = [];
+
+        foreach ($options as $key => $value) {
+            $source[] = [
+                'id'   => $key,
+                'text' => $value,
+            ];
+        }
+      //more options  http://vitalets.github.io/x-editable/docs.html#select2
+        $this->addOptions([
+            'source'        => $source,
+            'viewseparator' => ',',
+            'select2'       => [
+//                'multiple'           => false,
+//                'placeholder'        => 'Select Country',
+//                'minimumInputLength' => 1
+
+            ]
+        ]);
+    }
+
 
     /**
      * Date type editable.
@@ -131,14 +160,22 @@ class Editable extends AbstractDisplayer
     {
         $this->type = array_get($arguments, 0, 'text');
 
-        call_user_func_array([$this, $this->type], array_slice($arguments, 1));
+        call_user_func_array([
+            $this,
+            $this->type
+        ], array_slice($arguments, 1));
     }
 
     public function display()
     {
         $this->options['name'] = $column = $this->column->getName();
 
-        $class = 'grid-editable-'.str_replace(['.', '#', '[', ']'], '-', $column);
+        $class = 'grid-editable-' . str_replace([
+                '.',
+                '#',
+                '[',
+                ']'
+            ], '-', $column);
 
         $this->buildEditableOptions(func_get_args());
 

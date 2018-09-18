@@ -1,11 +1,11 @@
 <?php
-
 namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Form\Builder;
 
 trait ModelForm
 {
+
     /**
      * Display the specified resource.
      *
@@ -15,9 +15,8 @@ trait ModelForm
      */
     public function show($id)
     {
-        return $this->edit($id, true);
+        return $this->edit($id);
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -27,9 +26,8 @@ trait ModelForm
      */
     public function update($id)
     {
-        return $this->form(Builder::MODE_EDIT)->update($id);
+        return $this->form()->update($id);
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -51,7 +49,6 @@ trait ModelForm
             ]);
         }
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -59,6 +56,6 @@ trait ModelForm
      */
     public function store()
     {
-        return $this->form(Builder::MODE_CREATE)->store();
+        return $this->form()->store();
     }
 }

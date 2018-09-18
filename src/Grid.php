@@ -2,6 +2,7 @@
 
 namespace Encore\Admin;
 
+use App\Admin\Extensions\Tools\TCustomTools;
 use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Grid\Column;
@@ -27,6 +28,7 @@ use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Grid
 {
+    use TCustomTools;
     /**
      * The grid data model instance.
      *
@@ -130,7 +132,13 @@ class Grid
      *
      * @var array
      */
-    public $perPages = [10, 20, 30, 50, 100];
+    public $perPages = [
+        10,
+        20,
+        30,
+        50,
+        100
+    ];
 
     /**
      * Default items count per-page.
@@ -220,8 +228,10 @@ class Grid
             $this->model()->usePaginate(false);
 
             call_user_func($this->builder, $this);
-
-            (new Exporter($this))->resolve($this->exporter)->withScope($scope)->export();
+            if ($this->option('useExporter')) {
+                (new Exporter($this))->resolve($this->exporter)->withScope($scope)->export();
+            }
+            exit();
         }
     }
 
@@ -271,9 +281,9 @@ class Grid
 
             $relation = $this->model()->eloquent()->$relationName();
 
-            $label = $this->setLabel($label,$relationColumn);
-//            $label = empty($label) ? ucfirst($relationColumn) : $label;
-            $name = snake_case($relationName).'.'.$relationColumn;
+            $label = $this->setLabel($label, $relationColumn);
+            //            $label = empty($label) ? ucfirst($relationColumn) : $label;
+            $name = snake_case($relationName) . '.' . $relationColumn;
         }
 
         $column = $this->addColumn($name, $label);
@@ -286,18 +296,19 @@ class Grid
         return $column;
     }
 
-    public function setLabel($label , $relationColumn)
+    public function setLabel($label, $relationColumn)
     {
         $trans_key = 'validation.attributes.' . $relationColumn;
         $trans_key_low = strtolower($trans_key);
-         if (empty($label) && Lang::has($trans_key)) {
-             $label = Lang::get($trans_key);
-         }
-         if (empty($label) && Lang::has($trans_key_low)) {
+        if (empty($label) && Lang::has($trans_key)) {
+            $label = Lang::get($trans_key);
+        }
+        if (empty($label) && Lang::has($trans_key_low)) {
             $label = Lang::get($trans_key_low);
-        }else if (empty($label)) {
-             $label = ucfirst($relationColumn);
-         }
+        } else if (empty($label)) {
+            $label = ucfirst($relationColumn);
+        }
+
         return $label;
     }
 
@@ -670,7 +681,7 @@ class Grid
     {
         $input = array_merge(Input::all(), Exporter::formatExportQuery($scope, $args));
 
-        return $this->resource().'?'.http_build_query($input);
+        return $this->resource() . '?' . http_build_query($input);
     }
 
     /**
@@ -895,7 +906,7 @@ class Grid
     public function __call($method, $arguments)
     {
         $label = isset($arguments[0]) ? $arguments[0] : null;
-        $label = $this->setLabel($label,$method);
+        $label = $this->setLabel($label, $method);
 
         if ($this->model()->eloquent() instanceof MongodbModel) {
             return $this->addColumn($method, $label);

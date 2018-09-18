@@ -51,8 +51,11 @@ class Builder
      */
     const MODE_VIEW = 'view';
     const MODE_EDIT = 'edit';
+    const MODE_UPDATE = 'update';
     const MODE_CREATE = 'create';
+    const MODE_STORE = 'store';
     const MODE_SHOW = 'show';
+    const MODE_DESTROY = 'destroy';
 
     /**
      * Form action mode, could be create|view|edit.
@@ -167,6 +170,15 @@ class Builder
     public function setResourceId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * Set resource Id.
+     * @return mixed
+     */
+    public function getResourceId()
+    {
+       return $this->id;
     }
 
     /**

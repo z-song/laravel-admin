@@ -40,7 +40,6 @@ use phpDocumentor\Reflection\Types\This;
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Number         number($name, $label = '')
  * @method Field\Currency       currency($name, $label = '')
- * @method Field\Json           json($name, $label = '')
  * @method Field\SwitchField    switch ($name, $label = '')
  * @method Field\Display        display($name, $label = '')
  * @method Field\Rate           rate($name, $label = '')
@@ -50,6 +49,16 @@ use phpDocumentor\Reflection\Types\This;
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method \App\Admin\Extensions\Form\Script script($script, $arguments)
+ * @method \App\Admin\Extensions\Form\GeoCompleteMap  geocompletemap($latitude, $longitude, $label = '')
+ * @method \App\Admin\Extensions\Form\multiSelectTag  multiselect_tags($column, $label = '')
+ * @method \App\Admin\Extensions\Form\InstagramAddSelect2  instagram_add_select2($column, $label = '', $api_url, $type,$modal_get_url)
+ * @method \App\Admin\Extensions\Form\Cropper  cropper($column, $label = '')
+ * @method \App\Admin\Extensions\Form\PersianDate  pdate($column, $label = '')
+ * @method \App\Admin\Extensions\Form\TimePicker  timepicker($column, $label = '')
+ * @method \App\Admin\Extensions\Form\PHPEditor  phpeditor($column, $label = '')
+ * @method \App\Admin\Extensions\Form\Json  json($column, $label = '')
+ * @method \App\Admin\Extensions\Form\CkEditor  ckeditor($column, $label = '')
+ * @method \App\Admin\Extensions\Form\MultipleFileConverter  multiple_file_converter($column, $label = '')
  */
 class Form implements Renderable
 {

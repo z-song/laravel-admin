@@ -4,7 +4,6 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Form;
 use Illuminate\Support\Collection;
-
 /**
  * Class EmbeddedForm.
  *
@@ -14,6 +13,7 @@ use Illuminate\Support\Collection;
  * @method Field\Select         select($column, $label = '')
  * @method Field\MultipleSelect multipleSelect($column, $label = '')
  * @method Field\Textarea       textarea($column, $label = '')
+ * @method \App\Admin\Extensions\Form\TextareaEmoji  TextareaEmoji($column, $label = '')
  * @method Field\Hidden         hidden($column, $label = '')
  * @method Field\Id             id($column, $label = '')
  * @method Field\Ip             ip($column, $label = '')
@@ -23,6 +23,12 @@ use Illuminate\Support\Collection;
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\Map            map($latitude, $longitude, $label = '')
+ * @method \App\Admin\Extensions\Form\GeoCompleteMap  geocompletemap($latitude, $longitude, $label = '')
+ * @method \App\Admin\Extensions\Form\multiSelectTag  multiselect_tags($column, $label = '')
+ * @method \App\Admin\Extensions\Form\InstagramAddSelect2  instagram_add_select2($column, $label = '', $ajax_url, $type)
+ * @method \App\Admin\Extensions\Form\Cropper  cropper($column, $label = '')
+ * @method \App\Admin\Extensions\Form\PersianDate  pdate($column, $label = '')
+ * @method \App\Admin\Extensions\Form\TimePicker  timepicker($column, $label = '')
  * @method Field\Editor         editor($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
@@ -37,7 +43,7 @@ use Illuminate\Support\Collection;
  * @method Field\Number         number($column, $label = '')
  * @method Field\Currency       currency($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $callback)
- * @method Field\SwitchField    switch($column, $label = '')
+ * @method Field\SwitchField    switch ($column, $label = '')
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
  * @method Field\Divide         divider()
@@ -47,6 +53,10 @@ use Illuminate\Support\Collection;
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
+ * @method Field\MultipleImage  multipleImage($column, $label = '')
+ * @method Field\MultipleFile   multipleFile($column, $label = '')
+ * @method Field\Captcha        captcha($column, $label = '')
+ * @method Field\Listbox        listbox($column, $label = '')
  */
 class EmbeddedForm
 {

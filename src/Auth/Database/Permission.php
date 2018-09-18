@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Sofa\Eloquence\Eloquence;
 
 class Permission extends Model
 {
+    use Eloquence;
+    protected $searchableColumns = ['name', 'slug', 'http_method', 'http_path'];
+
     /**
      * @var array
      */
@@ -28,6 +32,7 @@ class Permission extends Model
      */
     public function __construct(array $attributes = [])
     {
+
         $connection = config('admin.database.connection') ?: config('database.default');
 
         $this->setConnection($connection);
