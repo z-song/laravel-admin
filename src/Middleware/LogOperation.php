@@ -42,8 +42,27 @@ class LogOperation
     protected function shouldLogOperation(Request $request)
     {
         return config('admin.operation_log.enable')
-            && !$this->inExceptArray($request)
+            && !$this->inExceptArray($request) && $this->inAllowedMethods($request->method())
             && Admin::user();
+    }
+
+
+    /**
+     * @param $method
+     *
+     * @return bool
+     */
+    protected function inAllowedMethods($method) {
+        $allowed_methods = array_map('strtoupper', (array)config('admin.operation_log.allowed_methods'));
+        if (empty($allowed_methods)) {
+            return true;
+        } else {
+            if (in_array($method, $allowed_methods)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     /**
