@@ -23,7 +23,7 @@
 
         </div>
         <!-- /.box-body -->
-        <div class="box-footer">
+        <div class="box-footer row">
 
             @if( ! $form->isMode(\Encore\Admin\Form\Builder::MODE_VIEW)  || ! $form->option('enableSubmit'))
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">

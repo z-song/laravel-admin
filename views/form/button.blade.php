@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group row">
 
     <label class="col-sm-{{$width['label']}} control-label"></label>
 

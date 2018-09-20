@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group row">
     <label for="{{$id}}" class="col-{{$width['label']}} control-label">{{$label}}</label>
 
     <div class="col-sm-{{$width['field']}}">

@@ -1,4 +1,4 @@
-<div class="form-group {!! !$errors->has($errorKey) ?: 'has-error' !!}">
+<div class="form-group row {!! !$errors->has($errorKey) ?: 'has-error' !!}">
 
     <label for="{{$id['lat']}}" class="col-sm-{{$width['label']}} control-label">{{$label}}</label>
 

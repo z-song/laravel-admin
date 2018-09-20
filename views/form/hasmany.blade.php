@@ -18,7 +18,7 @@
                     {!! $field->render() !!}
                 @endforeach
 
-                <div class="form-group">
+                <div class="form-group row">
                     <label class="col-sm-{{$width['label']}} control-label"></label>
                     <div class="col-sm-{{$width['field']}}">
                         <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin::lang.remove') }}</div>
@@ -36,7 +36,7 @@
 
             {!! $template !!}
 
-            <div class="form-group">
+            <div class="form-group row">
                 <label class="col-sm-{{$width['label']}} control-label"></label>
                 <div class="col-sm-{{$width['field']}}">
                     <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash"></i>&nbsp;{{ trans('admin::lang.remove') }}</div>
@@ -46,7 +46,7 @@
         </div>
     </template>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-{{$width['label']}} control-label"></label>
         <div class="col-sm-{{$width['field']}}">
             <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin::lang.new') }}</div>

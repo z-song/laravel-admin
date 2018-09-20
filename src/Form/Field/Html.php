@@ -53,7 +53,7 @@ class Html extends Field
         }
 
         return <<<EOT
-<div class="form-group">
+<div class="form-group row">
     <label  class="col-sm-{$this->width['label']} control-label">{$this->label}</label>
     <div class="col-sm-{$this->width['field']}">
         {$this->html}

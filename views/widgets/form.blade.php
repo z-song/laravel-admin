@@ -8,7 +8,7 @@
     </div>
 
     <!-- /.box-body -->
-    <div class="box-footer">
+    <div class="box-footer row">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="col-sm-2">
         </div>
