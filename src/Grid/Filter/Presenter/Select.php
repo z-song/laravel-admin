@@ -152,12 +152,16 @@ SCRIPT;
         ];
         $configs = array_merge([
             'allowClear'         => true,
+            'placeholder' => [
+                'id' => '',
+                'text' => trans('admin.choose'),
+            ],
         ], $this->config);
 
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
-        $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
+        $ajaxOptions = json_encode(array_merge($ajaxOptions, $options), JSON_UNESCAPED_UNICODE);
 
         $this->script = <<<EOT
 
