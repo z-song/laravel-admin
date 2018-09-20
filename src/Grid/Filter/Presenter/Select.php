@@ -73,10 +73,10 @@ class Select extends Presenter
         }
 
         if (empty($this->script)) {
-            $placeholder = [
+            $placeholder = json_encode([
                 'id' => '',
                 'text' => trans('admin.choose'),
-            ];
+            ]);
 
             $configs = array_merge([
                 'allowClear'         => true,
@@ -87,7 +87,7 @@ class Select extends Presenter
 
             $this->script = <<<SCRIPT
 $(".{$this->getElementClass()}").select2({
-  placeholder: "$placeholder",
+  placeholder: $placeholder,
   $configs
 });
 
