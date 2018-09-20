@@ -152,9 +152,9 @@ SCRIPT;
         ];
         $configs = array_merge([
             'allowClear'         => true,
-            'placeholder' => [
-                'id' => '',
-                'text' => trans('admin.choose'),
+            'placeholder'        => [
+                'id'        => '',
+                'text'      => trans('admin.choose'),
             ],
         ], $this->config);
 
