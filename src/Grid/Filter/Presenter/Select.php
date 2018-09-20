@@ -75,10 +75,17 @@ class Select extends Presenter
         if (empty($this->script)) {
             $placeholder = trans('admin.choose');
 
+            $configs = array_merge([
+                'allowClear'         => true,
+            ], $this->config);
+
+            $configs = json_encode($configs);
+            $configs = substr($configs, 1, strlen($configs) - 2);
+
             $this->script = <<<SCRIPT
 $(".{$this->getElementClass()}").select2({
   placeholder: "$placeholder",
-  allowClear: true
+  $configs
 });
 
 SCRIPT;
@@ -143,13 +150,22 @@ SCRIPT;
         $ajaxOptions = [
             'url' => $url.'?'.http_build_query($parameters),
         ];
+        $configs = array_merge([
+            'allowClear'         => true,
+        ], $this->config);
+
+        $configs = json_encode($configs);
+        $configs = substr($configs, 1, strlen($configs) - 2);
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
 
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
-  $(".{$this->getElementClass()}").select2({data: data});
+  $(".{$this->getElementClass()}").select2({
+    data: data,
+    $configs
+  });
 });
 
 EOT;
