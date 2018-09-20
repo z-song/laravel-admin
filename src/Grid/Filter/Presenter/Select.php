@@ -73,7 +73,10 @@ class Select extends Presenter
         }
 
         if (empty($this->script)) {
-            $placeholder = trans('admin.choose');
+            $placeholder = [
+                'id' => '',
+                'text' => trans('admin.choose'),
+            ];
 
             $configs = array_merge([
                 'allowClear'         => true,
