@@ -11,7 +11,7 @@
 
                 <div class="form-horizontal">
 
-                <div class="form-group">
+                <div class="form-group row">
 
                     <label for="inputTableName" class="col-sm-1 control-label">Table name</label>
 
@@ -24,7 +24,7 @@
                     </span>
 
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <label for="inputModelName" class="col-sm-1 control-label">Model</label>
 
                     <div class="col-sm-4">
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group row">
                     <label for="inputControllerName" class="col-sm-1 control-label">Controller</label>
 
                     <div class="col-sm-4">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-sm-offset-1 col-sm-11">
                         <div class="checkbox">
                             <label>

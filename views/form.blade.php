@@ -24,21 +24,21 @@
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
+            <div class="row">
+                @if( ! $form->isMode(\Encore\Admin\Form\Builder::MODE_VIEW)  || ! $form->option('enableSubmit'))
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                @endif
+                <div class="col-sm-{{$width['label']}}">
 
-            @if( ! $form->isMode(\Encore\Admin\Form\Builder::MODE_VIEW)  || ! $form->option('enableSubmit'))
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            @endif
-            <div class="col-sm-{{$width['label']}}">
+                </div>
+                <div class="col-sm-{{$width['field']}}">
 
+                    {!! $form->submitButton() !!}
+
+                    {!! $form->resetButton() !!}
+
+                </div>
             </div>
-            <div class="col-sm-{{$width['field']}}">
-
-                {!! $form->submitButton() !!}
-
-                {!! $form->resetButton() !!}
-
-            </div>
-
         </div>
 
         @foreach($form->getHiddenFields() as $hiddenField)
