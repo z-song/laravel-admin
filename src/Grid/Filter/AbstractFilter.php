@@ -390,7 +390,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * Set element id
+     * Set element id.
      *
      * @param string $id
      *
