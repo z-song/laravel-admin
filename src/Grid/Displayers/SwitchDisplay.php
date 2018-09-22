@@ -22,9 +22,19 @@ class SwitchDisplay extends AbstractDisplayer
     {
         $this->updateStates($states);
 
-        $name = str_replace('.', '_', $this->column->getName());
+        $name = $this->column->getName();
 
-        $class = "grid-switch-{$name}";
+        $class = "grid-switch-" . str_replace('.', '-', $name);
+
+        $keys = collect(explode('.', $name));
+        if ($keys->isEmpty()) {
+            $key = $name;
+        } else {
+            $key = $keys->shift()
+                . $keys->reduce(function ($carry, $val) {
+                    return $carry . "[$val]";}
+                );
+        }
 
         $script = <<<EOT
 
@@ -45,7 +55,7 @@ $('.$class').bootstrapSwitch({
             url: "{$this->grid->resource()}/" + pk,
             type: "POST",
             data: {
-                $name: value,
+                "$key": value,
                 _token: LA.token,
                 _method: 'PUT'
             },
