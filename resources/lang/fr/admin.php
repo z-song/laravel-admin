@@ -23,7 +23,7 @@ return [
     'continue_editing'      => 'Continuer l\'édition',
     'detail'       => 'Détail',
     'browse'       => 'Naviguer',
-    'reset'        => 'Reset',
+    'reset'        => 'Réinitialiser',
     'export'       => 'Exporter',
     'batch_delete' => 'Supprimer en masse',
     'save'         => 'Sauvegarder',
