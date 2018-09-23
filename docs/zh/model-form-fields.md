@@ -552,6 +552,30 @@ $form->html('你的html内容', $label = '');
 $form->tags('keywords');
 ```
 
+`tags`同样支持`ManyToMany`的关系，示例如下：
+
+```php
+$form->tags('tags', '文章标签')
+    ->pluck('name', 'id') // name 为需要显示的 Tag 模型的字段，id 为主键
+    ->options(Tag::all());// 下拉框选项
+```
+
+注意：处理`ManyToMany`关系时必须调用`pluck`方法，指定显示的字段名和主键。
+此外 `options` 方法传入一个`Collection`对象时，`options`会自动调用该对象的`pluck`方法转为`['主键名' => '显示字段名']` 数组，作为下拉框选项。或者可以直接使用`['主键名' => '显示字段名']`这样的数组作为参数。
+
+`tags`还支持`saving`方法用于处理提交的数据，示例如下：
+
+```php
+$form->tags('tags', '文章标签')
+    ->pluck('name', 'id')
+    ->options(Tag::all())
+    ->saving(function ($value) {
+        return $value;
+    });
+```
+
+`saving` 方法接收一个「参数为 tags 的提交值，返回值为修改后的 tags 提交值」的闭包，可以用于实现自动创建新 tag 或其它功能。
+
 ## 图标
 选择`font-awesome`图标
 ```php
