@@ -243,6 +243,16 @@ EOT;
         $ajaxOptions = [
             'url' => $url.'?'.http_build_query($parameters),
         ];
+        $configs = array_merge([
+            'allowClear'         => true,
+            'placeholder'        => [
+                'id'        => '',
+                'text'      => trans('admin.choose'),
+            ],
+        ], $this->config);
+
+        $configs = json_encode($configs);
+        $configs = substr($configs, 1, strlen($configs) - 2);
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
 
@@ -252,7 +262,10 @@ $.ajax($ajaxOptions).done(function(data) {
 
   var select = $("{$this->getElementClassSelector()}");
 
-  select.select2({data: data});
+  select.select2({
+    data: data,
+    $configs
+  });
   
   var value = select.data('value') + '';
   
@@ -351,7 +364,10 @@ EOT;
     {
         $configs = array_merge([
             'allowClear'  => true,
-            'placeholder' => $this->label,
+            'placeholder' => [
+                'id' => '',
+                'text' => $this->label,
+            ],
         ], $this->config);
 
         $configs = json_encode($configs);
