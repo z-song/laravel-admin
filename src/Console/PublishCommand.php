@@ -11,7 +11,7 @@ class PublishCommand extends Command
      *
      * @var string
      */
-    protected $name = 'admin:publish {--force}';
+    protected $signature = 'admin:publish {--force}';
 
     /**
      * The console command description.
