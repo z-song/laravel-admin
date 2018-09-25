@@ -81,7 +81,7 @@ $states = [
 
 $grid->column('switch_group')->switchGroup([
     'hot'       => 'Hot',
-    'new'       => 'New'
+    'new'       => 'New',
     'recommend' => 'Recommend',
 ], $states);
 
