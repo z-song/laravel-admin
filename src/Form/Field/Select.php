@@ -365,7 +365,7 @@ EOT;
         $configs = array_merge([
             'allowClear'  => true,
             'placeholder' => [
-                'id' => '',
+                'id'   => '',
                 'text' => $this->label,
             ],
         ], $this->config);
