@@ -74,7 +74,7 @@ class Select extends Presenter
 
         if (empty($this->script)) {
             $placeholder = json_encode([
-                'id' => '',
+                'id'   => '',
                 'text' => trans('admin.choose'),
             ]);
 
