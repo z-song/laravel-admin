@@ -331,7 +331,7 @@ class Form implements Renderable
             return $response;
         }
 
-        DB::transaction(function () {
+        $result = DB::transaction(function () {
             $inserts = $this->prepareInsert($this->updates);
 
             foreach ($inserts as $column => $value) {
@@ -341,10 +341,12 @@ class Form implements Renderable
             $this->model->save();
 
             $this->updateRelation($this->relations);
+
+            return $this->callSaved();
         });
 
-        if (($response = $this->callSaved()) instanceof Response) {
-            return $response;
+        if ($result instanceof Response) {
+            return $result;
         }
 
         if ($response = $this->ajaxResponse(trans('admin.save_succeeded'))) {
@@ -522,7 +524,7 @@ class Form implements Renderable
             return $response;
         }
 
-        DB::transaction(function () {
+        $result = DB::transaction(function () {
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
@@ -533,9 +535,11 @@ class Form implements Renderable
             $this->model->save();
 
             $this->updateRelation($this->relations);
+
+            return $this->callSaved();
         });
 
-        if (($result = $this->callSaved()) instanceof Response) {
+        if ($result instanceof Response) {
             return $result;
         }
 
@@ -996,7 +1000,7 @@ class Form implements Renderable
      */
     protected function setFieldOriginalValue()
     {
-//        static::doNotSnakeAttributes($this->model);
+        //        static::doNotSnakeAttributes($this->model);
 
         $values = $this->model->toArray();
 
@@ -1018,7 +1022,7 @@ class Form implements Renderable
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
-//        static::doNotSnakeAttributes($this->model);
+        //        static::doNotSnakeAttributes($this->model);
 
         $data = $this->model->toArray();
 
