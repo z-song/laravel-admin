@@ -110,6 +110,13 @@ class Form implements Renderable
     protected $saved = [];
 
     /**
+     * Callbacks after getting editing model.
+     *
+     * @var Closure[]
+     */
+    protected $editingModel = [];
+
+    /**
      * Data for save to current model from input.
      *
      * @var array
@@ -895,6 +902,18 @@ class Form implements Renderable
     }
 
     /**
+     * Set gotten model callback.
+     *
+     * @param Closure $callback
+     *
+     * @return void
+     */
+    public function editingModel(Closure $callback)
+    {
+        $this->editingModel[] = $callback;
+    }
+
+    /**
      * Set submitted callback.
      *
      * @param Closure $callback
@@ -1017,6 +1036,10 @@ class Form implements Renderable
         $relations = $this->getRelations();
 
         $this->model = $this->model->with($relations)->findOrFail($id);
+
+        foreach ($this->editingModel as $callback) {
+            $callback->call($this->model, $this->model);
+        }
 
 //        static::doNotSnakeAttributes($this->model);
 
