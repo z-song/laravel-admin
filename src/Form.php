@@ -183,6 +183,11 @@ class Form implements Renderable
     public $rows = [];
 
     /**
+     * @var bool
+     */
+    protected $isSoftDeletes = false;
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -197,6 +202,8 @@ class Form implements Renderable
         if ($callback instanceof Closure) {
             $callback($this);
         }
+
+        $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses($this->model));
     }
 
     /**
@@ -218,10 +225,6 @@ class Form implements Renderable
      */
     public function model()
     {
-        if ($this->isSoftDeletes()) {
-            return $this->model->withTrashed();
-        }
-
         return $this->model;
     }
 
@@ -280,16 +283,6 @@ class Form implements Renderable
     }
 
     /**
-     * If is a soft-deletes model.
-     *
-     * @return bool
-     */
-    protected function isSoftDeletes()
-    {
-        return in_array(SoftDeletes::class, class_uses($this->model));
-    }
-
-    /**
      * Destroy data entity and remove files.
      *
      * @param $id
@@ -299,16 +292,23 @@ class Form implements Renderable
     public function destroy($id)
     {
         collect(explode(',', $id))->filter()->each(function ($id) {
-            $model = $this->model()->findOrFail($id);
 
-            if ($this->isSoftDeletes() && $model->trashed()) {
-                $this->deleteFiles($id, true);
+            $builder = $this->model()->newQuery();
+
+            if ($this->isSoftDeletes) {
+                $builder = $builder->withTrashed();
+            }
+
+            $model = $builder->with($this->getRelations())->findOrFail($id);
+
+            if ($this->isSoftDeletes && $model->trashed()) {
+                $this->deleteFiles($model, true);
                 $model->forceDelete();
 
                 return;
             }
 
-            $this->deleteFiles($id);
+            $this->deleteFiles($model);
             $model->delete();
         });
 
@@ -318,20 +318,17 @@ class Form implements Renderable
     /**
      * Remove files in record.
      *
-     * @param mixed $id
+     * @param Model $model
      * @param bool  $forceDelete
      */
-    protected function deleteFiles($id, $forceDelete = false)
+    protected function deleteFiles(Model $model, $forceDelete = false)
     {
         // If it's a soft delete, the files in the data will not be deleted.
-        if (!$forceDelete && $this->isSoftDeletes()) {
+        if (!$forceDelete && $this->isSoftDeletes) {
             return;
         }
 
-        $data = $this
-            ->model()
-            ->with($this->getRelations())
-            ->findOrFail($id)->toArray();
+        $data = $model->toArray();
 
         $this->builder->fields()->filter(function ($field) {
             return $field instanceof Field\File;
@@ -1069,7 +1066,13 @@ class Form implements Renderable
     {
         $relations = $this->getRelations();
 
-        $this->model = $this->model->with($relations)->findOrFail($id);
+        $builder = $this->model()->newQuery();
+
+        if ($this->isSoftDeletes) {
+            $builder->withTrashed();
+        }
+
+        $this->model = $builder->with($relations)->findOrFail($id);
 
         $this->callEditing();
 
