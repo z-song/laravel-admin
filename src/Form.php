@@ -218,6 +218,10 @@ class Form implements Renderable
      */
     public function model()
     {
+        if ($this->isSoftDeletes()) {
+            return $this->model->withTrashed();
+        }
+
         return $this->model;
     }
 
@@ -276,6 +280,16 @@ class Form implements Renderable
     }
 
     /**
+     * If is a soft-deletes model.
+     *
+     * @return bool
+     */
+    protected function isSoftDeletes()
+    {
+        return in_array(SoftDeletes::class, class_uses($this->model));
+    }
+
+    /**
      * Destroy data entity and remove files.
      *
      * @param $id
@@ -284,11 +298,19 @@ class Form implements Renderable
      */
     public function destroy($id)
     {
-        $ids = explode(',', $id);
+        collect(explode(',', $id))->filter()->each(function ($id) {
 
-        collect($ids)->filter()->each(function ($id) {
+            $model = $this->model()->findOrFail($id);
+
+            if ($model->trashed()) {
+                $this->deleteFiles($id, true);
+                $model->forceDelete();
+
+                return;
+            }
+
             $this->deleteFiles($id);
-            $this->model()->find($id)->delete();
+            $model->delete();
         });
 
         return true;
@@ -297,12 +319,13 @@ class Form implements Renderable
     /**
      * Remove files in record.
      *
-     * @param $id
+     * @param mixed $id
+     * @param bool  $forceDelete
      */
-    protected function deleteFiles($id)
+    protected function deleteFiles($id, $forceDelete = false)
     {
         // If it's a soft delete, the files in the data will not be deleted.
-        if (in_array(SoftDeletes::class, class_uses($this->model))) {
+        if (!$forceDelete && $this->isSoftDeletes()) {
             return;
         }
 
