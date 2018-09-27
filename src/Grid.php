@@ -211,7 +211,10 @@ class Grid
             return;
         }
 
-        ob_end_clean();
+        // clear output buffer.
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
 
         $this->model()->usePaginate(false);
 
