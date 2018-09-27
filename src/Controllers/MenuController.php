@@ -4,6 +4,7 @@ namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Auth\Database\Role;
+use Encore\Admin\Auth\Permission;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
@@ -40,6 +41,7 @@ class MenuController extends Controller
                     $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin.uri'));
                     $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
+                    $form->select('permission_id', trans('admin.permission'))->options(Permission::pluck('name', 'slug'));
                     $form->hidden('_token')->default(csrf_token());
 
                     $column->append((new Box(trans('admin.new'), $form))->style('success'));
@@ -117,6 +119,7 @@ class MenuController extends Controller
         $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
         $form->text('uri', trans('admin.uri'));
         $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
+        $form->select('permission_id', trans('admin.permission'))->options(Permission::pluck('name', 'slug'));
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

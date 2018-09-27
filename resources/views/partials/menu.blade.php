@@ -1,4 +1,4 @@
-@if(Admin::user()->visible($item['roles']))
+@if(Admin::user()->visible($item['roles']) && (!isset($item['permission']) ?: Admin::user()->can($item['permission'])))
     @if(!isset($item['children']))
         <li>
             @if(url()->isValidUrl($item['uri']))
