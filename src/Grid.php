@@ -335,7 +335,26 @@ class Grid
         $column = new Column($column, $label);
         $column->setGrid($this);
 
-        return $this->columns[] = $column;
+        return tap($column, function ($value) {
+            $this->columns->push($value);
+        });
+    }
+
+    /**
+     * Prepend column to grid.
+     *
+     * @param string $column
+     * @param string $label
+     * @return Column
+     */
+    protected function prependColumn($column = '', $label = '')
+    {
+        $column = new Column($column, $label);
+        $column->setGrid($this);
+
+        return tap($column, function ($value) {
+            $this->columns->prepend($value);
+        });
     }
 
     /**
@@ -441,15 +460,8 @@ class Grid
             return;
         }
 
-        $grid = $this;
-        $callback = $this->actionsCallback;
-        $column = $this->addColumn('__actions__', trans('admin.action'));
-
-        $column->display(function ($value) use ($grid, $column, $callback) {
-            $actions = new Displayers\Actions($value, $grid, $column, $this);
-
-            return $actions->display($callback);
-        });
+        $this->addColumn('__actions__', trans('admin.action'))
+            ->displayUsing(Displayers\Actions::class, [$this->actionsCallback]);
     }
 
     /**
@@ -478,18 +490,8 @@ class Grid
             return;
         }
 
-        $grid = $this;
-
-        $column = new Column(Column::SELECT_COLUMN_NAME, ' ');
-        $column->setGrid($this);
-
-        $column->display(function ($value) use ($grid, $column) {
-            $actions = new Displayers\RowSelector($value, $grid, $column, $this);
-
-            return $actions->display();
-        });
-
-        $this->columns->prepend($column);
+        $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
+            ->displayUsing(Displayers\RowSelector::class);
     }
 
     /**

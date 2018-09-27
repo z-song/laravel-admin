@@ -303,6 +303,27 @@ class Column
     }
 
     /**
+     * Display using display abstract.
+     *
+     * @param string $abstract
+     * @param array $arguments
+     * @return Column
+     */
+    public function displayUsing($abstract, $arguments =[])
+    {
+        $grid = $this->grid;
+
+        $column = $this;
+
+        return $this->display(function ($value) use ($grid, $column, $abstract, $arguments) {
+            /** @var AbstractDisplayer $displayer */
+            $displayer = new $abstract($value, $grid, $column, $this);
+
+            return $displayer->display(...$arguments);
+        });
+    }
+
+    /**
      * Display column using array value map.
      *
      * @param array $values
