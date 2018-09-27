@@ -22,13 +22,6 @@ class Menu extends Model
     }
 
     /**
-     * whether enable menu bind to a permission
-     *
-     * @var bool
-     */
-    public $withPermission = true;
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -76,6 +69,16 @@ class Menu extends Model
         $byOrder = $orderColumn.' = 0,'.$orderColumn;
 
         return static::with('roles')->orderByRaw($byOrder)->get()->toArray();
+    }
+
+    /**
+     * determine if enable menu bind permission
+     *
+     * @return bool
+     */
+    public function withPermission()
+    {
+        return (bool)config('admin.menu_bind_permission');
     }
 
     /**
