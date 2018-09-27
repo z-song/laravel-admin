@@ -22,6 +22,13 @@ class Menu extends Model
     }
 
     /**
+     * whether enable menu bind to a permission
+     *
+     * @var bool
+     */
+    public $withPermission = true;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
