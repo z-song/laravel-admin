@@ -301,7 +301,7 @@ class Form implements Renderable
         collect(explode(',', $id))->filter()->each(function ($id) {
             $model = $this->model()->findOrFail($id);
 
-            if ($model->trashed()) {
+            if ($this->isSoftDeletes() && $model->trashed()) {
                 $this->deleteFiles($id, true);
                 $model->forceDelete();
 
