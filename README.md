@@ -20,9 +20,6 @@
     <a href="https://styleci.io/repos/48796179">
         <img src="https://styleci.io/repos/48796179/shield" alt="StyleCI">
     </a>
-    <a href="https://scrutinizer-ci.com/g/z-song/laravel-admin/?branch=master">
-        <img src="https://scrutinizer-ci.com/g/z-song/laravel-admin/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality">
-    </a>
     <a href="https://packagist.org/packages/encore/laravel-admin">
         <img src="https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000&&style=flat-square" alt="Packagist">
     </a>
@@ -35,9 +32,6 @@
     <a href="#backers" alt="sponsors on Open Collective">
         <img src="https://opencollective.com/laravel-admin/backers/badge.svg" />
     </a> 
-    <a href="#sponsors" alt="Sponsors on Open Collective">
-        <img src="https://opencollective.com/laravel-admin/sponsors/badge.svg" />
-    </a>
 </div>
 
 <p align="center">
