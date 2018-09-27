@@ -345,6 +345,7 @@ class Grid
      *
      * @param string $column
      * @param string $label
+     *
      * @return Column
      */
     protected function prependColumn($column = '', $label = '')

@@ -306,10 +306,11 @@ class Column
      * Display using display abstract.
      *
      * @param string $abstract
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return Column
      */
-    public function displayUsing($abstract, $arguments =[])
+    public function displayUsing($abstract, $arguments = [])
     {
         $grid = $this->grid;
 
