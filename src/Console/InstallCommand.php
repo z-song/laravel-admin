@@ -12,7 +12,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $name = 'admin:install';
+    protected $signature = 'admin:install';
 
     /**
      * The console command description.

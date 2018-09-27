@@ -902,7 +902,7 @@ class Form implements Renderable
     }
 
     /**
-     * Set gotten model callback.
+     * Set after getting editing model callback.
      *
      * @param Closure $callback
      *
