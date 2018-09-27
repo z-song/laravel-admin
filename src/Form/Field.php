@@ -727,9 +727,9 @@ class Field implements Renderable
     {
         return $this->attribute('pattern', $regexp);
     }
-    
+
     /**
-     * set the input filed required
+     * set the input filed required.
      *
      * @return Field
      */
