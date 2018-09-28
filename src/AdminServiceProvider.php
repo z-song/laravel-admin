@@ -64,7 +64,7 @@ class AdminServiceProvider extends ServiceProvider
             \URL::forceScheme('https');
             $this->app['request']->server->set('HTTPS', true);
         }
-        
+
         if (file_exists($routes = admin_path('routes.php'))) {
             $this->loadRoutesFrom($routes);
         }
