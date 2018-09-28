@@ -1261,7 +1261,7 @@ class Form implements Renderable
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
         }
-        
+
         return implode('/', $segments);
     }
 
