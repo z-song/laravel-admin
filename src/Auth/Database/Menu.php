@@ -72,13 +72,13 @@ class Menu extends Model
     }
 
     /**
-     * determine if enable menu bind permission
+     * determine if enable menu bind permission.
      *
      * @return bool
      */
     public function withPermission()
     {
-        return (bool)config('admin.menu_bind_permission');
+        return (bool) config('admin.menu_bind_permission');
     }
 
     /**
