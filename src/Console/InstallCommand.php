@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Console;
 
-use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Console\Command;
 
 class InstallCommand extends Command
@@ -49,7 +48,9 @@ class InstallCommand extends Command
     {
         $this->call('migrate');
 
-        if (Administrator::count() == 0) {
+        $userModel = config('admin.database.users_model');
+
+        if ($userModel::count() == 0) {
             $this->call('db:seed', ['--class' => \Encore\Admin\Auth\Database\AdminTablesSeeder::class]);
         }
     }

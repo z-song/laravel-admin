@@ -3,7 +3,6 @@
 namespace Encore\Admin;
 
 use Closure;
-use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Traits\HasAssets;
 use Encore\Admin\Widgets\Navbar;
@@ -146,7 +145,9 @@ class Admin
      */
     public function menu()
     {
-        return (new Menu())->toTree();
+        $menuModel = config('admin.database.menu_model');
+
+        return (new $menuModel())->toTree();
     }
 
     /**

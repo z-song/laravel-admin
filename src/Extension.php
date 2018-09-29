@@ -2,8 +2,6 @@
 
 namespace Encore\Admin;
 
-use Encore\Admin\Auth\Database\Menu;
-use Encore\Admin\Auth\Database\Permission;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -299,9 +297,11 @@ abstract class Extension
      */
     protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0)
     {
-        $lastOrder = Menu::max('order');
+        $menuModel = config('admin.database.menu_model');
 
-        Menu::create([
+        $lastOrder = $menuModel::max('order');
+
+        $menuModel::create([
             'parent_id' => $parentId,
             'order'     => $lastOrder + 1,
             'title'     => $title,
@@ -319,7 +319,9 @@ abstract class Extension
      */
     protected static function createPermission($name, $slug, $path)
     {
-        Permission::create([
+        $permissionModel = config('admin.database.permissions_model');
+
+        $permissionModel::create([
             'name'      => $name,
             'slug'      => $slug,
             'http_path' => '/'.trim($path, '/'),
