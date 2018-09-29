@@ -41,8 +41,7 @@ class MenuController extends Controller
                     $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin.uri'));
                     $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
-                    if ((new Menu())->withPermission())
-                    {
+                    if ((new Menu())->withPermission()) {
                         $form->select('permission', trans('admin.permission'))->options(Permission::pluck('name', 'slug'));
                     }
                     $form->hidden('_token')->default(csrf_token());
@@ -122,8 +121,7 @@ class MenuController extends Controller
         $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
         $form->text('uri', trans('admin.uri'));
         $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
-        if ($form->model()->withPermission())
-        {
+        if ($form->model()->withPermission()) {
             $form->select('permission', trans('admin.permission'))->options(Permission::pluck('name', 'slug'));
         }
 
