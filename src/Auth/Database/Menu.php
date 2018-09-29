@@ -26,7 +26,7 @@ class Menu extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'order', 'title', 'icon', 'uri'];
+    protected $fillable = ['parent_id', 'order', 'title', 'icon', 'uri', 'permission'];
 
     /**
      * Create a new Eloquent model instance.
@@ -69,6 +69,16 @@ class Menu extends Model
         $byOrder = $orderColumn.' = 0,'.$orderColumn;
 
         return static::with('roles')->orderByRaw($byOrder)->get()->toArray();
+    }
+
+    /**
+     * determine if enable menu bind permission
+     *
+     * @return bool
+     */
+    public function withPermission()
+    {
+        return (bool)config('admin.menu_bind_permission');
     }
 
     /**
