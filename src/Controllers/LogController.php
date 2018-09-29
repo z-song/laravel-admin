@@ -62,7 +62,6 @@ class LogController extends Controller
         $grid->disableCreation();
 
         $grid->filter(function ($filter) {
-
             $userModel = config('admin.database.users_model');
 
             $filter->equal('user_id', 'User')->select($userModel::all()->pluck('name', 'id'));
