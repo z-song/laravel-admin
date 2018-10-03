@@ -494,10 +494,10 @@ class Column
     {
         if (is_array($item)) {
             array_walk_recursive($item, function (&$value) {
-                $value = htmlentities($value);
+                $value = htmlentities($value, ENT_COMPAT, 'UTF-8');
             });
         } else {
-            $item = htmlentities($item);
+            $item = htmlentities($item, ENT_COMPAT, 'UTF-8');
         }
 
         return $item;
