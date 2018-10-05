@@ -59,6 +59,11 @@
             }
             $("<span class='input-group-btn'></span>").append(up).appendTo(group);
 
+	    if (clone.attr('disabled')) {
+              down.attr('disabled', 1);
+              up.attr('disabled', 1);
+            }
+		
             // remove spins from original
             clone.prop('type', 'text').keydown(function (e) {
                 if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
