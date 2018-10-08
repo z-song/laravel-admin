@@ -16,8 +16,8 @@ class Captcha extends Text
             throw new \Exception('To use captcha field, please install [mews/captcha] first.');
         }
 
-        $this->column = '__captcha__';
-        $this->label = trans('admin::lang.captcha');
+        $this->column = $column;
+        $this->label = array_get($arguments, 0, trans('admin::lang.captcha'));
     }
 
     public function setForm(Form $form = null)
@@ -33,7 +33,7 @@ class Captcha extends Text
     {
         $this->script = <<<EOT
 
-$('#{$this->column}-captcha').click(function () {
+$('#{$this->column}-captcha').on('click', function () {
     $(this).attr('src', $(this).attr('src')+'?'+Math.random());
 });
 
