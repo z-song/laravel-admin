@@ -296,6 +296,11 @@ HTML;
      */
     protected function renderCustomTools($tools)
     {
+        if ($this->form->isCreating()) {
+            $this->disableView();
+            $this->disableDelete();
+        }
+
         if (empty($tools)) {
             return '';
         }

@@ -172,6 +172,26 @@ class Builder
     }
 
     /**
+     * Check if is creating resource.
+     *
+     * @return bool
+     */
+    public function isCreating()
+    {
+        return $this->isMode(static::MODE_CREATE);
+    }
+
+    /**
+     * Check if is editing resource.
+     *
+     * @return bool
+     */
+    public function isEditing()
+    {
+        return $this->isMode(static::MODE_EDIT);
+    }
+
+    /**
      * Set resource Id.
      *
      * @param $id
