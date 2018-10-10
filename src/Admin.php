@@ -225,15 +225,15 @@ class Admin
                 $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']]);
             });
 
-
             $router->namespace(config('admin.route.namespace'))->group(function ($router) {
+
+                /* @var \Illuminate\Routing\Router $router */
                 $router->get('auth/login', 'AuthController@getLogin');
                 $router->post('auth/login', 'AuthController@postLogin');
                 $router->get('auth/logout', 'AuthController@getLogout');
                 $router->get('auth/setting', 'AuthController@getSetting');
                 $router->put('auth/setting', 'AuthController@putSetting');
             });
-
         });
     }
 
