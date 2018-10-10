@@ -209,14 +209,13 @@ class Admin
     {
         $attributes = [
             'prefix'     => config('admin.route.prefix'),
-            'namespace'  => 'Encore\Admin\Controllers',
             'middleware' => config('admin.route.middleware'),
         ];
 
         app('router')->group($attributes, function ($router) {
 
             /* @var \Illuminate\Routing\Router $router */
-            $router->group([], function ($router) {
+            $router->namespace('Encore\Admin\Controllers')->group(function ($router) {
 
                 /* @var \Illuminate\Routing\Router $router */
                 $router->resource('auth/users', 'UserController');
@@ -226,11 +225,15 @@ class Admin
                 $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']]);
             });
 
-            $router->get('auth/login', 'AuthController@getLogin');
-            $router->post('auth/login', 'AuthController@postLogin');
-            $router->get('auth/logout', 'AuthController@getLogout');
-            $router->get('auth/setting', 'AuthController@getSetting');
-            $router->put('auth/setting', 'AuthController@putSetting');
+
+            $router->namespace(config('admin.route.namespace'))->group(function ($router) {
+                $router->get('auth/login', 'AuthController@getLogin');
+                $router->post('auth/login', 'AuthController@postLogin');
+                $router->get('auth/logout', 'AuthController@getLogout');
+                $router->get('auth/setting', 'AuthController@getSetting');
+                $router->put('auth/setting', 'AuthController@putSetting');
+            });
+
         });
     }
 
