@@ -214,7 +214,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This value is the skin of admin pages.
-    | @see https://adminlte.io/docs/2.4/skin
+    | @see https://adminlte.io/docs/2.4/layout
     |
     | Supported:
     |    "skin-blue", "skin-blue-light", "skin-yellow", "skin-yellow-light",
