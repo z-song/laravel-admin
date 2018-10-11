@@ -232,6 +232,7 @@ class Field implements Renderable
      */
     public function file($server = '', $download = true)
     {
+        if ( ! $this->value ) return;
         $field = $this;
 
         return $this->unescape()->as(function ($path) use ($server, $download, $field) {
