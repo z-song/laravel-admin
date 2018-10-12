@@ -729,7 +729,7 @@ class Field implements Renderable
     }
 
     /**
-     * set the input filed required
+     * set the input filed required.
      *
      * @param bool $isLabelAsterisked
      *
