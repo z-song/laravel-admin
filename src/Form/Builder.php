@@ -542,6 +542,10 @@ class Builder
      */
     public function renderTools()
     {
+        if ($this->mode == static::MODE_CREATE) {
+           $this->tools->disableDelete();
+           $this->tools->disableView();
+        }
         return $this->tools->render();
     }
 
