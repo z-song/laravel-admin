@@ -210,11 +210,15 @@ abstract class Extension
      *
      * @return \Illuminate\Config\Repository|mixed
      */
-    public static function config($key, $default = null)
+    public static function config($key = null, $default = null)
     {
         $name = array_search(get_called_class(), Admin::$extensions);
 
-        $key = sprintf('admin.extensions.%s.%s', strtolower($name), $key);
+        if (is_null($key)) {
+            $key = sprintf('admin.extensions.%s', strtolower($name));
+        } else {
+            $key = sprintf('admin.extensions.%s.%s', strtolower($name), $key);
+        }
 
         return config($key, $default);
     }
