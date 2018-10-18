@@ -100,7 +100,7 @@ return [
     */
     'auth' => [
 
-        'controller' => App\Admin\Controllers\AuthController::class,
+        'controller' => Encore\Admin\Controllers\AuthController::class,
 
         'guards' => [
             'admin' => [
