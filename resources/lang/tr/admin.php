@@ -42,6 +42,7 @@ return [
     'back_to_list'          => 'Listeye dön',
     'submit'                => 'Gönder',
     'continue_editing'      => 'Düzenlemeye devam et',
+    'continue_creating'     => 'Oluşturmaya devam et',
     'menu'                  => 'Menü',
     'input'                 => 'Giriş',
     'succeeded'             => 'Başarılı',
@@ -97,6 +98,5 @@ return [
         'filter_clear'       => 'Tümünü göster',
         'filter_placeholder' => 'Filtrele',
     ],
-
-    'menu_titles' => [],
+    'menu_titles'           => [],
 ];
