@@ -177,6 +177,16 @@ class Column
     }
 
     /**
+     * Get original data for column.
+     *
+     * @return  array $input
+     */
+    public static function getOriginalGridData()
+    {
+        return static::$originalGridData;
+    }
+
+    /**
      * Set column attributes.
      *
      * @param array $attributes
