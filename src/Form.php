@@ -626,7 +626,7 @@ class Form implements Renderable
             $url = rtrim($resourcesPath, '/')."/{$key}/edit";
         } elseif (request('after-save') == 2) {
             // continue creating
-            $url = rtrim($resourcesPath, '/')."/create";
+            $url = rtrim($resourcesPath, '/').'/create';
         } elseif (request('after-save') == 3) {
             // view resource
             $url = rtrim($resourcesPath, '/')."/{$key}";
