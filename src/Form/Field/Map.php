@@ -39,8 +39,8 @@ class Map extends Field
 
     public function __construct($column, $arguments)
     {
-        $this->column['lat'] = $column;
-        $this->column['lng'] = $arguments[0];
+        $this->column['lat'] = (string) $column;
+        $this->column['lng'] = (string) $arguments[0];
 
         array_shift($arguments);
 
