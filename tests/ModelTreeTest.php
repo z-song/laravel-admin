@@ -1,7 +1,5 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
-use Encore\Admin\Auth\Database\Menu;
 use Tests\Models\Tree;
 
 class ModelTreeTest extends TestCase

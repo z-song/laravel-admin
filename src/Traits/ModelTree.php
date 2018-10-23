@@ -231,6 +231,7 @@ trait ModelTree
      *
      * @param \Closure|null $closure
      * @param string        $rootText
+     *
      * @return array
      */
     public static function selectOptions(\Closure $closure = null, $rootText = 'Root')
