@@ -12,7 +12,6 @@ class PersonController extends Controller
 {
     use ModelForm;
 
-
     /**
      * Edit interface.
      *
@@ -28,7 +27,6 @@ class PersonController extends Controller
             ->description()
             ->row($this->form()->edit($id));
     }
-
 
     /**
      * Make a form builder.

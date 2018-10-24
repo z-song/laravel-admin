@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Tests\Models\City;
 use Tests\Models\Country;
 
-
 class CountryController extends Controller
 {
     public function index()
