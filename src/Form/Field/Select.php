@@ -125,6 +125,11 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
+                
+                if (d.id == target.data('value')) {
+                    d.selected = 'selected';
+                }
+                
                 return d;
             })
         }).trigger('change');
@@ -162,6 +167,11 @@ var refreshOptions = function(url, target) {
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
+                
+                if (d.id == target.data('value')) {
+                    d.selected = 'selected';
+                }
+                
                 return d;
             })
         }).trigger('change');
