@@ -78,6 +78,30 @@ class CreateTestTables extends Migration
             $table->index(['user_id', 'tag_id']);
             $table->timestamps();
         });
+
+        Schema::create('test_countries', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('text');
+
+            $table->timestamps();
+        });
+
+        Schema::create('test_cities', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('country_id');
+            $table->string('text');
+
+            $table->timestamps();
+        });
+
+        Schema::create('test_persons', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->unsignedInteger('country_id');
+            $table->unsignedInteger('city_id');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -94,5 +118,8 @@ class CreateTestTables extends Migration
         Schema::dropIfExists('test_user_profiles');
         Schema::dropIfExists('test_tags');
         Schema::dropIfExists('test_user_tags');
+        Schema::dropIfExists('test_countries');
+        Schema::dropIfExists('test_cities');
+        Schema::dropIfExists('test_persons');
     }
 }

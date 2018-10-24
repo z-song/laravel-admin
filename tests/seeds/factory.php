@@ -34,3 +34,19 @@ $factory->define(Tests\Models\Tag::class, function (Faker $faker) {
         'name' => $faker->word,
     ];
 });
+
+$factory->define(Tests\Models\Country::class, function (Faker $faker) {
+    return [
+        'text' => $faker->country,
+    ];
+});
+$factory->define(Tests\Models\City::class, function (Faker $faker) {
+    return [
+        'text' => $faker->city,
+    ];
+});
+$factory->define(Tests\Models\Person::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+    ];
+});
