@@ -55,7 +55,7 @@ class BatchActions extends AbstractTool
     }
 
     /**
-     * Disable delete And Hode SelectAll Checkbox
+     * Disable delete And Hode SelectAll Checkbox.
      *
      * @return $this
      */
@@ -149,8 +149,8 @@ EOT;
         $this->setUpScripts();
 
         $data = [
-            'actions'       => $this->actions,
-            'selectAllName' => $this->grid->getSelectAllName(),
+            'actions'                 => $this->actions,
+            'selectAllName'           => $this->grid->getSelectAllName(),
             'isHoldSelectAllCheckbox' => $this->isHoldSelectAllCheckbox,
         ];
 
