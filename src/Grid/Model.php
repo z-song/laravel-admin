@@ -364,9 +364,10 @@ class Model
         $this->setSort();
         $this->setPaginate();
 
-        $this->queries->unique()->each(function ($query) {
-            $this->model = call_user_func_array([$this->model, $query['method']], $query['arguments']);
-        });
+        foreach ($this->queries->unique()->toArray() as $query) {
+            $tmp_model = call_user_func_array([$this->model, $query['method']], $query['arguments']);
+        }
+        $this->model = $tmp_model;
 
         if ($this->model instanceof Collection) {
             return $this->model;
