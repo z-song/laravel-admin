@@ -19,7 +19,7 @@
 </head>
 
 <body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
-<div class="wrapper">
+<div class="wrapper" id="app">
 
     @include('admin::partials.header')
 
