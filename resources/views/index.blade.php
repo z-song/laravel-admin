@@ -19,14 +19,16 @@
 </head>
 
 <body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
-<div class="wrapper" id="app">
+<div class="wrapper">
 
     @include('admin::partials.header')
 
     @include('admin::partials.sidebar')
 
     <div class="content-wrapper" id="pjax-container">
+        <div id="app">
         @yield('content')
+        </div>
         {!! Admin::script() !!}
     </div>
 
