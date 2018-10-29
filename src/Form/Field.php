@@ -405,7 +405,7 @@ class Field implements Renderable
     }
 
     /**
-     * Set array of custom validation messages
+     * Set array of custom validation messages.
      *
      * @example https://laravel.com/docs/5.4/validation#custom-error-messages
      *
@@ -844,7 +844,7 @@ class Field implements Renderable
      * Set view of this field.
      *
      * @param string $view
-     * 
+     *
      * @return string
      */
     public function setView($view)
