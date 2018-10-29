@@ -96,6 +96,13 @@ class Field implements Renderable
     protected $rules = '';
 
     /**
+     * Validation messages.
+     *
+     * @var array
+     */
+    protected $messages = [];
+
+    /**
      * Css required by this field.
      *
      * @var array
@@ -398,6 +405,24 @@ class Field implements Renderable
     }
 
     /**
+     * Set array of custom validation messages
+     *
+     * @example https://laravel.com/docs/5.4/validation#custom-error-messages
+     *
+     * @param array $messages
+     *
+     * @return $this
+     */
+    public function messages(array $messages)
+    {
+        if (Arr::isAssoc($messages)) {
+            $this->messages = $messages;
+        }
+
+        return $this;
+    }
+
+    /**
      * Get field validation rules.
      *
      * @return string
@@ -571,7 +596,7 @@ class Field implements Renderable
             }
         }
 
-        return Validator::make($input, $rules, [], $attributes);
+        return Validator::make($input, $rules, $this->messages, $attributes);
     }
 
     /**
