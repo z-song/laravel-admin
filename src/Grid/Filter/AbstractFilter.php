@@ -372,7 +372,7 @@ abstract class AbstractFilter
      */
     public function default($default = null)
     {
-        if ($default) {
+        if ($default !== null && $default !== '') {
             $this->defaultValue = $default;
         }
 
