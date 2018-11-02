@@ -35,3 +35,7 @@ a.editable-empty {
     content: " *";
     color: red;
 }
+
+.mailbox-attachments li {
+    width: 300px !important;
+}
