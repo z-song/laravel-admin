@@ -290,7 +290,7 @@ class Tree implements Renderable
         });
 
         $('.{$this->elementId}-tree-tools').on('click', function(e){
-            var target = $(e.target),
+            var target = $(this),
                 action = target.data('action');
             if (action === 'expand') {
                 $('.dd').nestable('expandAll');
