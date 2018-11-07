@@ -1,6 +1,8 @@
 <div class="box-header with-border {{ $expand?'':'hide' }}" id="{{ $filterID }}">
     <form action="{!! $action !!}" class="form-horizontal" pjax-container method="get">
 
+        <input type="hidden" name="tab_index" value="{{$_GET['tab_index']??0}}">
+
         <div class="row">
             @foreach($layout->columns() as $column)
             <div class="col-md-{{ $column->width() }}">
