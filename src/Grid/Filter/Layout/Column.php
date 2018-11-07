@@ -5,7 +5,7 @@ namespace Encore\Admin\Grid\Filter\Layout;
 use Encore\Admin\Grid\Filter\AbstractFilter;
 use Illuminate\Support\Collection;
 
-class Column
+class Column extends Layout
 {
     /**
      * @var Collection
