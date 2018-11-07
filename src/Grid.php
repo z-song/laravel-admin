@@ -7,6 +7,7 @@ use Encore\Admin\Exception\Handler;
 use Encore\Admin\Grid\Column;
 use Encore\Admin\Grid\Displayers;
 use Encore\Admin\Grid\Exporter;
+use Encore\Admin\Grid\Exporters\AbstractExporter;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\HasElementNames;
 use Encore\Admin\Grid\Model;
@@ -148,6 +149,7 @@ class Grid
      */
     protected $options = [
         'usePagination'  => true,
+        'useTools'       => true,
         'useFilter'      => true,
         'useExporter'    => true,
         'useActions'     => true,
@@ -156,7 +158,7 @@ class Grid
     ];
 
     /**
-     * @var Tools\Footer
+     * @var Closure
      */
     protected $footer;
 
@@ -178,7 +180,8 @@ class Grid
 
         $this->setupTools();
         $this->setupFilter();
-        $this->setupExporter();
+
+        $this->handleExportRequest();
     }
 
     /**
@@ -200,21 +203,42 @@ class Grid
     }
 
     /**
-     * Setup grid exporter.
+     * Handle export request.
      *
-     * @return void
+     * @param bool $forceExport
      */
-    protected function setupExporter()
+    protected function handleExportRequest($forceExport = false)
     {
-        if ($scope = Input::get(Exporter::$queryName)) {
-            $this->model()->usePaginate(false);
-
-            if ($this->builder) {
-                call_user_func($this->builder, $this);
-            }
-
-            (new Exporter($this))->resolve($this->exporter)->withScope($scope)->export();
+        if (!$scope = request(Exporter::$queryName)) {
+            return;
         }
+
+        // clear output buffer.
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
+
+        $this->model()->usePaginate(false);
+
+        if ($this->builder) {
+            call_user_func($this->builder, $this);
+
+            $this->getExporter($scope)->export();
+        }
+
+        if ($forceExport) {
+            $this->getExporter($scope)->export();
+        }
+    }
+
+    /**
+     * @param string $scope
+     *
+     * @return AbstractExporter
+     */
+    protected function getExporter($scope)
+    {
+        return (new Exporter($this))->resolve($this->exporter)->withScope($scope);
     }
 
     /**
@@ -321,7 +345,27 @@ class Grid
         $column = new Column($column, $label);
         $column->setGrid($this);
 
-        return $this->columns[] = $column;
+        return tap($column, function ($value) {
+            $this->columns->push($value);
+        });
+    }
+
+    /**
+     * Prepend column to grid.
+     *
+     * @param string $column
+     * @param string $label
+     *
+     * @return Column
+     */
+    protected function prependColumn($column = '', $label = '')
+    {
+        $column = new Column($column, $label);
+        $column->setGrid($this);
+
+        return tap($column, function ($value) {
+            $this->columns->prepend($value);
+        });
     }
 
     /**
@@ -427,15 +471,8 @@ class Grid
             return;
         }
 
-        $grid = $this;
-        $callback = $this->actionsCallback;
-        $column = $this->addColumn('__actions__', trans('admin.action'));
-
-        $column->display(function ($value) use ($grid, $column, $callback) {
-            $actions = new Displayers\Actions($value, $grid, $column, $this);
-
-            return $actions->display($callback);
-        });
+        $this->addColumn('__actions__', trans('admin.action'))
+            ->displayUsing(Displayers\Actions::class, [$this->actionsCallback]);
     }
 
     /**
@@ -464,18 +501,8 @@ class Grid
             return;
         }
 
-        $grid = $this;
-
-        $column = new Column(Column::SELECT_COLUMN_NAME, ' ');
-        $column->setGrid($this);
-
-        $column->display(function ($value) use ($grid, $column) {
-            $actions = new Displayers\RowSelector($value, $grid, $column, $this);
-
-            return $actions->display();
-        });
-
-        $this->columns->prepend($column);
+        $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
+            ->displayUsing(Displayers\RowSelector::class);
     }
 
     /**
@@ -489,12 +516,14 @@ class Grid
             return;
         }
 
-        $data = $this->processFilter();
+        $collection = $this->processFilter(false);
+
+        $data = $collection->toArray();
 
         $this->prependRowSelectorColumn();
         $this->appendActionsColumn();
 
-        Column::setOriginalGridData($data);
+        Column::setOriginalGridModels($collection);
 
         $this->columns->map(function (Column $column) use (&$data) {
             $data = $column->fill($data);
@@ -508,6 +537,17 @@ class Grid
     }
 
     /**
+     * Disable header tools.
+     *
+     * @return $this
+     */
+    public function disableTools()
+    {
+        $this->option('useTools', false);
+        return $this;
+    }
+
+    /**
      * Disable grid filter.
      *
      * @return $this
@@ -515,6 +555,8 @@ class Grid
     public function disableFilter()
     {
         $this->option('useFilter', false);
+
+        $this->tools->disableFilterButton();
 
         return $this;
     }
@@ -532,15 +574,17 @@ class Grid
     /**
      * Process the grid filter.
      *
-     * @return array
+     * @param bool $toArray
+     *
+     * @return array|Collection|mixed
      */
-    public function processFilter()
+    public function processFilter($toArray = true)
     {
         if ($this->builder) {
             call_user_func($this->builder, $this);
         }
 
-        return $this->filter->execute();
+        return $this->filter->execute($toArray);
     }
 
     /**
@@ -688,6 +732,16 @@ class Grid
     }
 
     /**
+     * If grid allows to use header tools
+     *
+     * @return bool
+     */
+    public function allowTools()
+    {
+        return $this->option('useTools');
+    }
+
+    /**
      * If grid allows export.s.
      *
      * @return bool
@@ -764,7 +818,7 @@ class Grid
      *
      * @param Closure|null $closure
      *
-     * @return $this|Tools\Footer
+     * @return Closure
      */
     public function footer(Closure $closure = null)
     {
@@ -788,7 +842,7 @@ class Grid
             return '';
         }
 
-        return new Tools\Footer($this);
+        return (new Tools\Footer($this))->render();
     }
 
     /**
@@ -1014,6 +1068,8 @@ class Grid
      */
     public function render()
     {
+        $this->handleExportRequest(true);
+
         try {
             $this->build();
         } catch (\Exception $e) {

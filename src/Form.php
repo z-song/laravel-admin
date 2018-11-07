@@ -11,6 +11,7 @@ use Encore\Admin\Form\Tab;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -90,23 +91,30 @@ class Form implements Renderable
     /**
      * Submitted callback.
      *
-     * @var Closure
+     * @var Closure[]
      */
-    protected $submitted;
+    protected $submitted = [];
 
     /**
      * Saving callback.
      *
-     * @var Closure
+     * @var Closure[]
      */
-    protected $saving;
+    protected $saving = [];
 
     /**
      * Saved callback.
      *
-     * @var Closure
+     * @var Closure[]
      */
-    protected $saved;
+    protected $saved = [];
+
+    /**
+     * Callbacks after getting editing model.
+     *
+     * @var Closure[]
+     */
+    protected $editing = [];
 
     /**
      * Data for save to current model from input.
@@ -135,6 +143,13 @@ class Form implements Renderable
      * @var array
      */
     public static $availableFields = [];
+
+    /**
+     * Form field alias.
+     *
+     * @var array
+     */
+    public static $fieldAlias = [];
 
     /**
      * Ignored saving fields.
@@ -168,6 +183,11 @@ class Form implements Renderable
     public $rows = [];
 
     /**
+     * @var bool
+     */
+    protected $isSoftDeletes = false;
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -182,6 +202,8 @@ class Form implements Renderable
         if ($callback instanceof Closure) {
             $callback($this);
         }
+
+        $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses($this->model));
     }
 
     /**
@@ -269,28 +291,43 @@ class Form implements Renderable
      */
     public function destroy($id)
     {
-        $ids = explode(',', $id);
+        collect(explode(',', $id))->filter()->each(function ($id) {
+            $builder = $this->model()->newQuery();
 
-        foreach ($ids as $id) {
-            if (empty($id)) {
-                continue;
+            if ($this->isSoftDeletes) {
+                $builder = $builder->withTrashed();
             }
-            $this->deleteFilesAndImages($id);
-            $this->model->find($id)->delete();
-        }
+
+            $model = $builder->with($this->getRelations())->findOrFail($id);
+
+            if ($this->isSoftDeletes && $model->trashed()) {
+                $this->deleteFiles($model, true);
+                $model->forceDelete();
+
+                return;
+            }
+
+            $this->deleteFiles($model);
+            $model->delete();
+        });
 
         return true;
     }
 
     /**
-     * Remove files or images in record.
+     * Remove files in record.
      *
-     * @param $id
+     * @param Model $model
+     * @param bool  $forceDelete
      */
-    protected function deleteFilesAndImages($id)
+    protected function deleteFiles(Model $model, $forceDelete = false)
     {
-        $data = $this->model->with($this->getRelations())
-            ->findOrFail($id)->toArray();
+        // If it's a soft delete, the files in the data will not be deleted.
+        if (!$forceDelete && $this->isSoftDeletes) {
+            return;
+        }
+
+        $data = $model->toArray();
 
         $this->builder->fields()->filter(function ($field) {
             return $field instanceof Field\File;
@@ -331,7 +368,7 @@ class Form implements Renderable
             $this->updateRelation($this->relations);
         });
 
-        if (($response = $this->complete($this->saved)) instanceof Response) {
+        if (($response = $this->callSaved()) instanceof Response) {
             return $response;
         }
 
@@ -427,14 +464,28 @@ class Form implements Renderable
     }
 
     /**
+     * Call editing callbacks.
+     *
+     * @return void
+     */
+    protected function callEditing()
+    {
+        foreach ($this->editing as $func) {
+            call_user_func($func, $this);
+        }
+    }
+
+    /**
      * Call submitted callback.
      *
      * @return mixed
      */
     protected function callSubmitted()
     {
-        if ($this->submitted instanceof Closure) {
-            return call_user_func($this->submitted, $this);
+        foreach ($this->submitted as $func) {
+            if ($func instanceof Closure && ($ret = call_user_func($func, $this)) instanceof Response) {
+                return $ret;
+            }
         }
     }
 
@@ -445,22 +496,24 @@ class Form implements Renderable
      */
     protected function callSaving()
     {
-        if ($this->saving instanceof Closure) {
-            return call_user_func($this->saving, $this);
+        foreach ($this->saving as $func) {
+            if ($func instanceof Closure && ($ret = call_user_func($func, $this)) instanceof Response) {
+                return $ret;
+            }
         }
     }
 
     /**
      * Callback after saving a Model.
      *
-     * @param Closure|null $callback
-     *
      * @return mixed|null
      */
-    protected function complete(Closure $callback = null)
+    protected function callSaved()
     {
-        if ($callback instanceof Closure) {
-            return $callback($this);
+        foreach ($this->saved as $func) {
+            if ($func instanceof Closure && ($ret = call_user_func($func, $this)) instanceof Response) {
+                return $ret;
+            }
         }
     }
 
@@ -519,7 +572,7 @@ class Form implements Renderable
             $this->updateRelation($this->relations);
         });
 
-        if (($result = $this->complete($this->saved)) instanceof Response) {
+        if (($result = $this->callSaved()) instanceof Response) {
             return $result;
         }
 
@@ -572,6 +625,9 @@ class Form implements Renderable
             // continue editing
             $url = rtrim($resourcesPath, '/')."/{$key}/edit";
         } elseif (request('after-save') == 2) {
+            // continue creating
+            $url = rtrim($resourcesPath, '/').'/create';
+        } elseif (request('after-save') == 3) {
             // view resource
             $url = rtrim($resourcesPath, '/')."/{$key}";
         } else {
@@ -672,7 +728,8 @@ class Form implements Renderable
             $relation = $this->model->$name();
 
             $oneToOneRelation = $relation instanceof Relations\HasOne
-                || $relation instanceof Relations\MorphOne;
+                || $relation instanceof Relations\MorphOne
+                || $relation instanceof Relations\BelongsTo;
 
             $prepared = $this->prepareUpdate([$name => $values], $oneToOneRelation);
 
@@ -702,6 +759,29 @@ class Form implements Renderable
                     }
 
                     $related->save();
+                    break;
+                case Relations\BelongsTo::class:
+
+                    $parent = $this->model->$name;
+
+                    // if related is empty
+                    if (is_null($parent)) {
+                        $parent = $relation->getRelated();
+                    }
+
+                    foreach ($prepared[$name] as $column => $value) {
+                        $parent->setAttribute($column, $value);
+                    }
+
+                    $parent->save();
+
+                    // When in creating, associate two models
+                    if (!$this->model->{$relation->getForeignKey()}) {
+                        $this->model->{$relation->getForeignKey()} = $parent->getKey();
+
+                        $this->model->save();
+                    }
+
                     break;
                 case Relations\MorphOne::class:
                     $related = $this->model->$name;
@@ -855,6 +935,18 @@ class Form implements Renderable
     }
 
     /**
+     * Set after getting editing model callback.
+     *
+     * @param Closure $callback
+     *
+     * @return void
+     */
+    public function editing(Closure $callback)
+    {
+        $this->editing[] = $callback;
+    }
+
+    /**
      * Set submitted callback.
      *
      * @param Closure $callback
@@ -863,7 +955,7 @@ class Form implements Renderable
      */
     public function submitted(Closure $callback)
     {
-        $this->submitted = $callback;
+        $this->submitted[] = $callback;
     }
 
     /**
@@ -875,7 +967,7 @@ class Form implements Renderable
      */
     public function saving(Closure $callback)
     {
-        $this->saving = $callback;
+        $this->saving[] = $callback;
     }
 
     /**
@@ -887,7 +979,7 @@ class Form implements Renderable
      */
     public function saved(Closure $callback)
     {
-        $this->saved = $callback;
+        $this->saved[] = $callback;
     }
 
     /**
@@ -976,7 +1068,15 @@ class Form implements Renderable
     {
         $relations = $this->getRelations();
 
-        $this->model = $this->model->with($relations)->findOrFail($id);
+        $builder = $this->model()->newQuery();
+
+        if ($this->isSoftDeletes) {
+            $builder->withTrashed();
+        }
+
+        $this->model = $builder->with($relations)->findOrFail($id);
+
+        $this->callEditing();
 
 //        static::doNotSnakeAttributes($this->model);
 
@@ -1010,7 +1110,7 @@ class Form implements Renderable
      *
      * @return MessageBag|bool
      */
-    protected function validationMessages($input)
+    public function validationMessages($input)
     {
         $failedValidators = [];
 
@@ -1196,6 +1296,30 @@ class Form implements Renderable
     }
 
     /**
+     * Disable View Checkbox on footer.
+     *
+     * @return $this
+     */
+    public function disableViewCheck()
+    {
+        $this->builder()->getFooter()->disableViewCheck();
+
+        return $this;
+    }
+
+    /**
+     * Disable Editing Checkbox on footer.
+     *
+     * @return $this
+     */
+    public function disableEditingCheck()
+    {
+        $this->builder()->getFooter()->disableEditingCheck();
+
+        return $this;
+    }
+
+    /**
      * Footer setting for form.
      *
      * @param Closure $callback
@@ -1218,10 +1342,6 @@ class Form implements Renderable
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
-        }
-        // # fix #1768
-        if ($segments[0] == 'http:' && config('admin.secure') == true) {
-            $segments[0] = 'https:';
         }
 
         return implode('/', $segments);
@@ -1333,6 +1453,19 @@ class Form implements Renderable
     }
 
     /**
+     * Set form field alias.
+     *
+     * @param string $field
+     * @param string $alias
+     *
+     * @return void
+     */
+    public static function alias($field, $alias)
+    {
+        static::$fieldAlias[$alias] = $field;
+    }
+
+    /**
      * Remove registered field.
      *
      * @param array|string $abstract
@@ -1351,6 +1484,11 @@ class Form implements Renderable
      */
     public static function findFieldClass($method)
     {
+        // If alias exists.
+        if (isset(static::$fieldAlias[$method])) {
+            $method = static::$fieldAlias[$method];
+        }
+
         $class = array_get(static::$availableFields, $method);
 
         if (class_exists($class)) {
@@ -1420,7 +1558,7 @@ class Form implements Renderable
      * @param string $method
      * @param array  $arguments
      *
-     * @return Field|void
+     * @return Field
      */
     public function __call($method, $arguments)
     {
@@ -1433,5 +1571,9 @@ class Form implements Renderable
 
             return $element;
         }
+
+        admin_error('Error', "Field type [$method] does not exist.");
+
+        return new Field\Nullable();
     }
 }

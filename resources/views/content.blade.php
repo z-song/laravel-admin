@@ -1,10 +1,10 @@
-@extends('admin::index')
+@extends('admin::index', ['header' => $header])
 
 @section('content')
     <section class="content-header">
         <h1>
-            {{ $header or trans('admin.title') }}
-            <small>{{ $description or trans('admin.description') }}</small>
+            {{ $header ?: trans('admin.title') }}
+            <small>{{ $description ?: trans('admin.description') }}</small>
         </h1>
 
         <!-- breadcrumb start -->
@@ -31,15 +31,24 @@
                 @endif
             @endforeach
         </ol>
+        @elseif(config('admin.enable_default_breadcrumb'))
+        <ol class="breadcrumb" style="margin-right: 30px;">
+            <li><a href="{{ admin_url('/') }}"><i class="fa fa-dashboard"></i> Home</a></li>   
+            @for($i = 2; $i <= count(Request::segments()); $i++)
+                <li>
+                {{ucfirst(Request::segment($i))}}
+                </li>
+            @endfor
+        </ol>
         @endif
+
         <!-- breadcrumb end -->
 
     </section>
 
     <section class="content">
 
-        @include('admin::partials.error')
-        @include('admin::partials.success')
+        @include('admin::partials.alerts')
         @include('admin::partials.exception')
         @include('admin::partials.toastr')
 

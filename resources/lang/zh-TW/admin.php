@@ -20,6 +20,7 @@ return [
     'edit'                  => '編輯',
     'view'                  => '查看',
     'continue_editing'      => '繼續編輯',
+    'continue_creating'     => '繼續創建',
     'detail'                => '詳細',
     'browse'                => '瀏覽',
     'reset'                 => '重置',
@@ -97,4 +98,5 @@ return [
         'filter_clear'       => '顯示全部',
         'filter_placeholder' => '過濾',
     ],
+    'menu_titles' => [],
 ];

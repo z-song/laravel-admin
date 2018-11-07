@@ -5,6 +5,8 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Select extends Field
@@ -44,6 +46,11 @@ class Select extends Field
     {
         // remote options
         if (is_string($options)) {
+            // reload selected
+            if (class_exists($options) && in_array(Model::class, class_parents($options))) {
+                return $this->model(...func_get_args());
+            }
+
             return $this->loadRemoteOptions(...func_get_args());
         }
 
@@ -183,6 +190,46 @@ EOT;
     }
 
     /**
+     * Load options from current selected resource(s).
+     *
+     * @param string $model
+     * @param string $idField
+     * @param string $textField
+     *
+     * @return $this
+     */
+    public function model($model, $idField = 'id', $textField = 'name')
+    {
+        if (!class_exists($model)
+            || !in_array(Model::class, class_parents($model))
+        ) {
+            throw new \InvalidArgumentException("[$model] must be a valid model class");
+        }
+
+        $this->options = function ($value) use ($model, $idField, $textField) {
+            if (empty($value)) {
+                return [];
+            }
+
+            $resources = [];
+
+            if (is_array($value)) {
+                if (Arr::isAssoc($value)) {
+                    $resources[] = array_get($value, $idField);
+                } else {
+                    $resources = array_column($value, $idField);
+                }
+            } else {
+                $resources[] = $value;
+            }
+
+            return $model::find($resources)->pluck($textField, $idField)->toArray();
+        };
+
+        return $this;
+    }
+
+    /**
      * Load options from remote.
      *
      * @param string $url
@@ -196,13 +243,36 @@ EOT;
         $ajaxOptions = [
             'url' => $url.'?'.http_build_query($parameters),
         ];
+        $configs = array_merge([
+            'allowClear'         => true,
+            'placeholder'        => [
+                'id'        => '',
+                'text'      => trans('admin.choose'),
+            ],
+        ], $this->config);
+
+        $configs = json_encode($configs);
+        $configs = substr($configs, 1, strlen($configs) - 2);
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
 
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
-  $("{$this->getElementClassSelector()}").select2({data: data});
+
+  var select = $("{$this->getElementClassSelector()}");
+
+  select.select2({
+    data: data,
+    $configs
+  });
+  
+  var value = select.data('value') + '';
+  
+  if (value) {
+    value = value.split(',');
+    select.select2('val', value);
+  }
 });
 
 EOT;
@@ -221,6 +291,15 @@ EOT;
      */
     public function ajax($url, $idField = 'id', $textField = 'text')
     {
+        $configs = array_merge([
+            'allowClear'         => true,
+            'placeholder'        => $this->label,
+            'minimumInputLength' => 1,
+        ], $this->config);
+
+        $configs = json_encode($configs);
+        $configs = substr($configs, 1, strlen($configs) - 2);
+
         $this->script = <<<EOT
 
 $("{$this->getElementClassSelector()}").select2({
@@ -250,7 +329,7 @@ $("{$this->getElementClassSelector()}").select2({
     },
     cache: true
   },
-  minimumInputLength: 1,
+  $configs,
   escapeMarkup: function (markup) {
       return markup;
   }
@@ -285,7 +364,10 @@ EOT;
     {
         $configs = array_merge([
             'allowClear'  => true,
-            'placeholder' => $this->label,
+            'placeholder' => [
+                'id'   => '',
+                'text' => $this->label,
+            ],
         ], $this->config);
 
         $configs = json_encode($configs);
@@ -308,6 +390,8 @@ EOT;
             'options' => $this->options,
             'groups'  => $this->groups,
         ]);
+
+        $this->attribute('data-value', implode(',', (array) $this->value()));
 
         return parent::render();
     }

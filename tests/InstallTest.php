@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: encore
- * Date: 16/11/20
- * Time: 下午6:44.
- */
 class InstallTest extends TestCase
 {
     public function testInstalledDirectories()
@@ -19,6 +13,8 @@ class InstallTest extends TestCase
         $this->assertFileExists(admin_path('bootstrap.php'));
 
         $this->assertFileExists(admin_path('Controllers/HomeController.php'));
+
+        $this->assertFileExists(admin_path('Controllers/AuthController.php'));
 
         $this->assertFileExists(admin_path('Controllers/ExampleController.php'));
 

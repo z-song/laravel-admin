@@ -5,7 +5,6 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\MessageBag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait UploadField
@@ -37,6 +36,13 @@ trait UploadField
      * @var bool
      */
     protected $useUniqueName = false;
+
+    /**
+     * If use sequence name to store upload file.
+     *
+     * @var bool
+     */
+    protected $useSequenceName = false;
 
     /**
      * @var bool
@@ -74,7 +80,7 @@ trait UploadField
             'showRemove'           => false,
             'showUpload'           => false,
 //            'initialCaption'       => $this->initialCaption($this->value),
-            'deleteExtraData' => [
+            'deleteExtraData'      => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
                 static::FILE_DELETE_FLAG         => '',
                 '_token'                         => csrf_token(),
@@ -137,20 +143,26 @@ trait UploadField
      *
      * @param string $disk Disks defined in `config/filesystems.php`.
      *
+     * @throws \Exception
+     *
      * @return $this
      */
     public function disk($disk)
     {
-        if (!array_key_exists($disk, config('filesystems.disks'))) {
-            $error = new MessageBag([
-                'title'   => 'Config error.',
-                'message' => "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`.",
-            ]);
+        try {
+            $this->storage = Storage::disk($disk);
+        } catch (\Exception $exception) {
+            if (!array_key_exists($disk, config('filesystems.disks'))) {
+                admin_error(
+                    'Config error.',
+                    "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`."
+                );
 
-            return session()->flash('error', $error);
+                return $this;
+            }
+
+            throw $exception;
         }
-
-        $this->storage = Storage::disk($disk);
 
         return $this;
     }
@@ -217,6 +229,18 @@ trait UploadField
     }
 
     /**
+     * Use sequence name for store upload file.
+     *
+     * @return $this
+     */
+    public function sequenceName()
+    {
+        $this->useSequenceName = true;
+
+        return $this;
+    }
+
+    /**
      * Get store name of upload file.
      *
      * @param UploadedFile $file
@@ -227,6 +251,10 @@ trait UploadField
     {
         if ($this->useUniqueName) {
             return $this->generateUniqueName($file);
+        }
+
+        if ($this->useSequenceName) {
+            return $this->generateSequenceName($file);
         }
 
         if ($this->name instanceof \Closure) {
@@ -316,6 +344,28 @@ trait UploadField
     protected function generateUniqueName(UploadedFile $file)
     {
         return md5(uniqid()).'.'.$file->getClientOriginalExtension();
+    }
+
+    /**
+     * Generate a sequence name for uploaded file.
+     *
+     * @param UploadedFile $file
+     *
+     * @return string
+     */
+    protected function generateSequenceName(UploadedFile $file)
+    {
+        $index = 1;
+        $extension = $file->getClientOriginalExtension();
+        $originalName = $file->getClientOriginalName();
+        $newName = $originalName.'_'.$index.'.'.$extension;
+
+        while ($this->storage->exists("{$this->getDirectory()}/$newName")) {
+            $index++;
+            $newName = $originalName.'_'.$index.'.'.$extension;
+        }
+
+        return $newName;
     }
 
     /**

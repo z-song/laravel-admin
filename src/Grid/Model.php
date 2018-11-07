@@ -26,6 +26,11 @@ class Model
     protected $model;
 
     /**
+     * @var EloquentModel
+     */
+    protected $originalModel;
+
+    /**
      * Array of queries of the eloquent model.
      *
      * @var \Illuminate\Support\Collection
@@ -102,6 +107,8 @@ class Model
     public function __construct(EloquentModel $model)
     {
         $this->model = $model;
+
+        $this->originalModel = $model;
 
         $this->queries = collect();
 
@@ -191,6 +198,8 @@ class Model
     }
 
     /**
+     * Set parent grid instance.
+     *
      * @param Grid $grid
      *
      * @return $this
@@ -200,6 +209,16 @@ class Model
         $this->grid = $grid;
 
         return $this;
+    }
+
+    /**
+     * Get parent gird instance.
+     *
+     * @return Grid
+     */
+    public function getGrid()
+    {
+        return $this->grid;
     }
 
     /**
@@ -363,6 +382,28 @@ class Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Builder|EloquentModel
+     */
+    public function getQueryBuilder()
+    {
+        if ($this->relation) {
+            return $this->relation->getQuery();
+        }
+
+        $this->setSort();
+
+        $queryBuilder = $this->originalModel;
+
+        $this->queries->reject(function ($query) {
+            return in_array($query['method'], ['get', 'paginate']);
+        })->each(function ($query) use (&$queryBuilder) {
+            $queryBuilder = $queryBuilder->{$query['method']}(...$query['arguments']);
+        });
+
+        return $queryBuilder;
+    }
+
+    /**
      * If current page is greater than last page, then redirect to last page.
      *
      * @param LengthAwarePaginator $paginator
@@ -495,6 +536,11 @@ class Model
             return $query['method'] == 'with' && in_array($relationName, $query['arguments']);
         })) {
             $relation = $this->model->$relationName();
+
+            $this->queries->push([
+                'method'    => 'select',
+                'arguments' => [$this->model->getTable().'.*'],
+            ]);
 
             $this->queries->push([
                 'method'    => 'join',

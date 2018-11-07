@@ -11,7 +11,7 @@ class UninstallCommand extends Command
      *
      * @var string
      */
-    protected $name = 'admin:uninstall';
+    protected $signature = 'admin:uninstall';
 
     /**
      * The console command description.

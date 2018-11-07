@@ -10,6 +10,7 @@ use Encore\Admin\Grid\Filter\Presenter\Presenter;
 use Encore\Admin\Grid\Filter\Presenter\Radio;
 use Encore\Admin\Grid\Filter\Presenter\Select;
 use Encore\Admin\Grid\Filter\Presenter\Text;
+use Illuminate\Support\Collection;
 
 /**
  * Class AbstractFilter.
@@ -80,6 +81,11 @@ abstract class AbstractFilter
      * @var string
      */
     protected $view = 'admin::filter.where';
+
+    /**
+     * @var Collection
+     */
+    public $group;
 
     /**
      * AbstractFilter constructor.
@@ -381,6 +387,20 @@ abstract class AbstractFilter
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set element id.
+     *
+     * @param string $id
+     *
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $this->formatId($id);
+
+        return $this;
     }
 
     /**

@@ -30,3 +30,12 @@ a.editable-empty {
     color: #3c8dbc;
     border-bottom: none !important;
 }
+
+.form-group > label.asterisk:after {
+    content: " *";
+    color: red;
+}
+
+.mailbox-attachments li {
+    width: 300px !important;
+}

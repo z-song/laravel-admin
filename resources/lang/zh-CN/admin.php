@@ -19,6 +19,7 @@ return [
     'remove'                => '移除',
     'edit'                  => '编辑',
     'continue_editing'      => '继续编辑',
+    'continue_creating'     => '继续创建',
     'view'                  => '查看',
     'detail'                => '详细',
     'browse'                => '浏览',
@@ -97,4 +98,5 @@ return [
         'filter_clear'       => '显示全部',
         'filter_placeholder' => '过滤',
     ],
+    'menu_titles' => [],
 ];

@@ -77,6 +77,14 @@ $form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Opt
 或者从api中获取选项列表：
 ```php
 $form->select($column[, $label])->options('/api/users');
+
+// 使用ajax并显示所选项目
+
+$form->select($column[, $label])->options(Model::class)->ajax('/api/users');
+
+// 或指定名称和ID
+
+$form->select($column[, $label])->options(Model::class, 'name', 'id')->ajax('/api/users');
 ```
 其中api接口的格式必须为下面格式：
 ```php
@@ -190,6 +198,14 @@ public function city(Request $request)
 
 ```php
 $form->multipleSelect($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+
+// 使用ajax并显示所选项目：
+
+$form->multipleSelect($column[, $label])->options(Model::class)->ajax('ajax_url');
+
+// 或指定名称和ID
+
+$form->multipleSelect($column[, $label])->options(Model::class, 'name', 'id')->ajax('ajax_url');
 ```
 
 多选框可以处理两种情况，第一种是`ManyToMany`的关系。
@@ -535,6 +551,30 @@ $form->html('你的html内容', $label = '');
 ```php
 $form->tags('keywords');
 ```
+
+`tags`同样支持`ManyToMany`的关系，示例如下：
+
+```php
+$form->tags('tags', '文章标签')
+    ->pluck('name', 'id') // name 为需要显示的 Tag 模型的字段，id 为主键
+    ->options(Tag::all());// 下拉框选项
+```
+
+注意：处理`ManyToMany`关系时必须调用`pluck`方法，指定显示的字段名和主键。
+此外 `options` 方法传入一个`Collection`对象时，`options`会自动调用该对象的`pluck`方法转为`['主键名' => '显示字段名']` 数组，作为下拉框选项。或者可以直接使用`['主键名' => '显示字段名']`这样的数组作为参数。
+
+`tags`还支持`saving`方法用于处理提交的数据，示例如下：
+
+```php
+$form->tags('tags', '文章标签')
+    ->pluck('name', 'id')
+    ->options(Tag::all())
+    ->saving(function ($value) {
+        return $value;
+    });
+```
+
+`saving` 方法接收一个「参数为 tags 的提交值，返回值为修改后的 tags 提交值」的闭包，可以用于实现自动创建新 tag 或其它功能。
 
 ## 图标
 选择`font-awesome`图标

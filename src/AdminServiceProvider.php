@@ -11,11 +11,16 @@ class AdminServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
+        Console\AdminCommand::class,
         Console\MakeCommand::class,
         Console\MenuCommand::class,
         Console\InstallCommand::class,
+        Console\PublishCommand::class,
         Console\UninstallCommand::class,
         Console\ImportCommand::class,
+        Console\CreateUserCommand::class,
+        Console\ResetPasswordCommand::class,
+        Console\ExtendCommand::class,
     ];
 
     /**
@@ -54,6 +59,11 @@ class AdminServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'admin');
+
+        if (config('admin.https') || config('admin.secure')) {
+            \URL::forceScheme('https');
+            $this->app['request']->server->set('HTTPS', true);
+        }
 
         if (file_exists($routes = admin_path('routes.php'))) {
             $this->loadRoutesFrom($routes);

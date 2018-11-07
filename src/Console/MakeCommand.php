@@ -19,7 +19,7 @@ class MakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Make empty admin controller';
+    protected $description = 'Make admin controller';
 
     /**
      * @var ResourceGenerator

@@ -14,10 +14,10 @@ class Image extends AbstractDisplayer
         }
 
         return collect((array) $this->value)->filter()->map(function ($path) use ($server, $width, $height) {
-            if (url()->isValidUrl($path)) {
+            if (url()->isValidUrl($path) || strpos($path, 'data:image') === 0) {
                 $src = $path;
             } elseif ($server) {
-                $src = $server.$path;
+                $src = rtrim($server, '/').'/'.ltrim($path, '/');
             } else {
                 $src = Storage::disk(config('admin.upload.disk'))->url($path);
             }
