@@ -268,7 +268,7 @@ EOT;
         $column = $this->filter->getColumn();
 
         $script = <<<EOT
-
+$(document).off('change', ".{$this->getClass($column)}");
 $(document).on('change', ".{$this->getClass($column)}", function () {
     var target = $(this).closest('form').find(".{$this->getClass($target)}");
     $.get("$resourceUrl?q="+this.value, function (data) {
