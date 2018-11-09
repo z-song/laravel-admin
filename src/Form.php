@@ -1070,7 +1070,7 @@ class Form implements Renderable
     {
         $relations = $this->getRelations();
 
-        $builder = $this->model()->newQuery();
+        $builder = $this->model();
 
         if ($this->isSoftDeletes) {
             $builder->withTrashed();
