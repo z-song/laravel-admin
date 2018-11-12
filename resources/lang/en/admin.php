@@ -100,4 +100,5 @@ return [
     ],
 
     'menu_titles' => [],
+    'since_at'    => 'Member since admin %s',
 ];

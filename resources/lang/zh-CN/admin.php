@@ -99,4 +99,5 @@ return [
         'filter_placeholder' => '过滤',
     ],
     'menu_titles' => [],
+    'since_at'    => '登录时间 %s',
 ];
