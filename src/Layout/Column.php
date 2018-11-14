@@ -9,7 +9,7 @@ class Column implements Buildable
 {
     /**
      * grid system prefix width
-     * 
+     *
      * @var array
      */
     protected $width = [];
