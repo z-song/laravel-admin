@@ -9,6 +9,7 @@ class Column implements Buildable
 {
     /**
      * grid system prefix width
+     * 
      * @var array
      */
     protected $width = [];
@@ -34,14 +35,13 @@ class Column implements Buildable
 
         ///// set width.
         // if null, or $this->width is empty array, set as "md" => "12"
-        if(is_null($width) || (is_array($width) && count($width) === 0)){
-            $this->width["md"] = 12;
+        if (is_null($width) || (is_array($width) && count($width) === 0)) {
+            $this->width['md'] = 12;
         }
         // $this->width is number(old version), set as "md" => $width
-        elseif(is_numeric($width)){
-            $this->width["md"] = $width;
-        }
-        else{
+        elseif (is_numeric($width)) {
+            $this->width['md'] = $width;
+        } else {
             $this->width = $width;
         }
     }
@@ -112,7 +112,7 @@ class Column implements Buildable
     protected function startColumn()
     {
         // get classname using width array
-        $classname = implode(" ", collect($this->width)->map(function($value, $key){
+        $classname = implode(' ', collect($this->width)->map(function ($value, $key) {
             return "col-$key-$value";
         })->toArray());
         echo "<div class=\"{$classname}\">";
