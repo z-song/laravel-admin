@@ -87,3 +87,19 @@ $grid->actions(function ($actions) {
     $actions->append(new CheckRow($actions->getKey()));
 }
 ```
+
+Row manipulations with column conditions:
+For row attributes, you can use `$row->model()` array or `$row->column()` method.
+You need to set style after setting attributes. Otherwise style method will be by-passed 
+```php
+$grid->rows(function ($row) {
+   // if relased column value is Yes
+   if ( $row->column('released') == 'Yes' ) {
+        // Set attributes for row.
+        $row->setAttributes([ 'data-row-id' => $row->model()['id'], 'data-row-date' => $row->column('release_date') ]);
+        // Set style of row
+        $row->style("background-color:green");
+    }
+
+});
+```

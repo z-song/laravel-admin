@@ -33,7 +33,7 @@ class Footer implements Renderable
      *
      * @var array
      */
-    protected $checkboxes = ['view', 'continue_editing'];
+    protected $checkboxes = ['view', 'continue_editing', 'continue_creating'];
 
     /**
      * Footer constructor.
@@ -89,6 +89,18 @@ class Footer implements Renderable
     public function disableEditingCheck()
     {
         array_delete($this->checkboxes, 'continue_editing');
+
+        return $this;
+    }
+
+    /**
+     * Disable Creating Checkbox.
+     *
+     * @return $this
+     */
+    public function disableCreatingCheck()
+    {
+        array_delete($this->checkboxes, 'continue_creating');
 
         return $this;
     }

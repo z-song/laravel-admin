@@ -7,6 +7,7 @@ use Encore\Admin\Exception\Handler;
 use Encore\Admin\Grid\Column;
 use Encore\Admin\Grid\Displayers;
 use Encore\Admin\Grid\Exporter;
+use Encore\Admin\Grid\Exporters\AbstractExporter;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\HasElementNames;
 use Encore\Admin\Grid\Model;
@@ -148,6 +149,7 @@ class Grid
      */
     protected $options = [
         'usePagination'  => true,
+        'useTools'       => true,
         'useFilter'      => true,
         'useExporter'    => true,
         'useActions'     => true,
@@ -218,17 +220,25 @@ class Grid
 
         $this->model()->usePaginate(false);
 
-        $exporter = (new Exporter($this))->resolve($this->exporter)->withScope($scope);
-
-        if ($forceExport) {
-            $exporter->export();
-        }
-
         if ($this->builder) {
             call_user_func($this->builder, $this);
 
-            $exporter->export();
+            $this->getExporter($scope)->export();
         }
+
+        if ($forceExport) {
+            $this->getExporter($scope)->export();
+        }
+    }
+
+    /**
+     * @param string $scope
+     *
+     * @return AbstractExporter
+     */
+    protected function getExporter($scope)
+    {
+        return (new Exporter($this))->resolve($this->exporter)->withScope($scope);
     }
 
     /**
@@ -527,6 +537,17 @@ class Grid
     }
 
     /**
+     * Disable header tools.
+     *
+     * @return $this
+     */
+    public function disableTools()
+    {
+        $this->option('useTools', false);
+        return $this;
+    }
+
+    /**
      * Disable grid filter.
      *
      * @return $this
@@ -708,6 +729,16 @@ class Grid
             $this->resource(),
             $queryString ? ('?'.$queryString) : ''
         );
+    }
+
+    /**
+     * If grid allows to use header tools
+     *
+     * @return bool
+     */
+    public function allowTools()
+    {
+        return $this->option('useTools');
     }
 
     /**

@@ -148,6 +148,16 @@ class Tools implements Renderable
     }
 
     /**
+     * Get parent form of tool.
+     *
+     * @return Builder
+     */
+    public function form()
+    {
+        return $this->form;
+    }
+
+    /**
      * Render list button.
      *
      * @return string

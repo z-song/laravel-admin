@@ -20,6 +20,7 @@ return [
     'edit'                  => '編輯',
     'view'                  => '查看',
     'continue_editing'      => '繼續編輯',
+    'continue_creating'     => '繼續創建',
     'detail'                => '詳細',
     'browse'                => '瀏覽',
     'reset'                 => '重置',

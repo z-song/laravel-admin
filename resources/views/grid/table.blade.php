@@ -5,15 +5,19 @@
     </div>
     @endif
 
+    @if ( $grid->allowTools() || $grid->allowExport() || $grid->allowCreation() )
     <div class="box-header with-border">
         <div class="pull-right">
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}
         </div>
+        @if ( $grid->allowTools() )
         <span>
             {!! $grid->renderHeaderTools() !!}
         </span>
+        @endif
     </div>
+    @endif
 
     {!! $grid->renderFilter() !!}
 

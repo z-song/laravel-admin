@@ -625,6 +625,9 @@ class Form implements Renderable
             // continue editing
             $url = rtrim($resourcesPath, '/')."/{$key}/edit";
         } elseif (request('after-save') == 2) {
+            // continue creating
+            $url = rtrim($resourcesPath, '/').'/create';
+        } elseif (request('after-save') == 3) {
             // view resource
             $url = rtrim($resourcesPath, '/')."/{$key}";
         } else {
@@ -748,7 +751,9 @@ class Form implements Renderable
                     // if related is empty
                     if (is_null($related)) {
                         $related = $relation->getRelated();
-                        $related->{$relation->getForeignKeyName()} = $this->model->{$this->model->getKeyName()};
+                        $qualifiedParentKeyName = $relation->getQualifiedParentKeyName();
+                        $localKey = array_last(explode('.', $qualifiedParentKeyName));
+                        $related->{$relation->getForeignKeyName()} = $this->model->{$localKey};
                     }
 
                     foreach ($prepared[$name] as $column => $value) {
@@ -1065,7 +1070,7 @@ class Form implements Renderable
     {
         $relations = $this->getRelations();
 
-        $builder = $this->model()->newQuery();
+        $builder = $this->model();
 
         if ($this->isSoftDeletes) {
             $builder->withTrashed();

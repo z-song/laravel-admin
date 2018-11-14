@@ -19,6 +19,8 @@ return [
     'remove'                => 'הסרה',
     'edit'                  => 'עריכה',
     'view'                  => 'צפייה',
+    'continue_editing'      => 'המשך בעריכה',
+    'continue_creating'     => 'המשך ליצור',
     'detail'                => 'פרט',
     'browse'                => 'דפדוף',
     'reset'                 => 'אתחול',
