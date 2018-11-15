@@ -144,6 +144,7 @@ class Actions extends AbstractDisplayer
      */
     protected function renderView()
     {
+        // Modified by MTM
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getKey()}">
     <i class="fa fa-eye"></i>
@@ -158,6 +159,7 @@ EOT;
      */
     protected function renderEdit()
     {
+        // Modified by MTM
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getKey()}/edit">
     <i class="fa fa-edit"></i>
@@ -223,6 +225,7 @@ SCRIPT;
 
         Admin::script($script);
 
+        // Modified by MTM
         return <<<EOT
 <a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
     <i class="fa fa-trash"></i>
