@@ -18,7 +18,7 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::guard('admin')->guest() && !$this->shouldPassThrough($request)) {
+        if (Auth::guard(config('admin.defaults.guard'))->guest() && !$this->shouldPassThrough($request)) {
             return redirect()->guest(admin_base_path('auth/login'));
         }
 

@@ -52,7 +52,7 @@ class UsersTest extends TestCase
             ->seeIsAuthenticated('admin')
             ->seePageIs('admin');
 
-        $this->assertTrue($this->app['auth']->guard('admin')->getUser()->isAdministrator());
+        $this->assertTrue($this->app['auth']->guard(config('admin.defaults.guard'))->getUser()->isAdministrator());
 
         $this->see('<span>Users</span>')
             ->see('<span>Roles</span>')

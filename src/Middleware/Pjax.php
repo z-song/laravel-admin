@@ -23,7 +23,7 @@ class Pjax
     {
         $response = $next($request);
 
-        if (!$request->pjax() || $response->isRedirection() || Auth::guard('admin')->guest()) {
+        if (!$request->pjax() || $response->isRedirection() || Auth::guard(config('admin.defaults.guard'))->guest()) {
             return $response;
         }
 

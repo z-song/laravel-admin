@@ -67,7 +67,9 @@ class AuthController extends Controller
     {
         $this->guard()->logout();
 
-        $request->session()->invalidate();
+        // Logoff other system problems on multitenancy
+        $request->session()->forget(config('admin.defaults.guard'));
+        $request->session()->regenerate();
 
         return redirect(config('admin.route.prefix'));
     }
@@ -199,6 +201,6 @@ class AuthController extends Controller
      */
     protected function guard()
     {
-        return Auth::guard('admin');
+        return Auth::guard(config('admin.defaults.guard'));
     }
 }

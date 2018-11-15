@@ -168,7 +168,7 @@ class Admin
      */
     public function user()
     {
-        return Auth::guard('admin')->user();
+        return Auth::guard(config('admin.defaults.guard'))->user();
     }
 
     /**
