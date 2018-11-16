@@ -544,6 +544,7 @@ class Grid
     public function disableTools()
     {
         $this->option('useTools', false);
+
         return $this;
     }
 
@@ -732,7 +733,7 @@ class Grid
     }
 
     /**
-     * If grid allows to use header tools
+     * If grid allows to use header tools.
      *
      * @return bool
      */
