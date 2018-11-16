@@ -98,7 +98,7 @@ return [
     |
      */
     'defaults' => [
-        'guard' => 'admin'
+        'guard' => 'admin',
     ],
 
     /*
