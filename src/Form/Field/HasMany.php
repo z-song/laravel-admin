@@ -134,8 +134,7 @@ class HasMany extends Field
             foreach (array_keys($input[$this->column]) as $key) {
                 $newRules["{$this->column}.$key.$column"] = $rule;
                 if (isset($input[$this->column][$key][$column]) &&
-                    is_array($input[$this->column][$key][$column]))
-                {
+                    is_array($input[$this->column][$key][$column])) {
                     foreach ($input[$this->column][$key][$column] as $vkey => $value) {
                         $newInput["{$this->column}.$key.{$column}$vkey"] = $value;
                     }
