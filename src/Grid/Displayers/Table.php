@@ -13,7 +13,7 @@ class Table extends AbstractDisplayer
         }
 
         if (empty($titles)) {
-            $titles = array_keys($this->value[0]);
+            $titles = array_keys(reset($this->value));
         }
 
         if (Arr::isAssoc($titles)) {
