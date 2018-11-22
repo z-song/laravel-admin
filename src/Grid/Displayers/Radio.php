@@ -59,7 +59,11 @@ $('form.grid-radio-$name').on('submit', function () {
             _method: 'PUT'
         },
         success: function (data) {
-            toastr.success(data.message);
+            if(data.status){
+                toastr.success(data.message);
+            }else{
+                toastr.error(data.message);
+            }
         }
     });
 
