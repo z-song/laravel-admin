@@ -1,8 +1,13 @@
 # Model form callback
 
-`model-form` currently has two methods for receiving callback functions:
+`model-form` currently has three methods for receiving callback functions:
 
 ```php
+// callback after form submission
+$form->submitted(function (Form $form) {
+    //...
+});
+
 // callback before save
 $form->saving(function (Form $form) {
     //...
@@ -11,6 +16,14 @@ $form->saving(function (Form $form) {
 // callback after save
 $form->saved(function (Form $form) {
     //...
+});
+
+```
+If required, you can add additional fields to ignore using the submitted function e.g.
+```php
+$form->submitted(function (Form $form) {
+    $form->ignore('username');
+
 });
 
 ```
