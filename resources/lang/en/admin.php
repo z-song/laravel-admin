@@ -104,7 +104,7 @@ return [
     'Detail'                 => 'Detail',
     'Create'                 => 'Create',
     'Edit'                   => 'Edit',
-    'ID'                     => 'ID',
+    'Id'                     => 'ID',
     'Updated at'             => 'Updated at',
     'Created at'             => 'Created at'
 ];

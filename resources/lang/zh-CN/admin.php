@@ -103,7 +103,7 @@ return [
     'Detail'                 => '详情',
     'Create'                 => '新增',
     'Edit'                   => '修改',
-    'ID'                     => '序号',
+    'Id'                     => '序号',
     'Updated at'             => '更新时间',
     'Created at'             => '创建时间'
 ];
