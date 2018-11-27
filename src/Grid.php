@@ -904,7 +904,10 @@ class Grid
             return false;
         }
 
-        if ($relation instanceof Relations\HasOne || $relation instanceof Relations\BelongsTo) {
+        if ($relation instanceof Relations\HasOne ||
+            $relation instanceof Relations\BelongsTo ||
+            $relation instanceof Relations\MorphOne
+        ) {
             $this->model()->with($method);
 
             return $this->addColumn($method, $label)->setRelation(snake_case($method));
