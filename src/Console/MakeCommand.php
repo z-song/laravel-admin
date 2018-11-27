@@ -12,7 +12,7 @@ class MakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'admin:make {name} {--model=} {--O|output}';
+    protected $signature = 'admin:make {name} {--model=} {--O|output} {--description=}';
 
     /**
      * The console command description.
@@ -97,6 +97,7 @@ class MakeCommand extends GeneratorCommand
                 'DummyGrid',
                 'DummyShow',
                 'DummyForm',
+                'DummyDescription'
             ],
             [
                 $this->option('model'),
@@ -104,6 +105,7 @@ class MakeCommand extends GeneratorCommand
                 $this->indentCodes($this->generator->generateGrid()),
                 $this->indentCodes($this->generator->generateShow()),
                 $this->indentCodes($this->generator->generateForm()),
+                $this->option('description') ? $this->option('description') : 'description'
             ],
             $stub
         );

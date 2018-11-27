@@ -99,4 +99,11 @@ return [
         'filter_placeholder' => '过滤',
     ],
     'menu_titles' => [],
+    'Index'                  => '主页',
+    'Detail'                 => '详情',
+    'Create'                 => '新增',
+    'Edit'                   => '修改',
+    'ID'                     => '序号',
+    'Updated at'             => '更新时间',
+    'Created at'             => '创建时间'
 ];

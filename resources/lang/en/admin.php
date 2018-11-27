@@ -100,4 +100,11 @@ return [
     ],
 
     'menu_titles' => [],
+    'Index'                  => 'Index',
+    'Detail'                 => 'Detail',
+    'Create'                 => 'Create',
+    'Edit'                   => 'Edit',
+    'ID'                     => 'ID',
+    'Updated at'             => 'Updated at',
+    'Created at'             => 'Created at'
 ];

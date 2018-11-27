@@ -167,9 +167,19 @@ class ResourceGenerator
 
         foreach ($this->getTableColumns() as $column) {
             $name = $column->getName();
-
-            // set column label
-            $label = $this->formatLabel($name);
+            switch ($name) {
+                case 'id':
+                case 'created_at':
+                case 'updated_at':
+                    $label = trans('admin.'.$this->formatLabel($name));
+                    break;
+                
+                default:
+                    // set column label
+                    $label = $this->formatLabel($name);
+                    break;
+            }
+            
 
             $output .= sprintf($this->formats['show_field'], $name, $label);
 
@@ -185,7 +195,18 @@ class ResourceGenerator
 
         foreach ($this->getTableColumns() as $column) {
             $name = $column->getName();
-            $label = $this->formatLabel($name);
+            switch ($name) {
+                case 'id':
+                case 'created_at':
+                case 'updated_at':
+                    $label = trans('admin.'.$this->formatLabel($name));
+                    break;
+                
+                default:
+                    // set column label
+                    $label = $this->formatLabel($name);
+                    break;
+            }
 
             $output .= sprintf($this->formats['grid_column'], $name, $label);
             $output .= ";\r\n";

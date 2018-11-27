@@ -23,8 +23,8 @@ class DummyClass extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('Index')
-            ->description('description')
+            ->header(trans('admin.Index'))
+            ->description('DummyDescription'.trans('admin.Index'))
             ->body($this->grid());
     }
 
@@ -38,8 +38,8 @@ class DummyClass extends Controller
     public function show($id, Content $content)
     {
         return $content
-            ->header('Detail')
-            ->description('description')
+            ->header(trans('admin.Detail'))
+            ->description('DummyDescription'.trans('admin.Detail'))
             ->body($this->detail($id));
     }
 
@@ -53,8 +53,8 @@ class DummyClass extends Controller
     public function edit($id, Content $content)
     {
         return $content
-            ->header('Edit')
-            ->description('description')
+            ->header(trans('admin.Edit'))
+            ->description(trans('admin.Edit').'DummyDescription')
             ->body($this->form()->edit($id));
     }
 
@@ -67,8 +67,8 @@ class DummyClass extends Controller
     public function create(Content $content)
     {
         return $content
-            ->header('Create')
-            ->description('description')
+            ->header(trans('admin.Create'))
+            ->description(trans('admin.Create').'DummyDescription')
             ->body($this->form());
     }
 
