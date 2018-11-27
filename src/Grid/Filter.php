@@ -103,6 +103,13 @@ class Filter implements Renderable
     protected $layout;
 
     /**
+     * Primary key of giving model.
+     *
+     * @var mixed
+     */
+    protected $primaryKey;
+
+    /**
      * Create a new filter instance.
      *
      * @param Model $model
@@ -111,11 +118,11 @@ class Filter implements Renderable
     {
         $this->model = $model;
 
-        $pk = $this->model->eloquent()->getKeyName();
+        $this->primaryKey = $this->model->eloquent()->getKeyName();
 
         $this->initLayout();
 
-        $this->equal($pk, strtoupper($pk));
+        $this->equal($this->primaryKey, strtoupper($this->primaryKey));
         $this->scopes = new Collection();
     }
 
@@ -199,10 +206,14 @@ class Filter implements Renderable
 
     /**
      * Disable Id filter.
+     *
+     * @return $this
      */
     public function disableIdFilter()
     {
         $this->useIdFilter = false;
+
+        return $this;
     }
 
     /**
@@ -211,9 +222,26 @@ class Filter implements Renderable
     public function removeIDFilterIfNeeded()
     {
         if (!$this->useIdFilter && !$this->idFilterRemoved) {
-            array_shift($this->filters);
+            $this->removeFilterByID($this->primaryKey);
+
+            foreach ($this->layout->columns() as $column) {
+                $column->removeFilterByID($this->primaryKey);
+            }
+
             $this->idFilterRemoved = true;
         }
+    }
+
+    /**
+     * Remove filter by filter id.
+     *
+     * @param mixed $id
+     */
+    protected function removeFilterByID($id)
+    {
+        $this->filters = array_filter($this->filters, function (AbstractFilter $filter) use ($id) {
+            return $filter->getId() != $id;
+        });
     }
 
     /**
@@ -375,7 +403,7 @@ class Filter implements Renderable
      */
     public function column($width, \Closure $closure)
     {
-        $width = $width < 1 ? round(12*$width) : $width;
+        $width = $width < 1 ? round(12 * $width) : $width;
 
         $this->layout->column($width, $closure);
 

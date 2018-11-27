@@ -67,4 +67,14 @@ class Column
     {
         return $this->width;
     }
+
+    /**
+     * Remove filter from column by id.
+     */
+    public function removeFilterByID($id)
+    {
+        $this->filters = $this->filters->reject(function (AbstractFilter $filter) use ($id) {
+            return $filter->getId() == $id;
+        });
+    }
 }

@@ -6,8 +6,8 @@ use Illuminate\Contracts\Support\Renderable;
 
 class Tab extends Widget implements Renderable
 {
-    const TYPE_CONTENT  = 1;
-    const TYPE_LINK     = 2;
+    const TYPE_CONTENT = 1;
+    const TYPE_LINK = 2;
 
     /**
      * @var string
@@ -58,9 +58,9 @@ class Tab extends Widget implements Renderable
     /**
      * Add a link on tab.
      *
-     * @param string    $title
-     * @param string    $href
-     * @param bool      $active
+     * @param string $title
+     * @param string $href
+     * @param bool   $active
      *
      * @return $this
      */

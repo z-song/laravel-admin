@@ -128,14 +128,26 @@ class HasMany extends Field
         }
 
         $newRules = [];
+        $newInput = [];
 
         foreach ($rules as $column => $rule) {
             foreach (array_keys($input[$this->column]) as $key) {
                 $newRules["{$this->column}.$key.$column"] = $rule;
+                if (isset($input[$this->column][$key][$column]) &&
+                    is_array($input[$this->column][$key][$column]))
+                {
+                    foreach ($input[$this->column][$key][$column] as $vkey => $value) {
+                        $newInput["{$this->column}.$key.{$column}$vkey"] = $value;
+                    }
+                }
             }
         }
 
-        return Validator::make($input, $newRules, $this->validationMessages, $attributes);
+        if (empty($newInput)) {
+            $newInput = $input;
+        }
+
+        return Validator::make($newInput, $newRules, $this->validationMessages, $attributes);
     }
 
     /**

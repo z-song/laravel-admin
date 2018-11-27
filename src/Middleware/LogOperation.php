@@ -28,7 +28,11 @@ class LogOperation
                 'input'   => json_encode($request->input()),
             ];
 
-            OperationLogModel::create($log);
+            try {
+                OperationLogModel::create($log);
+            } catch (\Exception $exception) {
+                // pass
+            }
         }
 
         return $next($request);
@@ -43,7 +47,28 @@ class LogOperation
     {
         return config('admin.operation_log.enable')
             && !$this->inExceptArray($request)
+            && $this->inAllowedMethods($request->method())
             && Admin::user();
+    }
+
+    /**
+     * Whether requests using this method are allowed to be logged.
+     *
+     * @param string $method
+     *
+     * @return bool
+     */
+    protected function inAllowedMethods($method)
+    {
+        $allowedMethods = collect(config('admin.operation_log.allowed_methods'))->filter();
+
+        if ($allowedMethods->isEmpty()) {
+            return true;
+        }
+
+        return $allowedMethods->map(function ($method) {
+            return strtoupper($method);
+        })->contains($method);
     }
 
     /**

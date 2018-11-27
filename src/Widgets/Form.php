@@ -226,7 +226,7 @@ class Form implements Renderable
      *
      * @return $this
      */
-    protected function pushField(Field &$field)
+    public function pushField(Field &$field)
     {
         array_push($this->fields, $field);
 

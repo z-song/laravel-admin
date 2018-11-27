@@ -18,6 +18,11 @@ class BatchActions extends AbstractTool
     protected $enableDelete = true;
 
     /**
+     * @var bool
+     */
+    private $isHoldSelectAllCheckbox = false;
+
+    /**
      * BatchActions constructor.
      */
     public function __construct()
@@ -45,6 +50,20 @@ class BatchActions extends AbstractTool
     public function disableDelete()
     {
         $this->enableDelete = false;
+
+        return $this;
+    }
+
+    /**
+     * Disable delete And Hode SelectAll Checkbox.
+     *
+     * @return $this
+     */
+    public function disableDeleteAndHodeSelectAll()
+    {
+        $this->enableDelete = false;
+
+        $this->isHoldSelectAllCheckbox = true;
 
         return $this;
     }
@@ -130,8 +149,9 @@ EOT;
         $this->setUpScripts();
 
         $data = [
-            'actions'       => $this->actions,
-            'selectAllName' => $this->grid->getSelectAllName(),
+            'actions'                 => $this->actions,
+            'selectAllName'           => $this->grid->getSelectAllName(),
+            'isHoldSelectAllCheckbox' => $this->isHoldSelectAllCheckbox,
         ];
 
         return view('admin::grid.batch-actions', $data)->render();

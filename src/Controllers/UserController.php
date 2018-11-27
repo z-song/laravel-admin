@@ -2,9 +2,6 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Administrator;
-use Encore\Admin\Auth\Database\Permission;
-use Encore\Admin\Auth\Database\Role;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
@@ -79,7 +76,9 @@ class UserController extends Controller
      */
     protected function grid()
     {
-        $grid = new Grid(new Administrator());
+        $userModel = config('admin.database.users_model');
+
+        $grid = new Grid(new $userModel());
 
         $grid->id('ID')->sortable();
         $grid->username(trans('admin.username'));
@@ -112,7 +111,9 @@ class UserController extends Controller
      */
     protected function detail($id)
     {
-        $show = new Show(Administrator::findOrFail($id));
+        $userModel = config('admin.database.users_model');
+
+        $show = new Show($userModel::findOrFail($id));
 
         $show->id('ID');
         $show->username(trans('admin.username'));
@@ -136,7 +137,11 @@ class UserController extends Controller
      */
     public function form()
     {
-        $form = new Form(new Administrator());
+        $userModel = config('admin.database.users_model');
+        $permissionModel = config('admin.database.permissions_model');
+        $roleModel = config('admin.database.roles_model');
+
+        $form = new Form(new $userModel());
 
         $form->display('id', 'ID');
 
@@ -151,8 +156,8 @@ class UserController extends Controller
 
         $form->ignore(['password_confirmation']);
 
-        $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
-        $form->multipleSelect('permissions', trans('admin.permissions'))->options(Permission::all()->pluck('name', 'id'));
+        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
+        $form->multipleSelect('permissions', trans('admin.permissions'))->options($permissionModel::all()->pluck('name', 'id'));
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

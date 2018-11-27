@@ -7,6 +7,10 @@ $grid->filter(function($filter){
 
     // 去掉默认的id过滤器
     $filter->disableIdFilter();
+    
+    // 自定义id过滤器，在去掉默认id过滤器后必须调用 setId 方法，
+    // 并设置一个和主键不同的值，自定义的id过滤器才会显示。
+    $filter->equal('id', '产品序列号')->setId('product_id');
 
     // 在这里添加字段过滤器
     $filter->like('name', 'name');

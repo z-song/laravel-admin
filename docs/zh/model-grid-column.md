@@ -39,6 +39,14 @@ $grid->title()->editable('textarea');
 
 $grid->title()->editable('select', [1 => 'option1', 2 => 'option2', 3 => 'option3']);
 
+// select 支持传递闭包作为参数，该闭包接收参数为当前行对应的模型
+$grid->title()->editable('select', function($row) {
+    if ($row->title === 'test') {
+        return ['test1', 'test2'];
+    }
+    return ['test3', 'test4'];
+});
+
 $grid->birth()->editable('date');
 
 $grid->published_at()->editable('datetime');
@@ -80,9 +88,10 @@ $states = [
 ];
 
 $grid->column('switch_group')->switchGroup([
-    'hot'       => '热门',
-    'new'       => '最新'
-    'recommend' => '推荐',
+    'hot'        => '热门',
+    'new'        => '最新',
+    'recommend'  => '推荐',
+    'image.show' => '显示图片', // 更新对应关联模型
 ], $states);
 
 ```
@@ -98,6 +107,8 @@ $grid->options()->select([
 ]);
 ```
 
+`select` 也支持参数为闭包，使用方法和`editable`的`select`类似。
+
 ### radio
 ```php
 $grid->options()->radio([
@@ -108,6 +119,8 @@ $grid->options()->radio([
 ]);
 ```
 
+`radio` 也支持参数为闭包，使用方法和`editable`的`select`类似。
+
 ### checkbox
 ```php
 $grid->options()->checkbox([
@@ -117,6 +130,8 @@ $grid->options()->checkbox([
     4 => 'laudantium, totam rem aperiam',
 ]);
 ```
+
+`checkbox` 也支持参数为闭包，使用方法和`editable`的`select`类似。
 
 ### image
 

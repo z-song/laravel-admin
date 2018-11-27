@@ -3,16 +3,25 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
+use Illuminate\Contracts\Support\Arrayable;
 
 class Checkbox extends AbstractDisplayer
 {
     public function display($options = [])
     {
+        if ($options instanceof \Closure) {
+            $options = $options->call($this, $this->row);
+        }
+
         $radios = '';
         $name = $this->column->getName();
 
         if (is_string($this->value)) {
             $this->value = explode(',', $this->value);
+        }
+
+        if ($this->value instanceof Arrayable) {
+            $this->value = $this->value->toArray();
         }
 
         foreach ($options as $value => $label) {
