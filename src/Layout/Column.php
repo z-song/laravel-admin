@@ -8,7 +8,7 @@ use Illuminate\Contracts\Support\Renderable;
 class Column implements Buildable
 {
     /**
-     * grid system prefix width
+     * grid system prefix width.
      *
      * @var array
      */
