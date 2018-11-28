@@ -50,7 +50,7 @@ trait UploadField
     protected $removable = false;
 
     /**
-     * Controls the storage permission. Could be 'private' or 'public'
+     * Controls the storage permission. Could be 'private' or 'public'.
      *
      * @var string
      */
@@ -383,6 +383,7 @@ trait UploadField
     public function storage_permission($permission)
     {
         $this->storage_permission = $permission;
+
         return $this;
     }
 }
