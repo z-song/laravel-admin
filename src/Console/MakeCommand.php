@@ -46,6 +46,7 @@ class MakeCommand extends GeneratorCommand
 
         if ($stub and !is_file($stub)) {
             $this->error("The stub file dose not exist.");
+
             return false;
         }
 
