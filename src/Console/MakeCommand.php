@@ -12,7 +12,10 @@ class MakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'admin:make {name} {--model=} {--O|output}';
+    protected $signature = 'admin:make {name} 
+        {--model=} 
+        {--stub= : Path to the custom stub file. } 
+        {--O|output}';
 
     /**
      * The console command description.
@@ -35,6 +38,14 @@ class MakeCommand extends GeneratorCommand
     {
         if (!$this->modelExists()) {
             $this->error('Model does not exists !');
+
+            return false;
+        }
+
+        $stub = $this->option('stub');
+
+        if ($stub and !is_file($stub)) {
+            $this->error('The stub file dose not exist.');
 
             return false;
         }
@@ -128,6 +139,10 @@ class MakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
+        if ($stub = $this->option('stub')) {
+            return $stub;
+        }
+
         if ($this->option('model')) {
             return __DIR__.'/stubs/controller.stub';
         }
