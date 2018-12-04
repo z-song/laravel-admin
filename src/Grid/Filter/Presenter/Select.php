@@ -131,7 +131,7 @@ SCRIPT;
                 if (Arr::isAssoc($value)) {
                     $resources[] = array_get($value, $idField);
                 } else {
-                    $resources = array_column($value, $idField);
+                    $resources = $value;
                 }
             } else {
                 $resources[] = $value;
