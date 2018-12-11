@@ -6,3 +6,4 @@ composer.lock
 *.project
 .idea/
 .php_cs.cache
+.vscode/
