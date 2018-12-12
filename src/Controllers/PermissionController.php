@@ -105,7 +105,7 @@ class PermissionController extends Controller
                     return "<span class='label label-primary'>{$name}</span>";
                 })->implode('&nbsp;');
                 
-                if(!empty(config('admin.route.prefix'))) {
+                if (!empty(config('admin.route.prefix'))) {
                     $path = '/'.trim(config('admin.route.prefix'), '/').$path;
                 }
 
@@ -157,7 +157,7 @@ class PermissionController extends Controller
                     return "<span class='label label-primary'>{$name}</span>";
                 })->implode('&nbsp;');
 
-                if(!empty(config('admin.route.prefix'))) {
+                if (!empty(config('admin.route.prefix'))) {
                     $path = '/'.trim(config('admin.route.prefix'), '/').$path;
                 }
 
