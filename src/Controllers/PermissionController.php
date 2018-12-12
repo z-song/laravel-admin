@@ -104,8 +104,10 @@ class PermissionController extends Controller
                 })->map(function ($name) {
                     return "<span class='label label-primary'>{$name}</span>";
                 })->implode('&nbsp;');
-
-                $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                
+                if (!empty(config('admin.route.prefix'))) {
+                    $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                }
 
                 return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
             })->implode('');
@@ -154,8 +156,10 @@ class PermissionController extends Controller
                 })->map(function ($name) {
                     return "<span class='label label-primary'>{$name}</span>";
                 })->implode('&nbsp;');
-
-                $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                
+                if (!empty(config('admin.route.prefix'))) {
+                    $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                }
 
                 return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
             })->implode('');
