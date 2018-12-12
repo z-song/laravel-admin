@@ -1551,7 +1551,7 @@ class Form implements Renderable
      */
     public function __set($name, $value)
     {
-        $this->input($name, $value);
+        return array_set($this->inputs, $name, $value);
     }
 
     /**
