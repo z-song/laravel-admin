@@ -91,7 +91,6 @@ class Layout
         $this->columns()
             ->first()
             ->filters()
-            ->shift()
-        ;
+            ->shift();
     }
 }
