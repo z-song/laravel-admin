@@ -487,7 +487,7 @@ EOT;
 
         Admin::script($script);
     }
-    
+
     /**
      * Disable create button.
      *
