@@ -57,7 +57,7 @@ class HasMany extends Field
     ];
 
     /**
-     * Options for template
+     * Options for template.
      *
      * @var array
      */
@@ -496,7 +496,7 @@ EOT;
     public function disableCreate()
     {
         $this->options['allowCreate'] = false;
-        
+
         return $this;
     }
 
@@ -508,7 +508,7 @@ EOT;
     public function disableDelete()
     {
         $this->options['allowDelete'] = false;
-        
+
         return $this;
     }
 
