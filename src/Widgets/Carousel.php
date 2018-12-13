@@ -56,7 +56,7 @@ class Carousel extends Widget implements Renderable
             'items'      => $this->items,
             'title'      => $this->title,
             'attributes' => $this->formatAttributes(),
-            'id'         => $this->id
+            'id'         => $this->id,
         ];
 
         return view($this->view, $variables)->render();
