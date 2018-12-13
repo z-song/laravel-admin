@@ -57,6 +57,16 @@ class HasMany extends Field
     ];
 
     /**
+     * Options for template.
+     *
+     * @var array
+     */
+    protected $options = [
+        'allowCreate' => true,
+        'allowDelete' => true,
+    ];
+
+    /**
      * Create a new HasMany field instance.
      *
      * @param $relationName
@@ -490,6 +500,30 @@ EOT;
     }
 
     /**
+     * Disable create button.
+     *
+     * @return $this
+     */
+    public function disableCreate()
+    {
+        $this->options['allowCreate'] = false;
+
+        return $this;
+    }
+
+    /**
+     * Disable delete button.
+     *
+     * @return $this
+     */
+    public function disableDelete()
+    {
+        $this->options['allowDelete'] = false;
+
+        return $this;
+    }
+
+    /**
      * Render the `HasMany` field.
      *
      * @throws \Exception
@@ -510,6 +544,7 @@ EOT;
             'forms'        => $this->buildRelatedForms(),
             'template'     => $template,
             'relationName' => $this->relationName,
+            'options'      => $this->options,
         ]);
     }
 }
