@@ -82,4 +82,16 @@ class Layout
 
         return $this->columns;
     }
+
+    /**
+     * Remove the default ID filter of the default(first) column.
+     */
+    public function removeDefaultIDFilter()
+    {
+        $this->columns()
+            ->first()
+            ->filters()
+            ->shift()
+        ;
+    }
 }
