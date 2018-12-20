@@ -87,7 +87,7 @@ class Permission
     {
         $response = response(Admin::content()->withError(trans('admin.deny')));
 
-        if (request()->ajax()) {
+        if (!request()->pjax() && request()->ajax()) {
             abort(403, trans('admin.deny'));
         }
 
