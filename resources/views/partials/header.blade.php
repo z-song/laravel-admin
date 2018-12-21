@@ -40,7 +40,6 @@
 
                             <p>
                                 {{ Admin::user()->name }}
-                                <small>Member since admin {{ Admin::user()->created_at }}</small>
                             </p>
                         </li>
                         <li class="user-footer">

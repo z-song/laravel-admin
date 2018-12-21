@@ -98,6 +98,25 @@ return [
         'filter_clear'       => 'Show all',
         'filter_placeholder' => 'Filter',
     ],
-
-    'menu_titles' => [],
+    'dashboard'             => 'Dashboard',
+    'menu_titles'           => [
+        'admin'         => 'Admin',
+        'index'         => 'Dashboard',
+        'users'         => 'Users',
+        'roles'         => 'Roles',
+        'permission'    => 'Permissions',
+        'menu'          => 'Menu',
+        'operation_log' => 'Logs',
+    ],
+    'breadcrumb_titles'     => [
+        'home'        => 'Home',
+        'edit'        => 'Edit',
+        'detail'      => 'Detail',
+        'users'       => 'Users',
+        'auth'        => 'Auth',
+        'roles'       => 'Roles',
+        'permissions' => 'Permissions',
+        'menu'        => 'Menu',
+        'logs'        => 'Logs',
+    ],
 ];
