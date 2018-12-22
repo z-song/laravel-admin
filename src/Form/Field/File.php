@@ -101,6 +101,10 @@ class File extends Field
      */
     public function prepare($file)
     {
+        if (empty($file)) {
+            return null;
+        }
+        
         if (request()->has(static::FILE_DELETE_FLAG)) {
             return $this->destroy();
         }
