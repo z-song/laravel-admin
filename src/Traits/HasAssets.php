@@ -18,6 +18,10 @@ trait HasAssets
      * @var array
      */
     public static $js = [];
+    /**
+     * @var array
+     */
+    public static $headerJs = [];
 
     /**
      * @var array
@@ -114,6 +118,27 @@ trait HasAssets
         static::$js = array_merge(static::baseJs(), static::$js, (array) $js);
 
         return view('admin::partials.js', ['js' => array_unique(static::$js)]);
+    }
+
+    /**
+     * Add js or get all js.
+     *
+     * @param null $js
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     */
+    public static function headerJs($js = null)
+    {
+        if (!is_null($js)) {
+            self::$headerJs = array_merge(self::$headerJs, (array) $js);
+
+            return;
+        }
+
+        static::$headerJs = array_merge(static::$headerJs, (array) $js);
+
+
+        return view('admin::partials.js', ['js' => array_unique(static::$headerJs)]);
     }
 
     /**
