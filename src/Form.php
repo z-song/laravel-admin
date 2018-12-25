@@ -359,9 +359,7 @@ class Form implements Renderable
         DB::transaction(function () {
             $inserts = $this->prepareInsert($this->updates);
 
-            foreach ($inserts as $column => $value) {
-                $this->model->setAttribute($column, $value);
-            }
+            $this->model->fill($inserts);
 
             $this->model->save();
 
@@ -562,10 +560,7 @@ class Form implements Renderable
         DB::transaction(function () {
             $updates = $this->prepareUpdate($this->updates);
 
-            foreach ($updates as $column => $value) {
-                /* @var Model $this->model */
-                $this->model->setAttribute($column, $value);
-            }
+            $this->model->fill($updates);
 
             $this->model->save();
 
