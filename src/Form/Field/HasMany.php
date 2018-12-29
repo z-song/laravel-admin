@@ -53,7 +53,7 @@ class HasMany extends Field
      */
     protected $views = [
         'default' => 'admin::form.hasmany',
-        'tab'     => 'admin::form.hasmanytab',
+        'tab' => 'admin::form.hasmanytab',
     ];
 
     /**
@@ -101,30 +101,29 @@ class HasMany extends Field
             return false;
         }
 
-        $array_key_attach_str = function (array $a, string $b, string $c = '.') {
+        $array_key_attach_str = function(array $a, string $b, string $c = '.') {
             return call_user_func_array(
                 'array_merge',
-                array_map(function ($u, $v) use ($b, $c) {
+                array_map(function($u, $v) use ($b, $c) {
                     return ["{$b}{$c}{$u}" => $v];
                 }, array_keys($a), array_values($a))
             );
         };
 
-        $array_key_clean = function (array $a) {
-            $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
+        $array_key_clean = function(array $a) {
+            $a = count($a) ? call_user_func_array('array_merge', array_map(function($k, $v) {
                 return [str_replace(':', '', $k) => $v];
             }, array_keys($a), array_values($a))) : $a;
 
             return $a;
         };
 
-        $array_key_clean_undot = function (array $a) {
-            if (count($a)) {
-                foreach ($a as $key => $val) {
-                    array_set($a, str_replace(':', '', $key), $val);
-                    if (preg_match('/[\.\:]/', $key)) {
-                        unset($a[$key]);
-                    }
+        $array_key_clean_undot = function(array $a) {
+            $keys = preg_grep('/[\.\:]/', array_keys($a));
+            if ($keys) {
+                foreach ($keys as $key) {
+                    array_set($a, str_replace(':', '', $key), $a[$key]);
+                    unset($a[$key]);
                 }
             }
 
@@ -137,7 +136,7 @@ class HasMany extends Field
         $rules = $attributes = [];
         $messages = [];
         // remove all inputs & keys marked as removed
-        $availInput = array_filter(array_map(function ($v) {
+        $availInput = array_filter(array_map(function($v) {
             return $v[NestedForm::REMOVE_FLAG_NAME] ? null : $v;
         }, $input[$rel]));
         $keys = array_keys($availInput);
@@ -158,8 +157,8 @@ class HasMany extends Field
             // {
             //     dd(request());
             // }
-            $newColumn = call_user_func_array('array_merge', array_map(function ($u) use ($columns, $rel) {
-                return array_map(function ($k, $v) use ($u, $rel) {
+            $newColumn = call_user_func_array('array_merge', array_map(function($u) use ($columns, $rel) {
+                return array_map(function($k, $v) use ($u, $rel) {
                     //Fix ResetInput Function! A Headache Implementation!
                     return !$k ? "{$rel}.{$u}.{$v}" : "{$rel}.{$u}.{$v}:{$k}";
                 }, array_keys($columns), array_values($columns));
@@ -168,13 +167,13 @@ class HasMany extends Field
             $fieldRules = is_array($fieldRules) ? implode('|', $fieldRules) : $fieldRules;
             $rules = array_merge($rules, call_user_func_array(
                 'array_merge',
-                array_map(function ($v) use ($fieldRules) {
+                array_map(function($v) use ($fieldRules) {
                     return [$v => $fieldRules];
                 }, $newColumn)
             ));
             $attributes = array_merge($attributes, call_user_func_array(
                 'array_merge',
-                array_map(function ($v) use ($field) {
+                array_map(function($v) use ($field) {
                     //Fix ResetInput Function! A Headache Implementation!
                     $u = $field->label();
                     $u .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[1])[0].']' : '';
@@ -183,7 +182,7 @@ class HasMany extends Field
                 }, $newColumn)
             ));
             if ($field->validationMessages) {
-                $newMessages = array_map(function ($v) use ($field, $availInput, $array_key_attach_str) {
+                $newMessages = array_map(function($v) use ($field, $availInput, $array_key_attach_str) {
                     list($r, $k, $c) = explode('.', $v);
                     //Fix ResetInput Function! A Headache Implementation!
                     $col1 = explode(':', $c)[0];
@@ -211,7 +210,7 @@ class HasMany extends Field
             return false;
         }
 
-        $newInput = call_user_func_array('array_merge', array_map(function ($u) use ($availInput) {
+        $newInput = call_user_func_array('array_merge', array_map(function($u) use ($availInput) {
             list($rel, $key, $col) = explode('.', $u);
             $idx = "{$rel}.{$key}.{$col}";
             //Fix ResetInput Function! A Headache Implementation!
@@ -220,7 +219,7 @@ class HasMany extends Field
                 return [null => null];
             }
             if (is_array($availInput[$key][$col1])) {
-                return call_user_func_array('array_merge', array_map(function ($x, $y) use ($idx) {
+                return call_user_func_array('array_merge', array_map(function($x, $y) use ($idx) {
                     return ["{$idx}{$x}" => $y];
                 }, array_keys($availInput[$key][$col1]), $availInput[$key][$col1]));
             }
@@ -229,7 +228,7 @@ class HasMany extends Field
         }, array_keys($rules)));
         $newInput = $array_key_clean_undot($newInput);
 
-        $newRules = array_map(function ($u) use ($availInput, $rules) {
+        $newRules = array_map(function($u) use ($availInput, $rules) {
             list($rel, $key, $col) = explode('.', $u);
             $idx = "{$rel}.{$key}.{$col}";
             //Fix ResetInput Function! A Headache Implementation!
@@ -238,7 +237,7 @@ class HasMany extends Field
                 return [null => null];
             }
             if (is_array($availInput[$key][$col1])) {
-                return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $rules) {
+                return call_user_func_array('array_merge', array_map(function($x) use ($idx, $rules) {
                     return ["{$idx}{$x}" => $rules[$idx]];
                 }, array_keys($availInput[$key][$col1])));
             }
@@ -248,7 +247,7 @@ class HasMany extends Field
         $newRules = array_filter(call_user_func_array('array_merge', $newRules), 'strlen', ARRAY_FILTER_USE_KEY);
         $newRules = $array_key_clean($newRules);
 
-        $newAttributes = array_map(function ($u) use ($availInput, $attributes) {
+        $newAttributes = array_map(function($u) use ($availInput, $attributes) {
             list($rel, $key, $col) = explode('.', $u);
             $idx = "{$rel}.{$key}.{$col}";
             //Fix ResetInput Function! A Headache Implementation!
@@ -258,7 +257,7 @@ class HasMany extends Field
             }
             if (is_array($availInput[$key][$col1])) {
                 if (array_keys($availInput[$key][$col1])) {
-                    return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
+                    return call_user_func_array('array_merge', array_map(function($x) use ($idx, $attributes) {
                         return ["{$idx}.{$x}" => $attributes[$idx]];
                     }, array_keys($availInput[$key][$col1])));
                 }
@@ -543,7 +542,7 @@ class HasMany extends Field
          */
         $script = <<<EOT
 var index = 0;
-$('#has-many-{$this->column}').on('click', '.add', function () {
+$('#has-many-{$this->column}').on('click', '.add', function() {
 
     var tpl = $('template.{$this->column}-tpl');
 
@@ -554,7 +553,7 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
     {$templateScript}
 });
 
-$('#has-many-{$this->column}').on('click', '.remove', function () {
+$('#has-many-{$this->column}').on('click', '.remove', function() {
     $(this).closest('.has-many-{$this->column}-form').hide();
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
 });
@@ -606,7 +605,7 @@ $('#has-many-{$this->column} > .header').off('click', '.add').on('click', '.add'
 });
 
 if ($('.has-error').length) {
-    $('.has-error').parent('.tab-pane').each(function () {
+    $('.has-error').parent('.tab-pane').each(function() {
         var tabId = '#'+$(this).attr('id');
         $('li a[href="'+tabId+'"] i').removeClass('hide');
     });
@@ -661,10 +660,10 @@ EOT;
         $this->setupScript($script);
 
         return parent::render()->with([
-            'forms'         => $this->buildRelatedForms(),
-            'template'      => $template,
-            'relationName'  => $this->relationName,
-            'options'       => $this->options,
+            'forms' => $this->buildRelatedForms(),
+            'template' => $template,
+            'relationName' => $this->relationName,
+            'options' => $this->options,
         ]);
     }
 }
