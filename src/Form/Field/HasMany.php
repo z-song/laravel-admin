@@ -53,7 +53,7 @@ class HasMany extends Field
      */
     protected $views = [
         'default' => 'admin::form.hasmany',
-        'tab' => 'admin::form.hasmanytab',
+        'tab'     => 'admin::form.hasmanytab',
     ];
 
     /**
@@ -151,7 +151,7 @@ class HasMany extends Field
             if ($field instanceof Field\MultipleSelect) {
                 foreach ($keys as $key) {
                     $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen');
-                    $availInput[$key][$column] = $availInput[$key][$column] ? : null;
+                    $availInput[$key][$column] = $availInput[$key][$column] ?: null;
                 }
             }
             // if($field instanceof Field\File)
@@ -160,7 +160,7 @@ class HasMany extends Field
             // }
             $newColumn = call_user_func_array('array_merge', array_map(function ($u) use ($columns, $rel) {
                 return array_map(function ($k, $v) use ($u, $rel) {
-                            //Fix ResetInput Function! A Headache Implementation!
+                    //Fix ResetInput Function! A Headache Implementation!
                     return !$k ? "{$rel}.{$u}.{$v}" : "{$rel}.{$u}.{$v}:{$k}";
                 }, array_keys($columns), array_values($columns));
             }, $keys));
@@ -177,7 +177,7 @@ class HasMany extends Field
                 array_map(function ($v) use ($field) {
                     //Fix ResetInput Function! A Headache Implementation!
                     $u = $field->label();
-                    $u .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[1])[0] . ']' : '';
+                    $u .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[1])[0].']' : '';
 
                     return [$v => "{$u}"];
                 }, $newColumn)
@@ -199,6 +199,7 @@ class HasMany extends Field
                         $k = "{$v}{$k}";
                         $r = array_merge($r, $array_key_attach_str($field->validationMessages, $k));
                     }
+
                     return $r;
                 }, $newColumn);
                 $newMessages = call_user_func_array('array_merge', $newMessages);
@@ -223,6 +224,7 @@ class HasMany extends Field
                     return ["{$idx}{$x}" => $y];
                 }, array_keys($availInput[$key][$col1]), $availInput[$key][$col1]));
             }
+
             return ["{$idx}" => $availInput[$key][$col1]];
         }, array_keys($rules)));
         $newInput = $array_key_clean_undot($newInput);
@@ -260,6 +262,7 @@ class HasMany extends Field
                         return ["{$idx}.{$x}" => $attributes[$idx]];
                     }, array_keys($availInput[$key][$col1])));
                 }
+
                 return [null => null];
             }
 
@@ -273,6 +276,7 @@ class HasMany extends Field
         if (empty($newInput)) {
             $newInput = [$rel => $availInput];
         }
+
         return Validator::make($newInput, $newRules, $messages, $newAttributes);
     }
 
@@ -291,7 +295,7 @@ class HasMany extends Field
 
         if (is_array($column)) {
             foreach ($column as $index => $col) {
-                $new[$col . $index] = $col;
+                $new[$col.$index] = $col;
             }
         }
 
@@ -303,7 +307,7 @@ class HasMany extends Field
             } else {
                 foreach ($new as $k => $val) {
                     if (Str::endsWith($key, ".$k")) {
-                        $attributes[$key] = $label . "[$val]";
+                        $attributes[$key] = $label."[$val]";
                     }
                 }
             }
@@ -361,7 +365,7 @@ class HasMany extends Field
                  *
                  * I don't know why a form need range input? Only can imagine is for range search....
                  */
-                $newKey = $name . $column[$name];
+                $newKey = $name.$column[$name];
 
                 /*
                  * set new key
@@ -513,7 +517,7 @@ class HasMany extends Field
      */
     protected function setupScript($script)
     {
-        $method = 'setupScriptFor' . ucfirst($this->viewMode) . 'View';
+        $method = 'setupScriptFor'.ucfirst($this->viewMode).'View';
 
         call_user_func([$this, $method], $script);
     }
@@ -657,10 +661,10 @@ EOT;
         $this->setupScript($script);
 
         return parent::render()->with([
-            'forms' => $this->buildRelatedForms(),
-            'template' => $template,
-            'relationName' => $this->relationName,
-            'options' => $this->options,
+            'forms'         => $this->buildRelatedForms(),
+            'template'      => $template,
+            'relationName'  => $this->relationName,
+            'options'       => $this->options,
         ]);
     }
 }

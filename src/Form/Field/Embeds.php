@@ -63,7 +63,6 @@ class Embeds extends Field
         $rules = $attributes = $messages = [];
         $rel = $this->column;
 
-
         $availInput = $input;
         $array_key_attach_str = function (array $a, string $b, string $c = '.') {
             return call_user_func_array(
@@ -91,6 +90,7 @@ class Embeds extends Field
                     }
                 }
             }
+
             return $a;
         };
 
@@ -104,7 +104,7 @@ class Embeds extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect) {
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
-                $availInput[$column] = $availInput[$column] ? : null;
+                $availInput[$column] = $availInput[$column] ?: null;
             }
             /*
              *
@@ -143,7 +143,7 @@ class Embeds extends Field
                 array_map(function ($v) use ($field) {
                     //Fix ResetInput Function! A Headache Implementation!
                     $u = $field->label();
-                    $u .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[1])[0] . ']' : '';
+                    $u .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[1])[0].']' : '';
 
                     return [$v => "{$u}"];
                 }, $newColumn)
@@ -205,6 +205,7 @@ class Embeds extends Field
                     return ["{$idx}{$x}" => $rules[$idx]];
                 }, array_keys($availInput[$rel][$col1])));
             }
+
             return ["{$idx}" => $rules[$idx]];
         }, array_keys($rules));
         $newRules = array_filter(call_user_func_array('array_merge', $newRules), 'strlen', ARRAY_FILTER_USE_KEY);
@@ -223,6 +224,7 @@ class Embeds extends Field
                         return ["{$idx}.{$x}" => $attributes[$idx]];
                     }, array_keys($availInput[$rel][$col1])));
                 }
+
                 return [null => null];
             }
 
@@ -236,6 +238,7 @@ class Embeds extends Field
         if (empty($newInput)) {
             $newInput = $availInput;
         }
+
         return Validator::make($newInput, $newRules, $messages, $newAttributes);
     }
 
@@ -256,7 +259,7 @@ class Embeds extends Field
 
         if (is_array($column)) {
             foreach ($column as $index => $col) {
-                $new[$col . $index] = $col;
+                $new[$col.$index] = $col;
             }
         }
 
@@ -268,7 +271,7 @@ class Embeds extends Field
             } else {
                 foreach ($new as $k => $val) {
                     if (Str::endsWith($key, ".$k")) {
-                        $attributes[$key] = $label . "[$val]";
+                        $attributes[$key] = $label."[$val]";
                     }
                 }
             }
@@ -294,7 +297,7 @@ class Embeds extends Field
                 continue;
             }
 
-            $newKey = $key . $column[$key];
+            $newKey = $key.$column[$key];
 
             /*
              * set new key
