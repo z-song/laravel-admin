@@ -53,7 +53,7 @@ class HasMany extends Field
      */
     protected $views = [
         'default' => 'admin::form.hasmany',
-        'tab' => 'admin::form.hasmanytab',
+        'tab'     => 'admin::form.hasmanytab',
     ];
 
     /**
@@ -240,8 +240,7 @@ class HasMany extends Field
                         return [null => null];
                     }
                     if (is_array($availInput[$k][$col])) {
-                        return call_user_func_array('array_merge', array_map(function ($u)
-                            use ($v, $field, $array_key_attach_str) {
+                        return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field, $array_key_attach_str) {
                             return $array_key_attach_str($field->validationMessages, "{$v}:{$u}");
                         }, array_keys($availInput[$k][$col])));
                     }
@@ -553,10 +552,10 @@ EOT;
         $this->setupScript($script);
 
         return parent::render()->with([
-            'forms' => $this->buildRelatedForms(),
-            'template' => $template,
+            'forms'        => $this->buildRelatedForms(),
+            'template'     => $template,
             'relationName' => $this->relationName,
-            'options' => $this->options,
+            'options'      => $this->options,
         ]);
     }
 }

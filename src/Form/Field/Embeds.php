@@ -188,6 +188,7 @@ class Embeds extends Field
                         $w = $field->label();
                         //Fix ResetInput Function! A Headache Implementation!
                         $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
+
                         return ["{$v}:{$u}" => $w];
                     }, array_keys($availInput[$k][$col])));
                 }
@@ -209,8 +210,7 @@ class Embeds extends Field
                         return [null => null];
                     }
                     if (is_array($availInput[$k][$col])) {
-                        return call_user_func_array('array_merge', array_map(function ($u)
-                            use ($v, $field, $array_key_attach_str) {
+                        return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field, $array_key_attach_str) {
                             return $array_key_attach_str($field->validationMessages, "{$v}:{$u}");
                         }, array_keys($availInput[$k][$col])));
                     }
