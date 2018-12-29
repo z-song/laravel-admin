@@ -9,7 +9,6 @@ use Encore\Admin\Form\NestedForm;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 /**
  * Class HasMany.
@@ -119,17 +118,7 @@ class HasMany extends Field
         };
 
         $array_clean_merge = function (array $a, $b) {
-            return array_merge(
-                $a,
-                call_user_func_array(
-                    'array_merge',
-                    array_filter(
-                        $b,
-                        'strlen',
-                        ARRAY_FILTER_USE_KEY
-                    )
-                )
-            );
+            return array_merge($a, call_user_func_array('array_merge', $b));
         };
 
         $array_key_clean_undot = function (array $a) {
@@ -178,14 +167,11 @@ class HasMany extends Field
                 list($r, $k, $c) = explode('.', $v);
                 //Fix ResetInput Function! A Headache Implementation!
                 $col = explode(':', $c)[0];
-                if (!array_key_exists($col, $availInput[$k])) {
-                    return [null => null];
-                }
-
-                if (is_array($availInput[$k][$col])) {
+                if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
                     return $array_key_attach_str(preg_replace('/./', $fieldRules, $availInput[$k][$col]), $v, ':');
                 }
 
+                //May Have Problem in Dealing with File Upload in Edit Mode
                 return [$v => $fieldRules];
             }, $newColumn);
             $rules = $array_clean_merge($rules, $newRules);
@@ -195,7 +181,8 @@ class HasMany extends Field
                 //Fix ResetInput Function! A Headache Implementation!
                 $col = explode(':', $c)[0];
                 if (!array_key_exists($col, $availInput[$k])) {
-                    return [null => null];
+                    //May Have Problem in Dealing with File Upload in Edit Mode
+                    return [$v => null];
                 }
 
                 if (is_array($availInput[$k][$col])) {
@@ -210,11 +197,7 @@ class HasMany extends Field
                 list($r, $k, $c) = explode('.', $v);
                 //Fix ResetInput Function! A Headache Implementation!
                 $col = explode(':', $c)[0];
-                if (!array_key_exists($col, $availInput[$k])) {
-                    return [null => null];
-                }
-
-                if (is_array($availInput[$k][$col])) {
+                if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
                     return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
                         $w = $field->label();
                         //Fix ResetInput Function! A Headache Implementation!
@@ -223,6 +206,7 @@ class HasMany extends Field
                     }, array_keys($availInput[$k][$col])));
                 }
 
+                //May Have Problem in Dealing with File Upload in Edit Mode
                 $w = $field->label();
                 //Fix ResetInput Function! A Headache Implementation!
                 $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
@@ -236,15 +220,13 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     //Fix ResetInput Function! A Headache Implementation!
                     $col = explode(':', $c)[0];
-                    if (!array_key_exists($col, $availInput[$k])) {
-                        return [null => null];
-                    }
-                    if (is_array($availInput[$k][$col])) {
+                    if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
                         return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field, $array_key_attach_str) {
                             return $array_key_attach_str($field->validationMessages, "{$v}:{$u}");
                         }, array_keys($availInput[$k][$col])));
                     }
 
+                    //May Have Problem in Dealing with File Upload in Edit Mode
                     return $array_key_attach_str($field->validationMessages, $v);
                 }, $newColumn);
                 $messages = $array_clean_merge($messages, $newMessages);
