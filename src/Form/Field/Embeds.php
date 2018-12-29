@@ -148,7 +148,6 @@ class Embeds extends Field
                 }, $newColumn)
             ));
             if ($field->validationMessages) {
-
                 $newMessages = array_map(function ($v) use ($field, $availInput, $array_key_attach_str) {
                     list($rel, $col) = explode('.', $v);
                     //Fix ResetInput Function! A Headache Implementation!
@@ -197,17 +196,18 @@ class Embeds extends Field
             list($rel, $col) = explode('.', $idx);
             //Fix ResetInput Function! A Headache Implementation!
             $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$rel])) return [null => null];
+            if (!array_key_exists($col1, $availInput[$rel])) {
+                return [null => null];
+            }
             if (is_array($availInput[$rel][$col1])) {
                 return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $rules) {
                     return ["{$idx}{$x}" => $rules[$idx]];
                 }, array_keys($availInput[$rel][$col1])));
             }
             return ["{$idx}" => $rules[$idx]];
-
         }, array_keys($rules));
         $newRules = array_filter(call_user_func_array('array_merge', $newRules), 'strlen', ARRAY_FILTER_USE_KEY);
-        $newRules = $array_key_clean($newRules);;
+        $newRules = $array_key_clean($newRules);
 
         $newAttributes = array_map(function ($idx) use ($availInput, $attributes) {
             list($rel, $col) = explode('.', $idx);
@@ -217,11 +217,11 @@ class Embeds extends Field
                 return [null => null];
             }
             if (is_array($availInput[$rel][$col1])) {
-                if (array_keys($availInput[$rel][$col1]))
+                if (array_keys($availInput[$rel][$col1])) {
                     return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
-                    return ["{$idx}.{$x}" => $attributes[$idx]];
-                }, array_keys($availInput[$rel][$col1])));
-
+                        return ["{$idx}.{$x}" => $attributes[$idx]];
+                    }, array_keys($availInput[$rel][$col1])));
+                }
                 return [null => null];
             }
 

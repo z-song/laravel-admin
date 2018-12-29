@@ -101,7 +101,7 @@ class HasMany extends Field
             return false;
         }
 
-        $array_key_attach_str = function (array $a, string $b, string $c = ".") {
+        $array_key_attach_str = function (array $a, string $b, string $c = '.') {
             return call_user_func_array(
                 'array_merge',
                 array_map(function ($u, $v) use ($b, $c) {
@@ -183,7 +183,6 @@ class HasMany extends Field
                 }, $newColumn)
             ));
             if ($field->validationMessages) {
-
                 $newMessages = array_map(function ($v) use ($field, $availInput, $array_key_attach_str) {
                     list($r, $k, $c) = explode('.', $v);
                     //Fix ResetInput Function! A Headache Implementation!
@@ -243,10 +242,9 @@ class HasMany extends Field
             }
 
             return ["{$idx}" => $rules[$idx]];
-
         }, array_keys($rules));
         $newRules = array_filter(call_user_func_array('array_merge', $newRules), 'strlen', ARRAY_FILTER_USE_KEY);
-        $newRules = $array_key_clean($newRules);;
+        $newRules = $array_key_clean($newRules);
 
         $newAttributes = array_map(function ($u) use ($availInput, $attributes) {
             list($rel, $key, $col) = explode('.', $u);
@@ -257,11 +255,11 @@ class HasMany extends Field
                 return [null => null];
             }
             if (is_array($availInput[$key][$col1])) {
-                if (array_keys($availInput[$key][$col1]))
+                if (array_keys($availInput[$key][$col1])) {
                     return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
-                    return ["{$idx}.{$x}" => $attributes[$idx]];
-                }, array_keys($availInput[$key][$col1])));
-
+                        return ["{$idx}.{$x}" => $attributes[$idx]];
+                    }, array_keys($availInput[$key][$col1])));
+                }
                 return [null => null];
             }
 
@@ -345,7 +343,6 @@ class HasMany extends Field
          * in the HasMany relation, has many data/field set, $set is field set in the below
          */
         foreach ($input[$this->column] as $index => $set) {
-
             /*
              * foreach the field set to find the corresponding $column
              */
