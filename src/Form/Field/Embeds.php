@@ -242,8 +242,6 @@ class Embeds extends Field
         return Validator::make($newInput, $newRules, $messages, $newAttributes);
     }
 
-
-
     /**
      * Format validation attributes.
      *
