@@ -14,6 +14,7 @@ class Embeds extends Field
      */
     protected $builder = null;
     protected $view = 'admin::form.embeds';
+
     /**
      * Create a new HasMany field instance.
      *
