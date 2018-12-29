@@ -103,7 +103,7 @@ class HasMany extends Field
 
         $array_key_attach_str = function (array $a, string $b, string $c = '.') {
             return call_user_func_array(
-                "array_merge",
+                'array_merge',
                 array_map(function ($u, $v) use ($b, $c) {
                     return ["{$b}{$c}{$u}" => $v];
                 }, array_keys($a), array_values($a))
@@ -111,7 +111,7 @@ class HasMany extends Field
         };
 
         $array_key_clean = function (array $a) {
-            $a = count($a) ? call_user_func_array("array_merge", array_map(function ($k, $v) {
+            $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
                 return [str_replace(':', '', $k) => $v];
             }, array_keys($a), array_values($a))) : $a;
 
@@ -122,10 +122,10 @@ class HasMany extends Field
             return array_merge(
                 $a,
                 call_user_func_array(
-                    "array_merge",
+                    'array_merge',
                     array_filter(
                         $b,
-                        "strlen",
+                        'strlen',
                         ARRAY_FILTER_USE_KEY
                     )
                 )
@@ -162,11 +162,11 @@ class HasMany extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect) {
                 foreach ($keys as $key) {
-                    $availInput[$key][$column] = array_filter($availInput[$key][$column], "strlen") ? : null;
+                    $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen') ?: null;
                 }
             }
 
-            $newColumn = call_user_func_array("array_merge", array_map(function ($u) use ($columns, $rel) {
+            $newColumn = call_user_func_array('array_merge', array_map(function ($u) use ($columns, $rel) {
                 return array_map(function ($k, $v) use ($u, $rel) {
                     //Fix ResetInput Function! A Headache Implementation!
                     return $k ? "{$rel}.{$u}.{$v}:{$k}" : "{$rel}.{$u}.{$v}";
@@ -215,17 +215,17 @@ class HasMany extends Field
                 }
 
                 if (is_array($availInput[$k][$col])) {
-                    return call_user_func_array("array_merge", array_map(function ($u) use ($v, $field) {
+                    return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
                         $w = $field->label();
                         //Fix ResetInput Function! A Headache Implementation!
-                        $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+                        $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
                         return ["{$v}:{$u}" => $w];
                     }, array_keys($availInput[$k][$col])));
                 }
 
                 $w = $field->label();
                 //Fix ResetInput Function! A Headache Implementation!
-                $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+                $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
 
                 return [$v => $w];
             }, $newColumn);
@@ -240,7 +240,7 @@ class HasMany extends Field
                         return [null => null];
                     }
                     if (is_array($availInput[$k][$col])) {
-                        return call_user_func_array("array_merge", array_map(function ($u)
+                        return call_user_func_array('array_merge', array_map(function ($u)
                             use ($v, $field, $array_key_attach_str) {
                             return $array_key_attach_str($field->validationMessages, "{$v}:{$u}");
                         }, array_keys($availInput[$k][$col])));
@@ -252,14 +252,14 @@ class HasMany extends Field
             }
         }
 
-        $rules = array_filter($rules, "strlen");
+        $rules = array_filter($rules, 'strlen');
         if (empty($rules)) {
             return false;
         }
 
-        $attributes = array_filter($attributes, "strlen");
-        $messages = array_filter($messages, "strlen");
-        $input = $array_key_clean_undot(array_filter($newInputs, "strlen", ARRAY_FILTER_USE_KEY));
+        $attributes = array_filter($attributes, 'strlen');
+        $messages = array_filter($messages, 'strlen');
+        $input = $array_key_clean_undot(array_filter($newInputs, 'strlen', ARRAY_FILTER_USE_KEY));
         $rules = $array_key_clean($rules);
         $attributes = $array_key_clean($attributes);
         $messages = $array_key_clean($messages);
@@ -269,106 +269,6 @@ class HasMany extends Field
         }
 
         return Validator::make($input, $rules, $messages, $attributes);
-    }
-
-    /**
-     * Format validation attributes.
-     *
-     * @param array  $input
-     * @param string $label
-     * @param string $column
-     *
-     * @return array
-     */
-    protected function formatValidationAttribute($input, $label, $column)
-    {
-        $new = $attributes = [];
-
-        if (is_array($column)) {
-            foreach ($column as $index => $col) {
-                $new[$col . $index] = $col;
-            }
-        }
-
-        foreach (array_keys(array_dot($input)) as $key) {
-            if (is_string($column)) {
-                if (Str::endsWith($key, ".$column")) {
-                    $attributes[$key] = $label;
-                }
-            } else {
-                foreach ($new as $k => $val) {
-                    if (Str::endsWith($key, ".$k")) {
-                        $attributes[$key] = $label . "[$val]";
-                    }
-                }
-            }
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * Reset input key for validation.
-     *
-     * @param array $input
-     * @param array $column $column is the column name array set
-     *
-     * @return void.
-     */
-    protected function resetInputKey(array &$input, array $column)
-    {
-        /**
-         * flip the column name array set.
-         *
-         * for example, for the DateRange, the column like as below
-         *
-         * ["start" => "created_at", "end" => "updated_at"]
-         *
-         * to:
-         *
-         * [ "created_at" => "start", "updated_at" => "end" ]
-         */
-        $column = array_flip($column);
-
-        /**
-         * $this->column is the inputs array' s node name ,default is the relation name .
-         *
-         * So ...$input [$this->column] is the data of this column 's inputs data
-         *
-         * in the HasMany relation, has many data/field set, $set is field set in the below
-         */
-        foreach ($input[$this->column] as $index => $set) {
-            /*
-             * foreach the field set to find the corresponding $column
-             */
-            foreach ($set as $name => $value) {
-                /*
-                 * if doesn' t have column name,
-            continue to the next loop
-                 * /
-                if (!array_key_exists($name, $column)) {
-                continue;
-            }
-
-            /**
-                 * example:  $newKey = created_atstart.
-                 *
-                 * Σ( ° △ °|||)︴
-                 *
-                 * I don't know why a form need range input? Only can imagine is for range search....
-                 */
-                $newKey = $name . $column[$name];
-
-                /*
-                 * set new key
-                 */
-                array_set($input, "{$this->column}.$index.$newKey", $value);
-                /*
-                 * forget the old key and value
-                 */
-                array_forget($input, "{$this->column}.$index.$name");
-            }
-        }
     }
 
     /**
