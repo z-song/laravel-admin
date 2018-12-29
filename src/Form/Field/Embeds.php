@@ -93,7 +93,6 @@ class Embeds extends Field
             return $a;
         };
 
-
         /** @var Field $field */
         foreach ($this->buildEmbeddedForm()->fields() as $field) {
             if (!$fieldRules = $field->getRules()) {
