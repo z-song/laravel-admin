@@ -202,6 +202,7 @@ class HasMany extends Field
                         $w = $field->label();
                         //Fix ResetInput Function! A Headache Implementation!
                         $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
+
                         return ["{$v}:{$u}" => $w];
                     }, array_keys($availInput[$k][$col])));
                 }
@@ -390,7 +391,7 @@ class HasMany extends Field
      */
     protected function setupScript($script)
     {
-        $method = 'setupScriptFor' . ucfirst($this->viewMode) . 'View';
+        $method = 'setupScriptFor'.ucfirst($this->viewMode) . 'View';
 
         call_user_func([$this, $method], $script);
     }
