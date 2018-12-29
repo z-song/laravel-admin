@@ -59,14 +59,12 @@ class Embeds extends Field
         }
 
         $input = array_only($input, $this->column);
-
-        $rules = $attributes = $messages = [];
+        $rules = $attributes = $messages = $newInputs = [];
         $rel = $this->column;
-
         $availInput = $input;
         $array_key_attach_str = function (array $a, string $b, string $c = '.') {
             return call_user_func_array(
-                'array_merge',
+                "array_merge",
                 array_map(function ($u, $v) use ($b, $c) {
                     return ["{$b}{$c}{$u}" => $v];
                 }, array_keys($a), array_values($a))
@@ -74,11 +72,25 @@ class Embeds extends Field
         };
 
         $array_key_clean = function (array $a) {
-            $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
+            $a = count($a) ? call_user_func_array("array_merge", array_map(function ($k, $v) {
                 return [str_replace(':', '', $k) => $v];
             }, array_keys($a), array_values($a))) : $a;
 
             return $a;
+        };
+
+        $array_clean_merge = function (array $a, $b) {
+            return array_merge(
+                $a,
+                call_user_func_array(
+                    "array_merge",
+                    array_filter(
+                        $b,
+                        "strlen",
+                        ARRAY_FILTER_USE_KEY
+                    )
+                )
+            );
         };
 
         $array_key_clean_undot = function (array $a) {
@@ -103,7 +115,7 @@ class Embeds extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect) {
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
-                $availInput[$column] = $availInput[$column] ?: null;
+                $availInput[$column] = $availInput[$column] ? : null;
             }
             /*
              *
@@ -131,114 +143,102 @@ class Embeds extends Field
             }, array_keys($columns), array_values($columns));
 
             $fieldRules = is_array($fieldRules) ? implode('|', $fieldRules) : $fieldRules;
-            $rules = array_merge($rules, call_user_func_array(
-                'array_merge',
-                array_map(function ($v) use ($fieldRules) {
-                    return [$v => $fieldRules];
-                }, $newColumn)
-            ));
-            $attributes = array_merge($attributes, call_user_func_array(
-                'array_merge',
-                array_map(function ($v) use ($field) {
-                    //Fix ResetInput Function! A Headache Implementation!
-                    $u = $field->label();
-                    $u .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[1])[0].']' : '';
+            $newRules = array_map(function ($v) use ($fieldRules, $availInput) {
+                list($k, $c) = explode('.', $v);
+                //Fix ResetInput Function! A Headache Implementation!
+                $col = explode(':', $c)[0];
+                if (!array_key_exists($col, $availInput[$k])) {
+                    return [null => null];
+                }
 
-                    return [$v => "{$u}"];
-                }, $newColumn)
-            ));
+                if (is_array($availInput[$k][$col])) {
+                    return $array_key_attach_str(preg_replace('/./', $fieldRules, $availInput[$k][$col]), $v, ':');
+                }
+
+                return [$v => $fieldRules];
+            }, $newColumn);
+            $rules = $array_clean_merge($rules, $newRules);
+
+            $newInput = array_map(function ($v) use ($availInput, $array_key_attach_str) {
+                list($k, $c) = explode('.', $v);
+                //Fix ResetInput Function! A Headache Implementation!
+                $col = explode(':', $c)[0];
+                if (!array_key_exists($col, $availInput[$k])) {
+                    return [null => null];
+                }
+
+                if (is_array($availInput[$k][$col])) {
+                    return $array_key_attach_str($availInput[$k][$col], $v, ':');
+                }
+
+                return [$v => $availInput[$k][$col]];
+            }, $newColumn);
+            $newInputs = $array_clean_merge($newInputs, $newInput);
+
+            $newAttributes = array_map(function ($v) use ($field, $availInput) {
+                list($k, $c) = explode('.', $v);
+                //Fix ResetInput Function! A Headache Implementation!
+                $col = explode(':', $c)[0];
+                if (!array_key_exists($col, $availInput[$k])) {
+                    return [null => null];
+                }
+
+                if (is_array($availInput[$k][$col])) {
+                    return call_user_func_array("array_merge", array_map(function ($u) use ($v, $field) {
+                        $w = $field->label();
+                        //Fix ResetInput Function! A Headache Implementation!
+                        $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+                        return ["{$v}:{$u}" => $w];
+                    }, array_keys($availInput[$k][$col])));
+                }
+
+                $w = $field->label();
+                //Fix ResetInput Function! A Headache Implementation!
+                $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+
+                return [$v => $w];
+            }, $newColumn);
+            $attributes = $array_clean_merge($attributes, $newAttributes);
+
             if ($field->validationMessages) {
                 $newMessages = array_map(function ($v) use ($field, $availInput, $array_key_attach_str) {
-                    list($rel, $col) = explode('.', $v);
+                    list($k, $c) = explode('.', $v);
                     //Fix ResetInput Function! A Headache Implementation!
-                    $col1 = explode(':', $col)[0];
-                    if (!array_key_exists($col1, $availInput[$rel])) {
+                    $col = explode(':', $c)[0];
+                    if (!array_key_exists($col, $availInput[$k])) {
                         return [null => null];
                     }
-                    $rows = $availInput[$rel][$col1];
-                    if (!is_array($rows)) {
-                        return $array_key_attach_str($field->validationMessages, $v);
-                    }
-                    $r = [];
-                    foreach (array_keys($rows) as $k) {
-                        $k = "{$v}{$k}";
-                        $r = array_merge($r, $array_key_attach_str($field->validationMessages, $k));
+                    if (is_array($availInput[$k][$col])) {
+                        return call_user_func_array("array_merge", array_map(function ($u)
+                            use ($v, $field, $array_key_attach_str) {
+                            return $array_key_attach_str($field->validationMessages, "{$v}:{$u}");
+                        }, array_keys($availInput[$k][$col])));
                     }
 
-                    return $r;
+                    return $array_key_attach_str($field->validationMessages, $v);
                 }, $newColumn);
-                $newMessages = call_user_func_array('array_merge', $newMessages);
-                $messages = array_merge($messages, $newMessages);
+                $messages = $array_clean_merge($messages, $newMessages);
             }
         }
+
+        $rules = array_filter($rules, "strlen");
 
         if (empty($rules)) {
             return false;
         }
-        $newInput = call_user_func_array('array_merge', array_map(function ($idx) use ($availInput) {
-            list($rel, $col) = explode('.', $idx);
-            //Fix ResetInput Function! A Headache Implementation!
-            $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$rel])) {
-                return [null => null];
-            }
-            if (is_array($availInput[$rel][$col1])) {
-                return call_user_func_array('array_merge', array_map(function ($x, $y) use ($idx) {
-                    return ["{$idx}{$x}" => $y];
-                }, array_keys($availInput[$rel][$col1]), $availInput[$rel][$col1]));
-            }
 
-            return ["{$idx}" => $availInput[$rel][$col1]];
-        }, array_keys($rules)));
-
-        $newInput = $array_key_clean_undot($newInput);
-        $newRules = array_map(function ($idx) use ($availInput, $rules) {
-            list($rel, $col) = explode('.', $idx);
-            //Fix ResetInput Function! A Headache Implementation!
-            $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$rel])) {
-                return [null => null];
-            }
-            if (is_array($availInput[$rel][$col1])) {
-                return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $rules) {
-                    return ["{$idx}{$x}" => $rules[$idx]];
-                }, array_keys($availInput[$rel][$col1])));
-            }
-
-            return ["{$idx}" => $rules[$idx]];
-        }, array_keys($rules));
-        $newRules = array_filter(call_user_func_array('array_merge', $newRules), 'strlen', ARRAY_FILTER_USE_KEY);
-        $newRules = $array_key_clean($newRules);
-
-        $newAttributes = array_map(function ($idx) use ($availInput, $attributes) {
-            list($rel, $col) = explode('.', $idx);
-            //Fix ResetInput Function! A Headache Implementation!
-            $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$rel])) {
-                return [null => null];
-            }
-            if (is_array($availInput[$rel][$col1])) {
-                if (array_keys($availInput[$rel][$col1])) {
-                    return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
-                        return ["{$idx}.{$x}" => $attributes[$idx]];
-                    }, array_keys($availInput[$rel][$col1])));
-                }
-
-                return [null => null];
-            }
-
-            return ["{$idx}" => $attributes[$idx]];
-        }, array_keys($attributes));
-        $newAttributes = array_filter(call_user_func_array('array_merge', $newAttributes), 'strlen');
-        $newAttributes = $array_key_clean($newAttributes);
-
+        $attributes = array_filter($attributes, "strlen");
+        $messages = array_filter($messages, "strlen");
+        $input = $array_key_clean_undot(array_filter($newInputs, "strlen", ARRAY_FILTER_USE_KEY));
+        $rules = $array_key_clean($rules);
+        $attributes = $array_key_clean($attributes);
         $messages = $array_key_clean($messages);
 
-        if (empty($newInput)) {
-            $newInput = $availInput;
+        if (empty($input)) {
+            $input = [$rel => $availInput];
         }
 
-        return Validator::make($newInput, $newRules, $messages, $newAttributes);
+        return Validator::make($input, $rules, $messages, $attributes);
     }
 
     /**
@@ -256,7 +256,7 @@ class Embeds extends Field
 
         if (is_array($column)) {
             foreach ($column as $index => $col) {
-                $new[$col.$index] = $col;
+                $new[$col . $index] = $col;
             }
         }
 
@@ -268,7 +268,7 @@ class Embeds extends Field
             } else {
                 foreach ($new as $k => $val) {
                     if (Str::endsWith($key, ".$k")) {
-                        $attributes[$key] = $label."[$val]";
+                        $attributes[$key] = $label . "[$val]";
                     }
                 }
             }
@@ -294,7 +294,7 @@ class Embeds extends Field
                 continue;
             }
 
-            $newKey = $key.$column[$key];
+            $newKey = $key . $column[$key];
 
             /*
              * set new key
@@ -330,7 +330,7 @@ class Embeds extends Field
             return json_decode($this->value, true);
         }
 
-        return (array) $this->value;
+        return (array)$this->value;
     }
 
     /**
