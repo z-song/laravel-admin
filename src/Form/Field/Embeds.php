@@ -103,7 +103,7 @@ class Embeds extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect) {
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
-                $availInput[$column] = $availInput[$column] ?: null;
+                $availInput[$column] = $availInput[$column] ? : null;
             }
             /*
              *
@@ -142,7 +142,7 @@ class Embeds extends Field
                 array_map(function ($v) use ($field) {
                     //Fix ResetInput Function! A Headache Implementation!
                     $u = $field->label();
-                    $u .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[1])[0].']' : '';
+                    $u .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[1])[0] . ']' : '';
 
                     return [$v => "{$u}"];
                 }, $newColumn)
@@ -221,7 +221,7 @@ class Embeds extends Field
                     return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
                     return ["{$idx}.{$x}" => $attributes[$idx]];
                 }, array_keys($availInput[$rel][$col1])));
-                
+
                 return [null => null];
             }
 

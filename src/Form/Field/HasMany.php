@@ -151,7 +151,7 @@ class HasMany extends Field
             if ($field instanceof Field\MultipleSelect) {
                 foreach ($keys as $key) {
                     $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen');
-                    $availInput[$key][$column] = $availInput[$key][$column] ?: null;
+                    $availInput[$key][$column] = $availInput[$key][$column] ? : null;
                 }
             }
             // if($field instanceof Field\File)
