@@ -13,7 +13,7 @@ class Embeds extends Field
      * @var \Closure
      */
     protected $builder = null;
-
+    protected $view = 'admin::form.embeds';
     /**
      * Create a new HasMany field instance.
      *
@@ -59,7 +59,37 @@ class Embeds extends Field
 
         $input = array_only($input, $this->column);
 
-        $rules = $attributes = [];
+        $rules = $attributes = $messages = [];
+        $rel = $this->column;
+
+
+        $availInput = $input;
+        $array_key_attach_str = function (array $a, string $b, string $c = ".") {
+            return call_user_func_array(
+                'array_merge',
+                array_map(function ($u, $v) use ($b, $c) {
+                    return ["{$b}{$c}{$u}" => $v];
+                }, array_keys($a), array_values($a))
+            );
+        };
+
+        $array_key_clean = function (array $a) {
+            $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
+                return [str_replace(':', '', $k) => $v];
+            }, array_keys($a), array_values($a))) : $a;
+            return $a;
+        };
+
+        $array_key_clean_undot = function (array $a) {
+            if (count($a))
+                foreach ($a as $key => $val) {
+                array_set($a, str_replace(':', '', $key), $val);
+                if (preg_match('/[\.\:]/', $key)) {
+                    unset($a[$key]);
+                }
+            }
+            return $a;
+        };
 
         /** @var Field $field */
         foreach ($this->buildEmbeddedForm()->fields() as $field) {
@@ -68,7 +98,11 @@ class Embeds extends Field
             }
 
             $column = $field->column();
-
+            $columns = is_array($column) ? $column : [$column];
+            if ($field instanceof Field\MultipleSelect) {
+                $availInput[$column] = array_filter($availInput[$column], 'strlen');
+                $availInput[$column] = $availInput[$column] ? : null;
+            }
             /*
              *
              * For single column field format rules to:
@@ -89,47 +123,109 @@ class Embeds extends Field
              *     'extra.end_atend' => 'required'
              * ]
              */
-            if (is_array($column)) {
-                foreach ($column as $key => $name) {
-                    $rules["{$this->column}.$name$key"] = $fieldRules;
-                }
+            $newColumn = array_map(function ($k, $v) use ($rel) {
+                //Fix ResetInput Function! A Headache Implementation!
+                return !$k ? "{$rel}.{$v}" : "{$rel}.{$v}:{$k}";
+            }, array_keys($columns), array_values($columns));
 
-                $this->resetInputKey($input, $column);
-            } else {
-                $rules["{$this->column}.$column"] = $fieldRules;
+            $fieldRules = is_array($fieldRules) ? implode('|', $fieldRules) : $fieldRules;
+            $rules = array_merge($rules, call_user_func_array(
+                'array_merge',
+                array_map(function ($v) use ($fieldRules) {
+                    return [$v => $fieldRules];
+                }, $newColumn)
+            ));
+            $attributes = array_merge($attributes, call_user_func_array(
+                'array_merge',
+                array_map(function ($v) use ($field) {
+                    //Fix ResetInput Function! A Headache Implementation!
+                    $u = $field->label();
+                    $u .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[1])[0] . ']' : '';
+                    return [$v => "{$u}"];
+                }, $newColumn)
+            ));
+            if ($field->validationMessages) {
+
+                $newMessages = array_map(function ($v) use ($field, $availInput, $array_key_attach_str) {
+                    list($rel, $col) = explode('.', $v);
+                    //Fix ResetInput Function! A Headache Implementation!
+                    $col1 = explode(':', $col)[0];
+                    if (!array_key_exists($col1, $availInput[$rel])) return [null => null];
+                    $rows = $availInput[$rel][$col1];
+                    if (!is_array($rows))
+                        return $array_key_attach_str($field->validationMessages, $v);
+                    $r = [];
+                    foreach (array_keys($rows) as $k) {
+                        $k = "{$v}{$k}";
+                        $r = array_merge($r, $array_key_attach_str($field->validationMessages, $k));
+                    }
+                    return $r;
+                }, $newColumn);
+                $newMessages = call_user_func_array('array_merge', $newMessages);
+                $messages = array_merge($messages, $newMessages);
             }
-
-            /**
-             * For single column field format attributes to:
-             * [
-             *     'extra.name' => $label
-             *     'extra.email' => $label
-             * ].
-             *
-             * For multiple column field with rules like 'required':
-             * 'extra' => [
-             *     'start' => 'start_at'
-             *     'end'   => 'end_at',
-             * ]
-             *
-             * format rules to:
-             * [
-             *     'extra.start_atstart' => "$label[start_at]"
-             *     'extra.end_atend' => "$label[end_at]"
-             * ]
-             */
-            $attributes = array_merge(
-                $attributes,
-                $this->formatValidationAttribute($input, $field->label(), $column)
-            );
         }
 
         if (empty($rules)) {
             return false;
         }
+        $newInput = call_user_func_array('array_merge', array_map(function ($idx) use ($availInput) {
+            list($rel, $col) = explode('.', $idx);
+            //Fix ResetInput Function! A Headache Implementation!
+            $col1 = explode(':', $col)[0];
+            if (!array_key_exists($col1, $availInput[$rel])) return [null => null];
+            if (is_array($availInput[$rel][$col1])) {
+                return call_user_func_array('array_merge', array_map(function ($x, $y) use ($idx) {
+                    return ["{$idx}{$x}" => $y];
+                }, array_keys($availInput[$rel][$col1]), $availInput[$rel][$col1]));
+            }
+            return ["{$idx}" => $availInput[$rel][$col1]];
+        }, array_keys($rules)));
 
-        return Validator::make($input, $rules, $this->validationMessages, $attributes);
+        $newInput = $array_key_clean_undot($newInput);
+        $newRules = array_map(function ($idx) use ($availInput, $rules) {
+            list($rel, $col) = explode('.', $idx);
+            //Fix ResetInput Function! A Headache Implementation!
+            $col1 = explode(':', $col)[0];
+            if (!array_key_exists($col1, $availInput[$rel])) return [null => null];
+            if (is_array($availInput[$rel][$col1])) {
+                return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $rules) {
+                    return ["{$idx}{$x}" => $rules[$idx]];
+                }, array_keys($availInput[$rel][$col1])));
+            }
+            return ["{$idx}" => $rules[$idx]];
+
+        }, array_keys($rules));
+        $newRules = array_filter(call_user_func_array('array_merge', $newRules), 'strlen', ARRAY_FILTER_USE_KEY);
+        $newRules = $array_key_clean($newRules);;
+
+        $newAttributes = array_map(function ($idx) use ($availInput, $attributes) {
+            list($rel, $col) = explode('.', $idx);
+            //Fix ResetInput Function! A Headache Implementation!
+            $col1 = explode(':', $col)[0];
+            if (!array_key_exists($col1, $availInput[$rel])) return [null => null];
+            if (is_array($availInput[$rel][$col1])) {
+                if (array_keys($availInput[$rel][$col1]))
+                    return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
+                    return ["{$idx}.{$x}" => $attributes[$idx]];
+                }, array_keys($availInput[$rel][$col1])));
+                return [null => null];
+            }
+
+            return ["{$idx}" => $attributes[$idx]];
+        }, array_keys($attributes));
+        $newAttributes = array_filter(call_user_func_array('array_merge', $newAttributes), 'strlen');
+        $newAttributes = $array_key_clean($newAttributes);
+
+        $messages = $array_key_clean($messages);
+
+        if (empty($newInput)) {
+            $newInput = $availInput;
+        }
+        return Validator::make($newInput, $newRules, $messages, $newAttributes);
     }
+
+
 
     /**
      * Format validation attributes.
@@ -146,7 +242,7 @@ class Embeds extends Field
 
         if (is_array($column)) {
             foreach ($column as $index => $col) {
-                $new[$col.$index] = $col;
+                $new[$col . $index] = $col;
             }
         }
 
@@ -158,7 +254,7 @@ class Embeds extends Field
             } else {
                 foreach ($new as $k => $val) {
                     if (Str::endsWith($key, ".$k")) {
-                        $attributes[$key] = $label."[$val]";
+                        $attributes[$key] = $label . "[$val]";
                     }
                 }
             }
@@ -184,7 +280,7 @@ class Embeds extends Field
                 continue;
             }
 
-            $newKey = $key.$column[$key];
+            $newKey = $key . $column[$key];
 
             /*
              * set new key
@@ -220,7 +316,7 @@ class Embeds extends Field
             return json_decode($this->value, true);
         }
 
-        return (array) $this->value;
+        return (array)$this->value;
     }
 
     /**
