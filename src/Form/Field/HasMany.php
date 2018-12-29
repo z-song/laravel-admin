@@ -52,8 +52,8 @@ class HasMany extends Field
      * @var array
      */
     protected $views = [
-        'default'  => 'admin::form.hasmany',
-        'tab'      => 'admin::form.hasmanytab',
+        'default' => 'admin::form.hasmany',
+        'tab' => 'admin::form.hasmanytab',
     ];
 
     /**
@@ -150,7 +150,7 @@ class HasMany extends Field
             if ($field instanceof Field\MultipleSelect) {
                 foreach ($keys as $key) {
                     $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen');
-                    $availInput[$key][$column] = $availInput[$key][$column] ?: null;
+                    $availInput[$key][$column] = $availInput[$key][$column] ? : null;
                 }
             }
             // if($field instanceof Field\File)
@@ -160,27 +160,74 @@ class HasMany extends Field
             $newColumn = call_user_func_array('array_merge', array_map(function ($u) use ($columns, $rel) {
                 return array_map(function ($k, $v) use ($u, $rel) {
                     //Fix ResetInput Function! A Headache Implementation!
-                    return !$k ? "{$rel}.{$u}.{$v}" : "{$rel}.{$u}.{$v}:{$k}";
+                    return $k ? "{$rel}.{$u}.{$v}:{$k}" : "{$rel}.{$u}.{$v}";
                 }, array_keys($columns), array_values($columns));
             }, $keys));
 
             $fieldRules = is_array($fieldRules) ? implode('|', $fieldRules) : $fieldRules;
-            $rules = array_merge($rules, call_user_func_array(
-                'array_merge',
-                array_map(function ($v) use ($fieldRules) {
-                    return [$v => $fieldRules];
-                }, $newColumn)
-            ));
-            $attributes = array_merge($attributes, call_user_func_array(
-                'array_merge',
-                array_map(function ($v) use ($field) {
-                    //Fix ResetInput Function! A Headache Implementation!
-                    $u = $field->label();
-                    $u .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[1])[0].']' : '';
+            $newRules = array_map(function ($v) use ($fieldRules, $availInput) {
+                list($r, $k, $c) = explode('.', $v);
+                //Fix ResetInput Function! A Headache Implementation!
+                $col = explode(':', $c)[0];
+                if (!array_key_exists($col, $availInput[$k])) {
+                    return [null => null];
+                }
 
-                    return [$v => "{$u}"];
-                }, $newColumn)
-            ));
+                if (is_array($availInput[$k][$col])) {
+                    return call_user_func_array('array_merge', array_map(function ($u) use ($v, $fieldRules) {
+                        return ["{$v}{$u}" => $fieldRules];
+                    }, array_keys($availInput[$k][$col])));
+                }
+
+                return [$v => $fieldRules];
+            }, $newColumn);
+            $rules = array_merge(
+                $rules,
+                call_user_func_array(
+                    'array_merge',
+                    array_filter(
+                        $newRules,
+                        'strlen',
+                        ARRAY_FILTER_USE_KEY
+                    )
+                )
+            );
+
+            $newAttributes = array_map(function ($v) use ($field, $availInput) {
+                list($r, $k, $c) = explode('.', $v);
+                //Fix ResetInput Function! A Headache Implementation!
+                $col = explode(':', $c)[0];
+                if (!array_key_exists($col, $availInput[$k])) {
+                    return [null => null];
+                }
+
+                if (is_array($availInput[$k][$col])) {
+                    return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
+                        $w = $field->label();
+                        //Fix ResetInput Function! A Headache Implementation!
+                        $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[1])[0] . ']' : '';
+                        return ["{$v}{$u}" => $w];
+                    }, array_keys($$availInput[$k][$col])));
+                }
+
+                $w = $field->label();
+                //Fix ResetInput Function! A Headache Implementation!
+                $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[1])[0] . ']' : '';
+
+                return [$v => $w];
+            }, $newColumn);
+            $attributes = array_merge(
+                $attributes,
+                call_user_func_array(
+                    'array_merge',
+                    array_filter(
+                        $newAttributes,
+                        'strlen',
+                        ARRAY_FILTER_USE_KEY
+                    )
+                )
+            );
+
             if ($field->validationMessages) {
                 $newMessages = array_map(function ($v) use ($field, $availInput, $array_key_attach_str) {
                     list($r, $k, $c) = explode('.', $v);
@@ -227,49 +274,8 @@ class HasMany extends Field
             return ["{$idx}" => $availInput[$key][$col1]];
         }, array_keys($rules)));
         $newInput = $array_key_clean_undot($newInput);
-
-        $newRules = array_map(function ($u) use ($availInput, $rules) {
-            list($rel, $key, $col) = explode('.', $u);
-            $idx = "{$rel}.{$key}.{$col}";
-            //Fix ResetInput Function! A Headache Implementation!
-            $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$key])) {
-                return [null => null];
-            }
-            if (is_array($availInput[$key][$col1])) {
-                return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $rules) {
-                    return ["{$idx}{$x}" => $rules[$idx]];
-                }, array_keys($availInput[$key][$col1])));
-            }
-
-            return ["{$idx}" => $rules[$idx]];
-        }, array_keys($rules));
-        $newRules = array_filter(call_user_func_array('array_merge', $newRules), 'strlen', ARRAY_FILTER_USE_KEY);
         $newRules = $array_key_clean($newRules);
-
-        $newAttributes = array_map(function ($u) use ($availInput, $attributes) {
-            list($rel, $key, $col) = explode('.', $u);
-            $idx = "{$rel}.{$key}.{$col}";
-            //Fix ResetInput Function! A Headache Implementation!
-            $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$key])) {
-                return [null => null];
-            }
-            if (is_array($availInput[$key][$col1])) {
-                if (array_keys($availInput[$key][$col1])) {
-                    return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
-                        return ["{$idx}.{$x}" => $attributes[$idx]];
-                    }, array_keys($availInput[$key][$col1])));
-                }
-
-                return [null => null];
-            }
-
-            return ["{$idx}" => $attributes[$idx]];
-        }, array_keys($attributes));
-        $newAttributes = array_filter(call_user_func_array('array_merge', $newAttributes), 'strlen');
         $newAttributes = $array_key_clean($newAttributes);
-
         $messages = $array_key_clean($messages);
 
         if (empty($newInput)) {
@@ -294,7 +300,7 @@ class HasMany extends Field
 
         if (is_array($column)) {
             foreach ($column as $index => $col) {
-                $new[$col.$index] = $col;
+                $new[$col . $index] = $col;
             }
         }
 
@@ -306,7 +312,7 @@ class HasMany extends Field
             } else {
                 foreach ($new as $k => $val) {
                     if (Str::endsWith($key, ".$k")) {
-                        $attributes[$key] = $label."[$val]";
+                        $attributes[$key] = $label . "[$val]";
                     }
                 }
             }
@@ -364,7 +370,7 @@ class HasMany extends Field
                  *
                  * I don't know why a form need range input? Only can imagine is for range search....
                  */
-                $newKey = $name.$column[$name];
+                $newKey = $name . $column[$name];
 
                 /*
                  * set new key
@@ -516,7 +522,7 @@ class HasMany extends Field
      */
     protected function setupScript($script)
     {
-        $method = 'setupScriptFor'.ucfirst($this->viewMode).'View';
+        $method = 'setupScriptFor' . ucfirst($this->viewMode) . 'View';
 
         call_user_func([$this, $method], $script);
     }
@@ -660,10 +666,10 @@ EOT;
         $this->setupScript($script);
 
         return parent::render()->with([
-            'forms'         => $this->buildRelatedForms(),
-            'template'      => $template,
-            'relationName'  => $this->relationName,
-            'options'       => $this->options,
+            'forms' => $this->buildRelatedForms(),
+            'template' => $template,
+            'relationName' => $this->relationName,
+            'options' => $this->options,
         ]);
     }
 }
