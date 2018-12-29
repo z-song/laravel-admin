@@ -114,17 +114,20 @@ class HasMany extends Field
             $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
                 return [str_replace(':', '', $k) => $v];
             }, array_keys($a), array_values($a))) : $a;
+
             return $a;
         };
 
         $array_key_clean_undot = function (array $a) {
-            if (count($a))
+            if (count($a)) {
                 foreach ($a as $key => $val) {
-                array_set($a, str_replace(':', '', $key), $val);
-                if (preg_match('/[\.\:]/', $key)) {
-                    unset($a[$key]);
+                    array_set($a, str_replace(':', '', $key), $val);
+                    if (preg_match('/[\.\:]/', $key)) {
+                        unset($a[$key]);
+                    }
                 }
             }
+
             return $a;
         };
 
@@ -148,7 +151,7 @@ class HasMany extends Field
             if ($field instanceof Field\MultipleSelect) {
                 foreach ($keys as $key) {
                     $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen');
-                    $availInput[$key][$column] = $availInput[$key][$column] ? : null;
+                    $availInput[$key][$column] = $availInput[$key][$column] ?: null;
                 }
             }
             // if($field instanceof Field\File)
@@ -175,6 +178,7 @@ class HasMany extends Field
                     //Fix ResetInput Function! A Headache Implementation!
                     $u = $field->label();
                     $u .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[1])[0] . ']' : '';
+
                     return [$v => "{$u}"];
                 }, $newColumn)
             ));
@@ -184,10 +188,13 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     //Fix ResetInput Function! A Headache Implementation!
                     $col1 = explode(':', $c)[0];
-                    if (!array_key_exists($col1, $availInput[$k])) return [null => null];
+                    if (!array_key_exists($col1, $availInput[$k])) {
+                        return [null => null];
+                    }
                     $rows = $availInput[$k][$col1];
-                    if (!is_array($rows))
+                    if (!is_array($rows)) {
                         return $array_key_attach_str($field->validationMessages, $v);
+                    }
                     $r = [];
                     foreach (array_keys($rows) as $k) {
                         $k = "{$v}{$k}";
@@ -209,7 +216,9 @@ class HasMany extends Field
             $idx = "{$rel}.{$key}.{$col}";
             //Fix ResetInput Function! A Headache Implementation!
             $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$key])) return [null => null];
+            if (!array_key_exists($col1, $availInput[$key])) {
+                return [null => null];
+            }
             if (is_array($availInput[$key][$col1])) {
                 return call_user_func_array('array_merge', array_map(function ($x, $y) use ($idx) {
                     return ["{$idx}{$x}" => $y];
@@ -224,12 +233,15 @@ class HasMany extends Field
             $idx = "{$rel}.{$key}.{$col}";
             //Fix ResetInput Function! A Headache Implementation!
             $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$key])) return [null => null];
+            if (!array_key_exists($col1, $availInput[$key])) {
+                return [null => null];
+            }
             if (is_array($availInput[$key][$col1])) {
                 return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $rules) {
                     return ["{$idx}{$x}" => $rules[$idx]];
                 }, array_keys($availInput[$key][$col1])));
             }
+
             return ["{$idx}" => $rules[$idx]];
 
         }, array_keys($rules));
@@ -241,12 +253,15 @@ class HasMany extends Field
             $idx = "{$rel}.{$key}.{$col}";
             //Fix ResetInput Function! A Headache Implementation!
             $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$key])) return [null => null];
+            if (!array_key_exists($col1, $availInput[$key])) {
+                return [null => null];
+            }
             if (is_array($availInput[$key][$col1])) {
                 if (array_keys($availInput[$key][$col1]))
                     return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
                     return ["{$idx}.{$x}" => $attributes[$idx]];
                 }, array_keys($availInput[$key][$col1])));
+
                 return [null => null];
             }
 

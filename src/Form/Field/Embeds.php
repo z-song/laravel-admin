@@ -64,7 +64,7 @@ class Embeds extends Field
 
 
         $availInput = $input;
-        $array_key_attach_str = function (array $a, string $b, string $c = ".") {
+        $array_key_attach_str = function (array $a, string $b, string $c = '.') {
             return call_user_func_array(
                 'array_merge',
                 array_map(function ($u, $v) use ($b, $c) {
@@ -77,15 +77,17 @@ class Embeds extends Field
             $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
                 return [str_replace(':', '', $k) => $v];
             }, array_keys($a), array_values($a))) : $a;
+
             return $a;
         };
 
         $array_key_clean_undot = function (array $a) {
-            if (count($a))
+            if (count($a)) {
                 foreach ($a as $key => $val) {
-                array_set($a, str_replace(':', '', $key), $val);
-                if (preg_match('/[\.\:]/', $key)) {
-                    unset($a[$key]);
+                    array_set($a, str_replace(':', '', $key), $val);
+                    if (preg_match('/[\.\:]/', $key)) {
+                        unset($a[$key]);
+                    }
                 }
             }
             return $a;
@@ -101,7 +103,7 @@ class Embeds extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect) {
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
-                $availInput[$column] = $availInput[$column] ? : null;
+                $availInput[$column] = $availInput[$column] ?: null;
             }
             /*
              *
@@ -140,7 +142,8 @@ class Embeds extends Field
                 array_map(function ($v) use ($field) {
                     //Fix ResetInput Function! A Headache Implementation!
                     $u = $field->label();
-                    $u .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[1])[0] . ']' : '';
+                    $u .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[1])[0].']' : '';
+
                     return [$v => "{$u}"];
                 }, $newColumn)
             ));
@@ -150,15 +153,19 @@ class Embeds extends Field
                     list($rel, $col) = explode('.', $v);
                     //Fix ResetInput Function! A Headache Implementation!
                     $col1 = explode(':', $col)[0];
-                    if (!array_key_exists($col1, $availInput[$rel])) return [null => null];
+                    if (!array_key_exists($col1, $availInput[$rel])) {
+                        return [null => null];
+                    }
                     $rows = $availInput[$rel][$col1];
-                    if (!is_array($rows))
+                    if (!is_array($rows)) {
                         return $array_key_attach_str($field->validationMessages, $v);
+                    }
                     $r = [];
                     foreach (array_keys($rows) as $k) {
                         $k = "{$v}{$k}";
                         $r = array_merge($r, $array_key_attach_str($field->validationMessages, $k));
                     }
+
                     return $r;
                 }, $newColumn);
                 $newMessages = call_user_func_array('array_merge', $newMessages);
@@ -173,12 +180,15 @@ class Embeds extends Field
             list($rel, $col) = explode('.', $idx);
             //Fix ResetInput Function! A Headache Implementation!
             $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$rel])) return [null => null];
+            if (!array_key_exists($col1, $availInput[$rel])) {
+                return [null => null];
+            }
             if (is_array($availInput[$rel][$col1])) {
                 return call_user_func_array('array_merge', array_map(function ($x, $y) use ($idx) {
                     return ["{$idx}{$x}" => $y];
                 }, array_keys($availInput[$rel][$col1]), $availInput[$rel][$col1]));
             }
+
             return ["{$idx}" => $availInput[$rel][$col1]];
         }, array_keys($rules)));
 
@@ -203,12 +213,15 @@ class Embeds extends Field
             list($rel, $col) = explode('.', $idx);
             //Fix ResetInput Function! A Headache Implementation!
             $col1 = explode(':', $col)[0];
-            if (!array_key_exists($col1, $availInput[$rel])) return [null => null];
+            if (!array_key_exists($col1, $availInput[$rel])) {
+                return [null => null];
+            }
             if (is_array($availInput[$rel][$col1])) {
                 if (array_keys($availInput[$rel][$col1]))
                     return call_user_func_array('array_merge', array_map(function ($x) use ($idx, $attributes) {
                     return ["{$idx}.{$x}" => $attributes[$idx]];
                 }, array_keys($availInput[$rel][$col1])));
+                
                 return [null => null];
             }
 
