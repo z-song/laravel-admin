@@ -660,10 +660,10 @@ EOT;
         $this->setupScript($script);
 
         return parent::render()->with([
-            'forms' => $this->buildRelatedForms(),
-            'template' => $template,
-            'relationName' => $this->relationName,
-            'options' => $this->options,
+            'forms'         => $this->buildRelatedForms(),
+            'template'      => $template,
+            'relationName'  => $this->relationName,
+            'options'       => $this->options,
         ]);
     }
 }
