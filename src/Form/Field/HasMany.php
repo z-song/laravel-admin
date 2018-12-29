@@ -52,8 +52,8 @@ class HasMany extends Field
      * @var array
      */
     protected $views = [
-        'default' => 'admin::form.hasmany',
-        'tab' => 'admin::form.hasmanytab',
+        'default'  => 'admin::form.hasmany',
+        'tab'      => 'admin::form.hasmanytab',
     ];
 
     /**
