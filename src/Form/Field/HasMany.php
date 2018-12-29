@@ -391,7 +391,7 @@ class HasMany extends Field
      */
     protected function setupScript($script)
     {
-        $method = 'setupScriptFor'.ucfirst($this->viewMode) . 'View';
+        $method = 'setupScriptFor'.ucfirst($this->viewMode).'View';
 
         call_user_func([$this, $method], $script);
     }
