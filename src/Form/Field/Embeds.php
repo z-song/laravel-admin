@@ -333,7 +333,7 @@ class Embeds extends Field
             return json_decode($this->value, true);
         }
 
-        return (array)$this->value;
+        return (array) $this->value;
     }
 
     /**
