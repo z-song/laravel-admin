@@ -53,7 +53,7 @@ class Tags extends Field
      */
     public function fill($data, $prefix = '')
     {
-        $this->value = array_get($data, $prefix . $this->column);
+        $this->value = array_get($data, $prefix.$this->column);
 
         if (is_array($this->value) && $this->keyAsValue) {
             $this->value = array_column($this->value, $this->visibleColumn, $this->key);
@@ -63,7 +63,7 @@ class Tags extends Field
             $this->value = explode(',', $this->value);
         }
 
-        $this->value = array_filter((array)$this->value, 'strlen');
+        $this->value = array_filter((array) $this->value, 'strlen');
     }
 
     /**
@@ -157,7 +157,7 @@ class Tags extends Field
             return empty($this->value) ? ($this->getDefault() ?? []) : $this->value;
         }
 
-        $this->value = (array)$value;
+        $this->value = (array) $value;
 
         return $this;
     }
@@ -179,7 +179,7 @@ class Tags extends Field
         }
 
         return parent::render()->with([
-            'options' => $options,
+            'options'    => $options,
             'keyAsValue' => $this->keyAsValue,
         ]);
     }

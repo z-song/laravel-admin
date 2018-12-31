@@ -39,7 +39,7 @@ class MultipleSelect extends Select
 
     public function fill($data, $prefix = '')
     {
-        $relations = array_get($data, $prefix . $this->column);
+        $relations = array_get($data, $prefix.$this->column);
 
         if (is_string($relations)) {
             $this->value = explode(',', $relations);
@@ -81,7 +81,7 @@ class MultipleSelect extends Select
 
     public function prepare($value)
     {
-        $value = (array)$value;
+        $value = (array) $value;
 
         return array_filter($value, 'strlen');
     }

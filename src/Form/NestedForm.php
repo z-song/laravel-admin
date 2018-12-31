@@ -339,7 +339,7 @@ class NestedForm
 
         $elementName = $elementClass = $errorKey = [];
 
-        $key = $this->key ? : 'new_' . static::DEFAULT_KEY_NAME;
+        $key = $this->key ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {
