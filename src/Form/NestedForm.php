@@ -289,11 +289,11 @@ class NestedForm
      *
      * @return $this
      */
-    public function fill(array $data)
+    public function fill(array $data, $prefix)
     {
         /* @var Field $field */
         foreach ($this->fields() as $field) {
-            $field->fill($data);
+            $field->fill($data, $prefix);
         }
 
         return $this;
@@ -339,7 +339,7 @@ class NestedForm
 
         $elementName = $elementClass = $errorKey = [];
 
-        $key = $this->key ?: 'new_'.static::DEFAULT_KEY_NAME;
+        $key = $this->key ? : 'new_' . static::DEFAULT_KEY_NAME;
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {

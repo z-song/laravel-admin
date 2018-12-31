@@ -5,7 +5,6 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form\EmbeddedForm;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class Embeds extends Field
 {
@@ -13,6 +12,7 @@ class Embeds extends Field
      * @var \Closure
      */
     protected $builder = null;
+    protected $view = 'admin::form.embeds';
 
     /**
      * Create a new HasMany field instance.
@@ -58,8 +58,41 @@ class Embeds extends Field
         }
 
         $input = array_only($input, $this->column);
+        $rules = $attributes = $messages = $newInputs = [];
+        $rel = $this->column;
+        $availInput = $input;
+        $array_key_attach_str = function (array $a, string $b, string $c = '.') {
+            return call_user_func_array(
+                'array_merge',
+                array_map(function ($u, $v) use ($b, $c) {
+                    return ["{$b}{$c}{$u}" => $v];
+                }, array_keys($a), array_values($a))
+            );
+        };
 
-        $rules = $attributes = [];
+        $array_key_clean = function (array $a) {
+            $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
+                return [str_replace(':', '', $k) => $v];
+            }, array_keys($a), array_values($a))) : $a;
+
+            return $a;
+        };
+
+        $array_clean_merge = function (array $a, $b) {
+            return array_merge($a, call_user_func_array('array_merge', $b));
+        };
+
+        $array_key_clean_undot = function (array $a) {
+            $keys = preg_grep('/[\.\:]/', array_keys($a));
+            if ($keys) {
+                foreach ($keys as $key) {
+                    array_set($a, str_replace(':', '', $key), $a[$key]);
+                    unset($a[$key]);
+                }
+            }
+
+            return $a;
+        };
 
         /** @var Field $field */
         foreach ($this->buildEmbeddedForm()->fields() as $field) {
@@ -68,7 +101,11 @@ class Embeds extends Field
             }
 
             $column = $field->column();
-
+            $columns = is_array($column) ? $column : [$column];
+            if ($field instanceof Field\MultipleSelect) {
+                $availInput[$column] = array_filter($availInput[$column], 'strlen');
+                $availInput[$column] = $availInput[$column] ? : null;
+            }
             /*
              *
              * For single column field format rules to:
@@ -89,112 +126,102 @@ class Embeds extends Field
              *     'extra.end_atend' => 'required'
              * ]
              */
-            if (is_array($column)) {
-                foreach ($column as $key => $name) {
-                    $rules["{$this->column}.$name$key"] = $fieldRules;
+            $newColumn = array_map(function ($k, $v) use ($rel) {
+                //Fix ResetInput Function! A Headache Implementation!
+                return !$k ? "{$rel}.{$v}" : "{$rel}.{$v}:{$k}";
+            }, array_keys($columns), array_values($columns));
+
+            $fieldRules = is_array($fieldRules) ? implode('|', $fieldRules) : $fieldRules;
+            $newRules = array_map(function ($v) use ($fieldRules, $availInput) {
+                list($k, $c) = explode('.', $v);
+                //Fix ResetInput Function! A Headache Implementation!
+                $col = explode(':', $c)[0];
+
+                if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
+                    return $array_key_attach_str(preg_replace('/./', $fieldRules, $availInput[$k][$col]), $v, ':');
                 }
 
-                $this->resetInputKey($input, $column);
-            } else {
-                $rules["{$this->column}.$column"] = $fieldRules;
-            }
+                //May Have Problem in Dealing with File Upload in Edit Mode
+                return [$v => $fieldRules];
+            }, $newColumn);
+            $rules = $array_clean_merge($rules, $newRules);
 
-            /**
-             * For single column field format attributes to:
-             * [
-             *     'extra.name' => $label
-             *     'extra.email' => $label
-             * ].
-             *
-             * For multiple column field with rules like 'required':
-             * 'extra' => [
-             *     'start' => 'start_at'
-             *     'end'   => 'end_at',
-             * ]
-             *
-             * format rules to:
-             * [
-             *     'extra.start_atstart' => "$label[start_at]"
-             *     'extra.end_atend' => "$label[end_at]"
-             * ]
-             */
-            $attributes = array_merge(
-                $attributes,
-                $this->formatValidationAttribute($input, $field->label(), $column)
-            );
+            $newInput = array_map(function ($v) use ($availInput, $array_key_attach_str) {
+                list($k, $c) = explode('.', $v);
+                //Fix ResetInput Function! A Headache Implementation!
+                $col = explode(':', $c)[0];
+                if (!array_key_exists($col, $availInput[$k])) {
+                    //May Have Problem in Dealing with File Upload in Edit Mode
+                    return [$v => null];
+                }
+
+                if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
+                    return $array_key_attach_str($availInput[$k][$col], $v, ':');
+                }
+
+                return [$v => $availInput[$k][$col]];
+            }, $newColumn);
+            $newInputs = $array_clean_merge($newInputs, $newInput);
+
+            $newAttributes = array_map(function ($v) use ($field, $availInput) {
+                list($k, $c) = explode('.', $v);
+                //Fix ResetInput Function! A Headache Implementation!
+                $col = explode(':', $c)[0];
+                if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
+                    return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
+                        $w = $field->label();
+                        //Fix ResetInput Function! A Headache Implementation!
+                        $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+
+                        return ["{$v}:{$u}" => $w];
+                    }, array_keys($availInput[$k][$col])));
+                }
+
+                //May Have Problem in Dealing with File Upload in Edit Mode
+                $w = $field->label();
+                //Fix ResetInput Function! A Headache Implementation!
+                $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+
+                return [$v => $w];
+            }, $newColumn);
+            $attributes = $array_clean_merge($attributes, $newAttributes);
+
+            if ($field->validationMessages) {
+                $newMessages = array_map(function ($v) use ($field, $availInput, $array_key_attach_str) {
+                    list($k, $c) = explode('.', $v);
+                    //Fix ResetInput Function! A Headache Implementation!
+                    $col = explode(':', $c)[0];
+                    if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
+                        return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field, $array_key_attach_str) {
+                            return $array_key_attach_str($field->validationMessages, "{$v}:{$u}");
+                        }, array_keys($availInput[$k][$col])));
+                    }
+
+                    //May Have Problem in Dealing with File Upload in Edit Mode
+                    return $array_key_attach_str($field->validationMessages, $v);
+                }, $newColumn);
+                $messages = $array_clean_merge($messages, $newMessages);
+            }
         }
+
+        $rules = array_filter($rules, 'strlen');
 
         if (empty($rules)) {
             return false;
         }
 
-        return Validator::make($input, $rules, $this->validationMessages, $attributes);
-    }
+        $attributes = array_filter($attributes, 'strlen');
+        $messages = array_filter($messages, 'strlen');
+        $input = $array_key_clean_undot(array_filter($newInputs, 'strlen', ARRAY_FILTER_USE_KEY));
+        $rules = $array_key_clean($rules);
+        $attributes = $array_key_clean($attributes);
+        $messages = $array_key_clean($messages);
 
-    /**
-     * Format validation attributes.
-     *
-     * @param array  $input
-     * @param string $label
-     * @param string $column
-     *
-     * @return array
-     */
-    protected function formatValidationAttribute($input, $label, $column)
-    {
-        $new = $attributes = [];
-
-        if (is_array($column)) {
-            foreach ($column as $index => $col) {
-                $new[$col.$index] = $col;
-            }
+        if (empty($input)) {
+            $input = [$rel => $availInput];
         }
 
-        foreach (array_keys(array_dot($input)) as $key) {
-            if (is_string($column)) {
-                if (Str::endsWith($key, ".$column")) {
-                    $attributes[$key] = $label;
-                }
-            } else {
-                foreach ($new as $k => $val) {
-                    if (Str::endsWith($key, ".$k")) {
-                        $attributes[$key] = $label."[$val]";
-                    }
-                }
-            }
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * Reset input key for validation.
-     *
-     * @param array $input
-     * @param array $column $column is the column name array set
-     *
-     * @return void.
-     */
-    public function resetInputKey(array &$input, array $column)
-    {
-        $column = array_flip($column);
-
-        foreach ($input[$this->column] as $key => $value) {
-            if (!array_key_exists($key, $column)) {
-                continue;
-            }
-
-            $newKey = $key.$column[$key];
-
-            /*
-             * set new key
-             */
-            array_set($input, "{$this->column}.$newKey", $value);
-            /*
-             * forget the old key and value
-             */
-            array_forget($input, "{$this->column}.$key");
-        }
+        return Validator::make($input, $rules, $messages, $attributes);
     }
 
     /**
@@ -220,7 +247,7 @@ class Embeds extends Field
             return json_decode($this->value, true);
         }
 
-        return (array) $this->value;
+        return (array)$this->value;
     }
 
     /**

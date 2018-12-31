@@ -162,7 +162,7 @@ class EmbeddedForm
     protected function prepareValue($key, $record)
     {
         $field = $this->fields->first(function (Field $field) use ($key) {
-            return in_array($key, (array) $field->column());
+            return in_array($key, (array)$field->column());
         });
 
         if (method_exists($field, 'prepare')) {
@@ -197,10 +197,10 @@ class EmbeddedForm
      *
      * @return $this
      */
-    public function fill(array $data)
+    public function fill(array $data, $prefix = '')
     {
-        $this->fields->each(function (Field $field) use ($data) {
-            $field->fill($data);
+        $this->fields->each(function (Field $field) use ($data, $prefix) {
+            $field->fill($data, $prefix);
         });
 
         return $this;

@@ -26,9 +26,7 @@ class MultipleSelect extends Select
             return $this->otherKey;
         }
 
-        if (is_callable([$this->form->model(), $this->column]) &&
-            ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
-        ) {
+        if (is_callable([$this->form->model(), $this->column]) && ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany) {
             /* @var BelongsToMany $relation */
             $fullKey = $relation->getQualifiedRelatedPivotKeyName();
             $fullKeyArray = explode('.', $fullKey);
@@ -39,9 +37,9 @@ class MultipleSelect extends Select
         throw new \Exception('Column of this field must be a `BelongsToMany` relation.');
     }
 
-    public function fill($data)
+    public function fill($data, $prefix = '')
     {
-        $relations = array_get($data, $this->column);
+        $relations = array_get($data, $prefix . $this->column);
 
         if (is_string($relations)) {
             $this->value = explode(',', $relations);
@@ -83,7 +81,7 @@ class MultipleSelect extends Select
 
     public function prepare($value)
     {
-        $value = (array) $value;
+        $value = (array)$value;
 
         return array_filter($value, 'strlen');
     }
