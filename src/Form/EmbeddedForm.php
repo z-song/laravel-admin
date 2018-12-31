@@ -162,7 +162,7 @@ class EmbeddedForm
     protected function prepareValue($key, $record)
     {
         $field = $this->fields->first(function (Field $field) use ($key) {
-            return in_array($key, (array)$field->column());
+            return in_array($key, (array) $field->column());
         });
 
         if (method_exists($field, 'prepare')) {
