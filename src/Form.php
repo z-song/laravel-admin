@@ -572,7 +572,9 @@ class Form implements Renderable
             $this->updateRelation($this->relations);
         });
         //Disable Pjax otherwise it would cause the show() method to be called before redirecting
-        Admin::disablePjax();
+        if (request()->pjax()) {
+            request()->headers->set('X-PJAX', false);
+        }
         if (($result = $this->callSaved()) instanceof Response) {
             return $result;
         }
