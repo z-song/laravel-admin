@@ -32,6 +32,11 @@ class Admin
     protected $navbar;
 
     /**
+     * @var string
+     */
+    public static $meta_t;
+
+    /**
      * @var array
      */
     public static $extensions = [];
@@ -152,13 +157,23 @@ class Admin
     }
 
     /**
+     * Set admin title.
+     *
+     * @return void
+     */
+    public static function setTitle($title)
+    {
+        self::$meta_t = $title;
+    }
+
+    /**
      * Get admin title.
      *
      * @return Config
      */
     public function title()
     {
-        return config('admin.title');
+        return self::$meta_t ? self::$meta_t : config('admin.title');
     }
 
     /**
