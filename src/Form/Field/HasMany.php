@@ -234,7 +234,6 @@ class HasMany extends Field
             }
         }
 
-        $rules = array_filter($rules, 'strlen');
         if (empty($rules)) {
             return false;
         }
