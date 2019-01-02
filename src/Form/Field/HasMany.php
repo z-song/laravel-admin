@@ -239,8 +239,6 @@ class HasMany extends Field
             return false;
         }
 
-        $attributes = array_filter($attributes, 'strlen');
-        $messages = array_filter($messages, 'strlen');
         $input = $array_key_clean_undot(array_filter($newInputs, 'strlen', ARRAY_FILTER_USE_KEY));
         $rules = $array_key_clean($rules);
         $attributes = $array_key_clean($attributes);
