@@ -398,7 +398,7 @@ class Form implements Renderable
         // ajax but not pjax
         if ($request->ajax() && !$request->pjax()) {
             return response()->json([
-                'status' => true,
+                'status'  => true,
                 'message' => $message,
             ]);
         }
@@ -531,7 +531,7 @@ class Form implements Renderable
      */
     public function update($id, $data = null)
     {
-        $data = ($data) ? : Input::all();
+        $data = ($data) ?: Input::all();
 
         $isEditable = $this->isEditable($data);
 
@@ -541,7 +541,7 @@ class Form implements Renderable
 
         if ($this->handleOrderable($id, $data)) {
             return response([
-                'status' => true,
+                'status'  => true,
                 'message' => trans('admin.update_succeeded'),
             ]);
         }
@@ -631,15 +631,15 @@ class Form implements Renderable
     {
         if (request('after-save') == 1) {
             // continue editing
-            $url = rtrim($resourcesPath, '/') . "/{$key}/edit";
+            $url = rtrim($resourcesPath, '/')."/{$key}/edit";
         } elseif (request('after-save') == 2) {
             // continue creating
-            $url = rtrim($resourcesPath, '/') . '/create';
+            $url = rtrim($resourcesPath, '/').'/create';
         } elseif (request('after-save') == 3) {
             // view resource
-            $url = rtrim($resourcesPath, '/') . "/{$key}";
+            $url = rtrim($resourcesPath, '/')."/{$key}";
         } else {
-            $url = request(Builder::PREVIOUS_URL_KEY) ? : $resourcesPath;
+            $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
         }
 
         admin_toastr(trans('admin.save_succeeded'));
@@ -881,7 +881,7 @@ class Form implements Renderable
      */
     protected function invalidColumn($columns, $oneToOneRelation = false)
     {
-        foreach ((array)$columns as $column) {
+        foreach ((array) $columns as $column) {
             if ((!$oneToOneRelation && Str::contains($column, '.')) || ($oneToOneRelation && !Str::contains($column, '.'))) {
                 return true;
             }
@@ -1000,7 +1000,7 @@ class Form implements Renderable
      */
     public function ignore($fields)
     {
-        $this->ignored = array_merge($this->ignored, (array)$fields);
+        $this->ignored = array_merge($this->ignored, (array) $fields);
 
         return $this;
     }
@@ -1405,52 +1405,52 @@ class Form implements Renderable
     public static function registerBuiltinFields()
     {
         $map = [
-            'button' => Field\Button::class,
-            'checkbox' => Field\Checkbox::class,
-            'color' => Field\Color::class,
-            'currency' => Field\Currency::class,
-            'date' => Field\Date::class,
-            'dateRange' => Field\DateRange::class,
-            'datetime' => Field\Datetime::class,
-            'dateTimeRange' => Field\DatetimeRange::class,
-            'datetimeRange' => Field\DatetimeRange::class,
-            'decimal' => Field\Decimal::class,
-            'display' => Field\Display::class,
-            'divider' => Field\Divide::class,
-            'divide' => Field\Divide::class,
-            'embeds' => Field\Embeds::class,
-            'editor' => Field\Editor::class,
-            'email' => Field\Email::class,
-            'file' => Field\File::class,
-            'hasMany' => Field\HasMany::class,
-            'hidden' => Field\Hidden::class,
-            'id' => Field\Id::class,
-            'image' => Field\Image::class,
-            'ip' => Field\Ip::class,
-            'map' => Field\Map::class,
-            'mobile' => Field\Mobile::class,
-            'month' => Field\Month::class,
+            'button'         => Field\Button::class,
+            'checkbox'       => Field\Checkbox::class,
+            'color'          => Field\Color::class,
+            'currency'       => Field\Currency::class,
+            'date'           => Field\Date::class,
+            'dateRange'      => Field\DateRange::class,
+            'datetime'       => Field\Datetime::class,
+            'dateTimeRange'  => Field\DatetimeRange::class,
+            'datetimeRange'  => Field\DatetimeRange::class,
+            'decimal'        => Field\Decimal::class,
+            'display'        => Field\Display::class,
+            'divider'        => Field\Divide::class,
+            'divide'         => Field\Divide::class,
+            'embeds'         => Field\Embeds::class,
+            'editor'         => Field\Editor::class,
+            'email'          => Field\Email::class,
+            'file'           => Field\File::class,
+            'hasMany'        => Field\HasMany::class,
+            'hidden'         => Field\Hidden::class,
+            'id'             => Field\Id::class,
+            'image'          => Field\Image::class,
+            'ip'             => Field\Ip::class,
+            'map'            => Field\Map::class,
+            'mobile'         => Field\Mobile::class,
+            'month'          => Field\Month::class,
             'multipleSelect' => Field\MultipleSelect::class,
-            'number' => Field\Number::class,
-            'password' => Field\Password::class,
-            'radio' => Field\Radio::class,
-            'rate' => Field\Rate::class,
-            'select' => Field\Select::class,
-            'slider' => Field\Slider::class,
-            'switch' => Field\SwitchField::class,
-            'text' => Field\Text::class,
-            'textarea' => Field\Textarea::class,
-            'time' => Field\Time::class,
-            'timeRange' => Field\TimeRange::class,
-            'url' => Field\Url::class,
-            'year' => Field\Year::class,
-            'html' => Field\Html::class,
-            'tags' => Field\Tags::class,
-            'icon' => Field\Icon::class,
-            'multipleFile' => Field\MultipleFile::class,
-            'multipleImage' => Field\MultipleImage::class,
-            'captcha' => Field\Captcha::class,
-            'listbox' => Field\Listbox::class,
+            'number'         => Field\Number::class,
+            'password'       => Field\Password::class,
+            'radio'          => Field\Radio::class,
+            'rate'           => Field\Rate::class,
+            'select'         => Field\Select::class,
+            'slider'         => Field\Slider::class,
+            'switch'         => Field\SwitchField::class,
+            'text'           => Field\Text::class,
+            'textarea'       => Field\Textarea::class,
+            'time'           => Field\Time::class,
+            'timeRange'      => Field\TimeRange::class,
+            'url'            => Field\Url::class,
+            'year'           => Field\Year::class,
+            'html'           => Field\Html::class,
+            'tags'           => Field\Tags::class,
+            'icon'           => Field\Icon::class,
+            'multipleFile'   => Field\MultipleFile::class,
+            'multipleImage'  => Field\MultipleImage::class,
+            'captcha'        => Field\Captcha::class,
+            'listbox'        => Field\Listbox::class,
         ];
 
         foreach ($map as $abstract => $class) {
@@ -1544,7 +1544,7 @@ class Form implements Renderable
 
         return static::$collectedAssets = [
             'css' => $css->flatten()->unique()->filter()->toArray(),
-            'js' => $js->flatten()->unique()->filter()->toArray(),
+            'js'  => $js->flatten()->unique()->filter()->toArray(),
         ];
     }
 
