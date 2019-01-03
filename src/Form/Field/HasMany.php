@@ -169,6 +169,7 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     $v = "{$r}.{$k}";
                     $embed = $field->getValidationRules([$field->column() => $availInput[$k][$c]]);
+
                     return $embed ? $array_key_attach_str($embed, $v) : null;
                 }, $newColumn);
                 $rules = $array_clean_merge($rules, array_filter($newRules));
@@ -177,6 +178,7 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     $v = "{$r}.{$k}";
                     $embed = $field->getValidationAttributes([$field->column() => $availInput[$k][$c]]);
+
                     return $embed ? $array_key_attach_str($embed, $v) : null;
                 }, $newColumn);
                 $attributes = $array_clean_merge($attributes, array_filter($newAttributes));
@@ -185,6 +187,7 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     $v = "{$r}.{$k}";
                     $embed = $field->getValidationInput([$field->column() => $availInput[$k][$c]]);
+
                     return $embed ? $array_key_attach_str($embed, $v) : [null => 'null'];
                 }, $newColumn);
                 $newInputs = $array_clean_merge($newInputs, array_filter($newInput, 'strlen', ARRAY_FILTER_USE_KEY));
@@ -193,6 +196,7 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     $v = "{$r}.{$k}";
                     $embed = $field->getValidationMessages([$field->column() => $availInput[$k][$c]]);
+
                     return $embed ? $array_key_attach_str($embed, $v) : null;
                 }, $newColumn);
                 $messages = $array_clean_merge($messages, array_filter($newMessages));
@@ -215,7 +219,6 @@ class HasMany extends Field
                     //Fix ResetInput Function! A Headache Implementation!
                     $col = explode(':', $c)[0];
                     if (!array_key_exists($col, $availInput[$k])) {
-
                         return [$v => null];
                     }
 
