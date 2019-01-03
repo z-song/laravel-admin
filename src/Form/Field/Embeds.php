@@ -288,7 +288,6 @@ class Embeds extends Field
                 //Fix ResetInput Function! A Headache Implementation!
                 $col = explode(':', $c)[0];
                 if (!array_key_exists($col, $availInput[$k])) {
-                    //May Have Problem in Dealing with File Upload in Edit Mode
                     return [$v => null];
                 }
 
@@ -477,6 +476,7 @@ class Embeds extends Field
 
         call_user_func($this->builder, $form);
 
+        //Fix the Bug of Embeds Fields Cannot be used within HasMany
         if ($this->elementName) {
             list($rel, $key, $col) = explode('.', $this->errorKey);
             $form->fields()->each(function (Field $field) use ($rel,$key,$col) {

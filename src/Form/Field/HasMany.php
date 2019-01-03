@@ -132,7 +132,6 @@ class HasMany extends Field
 
             return $a;
         };
-        $old = $input;
         $input = array_only($input, $this->column);
         $form = $this->buildNestedForm($this->column, $this->builder);
         $rel = $this->relationName;
@@ -152,7 +151,7 @@ class HasMany extends Field
             }
             $column = $field->column();
             $columns = is_array($column) ? $column : [$column];
-            if ($field instanceof Field\MultipleSelect || $field instanceof Field\Listbox) {
+            if ($field instanceof Field\MultipleSelect || $field instanceof Field\Listbox || $field instanceof Field\Tag) {
                 foreach ($keys as $key) {
                     $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen') ?: null;
                 }
@@ -166,17 +165,10 @@ class HasMany extends Field
             }, $keys));
 
             if ($field instanceof Field\Embeds) {
-                // dd($field->column(), $input, $old, $availInput);
                 $newRules = array_map(function ($v) use ($availInput, $field, $array_key_attach_str) {
                     list($r, $k, $c) = explode('.', $v);
                     $v = "{$r}.{$k}";
                     $embed = $field->getValidationRules([$field->column() => $availInput[$k][$c]]);
-                    // $embed = $embed ? call_user_func_array(
-                    //     'array_merge',
-                    //     array_map(function ($x, $y) {
-                    //         return [str_replace('.', ':', $x) => $y];
-                    //     }, array_keys($embed), $embed)
-                    // ) : $embed;
                     return $embed ? $array_key_attach_str($embed, $v) : null;
                 }, $newColumn);
                 $rules = $array_clean_merge($rules, array_filter($newRules));
@@ -185,12 +177,6 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     $v = "{$r}.{$k}";
                     $embed = $field->getValidationAttributes([$field->column() => $availInput[$k][$c]]);
-                    // $embed = $embed ? call_user_func_array(
-                    //     'array_merge',
-                    //     array_map(function ($x, $y) {
-                    //         return [str_replace('.', ':', $x) => $y];
-                    //     }, array_keys($embed), $embed)
-                    // ) : $embed;
                     return $embed ? $array_key_attach_str($embed, $v) : null;
                 }, $newColumn);
                 $attributes = $array_clean_merge($attributes, array_filter($newAttributes));
@@ -199,12 +185,6 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     $v = "{$r}.{$k}";
                     $embed = $field->getValidationInput([$field->column() => $availInput[$k][$c]]);
-                    // $embed = $embed ? call_user_func_array(
-                    //     'array_merge',
-                    //     array_map(function ($x, $y) {
-                    //         return [str_replace('.', ':', $x) => $y];
-                    //     }, array_keys($embed), $embed)
-                    // ) : $embed;
                     return $embed ? $array_key_attach_str($embed, $v) : [null => 'null'];
                 }, $newColumn);
                 $newInputs = $array_clean_merge($newInputs, array_filter($newInput, 'strlen', ARRAY_FILTER_USE_KEY));
@@ -213,18 +193,9 @@ class HasMany extends Field
                     list($r, $k, $c) = explode('.', $v);
                     $v = "{$r}.{$k}";
                     $embed = $field->getValidationMessages([$field->column() => $availInput[$k][$c]]);
-                    // $embed = $embed ? call_user_func_array(
-                    //     'array_merge',
-                    //     array_map(function ($x, $y) {
-                    //         $x = explode('.', $x);
-                    //         $x = implode('', array_slice($x, 0, -1)) . '.' . end($x);
-                    //         return [$x => $y];
-                    //     }, array_keys($embed), $embed)
-                    // ) : $embed;
                     return $embed ? $array_key_attach_str($embed, $v) : null;
                 }, $newColumn);
                 $messages = $array_clean_merge($messages, array_filter($newMessages));
-            // dd($rules, $attributes, $messages, $newInputs);
             } else {
                 $fieldRules = is_array($fieldRules) ? implode('|', $fieldRules) : $fieldRules;
                 $newRules = array_map(function ($v) use ($fieldRules, $availInput, $array_key_attach_str) {
@@ -235,7 +206,6 @@ class HasMany extends Field
                         return $array_key_attach_str(preg_replace('/.+/', $fieldRules, $availInput[$k][$col]), $v, ':');
                     }
 
-                    //May Have Problem in Dealing with File Upload in Edit Mode
                     return [$v => $fieldRules];
                 }, $newColumn);
                 $rules = $array_clean_merge($rules, $newRules);
@@ -245,7 +215,7 @@ class HasMany extends Field
                     //Fix ResetInput Function! A Headache Implementation!
                     $col = explode(':', $c)[0];
                     if (!array_key_exists($col, $availInput[$k])) {
-                        //May Have Problem in Dealing with File Upload in Edit Mode
+
                         return [$v => null];
                     }
 
@@ -271,7 +241,6 @@ class HasMany extends Field
                         }, array_keys($availInput[$k][$col])));
                     }
 
-                    //May Have Problem in Dealing with File Upload in Edit Mode
                     $w = $field->label();
                     //Fix ResetInput Function! A Headache Implementation!
                     $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
@@ -292,7 +261,6 @@ class HasMany extends Field
                         }, array_keys($availInput[$k][$col])));
                     }
 
-                    //May Have Problem in Dealing with File Upload in Edit Mode
                     return $array_key_attach_str($field->validationMessages, $v);
                 }, $newColumn);
                 $messages = $array_clean_merge($messages, $newMessages);
@@ -313,9 +281,6 @@ class HasMany extends Field
             $input = [$rel => $availInput];
         }
 
-        // if ($rel == 'files') {
-        //     dd(request()->all(), $input, $rules, $messages, $attributes, Validator::make($input, $rules, $messages, $attributes)->messages());
-        // }
         return Validator::make($input, $rules, $messages, $attributes);
     }
 
@@ -432,7 +397,6 @@ class HasMany extends Field
                 if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
                     continue;
                 }
-                // dd($this->value, $values, $key, $data);
 
                 $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
                     ->fill($data);
