@@ -197,10 +197,10 @@ class EmbeddedForm
      *
      * @return $this
      */
-    public function fill(array $data, $prefix = '')
+    public function fill(array $data)
     {
-        $this->fields->each(function (Field $field) use ($data, $prefix) {
-            $field->fill($data, $prefix);
+        $this->fields->each(function (Field $field) use ($data) {
+            $field->fill($data);
         });
 
         return $this;

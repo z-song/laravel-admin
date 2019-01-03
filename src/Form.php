@@ -352,6 +352,11 @@ class Form implements Renderable
             return back()->withInput()->withErrors($validationMessages);
         }
 
+        //Disable Pjax otherwise it would cause the show() method to be called before redirecting
+        if (request()->pjax()) {
+            request()->headers->set('X-PJAX', false);
+        }
+
         if (($response = $this->prepare($data)) instanceof Response) {
             return $response;
         }
@@ -571,7 +576,10 @@ class Form implements Renderable
 
             $this->updateRelation($this->relations);
         });
-
+        //Disable Pjax otherwise it would cause the show() method to be called before redirecting
+        if (request()->pjax()) {
+            request()->headers->set('X-PJAX', false);
+        }
         if (($result = $this->callSaved()) instanceof Response) {
             return $result;
         }
@@ -874,8 +882,7 @@ class Form implements Renderable
     protected function invalidColumn($columns, $oneToOneRelation = false)
     {
         foreach ((array) $columns as $column) {
-            if ((!$oneToOneRelation && Str::contains($column, '.')) ||
-                ($oneToOneRelation && !Str::contains($column, '.'))) {
+            if ((!$oneToOneRelation && Str::contains($column, '.')) || ($oneToOneRelation && !Str::contains($column, '.'))) {
                 return true;
             }
         }
@@ -1169,13 +1176,11 @@ class Form implements Renderable
                 list($relation) = explode('.', $column);
 
                 if (method_exists($this->model, $relation) &&
-                    $this->model->$relation() instanceof Relations\Relation
-                ) {
+                    $this->model->$relation() instanceof Relations\Relation) {
                     $relations[] = $relation;
                 }
             } elseif (method_exists($this->model, $column) &&
-                !method_exists(Model::class, $column)
-            ) {
+                !method_exists(Model::class, $column)) {
                 $relations[] = $column;
             }
         }

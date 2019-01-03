@@ -289,11 +289,11 @@ class NestedForm
      *
      * @return $this
      */
-    public function fill(array $data, $prefix)
+    public function fill(array $data)
     {
         /* @var Field $field */
         foreach ($this->fields() as $field) {
-            $field->fill($data, $prefix);
+            $field->fill($data);
         }
 
         return $this;

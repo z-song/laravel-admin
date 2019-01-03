@@ -103,20 +103,6 @@ class Filter implements Renderable
     protected $layout;
 
     /**
-     * Set this filter only in the layout.
-     *
-     * @var bool
-     */
-    protected $thisFilterLayoutOnly = false;
-
-    /**
-     * Columns of filter that are layout-only.
-     *
-     * @var array
-     */
-    protected $layoutOnlyFilterColumns = [];
-
-    /**
      * Primary key of giving model.
      *
      * @var mixed
@@ -294,11 +280,7 @@ class Filter implements Renderable
         $this->removeIDFilterIfNeeded();
 
         foreach ($this->filters() as $filter) {
-            if (in_array($column = $filter->getColumn(), $this->layoutOnlyFilterColumns)) {
-                $filter->default(array_get($params, $column));
-            } else {
-                $conditions[] = $filter->condition($params);
-            }
+            $conditions[] = $filter->condition($params);
         }
 
         return tap(array_filter($conditions), function ($conditions) {
@@ -329,18 +311,6 @@ class Filter implements Renderable
     }
 
     /**
-     * Set this filter layout only.
-     *
-     * @return $this
-     */
-    public function layoutOnly()
-    {
-        $this->thisFilterLayoutOnly = true;
-
-        return $this;
-    }
-
-    /**
      * Add a filter to grid.
      *
      * @param AbstractFilter $filter
@@ -352,11 +322,6 @@ class Filter implements Renderable
         $this->layout->addFilter($filter);
 
         $filter->setParent($this);
-
-        if ($this->thisFilterLayoutOnly) {
-            $this->thisFilterLayoutOnly = false;
-            $this->layoutOnlyFilterColumns[] = $filter->getColumn();
-        }
 
         return $this->filters[] = $filter;
     }
