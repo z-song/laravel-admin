@@ -13,6 +13,7 @@ class Embeds extends Field
      */
     protected $builder = null;
     protected $view = 'admin::form.embeds';
+
     /**
      * Create a new HasMany field instance.
      *
@@ -83,7 +84,7 @@ class Embeds extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect || $field instanceof Field\Listbox) {
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
-                $availInput[$column] = $availInput[$column] ? : null;
+                $availInput[$column] = $availInput[$column] ?: null;
             }
             /*
              *
@@ -165,7 +166,7 @@ class Embeds extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect || $field instanceof Field\Listbox) {
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
-                $availInput[$column] = $availInput[$column] ? : null;
+                $availInput[$column] = $availInput[$column] ?: null;
             }
             /*
              *
@@ -200,7 +201,7 @@ class Embeds extends Field
                     return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
                         $w = $field->label();
                         //Fix ResetInput Function! A Headache Implementation!
-                        $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+                        $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
 
                         return ["{$v}:{$u}" => $w];
                     }, array_keys($availInput[$k][$col])));
@@ -209,12 +210,11 @@ class Embeds extends Field
                 //May Have Problem in Dealing with File Upload in Edit Mode
                 $w = $field->label();
                 //Fix ResetInput Function! A Headache Implementation!
-                $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+                $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
 
                 return [$v => $w];
             }, $newColumn);
             $attributes = $array_clean_merge($attributes, $newAttributes);
-
         }
 
         return $attributes;
@@ -256,7 +256,7 @@ class Embeds extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect || $field instanceof Field\Listbox) {
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
-                $availInput[$column] = $availInput[$column] ? : null;
+                $availInput[$column] = $availInput[$column] ?: null;
             }
             /*
              *
@@ -299,7 +299,6 @@ class Embeds extends Field
                 return [$v => $availInput[$k][$col]];
             }, $newColumn);
             $newInputs = $array_clean_merge($newInputs, $newInput);
-
         }
 
         return $newInputs;
@@ -341,7 +340,7 @@ class Embeds extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect || $field instanceof Field\Listbox) {
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
-                $availInput[$column] = $availInput[$column] ? : null;
+                $availInput[$column] = $availInput[$column] ?: null;
             }
             /*
              *
@@ -462,7 +461,7 @@ class Embeds extends Field
             return json_decode($this->value, true);
         }
 
-        return (array)$this->value;
+        return (array) $this->value;
     }
 
     /**
@@ -472,28 +471,27 @@ class Embeds extends Field
      */
     protected function buildEmbeddedForm()
     {
-        $form = new EmbeddedForm($this->elementName?:$this->column);
+        $form = new EmbeddedForm($this->elementName ?: $this->column);
 
         $form->setParent($this->form);
 
         call_user_func($this->builder, $form);
 
-        if($this->elementName)
-        {
-            list($rel,$key,$col)=explode('.',$this->errorKey);
-            $form->fields()->each(function (Field $field) use ($rel,$key,$col){
+        if ($this->elementName) {
+            list($rel, $key, $col) = explode('.', $this->errorKey);
+            $form->fields()->each(function (Field $field) use ($rel,$key,$col) {
                 $column = $field->column();
                 $elementName = $elementClass = $errorKey = [];
                 if (is_array($column)) {
                     foreach ($column as $k => $name) {
-                        $errorKey[$k] = sprintf('%s.%s.%s.%s',$rel,$key,$col,$name);
-                        $elementName[$k] = sprintf('%s[%s][%s][%s]',$rel,$key,$col,$name);
-                        $elementClass[$k] = [$rel,$col, $name];
+                        $errorKey[$k] = sprintf('%s.%s.%s.%s', $rel, $key, $col, $name);
+                        $elementName[$k] = sprintf('%s[%s][%s][%s]', $rel, $key, $col, $name);
+                        $elementClass[$k] = [$rel, $col, $name];
                     }
                 } else {
-                    $errorKey = sprintf('%s.%s.%s.%s', $rel, $key, $col,$column);
-                    $elementName = sprintf('%s[%s][%s][%s]', $rel, $key, $col,$column);
-                    $elementClass = [$rel,$col, $column];
+                    $errorKey = sprintf('%s.%s.%s.%s', $rel, $key, $col, $column);
+                    $elementName = sprintf('%s[%s][%s][%s]', $rel, $key, $col, $column);
+                    $elementClass = [$rel, $col, $column];
                 }
                 $field->setErrorKey($errorKey)
                     ->setElementName($elementName)
@@ -504,7 +502,6 @@ class Embeds extends Field
 
         return $form;
     }
-
 
     /**
      * Render the form.

@@ -52,7 +52,7 @@ class HasMany extends Field
      */
     protected $views = [
         'default' => 'admin::form.hasmany',
-        'tab' => 'admin::form.hasmanytab',
+        'tab'     => 'admin::form.hasmanytab',
     ];
 
     /**
@@ -154,7 +154,7 @@ class HasMany extends Field
             $columns = is_array($column) ? $column : [$column];
             if ($field instanceof Field\MultipleSelect || $field instanceof Field\Listbox) {
                 foreach ($keys as $key) {
-                    $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen') ? : null;
+                    $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen') ?: null;
                 }
             }
 
@@ -224,7 +224,7 @@ class HasMany extends Field
                     return $embed ? $array_key_attach_str($embed, $v) : null;
                 }, $newColumn);
                 $messages = $array_clean_merge($messages, array_filter($newMessages));
-               // dd($rules, $attributes, $messages, $newInputs);
+            // dd($rules, $attributes, $messages, $newInputs);
             } else {
                 $fieldRules = is_array($fieldRules) ? implode('|', $fieldRules) : $fieldRules;
                 $newRules = array_map(function ($v) use ($fieldRules, $availInput, $array_key_attach_str) {
@@ -234,7 +234,7 @@ class HasMany extends Field
                     if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
                         return $array_key_attach_str(preg_replace('/.+/', $fieldRules, $availInput[$k][$col]), $v, ':');
                     }
-    
+
                     //May Have Problem in Dealing with File Upload in Edit Mode
                     return [$v => $fieldRules];
                 }, $newColumn);
@@ -265,22 +265,21 @@ class HasMany extends Field
                         return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
                             $w = $field->label();
                             //Fix ResetInput Function! A Headache Implementation!
-                            $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+                            $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
 
                             return ["{$v}:{$u}" => $w];
                         }, array_keys($availInput[$k][$col])));
                     }
-    
+
                     //May Have Problem in Dealing with File Upload in Edit Mode
                     $w = $field->label();
                     //Fix ResetInput Function! A Headache Implementation!
-                    $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+                    $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
 
                     return [$v => $w];
                 }, $newColumn);
                 $attributes = $array_clean_merge($attributes, $newAttributes);
             }
-
 
             if ($field->validationMessages) {
                 $newMessages = array_map(function ($v) use ($field, $availInput, $array_key_attach_str) {
@@ -459,7 +458,7 @@ class HasMany extends Field
      */
     protected function setupScript($script)
     {
-        $method = 'setupScriptFor' . ucfirst($this->viewMode) . 'View';
+        $method = 'setupScriptFor'.ucfirst($this->viewMode).'View';
 
         call_user_func([$this, $method], $script);
     }
@@ -603,10 +602,10 @@ EOT;
         $this->setupScript($script);
 
         return parent::render()->with([
-            'forms' => $this->buildRelatedForms(),
-            'template' => $template,
+            'forms'        => $this->buildRelatedForms(),
+            'template'     => $template,
             'relationName' => $this->relationName,
-            'options' => $this->options,
+            'options'      => $this->options,
         ]);
     }
 }
