@@ -71,7 +71,7 @@ class Embeds extends Field
         };
 
         $array_clean_merge = function (array $a, $b) {
-            return array_merge($a, call_user_func_array('array_merge', $b));
+            return $b ? array_merge($a, call_user_func_array('array_merge', $b)) : $a;
         };
 
         /** @var Field $field */
@@ -153,7 +153,7 @@ class Embeds extends Field
         };
 
         $array_clean_merge = function (array $a, $b) {
-            return array_merge($a, call_user_func_array('array_merge', $b));
+            return $b ? array_merge($a, call_user_func_array('array_merge', $b)) : $a;
         };
 
         /** @var Field $field */
@@ -243,7 +243,7 @@ class Embeds extends Field
         };
 
         $array_clean_merge = function (array $a, $b) {
-            return array_merge($a, call_user_func_array('array_merge', $b));
+            return $b ? array_merge($a, call_user_func_array('array_merge', $b)) : $a;
         };
 
         /** @var Field $field */
@@ -326,7 +326,7 @@ class Embeds extends Field
         };
 
         $array_clean_merge = function (array $a, $b) {
-            return array_merge($a, call_user_func_array('array_merge', $b));
+            return $b ? array_merge($a, call_user_func_array('array_merge', $b)) : $a;
         };
 
         /** @var Field $field */
