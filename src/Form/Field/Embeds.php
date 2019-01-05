@@ -106,7 +106,7 @@ class Embeds extends Field
              *     'extra.end_atend' => 'required'
              * ]
              *
-             * 
+             *
              * format attributes to:
              * [
              *      'extra.start_atstart' => "$label[start_at]"
@@ -195,7 +195,7 @@ class Embeds extends Field
              *     'extra.end_atend' => 'required'
              * ]
              *
-             * 
+             *
              * format attributes to:
              * [
              *      'extra.start_atstart' => "$label[start_at]"
