@@ -105,6 +105,13 @@ class Embeds extends Field
              *     'extra.start_atstart' => 'required'
              *     'extra.end_atend' => 'required'
              * ]
+             *
+             * 
+             * format attributes to:
+             * [
+             *      'extra.start_atstart' => "$label[start_at]"
+             *      'extra.end_atend'     => "$label[end_at]"
+             * ]
              */
             $newColumn = array_map(function ($k, $v) use ($rel) {
                 //Fix ResetInput Function! A Headache Implementation!
@@ -187,6 +194,13 @@ class Embeds extends Field
              *     'extra.start_atstart' => 'required'
              *     'extra.end_atend' => 'required'
              * ]
+             *
+             * 
+             * format attributes to:
+             * [
+             *      'extra.start_atstart' => "$label[start_at]"
+             *      'extra.end_atend'     => "$label[end_at]"
+             * ]
              */
             $newColumn = array_map(function ($k, $v) use ($rel) {
                 //Fix ResetInput Function! A Headache Implementation!
@@ -262,8 +276,8 @@ class Embeds extends Field
              *
              * For single column field format rules to:
              * [
-             *     'extra.name' => 'required'
-             *     'extra.email' => 'required'
+             *     'extra.name' => $value
+             *     'extra.email' => $value
              * ]
              *
              * For multiple column field with rules like 'required':
@@ -274,8 +288,8 @@ class Embeds extends Field
              *
              * format rules to:
              * [
-             *     'extra.start_atstart' => 'required'
-             *     'extra.end_atend' => 'required'
+             *     'extra.start_atstart' => $value
+             *     'extra.end_atend' => $value
              * ]
              */
             $newColumn = array_map(function ($k, $v) use ($rel) {
@@ -341,26 +355,7 @@ class Embeds extends Field
                 $availInput[$column] = array_filter($availInput[$column], 'strlen');
                 $availInput[$column] = $availInput[$column] ?: null;
             }
-            /*
-             *
-             * For single column field format rules to:
-             * [
-             *     'extra.name' => 'required'
-             *     'extra.email' => 'required'
-             * ]
-             *
-             * For multiple column field with rules like 'required':
-             * 'extra' => [
-             *     'start' => 'start_at'
-             *     'end'   => 'end_at',
-             * ]
-             *
-             * format rules to:
-             * [
-             *     'extra.start_atstart' => 'required'
-             *     'extra.end_atend' => 'required'
-             * ]
-             */
+
             $newColumn = array_map(function ($k, $v) use ($rel) {
                 //Fix ResetInput Function! A Headache Implementation!
                 return !$k ? "{$rel}.{$v}" : "{$rel}.{$v}:{$k}";
