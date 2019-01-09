@@ -49,7 +49,7 @@ return [
     'failed'                => '실패',
     'delete_confirm'        => '삭제하겠습니까?',
     'delete_succeeded'      => '삭제 완료했습니다 !',
-    'delete_failed'         => '삭제 실패했습니 !',
+    'delete_failed'         => '삭제 실패했습니다 !',
     'update_succeeded'      => '업데이트 완료했습니다 !',
     'save_succeeded'        => '저장 완료했습니다 !',
     'refresh_succeeded'     => '새로고침 완료했습니다 !',
@@ -93,7 +93,7 @@ return [
     'size'                  => '용량',
     'listbox'               => [
         'text_total'         => '총 {0} 개',
-        'text_empty'         => '테이블이 비었습니.',
+        'text_empty'         => '테이블이 비었습니다.',
         'filtered'           => '{0} / {1}',
         'filter_clear'       => '전체 보기',
         'filter_placeholder' => '필터링',
