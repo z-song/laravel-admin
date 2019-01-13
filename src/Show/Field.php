@@ -409,11 +409,11 @@ HTML;
     public function setValue(Model $model)
     {
         if ($this->relation) {
-            if (!$model->{$this->relation}) {
+            if (!$relationValue = $model->{$this->relation}) {
                 return $this;
             }
 
-            $this->value = $model->{$this->relation}->getAttribute($this->name);
+            $this->value = $relationValue;
         } else {
             $this->value = $model->getAttribute($this->name);
         }
