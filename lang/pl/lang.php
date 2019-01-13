@@ -80,8 +80,6 @@ return [
 
     'pagination'    => [
         'range'  => 'Wyświetlanie pozycji od :first do :last z :total',
-    ]
-    
-];
+    ],
 
-?>
+];
