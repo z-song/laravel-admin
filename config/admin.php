@@ -115,6 +115,9 @@ return [
                 'model'  => Encore\Admin\Auth\Database\Administrator::class,
             ],
         ],
+	    
+	    // Add "remember me" to login form
+	    'remember' => true,
     ],
 
     /*
