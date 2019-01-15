@@ -83,7 +83,7 @@ trait UploadField
             'showCancel'           => false,
             'showClose'            => $this->closeable,
             'fileActionSettings'   => [
-                'showDrag' => false,
+                'showDrag'   => false,
                 'showRemove' => $this->removable,
             ],
 //            'initialCaption'       => $this->initialCaption($this->value),
