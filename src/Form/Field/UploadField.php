@@ -50,6 +50,11 @@ trait UploadField
     protected $removable = false;
 
     /**
+     * @var bool
+     */
+    protected $closeable = false;
+
+    /**
      * Controls the storage permission. Could be 'private' or 'public'.
      *
      * @var string
