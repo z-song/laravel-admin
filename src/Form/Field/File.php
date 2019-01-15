@@ -162,7 +162,7 @@ class File extends Field
     protected function initialPreviewConfig()
     {
         return [
-            ['caption' => basename($this->value), 'key' => 0],
+            ['caption' => basename($this->value), 'key' => 0,],
         ];
     }
 

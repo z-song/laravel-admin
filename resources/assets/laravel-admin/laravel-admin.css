@@ -39,3 +39,9 @@ a.editable-empty {
 .mailbox-attachments li {
     width: 300px !important;
 }
+
+.file-preview-image{
+    color: green;
+    font: inherit;
+    word-break: break-all;
+}

@@ -77,9 +77,15 @@ trait UploadField
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
             'browseLabel'          => trans('admin.browse'),
-            'showRemove'           => false,
+            'showRemove'           => $this->removable,
             'showUpload'           => false,
             'dropZoneEnabled'      => false,        //dropzone disabled by default for backward compatibility
+            'showCancel'           => false,
+            'showClose'            => $this->closeable,
+            'fileActionSettings'   => [
+                'showDrag' => false,
+                'showRemove' => $this->removable,
+            ],
 //            'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
@@ -103,9 +109,9 @@ trait UploadField
      */
     protected function setupPreviewOptions()
     {
-        if (!$this->removable) {
-            return;
-        }
+        // if (!$this->removable) {
+        //     return;
+        // }
 
         $this->options([
             //'initialPreview'        => $this->preview(),
@@ -121,6 +127,18 @@ trait UploadField
     public function removable()
     {
         $this->removable = true;
+
+        return $this;
+    }
+
+    /**
+     * Allow use to close preview.
+     *
+     * @return $this
+     */
+    public function closeable()
+    {
+        $this->closeable = true;
 
         return $this;
     }
