@@ -65,10 +65,10 @@ class MultipleFile extends Field
             return $this->validator->call($this, $input);
         }
 
-         /*
-         * If has original value, means the form is in edit mode,
-         * then remove required rule from rules.
-         */
+        /*
+        * If has original value, means the form is in edit mode,
+        * then remove required rule from rules.
+        */
         if ($this->original()) {
             $this->removeRule('required');
         }
