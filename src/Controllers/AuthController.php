@@ -38,7 +38,7 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         $credentials = $request->only([$this->username(), 'password']);
-	    $remember = $request->get('remember', false);
+        $remember = $request->get('remember', false);
 
         /** @var \Illuminate\Validation\Validator $validator */
         $validator = Validator::make($credentials, [
