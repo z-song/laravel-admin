@@ -33,7 +33,7 @@
 
     <form action="{{ admin_base_path('auth/login') }}" method="post">
       <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
-
+ 
         @if($errors->has('username'))
           @foreach($errors->get('username') as $message)
             <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>{{$message}}</label><br>
