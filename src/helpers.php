@@ -173,15 +173,15 @@ if (!function_exists('array_delete')) {
 if (!function_exists('class_uses_deep')) {
 
     /**
-     * To get ALL traits including those used by parent classes and other traits
+     * To get ALL traits including those used by parent classes and other traits.
      *
      * @param $class
      * @param bool $autoload
+     * 
      * @return array
      */
     function class_uses_deep($class, $autoload = true)
     {
-
         $traits = [];
 
         do {
