@@ -177,7 +177,7 @@ if (!function_exists('class_uses_deep')) {
      *
      * @param $class
      * @param bool $autoload
-     * 
+     *
      * @return array
      */
     function class_uses_deep($class, $autoload = true)
