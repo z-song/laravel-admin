@@ -15,43 +15,38 @@ class Radio extends AbstractDisplayer
         $radios = '';
         $name = $this->column->getName();
 
+        $key = $this->row->{$this->grid->getKeyName()};
+
         foreach ($options as $value => $label) {
             $checked = ($value == $this->value) ? 'checked' : '';
             $radios .= <<<EOT
-<div class="radio">
+<div class="radio radio-$name">
     <label>
-        <input type="radio" name="grid-radio-$name" value="{$value}" $checked />{$label}
+        <input type="radio" name="grid-radio-$name-$key" value="{$value}" $checked data-key="$key" />{$label}
     </label>
 </div>
 EOT;
         }
-
         Admin::script($this->script());
 
-        return <<<EOT
-<form class="form-group grid-radio-$name" style="text-align: left" data-key="{$this->getKey()}">
-    $radios
-    <button type="submit" class="btn btn-info btn-xs pull-left">
-        <i class="fa fa-save"></i>&nbsp;{$this->trans('save')}
-    </button>
-    <button type="reset" class="btn btn-warning btn-xs pull-left" style="margin-left:10px;">
-        <i class="fa fa-trash"></i>&nbsp;{$this->trans('reset')}
-    </button>
-</form>
-EOT;
+        return $radios;
     }
 
     protected function script()
     {
         $name = $this->column->getName();
 
+        $key = $this->row->{$this->grid->getKeyName()};
+
+        $element = ".radio-$name input:radio";
+
         return <<<EOT
-
-$('form.grid-radio-$name').on('submit', function () {
-    var value = $(this).find('input:radio:checked').val();
-
+$("$element").iCheck({radioClass:'iradio_minimal-blue'})
+.on('ifChecked', function(event){
+    var pk = $(this).data('key');
+    var value = $(this).val();
     $.ajax({
-        url: "{$this->getResource()}/" + $(this).data('key'),
+        url: "{$this->getResource()}/" + pk,
         type: "POST",
         data: {
             $name: value,
@@ -62,10 +57,8 @@ $('form.grid-radio-$name').on('submit', function () {
             toastr.success(data.message);
         }
     });
-
     return false;
 });
-
 EOT;
     }
 }

@@ -16,6 +16,8 @@ class Checkbox extends AbstractDisplayer
         $radios = '';
         $name = $this->column->getName();
 
+        $key = $this->row->{$this->grid->getKeyName()};
+
         if (is_string($this->value)) {
             $this->value = explode(',', $this->value);
         }
@@ -27,9 +29,9 @@ class Checkbox extends AbstractDisplayer
         foreach ($options as $value => $label) {
             $checked = in_array($value, $this->value) ? 'checked' : '';
             $radios .= <<<EOT
-<div class="checkbox">
+<div class="checkbox checkbox-{$name}">
     <label>
-        <input type="checkbox" name="grid-checkbox-{$name}[]" value="{$value}" $checked />{$label}
+        <input type="checkbox" name="grid-checkbox-{$name}-{$key}" value="{$value}" $checked data-key="$key" />{$label}
     </label>
 </div>
 EOT;
@@ -37,49 +39,39 @@ EOT;
 
         Admin::script($this->script());
 
-        return <<<EOT
-<form class="form-group grid-checkbox-$name" style="text-align:left;" data-key="{$this->getKey()}">
-    $radios
-    <button type="submit" class="btn btn-info btn-xs pull-left">
-        <i class="fa fa-save"></i>&nbsp;{$this->trans('save')}
-    </button>
-    <button type="reset" class="btn btn-warning btn-xs pull-left" style="margin-left:10px;">
-        <i class="fa fa-trash"></i>&nbsp;{$this->trans('reset')}
-    </button>
-</form>
-EOT;
+        return $radios;
     }
 
     protected function script()
     {
         $name = $this->column->getName();
 
+        $key = $this->row->{$this->grid->getKeyName()};
+
+        $element = ".checkbox-$name input:checkbox";
+
         return <<<EOT
-
-$('form.grid-checkbox-$name').on('submit', function () {
-    var values = $(this).find('input:checkbox:checked').map(function (_, el) {
-        return $(el).val();
-    }).get();
-
-    var data = {
-        $name: values,
-        _token: LA.token,
-        _method: 'PUT'
-    };
-    
+$("$element").iCheck({checkboxClass:'icheckbox_minimal-blue'})
+.on('ifChanged', function(event){
+    var pk = $(this).data('key');
+    var checkBoxArr = [];
+    $("input:checkbox[name='grid-checkbox-{$name}-"+pk+"']:checked").each(function() {
+        checkBoxArr.push($(this).val());
+    });
     $.ajax({
-        url: "{$this->getResource()}/" + $(this).data('key'),
+        url: "{$this->getResource()}/" + pk,
         type: "POST",
-        contentType: 'application/json;charset=utf-8',
-        data: JSON.stringify(data),
+        data: {
+            $name: checkBoxArr,
+            _token: LA.token,
+            _method: 'PUT'
+        },
         success: function (data) {
             toastr.success(data.message);
         }
     });
-
     return false;
 });
-
 EOT;
     }
 }
