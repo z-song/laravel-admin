@@ -1,5 +1,5 @@
 {
-    "name": "encore/laravel-admin",
+    "name": "msencore/laravel-admin",
     "description": "laravel admin",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "form"],
@@ -7,8 +7,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "zsong",
-            "email": "zosong@126.com"
+            "name": "mako",
+            "email": "maciekslayer@vp.pl"
         }
     ],
     "require": {
