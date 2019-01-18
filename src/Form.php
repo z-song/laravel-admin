@@ -203,7 +203,7 @@ class Form implements Renderable
             $callback($this);
         }
 
-        $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses($this->model));
+        $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses_deep($this->model));
     }
 
     /**
