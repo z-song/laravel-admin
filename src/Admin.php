@@ -34,7 +34,7 @@ class Admin
     /**
      * @var string
      */
-    public static $meta_t;
+    public static $metaTitle;
 
     /**
      * @var array
@@ -163,7 +163,7 @@ class Admin
      */
     public static function setTitle($title)
     {
-        self::$meta_t = $title;
+        self::$metaTitle = $title;
     }
 
     /**
@@ -173,7 +173,7 @@ class Admin
      */
     public function title()
     {
-        return self::$meta_t ? self::$meta_t : config('admin.title');
+        return self::$metaTitle ? self::$metaTitle : config('admin.title');
     }
 
     /**
