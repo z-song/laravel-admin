@@ -36,7 +36,7 @@ class Text extends Field
     {
         $this->initPlainInput();
 
-        $this->prepend('<i class="fa ' . $this->icon . ' fa-fw"></i>')
+        $this->prepend('<i class="fa '.$this->icon.' fa-fw"></i>')
             ->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
