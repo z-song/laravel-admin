@@ -25,7 +25,7 @@ class Permission
      */
     public function handle(Request $request, \Closure $next, ...$args)
     {
-        if (!Admin::user() || !empty($args)) {
+        if (!Admin::user() || empty($args)) {
             return $next($request);
         }
 
