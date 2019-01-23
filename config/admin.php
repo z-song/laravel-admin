@@ -261,7 +261,7 @@ return [
     | Show version at footer
     |--------------------------------------------------------------------------
     |
-    | Whether to display the version number of laravel-admim at the footer of
+    | Whether to display the version number of laravel-admin at the footer of
     | each page
     |
     */
