@@ -30,11 +30,19 @@ class UsersTest extends TestCase
             'password_confirmation' => '123456',
         ];
 
+        // create user
         $this->visit('admin/auth/users/create')
             ->see('Create')
             ->submitForm('Submit', $user)
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.users_table'), ['username' => 'Test']);
+
+        // assign role to user
+        $this->visit('admin/auth/users/2/edit')
+            ->see('Edit')
+            ->submitForm('Submit', ['roles' => [1]])
+            ->seePageIs('admin/auth/users')
+            ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 1]);
 
         $this->visit('admin/auth/logout')
             ->dontSeeIsAuthenticated('admin')
@@ -44,13 +52,13 @@ class UsersTest extends TestCase
             ->seeIsAuthenticated('admin')
             ->seePageIs('admin');
 
-        $this->assertFalse($this->app['auth']->guard('admin')->getUser()->isAdministrator());
+        $this->assertTrue($this->app['auth']->guard('admin')->getUser()->isAdministrator());
 
-        $this->dontSee('<span>Users</span>')
-            ->dontSee('<span>Roles</span>')
-            ->dontSee('<span>Permission</span>')
-            ->dontSee('<span>Operation log</span>')
-            ->dontSee('<span>Menu</span>');
+        $this->see('<span>Users</span>')
+            ->see('<span>Roles</span>')
+            ->see('<span>Permission</span>')
+            ->see('<span>Operation log</span>')
+            ->see('<span>Menu</span>');
     }
 
     public function testUpdateUser()

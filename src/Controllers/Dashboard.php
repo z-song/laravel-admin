@@ -24,7 +24,7 @@ class Dashboard
             ['name' => 'Laravel version',   'value' => app()->version()],
             ['name' => 'CGI',               'value' => php_sapi_name()],
             ['name' => 'Uname',             'value' => php_uname()],
-            ['name' => 'Server',            'value' => $_SERVER['SERVER_SOFTWARE']],
+            ['name' => 'Server',            'value' => array_get($_SERVER, 'SERVER_SOFTWARE')],
 
             ['name' => 'Cache driver',      'value' => config('cache.default')],
             ['name' => 'Session driver',    'value' => config('session.driver')],
@@ -85,10 +85,10 @@ class Dashboard
                 'link' => 'https://github.com/laravel-admin-extensions/reporter',
                 'icon' => 'bug',
             ],
-            'translation' => [
-                'name' => 'laravel-admin-ext/translation',
-                'link' => 'https://github.com/laravel-admin-extensions/translation',
-                'icon' => 'language',
+            'redis-manager' => [
+                'name' => 'laravel-admin-ext/redis-manager',
+                'link' => 'https://github.com/laravel-admin-extensions/redis-manager',
+                'icon' => 'flask',
             ],
         ];
 

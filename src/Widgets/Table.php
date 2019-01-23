@@ -40,7 +40,7 @@ class Table extends Widget implements Renderable
         $this->setRows($rows);
         $this->setStyle($style);
 
-        $this->class('table');
+        $this->class('table '.implode(' ', $this->style));
     }
 
     /**
@@ -101,10 +101,10 @@ class Table extends Widget implements Renderable
     public function render()
     {
         $vars = [
-            'headers'       => $this->headers,
-            'rows'          => $this->rows,
-            'style'         => $this->style,
-            'attributes'    => $this->formatAttributes(),
+            'headers'    => $this->headers,
+            'rows'       => $this->rows,
+            'style'      => $this->style,
+            'attributes' => $this->formatAttributes(),
         ];
 
         return view($this->view, $vars)->render();

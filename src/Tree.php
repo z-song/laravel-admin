@@ -35,8 +35,8 @@ class Tree implements Renderable
      * @var string
      */
     protected $view = [
-        'tree'      => 'admin::tree',
-        'branch'    => 'admin::tree.branch',
+        'tree'   => 'admin::tree',
+        'branch' => 'admin::tree.branch',
     ];
 
     /**
@@ -53,6 +53,16 @@ class Tree implements Renderable
      * @var bool
      */
     public $useCreate = true;
+
+    /**
+     * @var bool
+     */
+    public $useSave = true;
+
+    /**
+     * @var bool
+     */
+    public $useRefresh = true;
 
     /**
      * @var array
@@ -163,6 +173,26 @@ class Tree implements Renderable
     }
 
     /**
+     * Disable save.
+     *
+     * @return void
+     */
+    public function disableSave()
+    {
+        $this->useSave = false;
+    }
+
+    /**
+     * Disable refresh.
+     *
+     * @return void
+     */
+    public function disableRefresh()
+    {
+        $this->useRefresh = false;
+    }
+
+    /**
      * Save tree order from a input.
      *
      * @param string $serialize
@@ -205,34 +235,39 @@ class Tree implements Renderable
         $('.tree_branch_delete').click(function() {
             var id = $(this).data('id');
             swal({
-              title: "$deleteConfirm",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "$confirm",
-              closeOnConfirm: false,
-              cancelButtonText: "$cancel"
-            },
-            function(){
-                $.ajax({
-                    method: 'post',
-                    url: '{$this->path}/' + id,
-                    data: {
-                        _method:'delete',
-                        _token:LA.token,
-                    },
-                    success: function (data) {
-                        $.pjax.reload('#pjax-container');
-
-                        if (typeof data === 'object') {
-                            if (data.status) {
-                                swal(data.message, '', 'success');
-                            } else {
-                                swal(data.message, '', 'error');
+                title: "$deleteConfirm",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "$confirm",
+                showLoaderOnConfirm: true,
+                cancelButtonText: "$cancel",
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        $.ajax({
+                            method: 'post',
+                            url: '{$this->path}/' + id,
+                            data: {
+                                _method:'delete',
+                                _token:LA.token,
+                            },
+                            success: function (data) {
+                                $.pjax.reload('#pjax-container');
+                                toastr.success('{$deleteSucceeded}');
+                                resolve(data);
                             }
-                        }
+                        });
+                    });
+                }
+            }).then(function(result) {
+                var data = result.value;
+                if (typeof data === 'object') {
+                    if (data.status) {
+                        swal(data.message, '', 'success');
+                    } else {
+                        swal(data.message, '', 'error');
                     }
-                });
+                }
             });
         });
 
@@ -255,8 +290,7 @@ class Tree implements Renderable
         });
 
         $('.{$this->elementId}-tree-tools').on('click', function(e){
-            var target = $(e.target),
-                action = target.data('action');
+            var action = $(this).data('action');
             if (action === 'expand') {
                 $('.dd').nestable('expandAll');
             }
@@ -297,10 +331,12 @@ SCRIPT;
     public function variables()
     {
         return [
-            'id'        => $this->elementId,
-            'tools'     => $this->tools->render(),
-            'items'     => $this->getItems(),
-            'useCreate' => $this->useCreate,
+            'id'         => $this->elementId,
+            'tools'      => $this->tools->render(),
+            'items'      => $this->getItems(),
+            'useCreate'  => $this->useCreate,
+            'useSave'    => $this->useSave,
+            'useRefresh' => $this->useRefresh,
         ];
     }
 

@@ -2,60 +2,77 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Permission;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Show;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 
 class PermissionController extends Controller
 {
-    use ModelForm;
+    use HasResourceActions;
 
     /**
      * Index interface.
      *
+     * @param Content $content
+     *
      * @return Content
      */
-    public function index()
+    public function index(Content $content)
     {
-        return Admin::content(function (Content $content) {
-            $content->header(trans('admin.permissions'));
-            $content->description(trans('admin.list'));
-            $content->body($this->grid()->render());
-        });
+        return $content
+            ->header(trans('admin.permissions'))
+            ->description(trans('admin.list'))
+            ->body($this->grid()->render());
+    }
+
+    /**
+     * Show interface.
+     *
+     * @param mixed   $id
+     * @param Content $content
+     *
+     * @return Content
+     */
+    public function show($id, Content $content)
+    {
+        return $content
+            ->header(trans('admin.permissions'))
+            ->description(trans('admin.detail'))
+            ->body($this->detail($id));
     }
 
     /**
      * Edit interface.
      *
      * @param $id
+     * @param Content $content
      *
      * @return Content
      */
-    public function edit($id)
+    public function edit($id, Content $content)
     {
-        return Admin::content(function (Content $content) use ($id) {
-            $content->header(trans('admin.permissions'));
-            $content->description(trans('admin.edit'));
-            $content->body($this->form()->edit($id));
-        });
+        return $content
+            ->header(trans('admin.permissions'))
+            ->description(trans('admin.edit'))
+            ->body($this->form()->edit($id));
     }
 
     /**
      * Create interface.
      *
+     * @param Content $content
+     *
      * @return Content
      */
-    public function create()
+    public function create(Content $content)
     {
-        return Admin::content(function (Content $content) {
-            $content->header(trans('admin.permissions'));
-            $content->description(trans('admin.create'));
-            $content->body($this->form());
-        });
+        return $content
+            ->header(trans('admin.permissions'))
+            ->description(trans('admin.create'))
+            ->body($this->form());
     }
 
     /**
@@ -65,41 +82,93 @@ class PermissionController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Permission::class, function (Grid $grid) {
-            $grid->id('ID')->sortable();
-            $grid->slug(trans('admin.slug'));
-            $grid->name(trans('admin.name'));
+        $permissionModel = config('admin.database.permissions_model');
 
-            $grid->http_path(trans('admin.route'))->display(function ($path) {
-                return collect(explode("\r\n", $path))->map(function ($path) {
-                    $method = $this->http_method ?: ['ANY'];
+        $grid = new Grid(new $permissionModel());
 
-                    if (Str::contains($path, ':')) {
-                        list($method, $path) = explode(':', $path);
-                        $method = explode(',', $method);
-                    }
+        $grid->id('ID')->sortable();
+        $grid->slug(trans('admin.slug'));
+        $grid->name(trans('admin.name'));
 
-                    $method = collect($method)->map(function ($name) {
-                        return strtoupper($name);
-                    })->map(function ($name) {
-                        return "<span class='label label-primary'>{$name}</span>";
-                    })->implode('&nbsp;');
+        $grid->http_path(trans('admin.route'))->display(function ($path) {
+            return collect(explode("\r\n", $path))->map(function ($path) {
+                $method = $this->http_method ?: ['ANY'];
 
+                if (Str::contains($path, ':')) {
+                    list($method, $path) = explode(':', $path);
+                    $method = explode(',', $method);
+                }
+
+                $method = collect($method)->map(function ($name) {
+                    return strtoupper($name);
+                })->map(function ($name) {
+                    return "<span class='label label-primary'>{$name}</span>";
+                })->implode('&nbsp;');
+
+                if (!empty(config('admin.route.prefix'))) {
                     $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                }
 
-                    return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
-                })->implode('');
-            });
+                return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
+            })->implode('');
+        });
 
-            $grid->created_at(trans('admin.created_at'));
-            $grid->updated_at(trans('admin.updated_at'));
+        $grid->created_at(trans('admin.created_at'));
+        $grid->updated_at(trans('admin.updated_at'));
 
-            $grid->tools(function (Grid\Tools $tools) {
-                $tools->batch(function (Grid\Tools\BatchActions $actions) {
-                    $actions->disableDelete();
-                });
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->batch(function (Grid\Tools\BatchActions $actions) {
+                $actions->disableDelete();
             });
         });
+
+        return $grid;
+    }
+
+    /**
+     * Make a show builder.
+     *
+     * @param mixed $id
+     *
+     * @return Show
+     */
+    protected function detail($id)
+    {
+        $permissionModel = config('admin.database.permissions_model');
+
+        $show = new Show($permissionModel::findOrFail($id));
+
+        $show->id('ID');
+        $show->slug(trans('admin.slug'));
+        $show->name(trans('admin.name'));
+
+        $show->http_path(trans('admin.route'))->as(function ($path) {
+            return collect(explode("\r\n", $path))->map(function ($path) {
+                $method = $this->http_method ?: ['ANY'];
+
+                if (Str::contains($path, ':')) {
+                    list($method, $path) = explode(':', $path);
+                    $method = explode(',', $method);
+                }
+
+                $method = collect($method)->map(function ($name) {
+                    return strtoupper($name);
+                })->map(function ($name) {
+                    return "<span class='label label-primary'>{$name}</span>";
+                })->implode('&nbsp;');
+
+                if (!empty(config('admin.route.prefix'))) {
+                    $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                }
+
+                return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
+            })->implode('');
+        });
+
+        $show->created_at(trans('admin.created_at'));
+        $show->updated_at(trans('admin.updated_at'));
+
+        return $show;
     }
 
     /**
@@ -109,20 +178,24 @@ class PermissionController extends Controller
      */
     public function form()
     {
-        return Admin::form(Permission::class, function (Form $form) {
-            $form->display('id', 'ID');
+        $permissionModel = config('admin.database.permissions_model');
 
-            $form->text('slug', trans('admin.slug'))->rules('required');
-            $form->text('name', trans('admin.name'))->rules('required');
+        $form = new Form(new $permissionModel());
 
-            $form->multipleSelect('http_method', trans('admin.http.method'))
-                ->options($this->getHttpMethodsOptions())
-                ->help('不选择默认为所有权限');
-            $form->textarea('http_path', trans('admin.http.path'));
+        $form->display('id', 'ID');
 
-            $form->display('created_at', trans('admin.created_at'));
-            $form->display('updated_at', trans('admin.updated_at'));
-        });
+        $form->text('slug', trans('admin.slug'))->rules('required');
+        $form->text('name', trans('admin.name'))->rules('required');
+
+        $form->multipleSelect('http_method', trans('admin.http.method'))
+            ->options($this->getHttpMethodsOptions())
+            ->help(trans('admin.all_methods_if_empty'));
+        $form->textarea('http_path', trans('admin.http.path'));
+
+        $form->display('created_at', trans('admin.created_at'));
+        $form->display('updated_at', trans('admin.updated_at'));
+
+        return $form;
     }
 
     /**
@@ -132,6 +205,8 @@ class PermissionController extends Controller
      */
     protected function getHttpMethodsOptions()
     {
-        return array_combine(Permission::$httpMethods, Permission::$httpMethods);
+        $permissionModel = config('admin.database.permissions_model');
+
+        return array_combine($permissionModel::$httpMethods, $permissionModel::$httpMethods);
     }
 }

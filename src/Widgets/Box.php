@@ -143,10 +143,10 @@ class Box extends Widget implements Renderable
     protected function variables()
     {
         return [
-            'title'         => $this->title,
-            'content'       => $this->content,
-            'tools'         => $this->tools,
-            'attributes'    => $this->formatAttributes(),
+            'title'      => $this->title,
+            'content'    => $this->content,
+            'tools'      => $this->tools,
+            'attributes' => $this->formatAttributes(),
         ];
     }
 

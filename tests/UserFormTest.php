@@ -46,7 +46,7 @@ class UserFormTest extends TestCase
             'password'              => '123456',
             'password_confirmation' => '123456',
             //"avatar"   => "test.jpg",
-            'profile'  => [
+            'profile' => [
                 'first_name' => 'John',
                 'last_name'  => 'Doe',
                 'postcode'   => '123456',
@@ -96,7 +96,7 @@ class UserFormTest extends TestCase
 
         $avatar = UserModel::first()->avatar;
 
-        $this->assertFileExists(public_path('upload/'.$avatar));
+        $this->assertFileExists(public_path('uploads/'.$avatar));
     }
 
     protected function seedsTable($count = 100)
@@ -186,5 +186,24 @@ class UserFormTest extends TestCase
             ->press('Submit')
             ->seePageIs('admin/users')
             ->seeInDatabase('test_users', ['email' => 'xx@xx.xx']);
+    }
+
+    public function testFormHeader()
+    {
+        $this->seedsTable(1);
+
+        $this->visit('admin/users/1/edit')
+            ->seeInElement('a[class*=btn-danger]', 'Delete')
+            ->seeInElement('a[class*=btn-default]', 'List')
+            ->seeInElement('a[class*=btn-primary]', 'View');
+    }
+
+    public function testFormFooter()
+    {
+        $this->seedsTable(1);
+
+        $this->visit('admin/users/1/edit')
+            ->seeElement('input[type=checkbox][value=1]')
+            ->seeElement('input[type=checkbox][value=2]');
     }
 }

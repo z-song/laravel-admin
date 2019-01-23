@@ -8,12 +8,15 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Traits\Macroable;
 
 /**
  * Class Field.
  */
 class Field implements Renderable
 {
+    use Macroable;
+
     const FILE_DELETE_FLAG = '_file_del_';
 
     /**
@@ -54,7 +57,7 @@ class Field implements Renderable
     /**
      * Column name.
      *
-     * @var string
+     * @var string|array
      */
     protected $column = '';
 
@@ -87,11 +90,30 @@ class Field implements Renderable
     protected $options = [];
 
     /**
+     * Checked for specify elements.
+     *
+     * @var array
+     */
+    protected $checked = [];
+
+    /**
      * Validation rules.
      *
-     * @var string
+     * @var string|\Closure
      */
     protected $rules = '';
+
+    /**
+     * @var callable
+     */
+    protected $validator;
+
+    /**
+     * Validation messages.
+     *
+     * @var array
+     */
+    protected $validationMessages = [];
 
     /**
      * Css required by this field.
@@ -174,9 +196,26 @@ class Field implements Renderable
     protected $horizontal = true;
 
     /**
+     * column data format.
+     *
+     * @var \Closure
+     */
+    protected $customFormat = null;
+
+    /**
+     * @var bool
+     */
+    protected $display = true;
+
+    /**
+     * @var array
+     */
+    protected $labelClass = [];
+
+    /**
      * Field constructor.
      *
-     * @param $column
+     * @param       $column
      * @param array $arguments
      */
     public function __construct($column, $arguments = [])
@@ -302,6 +341,23 @@ class Field implements Renderable
         }
 
         $this->value = array_get($data, $this->column);
+        if (isset($this->customFormat) && $this->customFormat instanceof \Closure) {
+            $this->value = call_user_func($this->customFormat, $this->value);
+        }
+    }
+
+    /**
+     * custom format form column data when edit.
+     *
+     * @param \Closure $call
+     *
+     * @return $this
+     */
+    public function customFormat(\Closure $call)
+    {
+        $this->customFormat = $call;
+
+        return $this;
     }
 
     /**
@@ -373,21 +429,48 @@ class Field implements Renderable
     }
 
     /**
-     * Get or set rules.
+     * Set the field option checked.
      *
-     * @param null $rules
+     * @param array $checked
      *
-     * @return mixed
+     * @return $this
      */
-    public function rules($rules = null)
+    public function checked($checked = [])
     {
-        if (is_null($rules)) {
-            return $this->rules;
+        if ($checked instanceof Arrayable) {
+            $checked = $checked->toArray();
         }
 
-        $rules = array_filter(explode('|', "{$this->rules}|$rules"));
+        $this->checked = array_merge($this->checked, $checked);
 
-        $this->rules = implode('|', $rules);
+        return $this;
+    }
+
+    /**
+     * Get or set rules.
+     *
+     * @param null  $rules
+     * @param array $messages
+     *
+     * @return $this
+     */
+    public function rules($rules = null, $messages = [])
+    {
+        if ($rules instanceof \Closure) {
+            $this->rules = $rules;
+        }
+
+        if (is_array($rules)) {
+            $thisRuleArr = array_filter(explode('|', $this->rules));
+
+            $this->rules = array_merge($thisRuleArr, $rules);
+        } elseif (is_string($rules)) {
+            $rules = array_filter(explode('|', "{$this->rules}|$rules"));
+
+            $this->rules = implode('|', $rules);
+        }
+
+        $this->validationMessages = $messages;
 
         return $this;
     }
@@ -399,11 +482,15 @@ class Field implements Renderable
      */
     protected function getRules()
     {
+        if ($this->rules instanceof \Closure) {
+            return $this->rules->call($this, $this->form);
+        }
+
         return $this->rules;
     }
 
     /**
-     * Remove a specific rule.
+     * Remove a specific rule by keyword.
      *
      * @param string $rule
      *
@@ -411,7 +498,26 @@ class Field implements Renderable
      */
     protected function removeRule($rule)
     {
-        $this->rules = str_replace($rule, '', $this->rules);
+        if (!is_string($this->rules)) {
+            return;
+        }
+
+        $pattern = "/{$rule}[^\|]?(\||$)/";
+        $this->rules = preg_replace($pattern, '', $this->rules, -1);
+    }
+
+    /**
+     * Set field validator.
+     *
+     * @param callable $validator
+     *
+     * @return $this
+     */
+    public function validator(callable $validator)
+    {
+        $this->validator = $validator;
+
+        return $this;
     }
 
     /**
@@ -502,7 +608,7 @@ class Field implements Renderable
     /**
      * Get column of the field.
      *
-     * @return string
+     * @return string|array
      */
     public function column()
     {
@@ -538,6 +644,10 @@ class Field implements Renderable
      */
     public function getValidator(array $input)
     {
+        if ($this->validator) {
+            return $this->validator->call($this, $input);
+        }
+
         $rules = $attributes = [];
 
         if (!$fieldRules = $this->getRules()) {
@@ -566,7 +676,7 @@ class Field implements Renderable
             }
         }
 
-        return Validator::make($input, $rules, [], $attributes);
+        return Validator::make($input, $rules, $this->validationMessages, $attributes);
     }
 
     /**
@@ -607,11 +717,59 @@ class Field implements Renderable
     }
 
     /**
+     * Specifies a regular expression against which to validate the value of the input.
+     *
+     * @param string $regexp
+     *
+     * @return Field
+     */
+    public function pattern($regexp)
+    {
+        return $this->attribute('pattern', $regexp);
+    }
+
+    /**
+     * set the input filed required.
+     *
+     * @param bool $isLabelAsterisked
+     *
+     * @return Field
+     */
+    public function required($isLabelAsterisked = true)
+    {
+        if ($isLabelAsterisked) {
+            $this->setLabelClass(['asterisk']);
+        }
+
+        return $this->attribute('required', true);
+    }
+
+    /**
+     * Set the field automatically get focus.
+     *
+     * @return Field
+     */
+    public function autofocus()
+    {
+        return $this->attribute('autofocus', true);
+    }
+
+    /**
      * Set the field as readonly mode.
      *
      * @return Field
      */
     public function readOnly()
+    {
+        return $this->attribute('readonly', true);
+    }
+
+    /**
+     * Set field as disabled.
+     *
+     * @return Field
+     */
+    public function disable()
     {
         return $this->attribute('disabled', true);
     }
@@ -638,6 +796,18 @@ class Field implements Renderable
     public function getPlaceholder()
     {
         return $this->placeholder ?: trans('admin.input').' '.$this->label;
+    }
+
+    /**
+     * Prepare for a field value before update or insert.
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function prepare($value)
+    {
+        return $value;
     }
 
     /**
@@ -673,19 +843,19 @@ class Field implements Renderable
     {
         if ($this->horizontal) {
             return [
-                'label'      => "col-sm-{$this->width['label']}",
+                'label'      => "col-sm-{$this->width['label']} {$this->getLabelClass()}",
                 'field'      => "col-sm-{$this->width['field']}",
                 'form-group' => 'form-group ',
             ];
         }
 
-        return ['label' =>'', 'field' => '', 'form-group' => ''];
+        return ['label' => "{$this->getLabelClass()}", 'field' => '', 'form-group' => ''];
     }
 
     /**
      * Set form element class.
      *
-     * @param string $class
+     * @param string|array $class
      *
      * @return $this
      */
@@ -737,7 +907,7 @@ class Field implements Renderable
     /**
      * Get element class selector.
      *
-     * @return string
+     * @return string|array
      */
     protected function getElementClassSelector()
     {
@@ -799,24 +969,60 @@ class Field implements Renderable
     }
 
     /**
+     * Add variables to field view.
+     *
+     * @param array $variables
+     *
+     * @return $this
+     */
+    protected function addVariables(array $variables = [])
+    {
+        $this->variables = array_merge($this->variables, $variables);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelClass()
+    : string
+    {
+        return implode(' ', $this->labelClass);
+    }
+
+    /**
+     * @param array $labelClass
+     *
+     * @return self
+     */
+    public function setLabelClass(array $labelClass)
+    : self
+    {
+        $this->labelClass = $labelClass;
+
+        return $this;
+    }
+
+    /**
      * Get the view variables of this field.
      *
      * @return array
      */
-    protected function variables()
+    public function variables()
     {
         return array_merge($this->variables, [
-            'id'            => $this->id,
-            'name'          => $this->elementName ?: $this->formatName($this->column),
-            'help'          => $this->help,
-            'class'         => $this->getElementClassString(),
-            'value'         => $this->value(),
-            'label'         => $this->label,
-            'viewClass'     => $this->getViewElementClasses(),
-            'column'        => $this->column,
-            'errorKey'      => $this->getErrorKey(),
-            'attributes'    => $this->formatAttributes(),
-            'placeholder'   => $this->getPlaceholder(),
+            'id'          => $this->id,
+            'name'        => $this->elementName ?: $this->formatName($this->column),
+            'help'        => $this->help,
+            'class'       => $this->getElementClassString(),
+            'value'       => $this->value(),
+            'label'       => $this->label,
+            'viewClass'   => $this->getViewElementClasses(),
+            'column'      => $this->column,
+            'errorKey'    => $this->getErrorKey(),
+            'attributes'  => $this->formatAttributes(),
+            'placeholder' => $this->getPlaceholder(),
         ]);
     }
 
@@ -847,12 +1053,30 @@ class Field implements Renderable
     }
 
     /**
+     * If this field should render.
+     *
+     * @return bool
+     */
+    protected function shouldRender()
+    {
+        if (!$this->display) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Render this filed.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
     public function render()
     {
+        if (!$this->shouldRender()) {
+            return '';
+        }
+
         Admin::script($this->script);
 
         return view($this->getView(), $this->variables());

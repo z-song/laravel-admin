@@ -35,19 +35,45 @@ class Checkbox extends MultipleSelect
     }
 
     /**
+     * Set checked.
+     *
+     * @param array|callable|string $checked
+     *
+     * @return $this
+     */
+    public function checked($checked = [])
+    {
+        if ($checked instanceof Arrayable) {
+            $checked = $checked->toArray();
+        }
+
+        $this->checked = (array) $checked;
+
+        return $this;
+    }
+
+    /**
      * Draw inline checkboxes.
+     *
+     * @return $this
      */
     public function inline()
     {
         $this->inline = true;
+
+        return $this;
     }
 
     /**
      * Draw stacked checkboxes.
+     *
+     * @return $this
      */
     public function stacked()
     {
         $this->inline = false;
+
+        return $this;
     }
 
     /**
@@ -57,6 +83,8 @@ class Checkbox extends MultipleSelect
     {
         $this->script = "$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
 
-        return parent::render()->with('inline', $this->inline);
+        $this->addVariables(['checked' => $this->checked, 'inline' => $this->inline]);
+
+        return parent::render();
     }
 }

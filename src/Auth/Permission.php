@@ -53,6 +53,16 @@ class Permission
     }
 
     /**
+     * Don't check permission.
+     *
+     * @return bool
+     */
+    public static function free()
+    {
+        return true;
+    }
+
+    /**
      * Roles denied to access.
      *
      * @param $roles
@@ -76,6 +86,10 @@ class Permission
     public static function error()
     {
         $response = response(Admin::content()->withError(trans('admin.deny')));
+
+        if (!request()->pjax() && request()->ajax()) {
+            abort(403, trans('admin.deny'));
+        }
 
         Pjax::respond($response);
     }

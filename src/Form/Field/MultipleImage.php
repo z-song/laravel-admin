@@ -33,6 +33,8 @@ class MultipleImage extends MultipleFile
 
         $this->callInterventionMethods($image->getRealPath());
 
-        return $this->upload($image);
+        return tap($this->upload($image), function () {
+            $this->name = null;
+        });
     }
 }

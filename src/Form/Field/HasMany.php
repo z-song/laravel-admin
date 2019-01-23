@@ -52,8 +52,18 @@ class HasMany extends Field
      * @var array
      */
     protected $views = [
-        'default'   => 'admin::form.hasmany',
-        'tab'       => 'admin::form.hasmanytab',
+        'default' => 'admin::form.hasmany',
+        'tab'     => 'admin::form.hasmanytab',
+    ];
+
+    /**
+     * Options for template.
+     *
+     * @var array
+     */
+    protected $options = [
+        'allowCreate' => true,
+        'allowDelete' => true,
     ];
 
     /**
@@ -128,14 +138,25 @@ class HasMany extends Field
         }
 
         $newRules = [];
+        $newInput = [];
 
         foreach ($rules as $column => $rule) {
             foreach (array_keys($input[$this->column]) as $key) {
                 $newRules["{$this->column}.$key.$column"] = $rule;
+                if (isset($input[$this->column][$key][$column]) &&
+                    is_array($input[$this->column][$key][$column])) {
+                    foreach ($input[$this->column][$key][$column] as $vkey => $value) {
+                        $newInput["{$this->column}.$key.{$column}$vkey"] = $value;
+                    }
+                }
             }
         }
 
-        return Validator::make($input, $newRules, [], $attributes);
+        if (empty($newInput)) {
+            $newInput = $input;
+        }
+
+        return Validator::make($newInput, $newRules, $this->validationMessages, $attributes);
     }
 
     /**
@@ -479,6 +500,30 @@ EOT;
     }
 
     /**
+     * Disable create button.
+     *
+     * @return $this
+     */
+    public function disableCreate()
+    {
+        $this->options['allowCreate'] = false;
+
+        return $this;
+    }
+
+    /**
+     * Disable delete button.
+     *
+     * @return $this
+     */
+    public function disableDelete()
+    {
+        $this->options['allowDelete'] = false;
+
+        return $this;
+    }
+
+    /**
      * Render the `HasMany` field.
      *
      * @throws \Exception
@@ -496,9 +541,10 @@ EOT;
         $this->setupScript($script);
 
         return parent::render()->with([
-            'forms'         => $this->buildRelatedForms(),
-            'template'      => $template,
-            'relationName'  => $this->relationName,
+            'forms'        => $this->buildRelatedForms(),
+            'template'     => $template,
+            'relationName' => $this->relationName,
+            'options'      => $this->options,
         ]);
     }
 }

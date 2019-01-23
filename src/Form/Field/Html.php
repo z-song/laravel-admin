@@ -18,6 +18,9 @@ class Html extends Field
      */
     protected $label = '';
 
+    /**
+     * @var bool
+     */
     protected $plain = false;
 
     /**
@@ -33,6 +36,9 @@ class Html extends Field
         $this->label = array_get($arguments, 0);
     }
 
+    /**
+     * @return $this
+     */
     public function plain()
     {
         $this->plain = true;
@@ -48,19 +54,19 @@ class Html extends Field
     public function render()
     {
         if ($this->html instanceof \Closure) {
-            $callback = $this->html->bindTo($this->form->model());
-
-            $this->html = call_user_func($callback, $this->form);
+            $this->html = $this->html->call($this->form->model(), $this->form);
         }
 
         if ($this->plain) {
             return $this->html;
         }
 
+        $viewClass = $this->getViewElementClasses();
+
         return <<<EOT
 <div class="form-group">
-    <label  class="col-sm-{$this->width['label']} control-label">{$this->label}</label>
-    <div class="col-sm-{$this->width['field']}">
+    <label  class="{$viewClass['label']} control-label">{$this->label}</label>
+    <div class="{$viewClass['field']}">
         {$this->html}
     </div>
 </div>

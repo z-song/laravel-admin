@@ -18,6 +18,11 @@ class BatchActions extends AbstractTool
     protected $enableDelete = true;
 
     /**
+     * @var bool
+     */
+    private $isHoldSelectAllCheckbox = false;
+
+    /**
      * BatchActions constructor.
      */
     public function __construct()
@@ -34,7 +39,7 @@ class BatchActions extends AbstractTool
      */
     protected function appendDefaultAction()
     {
-        $this->add(trans('admin.delete'), new BatchDelete());
+        $this->add(new BatchDelete(trans('admin.delete')));
     }
 
     /**
@@ -50,20 +55,40 @@ class BatchActions extends AbstractTool
     }
 
     /**
-     * Add a batch action.
-     *
-     * @param string      $title
-     * @param BatchAction $abstract
+     * Disable delete And Hode SelectAll Checkbox.
      *
      * @return $this
      */
-    public function add($title, BatchAction $abstract)
+    public function disableDeleteAndHodeSelectAll()
+    {
+        $this->enableDelete = false;
+
+        $this->isHoldSelectAllCheckbox = true;
+
+        return $this;
+    }
+
+    /**
+     * Add a batch action.
+     *
+     * @param $title
+     * @param BatchAction|null $action
+     *
+     * @return $this
+     */
+    public function add($title, BatchAction $action = null)
     {
         $id = $this->actions->count();
 
-        $abstract->setId($id);
+        if (func_num_args() == 1) {
+            $action = $title;
+            $action->setId($id);
+        } elseif (func_num_args() == 2) {
+            $action->setId($id);
+            $action->setTitle($title);
+        }
 
-        $this->actions->push(compact('id', 'title', 'abstract'));
+        $this->actions->push($action);
 
         return $this;
     }
@@ -78,10 +103,9 @@ class BatchActions extends AbstractTool
         Admin::script($this->script());
 
         foreach ($this->actions as $action) {
-            $abstract = $action['abstract'];
-            $abstract->setResource($this->grid->resource());
+            $action->setGrid($this->grid);
 
-            Admin::script($abstract->script());
+            Admin::script($action->script());
         }
     }
 
@@ -92,26 +116,17 @@ class BatchActions extends AbstractTool
      */
     protected function script()
     {
-        return <<<'EOT'
+        return <<<EOT
 
-$('.grid-select-all').iCheck({checkboxClass:'icheckbox_minimal-blue'});
+$('.{$this->grid->getSelectAllName()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});
 
-$('.grid-select-all').on('ifChanged', function(event) {
+$('.{$this->grid->getSelectAllName()}').on('ifChanged', function(event) {
     if (this.checked) {
-        $('.grid-row-checkbox').iCheck('check');
+        $('.{$this->grid->getGridRowName()}-checkbox').iCheck('check');
     } else {
-        $('.grid-row-checkbox').iCheck('uncheck');
+        $('.{$this->grid->getGridRowName()}-checkbox').iCheck('uncheck');
     }
 });
-
-var selectedRows = function () {
-    var selected = [];
-    $('.grid-row-checkbox:checked').each(function(){
-        selected.push($(this).data('id'));
-    });
-
-    return selected;
-}
 
 EOT;
     }
@@ -133,6 +148,12 @@ EOT;
 
         $this->setUpScripts();
 
-        return view('admin::grid.batch-actions', ['actions' => $this->actions])->render();
+        $data = [
+            'actions'                 => $this->actions,
+            'selectAllName'           => $this->grid->getSelectAllName(),
+            'isHoldSelectAllCheckbox' => $this->isHoldSelectAllCheckbox,
+        ];
+
+        return view('admin::grid.batch-actions', $data)->render();
     }
 }

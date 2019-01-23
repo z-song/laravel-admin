@@ -4,11 +4,11 @@ namespace Encore\Admin\Form\Field;
 
 class Url extends Text
 {
-    protected $rules = 'url';
+    protected $rules = 'nullable|url';
 
     public function render()
     {
-        $this->prepend('<i class="fa fa-internet-explorer"></i>')
+        $this->prepend('<i class="fa fa-internet-explorer fa-fw"></i>')
             ->defaultAttribute('type', 'url');
 
         return parent::render();

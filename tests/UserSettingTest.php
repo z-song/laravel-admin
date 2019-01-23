@@ -41,7 +41,7 @@ class UserSettingTest extends TestCase
 
     public function testUpdateAvatar()
     {
-        File::cleanDirectory(public_path('upload/image'));
+        File::cleanDirectory(public_path('uploads/images'));
 
         $this->visit('admin/auth/setting')
             ->attach(__DIR__.'/assets/test.jpg', 'avatar')
@@ -50,7 +50,7 @@ class UserSettingTest extends TestCase
 
         $avatar = Administrator::first()->avatar;
 
-        $this->assertEquals('http://localhost:8000/upload/image/test.jpg', $avatar);
+        $this->assertEquals('http://localhost:8000/uploads/images/test.jpg', $avatar);
     }
 
     public function testUpdatePasswordConfirmation()

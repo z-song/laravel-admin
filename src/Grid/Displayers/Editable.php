@@ -23,7 +23,14 @@ class Editable extends AbstractDisplayer
      *
      * @var array
      */
-    protected $options = [];
+    protected $options = [
+        'emptytext'  => '<i class="fa fa-pencil"></i>',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $attributes = [];
 
     /**
      * Add options for editable.
@@ -33,6 +40,16 @@ class Editable extends AbstractDisplayer
     public function addOptions($options = [])
     {
         $this->options = array_merge($this->options, $options);
+    }
+
+    /**
+     * Add attributes for editable.
+     *
+     * @param array $attributes
+     */
+    public function addAttributes($attributes = [])
+    {
+        $this->attributes = array_merge($this->attributes, $attributes);
     }
 
     /**
@@ -52,20 +69,28 @@ class Editable extends AbstractDisplayer
     /**
      * Select type editable.
      *
-     * @param array $options
+     * @param array|\Closure $options
      */
     public function select($options = [])
     {
-        $source = [];
+        $useClosure = false;
 
-        foreach ($options as $key => $value) {
-            $source[] = [
-                'value' => $key,
-                'text'  => $value,
-            ];
+        if ($options instanceof \Closure) {
+            $useClosure = true;
+            $options = $options->call($this, $this->row);
         }
 
-        $this->addOptions(['source' => $source]);
+        $source = [];
+
+        foreach ($options as $value => $text) {
+            $source[] = compact('value', 'text');
+        }
+
+        if ($useClosure) {
+            $this->addAttributes(['data-source' => json_encode($source)]);
+        } else {
+            $this->addOptions(compact('source'));
+        }
     }
 
     /**
@@ -118,10 +143,10 @@ class Editable extends AbstractDisplayer
         $this->type = 'combodate';
 
         $this->addOptions([
-            'format'        => $format,
-            'viewformat'    => $format,
-            'template'      => $format,
-            'combodate'     => [
+            'format'     => $format,
+            'viewformat' => $format,
+            'template'   => $format,
+            'combodate'  => [
                 'maxYear' => 2035,
             ],
         ]);
@@ -154,6 +179,10 @@ class Editable extends AbstractDisplayer
             'data-url'   => "{$this->grid->resource()}/{$this->getKey()}",
             'data-value' => "{$this->value}",
         ];
+
+        if (!empty($this->attributes)) {
+            $attributes = array_merge($attributes, $this->attributes);
+        }
 
         $attributes = collect($attributes)->map(function ($attribute, $name) {
             return "$name='$attribute'";

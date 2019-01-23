@@ -36,6 +36,25 @@ class Radio extends Field
     }
 
     /**
+     * Set checked.
+     *
+     * @param array|callable|string $checked
+     *
+     * @return $this
+     */
+    public function checked($checked = [])
+    {
+        if ($checked instanceof Arrayable) {
+            $checked = $checked->toArray();
+        }
+
+        // input radio checked should be unique
+        $this->checked = is_array($checked) ? (array) end($checked) : (array) $checked;
+
+        return $this;
+    }
+
+    /**
      * Draw inline radios.
      *
      * @return $this
@@ -78,6 +97,8 @@ class Radio extends Field
     {
         $this->script = "$('{$this->getElementClassSelector()}').iCheck({radioClass:'iradio_minimal-blue'});";
 
-        return parent::render()->with(['options' => $this->options, 'inline' => $this->inline]);
+        $this->addVariables(['options' => $this->options, 'checked' => $this->checked, 'inline' => $this->inline]);
+
+        return parent::render();
     }
 }

@@ -1,4 +1,6 @@
 <div class="form-group">
-    <label>{{$label}}</label>
-    @include('admin::filter.' . $field->name())
+    <label class="col-sm-2 control-label"> {{$label}}</label>
+    <div class="col-sm-8">
+        @include($presenter->view())
+    </div>
 </div>

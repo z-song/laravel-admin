@@ -36,7 +36,7 @@ class CreateAdminTables extends Migration
             $table->string('name', 50)->unique();
             $table->string('slug', 50);
             $table->string('http_method')->nullable();
-            $table->text('http_path');
+            $table->text('http_path')->nullable();
             $table->timestamps();
         });
 
@@ -47,6 +47,7 @@ class CreateAdminTables extends Migration
             $table->string('title', 50);
             $table->string('icon', 50);
             $table->string('uri', 50)->nullable();
+            $table->string('permission')->nullable();
 
             $table->timestamps();
         });
@@ -84,7 +85,7 @@ class CreateAdminTables extends Migration
             $table->integer('user_id');
             $table->string('path');
             $table->string('method', 10);
-            $table->string('ip', 15);
+            $table->string('ip');
             $table->text('input');
             $table->index('user_id');
             $table->timestamps();

@@ -16,7 +16,7 @@ class MultipleFile extends Field
      * @var array
      */
     protected static $css = [
-        '/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.3.7',
+        '/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.5.2',
     ];
 
     /**
@@ -25,8 +25,8 @@ class MultipleFile extends Field
      * @var array
      */
     protected static $js = [
-        '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
-        '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
+        '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
+        '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.5.2',
     ];
 
     /**
@@ -61,6 +61,10 @@ class MultipleFile extends Field
             return false;
         }
 
+        if ($this->validator) {
+            return $this->validator->call($this, $input);
+        }
+
         $attributes = [];
 
         if (!$fieldRules = $this->getRules()) {
@@ -71,7 +75,7 @@ class MultipleFile extends Field
 
         list($rules, $input) = $this->hydrateFiles(array_get($input, $this->column, []));
 
-        return Validator::make($input, $rules, [], $attributes);
+        return Validator::make($input, $rules, $this->validationMessages, $attributes);
     }
 
     /**
@@ -83,6 +87,10 @@ class MultipleFile extends Field
      */
     protected function hydrateFiles(array $value)
     {
+        if (empty($value)) {
+            return [[$this->column => $this->getRules()], []];
+        }
+
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
@@ -134,7 +142,9 @@ class MultipleFile extends Field
     {
         $this->name = $this->getStoreName($file);
 
-        return $this->upload($file);
+        return tap($this->upload($file), function () {
+            $this->name = null;
+        });
     }
 
     /**
@@ -198,7 +208,7 @@ class MultipleFile extends Field
         $this->setupDefaultOptions();
 
         if (!empty($this->value)) {
-            $this->options(['initialPreview' =>$this->preview()]);
+            $this->options(['initialPreview' => $this->preview()]);
             $this->setupPreviewOptions();
         }
 

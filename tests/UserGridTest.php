@@ -43,7 +43,7 @@ class UserGridTest extends TestCase
             ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][start]']")
             ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][end]']");
 
-        $this->seeInElement('a[href="/admin/users?_export_=1"]', 'Export')
+        $this->seeInElement('a[href="/admin/users?_export_=all"]', 'All')
             ->seeInElement('a[href="/admin/users/create"]', 'New');
     }
 
@@ -75,23 +75,20 @@ class UserGridTest extends TestCase
         $this->visit('admin/users')
             ->see('All users');
 
-        $this->click(2)->seePageIs('admin/users?page=2');
+        $this->visit('admin/users?page=2');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
 
-        $this->click(3)->seePageIs('admin/users?page=3');
+        $this->visit('admin/users?page=3');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
 
-        $this->click(4)->seePageIs('admin/users?page=4');
+        $this->visit('admin/users?page=4');
         $this->assertCount(5, $this->crawler()->filter('td a i[class*=fa-edit]'));
-
-//        $this->visit('admin/users?page=5')->seePageIs('admin/users?page=5');
-//        $this->assertCount(0, $this->crawler()->filter('td a i[class*=fa-edit]'));
 
         $this->click(1)->seePageIs('admin/users?page=1');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
     }
 
-    public function testIsFileter()
+    public function testEqualFilter()
     {
         $this->seedsTable(50);
 
@@ -160,7 +157,7 @@ class UserGridTest extends TestCase
             ->seeInElement('td', $user->end_at);
     }
 
-    public function testValueCallback()
+    public function testDisplayCallback()
     {
         $this->seedsTable(1);
 
