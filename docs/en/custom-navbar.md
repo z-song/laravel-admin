@@ -1,6 +1,6 @@
 # Customize the head navigation bar
 
-Since version `1.5.6`, you can add the html element to the top navigation bar,  open `app/Admin/bootstrap.php`：
+Since version `1.5.6`, you can add the html element to the top navigation bar, open `app/Admin/bootstrap.php`:
 ```php
 use Encore\Admin\Facades\Admin;
 
@@ -13,11 +13,11 @@ Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {
 });
 ```
 
-method `left` nad `right`方is used to add the contents of the left and right sides of the head, the method parameters can be any object can be rendered( objects which impletements `Htmlable`、`Renderable`, or has method `__toString()`) or strings.
+Methods `left` and `right` are used to add content to the left and right sides of the head, the method parameters can be any object that can be rendered (objects which impletements `Htmlable`, `Renderable`, or has method `__toString()`) or strings.
 
 ## Add elements to the left
 
-For example, add a search bar on the left, first create a view `resources/views/search-bar.blade.php`：
+For example, add a search bar on the left, first create a view `resources/views/search-bar.blade.php`:
 ```php
 <style>
 
