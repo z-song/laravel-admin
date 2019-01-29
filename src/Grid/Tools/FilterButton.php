@@ -46,6 +46,7 @@ class FilterButton extends AbstractTool
         $id = $this->filter()->getFilterID();
 
         $script = <<<SCRIPT
+$('.{$this->getElementClassName()}').unbind('click');
 $('.{$this->getElementClassName()}').click(function (e) {
     if ($('#{$id}').is(':visible')) {
         $('#{$id}').addClass('hide');
