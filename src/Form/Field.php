@@ -1053,6 +1053,18 @@ class Field implements Renderable
     }
 
     /**
+     * To set this field should render or not.
+     *
+     * @return self
+     */
+    public function setDisplay(bool $display)
+    {
+        $this->display = $display;
+
+        return $this;
+    }
+
+    /**
      * If this field should render.
      *
      * @return bool
