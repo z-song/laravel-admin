@@ -381,7 +381,7 @@ EOT;
                 $this->options = $this->options->bindTo($this->form->model());
             }
 
-            $this->options(call_user_func($this->options, $this->value));
+            $this->options(call_user_func($this->options, $this->value, $this));
         }
 
         $this->options = array_filter($this->options, 'strlen');
