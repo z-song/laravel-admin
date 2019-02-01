@@ -120,7 +120,7 @@ echo $tab->render();
 
 ## Table
 
-`Encore\Admin\Widgets\Table` class is used to generate forms:
+`Encore\Admin\Widgets\Table` class is used to generate tables:
 
 ```php
 use Encore\Admin\Widgets\Table;
