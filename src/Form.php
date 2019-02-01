@@ -8,6 +8,7 @@ use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
+use Encore\Admin\Traits\Resource;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
@@ -71,6 +72,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Form implements Renderable
 {
+    use Resource;
+
     /**
      * Eloquent model of the form.
      *
@@ -590,7 +593,7 @@ class Form implements Renderable
      */
     protected function redirectAfterStore()
     {
-        $resourcesPath = $this->resource(0);
+        $resourcesPath = $this->getResource(0);
 
         $key = $this->model->getKey();
 
@@ -606,7 +609,7 @@ class Form implements Renderable
      */
     protected function redirectAfterUpdate($key)
     {
-        $resourcesPath = $this->resource(-1);
+        $resourcesPath = $this->getResource(-1);
 
         return $this->redirectAfterSaving($resourcesPath, $key);
     }
@@ -1352,13 +1355,7 @@ class Form implements Renderable
      */
     public function resource($slice = -2)
     {
-        $segments = explode('/', trim(app('request')->getUri(), '/'));
-
-        if ($slice != 0) {
-            $segments = array_slice($segments, 0, $slice);
-        }
-
-        return implode('/', $segments);
+        return $this->getResource($slice);
     }
 
     /**

@@ -165,10 +165,11 @@ class Tools implements Renderable
     protected function renderList()
     {
         $text = trans('admin.list');
+        $url = url($this->getListPath());
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="$text"><i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
+    <a href="{$url}" class="btn btn-sm btn-default" title="$text"><i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
 </div>
 EOT;
     }
@@ -181,10 +182,11 @@ EOT;
     protected function renderView()
     {
         $view = trans('admin.view');
+        $url = url($this->getViewPath());
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary" title="{$view}">
+    <a href="{$url}" class="btn btn-sm btn-primary" title="{$view}">
         <i class="fa fa-eye"></i><span class="hidden-xs"> {$view}</span>
     </a>
 </div>
@@ -201,6 +203,7 @@ HTML;
         $deleteConfirm = trans('admin.delete_confirm');
         $confirm = trans('admin.confirm');
         $cancel = trans('admin.cancel');
+        $url = url($this->getDeletePath());
 
         $class = uniqid();
 
@@ -220,7 +223,7 @@ $('.{$class}-delete').unbind('click').click(function() {
             return new Promise(function(resolve) {
                 $.ajax({
                     method: 'post',
-                    url: '{$this->getDeletePath()}',
+                    url: '{$url}',
                     data: {
                         _method:'delete',
                         _token:LA.token,

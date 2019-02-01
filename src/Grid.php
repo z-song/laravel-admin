@@ -13,6 +13,7 @@ use Encore\Admin\Grid\HasElementNames;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Tools;
+use Encore\Admin\Traits\Resource;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
@@ -21,7 +22,7 @@ use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Grid
 {
-    use HasElementNames;
+    use HasElementNames, Resource;
 
     /**
      * The grid data model instance.
@@ -710,7 +711,7 @@ class Grid
             $input = array_merge($input, $constraints);
         }
 
-        return $this->resource().'?'.http_build_query($input);
+        return url($this->resource()).'?'.http_build_query($input);
     }
 
     /**
@@ -727,7 +728,7 @@ class Grid
         }
 
         return sprintf('%s/create%s',
-            $this->resource(),
+            url($this->resource()),
             $queryString ? ('?'.$queryString) : ''
         );
     }
@@ -865,7 +866,7 @@ class Grid
             return $this->resourcePath;
         }
 
-        return app('request')->getPathInfo();
+        return $this->getResource(0);
     }
 
     /**

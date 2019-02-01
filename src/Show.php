@@ -6,6 +6,7 @@ use Encore\Admin\Show\Divider;
 use Encore\Admin\Show\Field;
 use Encore\Admin\Show\Panel;
 use Encore\Admin\Show\Relation;
+use Encore\Admin\Traits\Resource;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,8 @@ use Illuminate\Support\Collection;
 
 class Show implements Renderable
 {
+    use Resource;
+
     /**
      * The Eloquent model to show.
      *
@@ -276,12 +279,7 @@ class Show implements Renderable
     public function getResourcePath()
     {
         if (empty($this->resource)) {
-            $path = request()->path();
-
-            $segments = explode('/', $path);
-            array_pop($segments);
-
-            $this->resource = implode('/', $segments);
+            $this->resource = $this->getResource(-1);
         }
 
         return $this->resource;

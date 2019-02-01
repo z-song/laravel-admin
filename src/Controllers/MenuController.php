@@ -80,11 +80,13 @@ class MenuController extends Controller
                 if (!isset($branch['children'])) {
                     if (url()->isValidUrl($branch['uri'])) {
                         $uri = $branch['uri'];
+                        $label = $branch['uri'];
                     } else {
-                        $uri = admin_base_path($branch['uri']);
+                        $uri = admin_url($branch['uri']);
+                        $label = admin_base_path($branch['uri']);
                     }
 
-                    $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$uri</a>";
+                    $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">$label</a>";
                 }
 
                 return $payload;
