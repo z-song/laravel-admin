@@ -861,8 +861,8 @@ class Field implements Renderable
      */
     public function setElementClass($class)
     {
-        $this->elementClass = (array) $class;
-
+        $this->elementClass = array_merge($this->elementClass, (array) $class);
+        
         return $this;
     }
 
