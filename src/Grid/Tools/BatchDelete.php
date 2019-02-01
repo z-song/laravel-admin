@@ -17,6 +17,7 @@ class BatchDelete extends BatchAction
         $deleteConfirm = trans('admin.delete_confirm');
         $confirm = trans('admin.confirm');
         $cancel = trans('admin.cancel');
+        $url = url($this->resource);
 
         return <<<EOT
 
@@ -36,7 +37,7 @@ $('{$this->getElementClass()}').on('click', function() {
             return new Promise(function(resolve) {
                 $.ajax({
                     method: 'post',
-                    url: '{$this->resource}/' + id,
+                    url: '{$url}/' + id,
                     data: {
                         _method:'delete',
                         _token:'{$this->getToken()}'

@@ -216,6 +216,7 @@ HTML;
         $confirm = trans('admin.confirm');
         $cancel = trans('admin.cancel');
         $url = url($this->getDeletePath());
+        $listUrl = url($this->getListPath());
 
         $class = uniqid();
 
@@ -241,7 +242,7 @@ $('.{$class}-delete').unbind('click').click(function() {
                         _token:LA.token,
                     },
                     success: function (data) {
-                        $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });
+                        $.pjax({container:'#pjax-container', url: '{$listUrl}' });
 
                         resolve(data);
                     }
