@@ -145,6 +145,7 @@ class Actions extends AbstractDisplayer
     protected function renderView()
     {
         $uri = url($this->getResource());
+
         return <<<EOT
 <a href="{$uri}/{$this->getKey()}">
     <i class="fa fa-eye"></i>
@@ -160,6 +161,7 @@ EOT;
     protected function renderEdit()
     {
         $uri = url($this->getResource());
+
         return <<<EOT
 <a href="{$uri}/{$this->getKey()}/edit">
     <i class="fa fa-edit"></i>

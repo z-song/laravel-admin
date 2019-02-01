@@ -5,12 +5,13 @@ namespace Encore\Admin\Traits;
 trait Resource
 {
     /**
-     * get resource to grid
+     * get resource to grid.
      */
-    protected function getResource($slice){
+    protected function getResource($slice)
+    {
         // create uri
         $segments = [];
-        
+
         // set url
         foreach (explode('/', trim(app('request')->getPathInfo(), '/')) as $value) {
             $segments[] = $value;

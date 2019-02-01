@@ -270,7 +270,7 @@ class Form implements Renderable
         $html = [];
         foreach ($attributes as $key => $val) {
             // set action as absolute url
-            if($key == 'action'){
+            if ($key == 'action') {
                 $val = url($val);
             }
 
