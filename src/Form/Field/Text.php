@@ -32,4 +32,14 @@ class Text extends Field
 
         return parent::render();
     }
+
+    public function datalist( $entries = [] ) {
+        $this->defaultAttribute('list', "list-{$this->id}");
+        $datalist = "<datalist id=\"list-{$this->id}\">";
+        foreach($entries as $k => $v) {
+            $datalist .= "<option value=\"{$k}\">{$v}</option>";
+        }
+        $datalist .= "</datalist>";
+        $this->append($datalist);
+    }
 }
