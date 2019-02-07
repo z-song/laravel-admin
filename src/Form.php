@@ -737,14 +737,14 @@ class Form implements Renderable
                 continue;
             }
 
-            switch (get_class($relation)) {
-                case Relations\BelongsToMany::class:
-                case Relations\MorphToMany::class:
+            switch (true) {
+                case $relation instanceof Relations\BelongsToMany:
+                case $relation instanceof Relations\MorphToMany:
                     if (isset($prepared[$name])) {
                         $relation->sync($prepared[$name]);
                     }
                     break;
-                case Relations\HasOne::class:
+                case $relation instanceof Relations\HasOne:
 
                     $related = $this->model->$name;
 
@@ -762,7 +762,7 @@ class Form implements Renderable
 
                     $related->save();
                     break;
-                case Relations\BelongsTo::class:
+                case $relation instanceof Relations\BelongsTo:
 
                     $parent = $this->model->$name;
 
@@ -785,7 +785,7 @@ class Form implements Renderable
                     }
 
                     break;
-                case Relations\MorphOne::class:
+                case $relation instanceof Relations\MorphOne:
                     $related = $this->model->$name;
                     if (is_null($related)) {
                         $related = $relation->make();
@@ -795,8 +795,8 @@ class Form implements Renderable
                     }
                     $related->save();
                     break;
-                case Relations\HasMany::class:
-                case Relations\MorphMany::class:
+                case $relation instanceof Relations\HasMany:
+                case $relation instanceof Relations\MorphMany:
 
                     foreach ($prepared[$name] as $related) {
                         /** @var Relations\Relation $relation */
