@@ -21,6 +21,7 @@ trait HasPermissions
      *
      * @param $ability
      * @param array $arguments
+     *
      * @return bool
      */
     public function can($ability, $arguments = []) : bool
