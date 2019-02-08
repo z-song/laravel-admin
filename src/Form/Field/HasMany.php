@@ -337,7 +337,7 @@ class HasMany extends Field
     {
         return $this->mode('tab');
     }
-    
+
     /**
      * Use table mode to showing hasmany field.
      *
@@ -509,7 +509,7 @@ EOT;
 
         Admin::script($script);
     }
-    
+
     /**
      * Setup default template script.
      *
@@ -521,7 +521,7 @@ EOT;
     {
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
-        
+
         /**
          * When add a new sub form, replace all element key in new sub form.
          *
@@ -548,7 +548,7 @@ $('#has-many-{$this->column}').on('click', '.remove', function () {
 });
 
 EOT;
-        
+
         Admin::script($script);
     }
 
@@ -606,10 +606,11 @@ EOT;
     }
 
     /**
-     * Render the `HasMany` field for table style
+     * Render the `HasMany` field for table style.
+     *
+     * @throws \Exception
      *
      * @return mixed
-     * @throws \Exception
      */
     protected function renderTable()
     {
@@ -620,7 +621,6 @@ EOT;
 
         /* @var Field $field */
         foreach ($this->buildNestedForm($this->column, $this->builder)->fields() as $field) {
-
             if (is_a($field, Hidden::class)) {
                 $hidden[] = $field->render();
             } else {
@@ -642,11 +642,12 @@ EOT;
         /* Build row elements */
         $template = array_reduce($fields, function ($all, $field) {
             $all .= "<td>{$field}</td>";
+
             return $all;
         }, '');
 
         /* Build cell with hidden elements */
-        $template .= '<td class="hidden">' . implode('', $hidden) . '</td>';
+        $template .= '<td class="hidden">'.implode('', $hidden).'</td>';
 
         $this->setupScript(implode("\r\n", $scripts));
 

@@ -22,7 +22,7 @@ class Text extends Field
             ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
             ->defaultAttribute('value', old($this->column, $this->value()))
-            ->defaultAttribute('class', 'form-control ' . $this->getElementClassString())
+            ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder());
 
         $this->addVariables([
@@ -76,18 +76,18 @@ class Text extends Field
      */
     protected function prepare_options($options)
     {
-        $original  = [];
+        $original = [];
         $toReplace = [];
 
         foreach ($options as $key => &$value) {
             if (is_array($value)) {
-                $subArray  = $this->prepare_options($value);
-                $value     = $subArray['options'];
-                $original  = array_merge($original, $subArray['original']);
+                $subArray = $this->prepare_options($value);
+                $value = $subArray['options'];
+                $original = array_merge($original, $subArray['original']);
                 $toReplace = array_merge($toReplace, $subArray['toReplace']);
             } elseif (preg_match('/function.*?/', $value)) {
-                $original[]  = $value;
-                $value       = "%{$key}%";
+                $original[] = $value;
+                $value = "%{$key}%";
                 $toReplace[] = "\"{$value}\"";
             }
         }
@@ -99,6 +99,7 @@ class Text extends Field
      * Add datalist element to Text input.
      *
      * @param array $entries
+     *
      * @return $this
      */
     public function datalist($entries = [])
@@ -109,7 +110,7 @@ class Text extends Field
         foreach ($entries as $k => $v) {
             $datalist .= "<option value=\"{$k}\">{$v}</option>";
         }
-        $datalist .= "</datalist>";
+        $datalist .= '</datalist>';
 
         return $this->append($datalist);
     }
