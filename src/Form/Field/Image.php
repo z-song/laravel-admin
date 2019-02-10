@@ -35,7 +35,7 @@ class Image extends File
 
         $path = $this->uploadAndDeleteOriginal($image);
 
-        $fullPath = $this->options['path_prefix'] . $path;
+        $fullPath = $this->options['path_prefix'].$path;
 
         $this->callInterventionMethods($fullPath);
 
