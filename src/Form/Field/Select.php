@@ -114,7 +114,7 @@ class Select extends Field
         } else {
             $class = $field;
         }
-
+        $sourceUrl = url($sourceUrl);
         $script = <<<EOT
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
@@ -149,6 +149,9 @@ EOT;
      */
     public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text')
     {
+        foreach ($sourceUrls as &$item) {
+            $item = url($item);
+        }
         $fieldsStr = implode('.', $fields);
         $urlsStr = implode('^', $sourceUrls);
         $script = <<<EOT
@@ -240,6 +243,7 @@ EOT;
      */
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
+        $url = url($url);
         $ajaxOptions = [
             'url' => $url.'?'.http_build_query($parameters),
         ];
@@ -291,6 +295,7 @@ EOT;
      */
     public function ajax($url, $idField = 'id', $textField = 'text')
     {
+        $url = url($url);
         $configs = array_merge([
             'allowClear'         => true,
             'placeholder'        => $this->label,

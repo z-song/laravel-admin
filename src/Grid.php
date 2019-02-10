@@ -727,9 +727,10 @@ class Grid
         }
 
         return sprintf('%s/create%s',
-            $this->resource(),
+            url($this->resource()),
             $queryString ? ('?'.$queryString) : ''
         );
+        
     }
 
     /**

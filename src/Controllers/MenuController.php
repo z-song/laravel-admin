@@ -31,7 +31,7 @@ class MenuController extends Controller
 
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
-                    $form->action(admin_base_path('auth/menu'));
+                    $form->action(url(admin_base_path('auth/menu')));
 
                     $menuModel = config('admin.database.menu_model');
                     $permissionModel = config('admin.database.permissions_model');
