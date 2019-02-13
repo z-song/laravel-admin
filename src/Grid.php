@@ -467,10 +467,9 @@ class Grid
      */
     protected function appendActionsColumn()
     {
-        if (!$this->option('useActions') or $this->model->eloquent()->count()==0) {
+        if (!$this->option('useActions')) {
             return;
         }
-
 
         $this->addColumn('__actions__', trans('admin.action'))
             ->displayUsing(Displayers\Actions::class, [$this->actionsCallback]);

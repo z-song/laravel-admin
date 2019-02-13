@@ -134,18 +134,6 @@ class Actions extends AbstractDisplayer
 
         $actions = array_merge($actions, $this->appends);
 
-        if(empty($actions)){
-
-
-            $this->grid->columns()->search(function($value,$key)
-            {
-
-                return  $value->getName() == '__actions__' ? $this->grid->columns()->forget($key) : "";
-
-            });
-
-        }
-
         return implode('', $actions);
     }
 
