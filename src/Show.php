@@ -284,7 +284,7 @@ class Show implements Renderable
             $this->resource = implode('/', $segments);
         }
 
-        return $this->resource;
+        return url($this->resource);
     }
 
     /**

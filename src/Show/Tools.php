@@ -140,7 +140,7 @@ class Tools implements Renderable
      */
     protected function getListPath()
     {
-        return '/'.ltrim($this->getResource(), '/');
+        return ltrim($this->getResource(), '/');
     }
 
     /**
