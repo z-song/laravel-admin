@@ -467,7 +467,7 @@ class Grid
      */
     protected function appendActionsColumn()
     {
-        if (!$this->option('useActions')) {
+        if (!$this->option('useActions') or $this->model->eloquent()->count() == 0) {
             return;
         }
 
