@@ -170,10 +170,8 @@ class Grid
      */
     public function __construct(Eloquent $model, Closure $builder = null)
     {
-
         $this->keyName = $model->getKeyName();
         $this->model = new Model($model);
-
         $this->columns = new Collection();
         $this->rows = new Collection();
         $this->builder = $builder;
