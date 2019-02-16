@@ -136,7 +136,7 @@ class Actions extends AbstractDisplayer
 
         if (empty($actions)) {
             $this->grid->columns()->search(function ($value, $key) {
-                return  $value->getName() == '__actions__' ? $this->grid->columns()->forget($key) : "";
+                return  $value->getName() == '__actions__' ? $this->grid->columns()->forget($key) : '';
             });
         }
 
