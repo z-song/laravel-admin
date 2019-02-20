@@ -1080,14 +1080,15 @@ class Field implements Renderable
     }
 
     /**
-     * Set script of current field
+     * Set script of current field.
      *
      * @return self
      */
-    public functiion setScript($script)
+    public function setScript($script)
     {
-       $this->script = $script;
-       return $this;
+        $this->script = $script;
+
+        return $this;
     }
 
     /**
