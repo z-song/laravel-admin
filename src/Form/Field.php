@@ -464,9 +464,11 @@ class Field implements Renderable
             $thisRuleArr = array_filter(explode('|', $this->rules));
 
             $this->rules = array_merge($thisRuleArr, $rules);
+            if (in_array('required', $this->rules)) $this->required();
         } elseif (is_string($rules)) {
             $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
+            if (in_array('required', $rules)) $this->required();
             $this->rules = implode('|', $rules);
         }
 
