@@ -213,6 +213,11 @@ class Field implements Renderable
     protected $labelClass = [];
 
     /**
+     * @var array
+     */
+    protected $groupClass = [];
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -968,6 +973,31 @@ class Field implements Renderable
         }
 
         return $this;
+    }
+
+    /**
+     * Set form group class.
+     *
+     * @param string|array $class
+     *
+     * @return $this
+     */
+    public function setGroupClass($class)
+    : self
+    {
+        array_push($this->groupClass, $class);
+        return $this;
+    }
+
+    /**
+     * Get element class.
+     *
+     * @return array
+     */
+    protected function getGroupClass($default = false)
+    : string
+    {
+        return ($default ? 'form-group ' : '') . implode(' ', array_filter($this->groupClass));
     }
 
     /**
