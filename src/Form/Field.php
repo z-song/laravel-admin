@@ -1084,7 +1084,7 @@ class Field implements Renderable
      *
      * @return self
      */
-    public functiion setScript($script)
+    public function setScript($script)
     {
        $this->script = $script;
        return $this;
