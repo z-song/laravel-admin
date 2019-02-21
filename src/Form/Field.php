@@ -987,9 +987,27 @@ class Field implements Renderable
         }
 
         foreach ($delClass as $del) {
-            if (($key = array_search($del, $this->elementClass))) {
+            if (($key = array_search($del, $this->elementClass)) !== false) {
                 unset($this->elementClass[$key]);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * reset field className
+     *
+     * @param string $className
+     * @param string $resetClassName
+     *
+     * @return $this
+     */
+    public function resetElementClassName(string $className, string $resetClassName)
+    {
+        if (($key = array_search($className, $this->getElementClass())) !== false) {
+
+            $this->elementClass[$key] = $resetClassName;
         }
 
         return $this;
