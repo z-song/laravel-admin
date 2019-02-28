@@ -11,6 +11,51 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+if (!function_exists('Encore\Admin\Form\Field\array_key_attach_str')) {
+    function array_key_attach_str(array $a, string $b, string $c = '.')
+    {
+        return call_user_func_array(
+            'array_merge',
+            array_map(function ($u, $v) use ($b, $c) {
+                return ["{$b}{$c}{$u}" => $v];
+            }, array_keys($a), array_values($a))
+        );
+    };
+}
+
+if (!function_exists('Encore\Admin\Form\Field\array_clean_merge')) {
+    function array_clean_merge(array $a, $b)
+    {
+        return $b ? array_merge($a, call_user_func_array('array_merge', $b)) : $a;
+    };
+}
+
+if (!function_exists('Encore\Admin\Form\Field\array_key_clean_undot')) {
+    function array_key_clean_undot(array $a)
+    {
+        $keys = preg_grep('/[\.\:]/', array_keys($a));
+        if ($keys) {
+            foreach ($keys as $key) {
+                array_set($a, str_replace(':', '', $key), $a[$key]);
+                unset($a[$key]);
+            }
+        }
+
+        return $a;
+    };
+}
+
+if (!function_exists('Encore\Admin\Form\Field\array_key_clean')) {
+    function array_key_clean(array $a)
+    {
+        $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
+            return [str_replace(':', '', $k) => $v];
+        }, array_keys($a), array_values($a))) : $a;
+
+        return $a;
+    };
+}
+
 /**
  * Class HasMany.
  */
@@ -103,162 +148,167 @@ class HasMany extends Field
         }
 
         $input = array_only($input, $this->column);
-
         $form = $this->buildNestedForm($this->column, $this->builder);
-
-        $rules = $attributes = [];
-
+        $rel = $this->relationName;
+        $rules = $attributes = $messages = $newInputs = [];
+        // remove all inputs & keys marked as removed
+        $availInput = array_filter(array_map(function ($v) {
+            return $v[NestedForm::REMOVE_FLAG_NAME] ? null : $v;
+        }, $input[$rel]));
+        $keys = array_keys($availInput);
         /* @var Field $field */
         foreach ($form->fields() as $field) {
-            if (!$fieldRules = $field->getRules()) {
+            if ($field instanceof Field\HasMany) {
+                throw new \Exception('nested hasMany field found.');
+            }
+            if (!($field instanceof Field\Embeds) && !($fieldRules = $field->getRules())) {
                 continue;
             }
-
             $column = $field->column();
-
-            if (is_array($column)) {
-                foreach ($column as $key => $name) {
-                    $rules[$name.$key] = $fieldRules;
+            $columns = is_array($column) ? $column : [$column];
+            if (
+                $field instanceof Field\MultipleSelect
+                || $field instanceof Field\Listbox
+                || $field instanceof Field\Checkbox
+                || $field instanceof Field\Tags
+                || $field instanceof Field\MultipleImage
+                || $field instanceof Field\MultipleFile
+            ) {
+                foreach ($keys as $key) {
+                    $availInput[$key][$column] = array_filter($availInput[$key][$column], 'strlen') ?: null;
                 }
-
-                $this->resetInputKey($input, $column);
-            } else {
-                $rules[$column] = $fieldRules;
             }
 
-            $attributes = array_merge(
-                $attributes,
-                $this->formatValidationAttribute($input, $field->label(), $column)
-            );
+            $newColumn = call_user_func_array('array_merge', array_map(function ($u) use ($columns, $rel) {
+                return array_map(function ($k, $v) use ($u, $rel) {
+                    //Fix ResetInput Function! A Headache Implementation!
+                    return $k ? "{$rel}.{$u}.{$v}:{$k}" : "{$rel}.{$u}.{$v}";
+                }, array_keys($columns), array_values($columns));
+            }, $keys));
+
+            if ($field instanceof Field\Embeds) {
+                $newRules = array_map(function ($v) use ($availInput, $field) {
+                    list($r, $k, $c) = explode('.', $v);
+                    $v = "{$r}.{$k}";
+                    $embed = $field->getValidationRules([$field->column() => $availInput[$k][$c]]);
+
+                    return $embed ? array_key_attach_str($embed, $v) : null;
+                }, $newColumn);
+                $rules = array_clean_merge($rules, array_filter($newRules));
+
+                $newAttributes = array_map(function ($v) use ($availInput, $field) {
+                    list($r, $k, $c) = explode('.', $v);
+                    $v = "{$r}.{$k}";
+                    $embed = $field->getValidationAttributes([$field->column() => $availInput[$k][$c]]);
+
+                    return $embed ? array_key_attach_str($embed, $v) : null;
+                }, $newColumn);
+                $attributes = array_clean_merge($attributes, array_filter($newAttributes));
+
+                $newInput = array_map(function ($v) use ($availInput, $field) {
+                    list($r, $k, $c) = explode('.', $v);
+                    $v = "{$r}.{$k}";
+                    $embed = $field->getValidationInput([$field->column() => $availInput[$k][$c]]);
+
+                    return $embed ? array_key_attach_str($embed, $v) : [null => 'null'];
+                }, $newColumn);
+                $newInputs = array_clean_merge($newInputs, array_filter($newInput, 'strlen', ARRAY_FILTER_USE_KEY));
+
+                $newMessages = array_map(function ($v) use ($availInput, $field) {
+                    list($r, $k, $c) = explode('.', $v);
+                    $v = "{$r}.{$k}";
+                    $embed = $field->getValidationMessages([$field->column() => $availInput[$k][$c]]);
+
+                    return $embed ? array_key_attach_str($embed, $v) : null;
+                }, $newColumn);
+                $messages = array_clean_merge($messages, array_filter($newMessages));
+            } else {
+                $fieldRules = is_array($fieldRules) ? implode('|', $fieldRules) : $fieldRules;
+                $newRules = array_map(function ($v) use ($fieldRules, $availInput) {
+                    list($r, $k, $c) = explode('.', $v);
+                    //Fix ResetInput Function! A Headache Implementation!
+                    $col = explode(':', $c)[0];
+                    if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
+                        return array_key_attach_str(preg_replace('/.+/', $fieldRules, $availInput[$k][$col]), $v, ':');
+                    }
+
+                    return [$v => $fieldRules];
+                }, $newColumn);
+                $rules = array_clean_merge($rules, $newRules);
+
+                $newInput = array_map(function ($v) use ($availInput) {
+                    list($r, $k, $c) = explode('.', $v);
+                    //Fix ResetInput Function! A Headache Implementation!
+                    $col = explode(':', $c)[0];
+                    if (!array_key_exists($col, $availInput[$k])) {
+                        return [$v => null];
+                    }
+
+                    if (is_array($availInput[$k][$col])) {
+                        return array_key_attach_str($availInput[$k][$col], $v, ':');
+                    }
+
+                    return [$v => $availInput[$k][$col]];
+                }, $newColumn);
+                $newInputs = array_clean_merge($newInputs, $newInput);
+
+                $newAttributes = array_map(function ($v) use ($field, $availInput) {
+                    list($r, $k, $c) = explode('.', $v);
+                    //Fix ResetInput Function! A Headache Implementation!
+                    $col = explode(':', $c)[0];
+                    if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
+                        return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
+                            $w = $field->label();
+                            //Fix ResetInput Function! A Headache Implementation!
+                            $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+
+                            return ["{$v}:{$u}" => $w];
+                        }, array_keys($availInput[$k][$col])));
+                    }
+
+                    $w = $field->label();
+                    //Fix ResetInput Function! A Headache Implementation!
+                    $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
+
+                    return [$v => $w];
+                }, $newColumn);
+                $attributes = array_clean_merge($attributes, $newAttributes);
+            }
+
+            if ($field->validationMessages) {
+                $newMessages = array_map(function ($v) use ($field, $availInput) {
+                    list($r, $k, $c) = explode('.', $v);
+                    //Fix ResetInput Function! A Headache Implementation!
+                    $col = explode(':', $c)[0];
+                    if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
+                        return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
+                            return array_key_attach_str($field->validationMessages, "{$v}:{$u}");
+                        }, array_keys($availInput[$k][$col])));
+                    }
+
+                    return array_key_attach_str($field->validationMessages, $v);
+                }, $newColumn);
+                $messages = array_clean_merge($messages, $newMessages);
+            }
         }
 
-        array_forget($rules, NestedForm::REMOVE_FLAG_NAME);
-
+        $rules = array_filter($rules, 'strlen');
         if (empty($rules)) {
             return false;
         }
 
-        $newRules = [];
-        $newInput = [];
+        $input = array_key_clean_undot(array_filter($newInputs, 'strlen', ARRAY_FILTER_USE_KEY));
+        $rules = array_key_clean($rules);
+        $attributes = array_key_clean($attributes);
+        $messages = array_key_clean($messages);
 
-        foreach ($rules as $column => $rule) {
-            foreach (array_keys($input[$this->column]) as $key) {
-                $newRules["{$this->column}.$key.$column"] = $rule;
-                if (isset($input[$this->column][$key][$column]) &&
-                    is_array($input[$this->column][$key][$column])) {
-                    foreach ($input[$this->column][$key][$column] as $vkey => $value) {
-                        $newInput["{$this->column}.$key.{$column}$vkey"] = $value;
-                    }
-                }
-            }
+        if (empty($input)) {
+            $input = [$rel => $availInput];
         }
 
-        if (empty($newInput)) {
-            $newInput = $input;
-        }
-
-        return Validator::make($newInput, $newRules, $this->validationMessages, $attributes);
+        return Validator::make($input, $rules, $messages, $attributes);
     }
 
-    /**
-     * Format validation attributes.
-     *
-     * @param array  $input
-     * @param string $label
-     * @param string $column
-     *
-     * @return array
-     */
-    protected function formatValidationAttribute($input, $label, $column)
-    {
-        $new = $attributes = [];
-
-        if (is_array($column)) {
-            foreach ($column as $index => $col) {
-                $new[$col.$index] = $col;
-            }
-        }
-
-        foreach (array_keys(array_dot($input)) as $key) {
-            if (is_string($column)) {
-                if (Str::endsWith($key, ".$column")) {
-                    $attributes[$key] = $label;
-                }
-            } else {
-                foreach ($new as $k => $val) {
-                    if (Str::endsWith($key, ".$k")) {
-                        $attributes[$key] = $label."[$val]";
-                    }
-                }
-            }
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * Reset input key for validation.
-     *
-     * @param array $input
-     * @param array $column $column is the column name array set
-     *
-     * @return void.
-     */
-    protected function resetInputKey(array &$input, array $column)
-    {
-        /**
-         * flip the column name array set.
-         *
-         * for example, for the DateRange, the column like as below
-         *
-         * ["start" => "created_at", "end" => "updated_at"]
-         *
-         * to:
-         *
-         * [ "created_at" => "start", "updated_at" => "end" ]
-         */
-        $column = array_flip($column);
-
-        /**
-         * $this->column is the inputs array's node name, default is the relation name.
-         *
-         * So... $input[$this->column] is the data of this column's inputs data
-         *
-         * in the HasMany relation, has many data/field set, $set is field set in the below
-         */
-        foreach ($input[$this->column] as $index => $set) {
-
-            /*
-             * foreach the field set to find the corresponding $column
-             */
-            foreach ($set as $name => $value) {
-                /*
-                 * if doesn't have column name, continue to the next loop
-                 */
-                if (!array_key_exists($name, $column)) {
-                    continue;
-                }
-
-                /**
-                 * example:  $newKey = created_atstart.
-                 *
-                 * Σ( ° △ °|||)︴
-                 *
-                 * I don't know why a form need range input? Only can imagine is for range search....
-                 */
-                $newKey = $name.$column[$name];
-
-                /*
-                 * set new key
-                 */
-                array_set($input, "{$this->column}.$index.$newKey", $value);
-                /*
-                 * forget the old key and value
-                 */
-                array_forget($input, "{$this->column}.$index.$name");
-            }
-        }
-    }
 
     /**
      * Prepare input data for insert or update.
@@ -408,7 +458,7 @@ class HasMany extends Field
      */
     protected function setupScript($script)
     {
-        $method = 'setupScriptFor'.ucfirst($this->viewMode).'View';
+        $method = 'setupScriptFor' . ucfirst($this->viewMode) . 'View';
 
         call_user_func([$this, $method], $script);
     }
@@ -647,7 +697,7 @@ EOT;
         }, '');
 
         /* Build cell with hidden elements */
-        $template .= '<td class="hidden">'.implode('', $hidden).'</td>';
+        $template .= '<td class="hidden">' . implode('', $hidden) . '</td>';
 
         $this->setupScript(implode("\r\n", $scripts));
 
