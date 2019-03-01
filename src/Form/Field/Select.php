@@ -61,7 +61,7 @@ class Select extends Field
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array)$options;
+            $this->options = (array) $options;
         }
 
         return $this;
@@ -110,11 +110,12 @@ class Select extends Field
                     "{$func_name} = function(data) {",
                     "\tif ( !data.id || data.loading) return data.text;",
                     $val,
-                    "}"
+                    '}',
                 ]);
                 Admin::script($script);
             }
         }
+
         return $this;
     }
 
@@ -126,17 +127,18 @@ class Select extends Field
                 if (is_string($v)) {
                     return  in_array($u, $functions) ? "{$u}: {$v}" : "{$u}: '{$v}'";
                 }
-                return "{$u}: " . json_encode($v);
+
+                return "{$u}: ".json_encode($v);
             }, array_keys($options), $options)
         );
     }
 
     private function configs($default = [], $quoted = false)
     {
-        $configs =  array_merge(
+        $configs = array_merge(
             [
                 'allowClear'  => true,
-                'language' => app()->getLocale(),
+                'language'    => app()->getLocale(),
                 'placeholder' => [
                     'id'   => '',
                     'text' => $this->label,
@@ -147,7 +149,8 @@ class Select extends Field
             $this->config
         );
         $configs = $this->buildJsJson($configs);
-        return $quoted ? '{' . $configs . '}' : $configs;
+
+        return $quoted ? '{'.$configs.'}' : $configs;
     }
 
     /**
@@ -298,7 +301,7 @@ EOT;
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url . '?' . http_build_query($parameters),
+            'url' => $url.'?'.http_build_query($parameters),
         ];
 
         $configs = $this->configs([
@@ -411,10 +414,10 @@ EOT;
 
     /**
      * {@inheritdoc}
-      */
+     */
     public function render()
     {
-        Admin::js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/i18n/' . app()->getLocale() . '.js');
+        Admin::js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/i18n/'.app()->getLocale().'.js');
         $configs = $this->configs(
             [
                 'allowClear'  => true,
@@ -425,7 +428,6 @@ EOT;
             ],
             true
         );
-
 
         if (empty($this->script)) {
             $this->script = "$(\"{$this->getElementClassSelector()}\").select2({$configs});";
@@ -446,7 +448,7 @@ EOT;
             'groups'  => $this->groups,
         ]);
 
-        $this->attribute('data-value', implode(',', (array)$this->value()));
+        $this->attribute('data-value', implode(',', (array) $this->value()));
 
         return parent::render();
     }
