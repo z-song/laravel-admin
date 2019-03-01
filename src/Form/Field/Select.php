@@ -61,7 +61,7 @@ class Select extends Field
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array) $options;
+            $this->options = (array)$options;
         }
 
         return $this;
@@ -96,6 +96,57 @@ class Select extends Field
         return $this;
     }
 
+    public function template(array $view)
+    {
+        $view = array_intersect_key($view, array_flip(['result', 'selection']));
+        if ($view) {
+            $this->config['escapeMarkup'] = 'function (markup) {return markup;}';
+            foreach ($view as $key => $val) {
+                $key = ucfirst(strtolower($key));
+                $func_key = "template{$key}";
+                $func_name = str_replace('.', '', "{$this->getElementClassSelector()}_{$key}");
+                $this->config[$func_key] = $func_name;
+                $script = implode("\n", [
+                    "{$func_name} = function(data) {",
+                    "\tif ( !data.id || data.loading) return data.text;",
+                    $val,
+                    "}"
+                ]);
+                Admin::script($script);
+            }
+        }
+        return $this;
+    }
+
+    private function buildJsJson(array $options,array $functions = ['escapeMarkup','templateResult','templateSelection'])
+    {
+        return implode(
+            ",\n",
+            array_map(function ($u, $v) use ($functions) {
+                if (is_string($v)) {
+                    return  in_array($u, $functions) ? "{$u}: {$v}" : "{$u}: '{$v}'";
+                }
+                return "{$u}: " . json_encode($v);
+            }, array_keys($options), $options)
+        );
+    }
+
+    private function configs($default = [], $quoted = false)
+    {
+        $configs =  array_merge(
+            [
+            'allowClear'  => true,
+            'language' => app()->getLocale(),
+            'placeholder' => [
+                'id'   => '',
+                'text' => $this->label,
+            ],
+            'escapeMarkup' => 'function (markup) {return markup;}',
+        ], $default, $this->config);
+        $configs = $this->buildJsJson($configs);
+        return $quoted ? '{' . $configs . '}' : $configs;
+    }
+
     /**
      * Load options for other select on change.
      *
@@ -126,7 +177,8 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
                 d.id = d.$idField;
                 d.text = d.$textField;
                 return d;
-            })
+            }),
+            {$this->configs()}
         }).trigger('change');
     });
 });
@@ -151,7 +203,7 @@ EOT;
     {
         $fieldsStr = implode('.', $fields);
         $urlsStr = implode('^', $sourceUrls);
-        $script = <<<EOT
+         $script = <<<EOT
 var fields = '$fieldsStr'.split('.');
 var urls = '$urlsStr'.split('^');
 
@@ -163,7 +215,8 @@ var refreshOptions = function(url, target) {
                 d.id = d.$idField;
                 d.text = d.$textField;
                 return d;
-            })
+            }),
+            {$this->configs()}
         }).trigger('change');
     });
 };
@@ -198,9 +251,10 @@ EOT;
      *
      * @return $this
      */
-    public function model($model, $idField = 'id', $textField = 'name')
+     public function model($model, $idField = 'id', $textField = 'name')
     {
-        if (!class_exists($model)
+        if (
+            !class_exists($model)
             || !in_array(Model::class, class_parents($model))
         ) {
             throw new \InvalidArgumentException("[$model] must be a valid model class");
@@ -241,18 +295,16 @@ EOT;
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters),
+            'url' => $url . '?' . http_build_query($parameters),
         ];
-        $configs = array_merge([
+
+        $configs = $this->configs([
             'allowClear'         => true,
             'placeholder'        => [
                 'id'        => '',
                 'text'      => trans('admin.choose'),
             ],
-        ], $this->config);
-
-        $configs = json_encode($configs);
-        $configs = substr($configs, 1, strlen($configs) - 2);
+        ]);
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
 
@@ -287,18 +339,15 @@ EOT;
      * @param $idField
      * @param $textField
      *
-     * @return $this
+     * @re tu rn $this
      */
-    public function ajax($url, $idField = 'id', $textField = 'text')
-    {
-        $configs = array_merge([
-            'allowClear'         => true,
-            'placeholder'        => $this->label,
+      public function ajax($url, $idField = 'id', $textField = 'text')
+     {
+        $configs = $this->configs([
+             'allowClear'         => true,
+             'placeholder'        => $this->label,
             'minimumInputLength' => 1,
-        ], $this->config);
-
-        $configs = json_encode($configs);
-        $configs = substr($configs, 1, strlen($configs) - 2);
+        ]);
 
         $this->script = <<<EOT
 
@@ -359,40 +408,41 @@ EOT;
 
     /**
      * {@inheritdoc}
-     */
+      */
     public function render()
     {
-        $configs = array_merge([
+        Admin::js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/i18n/' . app()->getLocale() . '.js');
+        $configs = $this->configs([
             'allowClear'  => true,
             'placeholder' => [
                 'id'   => '',
                 'text' => $this->label,
             ],
-        ], $this->config);
+        ],
+        true);
 
-        $configs = json_encode($configs);
 
-        if (empty($this->script)) {
-            $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
-        }
+if (empty($this->script)) {
+    $this->script = "$(\"{$this->getElementClassSelector()}\").select2({$configs});";
+}
 
-        if ($this->options instanceof \Closure) {
-            if ($this->form) {
-                $this->options = $this->options->bindTo($this->form->model());
-            }
-
-            $this->options(call_user_func($this->options, $this->value, $this));
-        }
-
-        $this->options = array_filter($this->options, 'strlen');
-
-        $this->addVariables([
-            'options' => $this->options,
-            'groups'  => $this->groups,
-        ]);
-
-        $this->attribute('data-value', implode(',', (array) $this->value()));
-
-        return parent::render();
+if ($this->options instanceof \Closure) {
+    if ($this->form) {
+        $this->options = $this->options->bindTo($this->form->model());
     }
+
+    $this->options(call_user_func($this->options, $this->value, $this));
+}
+
+$this->options = array_filter($this->options, 'strlen');
+
+$this->addVariables([
+    'options' => $this->options,
+    'groups'  => $this->groups,
+]);
+
+$this->attribute('data-value', implode(',', (array)$this->value()));
+
+return parent::render();
+}
 }
