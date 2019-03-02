@@ -135,7 +135,7 @@ class Select extends Field
             ",\n",
             array_map(function ($u, $v) use ($functions) {
                 if (is_string($v)) {
-                    return  in_array($u, $functions) ? "{$u}: {$v}" : "{$u}: '{$v}'";
+                    return  in_array($u, $functions) ? "{$u}: {$v}" : "{$u}: \"{$v}\"";
                 }
 
                 return "{$u}: ".json_encode($v);
@@ -188,14 +188,16 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
-        $(target).select2({
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            }),
-            {$this->configs()}
-        }).trigger('change');
+        config=window._config[".{$class}"];
+        console.log(config);
+        config.data=$.map(data, function (d) {
+            d.id = d.$idField;
+            d.text = d.$textField;
+            return d;
+        });
+        console.log(config);
+        $(target).select2(config).trigger('change');
+
     });
 });
 EOT;
@@ -223,17 +225,19 @@ EOT;
 var fields = '$fieldsStr'.split('.');
 var urls = '$urlsStr'.split('^');
 
-var refreshOptions = function(url, target) {
+var refreshOptions = function(url, target, name) {
     $.get(url).then(function(data) {
         target.find("option").remove();
-        $(target).select2({
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            }),
-            {$this->configs()}
-        }).trigger('change');
+        config=window._config[name];
+        console.log(config);
+        config.data=$.map(data, function (d) {
+            d.id = d.$idField;
+            d.text = d.$textField;
+            return d;
+        });
+        console.log(config);
+        $(target).select2(config).trigger('change');
+
     });
 };
 
@@ -244,7 +248,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
 
     fields.forEach(function(field, index){
         var target = $(_this).closest('.fields-group').find('.' + fields[index]);
-        promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
+        promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target, name));
     });
 
     $.when(promises).then(function() {
@@ -428,7 +432,7 @@ EOT;
     public function render()
     {
         Admin::js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/i18n/'.app()->getLocale().'.js');
-        $configs = $this->configs(
+        $configs = str_replace("\n","",$this->configs(
             [
                 'allowClear'  => true,
                 'placeholder' => [
@@ -437,7 +441,9 @@ EOT;
                 ],
             ],
             true
-        );
+        ));
+        Admin::script("if(!window.hasOwnProperty('_config')) window._config=new Object();");
+        Admin::script("window._config['{$this->getElementClassSelector()}']=eval('({$configs})');\n");
 
         if (empty($this->script)) {
             $this->script = "$(\"{$this->getElementClassSelector()}\").select2({$configs});";
