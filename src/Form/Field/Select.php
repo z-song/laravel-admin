@@ -119,8 +119,17 @@ class Select extends Field
         return $this;
     }
 
-    private function buildJsJson(array $options, array $functions = ['escapeMarkup', 'templateResult', 'templateSelection'])
+    private function buildJsJson(array $options, array $functions = [])
     {
+        $functions = array_merge([
+            'ajax',
+            'escapeMarkup',
+            'templateResult',
+            'templateSelection',
+            'initSelection',
+            'sorter',
+            'tokenizer'
+        ], $functions);
         return implode(
             ",\n",
             array_map(function ($u, $v) use ($functions) {
