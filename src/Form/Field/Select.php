@@ -432,7 +432,7 @@ EOT;
     public function render()
     {
         Admin::js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/i18n/'.app()->getLocale().'.js');
-        $configs = str_replace("\n","",$this->configs(
+        $configs = str_replace("\n", '', $this->configs(
             [
                 'allowClear'  => true,
                 'placeholder' => [
