@@ -128,8 +128,9 @@ class Select extends Field
             'templateSelection',
             'initSelection',
             'sorter',
-            'tokenizer'
+            'tokenizer',
         ], $functions);
+
         return implode(
             ",\n",
             array_map(function ($u, $v) use ($functions) {
