@@ -189,13 +189,11 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
         config=window._config[".{$class}"];
-        console.log(config);
         config.data=$.map(data, function (d) {
             d.id = d.$idField;
             d.text = d.$textField;
             return d;
         });
-        console.log(config);
         $(target).select2(config).trigger('change');
 
     });
@@ -229,13 +227,11 @@ var refreshOptions = function(url, target, name) {
     $.get(url).then(function(data) {
         target.find("option").remove();
         config=window._config[name];
-        console.log(config);
         config.data=$.map(data, function (d) {
             d.id = d.$idField;
             d.text = d.$textField;
             return d;
         });
-        console.log(config);
         $(target).select2(config).trigger('change');
 
     });
