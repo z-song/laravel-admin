@@ -542,7 +542,13 @@ class Form implements Renderable
         }
 
         /* @var Model $this->model */
-        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+        $builder = $this->model();
+
+        if ($this->isSoftDeletes) {
+            $builder = $builder->withTrashed();
+        }
+
+        $this->model = $builder->with($this->getRelations())->findOrFail($id);
 
         $this->setFieldOriginalValue();
 
