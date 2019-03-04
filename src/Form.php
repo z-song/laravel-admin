@@ -1073,7 +1073,7 @@ class Form implements Renderable
         $builder = $this->model();
 
         if ($this->isSoftDeletes) {
-            $builder->withTrashed();
+            $builder = $builder->withTrashed();
         }
 
         $this->model = $builder->with($relations)->findOrFail($id);
