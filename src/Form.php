@@ -188,6 +188,11 @@ class Form implements Renderable
     protected $isSoftDeletes = false;
 
     /**
+     * @var Closure
+     */
+    protected static $initCallback;
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -204,6 +209,20 @@ class Form implements Renderable
         }
 
         $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses($this->model));
+
+        if (static::$initCallback instanceof Closure) {
+            call_user_func(static::$initCallback, $this);
+        }
+    }
+
+    /**
+     * Initialize with user pre-defined default disables, etc.
+     *
+     * @param Closure $callback
+     */
+    public static function init(Closure $callback = null)
+    {
+        static::$initCallback = $callback;
     }
 
     /**

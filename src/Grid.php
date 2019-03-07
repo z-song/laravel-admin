@@ -168,6 +168,11 @@ class Grid
     protected $footer;
 
     /**
+     * @var Closure
+     */
+    protected static $initCallback;
+
+    /**
      * Create a new grid instance.
      *
      * @param Eloquent $model
@@ -187,6 +192,20 @@ class Grid
         $this->setupFilter();
 
         $this->handleExportRequest();
+
+        if (static::$initCallback instanceof Closure) {
+            call_user_func(static::$initCallback, $this);
+        }
+    }
+
+    /**
+     * Initialize with user pre-defined default disables and exporter, etc.
+     *
+     * @param Closure $callback
+     */
+    public static function init(Closure $callback = null)
+    {
+        static::$initCallback = $callback;
     }
 
     /**
