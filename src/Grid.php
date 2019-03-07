@@ -471,13 +471,11 @@ class Grid
      *
      * @return $this
      */
-    public function disablePagination()
+    public function disablePagination(bool $disable = true)
     {
-        $this->model->usePaginate(false);
+        $this->model->usePaginate(!$disable);
 
-        $this->option('show_pagination', false);
-
-        return $this;
+        return $this->option('show_pagination', !$disable);
     }
 
     /**
