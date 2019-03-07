@@ -47,9 +47,9 @@ class BatchActions extends AbstractTool
      *
      * @return $this
      */
-    public function disableDelete()
+    public function disableDelete(bool $disable = true)
     {
-        $this->enableDelete = false;
+        $this->enableDelete = !$disable;
 
         return $this;
     }

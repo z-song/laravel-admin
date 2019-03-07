@@ -13,6 +13,32 @@ abstract class AbstractTool implements Renderable
     protected $grid;
 
     /**
+     * @var boolean
+     */
+    protected $disabled = false;
+
+    /**
+     * Toggle this button.
+     *
+     * @param bool $disable
+     * @return $this
+     */
+    public function disable(bool $disable = true)
+    {
+        $this->disabled = $disable;
+
+        return $this;
+    }
+
+    /**
+     * If the tool is allowed.
+     */
+    public function allowed()
+    {
+        return !$this->disabled;
+    }
+
+    /**
      * Set parent grid.
      *
      * @param Grid $grid

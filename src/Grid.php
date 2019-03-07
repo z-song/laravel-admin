@@ -542,14 +542,11 @@ class Grid
      *
      * @return Grid|mixed
      */
-    public function disableRowSelector()
+    public function disableRowSelector(bool $disable = true)
     {
-        $this->tools(function ($tools) {
-            /* @var Grid\Tools $tools */
-            $tools->disableBatchActions();
-        });
+        $this->tools->disableBatchActions($disable);
 
-        return $this->option('show_row_selector', false);
+        return $this->option('show_row_selector', !$disable);
     }
 
     /**
@@ -613,13 +610,11 @@ class Grid
      *
      * @return $this
      */
-    public function disableFilter()
+    public function disableFilter(bool $disable = true)
     {
-        $this->option('show_filter', false);
+        $this->tools->disableFilterButton($disable);
 
-        $this->tools->disableFilterButton();
-
-        return $this;
+        return $this->option('show_filter', !$disable);
     }
 
     /**
