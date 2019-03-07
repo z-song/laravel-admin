@@ -1301,9 +1301,9 @@ class Form implements Renderable
      *
      * @deprecated
      */
-    public function disableSubmit()
+    public function disableSubmit(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableSubmit();
+        $this->builder()->getFooter()->disableSubmit($disable);
 
         return $this;
     }
@@ -1315,9 +1315,9 @@ class Form implements Renderable
      *
      * @deprecated
      */
-    public function disableReset()
+    public function disableReset(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableReset();
+        $this->builder()->getFooter()->disableReset($disable);
 
         return $this;
     }
@@ -1327,9 +1327,9 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function disableViewCheck()
+    public function disableViewCheck(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableViewCheck();
+        $this->builder()->getFooter()->disableViewCheck($disable);
 
         return $this;
     }
@@ -1339,9 +1339,9 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function disableEditingCheck()
+    public function disableEditingCheck(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableEditingCheck();
+        $this->builder()->getFooter()->disableEditingCheck($disable);
 
         return $this;
     }
@@ -1351,9 +1351,9 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function disableCreatingCheck()
+    public function disableCreatingCheck(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableCreatingCheck();
+        $this->builder()->getFooter()->disableCreatingCheck($disable);
 
         return $this;
     }
