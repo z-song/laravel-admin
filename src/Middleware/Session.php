@@ -8,7 +8,7 @@ class Session
 {
     public function handle(Request $request, \Closure $next)
     {
-        $path = '/' . trim(config('admin.route.prefix'), '/');
+        $path = '/'.trim(config('admin.route.prefix'), '/');
 
         config(['session.path' => $path]);
 

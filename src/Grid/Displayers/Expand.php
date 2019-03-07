@@ -30,7 +30,7 @@ EOT;
 
     protected function setupScript()
     {
-        $script = <<<EOT
+        $script = <<<'EOT'
 
 $('.grid-expand').on('click', function () {
     

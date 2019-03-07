@@ -39,7 +39,6 @@ class ColumnSelector extends AbstractTool
         $this->setupScript($show, $columns);
 
         $lists = $columns->map(function ($val, $key) use ($show) {
-
             if (empty($show)) {
                 $checked = 'checked';
             } else {
@@ -75,11 +74,10 @@ EOT;
     protected function getGridColumns()
     {
         return $this->grid->columns()->map(function (Grid\Column $column) {
-
             $name = $column->getName();
 
             if (in_array($name, ['__row_selector__', '__actions__'])) {
-                return null;
+                return;
             }
 
             return [$name => $column->getLabel()];
