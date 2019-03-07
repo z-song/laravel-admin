@@ -91,7 +91,7 @@ class PermissionController extends Controller
         $grid->name(trans('admin.name'));
 
         $grid->http_path(trans('admin.route'))->display(function ($path) {
-            return collect(explode("\r\n", $path))->map(function ($path) {
+            return collect(explode("\n", $path))->map(function ($path) {
                 $method = $this->http_method ?: ['ANY'];
 
                 if (Str::contains($path, ':')) {
