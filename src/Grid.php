@@ -505,9 +505,9 @@ class Grid
      *
      * @return $this
      */
-    public function disableActions()
+    public function disableActions(bool $disable = true)
     {
-        return $this->option('show_actions', false);
+        return $this->option('show_actions', !$disable);
     }
 
     /**
@@ -605,11 +605,9 @@ class Grid
      *
      * @return $this
      */
-    public function disableTools()
+    public function disableTools(bool $disable = true)
     {
-        $this->option('show_tools', false);
-
-        return $this;
+        return $this->option('show_tools', !$disable);
     }
 
     /**
@@ -821,9 +819,9 @@ class Grid
      *
      * @return $this
      */
-    public function disableExport()
+    public function disableExport(bool $disable = true)
     {
-        return $this->option('show_exporter', false);
+        return $this->option('show_exporter', !$disable);
     }
 
     /**
@@ -853,9 +851,9 @@ class Grid
      *
      * @return $this
      */
-    public function disableCreateButton()
+    public function disableCreateButton(bool $disable = true)
     {
-        return $this->option('show_create_btn', false);
+        return $this->option('show_create_btn', !$disable);
     }
 
     /**
