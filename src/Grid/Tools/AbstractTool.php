@@ -13,7 +13,7 @@ abstract class AbstractTool implements Renderable
     protected $grid;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $disabled = false;
 
@@ -21,6 +21,7 @@ abstract class AbstractTool implements Renderable
      * Toggle this button.
      *
      * @param bool $disable
+     *
      * @return $this
      */
     public function disable(bool $disable = true)

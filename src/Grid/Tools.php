@@ -89,6 +89,7 @@ class Tools implements Renderable
             if ($tool instanceof FilterButton) {
                 return $tool->disable($disable);
             }
+
             return $tool;
         });
     }
@@ -104,6 +105,7 @@ class Tools implements Renderable
             if ($tool instanceof RefreshButton) {
                 return $tool->disable($disable);
             }
+
             return $tool;
         });
     }
@@ -119,6 +121,7 @@ class Tools implements Renderable
             if ($tool instanceof BatchActions) {
                 return $tool->disable($disable);
             }
+
             return $tool;
         });
     }
@@ -145,6 +148,7 @@ class Tools implements Renderable
                 if (!$tool->allowed()) {
                     return '';
                 }
+
                 return $tool->setGrid($this->grid)->render();
             }
 
