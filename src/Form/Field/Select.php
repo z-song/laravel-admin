@@ -61,7 +61,7 @@ class Select extends Field
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array) $options;
+            $this->options = (array)$options;
         }
 
         return $this;
@@ -119,6 +119,20 @@ class Select extends Field
         return $this;
     }
 
+    public function readonly()
+    {
+        $script = <<<EOT
+        $("form select").on("select2:opening", function (e) {
+    if($(this).attr('readonly') || $(this).is(':hidden')){
+        e.preventDefault();
+    }
+});
+EOT;
+        Admin::script($script);
+        $this->attribute('readonly');
+        return $this;
+    }
+
     private function buildJsJson(array $options, array $functions = [])
     {
         $functions = array_merge([
@@ -138,7 +152,7 @@ class Select extends Field
                     return  in_array($u, $functions) ? "{$u}: {$v}" : "{$u}: \"{$v}\"";
                 }
 
-                return "{$u}: ".json_encode($v);
+                return "{$u}: " . json_encode($v);
             }, array_keys($options), $options)
         );
     }
@@ -160,7 +174,7 @@ class Select extends Field
         );
         $configs = $this->buildJsJson($configs);
 
-        return $quoted ? '{'.$configs.'}' : $configs;
+        return $quoted ? '{' . $configs . '}' : $configs;
     }
 
     /**
@@ -186,6 +200,7 @@ class Select extends Field
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
+    if(this.value)
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
         config=window._config[".{$class}"];
@@ -311,7 +326,7 @@ EOT;
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters),
+            'url' => $url . '?' . http_build_query($parameters),
         ];
 
         $configs = $this->configs([
@@ -427,8 +442,8 @@ EOT;
      */
     public function render()
     {
-        Admin::js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/i18n/'.app()->getLocale().'.js');
-        $configs = str_replace("\n", '', $this->configs(
+        Admin::js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/i18n/' . app()->getLocale() . '.js');
+        $configs = str_replace("\n", "", $this->configs(
             [
                 'allowClear'  => true,
                 'placeholder' => [
@@ -460,7 +475,7 @@ EOT;
             'groups'  => $this->groups,
         ]);
 
-        $this->attribute('data-value', implode(',', (array) $this->value()));
+        $this->attribute('data-value', implode(',', (array)$this->value()));
 
         return parent::render();
     }
