@@ -15,14 +15,14 @@ if (!function_exists('array_key_attach_str')) {
                 return ["{$b}{$c}{$u}" => $v];
             }, array_keys($a), array_values($a))
         );
-    }
+    };
 }
 
 if (!function_exists('array_clean_merge')) {
     function array_clean_merge(array $a, $b)
     {
         return $b ? array_merge($a, call_user_func_array('array_merge', $b)) : $a;
-    }
+    };
 }
 
 if (!function_exists('array_key_clean_undot')) {
@@ -37,7 +37,7 @@ if (!function_exists('array_key_clean_undot')) {
         }
 
         return $a;
-    }
+    };
 }
 
 if (!function_exists('array_key_clean')) {
@@ -48,7 +48,7 @@ if (!function_exists('array_key_clean')) {
         }, array_keys($a), array_values($a))) : $a;
 
         return $a;
-    }
+    };
 }
 
 class Embeds extends Field
@@ -256,7 +256,7 @@ class Embeds extends Field
                     return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
                         $w = $field->label();
                         //Fix ResetInput Function! A Headache Implementation!
-                        $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
+                        $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
 
                         return ["{$v}:{$u}" => $w];
                     }, array_keys($availInput[$k][$col])));
@@ -265,7 +265,7 @@ class Embeds extends Field
                 //May Have Problem in Dealing with File Upload in Edit Mode
                 $w = $field->label();
                 //Fix ResetInput Function! A Headache Implementation!
-                $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
+                $w .= is_array($field->column()) ? '[' . explode(':', explode('.', $v)[2])[0] . ']' : '';
 
                 return [$v => $w];
             }, $newColumn);
@@ -476,7 +476,7 @@ class Embeds extends Field
             return json_decode($this->value, true);
         }
 
-        return (array) $this->value;
+        return (array)$this->value;
     }
 
     /**
@@ -518,6 +518,7 @@ class Embeds extends Field
 
         return $form;
     }
+
 
     /**
      * Render the form.
