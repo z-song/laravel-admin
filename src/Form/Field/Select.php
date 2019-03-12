@@ -96,6 +96,98 @@ class Select extends Field
         return $this;
     }
 
+    public function template(array $view)
+    {
+        $view = array_intersect_key($view, array_flip(['result', 'selection']));
+        if ($view) {
+            $this->config['escapeMarkup'] = 'function (markup) {return markup;}';
+            foreach ($view as $key => $val) {
+                $key = ucfirst(strtolower($key));
+                $func_key = "template{$key}";
+                $func_name = str_replace('.', '', "{$this->getElementClassSelector()}_{$key}");
+                $this->config[$func_key] = $func_name;
+                $script = implode("\n", [
+                    "{$func_name} = function(data) {",
+                    "\tif ( !data.id || data.loading) return data.text;",
+                    $val,
+                    '}',
+                ]);
+                Admin::script($script);
+            }
+        }
+
+        return $this;
+    }
+
+    public function readonly()
+    {
+        $script = <<<'EOT'
+        $("form select").on("select2:opening", function (e) {
+            if($(this).attr('readonly') || $(this).is(':hidden')){
+            e.preventDefault();
+            }
+        });
+        $(document).ready(function(){
+            $('select').each(function(){
+                if($(this).is('[readonly]')){
+                    $(this).closest('.form-group').find('span.select2-selection__choice__remove').first().remove();
+                    $(this).closest('.form-group').find('li.select2-search').first().remove();
+                    $(this).closest('.form-group').find('span.select2-selection__clear').first().remove();
+                }
+            });
+        });
+EOT;
+        Admin::script($script);
+        // $this->config('allowClear', false);
+        $this->attribute('readonly');
+
+        return $this;
+    }
+
+    private function buildJsJson(array $options, array $functions = [])
+    {
+        $functions = array_merge([
+            'ajax',
+            'escapeMarkup',
+            'templateResult',
+            'templateSelection',
+            'initSelection',
+            'sorter',
+            'tokenizer',
+        ], $functions);
+
+        return implode(
+            ",\n",
+            array_map(function ($u, $v) use ($functions) {
+                if (is_string($v)) {
+                    return  in_array($u, $functions) ? "{$u}: {$v}" : "{$u}: \"{$v}\"";
+                }
+
+                return "{$u}: ".json_encode($v);
+            }, array_keys($options), $options)
+        );
+    }
+
+    private function configs($default = [], $quoted = false)
+    {
+        $configs = array_merge(
+            [
+                'allowClear'  => true,
+                'language'    => app()->getLocale(),
+                'placeholder' => [
+                    'id'   => '',
+                    'text' => $this->label,
+                ],
+                'escapeMarkup' => 'function (markup) {return markup;}',
+            ],
+            $default,
+            $this->config
+        );
+        $configs = $this->buildJsJson($configs);
+
+        return $quoted ? '{'.$configs.'}' : $configs;
+    }
+
     /**
      * Load options for other select on change.
      *
@@ -119,15 +211,17 @@ class Select extends Field
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
+    if(this.value)
     $.get("$sourceUrl?q="+this.value, function (data) {
         target.find("option").remove();
-        $(target).select2({
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        }).trigger('change');
+        config=window._config[".{$class}"];
+        config.data=$.map(data, function (d) {
+            d.id = d.$idField;
+            d.text = d.$textField;
+            return d;
+        });
+        $(target).select2(config).trigger('change');
+
     });
 });
 EOT;
@@ -155,16 +249,17 @@ EOT;
 var fields = '$fieldsStr'.split('.');
 var urls = '$urlsStr'.split('^');
 
-var refreshOptions = function(url, target) {
+var refreshOptions = function(url, target, name) {
     $.get(url).then(function(data) {
         target.find("option").remove();
-        $(target).select2({
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        }).trigger('change');
+        config=window._config[name];
+        config.data=$.map(data, function (d) {
+            d.id = d.$idField;
+            d.text = d.$textField;
+            return d;
+        });
+        $(target).select2(config).trigger('change');
+
     });
 };
 
@@ -175,7 +270,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
 
     fields.forEach(function(field, index){
         var target = $(_this).closest('.fields-group').find('.' + fields[index]);
-        promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
+        promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target, name));
     });
 
     $.when(promises).then(function() {
@@ -200,7 +295,8 @@ EOT;
      */
     public function model($model, $idField = 'id', $textField = 'name')
     {
-        if (!class_exists($model)
+        if (
+            !class_exists($model)
             || !in_array(Model::class, class_parents($model))
         ) {
             throw new \InvalidArgumentException("[$model] must be a valid model class");
@@ -243,16 +339,14 @@ EOT;
         $ajaxOptions = [
             'url' => $url.'?'.http_build_query($parameters),
         ];
-        $configs = array_merge([
+
+        $configs = $this->configs([
             'allowClear'         => true,
             'placeholder'        => [
                 'id'        => '',
                 'text'      => trans('admin.choose'),
             ],
-        ], $this->config);
-
-        $configs = json_encode($configs);
-        $configs = substr($configs, 1, strlen($configs) - 2);
+        ]);
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
 
@@ -291,14 +385,11 @@ EOT;
      */
     public function ajax($url, $idField = 'id', $textField = 'text')
     {
-        $configs = array_merge([
+        $configs = $this->configs([
             'allowClear'         => true,
             'placeholder'        => $this->label,
             'minimumInputLength' => 1,
-        ], $this->config);
-
-        $configs = json_encode($configs);
-        $configs = substr($configs, 1, strlen($configs) - 2);
+        ]);
 
         $this->script = <<<EOT
 
@@ -360,37 +451,24 @@ EOT;
     /**
      * {@inheritdoc}
      */
-    public function readOnly()
-    {
-        $script = <<<EOT
-$("{$this->getElementClassSelector()}").on("select2:opening", function (e) {
-    if($(this).attr('readonly') || $(this).is(':hidden')){
-        e.preventDefault();
-    }
-});
-EOT;
-        Admin::script($script);
-
-        return parent::readOnly();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function render()
     {
-        $configs = array_merge([
-            'allowClear'  => true,
-            'placeholder' => [
-                'id'   => '',
-                'text' => $this->label,
+        Admin::js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/i18n/'.app()->getLocale().'.js');
+        $configs = str_replace("\n", '', $this->configs(
+            [
+                'allowClear'  => true,
+                'placeholder' => [
+                    'id'   => '',
+                    'text' => $this->label,
+                ],
             ],
-        ], $this->config);
-
-        $configs = json_encode($configs);
+            true
+        ));
+        Admin::script("if(!window.hasOwnProperty('_config')) window._config=new Object();");
+        Admin::script("window._config['{$this->getElementClassSelector()}']=eval('({$configs})');\n");
 
         if (empty($this->script)) {
-            $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
+            $this->script = "$(\"{$this->getElementClassSelector()}\").select2({$configs});";
         }
 
         if ($this->options instanceof \Closure) {
