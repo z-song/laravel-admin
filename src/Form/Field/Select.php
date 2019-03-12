@@ -61,7 +61,7 @@ class Select extends Field
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array)$options;
+            $this->options = (array) $options;
         }
 
         return $this;
@@ -242,7 +242,7 @@ EOT;
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url . '?' . http_build_query($parameters),
+            'url' => $url.'?'.http_build_query($parameters),
         ];
         $configs = array_merge([
             'allowClear'         => true,
@@ -365,7 +365,7 @@ EOT;
     {
         //移除特定字段名称,增加MultipleSelect的修订
         //没有特定字段名可以使多个readonly的JS代码片段被Admin::script的array_unique精简代码
-        $script = <<<EOT
+        $script = <<<'EOT'
 $("form select").on("select2:opening", function (e) {
     if($(this).attr('readonly') || $(this).is(':hidden')){
     e.preventDefault();
@@ -385,7 +385,6 @@ EOT;
 
         return parent::readOnly();
     }
-
 
     /**
      * {@inheritdoc}
@@ -421,7 +420,7 @@ EOT;
             'groups'  => $this->groups,
         ]);
 
-        $this->attribute('data-value', implode(',', (array)$this->value()));
+        $this->attribute('data-value', implode(',', (array) $this->value()));
 
         return parent::render();
     }
