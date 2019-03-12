@@ -10,54 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Validator;
 
-<<<<<<< HEAD
-if (!function_exists('Encore\Admin\Form\Field\array_key_attach_str')) {
-    function array_key_attach_str(array $a, string $b, string $c = '.')
-    {
-        return call_user_func_array(
-            'array_merge',
-            array_map(function ($u, $v) use ($b, $c) {
-                return ["{$b}{$c}{$u}" => $v];
-            }, array_keys($a), array_values($a))
-        );
-    }
-}
-
-if (!function_exists('Encore\Admin\Form\Field\array_clean_merge')) {
-    function array_clean_merge(array $a, $b)
-    {
-        return $b ? array_merge($a, call_user_func_array('array_merge', $b)) : $a;
-    }
-}
-
-if (!function_exists('Encore\Admin\Form\Field\array_key_clean_undot')) {
-    function array_key_clean_undot(array $a)
-    {
-        $keys = preg_grep('/[\.\:]/', array_keys($a));
-        if ($keys) {
-            foreach ($keys as $key) {
-                array_set($a, str_replace(':', '', $key), $a[$key]);
-                unset($a[$key]);
-            }
-        }
-
-        return $a;
-    }
-}
-
-if (!function_exists('Encore\Admin\Form\Field\array_key_clean')) {
-    function array_key_clean(array $a)
-    {
-        $a = count($a) ? call_user_func_array('array_merge', array_map(function ($k, $v) {
-            return [str_replace(':', '', $k) => $v];
-        }, array_keys($a), array_values($a))) : $a;
-
-        return $a;
-    }
-}
-
-=======
->>>>>>> parent of 1d296a2e... Initial Commit
 /**
  * Class HasMany.
  */
@@ -188,24 +140,6 @@ class HasMany extends Field
         $newRules = [];
         $newInput = [];
 
-<<<<<<< HEAD
-                    return [$v => $availInput[$k][$col]];
-                }, $newColumn);
-                $newInputs = array_clean_merge($newInputs, $newInput);
-
-                $newAttributes = array_map(function ($v) use ($field, $availInput) {
-                    list($r, $k, $c) = explode('.', $v);
-                    //Fix ResetInput Function! A Headache Implementation!
-                    $col = explode(':', $c)[0];
-                    if (array_key_exists($col, $availInput[$k]) && is_array($availInput[$k][$col])) {
-                        return call_user_func_array('array_merge', array_map(function ($u) use ($v, $field) {
-                            $w = $field->label();
-                            //Fix ResetInput Function! A Headache Implementation!
-                            $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
-
-                            return ["{$v}:{$u}" => $w];
-                        }, array_keys($availInput[$k][$col])));
-=======
         foreach ($rules as $column => $rule) {
             foreach (array_keys($input[$this->column]) as $key) {
                 $newRules["{$this->column}.$key.$column"] = $rule;
@@ -213,21 +147,14 @@ class HasMany extends Field
                     is_array($input[$this->column][$key][$column])) {
                     foreach ($input[$this->column][$key][$column] as $vkey => $value) {
                         $newInput["{$this->column}.$key.{$column}$vkey"] = $value;
->>>>>>> parent of 1d296a2e... Initial Commit
                     }
                 }
             }
         }
 
-<<<<<<< HEAD
-                    $w = $field->label();
-                    //Fix ResetInput Function! A Headache Implementation!
-                    $w .= is_array($field->column()) ? '['.explode(':', explode('.', $v)[2])[0].']' : '';
-=======
         if (empty($newInput)) {
             $newInput = $input;
         }
->>>>>>> parent of 1d296a2e... Initial Commit
 
         return Validator::make($newInput, $newRules, $this->validationMessages, $attributes);
     }
@@ -300,8 +227,6 @@ class HasMany extends Field
          */
         foreach ($input[$this->column] as $index => $set) {
 
-<<<<<<< HEAD
-=======
             /*
              * foreach the field set to find the corresponding $column
              */
@@ -334,7 +259,6 @@ class HasMany extends Field
         }
     }
 
->>>>>>> parent of 1d296a2e... Initial Commit
     /**
      * Prepare input data for insert or update.
      *
