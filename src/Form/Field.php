@@ -1070,6 +1070,18 @@ class Field implements Renderable
     }
 
     /**
+     * Set view of current field.
+     *
+     * @return string
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
+
+        return $this;
+    }
+
+    /**
      * Get script of current field.
      *
      * @return string
@@ -1077,6 +1089,18 @@ class Field implements Renderable
     public function getScript()
     {
         return $this->script;
+    }
+
+    /**
+     * Set script of current field.
+     *
+     * @return self
+     */
+    public function setScript($script)
+    {
+        $this->script = $script;
+
+        return $this;
     }
 
     /**

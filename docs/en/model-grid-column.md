@@ -166,7 +166,7 @@ Add following code to `app/Admin/bootstrap.php`:
 use Encore\Admin\Grid\Column;
 
 Column::extend('color', function ($value, $color) {
-    return "<span style='color: $color'>$value</span>"
+    return "<span style='color: $color'>$value</span>";
 });
 ```
 Use this extension in `model-grid`:
@@ -176,7 +176,7 @@ $grid->title()->color('#ccc');
 
 ```
 
-If the column display logic is more complex, can implements with a extension class.
+If the column display logic is more complex, you can implement with an extension class.
 
 Extension class `app/Admin/Extensions/Popover.php`:
 ```php
@@ -210,7 +210,7 @@ EOT;
     }
 }
 ```
-And then redister extension in `app/Admin/bootstrap.php`：
+And then register the extension in `app/Admin/bootstrap.php`：
 ```php
 use Encore\Admin\Grid\Column;
 use App\Admin\Extensions\Popover;
