@@ -184,6 +184,17 @@ EOT;
      */
     protected function renderDelete()
     {
+        $this->setupDeleteScript();
+
+        return <<<EOT
+<a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
+    <i class="fa fa-trash"></i>
+</a>
+EOT;
+    }
+
+    protected function setupDeleteScript()
+    {
         $deleteConfirm = trans('admin.delete_confirm');
         $confirm = trans('admin.confirm');
         $cancel = trans('admin.cancel');
@@ -234,11 +245,5 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
 SCRIPT;
 
         Admin::script($script);
-
-        return <<<EOT
-<a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
-    <i class="fa fa-trash"></i>
-</a>
-EOT;
     }
 }

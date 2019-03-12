@@ -143,6 +143,13 @@ class Grid
     protected $actionsCallback;
 
     /**
+     * Actions column display class.
+     *
+     * @var string
+     */
+    protected $actionsClass = Displayers\Actions::class;
+
+    /**
      * Options for grid.
      *
      * @var array
@@ -511,13 +518,19 @@ class Grid
     /**
      * Set grid action callback.
      *
-     * @param Closure $callback
+     * @param Closure|string $actions
      *
      * @return $this
      */
-    public function actions(Closure $callback)
+    public function actions($actions)
     {
-        $this->actionsCallback = $callback;
+        if ($actions instanceof Closure) {
+            $this->actionsCallback = $actions;
+        }
+
+        if (is_string($actions) && is_subclass_of($actions, Displayers\Actions::class)) {
+            $this->actionsClass = $actions;
+        }
 
         return $this;
     }
@@ -534,7 +547,7 @@ class Grid
         }
 
         $this->addColumn('__actions__', trans('admin.action'))
-            ->displayUsing(Displayers\Actions::class, [$this->actionsCallback]);
+            ->displayUsing($this->actionsClass, [$this->actionsCallback]);
     }
 
     /**
