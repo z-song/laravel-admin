@@ -360,6 +360,23 @@ EOT;
     /**
      * {@inheritdoc}
      */
+    public function readOnly()
+    {
+        $script = <<<EOT
+$("{$this->getElementClassSelector()}").on("select2:opening", function (e) {
+    if($(this).attr('readonly') || $(this).is(':hidden')){
+        e.preventDefault();
+    }
+});
+EOT;
+        Admin::script($script);
+
+        return parent::readOnly();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function render()
     {
         $configs = array_merge([

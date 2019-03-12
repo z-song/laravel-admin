@@ -5,13 +5,14 @@
     </div>
     @endif
 
-    @if ( $grid->allowTools() || $grid->allowExport() || $grid->allowCreation() )
+    @if ( $grid->showTools() || $grid->showExportBtn() || $grid->showCreateBtn() )
     <div class="box-header with-border">
         <div class="pull-right">
+            {!! $grid->renderColumnSelector() !!}
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}
         </div>
-        @if ( $grid->allowTools() )
+        @if ( $grid->showTools() )
         <span>
             {!! $grid->renderHeaderTools() !!}
         </span>
@@ -21,12 +22,14 @@
 
     {!! $grid->renderFilter() !!}
 
+    {!! $grid->renderHeader() !!}
+
     <!-- /.box-header -->
     <div class="box-body table-responsive no-padding">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    @foreach($grid->columns() as $column)
+                    @foreach($grid->visibleColumns() as $column)
                     <th>{{$column->getLabel()}}{!! $column->sorter() !!}</th>
                     @endforeach
                 </tr>
@@ -35,7 +38,7 @@
             <tbody>
                 @foreach($grid->rows() as $row)
                 <tr {!! $row->getRowAttributes() !!}>
-                    @foreach($grid->columnNames as $name)
+                    @foreach($grid->visibleColumnNames() as $name)
                     <td {!! $row->getColumnAttributes($name) !!}>
                         {!! $row->column($name) !!}
                     </td>

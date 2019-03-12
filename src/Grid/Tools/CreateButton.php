@@ -28,7 +28,7 @@ class CreateButton extends AbstractTool
      */
     public function render()
     {
-        if (!$this->grid->allowCreation()) {
+        if (!$this->grid->showCreateBtn()) {
             return '';
         }
 

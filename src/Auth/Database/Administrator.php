@@ -45,6 +45,10 @@ class Administrator extends Model implements AuthenticatableContract
      */
     public function getAvatarAttribute($avatar)
     {
+        if (url()->isValidUrl($avatar)) {
+            return $avatar;
+        }
+
         $disk = config('admin.upload.disk');
 
         if ($avatar && array_key_exists($disk, config('filesystems.disks'))) {
