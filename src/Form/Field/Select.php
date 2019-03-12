@@ -200,7 +200,8 @@ EOT;
      */
     public function model($model, $idField = 'id', $textField = 'name')
     {
-        if (!class_exists($model)
+        if (
+            !class_exists($model)
             || !in_array(Model::class, class_parents($model))
         ) {
             throw new \InvalidArgumentException("[$model] must be a valid model class");
@@ -362,11 +363,22 @@ EOT;
      */
     public function readOnly()
     {
-        $script = <<<EOT
-$("{$this->getElementClassSelector()}").on("select2:opening", function (e) {
+        //移除特定字段名称,增加MultipleSelect的修订
+        //没有特定字段名可以使多个readonly的JS代码片段被Admin::script的array_unique精简代码
+        $script = <<<'EOT'
+$("form select").on("select2:opening", function (e) {
     if($(this).attr('readonly') || $(this).is(':hidden')){
-        e.preventDefault();
+    e.preventDefault();
     }
+});
+$(document).ready(function(){
+    $('select').each(function(){
+        if($(this).is('[readonly]')){
+            $(this).closest('.form-group').find('span.select2-selection__choice__remove').first().remove();
+            $(this).closest('.form-group').find('li.select2-search').first().remove();
+            $(this).closest('.form-group').find('span.select2-selection__clear').first().remove();
+        }
+    });
 });
 EOT;
         Admin::script($script);
