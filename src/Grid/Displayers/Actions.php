@@ -57,6 +57,16 @@ class Actions extends AbstractDisplayer
     }
 
     /**
+     * Get route key name of current row.
+     *
+     * @return mixed
+     */
+    public function getRouteKey()
+    {
+        return $this->row->{$this->row->getRouteKeyName()};
+    }
+    
+    /**
      * Disable view action.
      *
      * @return $this
@@ -140,7 +150,7 @@ class Actions extends AbstractDisplayer
         $actions = $this->prepends;
 
         foreach ($this->actions as $action) {
-            $method = 'render'.ucfirst($action);
+            $method = 'render' . ucfirst($action);
             array_push($actions, $this->{$method}());
         }
 
@@ -157,7 +167,7 @@ class Actions extends AbstractDisplayer
     protected function renderView()
     {
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}">
+<a href="{$this->getResource()}/{$this->getRouteKey()}">
     <i class="fa fa-eye"></i>
 </a>
 EOT;
@@ -171,7 +181,7 @@ EOT;
     protected function renderEdit()
     {
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}/edit">
+<a href="{$this->getResource()}/{$this->getRouteKey()}/edit">
     <i class="fa fa-edit"></i>
 </a>
 EOT;
