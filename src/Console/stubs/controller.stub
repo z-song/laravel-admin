@@ -55,7 +55,7 @@ class DummyClass extends Controller
         return $content
             ->header('Edit')
             ->description('description')
-            ->body($this->form()->edit($id));
+            ->body($this->form($id)->edit($id));
     }
 
     /**
@@ -106,7 +106,7 @@ DummyShow
      *
      * @return Form
      */
-    protected function form()
+    protected function form($id=null)
     {
         $form = new Form(new DummyModel);
 
