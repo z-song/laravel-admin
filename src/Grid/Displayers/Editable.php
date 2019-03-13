@@ -171,6 +171,8 @@ class Editable extends AbstractDisplayer
 
         Admin::script("$('.$class').editable($options);");
 
+        $this->value = htmlentities($this->value);
+
         $attributes = [
             'href'       => '#',
             'class'      => "$class",
