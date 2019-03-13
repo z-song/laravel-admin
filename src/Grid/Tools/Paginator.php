@@ -86,7 +86,7 @@ class Paginator extends AbstractTool
      */
     public function render()
     {
-        if (!$this->grid->usePagination()) {
+        if (!$this->grid->showPagination()) {
             return '';
         }
 
