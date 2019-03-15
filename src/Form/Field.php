@@ -660,8 +660,8 @@ class Field implements Renderable
      */
     public function setElementClass($class)
     {
+        array_push($class,'key'.uniqid());
         $this->elementClass = (array) $class;
-
         return $this;
     }
 
