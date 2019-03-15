@@ -45,6 +45,13 @@ class Grid
     protected $rows;
 
     /**
+     * Class of the grid action column.
+     *
+     * @var Encore\Admin\Grid\Displayers\Actions
+     */
+    protected $actionsClass = Displayers\Actions::class;
+
+    /**
      * Rows callable fucntion.
      *
      * @var \Closure
@@ -143,13 +150,6 @@ class Grid
     protected $actionsCallback;
 
     /**
-     * Actions column display class.
-     *
-     * @var string
-     */
-    protected $actionsClass = Displayers\Actions::class;
-
-    /**
      * Options for grid.
      *
      * @var array
@@ -221,6 +221,16 @@ class Grid
     public function setupTools()
     {
         $this->tools = new Tools($this);
+    }
+
+    /**
+     * Setup grid actions column class.
+     *
+     * @return void
+     */
+    public function setActions($class)
+    {
+        $this->actionsClass = $class;
     }
 
     /**
@@ -320,7 +330,7 @@ class Grid
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
 
-            $name = snake_case($relationName).'.'.$relationColumn;
+            $name = snake_case($relationName) . '.' . $relationColumn;
         }
 
         $column = $this->addColumn($name, $label);
@@ -518,19 +528,13 @@ class Grid
     /**
      * Set grid action callback.
      *
-     * @param Closure|string $actions
+     * @param Closure $callback
      *
      * @return $this
      */
-    public function actions($actions)
+    public function actions(Closure $callback)
     {
-        if ($actions instanceof Closure) {
-            $this->actionsCallback = $actions;
-        }
-
-        if (is_string($actions) && is_subclass_of($actions, Displayers\Actions::class)) {
-            $this->actionsClass = $actions;
-        }
+        $this->actionsCallback = $callback;
 
         return $this;
     }
@@ -778,7 +782,7 @@ class Grid
             $input = array_merge($input, $constraints);
         }
 
-        return $this->resource().'?'.http_build_query($input);
+        return $this->resource() . '?' . http_build_query($input);
     }
 
     /**
@@ -794,9 +798,10 @@ class Grid
             $queryString = http_build_query($constraints);
         }
 
-        return sprintf('%s/create%s',
+        return sprintf(
+            '%s/create%s',
             $this->resource(),
-            $queryString ? ('?'.$queryString) : ''
+            $queryString ? ('?' . $queryString) : ''
         );
     }
 
@@ -1013,7 +1018,8 @@ class Grid
             return false;
         }
 
-        if ($relation instanceof Relations\HasOne ||
+        if (
+            $relation instanceof Relations\HasOne ||
             $relation instanceof Relations\BelongsTo ||
             $relation instanceof Relations\MorphOne
         ) {
@@ -1022,7 +1028,8 @@ class Grid
             return $this->addColumn($method, $label)->setRelation(snake_case($method));
         }
 
-        if ($relation instanceof Relations\HasMany
+        if (
+            $relation instanceof Relations\HasMany
             || $relation instanceof Relations\BelongsToMany
             || $relation instanceof Relations\MorphToMany
         ) {
