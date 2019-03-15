@@ -330,7 +330,7 @@ class Grid
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
 
-            $name = snake_case($relationName) . '.' . $relationColumn;
+            $name = snake_case($relationName).'.'.$relationColumn;
         }
 
         $column = $this->addColumn($name, $label);
@@ -782,7 +782,7 @@ class Grid
             $input = array_merge($input, $constraints);
         }
 
-        return $this->resource() . '?' . http_build_query($input);
+        return $this->resource().'?'.http_build_query($input);
     }
 
     /**
@@ -801,7 +801,7 @@ class Grid
         return sprintf(
             '%s/create%s',
             $this->resource(),
-            $queryString ? ('?' . $queryString) : ''
+            $queryString ? ('?'.$queryString) : ''
         );
     }
 
