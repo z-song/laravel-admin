@@ -49,7 +49,7 @@ class Grid
      *
      * @var Encore\Admin\Grid\Displayers\Actions
      */
-    protected $actionsClass = Displayers\Actions::class;
+    protected static $actionsClass = Displayers\Actions::class;
 
     /**
      * Rows callable fucntion.
@@ -228,9 +228,9 @@ class Grid
      *
      * @return void
      */
-    public function setActions($class)
+    public static function setActions($class)
     {
-        $this->actionsClass = $class;
+        self::$actionsClass = $class;
     }
 
     /**
@@ -551,7 +551,7 @@ class Grid
         }
 
         $this->addColumn('__actions__', trans('admin.action'))
-            ->displayUsing($this->actionsClass, [$this->actionsCallback]);
+            ->displayUsing(self::$actionsClass, [$this->actionsCallback]);
     }
 
     /**
