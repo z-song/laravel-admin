@@ -15,6 +15,8 @@ class Bootstrap
 
         Grid::registerColumnDisplayer();
 
+        Grid\Filter::registerFilters();
+
         if (file_exists($bootstrap = admin_path('bootstrap.php'))) {
             require $bootstrap;
         }
