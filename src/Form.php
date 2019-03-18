@@ -662,13 +662,13 @@ class Form implements Renderable
     {
         if (request('after-save') == 1) {
             // continue editing
-            $url = rtrim($resourcesPath, '/')."/{$key}/edit";
+            $url = rtrim($resourcesPath, '/') . "/{$key}/edit";
         } elseif (request('after-save') == 2) {
             // continue creating
-            $url = rtrim($resourcesPath, '/').'/create';
+            $url = rtrim($resourcesPath, '/') . '/create';
         } elseif (request('after-save') == 3) {
             // view resource
-            $url = rtrim($resourcesPath, '/')."/{$key}";
+            $url = rtrim($resourcesPath, '/') . "/{$key}";
         } else {
             $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
         }
@@ -802,7 +802,7 @@ class Form implements Renderable
                     $related->save();
                     break;
                 case $relation instanceof Relations\BelongsTo:
-                case $relation instanceof Relations\MorphTo:                    
+                case $relation instanceof Relations\MorphTo:
 
                     $parent = $this->model->$name;
 
@@ -913,9 +913,10 @@ class Form implements Renderable
      */
     protected function invalidColumn($columns, $oneToOneRelation = false)
     {
-        foreach ((array) $columns as $column) {
-            if ((!$oneToOneRelation && Str::contains($column, '.')) ||
-                ($oneToOneRelation && !Str::contains($column, '.'))) {
+        foreach ((array)$columns as $column) {
+            if (
+                (!$oneToOneRelation && Str::contains($column, '.')) || ($oneToOneRelation && !Str::contains($column, '.'))
+            ) {
                 return true;
             }
         }
@@ -932,9 +933,10 @@ class Form implements Renderable
      */
     protected function prepareInsert($inserts)
     {
-        if ($this->isHasOneRelation($inserts)) {
-            $inserts = array_dot($inserts);
-        }
+        // Relationship would handled by $this->relations
+        // if ($this->isHasOneRelation($inserts)) {
+        //     $inserts = array_dot($inserts);
+        // }
 
         foreach ($inserts as $column => $value) {
             if (is_null($field = $this->getFieldByColumn($column))) {
@@ -1033,7 +1035,7 @@ class Form implements Renderable
      */
     public function ignore($fields)
     {
-        $this->ignored = array_merge($this->ignored, (array) $fields);
+        $this->ignored = array_merge($this->ignored, (array)$fields);
 
         return $this;
     }
@@ -1090,7 +1092,7 @@ class Form implements Renderable
      */
     protected function setFieldOriginalValue()
     {
-//        static::doNotSnakeAttributes($this->model);
+        //        static::doNotSnakeAttributes($this->model);
 
         $values = $this->model->toArray();
 
@@ -1120,7 +1122,7 @@ class Form implements Renderable
 
         $this->callEditing();
 
-//        static::doNotSnakeAttributes($this->model);
+        //        static::doNotSnakeAttributes($this->model);
 
         $data = $this->model->toArray();
 
@@ -1208,12 +1210,14 @@ class Form implements Renderable
             if (str_contains($column, '.')) {
                 list($relation) = explode('.', $column);
 
-                if (method_exists($this->model, $relation) &&
+                if (
+                    method_exists($this->model, $relation) &&
                     $this->model->$relation() instanceof Relations\Relation
                 ) {
                     $relations[] = $relation;
                 }
-            } elseif (method_exists($this->model, $column) &&
+            } elseif (
+                method_exists($this->model, $column) &&
                 !method_exists(Model::class, $column)
             ) {
                 $relations[] = $column;
