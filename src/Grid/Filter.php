@@ -366,7 +366,7 @@ class Filter implements Renderable
         $filter->setParent($this);
 
         if ($this->thisFilterLayoutOnly) {
-            $this->thisFilterLayoutOnly      = false;
+            $this->thisFilterLayoutOnly = false;
             $this->layoutOnlyFilterColumns[] = $filter->getColumn();
         }
 
@@ -449,7 +449,7 @@ class Filter implements Renderable
     /**
      * Add a new layout column.
      *
-     * @param int $width
+     * @param int      $width
      * @param \Closure $closure
      *
      * @return $this
@@ -494,7 +494,7 @@ class Filter implements Renderable
 
     /**
      * @param callable $callback
-     * @param int $count
+     * @param int      $count
      *
      * @return bool
      */
@@ -581,17 +581,17 @@ class Filter implements Renderable
             $keys = $keys->toArray();
         }
 
-        $keys = (array)$keys;
+        $keys = (array) $keys;
 
         $request = request();
 
         $query = $request->query();
         array_forget($query, $keys);
 
-        $question = $request->getBaseUrl() . $request->getPathInfo() == '/' ? '/?' : '?';
+        $question = $request->getBaseUrl().$request->getPathInfo() == '/' ? '/?' : '?';
 
         return count($request->query()) > 0
-            ? $request->url() . $question . http_build_query($query)
+            ? $request->url().$question.http_build_query($query)
             : $request->fullUrl();
     }
 
@@ -602,7 +602,7 @@ class Filter implements Renderable
     public static function extend($name, $filterClass)
     {
         if (!is_subclass_of($filterClass, AbstractFilter::class)) {
-            throw new \InvalidArgumentException("The class [$filterClass] must be a type of " . AbstractFilter::class . '.');
+            throw new \InvalidArgumentException("The class [$filterClass] must be a type of ".AbstractFilter::class.'.');
         }
 
         static::$supports[$name] = $filterClass;
@@ -610,7 +610,7 @@ class Filter implements Renderable
 
     /**
      * @param string $abstract
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return AbstractFilter
      */
@@ -654,7 +654,7 @@ class Filter implements Renderable
      * Generate a filter object and add to grid.
      *
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return AbstractFilter|$this
      */
