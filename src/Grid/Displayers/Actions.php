@@ -65,7 +65,7 @@ class Actions extends AbstractDisplayer
     {
         return $this->row->{$this->row->getRouteKeyName()};
     }
-    
+
     /**
      * Disable view action.
      *
@@ -150,7 +150,7 @@ class Actions extends AbstractDisplayer
         $actions = $this->prepends;
 
         foreach ($this->actions as $action) {
-            $method = 'render' . ucfirst($action);
+            $method = 'render'.ucfirst($action);
             array_push($actions, $this->{$method}());
         }
 
