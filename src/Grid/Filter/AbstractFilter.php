@@ -238,7 +238,7 @@ abstract class AbstractFilter
     /**
      * Select filter.
      *
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return Select
      */
