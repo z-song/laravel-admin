@@ -57,7 +57,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Validate is the login request legal
+     * Validate is the login request legal.
      *
      * @return array
      */
