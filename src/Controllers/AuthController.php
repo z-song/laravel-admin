@@ -41,7 +41,7 @@ class AuthController extends Controller
         $remember = $request->get('remember', false);
 
         /** @var \Illuminate\Validation\Validator $validator */
-        $validator = Validator::make($request->all(), $this->validateLogin());
+        $validator = $this->validateLogin($request);
 
         if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
@@ -59,14 +59,16 @@ class AuthController extends Controller
     /**
      * Validate is the login request legal.
      *
-     * @return array
+     * @param Request $request
+     *
+     * @return \Illuminate\Validation\Validator
      */
-    protected function validateLogin()
+    protected function validateLogin(Request $request)
     {
-        return [
+        return Validator::make($request->all(), [
             $this->username()   => 'required',
             'password'          => 'required',
-        ];
+        ]);
     }
 
     /**
