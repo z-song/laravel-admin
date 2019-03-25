@@ -175,9 +175,11 @@ class Grid
     protected $footer;
 
     /**
-     * @var Closure
+     * Initialization closure array.
+     *
+     * @var []Closure
      */
-    protected static $initCallback;
+    protected static $initCallbacks = [];
 
     /**
      * Create a new grid instance.
@@ -200,9 +202,7 @@ class Grid
 
         $this->handleExportRequest();
 
-        if (static::$initCallback instanceof Closure) {
-            call_user_func(static::$initCallback, $this);
-        }
+        $this->callInitCallbacks();
     }
 
     /**
@@ -212,7 +212,21 @@ class Grid
      */
     public static function init(Closure $callback = null)
     {
-        static::$initCallback = $callback;
+        static::$initCallbacks[] = $callback;
+    }
+
+    /**
+     * Call the initialization closure array in sequence.
+     */
+    protected function callInitCallbacks()
+    {
+        if (empty(static::$initCallbacks)) {
+            return;
+        }
+
+        foreach (static::$initCallbacks as $callback) {
+            call_user_func($callback, $this);
+        }
     }
 
     /**
