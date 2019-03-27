@@ -200,7 +200,6 @@ class Field implements Renderable
     public function image($server = '', $width = 200, $height = 200)
     {
         return $this->unescape()->as(function ($images) use ($server, $width, $height) {
-
             return collect($images)->map(function ($path) use ($server, $width, $height) {
                 if (empty($path)) {
                     return '';
@@ -209,7 +208,7 @@ class Field implements Renderable
                 if (url()->isValidUrl($path)) {
                     $src = $path;
                 } elseif ($server) {
-                    $src = $server . $path;
+                    $src = $server.$path;
                 } else {
                     $disk = config('admin.upload.disk');
 
