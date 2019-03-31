@@ -128,6 +128,15 @@ return [
 
         // Add "remember me" to login form
         'remember' => true,
+
+        // Redirect to the specified URI when user is not authorized.
+        'redirect_to' => 'auth/login',
+
+        // The URIs that should be excluded from authorization.
+        'excepts' => [
+            'auth/login',
+            'auth/logout',
+        ],
     ],
 
     /*

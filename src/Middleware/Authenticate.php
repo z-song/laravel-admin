@@ -12,14 +12,16 @@ class Authenticate
      * Handle an incoming request.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param \Closure $next
      *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
+        $redirectTo = admin_base_path(config('admin.auth.redirect_to', 'auth/login'));
+
         if (Auth::guard('admin')->guest() && !$this->shouldPassThrough($request)) {
-            return redirect()->guest(admin_base_path('auth/login'));
+            return redirect()->guest($redirectTo);
         }
 
         return $next($request);
@@ -34,21 +36,19 @@ class Authenticate
      */
     protected function shouldPassThrough($request)
     {
-        $excepts = [
-            admin_base_path('auth/login'),
-            admin_base_path('auth/logout'),
-        ];
+        $excepts = config('admin.auth.excepts', [
+            'auth/login',
+            'auth/logout',
+        ]);
 
-        foreach ($excepts as $except) {
-            if ($except !== '/') {
-                $except = trim($except, '/');
-            }
+        return collect($excepts)
+            ->map('admin_base_path')
+            ->contains(function ($except) use ($request) {
+                if ($except !== '/') {
+                    $except = trim($except, '/');
+                }
 
-            if ($request->is($except)) {
-                return true;
-            }
-        }
-
-        return false;
+                return $request->is($except);
+            });
     }
 }
