@@ -162,6 +162,7 @@ class Grid
         'show_actions'      => true,
         'show_row_selector' => true,
         'show_create_btn'   => true,
+        'show_column_selector'   => true,
     ];
 
     /**
@@ -894,6 +895,25 @@ class Grid
     public function renderCreateButton()
     {
         return (new Tools\CreateButton($this))->render();
+    }
+
+    /**
+     * Remove column selector on grid.
+     *
+     * @param bool $disable
+     * @return Grid|mixed
+     */
+    public function disableColumnSelector(bool $disable = true)
+    {
+        return $this->option('show_column_selector', !$disable);
+    }
+
+    /**
+     * @return bool
+     */
+    public function showColumnSelector()
+    {
+        return $this->option('show_column_selector');
     }
 
     /**
