@@ -53,7 +53,7 @@ class CsvExporter extends AbstractExporter
      */
     public function getHeaderRowFromRecords(Collection $records): array
     {
-        $titles = collect(array_dot($records->first()->toArray()))->keys()->map(
+        $titles = collect(array_dot($records->first()->getAttributes()))->keys()->map(
             function ($key) {
                 $key = str_replace('.', ' ', $key);
 
