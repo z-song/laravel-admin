@@ -159,11 +159,7 @@ class MakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        $directory = config('admin.directory');
-
-        $namespace = ucfirst(basename($directory));
-
-        return $rootNamespace."\\$namespace\Controllers";
+        return config('admin.route.namespace');
     }
 
     /**

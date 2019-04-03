@@ -143,18 +143,26 @@ class Grid
     protected $actionsCallback;
 
     /**
+     * Actions column display class.
+     *
+     * @var string
+     */
+    protected $actionsClass = Displayers\Actions::class;
+
+    /**
      * Options for grid.
      *
      * @var array
      */
     protected $options = [
-        'show_pagination'   => true,
-        'show_tools'        => true,
-        'show_filter'       => true,
-        'show_exporter'     => true,
-        'show_actions'      => true,
-        'show_row_selector' => true,
-        'show_create_btn'   => true,
+        'show_pagination'        => true,
+        'show_tools'             => true,
+        'show_filter'            => true,
+        'show_exporter'          => true,
+        'show_actions'           => true,
+        'show_row_selector'      => true,
+        'show_create_btn'        => true,
+        'show_column_selector'   => true,
     ];
 
     /**
@@ -168,9 +176,11 @@ class Grid
     protected $footer;
 
     /**
-     * @var Closure
+     * Initialization closure array.
+     *
+     * @var []Closure
      */
-    protected static $initCallback;
+    protected static $initCallbacks = [];
 
     /**
      * Create a new grid instance.
@@ -193,9 +203,7 @@ class Grid
 
         $this->handleExportRequest();
 
-        if (static::$initCallback instanceof Closure) {
-            call_user_func(static::$initCallback, $this);
-        }
+        $this->callInitCallbacks();
     }
 
     /**
@@ -205,7 +213,21 @@ class Grid
      */
     public static function init(Closure $callback = null)
     {
-        static::$initCallback = $callback;
+        static::$initCallbacks[] = $callback;
+    }
+
+    /**
+     * Call the initialization closure array in sequence.
+     */
+    protected function callInitCallbacks()
+    {
+        if (empty(static::$initCallbacks)) {
+            return;
+        }
+
+        foreach (static::$initCallbacks as $callback) {
+            call_user_func($callback, $this);
+        }
     }
 
     /**
@@ -511,13 +533,19 @@ class Grid
     /**
      * Set grid action callback.
      *
-     * @param Closure $callback
+     * @param Closure|string $actions
      *
      * @return $this
      */
-    public function actions(Closure $callback)
+    public function actions($actions)
     {
-        $this->actionsCallback = $callback;
+        if ($actions instanceof Closure) {
+            $this->actionsCallback = $actions;
+        }
+
+        if (is_string($actions) && is_subclass_of($actions, Displayers\Actions::class)) {
+            $this->actionsClass = $actions;
+        }
 
         return $this;
     }
@@ -534,7 +562,7 @@ class Grid
         }
 
         $this->addColumn('__actions__', trans('admin.action'))
-            ->displayUsing(Displayers\Actions::class, [$this->actionsCallback]);
+            ->displayUsing($this->actionsClass, [$this->actionsCallback]);
     }
 
     /**
@@ -867,6 +895,26 @@ class Grid
     public function renderCreateButton()
     {
         return (new Tools\CreateButton($this))->render();
+    }
+
+    /**
+     * Remove column selector on grid.
+     *
+     * @param bool $disable
+     *
+     * @return Grid|mixed
+     */
+    public function disableColumnSelector(bool $disable = true)
+    {
+        return $this->option('show_column_selector', !$disable);
+    }
+
+    /**
+     * @return bool
+     */
+    public function showColumnSelector()
+    {
+        return $this->option('show_column_selector');
     }
 
     /**

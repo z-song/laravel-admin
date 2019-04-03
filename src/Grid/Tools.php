@@ -85,7 +85,7 @@ class Tools implements Renderable
      */
     public function disableFilterButton(bool $disable = true)
     {
-        $this->tools = $this->tools->map(function (AbstractTool $tool) use ($disable) {
+        $this->tools = $this->tools->map(function ($tool) use ($disable) {
             if ($tool instanceof FilterButton) {
                 return $tool->disable($disable);
             }

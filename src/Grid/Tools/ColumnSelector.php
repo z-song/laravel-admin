@@ -32,6 +32,9 @@ class ColumnSelector extends AbstractTool
      */
     public function render()
     {
+        if (!$this->grid->showColumnSelector()) {
+            return '';
+        }
         $show = array_filter(explode(',', request(static::SELECT_COLUMN_NAME)));
 
         $columns = $this->getGridColumns();
@@ -48,6 +51,11 @@ class ColumnSelector extends AbstractTool
             return "<li><a href=\"#\" data-value=\"{$key}\" tabIndex=\"-1\"><input type=\"checkbox\" {$checked}/>&nbsp;&nbsp;&nbsp;{$val}</a></li>";
         })->implode("\r\n");
 
+        $btns = [
+            'all'    => __('admin.all'),
+            'submit' => __('admin.submit'),
+        ];
+
         return <<<EOT
 
 <div class="dropdown pull-right column-selector" style="margin-right: 10px">
@@ -60,8 +68,8 @@ class ColumnSelector extends AbstractTool
         {$lists}
         <li class="divider"></li>
         <li style="padding: 0 15px;">
-            <button class="btn btn-xs btn-instagram column-select-all">全选</button>
-            <button class="btn btn-xs btn-primary column-select-submit" style="float: right">确定</button>
+            <button class="btn btn-xs btn-instagram column-select-all">{$btns['all']}</button>
+            <button class="btn btn-xs btn-primary column-select-submit" style="float: right">{$btns['submit']}</button>
         </li>
     </ul>
 </div>

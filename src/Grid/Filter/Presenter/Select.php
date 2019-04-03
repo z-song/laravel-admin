@@ -285,7 +285,7 @@ $(document).on('change', ".{$this->getClass($column)}", function () {
             }));
         });
         
-        $(target).trigger('change');
+        $(target).val(null).trigger('change');
     });
 });
 EOT;
