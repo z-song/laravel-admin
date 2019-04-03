@@ -5,6 +5,7 @@ namespace Encore\Admin\Controllers;
 use Encore\Admin\Auth\Database\OperationLog;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\Box;
 use Illuminate\Routing\Controller;
 
 class LogController extends Controller
@@ -42,14 +43,15 @@ class LogController extends Controller
         });
         $grid->path()->label('info');
         $grid->ip()->label('primary');
-        $grid->input()->display(function ($input) {
-            $input = json_decode($input, true);
+        $grid->input()->limit(20)->modal(function ($model) {
+            $input = json_decode($model->input, true);
             $input = array_except($input, ['_pjax', '_token', '_method', '_previous_']);
-            if (empty($input)) {
-                return '<code>{}</code>';
-            }
 
-            return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).'</pre>';
+            $input = empty($input) ?
+                '<code>{}</code>' :
+                '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).'</pre>';
+
+            return new Box(trans('admin.description'), $input);
         });
 
         $grid->created_at(trans('admin.created_at'));
