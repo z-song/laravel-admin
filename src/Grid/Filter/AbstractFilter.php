@@ -248,7 +248,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return MultipleSelect
      */
@@ -258,7 +258,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return Radio
      */
@@ -268,7 +268,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return Checkbox
      */
@@ -280,7 +280,7 @@ abstract class AbstractFilter
     /**
      * Datetime filter.
      *
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return DateTime
      */
