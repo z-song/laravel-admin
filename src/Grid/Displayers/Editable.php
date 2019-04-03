@@ -134,6 +134,14 @@ class Editable extends AbstractDisplayer
     }
 
     /**
+     * Time type editable.
+     */
+    public function time()
+    {
+        $this->combodate('HH:mm:ss');
+    }
+
+    /**
      * Combodate type editable.
      *
      * @param string $format

@@ -802,7 +802,7 @@ class Form implements Renderable
                     $related->save();
                     break;
                 case $relation instanceof Relations\BelongsTo:
-                case $relation instanceof Relations\MorphTo:                    
+                case $relation instanceof Relations\MorphTo:
 
                     $parent = $this->model->$name;
 

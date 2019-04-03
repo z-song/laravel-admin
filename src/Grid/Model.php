@@ -473,7 +473,7 @@ class Model
         }
 
         if ($name = $this->grid->getName()) {
-            return [$this->perPage, null, "{$name}_page"];
+            return [$this->perPage, ['*'], "{$name}_page"];
         }
 
         return [$this->perPage];
