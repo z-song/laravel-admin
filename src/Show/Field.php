@@ -199,26 +199,28 @@ class Field implements Renderable
      */
     public function image($server = '', $width = 200, $height = 200)
     {
-        return $this->unescape()->as(function ($path) use ($server, $width, $height) {
-            if (empty($path)) {
-                return '';
-            }
-
-            if (url()->isValidUrl($path)) {
-                $src = $path;
-            } elseif ($server) {
-                $src = $server.$path;
-            } else {
-                $disk = config('admin.upload.disk');
-
-                if (config("filesystems.disks.{$disk}")) {
-                    $src = Storage::disk($disk)->url($path);
-                } else {
+        return $this->unescape()->as(function ($images) use ($server, $width, $height) {
+            return collect($images)->map(function ($path) use ($server, $width, $height) {
+                if (empty($path)) {
                     return '';
                 }
-            }
 
-            return "<img src='$src' style='max-width:{$width}px;max-height:{$height}px' class='img' />";
+                if (url()->isValidUrl($path)) {
+                    $src = $path;
+                } elseif ($server) {
+                    $src = $server.$path;
+                } else {
+                    $disk = config('admin.upload.disk');
+
+                    if (config("filesystems.disks.{$disk}")) {
+                        $src = Storage::disk($disk)->url($path);
+                    } else {
+                        return '';
+                    }
+                }
+
+                return "<img src='$src' style='max-width:{$width}px;max-height:{$height}px' class='img' />";
+            })->implode('&nbsp;');
         });
     }
 
@@ -251,6 +253,10 @@ class Field implements Renderable
                     $url = $storage->url($path);
                     $size = ($storage->size($path) / 1000).'KB';
                 }
+            }
+
+            if (!$url) {
+                return '';
             }
 
             return <<<HTML
@@ -405,11 +411,11 @@ HTML;
     public function setValue(Model $model)
     {
         if ($this->relation) {
-            if (!$model->{$this->relation}) {
+            if (!$relationValue = $model->{$this->relation}) {
                 return $this;
             }
 
-            $this->value = $model->{$this->relation}->getAttribute($this->name);
+            $this->value = $relationValue;
         } else {
             $this->value = $model->getAttribute($this->name);
         }

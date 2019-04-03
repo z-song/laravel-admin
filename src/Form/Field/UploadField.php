@@ -50,6 +50,13 @@ trait UploadField
     protected $removable = false;
 
     /**
+     * Controls the storage permission. Could be 'private' or 'public'.
+     *
+     * @var string
+     */
+    protected $storage_permission;
+
+    /**
      * Initialize the storage instance.
      *
      * @return void.
@@ -72,6 +79,7 @@ trait UploadField
             'browseLabel'          => trans('admin.browse'),
             'showRemove'           => false,
             'showUpload'           => false,
+            'dropZoneEnabled'      => false,        //dropzone disabled by default for backward compatibility
 //            'initialCaption'       => $this->initialCaption($this->value),
             'deleteExtraData'      => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
@@ -286,6 +294,10 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
+        if (!is_null($this->storage_permission)) {
+            return $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storage_permission);
+        }
+
         return $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
     }
 
@@ -367,5 +379,12 @@ trait UploadField
         if ($this->storage->exists($this->original)) {
             $this->storage->delete($this->original);
         }
+    }
+
+    public function storage_permission($permission)
+    {
+        $this->storage_permission = $permission;
+
+        return $this;
     }
 }

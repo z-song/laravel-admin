@@ -1,5 +1,6 @@
 <input type="checkbox" class="{{ $selectAllName }}" />&nbsp;
 
+@if(!$isHoldSelectAllCheckbox)
 <div class="btn-group">
     <a class="btn btn-sm btn-default">&nbsp;<span class="hidden-xs">{{ trans('admin.action') }}</span></a>
     <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
@@ -12,3 +13,4 @@
         @endforeach
     </ul>
 </div>
+@endif

@@ -53,7 +53,7 @@ SCRIPT;
      */
     public function render()
     {
-        if (!$this->grid->allowExport()) {
+        if (!$this->grid->showExportBtn()) {
             return '';
         }
 

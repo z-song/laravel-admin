@@ -16,7 +16,7 @@ class File extends Field
      * @var array
      */
     protected static $css = [
-        '/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.3.7',
+        '/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.5.2',
     ];
 
     /**
@@ -25,8 +25,8 @@ class File extends Field
      * @var array
      */
     protected static $js = [
-        '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
-        '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
+        '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
+        '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.5.2',
     ];
 
     /**
@@ -121,7 +121,13 @@ class File extends Field
     {
         $this->renameIfExists($file);
 
-        $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
+        $path = null;
+
+        if (!is_null($this->storage_permission)) {
+            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storage_permission);
+        } else {
+            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
+        }
 
         $this->destroy();
 

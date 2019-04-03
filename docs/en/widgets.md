@@ -21,19 +21,19 @@ echo $box;
 
 ```
 
-The `$content` parameter is the content element of the Box, which can be either an implementation of the `Illuminate\Contracts \ Support\Renderable` interface, or other printable variables.
+The `$content` parameter is the content element of the Box, which can be either an implementation of the `Illuminate\Contracts\Support\Renderable` interface, or other printable variables.
 
-The `Box::title($title)` method is used to set the Box component title.
+`Box::title($title)` method is used to set the Box component title.
 
-The `Box::content($content)` method is used to set the content element of a Box component.
+`Box::content($content)` method is used to set the content element of a Box component.
 
-The `Box::removable()` method sets the Box component as removable.
+`Box::removable()` method sets the Box component as removable.
 
-The `Box::collapsable()` method sets the Box component as collapsable.
+`Box::collapsable()` method sets the Box component as collapsable.
 
-`Box::style($style)` method sets the style of the Box component to fill in `primary`,` info`, `danger`,` warning`, `success`,` default`.
+`Box::style($style)` method sets the style of the Box component to fill in `primary`, `info`, `danger`, `warning`, `success`, `default`.
 
-The `Box::solid()` method adds a border to the Box component.
+`Box::solid()` method adds a border to the Box component.
 
 ## Collapse
 
@@ -50,12 +50,12 @@ echo $collapse->render();
 
 ```
 
-The `Collapse::add($title, $content)` method is used to add a collapsed item to the collapsing component. The `$title` parameter sets the title of the item. The`$content` parameter is used to .
+`Collapse::add($title, $content)` method is used to add a collapsed item to the collapsing component. The `$title` parameter sets the title of the item. The`$content` parameter is used to .
 
 
 ## Form
 
-`Encore\Admin\Widgets\Form` class is used to quickly build a form：
+`Encore\Admin\Widgets\Form` class is used to quickly build a form:
 
 ```php
 
@@ -76,17 +76,17 @@ $form->dateRange('created_at', 'updated_at');
 echo $form->render();
 ```
 
-`Form::__construct($data = [])` generates a form object. If the `$data` parameter is passed, the elements in the` $data` array will be filled into the form.
+`Form::__construct($data = [])` generates a form object. If the `$data` parameter is passed, the elements in the `$data` array will be filled into the form.
 
 `Form::action($uri)` method is used to set the form submission address.
 
-`Form::method($method)` method is used to set the submit method of the form form, the default is `POST` method.
+`Form::method($method)` method is used to set the submit method of the form, the default is `POST` method.
 
 `Form::disablePjax()` disable pjax for form submit.
 
 ## Infobox
 
-The `Encore\Admin\Widgets\InfoBox` class is used to generate the information presentation block:
+`Encore\Admin\Widgets\InfoBox` class is used to generate the information presentation block:
 
 ```php
 use Encore\Admin\Widgets\InfoBox;
@@ -97,11 +97,11 @@ echo $infoBox->render();
 
 ```
 
-Refer to the section on the `InfoBox` in the` index()`method of the home page layout file [HomeController.php](https://github.com/z-song/laravel-admin/blob/master/src/Console/stubs/HomeController.stub).
+Refer to the section on the `InfoBox` in the `index()` method of the home page layout file [HomeController.php](https://github.com/z-song/laravel-admin/blob/master/src/Console/stubs/HomeController.stub).
 
 ## Tab component
 
-The `Encore\Admin\Widgets\Tab` class is used to generate the tab components:
+`Encore\Admin\Widgets\Tab` class is used to generate the tab components:
 
 ```php
 use Encore\Admin\Widgets\Tab;
@@ -116,11 +116,11 @@ echo $tab->render();
 
 ```
 
-The `Tab::ad ($title, $content)` method is used to add a tab, `$title` for the option title, and the` $content` tab for the content.
+`Tab::add($title, $content)` method is used to add new tab, `$title` is tab title, `$content` is tab content.
 
 ## Table
 
-`Encore\Admin\Widgets\Table` class is used to generate forms：
+`Encore\Admin\Widgets\Table` class is used to generate tables:
 
 ```php
 use Encore\Admin\Widgets\Table;

@@ -91,7 +91,7 @@ class PermissionController extends Controller
         $grid->name(trans('admin.name'));
 
         $grid->http_path(trans('admin.route'))->display(function ($path) {
-            return collect(explode("\r\n", $path))->map(function ($path) {
+            return collect(explode("\n", $path))->map(function ($path) {
                 $method = $this->http_method ?: ['ANY'];
 
                 if (Str::contains($path, ':')) {
@@ -105,7 +105,9 @@ class PermissionController extends Controller
                     return "<span class='label label-primary'>{$name}</span>";
                 })->implode('&nbsp;');
 
-                $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                if (!empty(config('admin.route.prefix'))) {
+                    $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                }
 
                 return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
             })->implode('');
@@ -155,7 +157,9 @@ class PermissionController extends Controller
                     return "<span class='label label-primary'>{$name}</span>";
                 })->implode('&nbsp;');
 
-                $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                if (!empty(config('admin.route.prefix'))) {
+                    $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                }
 
                 return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
             })->implode('');
