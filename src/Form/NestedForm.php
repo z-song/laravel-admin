@@ -94,8 +94,8 @@ class NestedForm
      *
      * NestedForm constructor.
      *
-     * @param string  $relation
-     * @param Model   $model
+     * @param string $relation
+     * @param Model  $model
      */
     public function __construct($relation, $model = null)
     {
@@ -126,8 +126,6 @@ class NestedForm
         if ($this->model) {
             return $this->model->getKey();
         }
-
-        return null;
     }
 
     /**
