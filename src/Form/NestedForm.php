@@ -4,6 +4,7 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -65,9 +66,9 @@ class NestedForm
     /**
      * NestedForm key.
      *
-     * @var
+     * @var Model
      */
-    protected $key;
+    protected $model;
 
     /**
      * Fields in form.
@@ -93,16 +94,40 @@ class NestedForm
      *
      * NestedForm constructor.
      *
-     * @param string $relation
-     * @param null   $key
+     * @param string  $relation
+     * @param Model   $model
      */
-    public function __construct($relation, $key = null)
+    public function __construct($relation, $model = null)
     {
         $this->relationName = $relation;
 
-        $this->key = $key;
+        $this->model = $model;
 
         $this->fields = new Collection();
+    }
+
+    /**
+     * Get current model.
+     *
+     * @return Model|null
+     */
+    public function model()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Get the value of the model's primary key.
+     *
+     * @return mixed|null
+     */
+    public function getKey()
+    {
+        if ($this->model) {
+            return $this->model->getKey();
+        }
+
+        return null;
     }
 
     /**
@@ -183,6 +208,7 @@ class NestedForm
         if (array_key_exists($key, $this->original)) {
             $values = $this->original[$key];
         }
+
         $this->fields->each(function (Field $field) use ($values) {
             $field->setOriginal($values);
         });
@@ -339,7 +365,7 @@ class NestedForm
 
         $elementName = $elementClass = $errorKey = [];
 
-        $key = $this->key ?: 'new_'.static::DEFAULT_KEY_NAME;
+        $key = $this->getKey() ?: 'new_'.static::DEFAULT_KEY_NAME;
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {
