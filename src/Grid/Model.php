@@ -587,7 +587,7 @@ class Model
         $relatedTable = $relation->getRelated()->getTable();
 
         if ($relation instanceof BelongsTo) {
-            $foreignKeyMethod = app()::VERSION < '5.8.0' ? 'getForeignKey' : 'getForeignKeyName';
+            $foreignKeyMethod = (app()->version() < '5.8.0') ? 'getForeignKey' : 'getForeignKeyName';
             return [
                 $relatedTable,
                 $relation->{$foreignKeyMethod}(),
