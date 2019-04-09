@@ -441,7 +441,7 @@ HTML;
      * Call extended field.
      *
      * @param string|AbstractField|\Closure $abstract
-     * @param array $arguments
+     * @param array                         $arguments
      *
      * @return Field
      */
@@ -453,7 +453,7 @@ HTML;
 
         if (is_string($abstract) && class_exists($abstract)) {
             /** @var AbstractField $extend */
-            $extend = new $abstract;
+            $extend = new $abstract();
         }
 
         if ($abstract instanceof AbstractField) {
@@ -474,7 +474,6 @@ HTML;
         $field = $this;
 
         return $this->as(function ($value) use ($extend, $field, $arguments) {
-
             if (!$extend->border) {
                 $field->border = false;
             }
