@@ -6,6 +6,7 @@ use Encore\Admin\Grid\Filter\AbstractFilter;
 use Encore\Admin\Grid\Filter\Between;
 use Encore\Admin\Grid\Filter\Date;
 use Encore\Admin\Grid\Filter\Day;
+use Encore\Admin\Grid\Filter\EndsWith;
 use Encore\Admin\Grid\Filter\Equal;
 use Encore\Admin\Grid\Filter\Group;
 use Encore\Admin\Grid\Filter\Gt;
@@ -13,13 +14,13 @@ use Encore\Admin\Grid\Filter\Hidden;
 use Encore\Admin\Grid\Filter\Ilike;
 use Encore\Admin\Grid\Filter\In;
 use Encore\Admin\Grid\Filter\Layout\Layout;
-use Encore\Admin\Grid\Filter\LeftLike;
 use Encore\Admin\Grid\Filter\Like;
 use Encore\Admin\Grid\Filter\Lt;
 use Encore\Admin\Grid\Filter\Month;
 use Encore\Admin\Grid\Filter\NotEqual;
 use Encore\Admin\Grid\Filter\NotIn;
 use Encore\Admin\Grid\Filter\Scope;
+use Encore\Admin\Grid\Filter\StartsWith;
 use Encore\Admin\Grid\Filter\Where;
 use Encore\Admin\Grid\Filter\Year;
 use Illuminate\Contracts\Support\Arrayable;
@@ -34,6 +35,9 @@ use Illuminate\Support\Facades\Input;
  * @method AbstractFilter     notEqual($column, $label = '')
  * @method AbstractFilter     leftLike($column, $label = '')
  * @method AbstractFilter     like($column, $label = '')
+ * @method AbstractFilter     contains($column, $label = '')
+ * @method AbstractFilter     startsWith($column, $label = '')
+ * @method AbstractFilter     endsWith($column, $label = '')
  * @method AbstractFilter     ilike($column, $label = '')
  * @method AbstractFilter     gt($column, $label = '')
  * @method AbstractFilter     lt($column, $label = '')
@@ -629,23 +633,25 @@ class Filter implements Renderable
     public static function registerFilters()
     {
         $filters = [
-            'equal'    => Equal::class,
-            'notEqual' => NotEqual::class,
-            'ilike'    => Ilike::class,
-            'like'     => Like::class,
-            'leftLike' => LeftLike::class,
-            'gt'       => Gt::class,
-            'lt'       => Lt::class,
-            'between'  => Between::class,
-            'group'    => Group::class,
-            'where'    => Where::class,
-            'in'       => In::class,
-            'notIn'    => NotIn::class,
-            'date'     => Date::class,
-            'day'      => Day::class,
-            'month'    => Month::class,
-            'year'     => Year::class,
-            'hidden'   => Hidden::class,
+            'equal'      => Equal::class,
+            'notEqual'   => NotEqual::class,
+            'ilike'      => Ilike::class,
+            'like'       => Like::class,
+            'gt'         => Gt::class,
+            'lt'         => Lt::class,
+            'between'    => Between::class,
+            'group'      => Group::class,
+            'where'      => Where::class,
+            'in'         => In::class,
+            'notIn'      => NotIn::class,
+            'date'       => Date::class,
+            'day'        => Day::class,
+            'month'      => Month::class,
+            'year'       => Year::class,
+            'hidden'     => Hidden::class,
+            'contains'   => Like::class,
+            'startsWith' => StartsWith::class,
+            'endsWith'   => EndsWith::class,
         ];
 
         foreach ($filters as $name => $filterClass) {
