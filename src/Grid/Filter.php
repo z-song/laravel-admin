@@ -632,7 +632,7 @@ class Filter implements Renderable
             'notEqual' => NotEqual::class,
             'ilike'    => Ilike::class,
             'like'     => Like::class,
-            'leftLike'     => LeftLike::class,
+            'leftLike' => LeftLike::class,
             'gt'       => Gt::class,
             'lt'       => Lt::class,
             'between'  => Between::class,
