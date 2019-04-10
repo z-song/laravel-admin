@@ -13,8 +13,8 @@ use Encore\Admin\Grid\Filter\Hidden;
 use Encore\Admin\Grid\Filter\Ilike;
 use Encore\Admin\Grid\Filter\In;
 use Encore\Admin\Grid\Filter\Layout\Layout;
-use Encore\Admin\Grid\Filter\Like;
 use Encore\Admin\Grid\Filter\LeftLike;
+use Encore\Admin\Grid\Filter\Like;
 use Encore\Admin\Grid\Filter\Lt;
 use Encore\Admin\Grid\Filter\Month;
 use Encore\Admin\Grid\Filter\NotEqual;
@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Input;
  *
  * @method AbstractFilter     equal($column, $label = '')
  * @method AbstractFilter     notEqual($column, $label = '')
+ * @method AbstractFilter     leftLike($column, $label = '')
  * @method AbstractFilter     like($column, $label = '')
  * @method AbstractFilter     ilike($column, $label = '')
  * @method AbstractFilter     gt($column, $label = '')
