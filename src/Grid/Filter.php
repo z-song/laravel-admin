@@ -14,6 +14,7 @@ use Encore\Admin\Grid\Filter\Ilike;
 use Encore\Admin\Grid\Filter\In;
 use Encore\Admin\Grid\Filter\Layout\Layout;
 use Encore\Admin\Grid\Filter\Like;
+use Encore\Admin\Grid\Filter\LeftLike;
 use Encore\Admin\Grid\Filter\Lt;
 use Encore\Admin\Grid\Filter\Month;
 use Encore\Admin\Grid\Filter\NotEqual;
@@ -631,6 +632,7 @@ class Filter implements Renderable
             'notEqual' => NotEqual::class,
             'ilike'    => Ilike::class,
             'like'     => Like::class,
+            'leftLike'     => LeftLike::class,
             'gt'       => Gt::class,
             'lt'       => Lt::class,
             'between'  => Between::class,
