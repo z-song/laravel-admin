@@ -71,6 +71,22 @@ abstract class AbstractExporter implements ExporterInterface
     }
 
     /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getCollection()
+    {
+        return collect($this->getData());
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public function getQuery()
+    {
+        return $this->grid->getFilter()->getModel()->getQueryBuilder();
+    }
+
+    /**
      * Export data with scope.
      *
      * @param string $scope
