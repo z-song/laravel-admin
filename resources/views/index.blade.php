@@ -21,9 +21,17 @@
 <body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
 <div class="wrapper">
 
+    @if (!empty(config('admin.views.partials.header')))
+    @include(config('admin.views.partials.header'))
+    @else
     @include('admin::partials.header')
+    @endif
 
+    @if (!empty(config('admin.views.partials.sidebar')))
+    @include(config('admin.views.partials.sidebar'))
+    @else
     @include('admin::partials.sidebar')
+    @endif
 
     <div class="content-wrapper" id="pjax-container">
         <div id="app">
@@ -31,8 +39,11 @@
         </div>
         {!! Admin::script() !!}
     </div>
-
+    @if (!empty(config('admin.views.partials.footer')))
+    @include(config('admin.views.partials.footer'))
+    @else
     @include('admin::partials.footer')
+    @endif
 
 </div>
 

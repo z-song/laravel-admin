@@ -336,4 +336,20 @@ return [
     'extensions' => [
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Settings for custom views.
+    |--------------------------------------------------------------------------
+    |
+    | You can custom your views, just support header footer and sidebar.
+    | maybe support more in future
+    */
+    'views' => [
+        'partials' => [
+            'header' => '',
+            'footer' => '',
+            'sidebar' => '',
+        ]
+    ],
 ];
