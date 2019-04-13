@@ -350,6 +350,6 @@ return [
             'header'    => '',
             'footer'    => '',
             'sidebar'   => '',
-        ]
+        ],
     ],
 ];
