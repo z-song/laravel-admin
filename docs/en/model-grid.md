@@ -100,8 +100,9 @@ $grid->paginate(20);
 #### Modify the display output of column
 
 ```php
+use Illuminate\Support\Str;
 $grid->text()->display(function($text) {
-    return str_limit($text, 30, '...');
+    return Str::limit($text, 30, '...');
 });
 
 $grid->name()->display(function ($name) {
@@ -139,6 +140,11 @@ $grid->disableCreateButton();
 #### Disable Pagination
 ```php
 $grid->disablePagination();
+```
+
+#### Disable all tools on header of grid. Filter, refresh, export, batch actions
+```php
+$grid->disableTools();
 ```
 
 #### Disable data filter

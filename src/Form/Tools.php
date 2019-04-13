@@ -80,9 +80,13 @@ class Tools implements Renderable
      *
      * @return $this
      */
-    public function disableList()
+    public function disableList(bool $disable = true)
     {
-        array_delete($this->tools, 'list');
+        if ($disable) {
+            array_delete($this->tools, 'list');
+        } elseif (!in_array('list', $this->tools)) {
+            array_push($this->tools, 'list');
+        }
 
         return $this;
     }
@@ -92,9 +96,13 @@ class Tools implements Renderable
      *
      * @return $this
      */
-    public function disableDelete()
+    public function disableDelete(bool $disable = true)
     {
-        array_delete($this->tools, 'delete');
+        if ($disable) {
+            array_delete($this->tools, 'delete');
+        } elseif (!in_array('delete', $this->tools)) {
+            array_push($this->tools, 'delete');
+        }
 
         return $this;
     }
@@ -104,9 +112,13 @@ class Tools implements Renderable
      *
      * @return $this
      */
-    public function disableView()
+    public function disableView(bool $disable = true)
     {
-        array_delete($this->tools, 'view');
+        if ($disable) {
+            array_delete($this->tools, 'view');
+        } elseif (!in_array('view', $this->tools)) {
+            array_push($this->tools, 'view');
+        }
 
         return $this;
     }
@@ -145,6 +157,16 @@ class Tools implements Renderable
         } else {
             return $this->getListPath();
         }
+    }
+
+    /**
+     * Get parent form of tool.
+     *
+     * @return Builder
+     */
+    public function form()
+    {
+        return $this->form;
     }
 
     /**
@@ -296,6 +318,11 @@ HTML;
      */
     protected function renderCustomTools($tools)
     {
+        if ($this->form->isCreating()) {
+            $this->disableView();
+            $this->disableDelete();
+        }
+
         if (empty($tools)) {
             return '';
         }

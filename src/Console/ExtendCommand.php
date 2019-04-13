@@ -233,7 +233,7 @@ TREE;
      */
     protected function validateExtensionName($name)
     {
-        return preg_match('/^[\w-_]+\/[\w-_]+$/', $name);
+        return preg_match('/^[\w\-_]+\/[\w\-_]+$/', $name);
     }
 
     /**

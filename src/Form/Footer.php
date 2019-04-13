@@ -33,7 +33,7 @@ class Footer implements Renderable
      *
      * @var array
      */
-    protected $checkboxes = ['view', 'continue_editing'];
+    protected $checkboxes = ['view', 'continue_editing', 'continue_creating'];
 
     /**
      * Footer constructor.
@@ -50,9 +50,13 @@ class Footer implements Renderable
      *
      * @return $this
      */
-    public function disableReset()
+    public function disableReset(bool $disable = true)
     {
-        array_delete($this->buttons, 'reset');
+        if ($disable) {
+            array_delete($this->buttons, 'reset');
+        } elseif (!in_array('reset', $this->buttons)) {
+            array_push($this->buttons, 'reset');
+        }
 
         return $this;
     }
@@ -62,9 +66,13 @@ class Footer implements Renderable
      *
      * @return $this
      */
-    public function disableSubmit()
+    public function disableSubmit(bool $disable = true)
     {
-        array_delete($this->buttons, 'submit');
+        if ($disable) {
+            array_delete($this->buttons, 'submit');
+        } elseif (!in_array('submit', $this->buttons)) {
+            array_push($this->buttons, 'submit');
+        }
 
         return $this;
     }
@@ -74,9 +82,13 @@ class Footer implements Renderable
      *
      * @return $this
      */
-    public function disableViewCheck()
+    public function disableViewCheck(bool $disable = true)
     {
-        array_delete($this->checkboxes, 'view');
+        if ($disable) {
+            array_delete($this->checkboxes, 'view');
+        } elseif (!in_array('view', $this->checkboxes)) {
+            array_push($this->checkboxes, 'view');
+        }
 
         return $this;
     }
@@ -86,9 +98,29 @@ class Footer implements Renderable
      *
      * @return $this
      */
-    public function disableEditingCheck()
+    public function disableEditingCheck(bool $disable = true)
     {
-        array_delete($this->checkboxes, 'continue_editing');
+        if ($disable) {
+            array_delete($this->checkboxes, 'continue_editing');
+        } elseif (!in_array('continue_editing', $this->checkboxes)) {
+            array_push($this->checkboxes, 'continue_editing');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Disable Creating Checkbox.
+     *
+     * @return $this
+     */
+    public function disableCreatingCheck(bool $disable = true)
+    {
+        if ($disable) {
+            array_delete($this->checkboxes, 'continue_creating');
+        } elseif (!in_array('continue_creating', $this->checkboxes)) {
+            array_push($this->checkboxes, 'continue_creating');
+        }
 
         return $this;
     }

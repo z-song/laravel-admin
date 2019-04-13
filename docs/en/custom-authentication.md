@@ -1,6 +1,6 @@
 # Custom authentication
 
-If you do not use the `laravel-admin` built-in authentication login logic, you can refer to the following way to customize the login authentication logic
+If you do not use the `laravel-admin` built-in authentication login logic, you can refer to the following way to customize the login authentication logic.
 
 First of all, you need define a `User provider`, used to obtain the user identity, such as `app/Providers/CustomUserProvider.php`:
 
@@ -36,9 +36,9 @@ class CustomUserProvider implements UserProvider
 
 ```
 
-In the methods `retrieveByCredentials` and `validateCredentials`, the parameter `$credentials` is the user name and password array submitted in the login page, you can use `$credentials` to implement your own login logic
+In the methods `retrieveByCredentials` and `validateCredentials` the parameter `$credentials` is the user name and password array submitted on the login page, you can use `$credentials` to implement your own login logic.
 
-The definition of interface `Illuminate\Contracts\Auth\Authenticatable`：
+The definition of interface `Illuminate\Contracts\Auth\Authenticatable`:
 ```php
 <?php
 
@@ -56,7 +56,7 @@ interface Authenticatable {
 }
 ```
 
-More details about custom authentication please refer to[adding-custom-user-providers](https://laravel.com/docs/5.5/authentication#adding-custom-user-providers)
+For more details about custom authentication please refer to [adding-custom-user-providers](https://laravel.com/docs/5.5/authentication#adding-custom-user-providers).
 
 
 After you created cusom user provider, you will need to extend Laravel with it:
@@ -89,7 +89,7 @@ class AuthServiceProvider extends ServiceProvider
 }
 ```
 
-Finally modify the configuration, open `config/admin.php`，find the `auth` part:
+Finally modify the configuration, open `config/admin.php`, find the `auth` part:
 
 ```php
     'auth' => [
@@ -108,4 +108,4 @@ Finally modify the configuration, open `config/admin.php`，find the `auth` part
         ],
     ],
 ```
-This completes the logic of custom authentication
+This completes the logic of custom authentication.

@@ -1,14 +1,14 @@
 <p align="center">
-<a href="http://laravel-admin.org/">
-<img src="http://laravel-admin.org/img/logo004.png" alt="laravel-admin">
+<a href="https://laravel-admin.org/">
+<img src="https://laravel-admin.org/images/logo002.png" alt="laravel-admin">
 </a>
 
 <p align="center">⛵<code>laravel-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
 
 <p align="center">
-<a href="http://laravel-admin.org/docs">Documentation</a> |
-<a href="http://laravel-admin.org/docs/#/zh/">中文文档</a> |
-<a href="http://demo.laravel-admin.org">Demo</a> |
+<a href="https://laravel-admin.org/docs">Documentation</a> |
+<a href="https://laravel-admin.org/docs/zh">中文文档</a> |
+<a href="https://demo.laravel-admin.org">Demo</a> |
 <a href="https://github.com/z-song/demo.laravel-admin.org">Demo source code</a> |
 <a href="#extensions">Extensions</a>
 </p>
@@ -19,9 +19,6 @@
     </a>
     <a href="https://styleci.io/repos/48796179">
         <img src="https://styleci.io/repos/48796179/shield" alt="StyleCI">
-    </a>
-    <a href="https://scrutinizer-ci.com/g/z-song/laravel-admin/?branch=master">
-        <img src="https://scrutinizer-ci.com/g/z-song/laravel-admin/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality">
     </a>
     <a href="https://packagist.org/packages/encore/laravel-admin">
         <img src="https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000&&style=flat-square" alt="Packagist">
@@ -35,9 +32,6 @@
     <a href="#backers" alt="sponsors on Open Collective">
         <img src="https://opencollective.com/laravel-admin/backers/badge.svg" />
     </a> 
-    <a href="#sponsors" alt="Sponsors on Open Collective">
-        <img src="https://opencollective.com/laravel-admin/sponsors/badge.svg" />
-    </a>
 </div>
 
 <p align="center">
@@ -58,7 +52,7 @@ Requirements
 Installation
 ------------
 
-> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](http://laravel-admin.org/docs/v1.4/#/)
+> This package requires PHP 7+ and Laravel 5.5, for old versions please refer to [1.4](https://laravel-admin.org/docs/v1.4/#/)
 
 First, install laravel 5.5, and make sure that the database connection settings are correct.
 
@@ -100,7 +94,7 @@ The file `config/admin.php` contains an array of configurations, you can find th
 | [wangEditor](https://github.com/laravel-admin-extensions/wangEditor) | A rich text editor based on [wangeditor](http://www.wangeditor.com/)         |~1.6 |
 | [summernote](https://github.com/laravel-admin-extensions/summernote) | A rich text editor based on [summernote](https://summernote.org/)          |~1.6 |
 | [china-distpicker](https://github.com/laravel-admin-extensions/china-distpicker) | 一个基于[distpicker](https://github.com/fengyuanchen/distpicker)的中国省市区选择器          |~1.6 |
-| [simplemde](https://github.com/laravel-admin-extensions/simplemde) | A markdow editor based on [simplemde](https://github.com/sparksuite/simplemde-markdown-editor)          |~1.6 |
+| [simplemde](https://github.com/laravel-admin-extensions/simplemde) | A markdown editor based on [simplemde](https://github.com/sparksuite/simplemde-markdown-editor)          |~1.6 |
 | [phpinfo](https://github.com/laravel-admin-extensions/phpinfo) | Integrate the `phpinfo` page into laravel-admin          |~1.6 |
 | [php-editor](https://github.com/laravel-admin-extensions/php-editor) <br/> [python-editor](https://github.com/laravel-admin-extensions/python-editor) <br/> [js-editor](https://github.com/laravel-admin-extensions/js-editor)<br/> [css-editor](https://github.com/laravel-admin-extensions/css-editor)<br/> [clike-editor](https://github.com/laravel-admin-extensions/clike-editor)| Several programing language editor extensions based on code-mirror          |~1.6 |
 | [star-rating](https://github.com/laravel-admin-extensions/star-rating) | Star Rating extension for laravel-admin          |~1.6 |
@@ -108,6 +102,12 @@ The file `config/admin.php` contains an array of configurations, you can find th
 | [grid-lightbox](https://github.com/laravel-admin-extensions/grid-lightbox) | Turn your grid into a lightbox & gallery          |~1.6 |
 | [daterangepicker](https://github.com/laravel-admin-extensions/daterangepicker) | Integrates daterangepicker into laravel-admin          |~1.6 |
 | [material-ui](https://github.com/laravel-admin-extensions/material-ui) | Material-UI extension for laravel-admin          |~1.6 |
+| [sparkline](https://github.com/laravel-admin-extensions/sparkline) | Integrates jQuery sparkline into laravel-admin          |~1.6 |
+| [chartjs](https://github.com/laravel-admin-extensions/chartjs) | Use Chartjs in laravel-admin          |~1.6 |
+| [simditor](https://github.com/laravel-admin-extensions/simditor) | Integrates simditor full-rich editor into laravel-admin          |~1.6 |
+| [cropper](https://github.com/laravel-admin-extensions/cropper) | A simple jQuery image cropping plugin.          |~1.6 |
+| [composer-viewer](https://github.com/laravel-admin-extensions/composer-viewer) | A web interface of composer packages in laravel.          |~1.6 |
+| [data-table](https://github.com/laravel-admin-extensions/data-table) | Advanced table widget for laravel-admin |~1.6 |
 
 
 ## Contributors

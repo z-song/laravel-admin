@@ -277,15 +277,27 @@ class Column
     }
 
     /**
+     * Set sort value.
+     *
+     * @param bool $sort
+     *
+     * @return Column
+     */
+    public function sort($sort)
+    {
+        $this->sortable = $sort;
+
+        return $this;
+    }
+
+    /**
      * Mark this column as sortable.
      *
      * @return Column
      */
     public function sortable()
     {
-        $this->sortable = true;
-
-        return $this;
+        return $this->sort(true);
     }
 
     /**
@@ -300,6 +312,28 @@ class Column
         $this->displayCallbacks[] = $callback;
 
         return $this;
+    }
+
+    /**
+     * Display using display abstract.
+     *
+     * @param string $abstract
+     * @param array  $arguments
+     *
+     * @return Column
+     */
+    public function displayUsing($abstract, $arguments = [])
+    {
+        $grid = $this->grid;
+
+        $column = $this;
+
+        return $this->display(function ($value) use ($grid, $column, $abstract, $arguments) {
+            /** @var AbstractDisplayer $displayer */
+            $displayer = new $abstract($value, $grid, $column, $this);
+
+            return $displayer->display(...$arguments);
+        });
     }
 
     /**

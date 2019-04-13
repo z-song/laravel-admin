@@ -53,7 +53,13 @@ if (!function_exists('admin_base_path')) {
 
         $prefix = ($prefix == '/') ? '' : $prefix;
 
-        return $prefix.'/'.trim($path, '/');
+        $path = trim($path, '/');
+
+        if (is_null($path) || strlen($path) == 0) {
+            return $prefix ?: '/';
+        }
+
+        return $prefix.'/'.$path;
     }
 }
 
@@ -161,5 +167,31 @@ if (!function_exists('array_delete')) {
                 unset($array[$index]);
             }
         }
+    }
+}
+
+if (!function_exists('class_uses_deep')) {
+
+    /**
+     * To get ALL traits including those used by parent classes and other traits.
+     *
+     * @param $class
+     * @param bool $autoload
+     *
+     * @return array
+     */
+    function class_uses_deep($class, $autoload = true)
+    {
+        $traits = [];
+
+        do {
+            $traits = array_merge(class_uses($class, $autoload), $traits);
+        } while ($class = get_parent_class($class));
+
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, $autoload), $traits);
+        }
+
+        return array_unique($traits);
     }
 }

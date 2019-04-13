@@ -21,6 +21,7 @@ class AdminServiceProvider extends ServiceProvider
         Console\CreateUserCommand::class,
         Console\ResetPasswordCommand::class,
         Console\ExtendCommand::class,
+        Console\ExportSeedCommand::class,
     ];
 
     /**
@@ -34,6 +35,7 @@ class AdminServiceProvider extends ServiceProvider
         'admin.log'        => Middleware\LogOperation::class,
         'admin.permission' => Middleware\Permission::class,
         'admin.bootstrap'  => Middleware\Bootstrap::class,
+        'admin.session'    => Middleware\Session::class,
     ];
 
     /**
@@ -48,6 +50,7 @@ class AdminServiceProvider extends ServiceProvider
             'admin.log',
             'admin.bootstrap',
             'admin.permission',
+//            'admin.session',
         ],
     ];
 
@@ -60,6 +63,11 @@ class AdminServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'admin');
 
+        if (config('admin.https') || config('admin.secure')) {
+            \URL::forceScheme('https');
+            $this->app['request']->server->set('HTTPS', true);
+        }
+
         if (file_exists($routes = admin_path('routes.php'))) {
             $this->loadRoutesFrom($routes);
         }
@@ -67,7 +75,7 @@ class AdminServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__.'/../config' => config_path()], 'laravel-admin-config');
             $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang')], 'laravel-admin-lang');
-//            $this->publishes([__DIR__.'/../resources/views' => resource_path('views/admin')],           'laravel-admin-views');
+//            $this->publishes([__DIR__.'/../resources/views' => resource_path('views/vendor/admin')],           'laravel-admin-views');
             $this->publishes([__DIR__.'/../database/migrations' => database_path('migrations')], 'laravel-admin-migrations');
             $this->publishes([__DIR__.'/../resources/assets' => public_path('vendor/laravel-admin')], 'laravel-admin-assets');
         }
