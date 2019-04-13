@@ -473,7 +473,7 @@ class Model
         }
 
         if ($name = $this->grid->getName()) {
-            return [$this->perPage, null, "{$name}_page"];
+            return [$this->perPage, ['*'], "{$name}_page"];
         }
 
         return [$this->perPage];
@@ -587,9 +587,11 @@ class Model
         $relatedTable = $relation->getRelated()->getTable();
 
         if ($relation instanceof BelongsTo) {
+            $foreignKeyMethod = (app()->version() < '5.8.0') ? 'getForeignKey' : 'getForeignKeyName';
+
             return [
                 $relatedTable,
-                $relation->getForeignKey(),
+                $relation->{$foreignKeyMethod}(),
                 '=',
                 $relatedTable.'.'.$relation->getRelated()->getKeyName(),
             ];

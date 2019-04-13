@@ -20,9 +20,7 @@ class Decimal extends Text
 
     public function render()
     {
-        $options = json_encode($this->options);
-
-        $this->script = "$('{$this->getElementClassSelector()}').inputmask($options);";
+        $this->inputmask($this->options);
 
         $this->prepend('<i class="fa fa-terminal fa-fw"></i>')
             ->defaultAttribute('style', 'width: 130px');

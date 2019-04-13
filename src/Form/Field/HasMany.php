@@ -54,6 +54,7 @@ class HasMany extends Field
     protected $views = [
         'default' => 'admin::form.hasmany',
         'tab'     => 'admin::form.hasmanytab',
+        'table'   => 'admin::form.hasmanytable',
     ];
 
     /**
@@ -278,13 +279,13 @@ class HasMany extends Field
      *
      * @param string   $column
      * @param \Closure $builder
-     * @param null     $key
+     * @param null     $model
      *
      * @return NestedForm
      */
-    protected function buildNestedForm($column, \Closure $builder, $key = null)
+    protected function buildNestedForm($column, \Closure $builder, $model = null)
     {
-        $form = new Form\NestedForm($column, $key);
+        $form = new Form\NestedForm($column, $model);
 
         $form->setForm($this->form);
 
@@ -338,6 +339,16 @@ class HasMany extends Field
     }
 
     /**
+     * Use table mode to showing hasmany field.
+     *
+     * @return HasMany
+     */
+    public function useTable()
+    {
+        return $this->mode('table');
+    }
+
+    /**
      * Build Nested form for related data.
      *
      * @throws \Exception
@@ -373,14 +384,18 @@ class HasMany extends Field
                     continue;
                 }
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
+                $model = $relation->getRelated()->replicate()->forceFill($data);
+
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $model)
                     ->fill($data);
             }
         } else {
             foreach ($this->value as $data) {
                 $key = array_get($data, $relation->getRelated()->getKeyName());
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)
+                $model = $relation->getRelated()->replicate()->forceFill($data);
+
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $model)
                     ->fill($data);
             }
         }
@@ -500,6 +515,48 @@ EOT;
     }
 
     /**
+     * Setup default template script.
+     *
+     * @param string $templateScript
+     *
+     * @return void
+     */
+    protected function setupScriptForTableView($templateScript)
+    {
+        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
+        $defaultKey = NestedForm::DEFAULT_KEY_NAME;
+
+        /**
+         * When add a new sub form, replace all element key in new sub form.
+         *
+         * @example comments[new___key__][title]  => comments[new_{index}][title]
+         *
+         * {count} is increment number of current sub form count.
+         */
+        $script = <<<EOT
+var index = 0;
+$('#has-many-{$this->column}').on('click', '.add', function () {
+
+    var tpl = $('template.{$this->column}-tpl');
+
+    index++;
+
+    var template = tpl.html().replace(/{$defaultKey}/g, index);
+    $('.has-many-{$this->column}-forms').append(template);
+    {$templateScript}
+});
+
+$('#has-many-{$this->column}').on('click', '.remove', function () {
+    $(this).closest('.has-many-{$this->column}-form').hide();
+    $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
+});
+
+EOT;
+
+        Admin::script($script);
+    }
+
+    /**
      * Disable create button.
      *
      * @return $this
@@ -532,6 +589,10 @@ EOT;
      */
     public function render()
     {
+        if ($this->viewMode == 'table') {
+            return $this->renderTable();
+        }
+
         // specify a view to render.
         $this->view = $this->views[$this->viewMode];
 
@@ -541,6 +602,64 @@ EOT;
         $this->setupScript($script);
 
         return parent::render()->with([
+            'forms'        => $this->buildRelatedForms(),
+            'template'     => $template,
+            'relationName' => $this->relationName,
+            'options'      => $this->options,
+        ]);
+    }
+
+    /**
+     * Render the `HasMany` field for table style.
+     *
+     * @throws \Exception
+     *
+     * @return mixed
+     */
+    protected function renderTable()
+    {
+        $headers = [];
+        $fields = [];
+        $hidden = [];
+        $scripts = [];
+
+        /* @var Field $field */
+        foreach ($this->buildNestedForm($this->column, $this->builder)->fields() as $field) {
+            if (is_a($field, Hidden::class)) {
+                $hidden[] = $field->render();
+            } else {
+                /* Hide label and set field width 100% */
+                $field->setLabelClass(['hidden']);
+                $field->setWidth(12, 0);
+                $fields[] = $field->render();
+                $headers[] = $field->label();
+            }
+
+            /*
+             * Get and remove the last script of Admin::$script stack.
+             */
+            if ($field->getScript()) {
+                $scripts[] = array_pop(Admin::$script);
+            }
+        }
+
+        /* Build row elements */
+        $template = array_reduce($fields, function ($all, $field) {
+            $all .= "<td>{$field}</td>";
+
+            return $all;
+        }, '');
+
+        /* Build cell with hidden elements */
+        $template .= '<td class="hidden">'.implode('', $hidden).'</td>';
+
+        $this->setupScript(implode("\r\n", $scripts));
+
+        // specify a view to render.
+        $this->view = $this->views[$this->viewMode];
+
+        return parent::render()->with([
+            'headers'      => $headers,
             'forms'        => $this->buildRelatedForms(),
             'template'     => $template,
             'relationName' => $this->relationName,

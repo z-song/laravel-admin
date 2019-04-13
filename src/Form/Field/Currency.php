@@ -67,11 +67,7 @@ class Currency extends Text
      */
     public function render()
     {
-        $options = json_encode($this->options);
-
-        $this->script = <<<EOT
-$('{$this->getElementClassSelector()}').inputmask($options);
-EOT;
+        $this->inputmask($this->options);
 
         $this->prepend($this->symbol)
             ->defaultAttribute('style', 'width: 120px');

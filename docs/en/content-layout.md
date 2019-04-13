@@ -137,3 +137,15 @@ $content->row(function (Row $row) {
 ----------------------------------
 ```
 
+Add body into a page：
+
+```php
+    public function customPage($id)
+    {
+        $content = new Content();
+        $content->header('View');
+        $content->description('Description...');
+        $content->body('admin.custom',['id'=>1]);
+        return $content;
+    }
+```

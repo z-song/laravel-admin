@@ -111,11 +111,12 @@ class Column implements Buildable
      */
     protected function startColumn()
     {
-        // get classname using width array
-        $classname = implode(' ', collect($this->width)->map(function ($value, $key) {
+        // get class name using width array
+        $classnName = collect($this->width)->map(function ($value, $key) {
             return "col-$key-$value";
-        })->toArray());
-        echo "<div class=\"{$classname}\">";
+        })->implode(' ');
+
+        echo "<div class=\"{$classnName}\">";
     }
 
     /**
