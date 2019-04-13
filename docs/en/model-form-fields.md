@@ -21,7 +21,7 @@ $form->text('title')->help('help...');
 
 ### Set fa-icon class
 ```php
-$form->text('title')->addIcon('fa-copy');
+$form->text('title')->icon('fa-copy');
 ```
 
 ### Set attributes of field element

@@ -14,13 +14,13 @@ class Text extends Field
     protected $icon = 'fa-pencil';
 
     /**
-     * Add custom fa-icon.
+     * Set custom fa-icon.
      *
      * @param string $icon
      *
      * @return $this
      */
-    public function addIcon($icon)
+    public function icon($icon)
     {
         $this->icon = $icon;
 
