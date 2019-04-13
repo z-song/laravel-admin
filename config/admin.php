@@ -347,9 +347,9 @@ return [
     */
     'views' => [
         'partials' => [
-            'header' => '',
-            'footer' => '',
-            'sidebar' => '',
+            'header'    => '',
+            'footer'    => '',
+            'sidebar'   => '',
         ]
     ],
 ];
