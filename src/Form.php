@@ -188,6 +188,13 @@ class Form implements Renderable
     protected $isSoftDeletes = false;
 
     /**
+     * Initialization closure array.
+     *
+     * @var []Closure
+     */
+    protected static $initCallbacks;
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -204,6 +211,32 @@ class Form implements Renderable
         }
 
         $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses($this->model));
+
+        $this->callInitCallbacks();
+    }
+
+    /**
+     * Initialize with user pre-defined default disables, etc.
+     *
+     * @param Closure $callback
+     */
+    public static function init(Closure $callback = null)
+    {
+        static::$initCallbacks[] = $callback;
+    }
+
+    /**
+     * Call the initialization closure array in sequence.
+     */
+    protected function callInitCallbacks()
+    {
+        if (empty(static::$initCallbacks)) {
+            return;
+        }
+
+        foreach (static::$initCallbacks as $callback) {
+            call_user_func($callback, $this);
+        }
     }
 
     /**
@@ -542,7 +575,13 @@ class Form implements Renderable
         }
 
         /* @var Model $this->model */
-        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+        $builder = $this->model();
+
+        if ($this->isSoftDeletes) {
+            $builder = $builder->withTrashed();
+        }
+
+        $this->model = $builder->with($this->getRelations())->findOrFail($id);
 
         $this->setFieldOriginalValue();
 
@@ -737,21 +776,23 @@ class Form implements Renderable
                 continue;
             }
 
-            switch (get_class($relation)) {
-                case Relations\BelongsToMany::class:
-                case Relations\MorphToMany::class:
+            switch (true) {
+                case $relation instanceof Relations\BelongsToMany:
+                case $relation instanceof Relations\MorphToMany:
                     if (isset($prepared[$name])) {
                         $relation->sync($prepared[$name]);
                     }
                     break;
-                case Relations\HasOne::class:
+                case $relation instanceof Relations\HasOne:
 
                     $related = $this->model->$name;
 
                     // if related is empty
                     if (is_null($related)) {
                         $related = $relation->getRelated();
-                        $related->{$relation->getForeignKeyName()} = $this->model->{$this->model->getKeyName()};
+                        $qualifiedParentKeyName = $relation->getQualifiedParentKeyName();
+                        $localKey = array_last(explode('.', $qualifiedParentKeyName));
+                        $related->{$relation->getForeignKeyName()} = $this->model->{$localKey};
                     }
 
                     foreach ($prepared[$name] as $column => $value) {
@@ -760,7 +801,8 @@ class Form implements Renderable
 
                     $related->save();
                     break;
-                case Relations\BelongsTo::class:
+                case $relation instanceof Relations\BelongsTo:
+                case $relation instanceof Relations\MorphTo:
 
                     $parent = $this->model->$name;
 
@@ -776,14 +818,15 @@ class Form implements Renderable
                     $parent->save();
 
                     // When in creating, associate two models
-                    if (!$this->model->{$relation->getForeignKey()}) {
-                        $this->model->{$relation->getForeignKey()} = $parent->getKey();
+                    $foreignKeyMethod = (app()->version() < '5.8.0') ? 'getForeignKey' : 'getForeignKeyName';
+                    if (!$this->model->{$relation->{$foreignKeyMethod}()}) {
+                        $this->model->{$relation->{$foreignKeyMethod}()} = $parent->getKey();
 
                         $this->model->save();
                     }
 
                     break;
-                case Relations\MorphOne::class:
+                case $relation instanceof Relations\MorphOne:
                     $related = $this->model->$name;
                     if (is_null($related)) {
                         $related = $relation->make();
@@ -793,8 +836,8 @@ class Form implements Renderable
                     }
                     $related->save();
                     break;
-                case Relations\HasMany::class:
-                case Relations\MorphMany::class:
+                case $relation instanceof Relations\HasMany:
+                case $relation instanceof Relations\MorphMany:
 
                     foreach ($prepared[$name] as $related) {
                         /** @var Relations\Relation $relation */
@@ -1068,10 +1111,10 @@ class Form implements Renderable
     {
         $relations = $this->getRelations();
 
-        $builder = $this->model()->newQuery();
+        $builder = $this->model();
 
         if ($this->isSoftDeletes) {
-            $builder->withTrashed();
+            $builder = $builder->withTrashed();
         }
 
         $this->model = $builder->with($relations)->findOrFail($id);
@@ -1274,9 +1317,9 @@ class Form implements Renderable
      *
      * @deprecated
      */
-    public function disableSubmit()
+    public function disableSubmit(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableSubmit();
+        $this->builder()->getFooter()->disableSubmit($disable);
 
         return $this;
     }
@@ -1288,9 +1331,9 @@ class Form implements Renderable
      *
      * @deprecated
      */
-    public function disableReset()
+    public function disableReset(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableReset();
+        $this->builder()->getFooter()->disableReset($disable);
 
         return $this;
     }
@@ -1300,9 +1343,9 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function disableViewCheck()
+    public function disableViewCheck(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableViewCheck();
+        $this->builder()->getFooter()->disableViewCheck($disable);
 
         return $this;
     }
@@ -1312,9 +1355,21 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function disableEditingCheck()
+    public function disableEditingCheck(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableEditingCheck();
+        $this->builder()->getFooter()->disableEditingCheck($disable);
+
+        return $this;
+    }
+
+    /**
+     * Disable Creating Checkbox on footer.
+     *
+     * @return $this
+     */
+    public function disableCreatingCheck(bool $disable = true)
+    {
+        $this->builder()->getFooter()->disableCreatingCheck($disable);
 
         return $this;
     }
@@ -1549,7 +1604,7 @@ class Form implements Renderable
      */
     public function __set($name, $value)
     {
-        $this->input($name, $value);
+        return array_set($this->inputs, $name, $value);
     }
 
     /**

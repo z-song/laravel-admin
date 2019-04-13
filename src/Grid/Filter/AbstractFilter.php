@@ -238,7 +238,7 @@ abstract class AbstractFilter
     /**
      * Select filter.
      *
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return Select
      */
@@ -248,7 +248,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return MultipleSelect
      */
@@ -258,7 +258,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return Radio
      */
@@ -268,7 +268,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return Checkbox
      */
@@ -280,7 +280,7 @@ abstract class AbstractFilter
     /**
      * Datetime filter.
      *
-     * @param array $options
+     * @param array|\Illuminate\Support\Collection $options
      *
      * @return DateTime
      */
@@ -410,9 +410,9 @@ abstract class AbstractFilter
      */
     public function getColumn()
     {
-        $parenName = $this->parent->getName();
+        $parentName = $this->parent->getName();
 
-        return $parenName ? "{$parenName}_{$this->column}" : $this->column;
+        return $parentName ? "{$parentName}_{$this->column}" : $this->column;
     }
 
     /**

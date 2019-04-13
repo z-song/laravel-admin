@@ -12,14 +12,14 @@ class Content implements Renderable
      *
      * @var string
      */
-    protected $header = '';
+    protected $header = ' ';
 
     /**
      * Content description.
      *
      * @var string
      */
-    protected $description = '';
+    protected $description = ' ';
 
     /**
      * Page breadcrumb.

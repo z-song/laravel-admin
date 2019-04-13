@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void registerAuthRoutes()
  * @method static void extend($name, $class)
  * @method static void disablePjax()
+ * @method static void booting(\Closure $builder)
  */
 class Admin extends Facade
 {
