@@ -220,6 +220,11 @@ class Field implements Renderable
     protected $labelClass = [];
 
     /**
+     * @var array
+     */
+    protected $groupClass = [];
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -473,9 +478,11 @@ class Field implements Renderable
             $thisRuleArr = array_filter(explode('|', $this->rules));
 
             $this->rules = array_merge($thisRuleArr, $rules);
+            if (in_array('required', $this->rules)) $this->required();
         } elseif (is_string($rules)) {
             $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
+            if (in_array('required', $rules)) $this->required();
             $this->rules = implode('|', $rules);
         }
 
@@ -996,6 +1003,32 @@ class Field implements Renderable
     }
 
     /**
+     * Set form group class.
+     *
+     * @param string|array $class
+     *
+     * @return $this
+     */
+    public function setGroupClass($class)
+    : self
+    {
+        array_push($this->groupClass, $class);
+
+        return $this;
+    }
+
+    /**
+     * Get element class.
+     *
+     * @return array
+     */
+    protected function getGroupClass($default = false)
+    : string
+    {
+        return ($default ? 'form-group ' : '') . implode(' ', array_filter($this->groupClass));
+    }
+
+    /**
      * reset field className
      *
      * @param string $className
@@ -1006,7 +1039,6 @@ class Field implements Renderable
     public function resetElementClassName(string $className, string $resetClassName)
     {
         if (($key = array_search($className, $this->getElementClass())) !== false) {
-
             $this->elementClass[$key] = $resetClassName;
         }
 
