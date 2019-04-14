@@ -21,6 +21,7 @@ class Handler
             'message' => $exception->getMessage(),
             'file'    => $exception->getFile(),
             'line'    => $exception->getLine(),
+            'trace'   => explode("\n", $exception->getTraceAsString()),
         ]);
 
         $errors = new ViewErrorBag();

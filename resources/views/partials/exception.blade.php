@@ -8,5 +8,12 @@
             In <i title="{{ $error->get('file')[0] }} line {{ $error->get('line')[0] }}" style="border-bottom: 1px dotted #fff;cursor: pointer;" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">{{ basename($error->get('file')[0]) }} line {{ $error->get('line')[0] }}</i> :
         </h4>
         <p>{!! $error->get('message')[0] !!}</p>
+        <br>
+        <span onclick="$('#laravel-admin-exception-trace').toggleClass('hidden')" style="cursor: pointer">显示/隐藏堆栈信息</span>
+        <ul id="laravel-admin-exception-trace" class="hidden">
+            @foreach($error->get('trace') as $item)
+                <li>{{ $item }}</li>
+            @endforeach
+        </ul>
     </div>
 @endif
