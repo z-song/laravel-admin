@@ -91,6 +91,21 @@ class Tab extends Widget implements Renderable
     }
 
     /**
+     * Set content.
+     *
+     * @param string $title
+     * @param string $content
+     */
+    public function content($title, $content)
+    {
+        foreach ($this->data['tabs'] as $id => $tab) {
+            if ($tab['title'] == $title) {
+                $this->data['tabs'][$id]['content'] = $content;
+            }
+        }
+    }
+
+    /**
      * Set drop-down items.
      *
      * @param array $links
