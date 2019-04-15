@@ -139,13 +139,15 @@ $content->row(function (Row $row) {
 
 Add body into a page：
 
+Create a blade view file inside `/project/resources/views/admin/custom.blade.php`
+
 ```php
     public function customPage($id)
     {
         $content = new Content();
         $content->header('View');
         $content->description('Description...');
-        $content->body('admin.custom',['id'=>1]);
+        $content->body('admin.custom',['id' => $id]);
         return $content;
     }
 ```
