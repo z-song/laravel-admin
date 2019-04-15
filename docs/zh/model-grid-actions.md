@@ -87,5 +87,5 @@ $grid->actions(function ($actions) {
     
     // 添加操作
     $actions->append(new CheckRow($actions->getKey()));
-}
+});
 ```
