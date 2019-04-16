@@ -16,7 +16,7 @@ class Modal extends AbstractDisplayer
 
         $html = call_user_func_array($callback, [$this->row]);
 
-        $key = $this->getKey() . '-' . $this->getColumn()->getName();
+        $key = $this->getKey().'-'.$this->getColumn()->getName();
 
         return <<<EOT
 <span class="grid-expand" data-toggle="modal" data-target="#grid-modal-{$key}">

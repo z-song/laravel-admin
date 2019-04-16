@@ -554,8 +554,9 @@ class Form implements Renderable
     /**
      * Handle update.
      *
-     * @param int $id
+     * @param int  $id
      * @param null $data
+     *
      * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed|null|Response
      */
     public function update($id, $data = null)
@@ -687,8 +688,9 @@ class Form implements Renderable
     /**
      * Handle updates for single column.
      *
-     * @param integer $id
-     * @param array   $data
+     * @param int   $id
+     * @param array $data
+     *
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|Response
      */
     protected function handleColumnUpdates($id, $data)

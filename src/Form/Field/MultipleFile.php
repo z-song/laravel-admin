@@ -111,13 +111,14 @@ class MultipleFile extends Field
      * Sort files.
      *
      * @param string $order
+     *
      * @return array
      */
     protected function sortFiles($order)
     {
         $order = explode(',', $order);
 
-        $new      = [];
+        $new = [];
         $original = $this->original();
 
         foreach ($order as $item) {
@@ -249,7 +250,6 @@ $("input{$this->getElementClassSelector()}").fileinput({$options});
 EOT;
 
         if ($this->fileActionSettings['showRemove']) {
-
             $text = [
                 'title'   => trans('admin.delete_confirm'),
                 'confirm' => trans('admin.confirm'),
@@ -283,7 +283,6 @@ EOT;
         }
 
         if ($this->fileActionSettings['showDrag']) {
-
             $this->addVariables([
                 'sortable'  => true,
                 'sort_flag' => static::FILE_SORT_FLAG,
