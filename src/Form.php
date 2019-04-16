@@ -544,7 +544,8 @@ class Form implements Renderable
     protected function callSaved()
     {
         foreach ($this->saved as $func) {
-            if ($func instanceof Closure && ($ret = call_user_func($func, $this)) instanceof Response) {
+            if ($func instanceof Closure &&
+                ($ret = call_user_func($func, $this)) instanceof Response) {
                 return $ret;
             }
         }
@@ -554,8 +555,8 @@ class Form implements Renderable
      * Handle update.
      *
      * @param int $id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param null $data
+     * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed|null|Response
      */
     public function update($id, $data = null)
     {
@@ -563,15 +564,8 @@ class Form implements Renderable
 
         $isEditable = $this->isEditable($data);
 
-        $data = $this->handleEditable($data);
-
-        $data = $this->handleFileDelete($data);
-
-        if ($this->handleOrderable($id, $data)) {
-            return response([
-                'status'  => true,
-                'message' => trans('admin.update_succeeded'),
-            ]);
+        if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
+            return $data;
         }
 
         /* @var Model $this->model */
@@ -589,9 +583,9 @@ class Form implements Renderable
         if ($validationMessages = $this->validationMessages($data)) {
             if (!$isEditable) {
                 return back()->withInput()->withErrors($validationMessages);
-            } else {
-                return response()->json(['errors' => array_dot($validationMessages->getMessages())], 422);
             }
+
+            return response()->json(['errors' => array_dot($validationMessages->getMessages())], 422);
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -691,6 +685,31 @@ class Form implements Renderable
     }
 
     /**
+     * Handle updates for single column.
+     *
+     * @param integer $id
+     * @param array   $data
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|Response
+     */
+    protected function handleColumnUpdates($id, $data)
+    {
+        $data = $this->handleEditable($data);
+
+        $data = $this->handleFileDelete($data);
+
+        $data = $this->handleFileSort($data);
+
+        if ($this->handleOrderable($id, $data)) {
+            return response([
+                'status'  => true,
+                'message' => trans('admin.update_succeeded'),
+            ]);
+        }
+
+        return $data;
+    }
+
+    /**
      * Handle editable update.
      *
      * @param array $input
@@ -720,6 +739,32 @@ class Form implements Renderable
         if (array_key_exists(Field::FILE_DELETE_FLAG, $input)) {
             $input[Field::FILE_DELETE_FLAG] = $input['key'];
             unset($input['key']);
+        }
+
+        Input::replace($input);
+
+        return $input;
+    }
+
+    /**
+     * @param array $input
+     *
+     * @return array
+     */
+    protected function handleFileSort(array $input = [])
+    {
+        if (!array_key_exists(Field::FILE_SORT_FLAG, $input)) {
+            return $input;
+        }
+
+        $sorts = array_filter($input[Field::FILE_SORT_FLAG]);
+
+        if (empty($sorts)) {
+            return $input;
+        }
+
+        foreach ($sorts as $column => $order) {
+            $input[$column] = $order;
         }
 
         Input::replace($input);

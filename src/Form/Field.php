@@ -18,6 +18,7 @@ class Field implements Renderable
     use Macroable;
 
     const FILE_DELETE_FLAG = '_file_del_';
+    const FILE_SORT_FLAG   = '_file_sort_';
 
     /**
      * Element id.

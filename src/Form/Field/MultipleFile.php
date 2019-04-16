@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -27,6 +28,7 @@ class MultipleFile extends Field
     protected static $js = [
         '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
         '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.5.2',
+        '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/sortable.min.js?v=4.5.2',
     ];
 
     /**
@@ -58,6 +60,10 @@ class MultipleFile extends Field
     public function getValidator(array $input)
     {
         if (request()->has(static::FILE_DELETE_FLAG)) {
+            return false;
+        }
+
+        if (request()->has(static::FILE_SORT_FLAG)) {
             return false;
         }
 
@@ -102,6 +108,26 @@ class MultipleFile extends Field
     }
 
     /**
+     * Sort files.
+     *
+     * @param string $order
+     * @return array
+     */
+    protected function sortFiles($order)
+    {
+        $order = explode(',', $order);
+
+        $new      = [];
+        $original = $this->original();
+
+        foreach ($order as $item) {
+            $new[] = Arr::get($original, $item);
+        }
+
+        return $new;
+    }
+
+    /**
      * Prepare for saving.
      *
      * @param UploadedFile|array $files
@@ -112,6 +138,10 @@ class MultipleFile extends Field
     {
         if (request()->has(static::FILE_DELETE_FLAG)) {
             return $this->destroy(request(static::FILE_DELETE_FLAG));
+        }
+
+        if (is_string($files) && request()->has(static::FILE_SORT_FLAG)) {
+            return $this->sortFiles($files);
         }
 
         $targets = array_map([$this, 'prepareForeach'], $files);
@@ -197,6 +227,84 @@ class MultipleFile extends Field
     }
 
     /**
+     * Allow to sort files.
+     *
+     * @return $this
+     */
+    public function sortable()
+    {
+        $this->fileActionSettings['showDrag'] = true;
+
+        return $this;
+    }
+
+    /**
+     * @param array $options
+     * @param array $options
+     */
+    protected function setupScripts($options)
+    {
+        $this->script = <<<EOT
+$("input{$this->getElementClassSelector()}").fileinput({$options});
+EOT;
+
+        if ($this->fileActionSettings['showRemove']) {
+
+            $text = [
+                'title'   => trans('admin.delete_confirm'),
+                'confirm' => trans('admin.confirm'),
+                'cancel'  => trans('admin.cancel'),
+            ];
+
+            $this->script .= <<<EOT
+$("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
+    
+    return new Promise(function(resolve, reject) {
+    
+        var remove = resolve;
+    
+        swal({
+            title: "{$text['title']}",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "{$text['confirm']}",
+            showLoaderOnConfirm: true,
+            cancelButtonText: "{$text['cancel']}",
+            preConfirm: function() {
+                return new Promise(function(resolve) {
+                    resolve(remove());
+                });
+            }
+        });
+    });
+});
+EOT;
+        }
+
+        if ($this->fileActionSettings['showDrag']) {
+
+            $this->addVariables([
+                'sortable'  => true,
+                'sort_flag' => static::FILE_SORT_FLAG,
+            ]);
+
+            $this->script .= <<<EOT
+$("input{$this->getElementClassSelector()}").on('filesorted', function(event, params) {
+    
+    var order = [];
+    
+    params.stack.forEach(function (item) {
+        order.push(item.key);
+    });
+    
+    $("input{$this->getElementClassSelector()}_sort").val(order);
+});
+EOT;
+        }
+    }
+
+    /**
      * Render file upload field.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -214,9 +322,7 @@ class MultipleFile extends Field
 
         $options = json_encode($this->options);
 
-        $this->script = <<<EOT
-$("input{$this->getElementClassSelector()}").fileinput({$options});
-EOT;
+        $this->setupScripts($options);
 
         return parent::render();
     }
