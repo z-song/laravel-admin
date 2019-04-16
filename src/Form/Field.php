@@ -18,7 +18,7 @@ class Field implements Renderable
     use Macroable;
 
     const FILE_DELETE_FLAG = '_file_del_';
-    const FILE_SORT_FLAG   = '_file_sort_';
+    const FILE_SORT_FLAG = '_file_sort_';
 
     /**
      * Element id.
@@ -479,11 +479,15 @@ class Field implements Renderable
             $thisRuleArr = array_filter(explode('|', $this->rules));
 
             $this->rules = array_merge($thisRuleArr, $rules);
-            if (in_array('required', $this->rules)) $this->required();
+            if (in_array('required', $this->rules)) {
+                $this->required();
+            }
         } elseif (is_string($rules)) {
             $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
-            if (in_array('required', $rules)) $this->required();
+            if (in_array('required', $rules)) {
+                $this->required();
+            }
             $this->rules = implode('|', $rules);
         }
 
@@ -1026,11 +1030,11 @@ class Field implements Renderable
     protected function getGroupClass($default = false)
     : string
     {
-        return ($default ? 'form-group ' : '') . implode(' ', array_filter($this->groupClass));
+        return ($default ? 'form-group ' : '').implode(' ', array_filter($this->groupClass));
     }
 
     /**
-     * reset field className
+     * reset field className.
      *
      * @param string $className
      * @param string $resetClassName
