@@ -222,9 +222,12 @@ HTML;
      */
     protected function renderDelete()
     {
-        $deleteConfirm = trans('admin.delete_confirm');
-        $confirm = trans('admin.confirm');
-        $cancel = trans('admin.cancel');
+        $trans = [
+            'delete_confirm' => trans('admin.delete_confirm'),
+            'confirm'        => trans('admin.confirm'),
+            'cancel'         => trans('admin.cancel'),
+            'delete'         => trans('admin.delete'),
+        ];
 
         $class = uniqid();
 
@@ -233,13 +236,13 @@ HTML;
 $('.{$class}-delete').unbind('click').click(function() {
 
     swal({
-        title: "$deleteConfirm",
+        title: "{$trans['delete_confirm']}",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
-        confirmButtonText: "$confirm",
+        confirmButtonText: "{$trans['confirm']}",
         showLoaderOnConfirm: true,
-        cancelButtonText: "$cancel",
+        cancelButtonText: "{$trans['cancel']}",
         preConfirm: function() {
             return new Promise(function(resolve) {
                 $.ajax({
@@ -270,15 +273,12 @@ $('.{$class}-delete').unbind('click').click(function() {
 });
 
 SCRIPT;
-
-        $delete = trans('admin.delete');
-
         Admin::script($script);
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$delete}">
-        <i class="fa fa-trash"></i><span class="hidden-xs">  {$delete}</span>
+    <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$trans['delete']}">
+        <i class="fa fa-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
     </a>
 </div>
 HTML;

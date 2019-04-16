@@ -205,9 +205,11 @@ EOT;
 
     protected function setupDeleteScript()
     {
-        $deleteConfirm = trans('admin.delete_confirm');
-        $confirm = trans('admin.confirm');
-        $cancel = trans('admin.cancel');
+        $trans = [
+            'delete_confirm' => trans('admin.delete_confirm'),
+            'confirm'        => trans('admin.confirm'),
+            'cancel'         => trans('admin.cancel'),
+        ];
 
         $script = <<<SCRIPT
 
@@ -216,13 +218,13 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
     var id = $(this).data('id');
 
     swal({
-        title: "$deleteConfirm",
+        title: "{$trans['delete_confirm']}",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
-        confirmButtonText: "$confirm",
+        confirmButtonText: "{$trans['confirm']}",
         showLoaderOnConfirm: true,
-        cancelButtonText: "$cancel",
+        cancelButtonText: "{$trans['cancel']}",
         preConfirm: function() {
             return new Promise(function(resolve) {
                 $.ajax({

@@ -14,9 +14,11 @@ class BatchDelete extends BatchAction
      */
     public function script()
     {
-        $deleteConfirm = trans('admin.delete_confirm');
-        $confirm = trans('admin.confirm');
-        $cancel = trans('admin.cancel');
+        $trans = [
+            'delete_confirm' => trans('admin.delete_confirm'),
+            'confirm'        => trans('admin.confirm'),
+            'cancel'         => trans('admin.cancel'),
+        ];
 
         return <<<EOT
 
@@ -25,13 +27,13 @@ $('{$this->getElementClass()}').on('click', function() {
     var id = {$this->grid->getSelectedRowsName()}().join();
 
     swal({
-        title: "$deleteConfirm",
+        title: "{$trans['delete_confirm']}",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
-        confirmButtonText: "$confirm",
+        confirmButtonText: "{$trans['confirm']}",
         showLoaderOnConfirm: true,
-        cancelButtonText: "$cancel",
+        cancelButtonText: "{$trans['cancel']}",
         preConfirm: function() {
             return new Promise(function(resolve) {
                 $.ajax({
