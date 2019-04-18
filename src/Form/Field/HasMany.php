@@ -103,13 +103,13 @@ class HasMany extends Field
         }
 
         $input = array_only($input, $this->column);
-        
+
         foreach ($input[$this->column] as $ikey => $ivalue) {
-            if (isset($ivalue[NestedForm::REMOVE_FLAG_NAME]) && $ivalue[NestedForm::REMOVE_FLAG_NAME]==1) {
+            if (isset($ivalue[NestedForm::REMOVE_FLAG_NAME]) && $ivalue[NestedForm::REMOVE_FLAG_NAME] == 1) {
                 unset($input[$this->column][$ikey]);
             }
         }
-        
+
         $form = $this->buildNestedForm($this->column, $this->builder);
 
         $rules = $attributes = [];
