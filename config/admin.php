@@ -60,6 +60,8 @@ return [
 
         'prefix' => env('ADMIN_ROUTE_PREFIX', 'admin'),
 
+        'prefix-permission-ignore' => env('ADMIN_ROUTE_PREFIX_PERMISSION_IGNORE', false),
+
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
