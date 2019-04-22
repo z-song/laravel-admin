@@ -55,7 +55,6 @@ class ColumnSelector extends AbstractTool
     </label>
 </li>
 HTML;
-
         })->implode("\r\n");
 
         $btns = [
@@ -105,7 +104,7 @@ EOT;
 
     protected function setupScript()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 
 $('.column-select-submit').on('click', function () {
     
