@@ -145,7 +145,7 @@ class Content implements Renderable
      * Render giving view as content body.
      *
      * @param string $view
-     * @param array $data
+     * @param array  $data
      *
      * @return Content
      */
