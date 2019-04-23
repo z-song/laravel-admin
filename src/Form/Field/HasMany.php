@@ -548,7 +548,7 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
 
 $('#has-many-{$this->column}').on('click', '.remove', function () {
     $(this).closest('.has-many-{$this->column}-form').hide();
-    $(this).closest('.has-many-{$this->column}-form').find('name*=$removeNameAttribute').val(1);
+    $(this).closest('.has-many-{$this->column}-form').find('[name*=$removeNameAttribute]').val(1);
 });
 
 EOT;
