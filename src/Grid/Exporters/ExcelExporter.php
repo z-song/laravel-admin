@@ -21,10 +21,19 @@ abstract class ExcelExporter extends AbstractExporter implements FromQuery, With
     protected $headings = [];
 
     /**
+     * @var array
+     */
+    protected $columns = [];
+
+    /**
      * @return array
      */
     public function headings(): array
     {
+        if (!empty($this->columns)) {
+            return array_values($this->columns);
+        }
+
         return $this->headings;
     }
 
@@ -33,6 +42,10 @@ abstract class ExcelExporter extends AbstractExporter implements FromQuery, With
      */
     public function query()
     {
+        if (!empty($this->columns)) {
+            return $this->getQuery()->select(array_keys($this->columns));
+        }
+
         return $this->getQuery();
     }
 
