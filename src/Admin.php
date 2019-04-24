@@ -44,12 +44,12 @@ class Admin
     /**
      * @var []Closure
      */
-    protected static $bootingCallbacks;
+    protected static $bootingCallbacks = [];
 
     /**
      * @var []Closure
      */
-    protected static $bootedCallbacks;
+    protected static $bootedCallbacks = [];
 
     /**
      * Returns the long version of Laravel-admin.
