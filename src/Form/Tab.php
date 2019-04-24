@@ -47,7 +47,7 @@ class Tab
     {
         $fields = $this->collectFields($content);
 
-        $id = uniqid('form-');
+        $id = 'form-'.($this->tabs->count() + 1);
 
         $this->tabs->push(compact('id', 'title', 'fields', 'active'));
 
