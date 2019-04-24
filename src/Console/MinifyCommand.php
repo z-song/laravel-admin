@@ -3,8 +3,7 @@
 namespace Encore\Admin\Console;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
+use Encore\Admin\Facades\Admin as AdminFacade;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use MatthiasMullie\Minify;
@@ -16,19 +15,17 @@ class MinifyCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'admin:minify';
+    protected $signature = 'admin:minify {--clear}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Minify the css and js';
+    protected $description = 'Minify the CSS and JS';
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function handle()
     {
@@ -36,7 +33,11 @@ class MinifyCommand extends Command
             $this->error('To use `admin:minify` command, please install [matthiasmullie/minify] first.');
         }
 
-        $this->initAssets();
+        if ($this->option('clear')) {
+            return $this->clearMinifiedFiles();
+        }
+
+        AdminFacade::bootstrap();
 
         $this->minifyCSS();
         $this->minifyJS();
@@ -44,13 +45,26 @@ class MinifyCommand extends Command
         $this->generateManifest();
 
         $this->comment('JS and CSS are successfully minified:');
-        $this->line('  '.Admin::$min['js']);
-        $this->line('  '.Admin::$min['css']);
+        $this->line('  ' . Admin::$min['js']);
+        $this->line('  ' . Admin::$min['css']);
 
         $this->line('');
 
         $this->comment('Manifest successfully generated:');
-        $this->line('  '.Admin::$manifest);
+        $this->line('  ' . Admin::$manifest);
+    }
+
+    protected function clearMinifiedFiles()
+    {
+        @unlink(public_path(Admin::$manifest));
+        @unlink(public_path(Admin::$min['js']));
+        @unlink(public_path(Admin::$min['css']));
+
+        $this->comment('Following files are cleared:');
+
+        $this->line('  ' . Admin::$min['js']);
+        $this->line('  ' . Admin::$min['css']);
+        $this->line('  ' . Admin::$manifest);
     }
 
     protected function minifyCSS()
@@ -96,38 +110,8 @@ class MinifyCommand extends Command
 
             return [$value => sprintf('%s?id=%s', $value, md5(uniqid()))];
 
-        })->toJson(JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
+        })->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         file_put_contents(public_path(Admin::$manifest), $json);
-    }
-
-    protected function initAssets()
-    {
-        Form::registerBuiltinFields();
-
-        Grid::registerColumnDisplayer();
-
-        Grid\Filter::registerFilters();
-
-        if ($bootstrap = config('admin.bootstrap', admin_path('bootstrap.php'))) {
-            require $bootstrap;
-        }
-
-        if (!empty(Admin::$booting)) {
-            foreach (Admin::$booting as $callable) {
-                call_user_func($callable);
-            }
-        }
-
-        $assets = Form::collectFieldAssets();
-
-        Admin::css($assets['css']);
-        Admin::js($assets['js']);
-
-        if (!empty(Admin::$booted)) {
-            foreach (Admin::$booted as $callable) {
-                call_user_func($callable);
-            }
-        }
     }
 }
