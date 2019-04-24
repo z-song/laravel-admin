@@ -12,6 +12,11 @@ abstract class AbstractExporter implements ExporterInterface
     protected $grid;
 
     /**
+     * @var integer
+     */
+    protected $page;
+
+    /**
      * Create a new exporter instance.
      *
      * @param $grid
@@ -83,7 +88,24 @@ abstract class AbstractExporter implements ExporterInterface
      */
     public function getQuery()
     {
-        return $this->grid->getFilter()->getModel()->getQueryBuilder();
+        $model = $this->grid->model();
+
+        $queryBuilder = $model->getQueryBuilder();
+
+        // Export data of giving page number.
+        if ($this->page) {
+
+            $keyName = $this->grid->getKeyName();
+
+            $scope = (clone $queryBuilder)
+                ->select([$keyName])
+                ->setEagerLoads([])
+                ->forPage($this->page, request($model->getPerPageName()))->get();
+
+            $queryBuilder->whereIn($keyName, $scope->pluck($keyName));
+        }
+
+        return $queryBuilder;
     }
 
     /**
@@ -103,6 +125,7 @@ abstract class AbstractExporter implements ExporterInterface
 
         if ($scope == Grid\Exporter::SCOPE_CURRENT_PAGE) {
             $this->grid->model()->usePaginate(true);
+            $this->page = $args ?: 1;
         }
 
         if ($scope == Grid\Exporter::SCOPE_SELECTED_ROWS) {
