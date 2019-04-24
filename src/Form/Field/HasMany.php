@@ -523,7 +523,7 @@ EOT;
      */
     protected function setupScriptForTableView($templateScript)
     {
-        $removeNameAttribute = NestedForm::REMOVE_FLAG_NAME;
+        $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
         /**
@@ -548,7 +548,7 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
 
 $('#has-many-{$this->column}').on('click', '.remove', function () {
     $(this).closest('.has-many-{$this->column}-form').hide();
-    $(this).closest('.has-many-{$this->column}-form').find('[name*=$removeNameAttribute]').val(1);
+    $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
 });
 
 EOT;
