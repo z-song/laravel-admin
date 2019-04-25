@@ -2,6 +2,7 @@
 
 namespace Encore\Admin;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -263,7 +264,7 @@ abstract class Extension
             return true;
         }
 
-        $message = "Invalid menu:\r\n".implode("\r\n", array_flatten($validator->errors()->messages()));
+        $message = "Invalid menu:\r\n".implode("\r\n", Arr::flatten($validator->errors()->messages()));
 
         throw new \Exception($message);
     }
@@ -286,7 +287,7 @@ abstract class Extension
             return true;
         }
 
-        $message = "Invalid permission:\r\n".implode("\r\n", array_flatten($validator->errors()->messages()));
+        $message = "Invalid permission:\r\n".implode("\r\n", Arr::flatten($validator->errors()->messages()));
 
         throw new \Exception($message);
     }

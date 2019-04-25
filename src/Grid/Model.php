@@ -519,7 +519,7 @@ class Model
             return;
         }
 
-        if (str_contains($this->sort['column'], '.')) {
+        if (Str::contains($this->sort['column'], '.')) {
             $this->setRelationSort($this->sort['column']);
         } else {
             $this->resetOrderBy();

@@ -53,7 +53,7 @@ class Tags extends Field
      */
     public function fill($data)
     {
-        $this->value = array_get($data, $this->column);
+        $this->value = Arr::get($data, $this->column);
 
         if (is_array($this->value) && $this->keyAsValue) {
             $this->value = array_column($this->value, $this->visibleColumn, $this->key);

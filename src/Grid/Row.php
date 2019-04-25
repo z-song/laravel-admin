@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 
 class Row
 {
@@ -143,7 +144,7 @@ class Row
      */
     public function __get($attr)
     {
-        return array_get($this->data, $attr);
+        return Arr::get($this->data, $attr);
     }
 
     /**
@@ -157,7 +158,7 @@ class Row
     public function column($name, $value = null)
     {
         if (is_null($value)) {
-            $column = array_get($this->data, $name);
+            $column = Arr::get($this->data, $name);
 
             return $this->output($column);
         }
@@ -166,7 +167,7 @@ class Row
             $value = $value->call($this, $this->column($name));
         }
 
-        array_set($this->data, $name, $value);
+        Arr::set($this->data, $name, $value);
 
         return $this;
     }

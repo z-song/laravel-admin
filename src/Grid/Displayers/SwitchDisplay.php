@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
 
 class SwitchDisplay extends AbstractDisplayer
 {
@@ -13,8 +14,8 @@ class SwitchDisplay extends AbstractDisplayer
 
     protected function updateStates($states)
     {
-        foreach (array_dot($states) as $key => $state) {
-            array_set($this->states, $key, $state);
+        foreach (Arr::dot($states) as $key => $state) {
+            Arr::set($this->states, $key, $state);
         }
     }
 

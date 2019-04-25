@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Arr;
 
 class MultipleSelect extends Select
 {
@@ -41,7 +42,7 @@ class MultipleSelect extends Select
 
     public function fill($data)
     {
-        $relations = array_get($data, $this->column);
+        $relations = Arr::get($data, $this->column);
 
         if (is_string($relations)) {
             $this->value = explode(',', $relations);
@@ -54,7 +55,7 @@ class MultipleSelect extends Select
                 $this->value = $relations;
             } else {
                 foreach ($relations as $relation) {
-                    $this->value[] = array_get($relation, "pivot.{$this->getOtherKey()}");
+                    $this->value[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");
                 }
             }
         }
@@ -62,7 +63,7 @@ class MultipleSelect extends Select
 
     public function setOriginal($data)
     {
-        $relations = array_get($data, $this->column);
+        $relations = Arr::get($data, $this->column);
 
         if (is_string($relations)) {
             $this->original = explode(',', $relations);
@@ -75,7 +76,7 @@ class MultipleSelect extends Select
                 $this->original = $relations;
             } else {
                 foreach ($relations as $relation) {
-                    $this->original[] = array_get($relation, "pivot.{$this->getOtherKey()}");
+                    $this->original[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");
                 }
             }
         }

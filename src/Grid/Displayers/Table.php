@@ -26,7 +26,7 @@ class Table extends AbstractDisplayer
         $data = array_map(function ($item) use ($columns) {
             $sorted = [];
 
-            $arr = array_only($item, $columns);
+            $arr = Arr::only($item, $columns);
 
             foreach ($columns as $column) {
                 if (array_key_exists($column, $arr)) {

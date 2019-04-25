@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid\Filter;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
 
 class Between extends AbstractFilter
 {
@@ -58,11 +59,11 @@ class Between extends AbstractFilter
      */
     public function condition($inputs)
     {
-        if (!array_has($inputs, $this->column)) {
+        if (!Arr::has($inputs, $this->column)) {
             return;
         }
 
-        $this->value = array_get($inputs, $this->column);
+        $this->value = Arr::get($inputs, $this->column);
 
         $value = array_filter($this->value, function ($val) {
             return $val !== '';
@@ -104,8 +105,8 @@ class Between extends AbstractFilter
      */
     protected function setupDatetime($options = [])
     {
-        $options['format'] = array_get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
-        $options['locale'] = array_get($options, 'locale', config('app.locale'));
+        $options['format'] = Arr::get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
+        $options['locale'] = Arr::get($options, 'locale', config('app.locale'));
 
         $startOptions = json_encode($options);
         $endOptions = json_encode($options + ['useCurrent' => false]);

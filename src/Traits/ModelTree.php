@@ -3,6 +3,7 @@
 namespace Encore\Admin\Traits;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
@@ -194,7 +195,7 @@ trait ModelTree
      */
     protected static function setBranchOrder(array $order)
     {
-        static::$branchOrder = array_flip(array_flatten($order));
+        static::$branchOrder = array_flip(Arr::flatten($order));
 
         static::$branchOrder = array_map(function ($item) {
             return ++$item;

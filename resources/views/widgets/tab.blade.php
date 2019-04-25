@@ -26,7 +26,7 @@
     <div class="tab-content">
         @foreach($tabs as $id => $tab)
         <div class="tab-pane {{ $id == $active ? 'active' : '' }}" id="tab_{{ $tab['id'] }}">
-            {!! array_get($tab, 'content') !!}
+            {!! \Illuminate\Support\Arr::get($tab, 'content') !!}
         </div>
         @endforeach
 

@@ -6,6 +6,7 @@ use Encore\Admin\Auth\Database\OperationLog;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 
 class LogController extends Controller
 {
@@ -36,7 +37,7 @@ class LogController extends Controller
         $grid->id('ID')->sortable();
         $grid->user()->name('User');
         $grid->method()->display(function ($method) {
-            $color = array_get(OperationLog::$methodColors, $method, 'grey');
+            $color = Arr::get(OperationLog::$methodColors, $method, 'grey');
 
             return "<span class=\"badge bg-$color\">$method</span>";
         });
@@ -44,7 +45,7 @@ class LogController extends Controller
         $grid->ip()->label('primary');
         $grid->input()->display(function ($input) {
             $input = json_decode($input, true);
-            $input = array_except($input, ['_pjax', '_token', '_method', '_previous_']);
+            $input = Arr::except($input, ['_pjax', '_token', '_method', '_previous_']);
             if (empty($input)) {
                 return '<code>{}</code>';
             }

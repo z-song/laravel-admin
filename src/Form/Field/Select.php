@@ -216,7 +216,7 @@ EOT;
 
             if (is_array($value)) {
                 if (Arr::isAssoc($value)) {
-                    $resources[] = array_get($value, $idField);
+                    $resources[] = Arr::get($value, $idField);
                 } else {
                     $resources = array_column($value, $idField);
                 }
