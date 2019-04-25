@@ -174,6 +174,16 @@ class Model
     }
 
     /**
+     * Get per-page number.
+     *
+     * @return int
+     */
+    public function getPerPage()
+    {
+        return $this->perPage;
+    }
+
+    /**
      * Get the query string variable used to store the sort.
      *
      * @return string
