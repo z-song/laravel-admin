@@ -462,6 +462,27 @@ class Field implements Renderable
     }
 
     /**
+     * Add `required` attribute to current field if has required rule,
+     * except file and image fields.
+     *
+     * @param array $rules
+     */
+    protected function addRequiredAttribute($rules)
+    {
+        if (!in_array('required', $rules)) {
+            return;
+        }
+
+        if ($this instanceof Form\Field\MultipleFile
+            || $this instanceof Form\Field\File)
+        {
+            return;
+        }
+
+        $this->required();
+    }
+
+    /**
      * Get or set rules.
      *
      * @param null  $rules
@@ -479,15 +500,14 @@ class Field implements Renderable
             $thisRuleArr = array_filter(explode('|', $this->rules));
 
             $this->rules = array_merge($thisRuleArr, $rules);
-            if (in_array('required', $this->rules)) {
-                $this->required();
-            }
+
+            $this->addRequiredAttribute($this->rules);
+
         } elseif (is_string($rules)) {
             $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
-            if (in_array('required', $rules)) {
-                $this->required();
-            }
+            $this->addRequiredAttribute($rules);
+
             $this->rules = implode('|', $rules);
         }
 
