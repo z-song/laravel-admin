@@ -515,11 +515,11 @@ class Model
             $this->resetOrderBy();
 
             // get column. if contains "cast", set set column as cast
-            if(!empty($this->sort['cast'])){
+            if (!empty($this->sort['cast'])) {
                 $column = "CAST({$this->sort['column']} AS {$this->sort['cast']}) {$this->sort['type']}";
                 $method = 'orderByRaw';
                 $arguments = [$column];
-            }else{
+            } else {
                 $column = $this->sort['column'];
                 $method = 'orderBy';
                 $arguments = [$column, $this->sort['type']];
