@@ -55,7 +55,7 @@ class Row implements Buildable, Renderable
         if (is_string($class)) {
             $class = [$class];
         }
-        
+
         $this->class = $class;
 
         return $this;
@@ -90,7 +90,7 @@ class Row implements Buildable, Renderable
     {
         $class = $this->class;
         $class[] = 'row';
-        echo '<div class="'. implode(' ', $class) .'">';
+        echo '<div class="'.implode(' ', $class).'">';
     }
 
     /**
