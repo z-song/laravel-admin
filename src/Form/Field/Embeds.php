@@ -4,8 +4,8 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\EmbeddedForm;
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class Embeds extends Field
