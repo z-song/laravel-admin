@@ -70,6 +70,16 @@ class Form implements Renderable
     protected $buttons = ['reset', 'submit'];
 
     /**
+     * Width for label and submit field.
+     *
+     * @var array
+     */
+    protected $width = [
+        'label' => 2,
+        'field' => 8,
+    ];
+
+    /**
      * Form constructor.
      *
      * @param array $data
@@ -197,6 +207,12 @@ class Form implements Renderable
             $field->setWidth($fieldWidth, $labelWidth);
         });
 
+        // set this width
+        $this->width = [
+            'label' => $labelWidth,
+            'field' => $fieldWidth,
+        ];
+
         return $this;
     }
 
@@ -248,6 +264,7 @@ class Form implements Renderable
             'attributes' => $this->formatAttribute(),
             'method'     => $this->attributes['method'],
             'buttons'    => $this->buttons,
+            'width'      => $this->width,
         ];
     }
 
