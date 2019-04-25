@@ -142,6 +142,19 @@ class Content implements Renderable
     }
 
     /**
+     * Render giving view as content body.
+     *
+     * @param string $view
+     * @param array  $data
+     *
+     * @return Content
+     */
+    public function view($view, $data)
+    {
+        return $this->body(view($view, $data));
+    }
+
+    /**
      * Add Row.
      *
      * @param Row $row

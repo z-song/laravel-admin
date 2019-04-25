@@ -74,18 +74,20 @@ class PerPageSelector extends AbstractTool
             return "<option value=\"$url\" $selected>$option</option>";
         })->implode("\r\n");
 
-        $show = trans('admin.show');
-        $entries = trans('admin.entries');
+        $trans = [
+            'show'    => trans('admin.show'),
+            'entries' => trans('admin.entries'),
+        ];
 
         return <<<EOT
 
 <label class="control-label pull-right" style="margin-right: 10px; font-weight: 100;">
 
-        <small>$show</small>&nbsp;
+        <small>{$trans['show']}</small>&nbsp;
         <select class="input-sm {$this->grid->getPerPageName()}" name="per-page">
             $options
         </select>
-        &nbsp;<small>$entries</small>
+        &nbsp;<small>{$trans['entries']}</small>
     </label>
 
 EOT;

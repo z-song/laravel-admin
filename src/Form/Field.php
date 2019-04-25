@@ -18,6 +18,7 @@ class Field implements Renderable
     use Macroable;
 
     const FILE_DELETE_FLAG = '_file_del_';
+    const FILE_SORT_FLAG = '_file_sort_';
 
     /**
      * Element id.
@@ -32,6 +33,13 @@ class Field implements Renderable
      * @var mixed
      */
     protected $value;
+
+    /**
+     * Data of all original columns of value.
+     *
+     * @var mixed
+     */
+    protected $data;
 
     /**
      * Field original value.
@@ -213,6 +221,11 @@ class Field implements Renderable
     protected $labelClass = [];
 
     /**
+     * @var array
+     */
+    protected $groupClass = [];
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -331,6 +344,8 @@ class Field implements Renderable
 //        if (!is_null($this->value)) {
 //            return;
 //        }
+
+        $this->data = $data;
 
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
@@ -464,9 +479,15 @@ class Field implements Renderable
             $thisRuleArr = array_filter(explode('|', $this->rules));
 
             $this->rules = array_merge($thisRuleArr, $rules);
+            if (in_array('required', $this->rules)) {
+                $this->required();
+            }
         } elseif (is_string($rules)) {
             $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
+            if (in_array('required', $rules)) {
+                $this->required();
+            }
             $this->rules = implode('|', $rules);
         }
 
@@ -558,6 +579,24 @@ class Field implements Renderable
         }
 
         $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Set or get data.
+     *
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function data(array $data = null)
+    {
+        if (is_null($data)) {
+            return $this->data;
+        }
+
+        $this->data = $data;
 
         return $this;
     }
@@ -861,7 +900,7 @@ class Field implements Renderable
      */
     public function setElementClass($class)
     {
-        $this->elementClass = (array) $class;
+        $this->elementClass = array_merge($this->elementClass, (array) $class);
 
         return $this;
     }
@@ -960,9 +999,52 @@ class Field implements Renderable
         }
 
         foreach ($delClass as $del) {
-            if (($key = array_search($del, $this->elementClass))) {
+            if (($key = array_search($del, $this->elementClass)) !== false) {
                 unset($this->elementClass[$key]);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set form group class.
+     *
+     * @param string|array $class
+     *
+     * @return $this
+     */
+    public function setGroupClass($class)
+    : self
+    {
+        array_push($this->groupClass, $class);
+
+        return $this;
+    }
+
+    /**
+     * Get element class.
+     *
+     * @return array
+     */
+    protected function getGroupClass($default = false)
+    : string
+    {
+        return ($default ? 'form-group ' : '').implode(' ', array_filter($this->groupClass));
+    }
+
+    /**
+     * reset field className.
+     *
+     * @param string $className
+     * @param string $resetClassName
+     *
+     * @return $this
+     */
+    public function resetElementClassName(string $className, string $resetClassName)
+    {
+        if (($key = array_search($className, $this->getElementClass())) !== false) {
+            $this->elementClass[$key] = $resetClassName;
         }
 
         return $this;
@@ -1043,6 +1125,18 @@ class Field implements Renderable
     }
 
     /**
+     * Set view of current field.
+     *
+     * @return string
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
+
+        return $this;
+    }
+
+    /**
      * Get script of current field.
      *
      * @return string
@@ -1050,6 +1144,18 @@ class Field implements Renderable
     public function getScript()
     {
         return $this->script;
+    }
+
+    /**
+     * Set script of current field.
+     *
+     * @return self
+     */
+    public function setScript($script)
+    {
+        $this->script = $script;
+
+        return $this;
     }
 
     /**

@@ -24,7 +24,7 @@ class Admin
      *
      * @var string
      */
-    const VERSION = '1.6.9';
+    const VERSION = '1.6.12';
 
     /**
      * @var Navbar
@@ -44,12 +44,12 @@ class Admin
     /**
      * @var []Closure
      */
-    public static $booting;
+    protected static $bootingCallbacks = [];
 
     /**
      * @var []Closure
      */
-    public static $booted;
+    protected static $bootedCallbacks = [];
 
     /**
      * Returns the long version of Laravel-admin.
@@ -244,10 +244,10 @@ class Admin
             $authController = config('admin.auth.controller', AuthController::class);
 
             /* @var \Illuminate\Routing\Router $router */
-            $router->get('auth/login', $authController.'@getLogin');
+            $router->get('auth/login', $authController.'@getLogin')->name('admin.login');
             $router->post('auth/login', $authController.'@postLogin');
-            $router->get('auth/logout', $authController.'@getLogout');
-            $router->get('auth/setting', $authController.'@getSetting');
+            $router->get('auth/logout', $authController.'@getLogout')->name('admin.logout');
+            $router->get('auth/setting', $authController.'@getSetting')->name('admin.setting');
             $router->put('auth/setting', $authController.'@putSetting');
         });
     }
@@ -270,7 +270,7 @@ class Admin
      */
     public static function booting(callable $callback)
     {
-        static::$booting[] = $callback;
+        static::$bootingCallbacks[] = $callback;
     }
 
     /**
@@ -278,7 +278,50 @@ class Admin
      */
     public static function booted(callable $callback)
     {
-        static::$booted[] = $callback;
+        static::$bootedCallbacks[] = $callback;
+    }
+
+    /**
+     * Bootstrap the admin application.
+     */
+    public function bootstrap()
+    {
+        $this->fireBootingCallbacks();
+
+        Form::registerBuiltinFields();
+
+        Grid::registerColumnDisplayer();
+
+        Grid\Filter::registerFilters();
+
+        require config('admin.bootstrap', admin_path('bootstrap.php'));
+
+        $assets = Form::collectFieldAssets();
+
+        Admin::css($assets['css']);
+        Admin::js($assets['js']);
+
+        $this->fireBootedCallbacks();
+    }
+
+    /**
+     * Call the booting callbacks for the admin application.
+     */
+    protected function fireBootingCallbacks()
+    {
+        foreach (static::$bootingCallbacks as $callable) {
+            call_user_func($callable);
+        }
+    }
+
+    /**
+     * Call the booted callbacks for the admin application.
+     */
+    protected function fireBootedCallbacks()
+    {
+        foreach (static::$bootedCallbacks as $callable) {
+            call_user_func($callable);
+        }
     }
 
     /*

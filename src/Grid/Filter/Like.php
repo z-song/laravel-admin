@@ -5,6 +5,16 @@ namespace Encore\Admin\Grid\Filter;
 class Like extends AbstractFilter
 {
     /**
+     * @var string
+     */
+    protected $exprFormat = '%{value}%';
+
+    /**
+     * @var string
+     */
+    protected $operator = 'like';
+
+    /**
      * Get condition of this filter.
      *
      * @param array $inputs
@@ -25,6 +35,8 @@ class Like extends AbstractFilter
 
         $this->value = $value;
 
-        return $this->buildCondition($this->column, 'like', "%{$this->value}%");
+        $expr = str_replace('{value}', $this->value, $this->exprFormat);
+
+        return $this->buildCondition($this->column, $this->operator, $expr);
     }
 }

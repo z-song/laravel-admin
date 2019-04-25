@@ -36,7 +36,6 @@ use Illuminate\Contracts\Support\Renderable;
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Number         number($name, $label = '')
  * @method Field\Currency       currency($name, $label = '')
- * @method Field\Json           json($name, $label = '')
  * @method Field\SwitchField    switch($name, $label = '')
  * @method Field\Display        display($name, $label = '')
  * @method Field\Rate           rate($name, $label = '')

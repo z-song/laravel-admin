@@ -62,6 +62,18 @@ class Show implements Renderable
     protected $panel;
 
     /**
+     * Extended fields.
+     *
+     * @var array
+     */
+    public static $extendedFields = [];
+
+    /**
+     * @var \Closure
+     */
+    protected static $initCallback;
+
+    /**
      * Show constructor.
      *
      * @param Model $model
@@ -74,6 +86,33 @@ class Show implements Renderable
 
         $this->initPanel();
         $this->initContents();
+
+        if (static::$initCallback instanceof \Closure) {
+            call_user_func(static::$initCallback, $this);
+        }
+    }
+
+    /**
+     * Initialize with user pre-defined default disables, etc.
+     *
+     * @param \Closure $callback
+     */
+    public static function init(\Closure $callback = null)
+    {
+        static::$initCallback = $callback;
+    }
+
+    /**
+     * Register custom field.
+     *
+     * @param string $abstract
+     * @param string $class
+     *
+     * @return void
+     */
+    public static function extend($abstract, $class)
+    {
+        static::$extendedFields[$abstract] = $class;
     }
 
     /**

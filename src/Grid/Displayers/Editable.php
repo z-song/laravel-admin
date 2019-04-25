@@ -134,6 +134,14 @@ class Editable extends AbstractDisplayer
     }
 
     /**
+     * Time type editable.
+     */
+    public function time()
+    {
+        $this->combodate('HH:mm:ss');
+    }
+
+    /**
      * Combodate type editable.
      *
      * @param string $format
@@ -170,6 +178,8 @@ class Editable extends AbstractDisplayer
         $options = json_encode($this->options);
 
         Admin::script("$('.$class').editable($options);");
+
+        $this->value = htmlentities($this->value);
 
         $attributes = [
             'href'       => '#',

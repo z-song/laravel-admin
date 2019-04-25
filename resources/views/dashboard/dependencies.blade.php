@@ -10,7 +10,7 @@
     </div>
 
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="box-body dependencies">
         <div class="table-responsive">
             <table class="table table-striped">
                 @foreach($dependencies as $dependency => $version)

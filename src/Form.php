@@ -188,6 +188,13 @@ class Form implements Renderable
     protected $isSoftDeletes = false;
 
     /**
+     * Initialization closure array.
+     *
+     * @var []Closure
+     */
+    protected static $initCallbacks;
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -203,7 +210,33 @@ class Form implements Renderable
             $callback($this);
         }
 
-        $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses($this->model));
+        $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses_deep($this->model));
+
+        $this->callInitCallbacks();
+    }
+
+    /**
+     * Initialize with user pre-defined default disables, etc.
+     *
+     * @param Closure $callback
+     */
+    public static function init(Closure $callback = null)
+    {
+        static::$initCallbacks[] = $callback;
+    }
+
+    /**
+     * Call the initialization closure array in sequence.
+     */
+    protected function callInitCallbacks()
+    {
+        if (empty(static::$initCallbacks)) {
+            return;
+        }
+
+        foreach (static::$initCallbacks as $callback) {
+            call_user_func($callback, $this);
+        }
     }
 
     /**
@@ -511,7 +544,8 @@ class Form implements Renderable
     protected function callSaved()
     {
         foreach ($this->saved as $func) {
-            if ($func instanceof Closure && ($ret = call_user_func($func, $this)) instanceof Response) {
+            if ($func instanceof Closure &&
+                ($ret = call_user_func($func, $this)) instanceof Response) {
                 return $ret;
             }
         }
@@ -520,9 +554,10 @@ class Form implements Renderable
     /**
      * Handle update.
      *
-     * @param int $id
+     * @param int  $id
+     * @param null $data
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed|null|Response
      */
     public function update($id, $data = null)
     {
@@ -530,19 +565,18 @@ class Form implements Renderable
 
         $isEditable = $this->isEditable($data);
 
-        $data = $this->handleEditable($data);
-
-        $data = $this->handleFileDelete($data);
-
-        if ($this->handleOrderable($id, $data)) {
-            return response([
-                'status'  => true,
-                'message' => trans('admin.update_succeeded'),
-            ]);
+        if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
+            return $data;
         }
 
         /* @var Model $this->model */
-        $this->model = $this->model->with($this->getRelations())->findOrFail($id);
+        $builder = $this->model();
+
+        if ($this->isSoftDeletes) {
+            $builder = $builder->withTrashed();
+        }
+
+        $this->model = $builder->with($this->getRelations())->findOrFail($id);
 
         $this->setFieldOriginalValue();
 
@@ -550,9 +584,9 @@ class Form implements Renderable
         if ($validationMessages = $this->validationMessages($data)) {
             if (!$isEditable) {
                 return back()->withInput()->withErrors($validationMessages);
-            } else {
-                return response()->json(['errors' => array_dot($validationMessages->getMessages())], 422);
             }
+
+            return response()->json(['errors' => array_dot($validationMessages->getMessages())], 422);
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -652,6 +686,32 @@ class Form implements Renderable
     }
 
     /**
+     * Handle updates for single column.
+     *
+     * @param int   $id
+     * @param array $data
+     *
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|Response
+     */
+    protected function handleColumnUpdates($id, $data)
+    {
+        $data = $this->handleEditable($data);
+
+        $data = $this->handleFileDelete($data);
+
+        $data = $this->handleFileSort($data);
+
+        if ($this->handleOrderable($id, $data)) {
+            return response([
+                'status'  => true,
+                'message' => trans('admin.update_succeeded'),
+            ]);
+        }
+
+        return $data;
+    }
+
+    /**
      * Handle editable update.
      *
      * @param array $input
@@ -681,6 +741,32 @@ class Form implements Renderable
         if (array_key_exists(Field::FILE_DELETE_FLAG, $input)) {
             $input[Field::FILE_DELETE_FLAG] = $input['key'];
             unset($input['key']);
+        }
+
+        Input::replace($input);
+
+        return $input;
+    }
+
+    /**
+     * @param array $input
+     *
+     * @return array
+     */
+    protected function handleFileSort(array $input = [])
+    {
+        if (!array_key_exists(Field::FILE_SORT_FLAG, $input)) {
+            return $input;
+        }
+
+        $sorts = array_filter($input[Field::FILE_SORT_FLAG]);
+
+        if (empty($sorts)) {
+            return $input;
+        }
+
+        foreach ($sorts as $column => $order) {
+            $input[$column] = $order;
         }
 
         Input::replace($input);
@@ -737,14 +823,14 @@ class Form implements Renderable
                 continue;
             }
 
-            switch (get_class($relation)) {
-                case Relations\BelongsToMany::class:
-                case Relations\MorphToMany::class:
+            switch (true) {
+                case $relation instanceof Relations\BelongsToMany:
+                case $relation instanceof Relations\MorphToMany:
                     if (isset($prepared[$name])) {
                         $relation->sync($prepared[$name]);
                     }
                     break;
-                case Relations\HasOne::class:
+                case $relation instanceof Relations\HasOne:
 
                     $related = $this->model->$name;
 
@@ -762,7 +848,8 @@ class Form implements Renderable
 
                     $related->save();
                     break;
-                case Relations\BelongsTo::class:
+                case $relation instanceof Relations\BelongsTo:
+                case $relation instanceof Relations\MorphTo:
 
                     $parent = $this->model->$name;
 
@@ -778,14 +865,15 @@ class Form implements Renderable
                     $parent->save();
 
                     // When in creating, associate two models
-                    if (!$this->model->{$relation->getForeignKey()}) {
-                        $this->model->{$relation->getForeignKey()} = $parent->getKey();
+                    $foreignKeyMethod = (app()->version() < '5.8.0') ? 'getForeignKey' : 'getForeignKeyName';
+                    if (!$this->model->{$relation->{$foreignKeyMethod}()}) {
+                        $this->model->{$relation->{$foreignKeyMethod}()} = $parent->getKey();
 
                         $this->model->save();
                     }
 
                     break;
-                case Relations\MorphOne::class:
+                case $relation instanceof Relations\MorphOne:
                     $related = $this->model->$name;
                     if (is_null($related)) {
                         $related = $relation->make();
@@ -795,8 +883,8 @@ class Form implements Renderable
                     }
                     $related->save();
                     break;
-                case Relations\HasMany::class:
-                case Relations\MorphMany::class:
+                case $relation instanceof Relations\HasMany:
+                case $relation instanceof Relations\MorphMany:
 
                     foreach ($prepared[$name] as $related) {
                         /** @var Relations\Relation $relation */
@@ -1073,7 +1161,7 @@ class Form implements Renderable
         $builder = $this->model();
 
         if ($this->isSoftDeletes) {
-            $builder->withTrashed();
+            $builder = $builder->withTrashed();
         }
 
         $this->model = $builder->with($relations)->findOrFail($id);
@@ -1276,9 +1364,9 @@ class Form implements Renderable
      *
      * @deprecated
      */
-    public function disableSubmit()
+    public function disableSubmit(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableSubmit();
+        $this->builder()->getFooter()->disableSubmit($disable);
 
         return $this;
     }
@@ -1290,9 +1378,9 @@ class Form implements Renderable
      *
      * @deprecated
      */
-    public function disableReset()
+    public function disableReset(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableReset();
+        $this->builder()->getFooter()->disableReset($disable);
 
         return $this;
     }
@@ -1302,9 +1390,9 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function disableViewCheck()
+    public function disableViewCheck(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableViewCheck();
+        $this->builder()->getFooter()->disableViewCheck($disable);
 
         return $this;
     }
@@ -1314,9 +1402,9 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function disableEditingCheck()
+    public function disableEditingCheck(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableEditingCheck();
+        $this->builder()->getFooter()->disableEditingCheck($disable);
 
         return $this;
     }
@@ -1326,9 +1414,9 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function disableCreatingCheck()
+    public function disableCreatingCheck(bool $disable = true)
     {
-        $this->builder()->getFooter()->disableCreatingCheck();
+        $this->builder()->getFooter()->disableCreatingCheck($disable);
 
         return $this;
     }
