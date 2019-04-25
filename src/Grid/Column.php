@@ -315,6 +315,7 @@ class Column
     public function cast($cast)
     {
         $this->cast = $cast;
+
         return $this;
     }
 
