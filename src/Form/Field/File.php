@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -76,7 +77,7 @@ class File extends Field
         /*
          * Make input data validatable if the column data is `null`.
          */
-        if (array_has($input, $this->column) && is_null(array_get($input, $this->column))) {
+        if (Arr::has($input, $this->column) && is_null(Arr::get($input, $this->column))) {
             $input[$this->column] = '';
         }
 

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
@@ -45,7 +46,7 @@ class TestCase extends BaseTestCase
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
         $this->app['config']->set('admin', $adminConfig);
 
-        foreach (array_dot(array_get($adminConfig, 'auth'), 'auth.') as $key => $value) {
+        foreach (Arr::dot(Arr::get($adminConfig, 'auth'), 'auth.') as $key => $value) {
             $this->app['config']->set($key, $value);
         }
 

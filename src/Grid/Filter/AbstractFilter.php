@@ -10,6 +10,7 @@ use Encore\Admin\Grid\Filter\Presenter\Presenter;
 use Encore\Admin\Grid\Filter\Presenter\Radio;
 use Encore\Admin\Grid\Filter\Presenter\Select;
 use Encore\Admin\Grid\Filter\Presenter\Text;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
@@ -181,7 +182,7 @@ abstract class AbstractFilter
     public function siblings($index = null)
     {
         if (!is_null($index)) {
-            return array_get($this->parent->filters(), $index);
+            return Arr::get($this->parent->filters(), $index);
         }
 
         return $this->parent->filters();
@@ -224,7 +225,7 @@ abstract class AbstractFilter
      */
     public function condition($inputs)
     {
-        $value = array_get($inputs, $this->column);
+        $value = Arr::get($inputs, $this->column);
 
         if (!isset($value)) {
             return;

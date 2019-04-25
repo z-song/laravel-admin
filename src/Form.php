@@ -455,7 +455,7 @@ class Form implements Renderable
 
         $this->relations = $this->getRelationInputs($this->inputs);
 
-        $this->updates = array_except($this->inputs, array_keys($this->relations));
+        $this->updates = Arr::except($this->inputs, array_keys($this->relations));
     }
 
     /**
@@ -467,7 +467,7 @@ class Form implements Renderable
      */
     protected function removeIgnoredFields($input)
     {
-        array_forget($input, $this->ignored);
+        Arr::forget($input, $this->ignored);
 
         return $input;
     }
@@ -586,7 +586,7 @@ class Form implements Renderable
                 return back()->withInput()->withErrors($validationMessages);
             }
 
-            return response()->json(['errors' => array_dot($validationMessages->getMessages())], 422);
+            return response()->json(['errors' => Arr::dot($validationMessages->getMessages())], 422);
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -724,8 +724,8 @@ class Form implements Renderable
             $name = $input['name'];
             $value = $input['value'];
 
-            array_forget($input, ['pk', 'value', 'name']);
-            array_set($input, $name, $value);
+            Arr::forget($input, ['pk', 'value', 'name']);
+            Arr::set($input, $name, $value);
         }
 
         return $input;
@@ -838,7 +838,7 @@ class Form implements Renderable
                     if (is_null($related)) {
                         $related = $relation->getRelated();
                         $qualifiedParentKeyName = $relation->getQualifiedParentKeyName();
-                        $localKey = array_last(explode('.', $qualifiedParentKeyName));
+                        $localKey = Arr::last(explode('.', $qualifiedParentKeyName));
                         $related->{$relation->getForeignKeyName()} = $this->model->{$localKey};
                     }
 
@@ -892,7 +892,7 @@ class Form implements Renderable
 
                         $keyName = $relation->getRelated()->getKeyName();
 
-                        $instance = $relation->findOrNew(array_get($related, $keyName));
+                        $instance = $relation->findOrNew(Arr::get($related, $keyName));
 
                         if ($related[static::REMOVE_FLAG_NAME] == 1) {
                             $instance->delete();
@@ -900,7 +900,7 @@ class Form implements Renderable
                             continue;
                         }
 
-                        array_forget($related, static::REMOVE_FLAG_NAME);
+                        Arr::forget($related, static::REMOVE_FLAG_NAME);
 
                         $instance->fill($related);
 
@@ -929,7 +929,7 @@ class Form implements Renderable
             $columns = $field->column();
 
             // If column not in input array data, then continue.
-            if (!array_has($updates, $columns)) {
+            if (!Arr::has($updates, $columns)) {
                 continue;
             }
 
@@ -943,10 +943,10 @@ class Form implements Renderable
 
             if (is_array($columns)) {
                 foreach ($columns as $name => $column) {
-                    array_set($prepared, $column, $value[$name]);
+                    Arr::set($prepared, $column, $value[$name]);
                 }
             } elseif (is_string($columns)) {
-                array_set($prepared, $columns, $value);
+                Arr::set($prepared, $columns, $value);
             }
         }
 
@@ -981,7 +981,7 @@ class Form implements Renderable
     protected function prepareInsert($inserts)
     {
         if ($this->isHasOneRelation($inserts)) {
-            $inserts = array_dot($inserts);
+            $inserts = Arr::dot($inserts);
         }
 
         foreach ($inserts as $column => $value) {
@@ -996,7 +996,7 @@ class Form implements Renderable
         $prepared = [];
 
         foreach ($inserts as $key => $value) {
-            array_set($prepared, $key, $value);
+            Arr::set($prepared, $key, $value);
         }
 
         return $prepared;
@@ -1095,16 +1095,16 @@ class Form implements Renderable
     protected function getDataByColumn($data, $columns)
     {
         if (is_string($columns)) {
-            return array_get($data, $columns);
+            return Arr::get($data, $columns);
         }
 
         if (is_array($columns)) {
             $value = [];
             foreach ($columns as $name => $column) {
-                if (!array_has($data, $column)) {
+                if (!Arr::has($data, $column)) {
                     continue;
                 }
-                $value[$name] = array_get($data, $column);
+                $value[$name] = Arr::get($data, $column);
             }
 
             return $value;
@@ -1252,8 +1252,8 @@ class Form implements Renderable
             $columns[] = $field->column();
         }
 
-        foreach (array_flatten($columns) as $column) {
-            if (str_contains($column, '.')) {
+        foreach (Arr::flatten($columns) as $column) {
+            if (Str::contains($column, '.')) {
                 list($relation) = explode('.', $column);
 
                 if (method_exists($this->model, $relation) &&
@@ -1474,10 +1474,10 @@ class Form implements Renderable
     public function input($key, $value = null)
     {
         if (is_null($value)) {
-            return array_get($this->inputs, $key);
+            return Arr::get($this->inputs, $key);
         }
 
-        return array_set($this->inputs, $key, $value);
+        return Arr::set($this->inputs, $key, $value);
     }
 
     /**
@@ -1574,7 +1574,7 @@ class Form implements Renderable
      */
     public static function forget($abstract)
     {
-        array_forget(static::$availableFields, $abstract);
+        Arr::forget(static::$availableFields, $abstract);
     }
 
     /**
@@ -1591,7 +1591,7 @@ class Form implements Renderable
             $method = static::$fieldAlias[$method];
         }
 
-        $class = array_get(static::$availableFields, $method);
+        $class = Arr::get(static::$availableFields, $method);
 
         if (class_exists($class)) {
             return $class;
@@ -1621,8 +1621,8 @@ class Form implements Renderable
 
             $assets = call_user_func([$field, 'getAssets']);
 
-            $css->push(array_get($assets, 'css'));
-            $js->push(array_get($assets, 'js'));
+            $css->push(Arr::get($assets, 'css'));
+            $js->push(Arr::get($assets, 'js'));
         }
 
         return static::$collectedAssets = [
@@ -1651,7 +1651,7 @@ class Form implements Renderable
      */
     public function __set($name, $value)
     {
-        return array_set($this->inputs, $name, $value);
+        return Arr::set($this->inputs, $name, $value);
     }
 
     /**
@@ -1665,7 +1665,7 @@ class Form implements Renderable
     public function __call($method, $arguments)
     {
         if ($className = static::findFieldClass($method)) {
-            $column = array_get($arguments, 0, ''); //[0];
+            $column = Arr::get($arguments, 0, ''); //[0];
 
             $element = new $className($column, array_slice($arguments, 1));
 

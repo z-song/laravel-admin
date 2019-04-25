@@ -6,6 +6,7 @@ use Encore\Admin\Show;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -194,7 +195,7 @@ class Field implements Renderable
                 return $default;
             }
 
-            return array_get($values, $value, $default);
+            return Arr::get($values, $value, $default);
         });
     }
 
@@ -520,7 +521,7 @@ HTML;
      */
     public function __call($method, $arguments = [])
     {
-        if ($class = array_get(Show::$extendedFields, $method)) {
+        if ($class = Arr::get(Show::$extendedFields, $method)) {
             return $this->callExtendedField($class, $arguments);
         }
 
@@ -530,7 +531,7 @@ HTML;
 
         if ($this->relation) {
             $this->name = $method;
-            $this->label = $this->formatLabel(array_get($arguments, 0));
+            $this->label = $this->formatLabel(Arr::get($arguments, 0));
         }
 
         return $this;

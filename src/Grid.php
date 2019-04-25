@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Grid
@@ -335,7 +336,7 @@ class Grid
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
 
-            $name = snake_case($relationName).'.'.$relationColumn;
+            $name = Str::snake($relationName).'.'.$relationColumn;
         }
 
         $column = $this->addColumn($name, $label);
@@ -1054,7 +1055,7 @@ class Grid
         ) {
             $this->model()->with($method);
 
-            return $this->addColumn($method, $label)->setRelation(snake_case($method));
+            return $this->addColumn($method, $label)->setRelation(Str::snake($method));
         }
 
         if ($relation instanceof Relations\HasMany
@@ -1063,7 +1064,7 @@ class Grid
         ) {
             $this->model()->with($method);
 
-            return $this->addColumn(snake_case($method), $label);
+            return $this->addColumn(Str::snake($method), $label);
         }
 
         return false;

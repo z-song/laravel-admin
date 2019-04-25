@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\Relation as EloquentRelation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Show implements Renderable
 {
@@ -447,7 +448,7 @@ class Show implements Renderable
                 return $this->addRelation($method, $arguments[1], $arguments[0]);
             }
 
-            return $this->addField($method, array_get($arguments, 0))->setRelation(snake_case($method));
+            return $this->addField($method, Arr::get($arguments, 0))->setRelation(Str::snake($method));
         }
 
         if ($relation    instanceof HasMany
