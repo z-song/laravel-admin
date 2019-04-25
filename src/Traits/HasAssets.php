@@ -102,7 +102,9 @@ trait HasAssets
             static::$css = array_merge(static::$css, static::baseCss(), (array)$css);
         }
 
-        return view('admin::partials.css', ['css' => array_unique(static::$css)]);
+        $css = array_filter(array_unique(static::$css));
+
+        return view('admin::partials.css', compact('css'));
     }
 
     /**
@@ -146,7 +148,9 @@ trait HasAssets
             static::$js = array_merge(static::baseJs(), static::$js, (array) $js);
         }
 
-        return view('admin::partials.js', ['js' => array_unique(static::$js)]);
+        $js = array_filter(array_unique(static::$js));
+
+        return view('admin::partials.js', compact('js'));
     }
 
     /**
