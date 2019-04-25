@@ -327,6 +327,22 @@ class Show implements Renderable
     }
 
     /**
+     * Set field and label width in fields.
+     *
+     * @param int $fieldWidth
+     * @param int $labelWidth
+     *
+     * @return $this
+     */
+    public function setWidth($fieldWidth = 8, $labelWidth = 2)
+    {
+        collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
+            $field->each->setWidth($fieldWidth, $labelWidth);
+        });
+        return $this;
+    }
+
+    /**
      * Set the model instance.
      *
      * @param Model $model
