@@ -339,6 +339,7 @@ class Show implements Renderable
         collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
             $field->each->setWidth($fieldWidth, $labelWidth);
         });
+
         return $this;
     }
 
