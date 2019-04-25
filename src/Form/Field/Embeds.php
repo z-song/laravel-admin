@@ -5,6 +5,7 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form\EmbeddedForm;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Embeds extends Field
@@ -57,7 +58,7 @@ class Embeds extends Field
             return false;
         }
 
-        $input = array_only($input, $this->column);
+        $input = Arr::only($input, $this->column);
 
         $rules = $attributes = [];
 
@@ -150,7 +151,7 @@ class Embeds extends Field
             }
         }
 
-        foreach (array_keys(array_dot($input)) as $key) {
+        foreach (array_keys(Arr::dot($input)) as $key) {
             if (is_string($column)) {
                 if (Str::endsWith($key, ".$column")) {
                     $attributes[$key] = $label;
@@ -189,11 +190,11 @@ class Embeds extends Field
             /*
              * set new key
              */
-            array_set($input, "{$this->column}.$newKey", $value);
+            Arr::set($input, "{$this->column}.$newKey", $value);
             /*
              * forget the old key and value
              */
-            array_forget($input, "{$this->column}.$key");
+            Arr::forget($input, "{$this->column}.$key");
         }
     }
 

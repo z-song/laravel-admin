@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid\Filter\Presenter;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
 
 class DateTime extends Presenter
 {
@@ -33,8 +34,8 @@ class DateTime extends Presenter
      */
     protected function getOptions(array  $options) : array
     {
-        $options['format'] = array_get($options, 'format', $this->format);
-        $options['locale'] = array_get($options, 'locale', config('app.locale'));
+        $options['format'] = Arr::get($options, 'format', $this->format);
+        $options['locale'] = Arr::get($options, 'locale', config('app.locale'));
 
         return $options;
     }

@@ -25,7 +25,9 @@ use Encore\Admin\Grid\Filter\Where;
 use Encore\Admin\Grid\Filter\Year;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Input;
 
 /**
@@ -289,7 +291,7 @@ class Filter implements Renderable
      */
     public function conditions()
     {
-        $inputs = array_dot(Input::all());
+        $inputs = Arr::dot(Input::all());
 
         $inputs = array_filter($inputs, function ($input) {
             return $input !== '' && !is_null($input);
@@ -304,7 +306,7 @@ class Filter implements Renderable
         $params = [];
 
         foreach ($inputs as $key => $value) {
-            array_set($params, $key, $value);
+            Arr::set($params, $key, $value);
         }
 
         $conditions = [];
@@ -313,7 +315,7 @@ class Filter implements Renderable
 
         foreach ($this->filters() as $filter) {
             if (in_array($column = $filter->getColumn(), $this->layoutOnlyFilterColumns)) {
-                $filter->default(array_get($params, $column));
+                $filter->default(Arr::get($params, $column));
             } else {
                 $conditions[] = $filter->condition($params);
             }
@@ -338,7 +340,7 @@ class Filter implements Renderable
         }
 
         $inputs = collect($inputs)->filter(function ($input, $key) {
-            return starts_with($key, "{$this->name}_");
+            return Str::startsWith($key, "{$this->name}_");
         })->mapWithKeys(function ($val, $key) {
             $key = str_replace("{$this->name}_", '', $key);
 
@@ -592,7 +594,7 @@ class Filter implements Renderable
         $request = request();
 
         $query = $request->query();
-        array_forget($query, $keys);
+        Arr::forget($query, $keys);
 
         $question = $request->getBaseUrl().$request->getPathInfo() == '/' ? '/?' : '?';
 

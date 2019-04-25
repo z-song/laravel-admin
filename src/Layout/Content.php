@@ -4,6 +4,7 @@ namespace Encore\Admin\Layout;
 
 use Closure;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 
 class Content implements Renderable
 {
@@ -101,7 +102,7 @@ class Content implements Renderable
     protected function validateBreadcrumb(array $breadcrumb)
     {
         foreach ($breadcrumb as $item) {
-            if (!is_array($item) || !array_has($item, 'text')) {
+            if (!is_array($item) || !Arr::has($item, 'text')) {
                 throw new  \Exception('Breadcrumb format error!');
             }
         }

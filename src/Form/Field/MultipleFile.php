@@ -79,7 +79,7 @@ class MultipleFile extends Field
 
         $attributes[$this->column] = $this->label;
 
-        list($rules, $input) = $this->hydrateFiles(array_get($input, $this->column, []));
+        list($rules, $input) = $this->hydrateFiles(Arr::get($input, $this->column, []));
 
         return Validator::make($input, $rules, $this->validationMessages, $attributes);
     }
@@ -335,7 +335,7 @@ EOT;
     {
         $files = $this->original ?: [];
 
-        $file = array_get($files, $key);
+        $file = Arr::get($files, $key);
 
         if ($this->storage->exists($file)) {
             $this->storage->delete($file);

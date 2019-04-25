@@ -4,6 +4,7 @@ namespace Encore\Admin;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Arr;
 
 class AdminServiceProvider extends ServiceProvider
 {
@@ -109,7 +110,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected function loadAdminAuthConfig()
     {
-        config(array_dot(config('admin.auth', []), 'auth.'));
+        config(Arr::dot(config('admin.auth', []), 'auth.'));
     }
 
     /**
