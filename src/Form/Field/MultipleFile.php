@@ -259,7 +259,7 @@ EOT;
             $this->script .= <<<EOT
 $("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
     
-    return new Promise(function(resolve, reject) {
+    var p = new Promise(function(resolve, reject) {
     
         var remove = resolve;
     
@@ -281,11 +281,15 @@ $("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
                 return;
             }
             
-            setTimeout(function () {
-                $.pjax.reload('#pjax-container');
-            }, 100);
+            $.pjax.reload('#pjax-container');
         });
     });
+    
+    p.then(function() {
+        $.pjax.reload('#pjax-container');
+    });
+    
+    return p;
 });
 EOT;
         }
