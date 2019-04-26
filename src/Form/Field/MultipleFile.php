@@ -276,6 +276,14 @@ $("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
                     resolve(remove());
                 });
             }
+        }).then(function(result) {
+            if (result.dismiss == "cancel") {
+                return;
+            }
+            
+            setTimeout(function () {
+                $.pjax.reload('#pjax-container');
+            }, 100);
         });
     });
 });
