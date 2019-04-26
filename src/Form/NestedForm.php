@@ -60,6 +60,11 @@ class NestedForm
     const REMOVE_FLAG_CLASS = 'fom-removed';
 
     /**
+     * @var mixed
+     */
+    protected $key;
+
+    /**
      * @var string
      */
     protected $relationName;
@@ -125,8 +130,31 @@ class NestedForm
     public function getKey()
     {
         if ($this->model) {
-            return $this->model->getKey();
+            $key = $this->model->getKey();
         }
+
+        if (!is_null($this->key)) {
+            $key = $this->key;
+        }
+
+        if (isset($key)) {
+            return $key;
+        }
+
+        return 'new_'.static::DEFAULT_KEY_NAME;
+    }
+
+    /**
+     * Set key for current form.
+     *
+     * @param mixed $key
+     * @return $this
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+
+        return $this;
     }
 
     /**
@@ -161,17 +189,21 @@ class NestedForm
      *
      * @return $this
      */
-    public function setOriginal($data, $relatedKeyName)
+    public function setOriginal($data, $relatedKeyName = null)
     {
         if (empty($data)) {
             return $this;
         }
 
-        foreach ($data as $value) {
+        foreach ($data as $key => $value) {
             /*
              * like $this->original[30] = [ id = 30, .....]
              */
-            $this->original[$value[$relatedKeyName]] = $value;
+            if ($relatedKeyName) {
+                $key = $value[$relatedKeyName];
+            }
+
+            $this->original[$key] = $value;
         }
 
         return $this;
@@ -364,7 +396,7 @@ class NestedForm
 
         $elementName = $elementClass = $errorKey = [];
 
-        $key = $this->getKey() ?: 'new_'.static::DEFAULT_KEY_NAME;
+        $key = $this->getKey();
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {
