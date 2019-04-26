@@ -40,6 +40,9 @@ class MultipleSelect extends Select
         throw new \Exception('Column of this field must be a `BelongsToMany` relation.');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function fill($data)
     {
         $relations = Arr::get($data, $this->column);
@@ -48,19 +51,30 @@ class MultipleSelect extends Select
             $this->value = explode(',', $relations);
         }
 
-        if (is_array($relations)) {
-            if (is_null(current($relations))) {
-                $this->value = null;
-            } elseif (is_string(current($relations))) {
-                $this->value = $relations;
-            } else {
-                foreach ($relations as $relation) {
-                    $this->value[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");
-                }
+        if (!is_array($relations)) {
+            return;
+        }
+
+        $first = current($relations);
+
+        if (is_null($first)) {
+            $this->value = null;
+
+        // MultipleSelect value store as an ont-to-many relationship.
+        } elseif (is_array($first)) {
+            foreach ($relations as $relation) {
+                $this->value[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");
             }
+
+        // MultipleSelect value store as a column.
+        } else {
+            $this->value = $relations;
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setOriginal($data)
     {
         $relations = Arr::get($data, $this->column);
@@ -69,16 +83,24 @@ class MultipleSelect extends Select
             $this->original = explode(',', $relations);
         }
 
-        if (is_array($relations)) {
-            if (is_null(current($relations))) {
-                $this->original = null;
-            } elseif (is_string(current($relations))) {
-                $this->original = $relations;
-            } else {
-                foreach ($relations as $relation) {
-                    $this->original[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");
-                }
+        if (!is_array($relations)) {
+            return;
+        }
+
+        $first = current($relations);
+
+        if (is_null($first)) {
+            $this->original = null;
+
+        // MultipleSelect value store as an ont-to-many relationship.
+        } elseif (is_array($first)) {
+            foreach ($relations as $relation) {
+                $this->original[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");
             }
+
+        // MultipleSelect value store as a column.
+        } else {
+            $this->original = $relations;
         }
     }
 
