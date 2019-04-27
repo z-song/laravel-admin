@@ -187,7 +187,7 @@ class MultipleFile extends Field
     {
         $files = $this->value ?: [];
 
-        return array_map([$this, 'objectUrl'], $files);
+        return array_values(array_map([$this, 'objectUrl'], $files));
     }
 
     /**
@@ -259,7 +259,7 @@ EOT;
             $this->script .= <<<EOT
 $("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
     
-    var p = new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
     
         var remove = resolve;
     
@@ -276,20 +276,8 @@ $("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
                     resolve(remove());
                 });
             }
-        }).then(function(result) {
-            if (result.dismiss == "cancel") {
-                return;
-            }
-            
-            $.pjax.reload('#pjax-container');
         });
     });
-    
-    p.then(function() {
-        $.pjax.reload('#pjax-container');
-    });
-    
-    return p;
 });
 EOT;
         }
@@ -354,6 +342,8 @@ EOT;
         }
 
         unset($files[$key]);
+
+        return $files;
 
         return array_values($files);
     }
