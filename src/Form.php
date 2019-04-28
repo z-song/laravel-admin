@@ -68,7 +68,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\MultipleFile   multipleFile($column, $label = '')
  * @method Field\Captcha        captcha($column, $label = '')
  * @method Field\Listbox        listbox($column, $label = '')
- * @method Field\Table          table($column, $builder)
+ * @method Field\Table          table($column, $label, $builder)
  */
 class Form implements Renderable
 {

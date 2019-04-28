@@ -9,7 +9,7 @@ class Table extends HasMany
     /**
      * @var string
      */
-    protected $view = 'admin::form.hasmanytable';
+    protected $viewMode = 'table';
 
     /**
      * Table constructor.
