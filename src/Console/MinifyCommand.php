@@ -45,13 +45,13 @@ class MinifyCommand extends Command
         $this->generateManifest();
 
         $this->comment('JS and CSS are successfully minified:');
-        $this->line('  ' . Admin::$min['js']);
-        $this->line('  ' . Admin::$min['css']);
+        $this->line('  '.Admin::$min['js']);
+        $this->line('  '.Admin::$min['css']);
 
         $this->line('');
 
         $this->comment('Manifest successfully generated:');
-        $this->line('  ' . Admin::$manifest);
+        $this->line('  '.Admin::$manifest);
     }
 
     protected function clearMinifiedFiles()
@@ -62,16 +62,15 @@ class MinifyCommand extends Command
 
         $this->comment('Following files are cleared:');
 
-        $this->line('  ' . Admin::$min['js']);
-        $this->line('  ' . Admin::$min['css']);
-        $this->line('  ' . Admin::$manifest);
+        $this->line('  '.Admin::$min['js']);
+        $this->line('  '.Admin::$min['css']);
+        $this->line('  '.Admin::$manifest);
     }
 
     protected function minifyCSS()
     {
         $css = collect(array_merge(Admin::$css, Admin::baseCss()))
             ->unique()->map(function ($css) {
-
                 if (Str::contains($css, '?')) {
                     $css = substr($css, 0, strpos($css, '?'));
                 }
@@ -107,9 +106,7 @@ class MinifyCommand extends Command
     protected function generateManifest()
     {
         $json = collect(Admin::$min)->flatMap(function ($value) {
-
             return [$value => sprintf('%s?id=%s', $value, md5(uniqid()))];
-
         })->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         file_put_contents(public_path(Admin::$manifest), $json);

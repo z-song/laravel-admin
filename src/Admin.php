@@ -298,8 +298,8 @@ class Admin
 
         $assets = Form::collectFieldAssets();
 
-        Admin::css($assets['css']);
-        Admin::js($assets['js']);
+        self::css($assets['css']);
+        self::js($assets['js']);
 
         $this->fireBootedCallbacks();
     }

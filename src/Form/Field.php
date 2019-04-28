@@ -474,8 +474,7 @@ class Field implements Renderable
         }
 
         if ($this instanceof Form\Field\MultipleFile
-            || $this instanceof Form\Field\File)
-        {
+            || $this instanceof Form\Field\File) {
             return;
         }
 
@@ -502,7 +501,6 @@ class Field implements Renderable
             $this->rules = array_merge($thisRuleArr, $rules);
 
             $this->addRequiredAttribute($this->rules);
-
         } elseif (is_string($rules)) {
             $rules = array_filter(explode('|', "{$this->rules}|$rules"));
 
