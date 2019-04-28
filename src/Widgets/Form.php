@@ -133,6 +133,12 @@ class Form implements Renderable
      */
     public function method($method = 'POST')
     {
+        if (strtolower($method) == 'put') {
+            $this->hidden('_method')->default($method);
+
+            return $this;
+        }
+
         return $this->attribute('method', strtoupper($method));
     }
 
