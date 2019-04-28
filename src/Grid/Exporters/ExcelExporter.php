@@ -44,7 +44,6 @@ abstract class ExcelExporter extends AbstractExporter implements FromQuery, With
     public function query()
     {
         if (!empty($this->columns)) {
-
             $columns = array_keys($this->columns);
 
             $eagerLoads = array_keys($this->getQuery()->getEagerLoads());

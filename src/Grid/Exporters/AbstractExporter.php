@@ -12,7 +12,7 @@ abstract class AbstractExporter implements ExporterInterface
     protected $grid;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $page;
 
@@ -94,7 +94,6 @@ abstract class AbstractExporter implements ExporterInterface
 
         // Export data of giving page number.
         if ($this->page) {
-
             $keyName = $this->grid->getKeyName();
             $perPage = request($model->getPerPageName(), $model->getPerPage());
 

@@ -15,7 +15,7 @@ class Table extends HasMany
      * Table constructor.
      *
      * @param string $column
-     * @param array $arguments
+     * @param array  $arguments
      */
     public function __construct($column, $arguments = [])
     {
@@ -69,6 +69,7 @@ class Table extends HasMany
             return $item[NestedForm::REMOVE_FLAG_NAME] == 1;
         })->map(function ($item) {
             unset($item[NestedForm::REMOVE_FLAG_NAME]);
+
             return $item;
         })->toArray();
     }

@@ -99,7 +99,7 @@ trait HasAssets
         if ($css = static::getMinifiedCss()) {
             static::$css = [$css];
         } else {
-            static::$css = array_merge(static::$css, static::baseCss(), (array)$css);
+            static::$css = array_merge(static::$css, static::baseCss(), (array) $css);
         }
 
         $css = array_filter(array_unique(static::$css));
@@ -207,6 +207,7 @@ trait HasAssets
 
     /**
      * @param string $key
+     *
      * @return mixed
      */
     protected static function getManifestData($key)

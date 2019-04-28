@@ -66,7 +66,7 @@ class MultipleSelect extends Select
                 $this->value[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");
             }
 
-        // MultipleSelect value store as a column.
+            // MultipleSelect value store as a column.
         } else {
             $this->value = $relations;
         }
@@ -98,7 +98,7 @@ class MultipleSelect extends Select
                 $this->original[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");
             }
 
-        // MultipleSelect value store as a column.
+            // MultipleSelect value store as a column.
         } else {
             $this->original = $relations;
         }

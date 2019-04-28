@@ -140,8 +140,8 @@ EOT;
     /**
      * Load options for other selects on change.
      *
-     * @param array $fields
-     * @param array $sourceUrls
+     * @param array  $fields
+     * @param array  $sourceUrls
      * @param string $idField
      * @param string $textField
      *

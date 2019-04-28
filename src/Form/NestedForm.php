@@ -148,6 +148,7 @@ class NestedForm
      * Set key for current form.
      *
      * @param mixed $key
+     *
      * @return $this
      */
     public function setKey($key)
