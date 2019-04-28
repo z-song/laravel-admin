@@ -344,7 +344,5 @@ EOT;
         unset($files[$key]);
 
         return $files;
-
-        return array_values($files);
     }
 }
