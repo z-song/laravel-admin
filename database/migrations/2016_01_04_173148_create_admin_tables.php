@@ -41,7 +41,7 @@ class CreateAdminTables extends Migration
         Schema::create(config('admin.database.permissions_table'), function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50)->unique();
-            $table->string('slug', 50);
+            $table->string('slug', 50)->unique();
             $table->string('http_method')->nullable();
             $table->text('http_path')->nullable();
             $table->timestamps();
