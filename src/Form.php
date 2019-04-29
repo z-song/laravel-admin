@@ -300,7 +300,6 @@ class Form implements Renderable
     public function destroy($id)
     {
         try {
-
             if (($ret = $this->callDeleting()) instanceof Response) {
                 return $ret;
             }
@@ -333,7 +332,6 @@ class Form implements Renderable
                 'status'  => true,
                 'message' => trans('admin.delete_succeeded'),
             ];
-
         } catch (\Exception $exception) {
             $response = [
                 'status'  => false,
@@ -483,7 +481,6 @@ class Form implements Renderable
         foreach ($inputs as $column => $value) {
             if (!method_exists($this->model, $column)) {
                 continue;
-
             }
 
             $relation = call_user_func([$this->model, $column]);
@@ -1556,6 +1553,7 @@ class Form implements Renderable
      *
      * @param string $name
      * @param mixed  $value
+     *
      * @return array
      */
     public function __set($name, $value)

@@ -183,7 +183,7 @@ class File extends Field
             $this->attribute('data-initial-caption', $this->initialCaption($this->value));
 
             $this->setupPreviewOptions();
-            /**
+            /*
              * If has original value, means the form is in edit mode,
              * then remove required rule from rules.
              */
