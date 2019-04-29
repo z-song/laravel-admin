@@ -8,6 +8,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Traits\HasAssets;
 use Encore\Admin\Widgets\Navbar;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
@@ -30,6 +31,11 @@ class Admin
      * @var Navbar
      */
     protected $navbar;
+
+    /**
+     * @var array
+     */
+    protected $menu = [];
 
     /**
      * @var string
@@ -151,9 +157,36 @@ class Admin
      */
     public function menu()
     {
+        if (!empty($this->menu)) {
+            return $this->menu;
+        }
+
         $menuModel = config('admin.database.menu_model');
 
-        return (new $menuModel())->toTree();
+        return $this->menu = (new $menuModel())->toTree();
+    }
+
+    /**
+     * @param array $menu
+     * @return array
+     */
+    public function menuLinks($menu = [])
+    {
+        if (empty($menu)) {
+            $menu = $this->menu();
+        }
+
+        $links = [];
+
+        foreach ($menu as $item) {
+            if (!empty($item['children'])) {
+                $links = array_merge($links, $this->menuLinks($item['children']));
+            } else {
+                $links[] = Arr::only($item, ['title', 'uri', 'icon']);
+            }
+        }
+
+        return $links;
     }
 
     /**
