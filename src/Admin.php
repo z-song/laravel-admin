@@ -234,11 +234,11 @@ class Admin
             $router->namespace('Encore\Admin\Controllers')->group(function ($router) {
 
                 /* @var \Illuminate\Routing\Router $router */
-                $router->resource('auth/users', 'UserController');
-                $router->resource('auth/roles', 'RoleController');
-                $router->resource('auth/permissions', 'PermissionController');
-                $router->resource('auth/menu', 'MenuController', ['except' => ['create']]);
-                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']]);
+                $router->resource('auth/users', 'UserController')->names('admin.auth.users');
+                $router->resource('auth/roles', 'RoleController')->names('admin.auth.roles');
+                $router->resource('auth/permissions', 'PermissionController')->names('admin.auth.permissions');
+                $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('admin.auth.menu');
+                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
             });
 
             $authController = config('admin.auth.controller', AuthController::class);
