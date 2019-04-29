@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 trait HasHooks
 {
     /**
-     * Supported hooks: submitted, editing, saving, saved, deleting, deleted
+     * Supported hooks: submitted, editing, saving, saved, deleting, deleted.
      *
      * @var array
      */
@@ -18,7 +18,7 @@ trait HasHooks
     /**
      * Register a hook.
      *
-     * @param string $name
+     * @param string  $name
      * @param Closure $callback
      *
      * @return $this
@@ -42,7 +42,6 @@ trait HasHooks
         $hooks = Arr::get($this->hooks, $name, []);
 
         foreach ($hooks as $func) {
-
             if (!$func instanceof Closure) {
                 continue;
             }

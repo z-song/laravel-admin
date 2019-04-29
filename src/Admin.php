@@ -168,6 +168,7 @@ class Admin
 
     /**
      * @param array $menu
+     *
      * @return array
      */
     public function menuLinks($menu = [])
