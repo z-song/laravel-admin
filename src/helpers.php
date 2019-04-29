@@ -152,6 +152,28 @@ if (!function_exists('admin_asset')) {
     }
 }
 
+if (!function_exists('admin_trans')) {
+
+    /**
+     * Translate the given message.
+     *
+     * @param  string  $key
+     * @param  array   $replace
+     * @param  string  $locale
+     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
+     */
+    function admin_trans($key = null, $replace = [], $locale = null)
+    {
+        $line = __($key, $replace, $locale);
+
+        if (!is_string($line)) {
+            return $key;
+        }
+
+        return $line;
+    }
+}
+
 if (!function_exists('array_delete')) {
 
     /**
