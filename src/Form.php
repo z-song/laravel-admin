@@ -481,12 +481,15 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
-            if (method_exists($this->model, $column)) {
-                $relation = call_user_func([$this->model, $column]);
+            if (!method_exists($this->model, $column)) {
+                continue;
 
-                if ($relation instanceof Relations\Relation) {
-                    $relations[$column] = $value;
-                }
+            }
+
+            $relation = call_user_func([$this->model, $column]);
+
+            if ($relation instanceof Relations\Relation) {
+                $relations[$column] = $value;
             }
         }
 
@@ -507,8 +510,8 @@ class Form implements Renderable
 
         $isEditable = $this->isEditable($data);
 
-        if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
-            return $data;
+        if (($response = $this->handleColumnUpdates($id, $data)) instanceof Response) {
+            return $response;
         }
 
         /* @var Model $this->model */
