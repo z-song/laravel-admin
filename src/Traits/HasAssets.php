@@ -154,8 +154,6 @@ trait HasAssets
             return self::$headerJs = array_merge(self::$headerJs, (array) $js);
         }
 
-        static::$headerJs = array_merge(static::$headerJs, (array) $js);
-
         return view('admin::partials.js', ['js' => array_unique(static::$headerJs)]);
     }
 
