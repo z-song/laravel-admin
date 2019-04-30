@@ -242,8 +242,9 @@ EOT;
      */
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
+        $operator = Str::contains($url, '?') ? '&' : '?';
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters),
+            'url' => $url.$operator.http_build_query($parameters),
         ];
         $configs = array_merge([
             'allowClear'         => true,
