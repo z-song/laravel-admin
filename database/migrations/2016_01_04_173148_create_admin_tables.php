@@ -34,7 +34,7 @@ class CreateAdminTables extends Migration
         Schema::create(config('admin.database.roles_table'), function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50)->unique();
-            $table->string('slug', 50);
+            $table->string('slug', 50)->unique();
             $table->timestamps();
         });
 
