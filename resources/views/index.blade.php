@@ -36,6 +36,8 @@
 
 </div>
 
+<button id="totop" title="Go to top" style="display: none;"><i class="fa fa-angle-double-up"></i></button>
+
 <script>
     function LA() {}
     LA.token = "{{ csrf_token() }}";

@@ -60,3 +60,22 @@ a.editable-empty {
 .table-has-many label.control-label[for=inputError]+br {
     display: none;
 }
+
+#totop {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    z-index: 99;
+    outline: none;
+    background-color: #3c8dbc;
+    color: white;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 4px;
+    opacity: 0.5;
+}
+
+#totop:hover {
+    opacity: 1;
+}

@@ -117,6 +117,19 @@ $(function () {
     });
 });
 
+$(window).scroll(function() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        $('#totop').fadeIn(500);
+    } else {
+        $('#totop').fadeOut(500);
+    }
+});
+
+$('#totop').on('click', function (e) {
+    e.preventDefault();
+    $('html,body').animate({scrollTop: 0}, 500);
+});
+
 (function ($) {
     $.fn.admin = LA;
     $.admin = LA;
