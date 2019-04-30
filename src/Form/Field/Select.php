@@ -108,6 +108,7 @@ class Select extends Field
      */
     public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
     {
+        $operator = Str::contains($sourceUrl, '?') ? '&' : '?';
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
             $class = str_replace(['[', ']'], '_', $field);
@@ -119,7 +120,7 @@ class Select extends Field
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
-    $.get("$sourceUrl?q="+this.value, function (data) {
+    $.get("$sourceUrl${operator}q="+this.value, function (data) {
         target.find("option").remove();
         $(target).select2({
             data: $.map(data, function (d) {
