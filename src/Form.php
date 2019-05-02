@@ -384,7 +384,7 @@ class Form implements Renderable
             return $response;
         }
 
-        DB::transaction(function () {
+        $response = DB::transaction(function () {
             $inserts = $this->prepareInsert($this->updates);
 
             foreach ($inserts as $column => $value) {
@@ -394,9 +394,11 @@ class Form implements Renderable
             $this->model->save();
 
             $this->updateRelation($this->relations);
+            
+            return $this->callSaved();
         });
 
-        if (($response = $this->callSaved()) instanceof Response) {
+        if ($response instanceof Response) {
             return $response;
         }
 
@@ -535,7 +537,7 @@ class Form implements Renderable
             return $response;
         }
 
-        DB::transaction(function () {
+        $result = DB::transaction(function () {
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
@@ -546,9 +548,11 @@ class Form implements Renderable
             $this->model->save();
 
             $this->updateRelation($this->relations);
+            
+            return $this->callSaved();
         });
 
-        if (($result = $this->callSaved()) instanceof Response) {
+        if ($result instanceof Response) {
             return $result;
         }
 
