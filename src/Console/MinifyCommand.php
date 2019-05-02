@@ -79,9 +79,9 @@ class MinifyCommand extends Command
     {
         $css = collect(array_merge(Admin::$css, Admin::baseCss()))
             ->unique()->map(function ($css) {
-
                 if (url()->isValidUrl($css)) {
                     $this->assets['css'][] = $css;
+
                     return;
                 }
 
@@ -103,9 +103,9 @@ class MinifyCommand extends Command
     {
         $js = collect(array_merge(Admin::$js, Admin::baseJs()))
             ->unique()->map(function ($js) {
-
                 if (url()->isValidUrl($js)) {
                     $this->assets['js'][] = $js;
+
                     return;
                 }
 
