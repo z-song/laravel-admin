@@ -22,11 +22,11 @@ class TotalRow extends AbstractTool
      * TotalRow constructor.
      *
      * @param Builder $query
-     * @param array $columns
+     * @param array   $columns
      */
     public function __construct($query, array $columns)
     {
-        $this->query   = $query;
+        $this->query = $query;
 
         $this->columns = $columns;
     }
@@ -35,7 +35,7 @@ class TotalRow extends AbstractTool
      * Get total value of current column.
      *
      * @param string $column
-     * @param mixed $display
+     * @param mixed  $display
      *
      * @return mixed
      */
@@ -62,13 +62,11 @@ class TotalRow extends AbstractTool
     public function render()
     {
         $columns = $this->getGrid()->columns()->flatMap(function (Column $column) {
-
             $name = $column->getName();
 
             $total = ($display = Arr::get($this->columns, $name)) ? $this->total($name, $display) : '';
 
             return [$name => $total];
-
         })->toArray();
 
         return view('admin::grid.total-row', compact('columns'));
