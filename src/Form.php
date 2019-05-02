@@ -394,7 +394,7 @@ class Form implements Renderable
             $this->model->save();
 
             $this->updateRelation($this->relations);
-            
+
             return $this->callSaved();
         });
 
@@ -548,7 +548,7 @@ class Form implements Renderable
             $this->model->save();
 
             $this->updateRelation($this->relations);
-            
+
             return $this->callSaved();
         });
 
