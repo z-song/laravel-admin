@@ -392,6 +392,20 @@ class Column
     }
 
     /**
+     * Add column to total-row.
+     *
+     * @param null $display
+     *
+     * @return $this
+     */
+    public function totalRow($display = null)
+    {
+        $this->grid->addTotalRow($this->name, $display);
+
+        return $this;
+    }
+
+    /**
      * If has display callbacks.
      *
      * @return bool
