@@ -507,8 +507,8 @@ class Form implements Renderable
 
         $isEditable = $this->isEditable($data);
 
-        if (($response = $this->handleColumnUpdates($id, $data)) instanceof Response) {
-            return $response;
+        if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
+            return $data;
         }
 
         /* @var Model $this->model */
