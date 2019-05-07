@@ -275,6 +275,7 @@ class Content implements Renderable
     {
         $items = [
             'header'      => $this->header,
+            'headericon'  => $this->headericon,
             'description' => $this->description,
             'breadcrumb'  => $this->breadcrumb,
             'content'     => $this->build(),
