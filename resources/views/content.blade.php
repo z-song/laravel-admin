@@ -3,6 +3,9 @@
 @section('content')
     <section class="content-header">
         <h1>
+            @if($headericon)
+            <i class="fa {{$headericon}}"></i>
+            @endif
             {{ $header ?: trans('admin.title') }}
             <small>{{ $description ?: trans('admin.description') }}</small>
         </h1>

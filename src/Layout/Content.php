@@ -16,6 +16,13 @@ class Content implements Renderable
     protected $header = ' ';
 
     /**
+     * Content header icon.
+     *
+     * @var string
+     */
+    protected $headericon = null;
+
+    /**
      * Content description.
      *
      * @var string
@@ -56,6 +63,20 @@ class Content implements Renderable
     public function header($header = '')
     {
         $this->header = $header;
+
+        return $this;
+    }
+
+    /**
+     * Set header icon of content.
+     *
+     * @param string $header
+     *
+     * @return $this
+     */
+    public function headericon($headericon = null)
+    {
+        $this->headericon = $headericon;
 
         return $this;
     }
