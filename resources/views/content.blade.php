@@ -4,7 +4,7 @@
     <section class="content-header">
         <h1>
             @if($headericon)
-            <i class="fa {{$headericon}}"></i>
+            <i class="fa {{$headericon}}" style="padding-right:4px;"></i>
             @endif
             {{ $header ?: trans('admin.title') }}
             <small>{{ $description ?: trans('admin.description') }}</small>
