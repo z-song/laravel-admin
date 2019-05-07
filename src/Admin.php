@@ -335,6 +335,13 @@ class Admin
         self::css($assets['css']);
         self::js($assets['js']);
 
+        if (!app()->runningInConsole() && config('admin.minify_assets') && file_exists(public_path(static::$manifest))) {
+            self::$css = [];
+            self::$js = [];
+            $skin = config('admin.skin', 'skin-blue-light');
+            self::css("vendor/laravel-admin/AdminLTE/dist/css/skins/{$skin}.min.css");
+        }
+
         $this->fireBootedCallbacks();
     }
 

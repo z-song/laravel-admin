@@ -92,8 +92,12 @@ trait HasAssets
             return self::$css = array_merge(self::$css, (array) $css);
         }
 
-        if (!$css = static::getMinifiedCss()) {
+        $css = static::getMinifiedCss();
+
+        if (!$css) {
             $css = array_merge(static::$css, static::baseCss());
+        } else {
+            $css = array_merge($css, self::$css);
         }
 
         $css = array_filter(array_unique($css));
@@ -132,8 +136,12 @@ trait HasAssets
             return self::$js = array_merge(self::$js, (array) $js);
         }
 
-        if (!$js = static::getMinifiedJs()) {
+        $js = static::getMinifiedJs();
+
+        if (!$js) {
             $js = array_merge(static::baseJs(), static::$js);
+        } else {
+            $js = array_merge($js, self::$js);
         }
 
         $js = array_filter(array_unique($js));

@@ -77,7 +77,7 @@ class MinifyCommand extends Command
 
     protected function minifyCSS()
     {
-        $css = collect(array_merge(Admin::$css, Admin::baseCss()))
+        $css = collect(array_merge(Admin::$css, Admin::$baseCss))
             ->unique()->map(function ($css) {
                 if (url()->isValidUrl($css)) {
                     $this->assets['css'][] = $css;
