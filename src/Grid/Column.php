@@ -54,6 +54,13 @@ class Column
     protected $sort;
 
     /**
+     * Help message.
+     *
+     * @var string
+     */
+    protected $help = '';
+
+    /**
      * Cast Name.
      *
      * @var array
@@ -596,6 +603,32 @@ class Column
         }
 
         return isset($this->sort['column']) && $this->sort['column'] == $this->name;
+    }
+
+    /**
+     * Set help message for column.
+     *
+     * @param string $help
+     *
+     * @return $this|string
+     */
+    public function help($help = '')
+    {
+        if (!empty($help)) {
+            $this->help = $help;
+
+            return $this;
+        }
+
+        if (empty($this->help)) {
+            return '';
+        }
+
+        return <<<HELP
+<a href="javascript:void(0);" tabindex="0" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="{$this->help}">
+    <i class="fa fa-question-circle"></i>
+</a>
+HELP;
     }
 
     /**
