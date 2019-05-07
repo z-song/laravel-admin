@@ -240,8 +240,7 @@ class MultipleFile extends Field
     }
 
     /**
-     * @param array $options
-     * @param array $options
+     * @param string $options
      */
     protected function setupScripts($options)
     {
