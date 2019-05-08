@@ -43,6 +43,11 @@ class Admin
     public static $metaTitle;
 
     /**
+     * @var string
+     */
+    public static $favicon;
+
+    /**
      * @var array
      */
     public static $extensions = [];
@@ -208,6 +213,26 @@ class Admin
     public function title()
     {
         return self::$metaTitle ? self::$metaTitle : config('admin.title');
+    }
+
+    /**
+     * Set favicon.
+     *
+     * @return void
+     */
+    public static function setFavicon($favicon)
+    {
+        self::$favicon = $favicon;
+    }
+
+    /**
+     * Get favicon.
+     *
+     * @return Config
+     */
+    public function favicon()
+    {
+        return self::$favicon;
     }
 
     /**
