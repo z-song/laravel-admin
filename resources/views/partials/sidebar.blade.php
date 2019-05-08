@@ -15,6 +15,7 @@
             </div>
         </div>
 
+        @if(config('admin.enable_menu_search'))
         <!-- search form (Optional) -->
         <form class="sidebar-form" style="overflow: initial;" onsubmit="return false;">
             <div class="input-group">
@@ -33,6 +34,7 @@
             </div>
         </form>
         <!-- /.search form -->
+        @endif
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
