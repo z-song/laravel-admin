@@ -3,6 +3,7 @@
 namespace Encore\Admin;
 
 use Closure;
+use Encore\Admin\Auth\Database\Menu;
 use Encore\Admin\Controllers\AuthController;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Traits\HasAssets;
@@ -10,7 +11,6 @@ use Encore\Admin\Widgets\Navbar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 
 /**
@@ -102,6 +102,7 @@ class Admin
      * Build a tree.
      *
      * @param $model
+     * @param Closure|null $callable
      *
      * @return \Encore\Admin\Tree
      */
@@ -166,9 +167,12 @@ class Admin
             return $this->menu;
         }
 
-        $menuModel = config('admin.database.menu_model');
+        $menuClass = config('admin.database.menu_model');
 
-        return $this->menu = (new $menuModel())->toTree();
+        /** @var Menu $menuModel */
+        $menuModel = new $menuClass;
+
+        return $this->menu = $menuModel->toTree();
     }
 
     /**
@@ -198,6 +202,8 @@ class Admin
     /**
      * Set admin title.
      *
+     * @param string $title
+     *
      * @return void
      */
     public static function setTitle($title)
@@ -208,7 +214,7 @@ class Admin
     /**
      * Get admin title.
      *
-     * @return Config
+     * @return string
      */
     public function title()
     {
@@ -216,23 +222,17 @@ class Admin
     }
 
     /**
-     * Set favicon.
+     * @param null|string $favicon
      *
-     * @return void
+     * @return string|void
      */
-    public static function setFavicon($favicon)
+    public function favicon($favicon = null)
     {
-        self::$favicon = $favicon;
-    }
+        if (is_null($favicon)) {
+            return static::$favicon;
+        }
 
-    /**
-     * Get favicon.
-     *
-     * @return Config
-     */
-    public function favicon()
-    {
-        return self::$favicon;
+        static::$favicon = $favicon;
     }
 
     /**
@@ -289,7 +289,7 @@ class Admin
 
         app('router')->group($attributes, function ($router) {
 
-            /* @var \Illuminate\Routing\Router $router */
+            /* @var \Illuminate\Support\Facades\Route $router */
             $router->namespace('Encore\Admin\Controllers')->group(function ($router) {
 
                 /* @var \Illuminate\Routing\Router $router */
