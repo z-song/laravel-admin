@@ -108,7 +108,16 @@ class Permission extends Model
      */
     protected function matchRequest(array $match, Request $request) : bool
     {
-        if (!$request->is(trim($match['path'], '/'))) {
+        // if not "/"， trim
+        if(!$request->is("/")){
+            $match['path'] = trim($match['path'], '/');
+        }
+
+        if (!$request->is($match['path'])) {
+            return false;
+        }
+
+        if (!$request->is($match['path'])) {
             return false;
         }
 
