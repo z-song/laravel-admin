@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid;
 
 use Closure;
+use Encore\Admin\Admin;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\AbstractDisplayer;
 use Illuminate\Contracts\Support\Arrayable;
@@ -624,8 +625,10 @@ class Column
             return '';
         }
 
+        Admin::script("$('.column-help').popover();");
+
         return <<<HELP
-<a href="javascript:void(0);" tabindex="0" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="{$this->help}">
+<a href="javascript:void(0);" class="column-help" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="{$this->help}">
     <i class="fa fa-question-circle"></i>
 </a>
 HELP;
