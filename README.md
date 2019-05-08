@@ -30,7 +30,10 @@
         <img src="https://img.shields.io/badge/Awesome-Laravel-brightgreen.svg?style=flat-square" alt="Awesome Laravel">
     </a>
     <a href="#backers" alt="sponsors on Open Collective">
-        <img src="https://opencollective.com/laravel-admin/backers/badge.svg" />
+        <img src="https://opencollective.com/laravel-admin/backers/badge.svg?style=flat-square" />
+    </a> 
+    <a href="https://www.paypal.me/zousong" alt="Paypal donate">
+        <img src="https://img.shields.io/badge/Donate-Paypal-green.svg?style=flat-square" />
     </a> 
 </div>
 
