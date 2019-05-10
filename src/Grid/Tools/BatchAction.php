@@ -34,6 +34,13 @@ abstract class BatchAction
         $this->id = $id;
     }
 
+    /**
+     * Set title for this action.
+     *
+     * @param string $title
+     *
+     * @return $this
+     */
     public function setTitle($title)
     {
         $this->title = $title;

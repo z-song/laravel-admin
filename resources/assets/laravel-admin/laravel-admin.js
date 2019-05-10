@@ -131,7 +131,35 @@ $('#totop').on('click', function (e) {
 });
 
 (function ($) {
+
+    var Grid = function () {
+        this.selects = {};
+    };
+
+    Grid.prototype.select = function (id) {
+        this.selects[id] = id;
+    };
+
+    Grid.prototype.unselect = function (id) {
+        delete this.selects[id];
+    };
+
+    Grid.prototype.selected = function () {
+        var rows = [];
+        $.each(this.selects, function (key, val) {
+            rows.push(key);
+        });
+
+        return rows;
+    };
+
+    LA.getToken = function () {
+        return $('meta[name="csrf-token"]').attr('content');
+    };
+
     $.fn.admin = LA;
     $.admin = LA;
+
+    $.admin.grid = new Grid();
 
 })(jQuery);

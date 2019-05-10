@@ -19,21 +19,17 @@ EOT;
     {
         return <<<EOT
 $('.{$this->grid->getGridRowName()}-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
+    
+    var id = $(this).data('id');
+
     if (this.checked) {
+        \$.admin.grid.select(id);
         $(this).closest('tr').css('background-color', '#ffffd5');
     } else {
+        \$.admin.grid.unselect(id);
         $(this).closest('tr').css('background-color', '');
     }
 });
-
-var {$this->grid->getSelectedRowsName()} = function () {
-    var selected = [];
-    $('.{$this->grid->getGridRowName()}-checkbox:checked').each(function(){
-        selected.push($(this).data('id'));
-    });
-
-    return selected;
-}
 
 EOT;
     }

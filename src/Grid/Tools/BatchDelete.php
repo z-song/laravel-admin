@@ -24,8 +24,6 @@ class BatchDelete extends BatchAction
 
 $('{$this->getElementClass()}').on('click', function() {
 
-    var id = {$this->grid->getSelectedRowsName()}().join();
-
     swal({
         title: "{$trans['delete_confirm']}",
         type: "warning",
@@ -38,7 +36,7 @@ $('{$this->getElementClass()}').on('click', function() {
             return new Promise(function(resolve) {
                 $.ajax({
                     method: 'post',
-                    url: '{$this->resource}/' + id,
+                    url: '{$this->resource}/' + $.admin.grid.selected().join(),
                     data: {
                         _method:'delete',
                         _token:'{$this->getToken()}'
