@@ -29,7 +29,11 @@ class Checkbox extends MultipleSelect
             $options = $options->toArray();
         }
 
-        $this->options = (array) $options;
+        if (is_callable($options)) {
+            $this->options = $options;
+        } else {
+            $this->options = (array) $options;
+        }
 
         return $this;
     }
