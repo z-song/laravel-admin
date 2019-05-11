@@ -130,6 +130,14 @@ class Model
     }
 
     /**
+     * @return EloquentModel
+     */
+    public function getOriginalModel()
+    {
+        return $this->originalModel;
+    }
+
+    /**
      * Get the eloquent model of the grid model.
      *
      * @return EloquentModel
