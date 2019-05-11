@@ -7,6 +7,7 @@ use Encore\Admin\Grid\Tools\AbstractTool;
 use Encore\Admin\Grid\Tools\BatchActions;
 use Encore\Admin\Grid\Tools\FilterButton;
 use Encore\Admin\Grid\Tools\RefreshButton;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
 
@@ -150,6 +151,14 @@ class Tools implements Renderable
                 }
 
                 return $tool->setGrid($this->grid)->render();
+            }
+
+            if ($tool instanceof Renderable) {
+                return $tool->render();
+            }
+
+            if ($tool instanceof Htmlable) {
+                return $tool->toHtml();
             }
 
             return (string) $tool;
