@@ -276,11 +276,23 @@ class Admin
     }
 
     /**
-     * Register the auth routes.
+     * Register the laravel-admin builtin routes.
+     *
+     * @return void
+     *
+     * @deprecated Use Admin::routes() instead();
+     */
+    public function registerAuthRoutes()
+    {
+        $this->routes();
+    }
+
+    /**
+     * Register the laravel-admin builtin routes.
      *
      * @return void
      */
-    public function registerAuthRoutes()
+    public function routes()
     {
         $attributes = [
             'prefix'     => config('admin.route.prefix'),
