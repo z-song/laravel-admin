@@ -153,13 +153,22 @@ $('#totop').on('click', function (e) {
         return rows;
     };
 
-    LA.getToken = function () {
-        return $('meta[name="csrf-token"]').attr('content');
-    };
-
     $.fn.admin = LA;
     $.admin = LA;
-
+    $.admin.swal = swal;
+    $.admin.toastr = toastr;
     $.admin.grid = new Grid();
+
+    $.admin.reload = function () {
+        $.pjax.reload('#pjax-container');
+    };
+
+    $.admin.redirect = function (url) {
+        $.pjax({container:'#pjax-container', url: url });
+    };
+
+    $.admin.getToken = function () {
+        return $('meta[name="csrf-token"]').attr('content');
+    };
 
 })(jQuery);
