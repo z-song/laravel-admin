@@ -9,7 +9,7 @@
     </button>
     <ul class="dropdown-menu" role="menu">
         @foreach($actions as $action)
-            <li><a href="#" class="{{ $action->getElementClass(false) }}">{{ $action->getTitle() }}</a></li>
+            <li><a href="#" class="{{ $action->getElementClass(false) }}">{!! $action->render() !!} </a></li>
         @endforeach
     </ul>
 </div>
