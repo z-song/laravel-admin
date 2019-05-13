@@ -3,7 +3,7 @@
 @section('content')
     <section class="content-header">
         <h1>
-            @if($headericon)
+            @if(isset($headericon))
             <i class="fa {{$headericon}}" style="padding-right:4px;"></i>
             @endif
             {{ $header ?: trans('admin.title') }}
