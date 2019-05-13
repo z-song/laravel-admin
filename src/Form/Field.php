@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form;
 
+use Closure;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Arrayable;
@@ -224,6 +225,11 @@ class Field implements Renderable
      * @var array
      */
     protected $groupClass = [];
+
+    /**
+     * @var \Closure
+     */
+    protected $callback;
 
     /**
      * Field constructor.
@@ -1203,6 +1209,18 @@ class Field implements Renderable
     }
 
     /**
+     * @param  \Closure  $callback
+     * 
+     * @return \Encore\Admin\Form\Field
+     */
+    public function with(Closure $callback)
+    {
+        $this->callback = $callback;
+
+        return $this;
+    }
+
+    /**
      * Render this filed.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
@@ -1211,6 +1229,10 @@ class Field implements Renderable
     {
         if (!$this->shouldRender()) {
             return '';
+        }
+
+        if ($this->callback instanceof Closure) {
+            $this->value = $this->callback->call($this->form->model(), $this->value);
         }
 
         Admin::script($this->script);
