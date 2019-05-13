@@ -1209,8 +1209,8 @@ class Field implements Renderable
     }
 
     /**
-     * @param  \Closure  $callback
-     * 
+     * @param \Closure $callback
+     *
      * @return \Encore\Admin\Form\Field
      */
     public function with(Closure $callback)
