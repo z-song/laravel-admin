@@ -1232,7 +1232,7 @@ class Field implements Renderable
         }
 
         if ($this->callback instanceof Closure) {
-            $this->value = $this->callback->call($this->form->model(), $this->value);
+            $this->value = $this->callback->call($this->form->model(), $this->value, $this);
         }
 
         Admin::script($this->script);
