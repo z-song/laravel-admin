@@ -457,8 +457,8 @@ class Filter implements Renderable
     /**
      * Add a new layout column.
      *
-     * @param int      $width
-     * @param \Closure $closure
+     * @param int|float $width
+     * @param \Closure  $closure
      *
      * @return $this
      */
