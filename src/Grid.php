@@ -724,6 +724,7 @@ class Grid
      * Remove create button on grid.
      *
      * @param bool $disable
+     *
      * @return $this
      */
     public function disableCreateButton(bool $disable = true)

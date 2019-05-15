@@ -490,8 +490,8 @@ class Field implements Renderable
     /**
      * Get or set rules.
      *
-     * @param string|array|\Closure|null  $rules
-     * @param array                       $messages
+     * @param string|array|\Closure|null $rules
+     * @param array                      $messages
      *
      * @return $this
      */
