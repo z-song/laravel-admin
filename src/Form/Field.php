@@ -8,7 +8,6 @@ use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Macroable;
 
 /**
@@ -108,12 +107,26 @@ class Field implements Renderable
     /**
      * Validation rules.
      *
-     * @var string|\Closure
+     * @var array|\Closure
      */
-    protected $rules = '';
+    protected $rules = [];
 
     /**
-     * @var callable
+     * The validation rules for creation.
+     *
+     * @var array|\Closure
+     */
+    public $creationRules = [];
+
+    /**
+     * The validation rules for updates.
+     *
+     * @var array|\Closure
+     */
+    public $updateRules = [];
+
+    /**
+     * @var \Closure
      */
     protected $validator;
 
@@ -240,8 +253,8 @@ class Field implements Renderable
     public function __construct($column, $arguments = [])
     {
         $this->column = $column;
-        $this->label = $this->formatLabel($arguments);
-        $this->id = $this->formatId($column);
+        $this->label  = $this->formatLabel($arguments);
+        $this->id     = $this->formatId($column);
     }
 
     /**
@@ -475,6 +488,10 @@ class Field implements Renderable
      */
     protected function addRequiredAttribute($rules)
     {
+        if (!is_array($rules)) {
+            return;
+        }
+
         if (!in_array('required', $rules)) {
             return;
         }
@@ -488,36 +505,107 @@ class Field implements Renderable
     }
 
     /**
-     * Get or set rules.
+     * If has `required` rule, add required attribute to this field.
+     */
+    protected function addRequiredAttributeFromRules()
+    {
+        if (is_null($this->data)) {
+            // Create page
+            $this->addRequiredAttribute($this->creationRules ?? $this->rules);
+        } else {
+            // Update page
+            $this->addRequiredAttribute($this->updateRules ?? $this->rules);
+        }
+    }
+
+    /**
+     * Set the validation rules for the field.
      *
-     * @param null  $rules
+     * @param array|callable|string  $rules
      * @param array $messages
      *
      * @return $this
      */
     public function rules($rules = null, $messages = [])
     {
-        if ($rules instanceof \Closure) {
-            $this->rules = $rules;
+        if (is_string($rules)) {
+            $this->rules = array_filter(explode('|', $rules));
         }
 
-        if (is_array($rules)) {
-            $thisRuleArr = array_filter(explode('|', $this->rules));
-
-            $this->rules = array_merge($thisRuleArr, $rules);
-
-            $this->addRequiredAttribute($this->rules);
-        } elseif (is_string($rules)) {
-            $rules = array_filter(explode('|', "{$this->rules}|$rules"));
-
-            $this->addRequiredAttribute($rules);
-
-            $this->rules = implode('|', $rules);
-        }
-
-        $this->validationMessages = $messages;
+        $this->setValidationMessages('default', $messages);
 
         return $this;
+    }
+
+    /**
+     * Set the update validation rules for the field.
+     *
+     * @param array|callable|string $rules
+     * @param array $messages
+     *
+     * @return $this
+     */
+    public function updateRules($rules = null, $messages = [])
+    {
+        if (is_string($rules)) {
+            $this->updateRules = array_filter(explode('|', $rules));
+        }
+
+        $this->setValidationMessages('update', $messages);
+
+        return $this;
+    }
+
+    /**
+     * Set the creation validation rules for the field.
+     *
+     * @param array|callable|string $rules
+     * @param array $messages
+     * @return $this
+     */
+    public function creationRules($rules = null, $messages = [])
+    {
+        if (is_string($rules)) {
+            $this->creationRules = array_filter(explode('|', $rules));
+        }
+
+        $this->setValidationMessages('creation', $messages);
+
+        return $this;
+    }
+
+    /**
+     * Set validation messages for column.
+     *
+     * @param string $key
+     * @param array $messages
+     *
+     * @return $this
+     */
+    public function setValidationMessages($key, array $messages)
+    {
+        $this->validationMessages[$key] = $messages;
+        
+        return $this;
+    }
+
+    /**
+     * Get validation messages for the field.
+     *
+     * @return array|mixed
+     */
+    public function getValidationMessages()
+    {
+        // Default validation message.
+        $messages = $this->validationMessages['default'] ?? [];
+
+        if (request()->isMethod('POST')) {
+            $messages = $this->validationMessages['creation'] ?? $messages;
+        } elseif (request()->isMethod('PUT')) {
+            $messages = $this->validationMessages['update'] ?? $messages;
+        }
+
+        return $messages;
     }
 
     /**
@@ -527,11 +615,19 @@ class Field implements Renderable
      */
     protected function getRules()
     {
-        if ($this->rules instanceof \Closure) {
-            return $this->rules->call($this, $this->form);
+        if (request()->isMethod('POST')) {
+            $rules = $this->creationRules ?: $this->rules;
+        } elseif (request()->isMethod('PUT')) {
+            $rules = $this->updateRules ?: $this->rules;
+        } else {
+            $rules = $this->rules;
         }
 
-        return $this->rules;
+        if ($rules instanceof \Closure) {
+            return $rules->call($this, $this->form);
+        }
+
+        return $rules;
     }
 
     /**
@@ -703,7 +799,7 @@ class Field implements Renderable
      *
      * @param array $input
      *
-     * @return bool|Validator
+     * @return bool|\Illuminate\Contracts\Validation\Validator|mixed
      */
     public function getValidator(array $input)
     {
@@ -739,7 +835,7 @@ class Field implements Renderable
             }
         }
 
-        return Validator::make($input, $rules, $this->validationMessages, $attributes);
+        return \validator($input, $rules, $this->getValidationMessages(), $attributes);
     }
 
     /**
@@ -1049,7 +1145,9 @@ class Field implements Renderable
     /**
      * Get element class.
      *
-     * @return array
+     * @param bool $default
+     *
+     * @return string
      */
     protected function getGroupClass($default = false)
     : string
@@ -1151,6 +1249,8 @@ class Field implements Renderable
     /**
      * Set view of current field.
      *
+     * @param string $view
+     *
      * @return string
      */
     public function setView($view)
@@ -1173,7 +1273,9 @@ class Field implements Renderable
     /**
      * Set script of current field.
      *
-     * @return self
+     * @param string $script
+     *
+     * @return $this
      */
     public function setScript($script)
     {
@@ -1185,7 +1287,9 @@ class Field implements Renderable
     /**
      * To set this field should render or not.
      *
-     * @return self
+     * @param bool $display
+     *
+     * @return $this
      */
     public function setDisplay(bool $display)
     {
@@ -1234,6 +1338,8 @@ class Field implements Renderable
         if ($this->callback instanceof Closure) {
             $this->value = $this->callback->call($this->form->model(), $this->value, $this);
         }
+
+        $this->addRequiredAttributeFromRules();
 
         Admin::script($this->script);
 

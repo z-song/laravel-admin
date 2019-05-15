@@ -9,7 +9,6 @@ use Encore\Admin\Form\NestedForm;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 /**
@@ -95,7 +94,7 @@ class HasMany extends Field
      *
      * @param array $input
      *
-     * @return bool|Validator
+     * @return bool|\Illuminate\Contracts\Validation\Validator
      */
     public function getValidator(array $input)
     {
@@ -158,7 +157,7 @@ class HasMany extends Field
             $newInput = $input;
         }
 
-        return Validator::make($newInput, $newRules, $this->validationMessages, $attributes);
+        return \validator($newInput, $newRules, $this->getValidationMessages(), $attributes);
     }
 
     /**

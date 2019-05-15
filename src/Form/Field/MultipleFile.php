@@ -4,7 +4,6 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MultipleFile extends Field
@@ -81,7 +80,7 @@ class MultipleFile extends Field
 
         list($rules, $input) = $this->hydrateFiles(Arr::get($input, $this->column, []));
 
-        return Validator::make($input, $rules, $this->validationMessages, $attributes);
+        return \validator($input, $rules, $this->getValidationMessages(), $attributes);
     }
 
     /**
@@ -328,7 +327,9 @@ EOT;
     /**
      * Destroy original files.
      *
-     * @return string.
+     * @param string $key
+     *
+     * @return array.
      */
     public function destroy($key)
     {
