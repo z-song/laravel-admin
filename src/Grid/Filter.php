@@ -241,6 +241,8 @@ class Filter implements Renderable
     /**
      * Disable Id filter.
      *
+     * @param bool $disable
+     *
      * @return $this
      */
     public function disableIdFilter(bool $disable = true)
@@ -457,8 +459,8 @@ class Filter implements Renderable
     /**
      * Add a new layout column.
      *
-     * @param int      $width
-     * @param \Closure $closure
+     * @param int|float $width
+     * @param \Closure  $closure
      *
      * @return $this
      */

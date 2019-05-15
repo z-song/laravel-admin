@@ -538,7 +538,7 @@ class Field implements Renderable
 
     /**
      *
-     * @param string|array|Closure $input
+     * @param string|array|Closure|null $input
      * @param string|array $original
      *
      * @return array|Closure
@@ -561,7 +561,7 @@ class Field implements Renderable
     /**
      * Set the validation rules for the field.
      *
-     * @param array|callable|string  $rules
+     * @param array|callable|string|null $rules
      * @param array $messages
      *
      * @return $this
