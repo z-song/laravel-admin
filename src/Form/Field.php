@@ -511,10 +511,10 @@ class Field implements Renderable
     {
         if (is_null($this->data)) {
             // Create page
-            $this->addRequiredAttribute($this->creationRules ?? $this->rules);
+            $this->addRequiredAttribute($this->creationRules ?: $this->rules);
         } else {
             // Update page
-            $this->addRequiredAttribute($this->updateRules ?? $this->rules);
+            $this->addRequiredAttribute($this->updateRules ?: $this->rules);
         }
     }
 
@@ -528,6 +528,8 @@ class Field implements Renderable
      */
     public function rules($rules = null, $messages = [])
     {
+        $this->rules = $rules;
+
         if (is_string($rules)) {
             $this->rules = array_filter(explode('|', $rules));
         }
@@ -547,6 +549,8 @@ class Field implements Renderable
      */
     public function updateRules($rules = null, $messages = [])
     {
+        $this->updateRules = $rules;
+
         if (is_string($rules)) {
             $this->updateRules = array_filter(explode('|', $rules));
         }
@@ -565,6 +569,8 @@ class Field implements Renderable
      */
     public function creationRules($rules = null, $messages = [])
     {
+        $this->creationRules = $rules;
+
         if (is_string($rules)) {
             $this->creationRules = array_filter(explode('|', $rules));
         }
