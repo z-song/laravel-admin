@@ -167,7 +167,7 @@ class Actions extends AbstractDisplayer
     protected function renderView()
     {
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getRouteKey()}">
+<a href="{$this->getResource()}/{$this->getRouteKey()}" class="{$this->grid->getGridRowName()}-view">
     <i class="fa fa-eye"></i>
 </a>
 EOT;
@@ -181,7 +181,7 @@ EOT;
     protected function renderEdit()
     {
         return <<<EOT
-<a href="{$this->getResource()}/{$this->getRouteKey()}/edit">
+<a href="{$this->getResource()}/{$this->getRouteKey()}/edit" class="{$this->grid->getGridRowName()}-edit">
     <i class="fa fa-edit"></i>
 </a>
 EOT;
