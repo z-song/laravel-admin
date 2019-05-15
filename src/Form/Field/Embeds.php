@@ -129,7 +129,7 @@ class Embeds extends Field
             return false;
         }
 
-        return Validator::make($input, $rules, $this->validationMessages, $attributes);
+        return \validator($input, $rules, $this->getValidationMessages(), $attributes);
     }
 
     /**
