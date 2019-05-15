@@ -143,8 +143,13 @@ class UserController extends Controller
 
         $form = new Form(new $userModel());
 
+        $userTable = config('admin.database.users_table');
+
         $form->display('id', 'ID');
-        $form->text('username', trans('admin.username'))->rules(['required', 'unique:'.config('admin.database.users_table')]);
+        $form->text('username', trans('admin.username'))
+            ->creationRules(['required', "unique:{$userTable}"])
+            ->updateRules(['required', "unique:{$userTable},username,{{id}}"]);
+
         $form->text('name', trans('admin.name'))->rules('required');
         $form->image('avatar', trans('admin.avatar'));
         $form->password('password', trans('admin.password'))->rules('required|confirmed');

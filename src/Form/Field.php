@@ -511,11 +511,13 @@ class Field implements Renderable
     {
         if (is_null($this->data)) {
             // Create page
-            $this->addRequiredAttribute($this->creationRules ?: $this->rules);
+            $rules = $this->creationRules ?: $this->rules;
         } else {
             // Update page
-            $this->addRequiredAttribute($this->updateRules ?: $this->rules);
+            $rules = $this->updateRules ?: $this->rules;
         }
+
+        $this->addRequiredAttribute($rules);
     }
 
     /**
@@ -630,7 +632,21 @@ class Field implements Renderable
         }
 
         if ($rules instanceof \Closure) {
-            return $rules->call($this, $this->form);
+            $rules = $rules->call($this, $this->form);
+        }
+
+        if (is_string($rules)) {
+            $rules = array_filter(explode('|', $rules));
+        }
+
+        if (!$id = $this->form->model()->getKey()) {
+            return $rules;
+        }
+
+        foreach ($rules as &$rule) {
+            if (is_string($rule)) {
+                $rule = str_replace('{{id}}', $id, $rule);
+            }
         }
 
         return $rules;
