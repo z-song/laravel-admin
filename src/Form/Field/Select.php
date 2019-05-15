@@ -177,10 +177,6 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
         var target = $(_this).closest('.fields-group').find('.' + fields[index]);
         promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
     });
-
-    $.when(promises).then(function() {
-        console.log('开始更新其它select的选择options');
-    });
 });
 EOT;
 
