@@ -521,6 +521,44 @@ class Field implements Renderable
     }
 
     /**
+     * Format validation rules.
+     *
+     * @param array|string $rules
+     *
+     * @return array
+     */
+    protected function formatRules($rules)
+    {
+        if (is_string($rules)) {
+            $rules = array_filter(explode('|', $rules));
+        }
+
+        return array_filter((array) $rules);
+    }
+
+    /**
+     *
+     * @param string|array|Closure $input
+     * @param string|array $original
+     *
+     * @return array|Closure
+     */
+    protected function mergeRules($input, $original)
+    {
+        if ($input instanceof Closure) {
+            $rules = $input;
+        } else {
+            if (!empty($original)) {
+                $original = $this->formatRules($original);
+            }
+
+            $rules = array_merge($original, $this->formatRules($input));
+        }
+
+        return $rules;
+    }
+
+    /**
      * Set the validation rules for the field.
      *
      * @param array|callable|string  $rules
@@ -530,11 +568,7 @@ class Field implements Renderable
      */
     public function rules($rules = null, $messages = [])
     {
-        $this->rules = $rules;
-
-        if (is_string($rules)) {
-            $this->rules = array_filter(explode('|', $rules));
-        }
+        $this->rules = $this->mergeRules($rules, $this->rules);
 
         $this->setValidationMessages('default', $messages);
 
@@ -551,11 +585,7 @@ class Field implements Renderable
      */
     public function updateRules($rules = null, $messages = [])
     {
-        $this->updateRules = $rules;
-
-        if (is_string($rules)) {
-            $this->updateRules = array_filter(explode('|', $rules));
-        }
+        $this->updateRules = $this->mergeRules($rules, $this->updateRules);
 
         $this->setValidationMessages('update', $messages);
 
@@ -571,11 +601,7 @@ class Field implements Renderable
      */
     public function creationRules($rules = null, $messages = [])
     {
-        $this->creationRules = $rules;
-
-        if (is_string($rules)) {
-            $this->creationRules = array_filter(explode('|', $rules));
-        }
+        $this->creationRules = $this->mergeRules($rules, $this->creationRules);
 
         $this->setValidationMessages('creation', $messages);
 
