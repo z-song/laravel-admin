@@ -124,8 +124,8 @@ class File extends Field
 
         $path = null;
 
-        if (!is_null($this->storage_permission)) {
-            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storage_permission);
+        if (!is_null($this->storagePermission)) {
+            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         } else {
             $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
         }
