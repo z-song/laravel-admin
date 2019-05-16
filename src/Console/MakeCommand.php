@@ -61,7 +61,6 @@ class MakeCommand extends GeneratorCommand
         }
 
         if (parent::handle() !== false) {
-
             $name = $this->argument('name');
             $path = Str::plural(Str::slug(class_basename($this->option('model'))));
 
