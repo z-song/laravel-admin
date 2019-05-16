@@ -45,6 +45,13 @@ trait UploadField
     protected $useSequenceName = false;
 
     /**
+     * Retain file when delete record from DB.
+     *
+     * @var bool
+     */
+    protected $retainable = false;
+
+    /**
      * Configuration for setting up file actions for newly selected file thumbnails in the preview window.
      *
      * @var array
@@ -123,6 +130,18 @@ trait UploadField
     public function removable()
     {
         $this->fileActionSettings['showRemove'] = true;
+
+        return $this;
+    }
+
+    /**
+     * Indicates if the underlying field is retainable.
+     *
+     * @return $this
+     */
+    public function retainable($retainable = true)
+    {
+        $this->retainable = $retainable;
 
         return $this;
     }
@@ -378,7 +397,7 @@ trait UploadField
      */
     public function destroy()
     {
-        if ($this->storage->exists($this->original)) {
+        if (!$this->retainable && $this->storage->exists($this->original)) {
             $this->storage->delete($this->original);
         }
     }

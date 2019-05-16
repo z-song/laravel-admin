@@ -337,7 +337,7 @@ EOT;
 
         $file = Arr::get($files, $key);
 
-        if ($this->storage->exists($file)) {
+        if (!$this->retainable && $this->storage->exists($file)) {
             $this->storage->delete($file);
         }
 
