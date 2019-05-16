@@ -4,6 +4,7 @@ namespace Encore\Admin\Console;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class MakeCommand extends GeneratorCommand
 {
@@ -14,6 +15,7 @@ class MakeCommand extends GeneratorCommand
      */
     protected $signature = 'admin:make {name} 
         {--model=} 
+        {--header=} 
         {--stub= : Path to the custom stub file. } 
         {--O|output}';
 
@@ -58,7 +60,17 @@ class MakeCommand extends GeneratorCommand
             return $this->output($modelName);
         }
 
-        parent::handle();
+        if (parent::handle() !== false) {
+
+            $name = $this->argument('name');
+            $path = Str::plural(Str::slug(class_basename($this->option('model'))));
+
+            $this->line('');
+            $this->comment('Add the following route to app/Admin/routes.php:');
+            $this->line('');
+            $this->info("    \$router->resource('{$path}', {$name}::class);");
+            $this->line('');
+        }
     }
 
     /**
@@ -104,6 +116,7 @@ class MakeCommand extends GeneratorCommand
         return str_replace(
             [
                 'DummyModelNamespace',
+                'DummyHeader',
                 'DummyModel',
                 'DummyGrid',
                 'DummyShow',
@@ -111,6 +124,7 @@ class MakeCommand extends GeneratorCommand
             ],
             [
                 $this->option('model'),
+                $this->option('header') ?: $this->option('model'),
                 class_basename($this->option('model')),
                 $this->indentCodes($this->generator->generateGrid()),
                 $this->indentCodes($this->generator->generateShow()),
