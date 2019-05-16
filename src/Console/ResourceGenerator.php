@@ -17,7 +17,7 @@ class ResourceGenerator
     protected $formats = [
         'form_field'  => "\$form->%s('%s', '%s')",
         'show_field'  => "\$show->%s('%s')",
-        'grid_column' => "\$grid->%s('%s')",
+        'grid_column' => "\$grid->column('%s', '%s')",
     ];
 
     /**
