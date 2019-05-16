@@ -4,7 +4,6 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field

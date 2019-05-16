@@ -253,8 +253,8 @@ class Field implements Renderable
     public function __construct($column, $arguments = [])
     {
         $this->column = $column;
-        $this->label  = $this->formatLabel($arguments);
-        $this->id     = $this->formatId($column);
+        $this->label = $this->formatLabel($arguments);
+        $this->id = $this->formatId($column);
     }
 
     /**
@@ -537,9 +537,8 @@ class Field implements Renderable
     }
 
     /**
-     *
      * @param string|array|Closure $input
-     * @param string|array $original
+     * @param string|array         $original
      *
      * @return array|Closure
      */
@@ -561,8 +560,8 @@ class Field implements Renderable
     /**
      * Set the validation rules for the field.
      *
-     * @param array|callable|string  $rules
-     * @param array $messages
+     * @param array|callable|string $rules
+     * @param array                 $messages
      *
      * @return $this
      */
@@ -579,7 +578,7 @@ class Field implements Renderable
      * Set the update validation rules for the field.
      *
      * @param array|callable|string $rules
-     * @param array $messages
+     * @param array                 $messages
      *
      * @return $this
      */
@@ -596,7 +595,8 @@ class Field implements Renderable
      * Set the creation validation rules for the field.
      *
      * @param array|callable|string $rules
-     * @param array $messages
+     * @param array                 $messages
+     *
      * @return $this
      */
     public function creationRules($rules = null, $messages = [])
@@ -612,14 +612,14 @@ class Field implements Renderable
      * Set validation messages for column.
      *
      * @param string $key
-     * @param array $messages
+     * @param array  $messages
      *
      * @return $this
      */
     public function setValidationMessages($key, array $messages)
     {
         $this->validationMessages[$key] = $messages;
-        
+
         return $this;
     }
 

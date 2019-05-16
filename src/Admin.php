@@ -170,7 +170,7 @@ class Admin
         $menuClass = config('admin.database.menu_model');
 
         /** @var Menu $menuModel */
-        $menuModel = new $menuClass;
+        $menuModel = new $menuClass();
 
         return $this->menu = $menuModel->toTree();
     }
