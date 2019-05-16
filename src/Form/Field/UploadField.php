@@ -66,7 +66,7 @@ trait UploadField
      *
      * @var string
      */
-    protected $storage_permission;
+    protected $storagePermission;
 
     /**
      * Initialize the storage instance.
@@ -315,8 +315,8 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        if (!is_null($this->storage_permission)) {
-            return $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storage_permission);
+        if (!is_null($this->storagePermission)) {
+            return $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         }
 
         return $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
@@ -379,15 +379,15 @@ trait UploadField
     {
         $index = 1;
         $extension = $file->getClientOriginalExtension();
-        $originalName = $file->getClientOriginalName();
-        $newName = $originalName.'_'.$index.'.'.$extension;
+        $original = $file->getClientOriginalName();
+        $new = sprintf('%s_%s.%s', $original, $index, $extension);
 
-        while ($this->storage->exists("{$this->getDirectory()}/$newName")) {
+        while ($this->storage->exists("{$this->getDirectory()}/$new")) {
             $index++;
-            $newName = $originalName.'_'.$index.'.'.$extension;
+            $new = sprintf('%s_%s.%s', $original, $index, $extension);
         }
 
-        return $newName;
+        return $new;
     }
 
     /**
@@ -402,9 +402,16 @@ trait UploadField
         }
     }
 
-    public function storage_permission($permission)
+    /**
+     * Set file permission when stored into storage.
+     *
+     * @param string $permission
+     *
+     * @return $this
+     */
+    public function storagePermission($permission)
     {
-        $this->storage_permission = $permission;
+        $this->storagePermission = $permission;
 
         return $this;
     }
