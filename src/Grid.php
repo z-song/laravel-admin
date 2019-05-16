@@ -849,6 +849,7 @@ class Grid
         if ($relation instanceof Relations\HasMany
             || $relation instanceof Relations\BelongsToMany
             || $relation instanceof Relations\MorphToMany
+            || $relation instanceof Relations\HasManyThrough
         ) {
             $this->model()->with($method);
 
