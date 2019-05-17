@@ -1250,6 +1250,20 @@ class Form implements Renderable
     }
 
     /**
+     * @param Closure|null $callback
+     *
+     * @return Form\Tools
+     */
+    public function header(Closure $callback = null)
+    {
+        if (func_num_args() == 0) {
+            return $this->builder->getTools();
+        }
+
+        $callback->call($this, $this->builder->getTools());
+    }
+
+    /**
      * Disable form submit.
      *
      * @param bool $disable
@@ -1328,8 +1342,12 @@ class Form implements Renderable
      *
      * @param Closure $callback
      */
-    public function footer(Closure $callback)
+    public function footer(Closure $callback = null)
     {
+        if (func_num_args() == 0) {
+            return $this->builder()->getFooter();
+        }
+
         call_user_func($callback, $this->builder()->getFooter());
     }
 
