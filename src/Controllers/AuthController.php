@@ -102,7 +102,7 @@ class AuthController extends Controller
         );
 
         return $content
-            ->header(trans('admin.user_setting'))
+            ->title(trans('admin.user_setting'))
             ->body($form->edit(Admin::user()->id));
     }
 

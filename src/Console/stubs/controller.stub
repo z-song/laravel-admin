@@ -11,11 +11,11 @@ use Encore\Admin\Show;
 class DummyClass extends AdminController
 {
     /**
-     * Set title for current resource.
+     * Title for current resource.
      *
      * @var string
      */
-    protected $header = 'DummyHeader';
+    protected $title = 'DummyTitle';
 
     /**
      * Make a grid builder.

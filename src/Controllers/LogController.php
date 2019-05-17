@@ -11,7 +11,7 @@ class LogController extends AdminController
     /**
      * {@inheritdoc}
      */
-    protected function header()
+    protected function title()
     {
         return trans('admin.operation_log');
     }

@@ -9,11 +9,11 @@ use Illuminate\Support\Arr;
 class Content implements Renderable
 {
     /**
-     * Content header.
+     * Content title.
      *
      * @var string
      */
-    protected $header = ' ';
+    protected $title = ' ';
 
     /**
      * Content description.
@@ -47,7 +47,7 @@ class Content implements Renderable
     }
 
     /**
-     * Set header of content.
+     * Alias of method `title`.
      *
      * @param string $header
      *
@@ -55,7 +55,17 @@ class Content implements Renderable
      */
     public function header($header = '')
     {
-        $this->header = $header;
+        return $this->title($header);
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return $this
+     */
+    public function title($title)
+    {
+        $this->title = $title;
 
         return $this;
     }
@@ -253,7 +263,7 @@ class Content implements Renderable
     public function render()
     {
         $items = [
-            'header'      => $this->header,
+            'header'      => $this->title,
             'description' => $this->description,
             'breadcrumb'  => $this->breadcrumb,
             'content'     => $this->build(),
