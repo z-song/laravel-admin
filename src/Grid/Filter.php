@@ -492,6 +492,10 @@ class Filter implements Renderable
      */
     public function execute($toArray = true)
     {
+        if (method_exists($this->model->eloquent(), 'paginate')) {
+            $this->model->usePaginate(true);
+            return $this->model->buildData($toArray);
+        }
         $conditions = array_merge(
             $this->conditions(),
             $this->scopeConditions()
