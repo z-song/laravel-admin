@@ -29,6 +29,16 @@ class AdminController extends Controller
     ];
 
     /**
+     * Get content header.
+     *
+     * @return string
+     */
+    protected function header()
+    {
+        return $this->header;
+    }
+
+    /**
      * Index interface.
      *
      * @param Content $content
@@ -38,7 +48,7 @@ class AdminController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header($this->header)
+            ->header($this->header())
             ->description($this->description['index'] ?? trans('admin.list'))
             ->body($this->grid());
     }
@@ -54,7 +64,7 @@ class AdminController extends Controller
     public function show($id, Content $content)
     {
         return $content
-            ->header($this->header)
+            ->header($this->header())
             ->description($this->description['show'] ?? trans('admin.show'))
             ->body($this->detail($id));
     }
@@ -70,7 +80,7 @@ class AdminController extends Controller
     public function edit($id, Content $content)
     {
         return $content
-            ->header($this->header)
+            ->header($this->header())
             ->description($this->description['edit'] ?? trans('admin.edit'))
             ->body($this->form()->edit($id));
     }
@@ -85,7 +95,7 @@ class AdminController extends Controller
     public function create(Content $content)
     {
         return $content
-            ->header($this->header)
+            ->header($this->header())
             ->description($this->description['create'] ?? trans('admin.create'))
             ->body($this->form());
     }

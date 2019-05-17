@@ -388,10 +388,6 @@ class Show implements Renderable
             return $field;
         }
 
-        if ($field = $this->handleModelField($method, $label)) {
-            return $field;
-        }
-
         return $this->addField($method, $label);
     }
 
@@ -474,6 +470,11 @@ class Show implements Renderable
         return false;
     }
 
+    /**
+     * @param string $relation
+     * @param string $label
+     * @return Field
+     */
     protected function showRelationAsField($relation = '', $label = '')
     {
         return $this->addField($relation, $label);
