@@ -665,6 +665,10 @@ class Field implements Renderable
             $rules = array_filter(explode('|', $rules));
         }
 
+        if (!$this->form) {
+            return $rules;
+        }
+
         if (!$id = $this->form->model()->getKey()) {
             return $rules;
         }

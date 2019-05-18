@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Widgets;
 
+use Encore\Admin\Form as BaseForm;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
@@ -25,13 +26,13 @@ use Illuminate\Support\Arr;
  * @method Field\Email          email($name, $label = '')
  * @method Field\Mobile         mobile($name, $label = '')
  * @method Field\Slider         slider($name, $label = '')
- * @method Field\Map            map($latitude, $longitude, $label = '')
- * @method Field\Editor         editor($name, $label = '')
  * @method Field\File           file($name, $label = '')
  * @method Field\Image          image($name, $label = '')
  * @method Field\Date           date($name, $label = '')
  * @method Field\Datetime       datetime($name, $label = '')
  * @method Field\Time           time($name, $label = '')
+ * @method Field\Year           year($column, $label = '')
+ * @method Field\Month          month($column, $label = '')
  * @method Field\DateRange      dateRange($start, $end, $label = '')
  * @method Field\DateTimeRange  dateTimeRange($start, $end, $label = '')
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
@@ -45,6 +46,10 @@ use Illuminate\Support\Arr;
  * @method Field\Html           html($html)
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
+ * @method Field\Captcha        captcha($column, $label = '')
+ * @method Field\Listbox        listbox($column, $label = '')
+ * @method Field\Table          table($column, $label, $builder)
+ * @method Field\Timezone       timezone($column, $label = '')
  */
 class Form implements Renderable
 {
@@ -87,6 +92,19 @@ class Form implements Renderable
      */
     public function __construct($data = [])
     {
+        $this->fill($data);
+
+        $this->initFormAttributes();
+    }
+
+    /**
+     * Fill data to form fields.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function fill($data = [])
+    {
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
         }
@@ -95,7 +113,7 @@ class Form implements Renderable
             $this->data = $data;
         }
 
-        $this->initFormAttributes();
+        return $this;
     }
 
     /**
@@ -232,13 +250,25 @@ class Form implements Renderable
      */
     public static function findFieldClass($method)
     {
-        $class = Arr::get(\Encore\Admin\Form::$availableFields, $method);
+        $class = Arr::get(BaseForm::$availableFields, $method);
 
         if (class_exists($class)) {
             return $class;
         }
 
         return false;
+    }
+
+    /**
+     * Determine if the form has field type.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasField($name)
+    {
+        return isset(BaseForm::$availableFields[$name]);
     }
 
     /**
@@ -253,6 +283,16 @@ class Form implements Renderable
         array_push($this->fields, $field);
 
         return $this;
+    }
+
+    /**
+     * Get all fields of form.
+     *
+     * @return Field[]
+     */
+    public function fields()
+    {
+        return $this->fields;
     }
 
     /**
