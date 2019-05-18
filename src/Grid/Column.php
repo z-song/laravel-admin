@@ -12,8 +12,31 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
+/**
+ * Class Column
+ *
+ * @method Displayers\Editable      editable()
+ * @method Displayers\SwitchDisplay switch ($states = [])
+ * @method Displayers\SwitchGroup   switchGroup($columns = [], $states = [])
+ * @method Displayers\Select        select($options = [])
+ * @method Displayers\Image         image($server = '', $width = 200, $height = 200)
+ * @method Displayers\Label         label($style = 'success')
+ * @method Displayers\Button        button($style = null)
+ * @method Displayers\Link          link($href = '', $target = '_blank')
+ * @method Displayers\Badge         badge($style = 'red')
+ * @method Displayers\ProgressBar   progressBar($style = 'primary', $size = 'sm', $max = 100)
+ * @method Displayers\Radio         radio($options = [])
+ * @method Displayers\Checkbox      checkbox($options = [])
+ * @method Displayers\Orderable     orderable($column, $label = '')
+ * @method Displayers\Table         table($titles = [])
+ * @method Displayers\Expand        expand($callback = null)
+ * @method Displayers\Modal         modal($callback = null)
+ * @method Displayers\Gravatar      gravatar($size = 30)
+ */
 class Column
 {
+    const SELECT_COLUMN_NAME = '__row_selector__';
+
     /**
      * @var Grid
      */
@@ -124,8 +147,6 @@ class Column
      * @var Model
      */
     protected static $model;
-
-    const SELECT_COLUMN_NAME = '__row_selector__';
 
     /**
      * @param string $name
