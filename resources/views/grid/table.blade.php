@@ -30,7 +30,7 @@
             <thead>
                 <tr>
                     @foreach($grid->visibleColumns() as $column)
-                    <th>{{$column->getLabel()}}{!! $column->sorter() !!}{!! $column->help() !!}</th>
+                    <th class="column-{!! $column->getName() !!}">{{$column->getLabel()}}{!! $column->sorter() !!}{!! $column->help() !!}</th>
                     @endforeach
                 </tr>
             </thead>
@@ -39,7 +39,7 @@
                 @foreach($grid->rows() as $row)
                 <tr {!! $row->getRowAttributes() !!}>
                     @foreach($grid->visibleColumnNames() as $name)
-                    <td {!! $row->getColumnAttributes($name) !!}>
+                    <td {!! $row->getColumnAttributes($name) !!} class="column-{!! $name !!}">
                         {!! $row->column($name) !!}
                     </td>
                     @endforeach
