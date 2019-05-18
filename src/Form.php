@@ -67,6 +67,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Captcha        captcha($column, $label = '')
  * @method Field\Listbox        listbox($column, $label = '')
  * @method Field\Table          table($column, $label, $builder)
+ * @method Field\Timezone       timezone($column, $label)
  */
 class Form implements Renderable
 {
@@ -1453,6 +1454,7 @@ class Form implements Renderable
             'captcha'        => Field\Captcha::class,
             'listbox'        => Field\Listbox::class,
             'table'          => Field\Table::class,
+            'timezone'       => Field\Timezone::class,
         ];
 
         foreach ($map as $abstract => $class) {
