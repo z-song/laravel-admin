@@ -874,7 +874,7 @@ class Form implements Renderable
                 continue;
             }
 
-            if ($this->invalidColumn($columns, $oneToOneRelation)) {
+            if ($this->isInvalidColumn($columns, $oneToOneRelation || $field->isJsonType)) {
                 continue;
             }
 
@@ -896,15 +896,15 @@ class Form implements Renderable
 
     /**
      * @param string|array $columns
-     * @param bool         $oneToOneRelation
+     * @param bool         $containsDot
      *
      * @return bool
      */
-    protected function invalidColumn($columns, $oneToOneRelation = false)
+    protected function isInvalidColumn($columns, $containsDot = false)
     {
         foreach ((array) $columns as $column) {
-            if ((!$oneToOneRelation && Str::contains($column, '.')) ||
-                ($oneToOneRelation && !Str::contains($column, '.'))) {
+            if ((!$containsDot && Str::contains($column, '.')) ||
+                ($containsDot && !Str::contains($column, '.'))) {
                 return true;
             }
         }

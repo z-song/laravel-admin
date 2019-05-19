@@ -8,6 +8,7 @@ use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 
 /**
@@ -245,6 +246,11 @@ class Field implements Renderable
     protected $callback;
 
     /**
+     * @var bool
+     */
+    public $isJsonType = false;
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -252,7 +258,7 @@ class Field implements Renderable
      */
     public function __construct($column, $arguments = [])
     {
-        $this->column = $column;
+        $this->column = $this->formatColumn($column);
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($column);
     }
@@ -268,6 +274,18 @@ class Field implements Renderable
             'css' => static::$css,
             'js'  => static::$js,
         ];
+    }
+
+    protected function formatColumn($column = '')
+    {
+        if (Str::contains($column, '->')) {
+
+            $this->isJsonType = true;
+
+            $column = str_replace('->', '.', $column);
+        }
+
+        return $column;
     }
 
     /**
@@ -295,7 +313,7 @@ class Field implements Renderable
 
         $label = isset($arguments[0]) ? $arguments[0] : ucfirst($column);
 
-        return str_replace(['.', '_'], ' ', $label);
+        return str_replace(['.', '_', '->'], ' ', $label);
     }
 
     /**
@@ -308,7 +326,12 @@ class Field implements Renderable
     protected function formatName($column)
     {
         if (is_string($column)) {
-            $name = explode('.', $column);
+
+            if (Str::contains($column, '->')) {
+                $name = explode('->', $column);
+            } else {
+                $name = explode('.', $column);
+            }
 
             if (count($name) == 1) {
                 return $name[0];

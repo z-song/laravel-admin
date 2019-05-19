@@ -299,6 +299,10 @@ class Grid
             return $this->addRelationColumn($name, $label);
         }
 
+        if (Str::contains($name, '->')) {
+            return $this->addJsonColumn($name, $label);
+        }
+
         return $this->__call($name, [$label]);
     }
 
@@ -417,6 +421,23 @@ class Grid
         $this->model()->with($relation);
 
         return $this->addColumn($name, $label ?: ucfirst($column))->setRelation($relation, $column);
+    }
+
+    /**
+     * Add a json type column to grid.
+     *
+     * @param string $name
+     * @param string $label
+     *
+     * @return Column
+     */
+    protected function addJsonColumn($name, $label = '')
+    {
+        $column = substr($name, strrpos($name, '->') + 2);
+
+        $name = str_replace('->', '.', $name);
+
+        return $this->addColumn($name, $label ?: ucfirst($column));
     }
 
     /**
