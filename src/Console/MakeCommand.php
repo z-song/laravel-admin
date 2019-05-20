@@ -17,6 +17,7 @@ class MakeCommand extends GeneratorCommand
         {--model=} 
         {--title=} 
         {--stub= : Path to the custom stub file. } 
+        {--namespace=} 
         {--O|output}';
 
     /**
@@ -172,6 +173,10 @@ class MakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
+        if ($namespace = $this->option('namespace')) {
+            return $namespace;
+        }
+
         return config('admin.route.namespace');
     }
 
