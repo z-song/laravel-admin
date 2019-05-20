@@ -452,7 +452,9 @@ class Form implements Renderable
 
         $class = BaseForm::$availableFields[$method];
 
-        return tap(new $class(...$arguments), function ($field) {
+        $field = new $class($arguments[0], array_slice($arguments, 1));
+
+        return tap($field, function ($field) {
             $this->pushField($field);
         });
     }
