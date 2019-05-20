@@ -256,7 +256,7 @@ class Field implements Renderable
      * @param       $column
      * @param array $arguments
      */
-    public function __construct($column, $arguments = [])
+    public function __construct($column = '', $arguments = [])
     {
         $this->column = $this->formatColumn($column);
         $this->label = $this->formatLabel($arguments);
@@ -276,10 +276,16 @@ class Field implements Renderable
         ];
     }
 
+    /**
+     * Format the field column name.
+     *
+     * @param string $column
+     *
+     * @return mixed|string
+     */
     protected function formatColumn($column = '')
     {
         if (Str::contains($column, '->')) {
-
             $this->isJsonType = true;
 
             $column = str_replace('->', '.', $column);
