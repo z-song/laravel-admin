@@ -6,7 +6,10 @@ use Encore\Admin\Form as BaseForm;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\MessageBag;
+use Illuminate\Validation\Validator;
 
 /**
  * Class Form.
@@ -50,6 +53,8 @@ use Illuminate\Support\Arr;
  * @method Field\Listbox        listbox($column, $label = '')
  * @method Field\Table          table($column, $label, $builder)
  * @method Field\Timezone       timezone($column, $label = '')
+ *
+ * @method mixed                handle(Request $request)
  */
 class Form implements Renderable
 {
@@ -98,6 +103,14 @@ class Form implements Renderable
     }
 
     /**
+     * @return array
+     */
+    public function data()
+    {
+        return $this->data;
+    }
+
+    /**
      * Fill data to form fields.
      *
      * @param array $data
@@ -117,6 +130,18 @@ class Form implements Renderable
     }
 
     /**
+     * @return $this
+     */
+    public function sanitize()
+    {
+        foreach (['_form_', '_token'] as $key) {
+            request()->request->remove($key);
+        }
+
+        return $this;
+    }
+
+    /**
      * Initialize the form attributes.
      */
     protected function initFormAttributes()
@@ -128,6 +153,50 @@ class Form implements Renderable
             'accept-charset' => 'UTF-8',
             'pjax-container' => true,
         ];
+    }
+
+    /**
+     * Add form attributes.
+     *
+     * @param string|array $attr
+     * @param string       $value
+     *
+     * @return $this
+     */
+    public function attribute($attr, $value = '')
+    {
+        if (is_array($attr)) {
+            foreach ($attr as $key => $value) {
+                $this->attribute($key, $value);
+            }
+        } else {
+            $this->attributes[$attr] = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Format form attributes form array to html.
+     *
+     * @param array $attributes
+     *
+     * @return string
+     */
+    public function formatAttribute($attributes = [])
+    {
+        $attributes = $attributes ?: $this->attributes;
+
+        if ($this->hasFile()) {
+            $attributes['enctype'] = 'multipart/form-data';
+        }
+
+        $html = [];
+        foreach ($attributes as $key => $val) {
+            $html[] = "$key=\"$val\"";
+        }
+
+        return implode(' ', $html) ?: '';
     }
 
     /**
@@ -158,27 +227,6 @@ class Form implements Renderable
         }
 
         return $this->attribute('method', strtoupper($method));
-    }
-
-    /**
-     * Add form attributes.
-     *
-     * @param string|array $attr
-     * @param string       $value
-     *
-     * @return $this
-     */
-    public function attribute($attr, $value = '')
-    {
-        if (is_array($attr)) {
-            foreach ($attr as $key => $value) {
-                $this->attribute($key, $value);
-            }
-        } else {
-            $this->attributes[$attr] = $value;
-        }
-
-        return $this;
     }
 
     /**
@@ -242,24 +290,6 @@ class Form implements Renderable
     }
 
     /**
-     * Find field class with given name.
-     *
-     * @param string $method
-     *
-     * @return bool|string
-     */
-    public static function findFieldClass($method)
-    {
-        $class = Arr::get(BaseForm::$availableFields, $method);
-
-        if (class_exists($class)) {
-            return $class;
-        }
-
-        return false;
-    }
-
-    /**
      * Determine if the form has field type.
      *
      * @param string $name
@@ -303,7 +333,7 @@ class Form implements Renderable
     protected function getVariables()
     {
         foreach ($this->fields as $field) {
-            $field->fill($this->data);
+            $field->fill($this->data());
         }
 
         return [
@@ -313,29 +343,6 @@ class Form implements Renderable
             'buttons'    => $this->buttons,
             'width'      => $this->width,
         ];
-    }
-
-    /**
-     * Format form attributes form array to html.
-     *
-     * @param array $attributes
-     *
-     * @return string
-     */
-    public function formatAttribute($attributes = [])
-    {
-        $attributes = $attributes ?: $this->attributes;
-
-        if ($this->hasFile()) {
-            $attributes['enctype'] = 'multipart/form-data';
-        }
-
-        $html = [];
-        foreach ($attributes as $key => $val) {
-            $html[] = "$key=\"$val\"";
-        }
-
-        return implode(' ', $html) ?: '';
     }
 
     /**
@@ -355,24 +362,52 @@ class Form implements Renderable
     }
 
     /**
-     * Generate a Field object and add to form builder if Field exists.
+     * Validate this form fields.
      *
-     * @param string $method
-     * @param array  $arguments
+     * @param Request $request
      *
-     * @return Field|null
+     * @return bool|MessageBag
      */
-    public function __call($method, $arguments)
+    public function validate(Request $request)
     {
-        if ($className = static::findFieldClass($method)) {
-            $name = Arr::get($arguments, 0, '');
-
-            $element = new $className($name, array_slice($arguments, 1));
-
-            $this->pushField($element);
-
-            return $element;
+        if (method_exists($this, 'form')) {
+            $this->form();
         }
+
+        $failedValidators = [];
+
+        /** @var Field $field */
+        foreach ($this->fields() as $field) {
+            if (!$validator = $field->getValidator($request->all())) {
+                continue;
+            }
+
+            if (($validator instanceof Validator) && !$validator->passes()) {
+                $failedValidators[] = $validator;
+            }
+        }
+
+        $message = $this->mergeValidationMessages($failedValidators);
+
+        return $message->any() ? $message : false;
+    }
+
+    /**
+     * Merge validation messages from input validators.
+     *
+     * @param \Illuminate\Validation\Validator[] $validators
+     *
+     * @return MessageBag
+     */
+    protected function mergeValidationMessages($validators)
+    {
+        $messageBag = new MessageBag();
+
+        foreach ($validators as $validator) {
+            $messageBag = $messageBag->merge($validator->messages());
+        }
+
+        return $messageBag;
     }
 
     /**
@@ -382,7 +417,44 @@ class Form implements Renderable
      */
     public function render()
     {
-        return view('admin::widgets.form', $this->getVariables())->render();
+        if (method_exists($this, 'form')) {
+            $this->form();
+        }
+
+        if (method_exists($this, 'handle')) {
+            $this->method('POST');
+            $this->action(route('admin.handle-form'));
+            $this->hidden('_form_')->default(get_called_class());
+        }
+
+        $form = view('admin::widgets.form', $this->getVariables())->render();
+
+        if (!property_exists($this, 'title')) {
+            return $form;
+        }
+
+        return new Box($this->title, $form);
+    }
+
+    /**
+     * Generate a Field object and add to form builder if Field exists.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return Field|$this
+     */
+    public function __call($method, $arguments)
+    {
+        if (! $this->hasField($method)) {
+            return $this;
+        }
+
+        $class = BaseForm::$availableFields[$method];
+
+        return tap(new $class(...$arguments), function ($field) {
+            $this->pushField($field);
+        });
     }
 
     /**

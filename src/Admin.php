@@ -310,6 +310,8 @@ class Admin
                 $router->resource('auth/permissions', 'PermissionController')->names('admin.auth.permissions');
                 $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('admin.auth.menu');
                 $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
+
+                $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
             });
 
             $authController = config('admin.auth.controller', AuthController::class);
