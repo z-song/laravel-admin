@@ -12,6 +12,11 @@ trait HasAssets
     /**
      * @var array
      */
+    public static $style = [];
+
+    /**
+     * @var array
+     */
     public static $css = [];
 
     /**
@@ -183,6 +188,20 @@ trait HasAssets
         }
 
         return view('admin::partials.script', ['script' => array_unique(self::$script)]);
+    }
+
+    /**
+     * @param string $style
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public static function style($style = '')
+    {
+        if (!empty($style)) {
+            return self::$style = array_merge(self::$style, (array) $style);
+        }
+
+        return view('admin::partials.style', ['style' => array_unique(self::$style)]);
     }
 
     /**
