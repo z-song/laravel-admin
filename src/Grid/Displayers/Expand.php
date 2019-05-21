@@ -14,14 +14,19 @@ class Expand extends AbstractDisplayer
 
         $this->setupScript();
 
-        $key = $this->getKey();
+        $rowKey = $this->getKey();
+        $key = uniqid();
 
         return <<<EOT
-<span class="grid-expand" data-inserted="0" data-key="{$key}" data-toggle="collapse" data-target="#grid-collapse-{$key}">
-   <a href="javascript:void(0)"><i class="fa fa-angle-double-down"></i>&nbsp;&nbsp;{$this->value}</a>
-</span>
+<style>
+  .grid-expand:before{content:"\\f103";display: inline-block;font: normal normal normal 14px/1 FontAwesome;font-size: inherit;text-rendering: auto;-webkit-font-smoothing: antialiased;}
+  .grid-expand.collapsed:before{content:"\\f102";}
+</style>
+<a class="grid-expand collapsed" data-inserted="0" data-key="{$key}" data-row-key="{$rowKey}" data-parent="grid-expand-{$rowKey}" data-toggle="collapse" data-target="#grid-collapse-{$key}">
+   &nbsp;&nbsp;{$this->value}
+</a>
 <template class="grid-expand-{$key}">
-    <div id="grid-collapse-{$key}" class="collapse">
+    <div id="grid-collapse-{$key}" class="collapse grid-expand-{$rowKey}">
         <div  style="padding: 10px 10px 0 10px;">$html</div>
     </div>
 </template>
@@ -33,19 +38,19 @@ EOT;
         $script = <<<'EOT'
 
 $('.grid-expand').on('click', function () {
+
+    var key = $(this).data('key');
+    var rowkey = $(this).data('rowKey');
     
-    if ($(this).data('inserted') == '0') {
-    
-        var key = $(this).data('key');
+    if( ! $('#grid-collapse-' + key).length ) {
         var row = $(this).closest('tr');
         var html = $('template.grid-expand-'+key).html();
 
-        row.after("<tr style='background-color: #ecf0f5;'><td colspan='"+(row.find('td').length)+"' style='padding:0 !important; border:0;'>"+html+"</td></tr>");
+        $('#grid-expand-' + rowkey).length || row.after("<tr style='background-color: #ecf0f5;'><td id='grid-expand-" + rowkey + "' colspan='"+(row.find('td').length)+"' style='padding:0 !important; border:0;'></td></tr>");
+        
+        $('#grid-expand-' + rowkey).html(html);
 
-        $(this).data('inserted', 1);
     }
-    
-    $("i", this).toggleClass("fa-angle-double-down fa-angle-double-up");
 });
 EOT;
         Admin::script($script);
