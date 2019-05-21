@@ -12,6 +12,7 @@ class Expand extends AbstractDisplayer
 
         $html = call_user_func_array($callback, [$this->row]);
 
+        $this->setupStyle();
         $this->setupScript();
 
         $rowKey = $this->getKey();
@@ -19,15 +20,11 @@ class Expand extends AbstractDisplayer
         $val = $this->value ?: $def;
 
         return <<<EOT
-<style>
-  .grid-expand:before{content:"\\f103";display: inline-block;font: normal normal normal 14px/1 FontAwesome;font-size: inherit;text-rendering: auto;-webkit-font-smoothing: antialiased;}
-  .grid-expand.collapsed:before{content:"\\f102";}
-</style>
-<a href="javascript:void(0)" class="grid-expand collapsed" data-inserted="0" data-key="{$key}" data-row-key="{$rowKey}" data-parent="grid-expand-{$rowKey}" data-toggle="collapse" data-target="#grid-collapse-{$key}">
+<a href="javascript:;" class="btn btn-xs btn-default grid-expand collapsed" data-key="{$key}" data-row-key="{$rowKey}" data-parent="grid-collapse-group-{$rowKey}" data-toggle="collapse" data-target="#grid-collapse-{$key}">
    &nbsp;&nbsp;{$val}
 </a>
-<template class="grid-expand-{$key}">
-    <div id="grid-collapse-{$key}" class="collapse grid-expand-{$rowKey}">
+<template class="grid-collapse-tpl-{$key}">
+    <div id="grid-collapse-{$key}" class="collapse grid-collapse-group-{$rowKey}">
         <div  style="padding: 10px 10px 0 10px;">$html</div>
     </div>
 </template>
@@ -43,17 +40,30 @@ $('.grid-expand').on('click', function () {
     var key = $(this).data('key');
     var rowkey = $(this).data('rowKey');
     
+    $('.grid-expand:not(.collapsed)').each(function(){
+        $(this).attr("id") == '#grid-collapse-' + key || $(this).addClass('collapsed');
+    });
+
     if( ! $('#grid-collapse-' + key).length ) {
         var row = $(this).closest('tr');
-        var html = $('template.grid-expand-'+key).html();
+        var html = $('template.grid-collapse-tpl-'+key).html();
 
-        $('#grid-expand-' + rowkey).length || row.after("<tr style='background-color: #ecf0f5;'><td id='grid-expand-" + rowkey + "' colspan='"+(row.find('td').length)+"' style='padding:0 !important; border:0;'></td></tr>");
+        $('#grid-collapse-group-' + rowkey).length || row.after("<tr style='background-color: #ecf0f5;'><td id='grid-collapse-group-" + rowkey + "' colspan='"+(row.find('td').length)+"' style='padding:0 !important; border:0;'></td></tr>");
         
-        $('#grid-expand-' + rowkey).html(html);
+        $('#grid-collapse-group-' + rowkey).html(html);
 
     }
 });
 EOT;
         Admin::script($script);
+    }
+
+    protected function setupStyle()
+    {
+        $style = <<<STYLE
+        .grid-expand:before{content:"\\f0d7";display: inline-block;font: normal normal normal 14px/1 FontAwesome;font-size: inherit;text-rendering: auto;-webkit-font-smoothing: antialiased;}
+        .grid-expand.collapsed:before{content:"\\f0da";}
+STYLE;
+        Admin::style( $style );
     }
 }
