@@ -1065,6 +1065,12 @@ class Form implements Renderable
 
         $data = $this->model->toArray();
 
+        foreach ($this->model->getRelations() as $k => $v) {
+            if ($v instanceof Model && isset($data[$v->getTable()])) {
+                $data[$k] = $data[$v->getTable()];
+            }
+        }
+
         $this->builder->fields()->each(function (Field $field) use ($data) {
             if (!in_array($field->column(), $this->ignored)) {
                 $field->fill($data);
