@@ -11,3 +11,7 @@
         {!! $content !!}
     </div><!-- /.box-body -->
 </div>
+{{-- 由于widget box 有可能会用于expand，加载完页面后还没有对应的html，导致script失败，故只和html写在一起。 --}}
+<script>
+    {!! $script !!}
+</script>
