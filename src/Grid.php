@@ -946,6 +946,7 @@ class Grid
             'expand'      => Displayers\Expand::class,
             'modal'       => Displayers\Modal::class,
             'gravatar'    => Displayers\Gravatar::class,
+            'carousel'    => Displayers\Carousel::class,
         ];
 
         foreach ($map as $abstract => $class) {

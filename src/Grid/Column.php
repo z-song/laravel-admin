@@ -32,6 +32,7 @@ use Illuminate\Support\Str;
  * @method Displayers\Expand        expand($callback = null)
  * @method Displayers\Modal         modal($callback = null)
  * @method Displayers\Gravatar      gravatar($size = 30)
+ * @method Displayers\Carousel      carousel(int $width = 300, int $height = 200, $server = '')
  */
 class Column
 {
@@ -251,6 +252,18 @@ class Column
     public function style($style)
     {
         return $this->setAttributes(compact('style'));
+    }
+
+    /**
+     * Set the width of column.
+     *
+     * @param int $width
+     *
+     * @return Column
+     */
+    public function width(int $width)
+    {
+        return $this->style("width: {$width}px;");
     }
 
     /**
