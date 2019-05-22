@@ -329,7 +329,14 @@ return [
     | Enable/Disable assets minify
     |--------------------------------------------------------------------------
     */
-    'minify_assets' => true,
+    'minify_assets' => [
+
+        // Assets will not be minified.
+        'excepts' => [
+
+        ]
+
+    ],
 
     /*
     |--------------------------------------------------------------------------
