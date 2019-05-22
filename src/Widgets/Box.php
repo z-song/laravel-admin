@@ -3,6 +3,7 @@
 namespace Encore\Admin\Widgets;
 
 use Illuminate\Contracts\Support\Renderable;
+use Encore\Admin\Admin;
 
 class Box extends Widget implements Renderable
 {
@@ -25,6 +26,11 @@ class Box extends Widget implements Renderable
      * @var array
      */
     protected $tools = [];
+
+    /**
+     * @var string
+     */
+    protected $script;
 
     /**
      * Box constructor.
@@ -91,6 +97,25 @@ class Box extends Widget implements Renderable
     }
 
     /**
+     *  Set box body scrollable
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function scrollable($options = [], $nodeSelector = '')
+    {
+        $this->id = uniqid('box-slim-scroll-');
+        $scrollOptions = json_encode($options);
+        $nodeSelector = $nodeSelector ?: '.box-body';
+
+        $this->script = <<<SCRIPT
+$("#{$this->id} {$nodeSelector}").slimScroll({$scrollOptions});
+SCRIPT;
+
+        return $this;
+    }
+
+    /**
      * Set box as removable.
      *
      * @return $this
@@ -147,6 +172,7 @@ class Box extends Widget implements Renderable
             'content'    => $this->content,
             'tools'      => $this->tools,
             'attributes' => $this->formatAttributes(),
+            'script'     => $this->script,
         ];
     }
 
