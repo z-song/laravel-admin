@@ -26,6 +26,39 @@ class Listbox extends MultipleSelect
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function loadRemoteOptions($url, $parameters = [], $options = [])
+    {
+        $ajaxOptions = json_encode(array_merge([
+            'url' => $url.'?'.http_build_query($parameters),
+        ], $options));
+
+        $this->script = <<<EOT
+        
+$.ajax($ajaxOptions).done(function(data) {
+
+  var listbox = $("{$this->getElementClassSelector()}");
+
+    var value = listbox.data('value') + '';
+    
+    if (value) {
+      value = value.split(',');
+    }
+    
+    for (var key in data) {
+        var selected =  ($.inArray(key, value) >= 0) ? 'selected' : '';
+        listbox.append('<option value="'+key+'" '+selected+'>'+data[key]+'</option>');
+    }
+    
+    listbox.bootstrapDualListbox('refresh', true);
+});
+EOT;
+
+        return $this;
+    }
+
     public function render()
     {
         $settings = array_merge($this->settings, [
@@ -38,11 +71,13 @@ class Listbox extends MultipleSelect
 
         $settings = json_encode($settings);
 
-        $this->script = <<<SCRIPT
+        $this->script .= <<<SCRIPT
 
 $("{$this->getElementClassSelector()}").bootstrapDualListbox($settings);
 
 SCRIPT;
+
+        $this->attribute('data-value', implode(',', (array) $this->value()));
 
         return parent::render();
     }
