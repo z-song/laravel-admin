@@ -53,11 +53,19 @@ use Illuminate\Validation\Validator;
  * @method Field\Listbox        listbox($column, $label = '')
  * @method Field\Table          table($column, $label, $builder)
  * @method Field\Timezone       timezone($column, $label = '')
+ * @method Field\KeyValue       keyValue($column, $label = '')
  *
  * @method mixed                handle(Request $request)
  */
 class Form implements Renderable
 {
+    /**
+     * The title of form.
+     *
+     * @var string
+     */
+    public $title;
+
     /**
      * @var Field[]
      */
@@ -100,6 +108,16 @@ class Form implements Renderable
         $this->fill($data);
 
         $this->initFormAttributes();
+    }
+
+    /**
+     * Get form title.
+     *
+     * @return mixed
+     */
+    protected function title()
+    {
+        return $this->title;
     }
 
     /**
@@ -429,11 +447,13 @@ class Form implements Renderable
 
         $form = view('admin::widgets.form', $this->getVariables())->render();
 
-        if (!property_exists($this, 'title')) {
+        $title = $this->title();
+
+        if (!$title) {
             return $form;
         }
 
-        return new Box($this->title, $form);
+        return new Box($title, $form);
     }
 
     /**

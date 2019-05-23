@@ -68,6 +68,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Listbox        listbox($column, $label = '')
  * @method Field\Table          table($column, $label, $builder)
  * @method Field\Timezone       timezone($column, $label = '')
+ * @method Field\KeyValue       keyValue($column, $label = '')
  */
 class Form implements Renderable
 {
@@ -1455,6 +1456,7 @@ class Form implements Renderable
             'listbox'        => Field\Listbox::class,
             'table'          => Field\Table::class,
             'timezone'       => Field\Timezone::class,
+            'keyValue'       => Field\KeyValue::class,
         ];
 
         foreach ($map as $abstract => $class) {
