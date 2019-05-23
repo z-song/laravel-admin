@@ -15,12 +15,17 @@ class Box extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $title = 'Box header';
+    protected $title = '';
 
     /**
      * @var string
      */
     protected $content = 'here is the box content.';
+
+    /**
+     * @var string
+     */
+    protected $footer = '';
 
     /**
      * @var array
@@ -38,7 +43,7 @@ class Box extends Widget implements Renderable
      * @param string $title
      * @param string $content
      */
-    public function __construct($title = '', $content = '')
+    public function __construct($title = '', $content = '', $footer = '')
     {
         if ($title) {
             $this->title($title);
@@ -46,6 +51,10 @@ class Box extends Widget implements Renderable
 
         if ($content) {
             $this->content($content);
+        }
+
+        if ($footer) {
+            $this->footer($footer);
         }
 
         $this->class('box');
@@ -64,6 +73,24 @@ class Box extends Widget implements Renderable
             $this->content = $content->render();
         } else {
             $this->content = (string) $content;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set box footer.
+     *
+     * @param string $footer
+     *
+     * @return $this
+     */
+    public function footer($footer)
+    {
+        if ($footer instanceof Renderable) {
+            $this->footer = $footer->render();
+        } else {
+            $this->footer = (string) $footer;
         }
 
         return $this;
@@ -170,6 +197,7 @@ SCRIPT;
         return [
             'title'      => $this->title,
             'content'    => $this->content,
+            'footer'     => $this->footer,
             'tools'      => $this->tools,
             'attributes' => $this->formatAttributes(),
             'script'     => $this->script,
