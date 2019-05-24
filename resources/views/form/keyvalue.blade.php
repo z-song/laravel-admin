@@ -1,14 +1,14 @@
-<div class="row">
-    <div class="{{$viewClass['label']}}">
-        <h4 class="pull-right">{{ $label }}</h4>
-    </div>
+<div class="{{$viewClass['form-group']}}">
+
+    <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
+
     <div class="{{$viewClass['field']}}">
         <table class="table table-hover">
             <thead>
             <tr>
                 <th>{{ __('Key') }}</th>
                 <th>{{ __('Value') }}</th>
-                <th></th>
+                <th style="width: 75px;"></th>
             </tr>
             </thead>
             <tbody class="kv-{{$column}}-table">
