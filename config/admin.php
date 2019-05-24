@@ -334,7 +334,7 @@ return [
         // Assets will not be minified.
         'excepts' => [
 
-        ]
+        ],
 
     ],
 

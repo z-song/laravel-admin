@@ -332,7 +332,6 @@ class Field implements Renderable
     protected function formatName($column)
     {
         if (is_string($column)) {
-
             if (Str::contains($column, '->')) {
                 $name = explode('->', $column);
             } else {

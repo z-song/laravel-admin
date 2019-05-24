@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
- * Class Column
+ * Class Column.
  *
  * @method Displayers\Editable      editable()
  * @method Displayers\SwitchDisplay switch ($states = [])

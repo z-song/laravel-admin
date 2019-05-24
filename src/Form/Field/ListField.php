@@ -11,7 +11,7 @@ class ListField extends Field
     /**
      * Max list size.
      *
-     * @var integer
+     * @var int
      */
     protected $max;
 

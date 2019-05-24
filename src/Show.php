@@ -473,6 +473,7 @@ class Show implements Renderable
     /**
      * @param string $relation
      * @param string $label
+     *
      * @return Field
      */
     protected function showRelationAsField($relation = '', $label = '')

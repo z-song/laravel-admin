@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 trait CanHidesColumns
 {
     /**
-     * Default columns be hidden
+     * Default columns be hidden.
      *
      * @var array
      */
@@ -47,12 +47,13 @@ trait CanHidesColumns
      * Setting default shown columns on grid.
      *
      * @param array|string $columns
+     *
      * @return $this
      */
     public function hideColumns($columns)
     {
         if (func_num_args()) {
-            $columns = (array)$columns;
+            $columns = (array) $columns;
         } else {
             $columns = func_get_args();
         }
