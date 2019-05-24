@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Widgets;
 
-use Illuminate\Contracts\Support\Renderable;
 use Encore\Admin\Admin;
+use Illuminate\Contracts\Support\Renderable;
 
 class Box extends Widget implements Renderable
 {
@@ -124,9 +124,10 @@ class Box extends Widget implements Renderable
     }
 
     /**
-     *  Set box body scrollable
+     *  Set box body scrollable.
      *
      * @param array $options
+     *
      * @return $this
      */
     public function scrollable($options = [], $nodeSelector = '')

@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Controllers;
 
-use Exception;
 use Encore\Admin\Widgets\Form;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 

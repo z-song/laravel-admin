@@ -239,8 +239,8 @@ class Field implements Renderable
     /**
      * Show field as a carousel.
      *
-     * @param int $width
-     * @param int $height
+     * @param int    $width
+     * @param int    $height
      * @param string $server
      *
      * @return Field

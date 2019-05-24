@@ -55,7 +55,6 @@ use Illuminate\Validation\Validator;
  * @method Field\Timezone       timezone($column, $label = '')
  * @method Field\KeyValue       keyValue($column, $label = '')
  * @method Field\ListField      list($column, $label = '')
- *
  * @method mixed                handle(Request $request)
  */
 class Form implements Renderable
@@ -133,6 +132,7 @@ class Form implements Renderable
      * Fill data to form fields.
      *
      * @param array $data
+     *
      * @return $this
      */
     public function fill($data = [])
@@ -467,7 +467,7 @@ class Form implements Renderable
      */
     public function __call($method, $arguments)
     {
-        if (! $this->hasField($method)) {
+        if (!$this->hasField($method)) {
             return $this;
         }
 
