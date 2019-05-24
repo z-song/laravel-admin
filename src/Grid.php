@@ -64,6 +64,13 @@ class Grid
     public $columnNames = [];
 
     /**
+     * Default columns be shown
+     *
+     * @var array
+     */
+    public $columnShownNames = [];
+
+    /**
      * Grid builder.
      *
      * @var \Closure
@@ -343,7 +350,12 @@ class Grid
      */
     public function visibleColumns()
     {
-        $visible = array_filter(explode(',', request(Tools\ColumnSelector::SELECT_COLUMN_NAME)));
+        $querySelections = array_filter(explode(',', request(Tools\ColumnSelector::SELECT_COLUMN_NAME)));
+        if ( count($querySelections) > 0) {
+            $visible = $querySelections;
+        } else {
+            $visible = $this->columnShownNames;
+        }
 
         if (empty($visible)) {
             return $this->columns;
@@ -363,7 +375,12 @@ class Grid
      */
     public function visibleColumnNames()
     {
-        $visible = array_filter(explode(',', request(Tools\ColumnSelector::SELECT_COLUMN_NAME)));
+        $querySelections = array_filter(explode(',', request(Tools\ColumnSelector::SELECT_COLUMN_NAME)));
+        if ( count($querySelections) > 0) {
+            $visible = $querySelections;
+        } else {
+            $visible = $this->columnShownNames;
+        }
 
         if (empty($visible)) {
             return $this->columnNames;
@@ -810,7 +827,21 @@ class Grid
      */
     public function renderColumnSelector()
     {
-        return (new Grid\Tools\ColumnSelector($this))->render();
+        $columnSelector = new Grid\Tools\ColumnSelector($this);
+        $columnSelector->columnShownNames = $this->columnShownNames;
+        return $columnSelector->render();
+    }
+
+    /**
+     * Setting default shown columns on grid.
+     *
+     * @param array $columns
+     * @return array
+     */
+    public function selectColumns($columns = [])
+    {
+        $this->columnShownNames = $columns;
+        return $this->columnShownNames;
     }
 
     /**

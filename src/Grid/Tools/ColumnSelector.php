@@ -15,6 +15,8 @@ class ColumnSelector extends AbstractTool
      */
     protected $grid;
 
+    public $columnShownNames = [];
+
     /**
      * Create a new Export button instance.
      *
@@ -35,7 +37,13 @@ class ColumnSelector extends AbstractTool
         if (!$this->grid->showColumnSelector()) {
             return '';
         }
-        $show = array_filter(explode(',', request(static::SELECT_COLUMN_NAME)));
+
+        $querySelections = array_filter(explode(',', request(static::SELECT_COLUMN_NAME)));
+        if ( count($querySelections) > 0) {
+            $show = $querySelections;
+        } else {
+            $show = $this->columnShownNames;
+        }
 
         $columns = $this->getGridColumns();
 
