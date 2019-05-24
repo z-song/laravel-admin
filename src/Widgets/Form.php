@@ -44,7 +44,7 @@ use Illuminate\Validation\Validator;
  * @method Field\SwitchField    switch($name, $label = '')
  * @method Field\Display        display($name, $label = '')
  * @method Field\Rate           rate($name, $label = '')
- * @method Field\Divide         divide()
+ * @method Field\Divider        divider($title = '')
  * @method Field\Decimal        decimal($column, $label = '')
  * @method Field\Html           html($html)
  * @method Field\Tags           tags($column, $label = '')

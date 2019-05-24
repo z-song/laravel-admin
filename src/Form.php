@@ -55,7 +55,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\SwitchField    switch($column, $label = '')
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
- * @method Field\Divide         divider()
+ * @method Field\Divider        divider($title = '')
  * @method Field\Password       password($column, $label = '')
  * @method Field\Decimal        decimal($column, $label = '')
  * @method Field\Html           html($html, $label = '')
@@ -1422,8 +1422,7 @@ class Form implements Renderable
             'datetimeRange'  => Field\DatetimeRange::class,
             'decimal'        => Field\Decimal::class,
             'display'        => Field\Display::class,
-            'divider'        => Field\Divide::class,
-            'divide'         => Field\Divide::class,
+            'divider'        => Field\Divider::class,
             'embeds'         => Field\Embeds::class,
             'email'          => Field\Email::class,
             'file'           => Field\File::class,
