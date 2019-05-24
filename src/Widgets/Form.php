@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Widgets;
 
+use Closure;
 use Encore\Admin\Form as BaseForm;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
@@ -427,6 +428,27 @@ class Form implements Renderable
         }
 
         return $messageBag;
+    }
+
+    /**
+     * Add a fieldset to form.
+     *
+     * @param string $title
+     * @param Closure $setCallback
+     *
+     * @return Field\Fieldset
+     */
+    public function fieldset(string $title, Closure $setCallback)
+    {
+        $fieldset = new Field\Fieldset();
+
+        $this->html($fieldset->start($title))->plain();
+
+        $setCallback($this);
+
+        $this->html($fieldset->end())->plain();
+
+        return $fieldset;
     }
 
     /**
