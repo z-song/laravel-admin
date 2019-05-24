@@ -1,5 +1,5 @@
 
-@php($listErrorKey = "$column.values");
+@php($listErrorKey = "$column.values")
 
 <div class="{{$viewClass['form-group']}} {{ $errors->has($listErrorKey) ? 'has-error' : '' }}">
 
@@ -74,4 +74,3 @@
         </td>
     </tr>
 </template>
-

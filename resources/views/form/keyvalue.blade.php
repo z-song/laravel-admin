@@ -96,4 +96,3 @@
         </td>
     </tr>
 </template>
-
