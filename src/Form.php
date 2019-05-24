@@ -69,6 +69,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Table          table($column, $label, $builder)
  * @method Field\Timezone       timezone($column, $label = '')
  * @method Field\KeyValue       keyValue($column, $label = '')
+ * @method Field\ListField      list($column, $label = '')
  */
 class Form implements Renderable
 {
@@ -1457,6 +1458,7 @@ class Form implements Renderable
             'table'          => Field\Table::class,
             'timezone'       => Field\Timezone::class,
             'keyValue'       => Field\KeyValue::class,
+            'list'           => Field\ListField::class,
         ];
 
         foreach ($map as $abstract => $class) {

@@ -54,6 +54,7 @@ use Illuminate\Validation\Validator;
  * @method Field\Table          table($column, $label, $builder)
  * @method Field\Timezone       timezone($column, $label = '')
  * @method Field\KeyValue       keyValue($column, $label = '')
+ * @method Field\ListField      list($column, $label = '')
  *
  * @method mixed                handle(Request $request)
  */
