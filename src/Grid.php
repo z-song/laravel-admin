@@ -440,7 +440,7 @@ class Grid
     {
         $this->perPage = $perPage;
 
-        $this->model()->paginate($perPage);
+        $this->model()->setPerPage($perPage);
     }
 
     /**

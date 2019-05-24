@@ -192,6 +192,22 @@ class Model
     }
 
     /**
+     * Set per-page number.
+     *
+     * @param int $perPage
+     *
+     * @return $this
+     */
+    public function setPerPage($perPage)
+    {
+        $this->perPage = $perPage;
+
+        $this->__call('paginate', [$perPage]);
+
+        return $this;
+    }
+
+    /**
      * Get the query string variable used to store the sort.
      *
      * @return string
