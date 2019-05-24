@@ -142,7 +142,7 @@ class UserController extends Controller
             $form->password('password')->rules('confirmed');
             $form->password('password_confirmation');
 
-            $form->divide();
+            $form->divider();
 
             $form->text('profile.first_name');
             $form->text('profile.last_name');
