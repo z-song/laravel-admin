@@ -32,7 +32,7 @@
                         <span class="mailbox-attachment-size">
                           <input type="checkbox" class="grid-item" data-id="{{ $row->id() }}" />
                             <span class="pull-right">
-                                {!! $row->column('__actions__') !!}
+                                {!! $row->column(\Encore\Admin\Grid\Column::ACTION_COLUMN_NAME) !!}
                                 <a href="{!! isset($server) ? $server . '/' . $row->column($image_column) : \Illuminate\Support\Facades\Storage::disk(config('admin.upload.disk'))->url($row->column($image_column)) !!}" target="_blank" download="custom-filename.jpg">
                                     <i class="fa fa-cloud-download"></i>
                                 </a>

@@ -38,6 +38,8 @@ class Column
 {
     const SELECT_COLUMN_NAME = '__row_selector__';
 
+    const ACTION_COLUMN_NAME = '__actions__';
+
     /**
      * @var Grid
      */
@@ -431,6 +433,18 @@ class Column
 
             return view($view, compact('model', 'value'))->render();
         });
+    }
+
+    /**
+     * Hide this column by default.
+     *
+     * @return $this
+     */
+    public function hide()
+    {
+        $this->grid->hideColumns($this->getName());
+
+        return $this;
     }
 
     /**

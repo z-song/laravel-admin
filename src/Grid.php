@@ -26,7 +26,8 @@ class Grid
         Concerns\HasFooter,
         Concerns\HasFilter,
         Concerns\HasTools,
-        Concerns\HasTotalRow;
+        Concerns\HasTotalRow,
+        Concerns\CanHidesColumns;
 
     /**
      * The grid data model instance.
@@ -62,13 +63,6 @@ class Grid
      * @var array
      */
     public $columnNames = [];
-
-    /**
-     * Default columns be shown
-     *
-     * @var array
-     */
-    public $columnShownNames = [];
 
     /**
      * Grid builder.
@@ -344,56 +338,6 @@ class Grid
     }
 
     /**
-     * Get all visible column instances.
-     *
-     * @return Collection|static
-     */
-    public function visibleColumns()
-    {
-        $querySelections = array_filter(explode(',', request(Tools\ColumnSelector::SELECT_COLUMN_NAME)));
-        if ( count($querySelections) > 0) {
-            $visible = $querySelections;
-        } else {
-            $visible = $this->columnShownNames;
-        }
-
-        if (empty($visible)) {
-            return $this->columns;
-        }
-
-        array_push($visible, '__row_selector__', '__actions__');
-
-        return $this->columns->filter(function (Column $column) use ($visible) {
-            return in_array($column->getName(), $visible);
-        });
-    }
-
-    /**
-     * Get all visible column names.
-     *
-     * @return array|static
-     */
-    public function visibleColumnNames()
-    {
-        $querySelections = array_filter(explode(',', request(Tools\ColumnSelector::SELECT_COLUMN_NAME)));
-        if ( count($querySelections) > 0) {
-            $visible = $querySelections;
-        } else {
-            $visible = $this->columnShownNames;
-        }
-
-        if (empty($visible)) {
-            return $this->columnNames;
-        }
-
-        array_push($visible, '__row_selector__', '__actions__');
-
-        return collect($this->columnNames)->filter(function ($column) use ($visible) {
-            return in_array($column, $visible);
-        });
-    }
-
-    /**
      * Add column to grid.
      *
      * @param string $column
@@ -582,7 +526,7 @@ class Grid
             return;
         }
 
-        $this->addColumn('__actions__', trans('admin.action'))
+        $this->addColumn(Column::ACTION_COLUMN_NAME, trans('admin.action'))
             ->displayUsing($this->actionsClass, [$this->actionsCallback]);
     }
 
@@ -800,48 +744,6 @@ class Grid
     public function renderCreateButton()
     {
         return (new Tools\CreateButton($this))->render();
-    }
-
-    /**
-     * Remove column selector on grid.
-     *
-     * @param bool $disable
-     *
-     * @return Grid|mixed
-     */
-    public function disableColumnSelector(bool $disable = true)
-    {
-        return $this->option('show_column_selector', !$disable);
-    }
-
-    /**
-     * @return bool
-     */
-    public function showColumnSelector()
-    {
-        return $this->option('show_column_selector');
-    }
-
-    /**
-     * @return string
-     */
-    public function renderColumnSelector()
-    {
-        $columnSelector = new Grid\Tools\ColumnSelector($this);
-        $columnSelector->columnShownNames = $this->columnShownNames;
-        return $columnSelector->render();
-    }
-
-    /**
-     * Setting default shown columns on grid.
-     *
-     * @param array $columns
-     * @return array
-     */
-    public function selectColumns($columns = [])
-    {
-        $this->columnShownNames = $columns;
-        return $this->columnShownNames;
     }
 
     /**
