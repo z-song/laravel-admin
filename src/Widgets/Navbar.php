@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Widgets;
 
+use Encore\Admin\Widgets\Navbar\RefreshButton;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 
@@ -69,6 +70,8 @@ class Navbar implements Renderable
         if (!isset($this->elements[$part]) || $this->elements[$part]->isEmpty()) {
             return '';
         }
+
+        $this->right(new RefreshButton());
 
         return $this->elements[$part]->map(function ($element) {
             if ($element instanceof Htmlable) {

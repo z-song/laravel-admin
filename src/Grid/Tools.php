@@ -47,7 +47,6 @@ class Tools implements Renderable
     protected function appendDefaultTools()
     {
         $this->append(new BatchActions())
-            ->append(new RefreshButton())
             ->append(new FilterButton());
     }
 
