@@ -6,7 +6,6 @@ use Encore\Admin\Grid;
 use Encore\Admin\Grid\Tools\AbstractTool;
 use Encore\Admin\Grid\Tools\BatchActions;
 use Encore\Admin\Grid\Tools\FilterButton;
-use Encore\Admin\Grid\Tools\RefreshButton;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
@@ -98,16 +97,12 @@ class Tools implements Renderable
      * Disable refresh button.
      *
      * @return void
+     *
+     * @deprecated
      */
     public function disableRefreshButton(bool $disable = true)
     {
-        $this->tools = $this->tools->map(function (AbstractTool $tool) use ($disable) {
-            if ($tool instanceof RefreshButton) {
-                return $tool->disable($disable);
-            }
-
-            return $tool;
-        });
+        //
     }
 
     /**
