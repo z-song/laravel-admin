@@ -301,7 +301,7 @@ class Form implements Renderable
     public function destroy($id)
     {
         try {
-            if (($ret = $this->callDeleting()) instanceof Response) {
+            if (($ret = $this->callDeleting($id)) instanceof Response) {
                 return $ret;
             }
 
