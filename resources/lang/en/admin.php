@@ -98,6 +98,7 @@ return [
         'filter_clear'       => 'Show all',
         'filter_placeholder' => 'Filter',
     ],
+    'grid_items_selected'    => '{n} items selected',
 
     'menu_titles' => [],
 ];

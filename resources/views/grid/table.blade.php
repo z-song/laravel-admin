@@ -13,9 +13,9 @@
             {!! $grid->renderCreateButton() !!}
         </div>
         @if ( $grid->showTools() )
-        <span>
+        <div class="pull-left">
             {!! $grid->renderHeaderTools() !!}
-        </span>
+        </div>
         @endif
     </div>
     @endif
