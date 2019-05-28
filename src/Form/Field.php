@@ -387,11 +387,6 @@ class Field implements Renderable
      */
     public function fill($data)
     {
-        // Field value is already setted.
-//        if (!is_null($this->value)) {
-//            return;
-//        }
-
         $this->data = $data;
 
         if (is_array($this->column)) {
@@ -1084,7 +1079,7 @@ class Field implements Renderable
             return [
                 'label'      => "col-sm-{$this->width['label']} {$this->getLabelClass()}",
                 'field'      => "col-sm-{$this->width['field']}",
-                'form-group' => 'form-group ',
+                'form-group' => $this->getGroupClass(true),
             ];
         }
 
@@ -1217,7 +1212,11 @@ class Field implements Renderable
     public function setGroupClass($class)
     : self
     {
-        array_push($this->groupClass, $class);
+        if (is_array($class)) {
+            $this->groupClass = array_merge($this->groupClass, $class);
+        } else {
+            array_push($this->groupClass, $class);
+        }
 
         return $this;
     }
