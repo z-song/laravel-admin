@@ -189,7 +189,12 @@ class Filter implements Renderable
      */
     public function getModel()
     {
-        return $this->model;
+        $conditions = array_merge(
+            $this->conditions(),
+            $this->scopeConditions()
+        );
+
+        return $this->model->addConditions($conditions);
     }
 
     /**
