@@ -98,6 +98,7 @@ return [
         'filter_clear'       => '전체 보기',
         'filter_placeholder' => '필터',
     ],
+    'grid_items_selected' => '{n} 선택한 항목',
 
     'menu_titles' => [],
 ];
