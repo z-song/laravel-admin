@@ -86,9 +86,11 @@ class Select extends Presenter
             $configs = substr($configs, 1, strlen($configs) - 2);
 
             $this->script = <<<SCRIPT
+(function ($){
 $(".{$this->getElementClass()}").select2({
   placeholder: $placeholder,
   $configs
+});
 });
 
 SCRIPT;
