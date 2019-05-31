@@ -218,3 +218,23 @@ if (!function_exists('class_uses_deep')) {
         return array_unique($traits);
     }
 }
+
+if (!function_exists('admin_dump')) {
+
+    /**
+     * @param $var
+     * @return string
+     */
+    function admin_dump($var)
+    {
+        ob_start();
+
+        dump(...func_get_args());
+
+        $contents = ob_get_contents();
+
+        ob_end_clean();
+
+        return $contents;
+    }
+}

@@ -166,6 +166,15 @@ class Content implements Renderable
     }
 
     /**
+     * @param $var
+     * @return Content
+     */
+    public function dump($var)
+    {
+        return $this->row(admin_dump(...func_get_args()));
+    }
+
+    /**
      * Add Row.
      *
      * @param Row $row
