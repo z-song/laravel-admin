@@ -993,7 +993,7 @@ class Field implements Renderable
      *
      * @return Field
      */
-    public function readOnly()
+    public function readonly()
     {
         return $this->attribute('readonly', true);
     }
