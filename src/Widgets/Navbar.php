@@ -71,7 +71,9 @@ class Navbar implements Renderable
             return '';
         }
 
-        $this->right(new RefreshButton());
+        if ($part == 'right') {
+            $this->right(new RefreshButton());
+        }
 
         return $this->elements[$part]->map(function ($element) {
             if ($element instanceof Htmlable) {
