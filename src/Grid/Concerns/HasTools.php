@@ -7,6 +7,8 @@ use Encore\Admin\Grid\Tools;
 
 trait HasTools
 {
+    use HasSearchBar;
+
     /**
      * Header tools.
      *
@@ -16,10 +18,14 @@ trait HasTools
 
     /**
      * Setup grid tools.
+     *
+     * @return $this
      */
-    public function setupTools()
+    protected function initTools()
     {
         $this->tools = new Tools($this);
+
+        return $this;
     }
 
     /**

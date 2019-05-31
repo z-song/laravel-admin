@@ -103,12 +103,15 @@ class Model
      * Create a new grid model instance.
      *
      * @param EloquentModel $model
+     * @param Grid $grid
      */
-    public function __construct(EloquentModel $model)
+    public function __construct(EloquentModel $model, Grid $grid = null)
     {
         $this->model = $model;
 
         $this->originalModel = $model;
+
+        $this->grid = $grid;
 
         $this->queries = collect();
 

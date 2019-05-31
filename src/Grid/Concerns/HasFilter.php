@@ -18,11 +18,13 @@ trait HasFilter
     /**
      * Setup grid filter.
      *
-     * @return void
+     * @return $this
      */
-    protected function setupFilter()
+    protected function initFilter()
     {
         $this->filter = new Filter($this->model());
+
+        return $this;
     }
 
     /**

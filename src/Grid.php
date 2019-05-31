@@ -177,21 +177,29 @@ class Grid
      */
     public function __construct(Eloquent $model, Closure $builder = null)
     {
+        $this->model = new Model($model, $this);
         $this->keyName = $model->getKeyName();
-        $this->model = new Model($model);
-        $this->columns = new Collection();
-        $this->rows = new Collection();
         $this->builder = $builder;
-        $this->tableID = uniqid('grid-table');
 
-        $this->model()->setGrid($this);
-
-        $this->setupTools();
-        $this->setupFilter();
+        $this->initialize();
 
         $this->handleExportRequest();
 
         $this->callInitCallbacks();
+    }
+
+    /**
+     * Initialize.
+     */
+    protected function initialize()
+    {
+        $this->tableID = uniqid('grid-table');
+
+        $this->columns = Collection::make();
+        $this->rows = Collection::make();
+
+        $this->initTools()
+            ->initFilter();
     }
 
     /**
