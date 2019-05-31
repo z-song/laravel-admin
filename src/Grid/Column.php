@@ -287,9 +287,13 @@ class Column
      */
     protected function formatLabel($label)
     {
-        $label = $label ?: ucfirst($this->name);
+        if ($label) {
+            return $label;
+        }
 
-        return str_replace(['.', '_'], ' ', $label);
+        $label = ucfirst($this->name);
+
+        return __(str_replace(['.', '_'], ' ', $label));
     }
 
     /**
@@ -767,7 +771,7 @@ HELP;
     {
         if ($this->isRelation() && !$this->relationColumn) {
             $this->name = "{$this->relation}.$method";
-            $this->label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
+            $this->label = $this->formatLabel($arguments[0] ?? null);
 
             $this->relationColumn = $method;
 

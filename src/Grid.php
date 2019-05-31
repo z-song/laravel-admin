@@ -304,7 +304,7 @@ class Grid
             return $this->addJsonColumn($name, $label);
         }
 
-        return $this->__call($name, [$label]);
+        return $this->__call($name, array_filter([$label]));
     }
 
     /**
@@ -381,7 +381,7 @@ class Grid
 
         $this->model()->with($relation);
 
-        return $this->addColumn($name, $label ?: ucfirst($column))->setRelation($relation, $column);
+        return $this->addColumn($name, $label)->setRelation($relation, $column);
     }
 
     /**
@@ -837,7 +837,7 @@ class Grid
      */
     public function __call($method, $arguments)
     {
-        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
+        $label = $arguments[0] ?? null;
 
         if ($this->model()->eloquent() instanceof MongodbModel) {
             return $this->addColumn($method, $label);
