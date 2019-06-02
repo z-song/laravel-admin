@@ -77,7 +77,7 @@ HTML;
         </li>
         <li class="divider"></li>
         <li class="text-right">
-            <button class="btn btn-sm btn-defalut column-select-all">{$btns['all']}</button>&nbsp;&nbsp;
+            <button class="btn btn-sm btn-default column-select-all">{$btns['all']}</button>&nbsp;&nbsp;
             <button class="btn btn-sm btn-primary column-select-submit">{$btns['submit']}</button>
         </li>
     </ul>
