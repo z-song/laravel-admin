@@ -119,7 +119,7 @@ class Select extends Field
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
-    $.get("$sourceUrl?q="+this.value, function (data) {
+    $.get("$sourceUrl",{q : this.value}, function (data) {
         target.find("option").remove();
         $(target).select2({
             data: $.map(data, function (d) {
