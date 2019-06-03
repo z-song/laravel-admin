@@ -153,7 +153,7 @@ SCRIPT;
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url,
+            'url'  => $url,
             'data' => $parameters,
         ];
         $configs = array_merge([
