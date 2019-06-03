@@ -2,15 +2,15 @@
 
 namespace Encore\Admin\Grid\Tools;
 
-use Encore\Admin\Grid\Concerns\HasSearchBar;
+use Encore\Admin\Grid\Concerns\HasQuickSearch;
 use Illuminate\Support\Arr;
 
-class SearchBar extends AbstractTool
+class QuickSearch extends AbstractTool
 {
     /**
      * @var string
      */
-    protected $view = 'admin::grid.search-bar';
+    protected $view = 'admin::grid.quick-search';
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -19,12 +19,12 @@ class SearchBar extends AbstractTool
     {
         $query = request()->query();
 
-        Arr::forget($query, HasSearchBar::$searchKey);
+        Arr::forget($query, HasQuickSearch::$searchKey);
 
         $vars = [
             'action' => request()->url() . '?' . http_build_query($query),
-            'key'    => HasSearchBar::$searchKey,
-            'value'  => request(HasSearchBar::$searchKey),
+            'key'    => HasQuickSearch::$searchKey,
+            'value'  => request(HasQuickSearch::$searchKey),
         ];
 
         return view($this->view, $vars);

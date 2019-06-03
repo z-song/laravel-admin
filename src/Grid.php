@@ -576,6 +576,8 @@ class Grid
             return;
         }
 
+        $this->applyQuickSearch();
+
         $collection = $this->processFilter(false);
 
         $data = $collection->toArray();
