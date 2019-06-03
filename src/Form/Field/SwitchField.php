@@ -25,6 +25,7 @@ class SwitchField extends Field
     public function setSize($size)
     {
         $this->size = $size;
+
         return $this;
     }
 

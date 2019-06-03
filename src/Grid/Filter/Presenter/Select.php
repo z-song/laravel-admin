@@ -154,7 +154,7 @@ SCRIPT;
     {
         $ajaxOptions = [
             'url' => $url,
-            'data' => $parameters
+            'data' => $parameters,
         ];
         $configs = array_merge([
             'allowClear'         => true,
