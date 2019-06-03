@@ -33,6 +33,7 @@ use Illuminate\Support\Str;
  * @method Displayers\Modal         modal($callback = null)
  * @method Displayers\Gravatar      gravatar($size = 30)
  * @method Displayers\Carousel      carousel(int $width = 300, int $height = 200, $server = '')
+ * @method Displayers\FileSize      filesize()
  */
 class Column
 {

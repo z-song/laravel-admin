@@ -888,6 +888,7 @@ class Grid
             'modal'       => Displayers\Modal::class,
             'gravatar'    => Displayers\Gravatar::class,
             'carousel'    => Displayers\Carousel::class,
+            'filesize'    => Displayers\FileSize::class,
         ];
 
         foreach ($map as $abstract => $class) {
