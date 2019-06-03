@@ -578,14 +578,14 @@ class Grid
 
         $this->applyQuickSearch();
 
-        $collection = $this->processFilter(false);
-
-        $data = $collection->toArray();
+        $collection = $this->applyFilter(false);
 
         $this->prependRowSelectorColumn();
         $this->appendActionsColumn();
 
         Column::setOriginalGridModels($collection);
+
+        $data = $collection->toArray();
 
         $this->columns->map(function (Column $column) use (&$data) {
             $data = $column->fill($data);

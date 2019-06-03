@@ -56,7 +56,7 @@ trait HasFilter
      *
      * @return array|Collection|mixed
      */
-    public function processFilter($toArray = true)
+    public function applyFilter($toArray = true)
     {
         if ($this->builder) {
             call_user_func($this->builder, $this);
