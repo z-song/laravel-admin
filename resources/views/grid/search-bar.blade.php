@@ -1,9 +1,9 @@
-<div class="input-group input-group-sm" style="display: inline-block;">
-    <form action="{!! $action !!}" pjax-container method="get">
-    <input type="text" name="{{ $key }}" class="form-control" style="width: 150px;" value="{{ $value }}">
+<form action="{!! $action !!}" pjax-container style="display: inline-block;">
+    <div class="input-group input-group-sm" style="display: inline-block;">
+        <input type="text" name="{{ $key }}" class="form-control" style="width: 150px;" value="{{ $value }}">
 
-    <div class="input-group-btn" style="display: inline-block;">
-        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+        <div class="input-group-btn" style="display: inline-block;">
+            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+        </div>
     </div>
 </form>
-</div>
