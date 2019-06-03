@@ -235,7 +235,7 @@ trait ModelTree
      *
      * @return array
      */
-    public static function selectOptions(\Closure $closure = null, $rootText = 'Root')
+    public static function selectOptions(\Closure $closure = null, $rootText = 'ROOT')
     {
         $options = (new static())->withQuery($closure)->buildSelectOptions();
 
@@ -248,12 +248,13 @@ trait ModelTree
      * @param array  $nodes
      * @param int    $parentId
      * @param string $prefix
+     * @param string $space
      *
      * @return array
      */
-    protected function buildSelectOptions(array $nodes = [], $parentId = 0, $prefix = '')
+    protected function buildSelectOptions(array $nodes = [], $parentId = 0, $prefix = '', $space = '&nbsp;')
     {
-        $prefix = $prefix ?: str_repeat('&nbsp;', 6);
+        $prefix = $prefix ?: '┝'.$space;
 
         $options = [];
 
@@ -261,10 +262,14 @@ trait ModelTree
             $nodes = $this->allNodes();
         }
 
-        foreach ($nodes as $node) {
-            $node[$this->titleColumn] = $prefix.'&nbsp;'.$node[$this->titleColumn];
+        foreach ($nodes as $index => $node) {
+
             if ($node[$this->parentColumn] == $parentId) {
-                $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $prefix.$prefix);
+                $node[$this->titleColumn] = $prefix.$space.$node[$this->titleColumn];
+
+                $childrenPrefix = str_replace('┝', str_repeat($space, 6), $prefix).'┝'.str_replace(['┝', $space], '', $prefix);
+
+                $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $childrenPrefix);
 
                 $options[$node[$this->getKeyName()]] = $node[$this->titleColumn];
 
