@@ -27,6 +27,11 @@ trait HasAssets
     /**
      * @var array
      */
+    public static $html = [];
+
+    /**
+     * @var array
+     */
     public static $headerJs = [];
 
     /**
@@ -202,6 +207,20 @@ trait HasAssets
         }
 
         return view('admin::partials.style', ['style' => array_unique(self::$style)]);
+    }
+
+    /**
+     * @param string $html
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public static function html($html = '')
+    {
+        if (!empty($html)) {
+            return self::$html = array_merge(self::$html, (array) $html);
+        }
+
+        return view('admin::partials.html', ['html' => array_unique(self::$html)]);
     }
 
     /**
