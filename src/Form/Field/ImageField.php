@@ -105,6 +105,12 @@ trait ImageField
      */
     public function addThumbnailSize(string $name, int $width, int $height)
     {
+        if (empty($width)) {
+            $width = null;
+        } elseif (empty($height)) {
+            $height = null;
+        }
+        
         $this->sizes[] = compact('name', 'width', 'height');
 
         return $this;
@@ -154,9 +160,9 @@ trait ImageField
 
             // Resize image with aspect ratio
             $image = InterventionImage::make($file);
-            $image->resize($size['width'], $size['height'], function (Constraint $constraint) {
+            $image->resize($size['width'], $size['height'], function($constraint) {
                 $constraint->aspectRatio();
-            });
+            })->resizeCanvas($size['width'], $size['height'], 'center', false, '#ffffff');
 
             if (!is_null($this->storage_permission)) {
                 $this->storage->put("{$this->getDirectory()}/{$name}", $image->encode(), $this->storage_permission);
