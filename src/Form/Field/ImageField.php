@@ -110,7 +110,7 @@ trait ImageField
         } elseif (empty($height)) {
             $height = null;
         }
-        
+
         $this->sizes[] = compact('name', 'width', 'height');
 
         return $this;
@@ -160,7 +160,7 @@ trait ImageField
 
             // Resize image with aspect ratio
             $image = InterventionImage::make($file);
-            $image->resize($size['width'], $size['height'], function($constraint) {
+            $image->resize($size['width'], $size['height'], function (Constraint $constraint) {
                 $constraint->aspectRatio();
             })->resizeCanvas($size['width'], $size['height'], 'center', false, '#ffffff');
 
