@@ -81,7 +81,7 @@ trait ImageField
      */
     public function render()
     {
-        $this->options(['allowedFileTypes' => ['image']]);
+        $this->options(['allowedFileTypes' => ['image'], 'msgPlaceholder' => trans('admin.choose_image')]);
 
         return parent::render();
     }
