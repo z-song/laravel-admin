@@ -216,7 +216,7 @@ EOT;
      */
     public function render()
     {
-        $this->options(['overwriteInitial' => true]);
+        $this->options(['overwriteInitial' => true, 'msgPlaceholder' => trans('admin.choose_file')]);
 
         $this->setupDefaultOptions();
 
