@@ -20,13 +20,12 @@ SCRIPT;
 
         Admin::script($script);
 
-        return <<<EOT
+        return <<<'EOT'
 <li>
     <a href="javascript:void(0);" class="container-refresh">
       <i class="fa fa-refresh"></i>
     </a>
 </li>
 EOT;
-
     }
 }

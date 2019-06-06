@@ -1077,7 +1077,7 @@ class Form implements Renderable
     /**
      * Add a fieldset to form.
      *
-     * @param string $title
+     * @param string  $title
      * @param Closure $setCallback
      *
      * @return Field\Fieldset

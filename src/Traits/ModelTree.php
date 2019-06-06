@@ -263,7 +263,6 @@ trait ModelTree
         }
 
         foreach ($nodes as $index => $node) {
-
             if ($node[$this->parentColumn] == $parentId) {
                 $node[$this->titleColumn] = $prefix.$space.$node[$this->titleColumn];
 

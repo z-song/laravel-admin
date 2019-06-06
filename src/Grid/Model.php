@@ -103,7 +103,7 @@ class Model
      * Create a new grid model instance.
      *
      * @param EloquentModel $model
-     * @param Grid $grid
+     * @param Grid          $grid
      */
     public function __construct(EloquentModel $model, Grid $grid = null)
     {

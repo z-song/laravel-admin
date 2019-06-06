@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
- * Trait HasQuickSearch
+ * Trait HasQuickSearch.
  *
  * @property Collection $columns
  * @property Tools      $tools
@@ -30,6 +30,7 @@ trait HasQuickSearch
 
     /**
      * @param array|string|\Closure
+     *
      * @return $this
      */
     public function quickSearch($search = null)
@@ -66,7 +67,7 @@ trait HasQuickSearch
 
         if (is_array($this->search)) {
             foreach ($this->search as $column) {
-                $this->addWhereLikeBinding($column, true, '%' . $query . '%');
+                $this->addWhereLikeBinding($column, true, '%'.$query.'%');
             }
         } elseif (is_null($this->search)) {
             $this->addWhereBindings($query);
@@ -74,7 +75,7 @@ trait HasQuickSearch
     }
 
     /**
-     * Add where bindings
+     * Add where bindings.
      *
      * @param string $query
      */
@@ -83,9 +84,8 @@ trait HasQuickSearch
         $queries = preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', trim($query));
 
         foreach ($this->parseQueryBindings($queries) as list($column, $condition, $or)) {
-
             if (preg_match('/(?<not>!?)\((?<values>.+)\)/', $condition, $match) !== 0) {
-                $this->addWhereInBinding($column, $or, (bool)$match['not'], $match['values']);
+                $this->addWhereInBinding($column, $or, (bool) $match['not'], $match['values']);
                 continue;
             }
 
@@ -120,14 +120,14 @@ trait HasQuickSearch
      * Parse quick query bindings.
      *
      * @param array $queries
+     *
      * @return array
      */
     protected function parseQueryBindings(array $queries)
     {
         $columnMap = $this->columns->mapWithKeys(function (Column $column) {
-
             $label = $column->getLabel();
-            $name  = $column->getName();
+            $name = $column->getName();
 
             return [$label => $name, $name => $name];
         });
@@ -144,7 +144,7 @@ trait HasQuickSearch
             list($column, $condition) = $segments;
 
             if (Str::startsWith($column, '|')) {
-                $or     = true;
+                $or = true;
                 $column = substr($column, 1);
             }
 
@@ -158,13 +158,13 @@ trait HasQuickSearch
      * Add where like binding to model query.
      *
      * @param string $column
-     * @param bool $or
+     * @param bool   $or
      * @param string $pattern
      */
     protected function addWhereLikeBinding(string $column, bool $or, string $pattern)
     {
         $connectionType = $this->model()->eloquent()->getConnection()->getDriverName();
-        $likeOperator   = $connectionType == 'pgsql' ? 'ilike' : 'like';
+        $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
 
         $method = $or ? 'orWhere' : 'where';
 
@@ -175,13 +175,13 @@ trait HasQuickSearch
      * Add where date time function binding to model query.
      *
      * @param string $column
-     * @param bool $or
+     * @param bool   $or
      * @param string $function
      * @param string $value
      */
     protected function addWhereDatetimeBinding(string $column, bool $or, string $function, string $value)
     {
-        $method = ($or ? 'orWhere' : 'where') . ucfirst($function);
+        $method = ($or ? 'orWhere' : 'where').ucfirst($function);
 
         $this->model()->$method($column, $value);
     }
@@ -190,8 +190,8 @@ trait HasQuickSearch
      * Add where in binding to the model query.
      *
      * @param string $column
-     * @param bool $or
-     * @param bool $not
+     * @param bool   $or
+     * @param bool   $not
      * @param string $values
      */
     protected function addWhereInBinding(string $column, bool $or, bool $not, string $values)
@@ -206,7 +206,7 @@ trait HasQuickSearch
 
         $where = $or ? 'orWhere' : 'where';
 
-        $method = $where . ($not ? 'NotIn' : 'In');
+        $method = $where.($not ? 'NotIn' : 'In');
 
         $this->model()->$method($column, $values);
     }
@@ -215,7 +215,7 @@ trait HasQuickSearch
      * Add where between binding to the model query.
      *
      * @param string $column
-     * @param bool $or
+     * @param bool   $or
      * @param string $start
      * @param string $end
      */
@@ -230,7 +230,7 @@ trait HasQuickSearch
      * Add where basic binding to the model query.
      *
      * @param string $column
-     * @param bool $or
+     * @param bool   $or
      * @param string $operator
      * @param string $value
      */
@@ -242,7 +242,7 @@ trait HasQuickSearch
 
         if ($operator == '%') {
             $operator = 'like';
-            $value    = "%{$value}%";
+            $value = "%{$value}%";
         }
 
         if ($value === 'NULL') {
