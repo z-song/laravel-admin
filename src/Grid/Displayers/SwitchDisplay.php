@@ -50,19 +50,30 @@ $('.$class').bootstrapSwitch({
 
         var pk = $(this).data('key');
         var value = $(this).val();
+        var _status = true;
 
         $.ajax({
             url: "{$this->grid->resource()}/" + pk,
             type: "POST",
+            async:false,
             data: {
                 "$key": value,
                 _token: LA.token,
                 _method: 'PUT'
             },
             success: function (data) {
-                toastr.success(data.message);
+                if (data.status)
+                    toastr.success(data.message);
+                else
+                    toastr.warning(data.message);
+            },
+            complete:function(xhr,status) {
+                if (status == 'success')
+                    _status = xhr.responseJSON.status;
             }
         });
+        
+        return _status;
     }
 });
 
