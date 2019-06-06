@@ -22,7 +22,7 @@ class QuickSearch extends AbstractTool
         Arr::forget($query, HasQuickSearch::$searchKey);
 
         $vars = [
-            'action' => request()->url() . '?' . http_build_query($query),
+            'action' => request()->url().'?'.http_build_query($query),
             'key'    => HasQuickSearch::$searchKey,
             'value'  => request(HasQuickSearch::$searchKey),
         ];
