@@ -444,11 +444,11 @@ class Grid
      *
      * @return void
      */
-    public function paginate($perPage = 20)
+    public function paginate($perPage = 20, $columns = ['*'], $pageName = 'page', $page = null)
     {
         $this->perPage = $perPage;
 
-        $this->model()->setPerPage($perPage);
+        $this->model()->setPerPage($perPage, $columns, $pageName, $page);
     }
 
     /**
