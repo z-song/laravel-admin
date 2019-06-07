@@ -4,6 +4,15 @@
 
     <div class="{{$viewClass['field']}}" id="{{$id}}">
 
+        @if($hasCheckAll)
+            <span class="icheck">
+            <label class="checkbox-inline">
+                <input type="checkbox" class="{{ $checkAllClass }}"/>&nbsp;{{ __('admin.all') }}
+            </label>
+            </span>
+            <hr style="margin-top: 10px;margin-bottom: 0;">
+        @endif
+
         @include('admin::form.error')
 
         @foreach($options as $option => $label)
