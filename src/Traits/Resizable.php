@@ -24,7 +24,7 @@ trait Resizable
 
         $thumbnail = $this->getThumbnail($image, $type);
 
-        return \Illuminate\Support\Facades\Storage::exists($thumbnail) ? $thumbnail : $image;
+        return \Illuminate\Support\Facades\Storage::disk(config('admin.upload.disk'))->exists($thumbnail) ? $thumbnail : $image;
     }
 
     /**
