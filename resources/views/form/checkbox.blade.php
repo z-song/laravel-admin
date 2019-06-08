@@ -4,7 +4,7 @@
 
     <div class="{{$viewClass['field']}}" id="{{$id}}">
 
-        @if($hasCheckAll)
+        @if($canCheckAll)
             <span class="icheck">
             <label class="checkbox-inline">
                 <input type="checkbox" class="{{ $checkAllClass }}"/>&nbsp;{{ __('admin.all') }}

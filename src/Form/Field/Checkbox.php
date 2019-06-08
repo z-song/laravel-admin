@@ -8,7 +8,7 @@ class Checkbox extends MultipleSelect
 {
     protected $inline = true;
 
-    protected $hasCheckAll = false;
+    protected $canCheckAll = false;
 
     protected static $css = [
         '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.css',
@@ -41,11 +41,13 @@ class Checkbox extends MultipleSelect
     }
 
     /**
+     * Add a checkbox above this component, so you can select all checkboxes by click on it.
+     *
      * @return $this
      */
-    public function hasCheckAll()
+    public function canCheckAll()
     {
-        $this->hasCheckAll = true;
+        $this->canCheckAll = true;
 
         return $this;
     }
@@ -102,10 +104,10 @@ class Checkbox extends MultipleSelect
         $this->addVariables([
             'checked'     => $this->checked,
             'inline'      => $this->inline,
-            'hasCheckAll' => $this->hasCheckAll,
+            'canCheckAll' => $this->canCheckAll,
         ]);
 
-        if ($this->hasCheckAll) {
+        if ($this->canCheckAll) {
 
             $checkAllClass = uniqid('check-all-');
 
