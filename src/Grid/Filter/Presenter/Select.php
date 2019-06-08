@@ -6,6 +6,7 @@ use Encore\Admin\Facades\Admin;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Select extends Presenter
 {
@@ -134,6 +135,9 @@ SCRIPT;
             } else {
                 $resources[] = $value;
             }
+
+            if (in_array(SoftDeletes::class,class_uses_deep($model)))
+                $model = $model::withTrashed();
 
             return $model::find($resources)->pluck($textField, $idField)->toArray();
         };
