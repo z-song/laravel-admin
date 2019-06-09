@@ -27,6 +27,17 @@ class Listbox extends MultipleSelect
     }
 
     /**
+     * Set listbox height
+     *
+     * @param int $height
+     * @return Listbox
+     */
+    public function height($height = 100)
+    {
+        return $this->settings(['selectorMinimalHeight' => $height]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
