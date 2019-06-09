@@ -25,7 +25,7 @@ class MultipleSteps implements Renderable
      * MultipleSteps constructor.
      *
      * @param array $steps
-     * @param null $current
+     * @param null  $current
      */
     public function __construct($steps = [], $current = null)
     {
@@ -36,16 +36,17 @@ class MultipleSteps implements Renderable
 
     /**
      * @param array $steps
-     * @param null $current
+     * @param null  $current
+     *
      * @return static
      */
-    public static function make($steps, $current = null): MultipleSteps
+    public static function make($steps, $current = null): self
     {
         return new static($steps, $current);
     }
 
     /**
-     * @param array $steps
+     * @param array      $steps
      * @param string|int $current
      *
      * @return string|int
@@ -70,11 +71,12 @@ class MultipleSteps implements Renderable
 
         if (!is_subclass_of($class, StepForm::class)) {
             admin_error("Class [{$class}] must be a sub-class of [Encore\Admin\Widgets\StepForm].");
+
             return;
         }
 
         /** @var StepForm $step */
-        $step = new $class;
+        $step = new $class();
 
         return $step
             ->setSteps(array_keys($this->steps))
