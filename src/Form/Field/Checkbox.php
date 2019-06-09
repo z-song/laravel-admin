@@ -34,7 +34,7 @@ class Checkbox extends MultipleSelect
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array)$options;
+            $this->options = (array) $options;
         }
 
         return $this;
@@ -65,7 +65,7 @@ class Checkbox extends MultipleSelect
             $checked = $checked->toArray();
         }
 
-        $this->checked = (array)$checked;
+        $this->checked = (array) $checked;
 
         return $this;
     }
@@ -108,7 +108,6 @@ class Checkbox extends MultipleSelect
         ]);
 
         if ($this->canCheckAll) {
-
             $checkAllClass = uniqid('check-all-');
 
             $this->script .= <<<SCRIPT
