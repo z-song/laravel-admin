@@ -100,7 +100,7 @@ return [
     ],
     'grid_items_selected'    => '{n} items selected',
 
-    'menu_titles' => [],
+    'menu_titles'            => [],
     'prev'                   => 'Prev',
     'next'                   => 'Next',
 ];

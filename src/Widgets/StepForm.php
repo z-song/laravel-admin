@@ -58,7 +58,7 @@ class StepForm extends Form
 
         $step = $this->steps[$index + 1];
 
-        $nextUrl = $this->url . '?' . http_build_query(compact('step'));
+        $nextUrl = $this->url.'?'.http_build_query(compact('step'));
 
         return redirect($nextUrl);
     }
@@ -134,9 +134,6 @@ class StepForm extends Form
         $this->addFooter();
     }
 
-    /**
-     *
-     */
     protected function addFooter()
     {
         $footer = '';
@@ -150,8 +147,8 @@ class StepForm extends Form
         ];
 
         if ($index !== 0) {
-            $step    = $this->steps[$index - 1];
-            $prevUrl = request()->fullUrlWithQuery(compact('step'));;
+            $step = $this->steps[$index - 1];
+            $prevUrl = request()->fullUrlWithQuery(compact('step'));
             $footer .= "<a href=\"{$prevUrl}\" class=\"btn btn-warning pull-left\">{$trans['prev']}</a>";
         }
 
@@ -187,6 +184,6 @@ class StepForm extends Form
      */
     public function data()
     {
-        return session()->get('steps.' . $this->current, []);
+        return session()->get('steps.'.$this->current, []);
     }
 }
