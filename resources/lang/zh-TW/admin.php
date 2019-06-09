@@ -99,4 +99,6 @@ return [
         'filter_placeholder' => '過濾',
     ],
     'menu_titles' => [],
+    'prev'                   => '上一步',
+    'next'                   => '下一步',
 ];

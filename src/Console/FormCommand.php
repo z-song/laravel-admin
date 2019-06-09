@@ -12,8 +12,9 @@ class FormCommand extends GeneratorCommand
      * @var string
      */
     protected $signature = 'admin:form {name} 
-        {--title=} 
-        {--namespace=} ';
+        {--title=}
+        {--step}
+        {--namespace=}';
 
     /**
      * The console command description.
@@ -44,6 +45,10 @@ class FormCommand extends GeneratorCommand
      */
     protected function getStub()
     {
+        if ($this->option('step')) {
+            return __DIR__.'/stubs/step-form.stub';
+        }
+
         return __DIR__.'/stubs/form.stub';
     }
 
