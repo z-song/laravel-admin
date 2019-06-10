@@ -398,6 +398,15 @@ class Field implements Renderable
         }
 
         $this->value = Arr::get($data, $this->column);
+
+        $this->formatValue();
+    }
+
+    /**
+     * Format value by passing custom formater.
+     */
+    protected function formatValue()
+    {
         if (isset($this->customFormat) && $this->customFormat instanceof \Closure) {
             $this->value = call_user_func($this->customFormat, $this->value);
         }

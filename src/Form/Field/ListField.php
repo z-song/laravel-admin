@@ -23,6 +23,11 @@ class ListField extends Field
     protected $min = 0;
 
     /**
+     * @var array
+     */
+    protected $value = [''];
+
+    /**
      * Set Max list size.
      *
      * @param int $size
@@ -48,6 +53,22 @@ class ListField extends Field
         $this->min = $size;
 
         return $this;
+    }
+
+    /**
+     * Fill data to the field.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public function fill($data)
+    {
+        $this->data = $data;
+
+        $this->value = Arr::get($data, $this->column, $this->value);
+
+        $this->formatValue();
     }
 
     /**

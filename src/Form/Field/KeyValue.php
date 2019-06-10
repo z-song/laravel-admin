@@ -9,6 +9,27 @@ use Illuminate\Support\Arr;
 class KeyValue extends Field
 {
     /**
+     * @var array
+     */
+    protected $value = ['' => ''];
+
+    /**
+     * Fill data to the field.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public function fill($data)
+    {
+        $this->data = $data;
+
+        $this->value = Arr::get($data, $this->column, $this->value);
+
+        $this->formatValue();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getValidator(array $input)
