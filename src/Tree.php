@@ -224,6 +224,7 @@ class Tree implements Renderable
             'save_succeeded'    => trans('admin.save_succeeded'),
             'refresh_succeeded' => trans('admin.refresh_succeeded'),
             'delete_succeeded'  => trans('admin.delete_succeeded'),
+            'delete_failed'     => trans('admin.delete_failed'),
             'confirm'           => trans('admin.confirm'),
             'cancel'            => trans('admin.cancel'),
         ];
@@ -255,7 +256,6 @@ class Tree implements Renderable
                             },
                             success: function (data) {
                                 $.pjax.reload('#pjax-container');
-                                toastr.success('{$trans['delete_succeeded']}');
                                 resolve(data);
                             }
                         });
@@ -266,8 +266,10 @@ class Tree implements Renderable
                 if (typeof data === 'object') {
                     if (data.status) {
                         swal(data.message, '', 'success');
+                        toastr.success('{$trans['delete_succeeded']}');
                     } else {
                         swal(data.message, '', 'error');
+                        toastr.error('{$trans['delete_failed']}');
                     }
                 }
             });
