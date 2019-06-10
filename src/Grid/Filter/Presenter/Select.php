@@ -136,10 +136,13 @@ SCRIPT;
                 $resources[] = $value;
             }
 
-            if (in_array(SoftDeletes::class,class_uses_deep($model)))
-                $model = $model::withTrashed();
+            if (in_array(SoftDeletes::class,class_uses_deep($model))) {
+                $model = $model::withTrashed()->whereIn($idField,$resources);
+            } else {
+                $model = $model::whereIn($idField,$resources);
+            }
 
-            return $model::find($resources)->pluck($textField, $idField)->toArray();
+            return $model->pluck($textField, $idField)->toArray();
         };
 
         return $this;
