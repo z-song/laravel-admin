@@ -27,9 +27,10 @@ class Listbox extends MultipleSelect
     }
 
     /**
-     * Set listbox height
+     * Set listbox height.
      *
      * @param int $height
+     *
      * @return Listbox
      */
     public function height($height = 100)
