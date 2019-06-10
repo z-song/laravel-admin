@@ -67,12 +67,12 @@ class Navbar implements Renderable
      */
     public function render($part = 'right')
     {
-        if (!isset($this->elements[$part]) || $this->elements[$part]->isEmpty()) {
-            return '';
-        }
-
         if ($part == 'right') {
             $this->right(new RefreshButton());
+        }
+
+        if (!isset($this->elements[$part]) || $this->elements[$part]->isEmpty()) {
+            return '';
         }
 
         return $this->elements[$part]->map(function ($element) {
