@@ -87,11 +87,11 @@ class Select extends Presenter
 
             $this->script = <<<SCRIPT
 (function ($){
-$(".{$this->getElementClass()}").select2({
-  placeholder: $placeholder,
-  $configs
-});
-});
+    $(".{$this->getElementClass()}").select2({
+      placeholder: $placeholder,
+      $configs
+    });
+})(jQuery);
 
 SCRIPT;
         }
