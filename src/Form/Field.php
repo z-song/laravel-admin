@@ -723,6 +723,11 @@ class Field implements Renderable
      */
     protected function removeRule($rule)
     {
+        if (is_array($this->rules)) {
+            array_delete($this->rules, $rule);
+            return;
+        }
+
         if (!is_string($this->rules)) {
             return;
         }
