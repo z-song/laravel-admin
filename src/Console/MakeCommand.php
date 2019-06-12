@@ -63,7 +63,7 @@ class MakeCommand extends GeneratorCommand
 
         if (parent::handle() !== false) {
             $name = $this->argument('name');
-            $path = Str::plural(Str::slug(class_basename($this->option('model'))));
+            $path = Str::plural(Str::kebab(class_basename($this->option('model'))));
 
             $this->line('');
             $this->comment('Add the following route to app/Admin/routes.php:');
