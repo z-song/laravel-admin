@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Grid;
 
+use Carbon\Carbon;
 use Closure;
 use Encore\Admin\Admin;
 use Encore\Admin\Grid;
@@ -31,10 +32,7 @@ use Illuminate\Support\Str;
  * @method Displayers\Table         table($titles = [])
  * @method Displayers\Expand        expand($callback = null)
  * @method Displayers\Modal         modal($callback = null)
- * @method Displayers\Gravatar      gravatar($size = 30)
  * @method Displayers\Carousel      carousel(int $width = 300, int $height = 200, $server = '')
- * @method Displayers\Loading       loading($values = [], $others = [])
- * @method Displayers\FileSize      filesize()
  */
 class Column
 {
@@ -465,6 +463,74 @@ class Column
         $this->grid->addTotalRow($this->name, $display);
 
         return $this;
+    }
+
+    /**
+     * Convert file size to a human readable format like `100mb`.
+     *
+     * @return $this
+     */
+    public function filesize()
+    {
+        return $this->display(function ($value) {
+            return file_size($value);
+        });
+    }
+
+    /**
+     * Display the fields in the email format as gavatar.
+     *
+     * @param int $size
+     *
+     * @return $this
+     */
+    public function gravatar($size = 30)
+    {
+        return $this->display(function ($value) use ($size) {
+            $src = sprintf('https://www.gravatar.com/avatar/%s?s=%d', md5(strtolower($value)), $size);
+
+            return "<img src='$src' class='img img-circle'/>";
+        });
+    }
+
+    /**
+     * Display field as a loading icon.
+     *
+     * @param array $values
+     * @param array $others
+     *
+     * @return Column
+     */
+    public function loading($values = [], $others = [])
+    {
+        return $this->display(function ($value) use ($values, $others) {
+
+            $values = (array) $values;
+
+            if (in_array($value, $values)) {
+                return '<i class="fa fa-refresh fa-spin text-primary"></i>';
+            }
+
+            return Arr::get($others, $value, $value);
+        });
+    }
+
+    /**
+     * Return a human readable format time.
+     *
+     * @param null $locale
+     *
+     * @return $this
+     */
+    public function diffForHumans($locale = null)
+    {
+        if ($locale) {
+            Carbon::setLocale($locale);
+        }
+
+        return $this->display(function ($value) {
+            return Carbon::parse($value)->diffForHumans();
+        });
     }
 
     /**

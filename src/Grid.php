@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Macroable;
 use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Grid
@@ -27,7 +28,10 @@ class Grid
         Concerns\HasFilter,
         Concerns\HasTools,
         Concerns\HasTotalRow,
-        Concerns\CanHidesColumns;
+        Concerns\CanHidesColumns,
+        Macroable {
+            __call as macroCall;
+        }
 
     /**
      * The grid data model instance.
@@ -847,6 +851,10 @@ class Grid
      */
     public function __call($method, $arguments)
     {
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $arguments);
+        }
+
         $label = $arguments[0] ?? null;
 
         if ($this->model()->eloquent() instanceof MongodbModel) {
@@ -888,10 +896,7 @@ class Grid
             'table'       => Displayers\Table::class,
             'expand'      => Displayers\Expand::class,
             'modal'       => Displayers\Modal::class,
-            'gravatar'    => Displayers\Gravatar::class,
             'carousel'    => Displayers\Carousel::class,
-            'loading'     => Displayers\Loading::class,
-            'filesize'    => Displayers\FileSize::class,
         ];
 
         foreach ($map as $abstract => $class) {

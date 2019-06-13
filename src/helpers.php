@@ -243,6 +243,8 @@ if (!function_exists('admin_dump')) {
 if (!function_exists('file_size')) {
 
     /**
+     * Convert file size to a human readable format like `100mb`.
+     *
      * @param int $bytes
      *
      * @return string
