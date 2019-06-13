@@ -459,7 +459,15 @@ trait UploadField
      */
     public function destroy()
     {
-        if (!$this->retainable && $this->storage->exists($this->original)) {
+        if ($this->retainable) {
+            return;
+        }
+
+        if (method_exists($this, 'destroyThumbnail')) {
+            $this->destroyThumbnail();
+        }
+
+        if ($this->storage->exists($this->original)) {
             $this->storage->delete($this->original);
         }
     }

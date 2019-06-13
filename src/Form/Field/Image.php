@@ -28,8 +28,6 @@ class Image extends File
     public function prepare($image)
     {
         if (request()->has(static::FILE_DELETE_FLAG)) {
-            $this->destroyThumbnail();
-
             return $this->destroy();
         }
 

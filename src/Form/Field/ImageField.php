@@ -17,11 +17,11 @@ trait ImageField
     protected $interventionCalls = [];
 
     /**
-     * Thumbnail sizes.
+     * Thumbnail settings.
      *
      * @var array
      */
-    protected $sizes = [];
+    protected $thumbnails = [];
 
     /**
      * Default directory for file to upload.
@@ -97,21 +97,23 @@ trait ImageField
     }
 
     /**
-     * @param string $name
+     * @param string|array $name
      * @param int    $width
      * @param int    $height
      *
      * @return $this
      */
-    public function addThumbnailSize(string $name, int $width, int $height)
+    public function thumbnail($name, int $width = null, int $height = null)
     {
-        if (empty($width)) {
-            $width = null;
-        } elseif (empty($height)) {
-            $height = null;
+        if (func_num_args() == 1 && is_array($name)) {
+            foreach ($name as $key => $size) {
+                if (count($size) == 2) {
+                    $this->thumbnails[$key] = $size;
+                }
+            }
+        } elseif (func_num_args() == 3) {
+            $this->thumbnails[$name] = [$width, $height];
         }
-
-        $this->sizes[] = compact('name', 'width', 'height');
 
         return $this;
     }
@@ -123,18 +125,22 @@ trait ImageField
      */
     public function destroyThumbnail()
     {
-        foreach ($this->sizes as $size) {
+        if ($this->retainable) {
+            return;
+        }
+
+        foreach ($this->thumbnails as $name => $_) {
             // We need to get extension type ( .jpeg , .png ...)
             $ext = pathinfo($this->original, PATHINFO_EXTENSION);
 
             // We remove extension from file name so we can append thumbnail type
-            $name = str_replace_last('.'.$ext, '', $this->original);
+            $path = str_replace_last('.'.$ext, '', $this->original);
 
             // We merge original name + thumbnail name + extension
-            $name = $name.'-'.$size['name'].'.'.$ext;
+            $path = $path.'-'.$name.'.'.$ext;
 
-            if ($this->storage->exists($name)) {
-                $this->storage->delete($name);
+            if ($this->storage->exists($path)) {
+                $this->storage->delete($path);
             }
         }
     }
@@ -148,26 +154,29 @@ trait ImageField
      */
     protected function uploadAndDeleteOriginalThumbnail(UploadedFile $file)
     {
-        foreach ($this->sizes as $size) {
+        foreach ($this->thumbnails as $name => $size) {
             // We need to get extension type ( .jpeg , .png ...)
             $ext = pathinfo($this->name, PATHINFO_EXTENSION);
 
             // We remove extension from file name so we can append thumbnail type
-            $name = str_replace_last('.'.$ext, '', $this->name);
+            $path = str_replace_last('.'.$ext, '', $this->name);
 
             // We merge original name + thumbnail name + extension
-            $name = $name.'-'.$size['name'].'.'.$ext;
+            $path = $path.'-'.$name.'.'.$ext;
+
+
+            /** @var \Intervention\Image\Image $image */
+            $image = InterventionImage::make($file);
 
             // Resize image with aspect ratio
-            $image = InterventionImage::make($file);
-            $image->resize($size['width'], $size['height'], function (Constraint $constraint) {
+            $image->resize($size[0], $size[1], function (Constraint $constraint) {
                 $constraint->aspectRatio();
-            })->resizeCanvas($size['width'], $size['height'], 'center', false, '#ffffff');
+            })->resizeCanvas($size[0], $size[1], 'center', false, '#ffffff');
 
-            if (!is_null($this->storage_permission)) {
-                $this->storage->put("{$this->getDirectory()}/{$name}", $image->encode(), $this->storage_permission);
+            if (!is_null($this->storagePermission)) {
+                $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode(), $this->storagePermission);
             } else {
-                $this->storage->put("{$this->getDirectory()}/{$name}", $image->encode());
+                $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode());
             }
         }
 
