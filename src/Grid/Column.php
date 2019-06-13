@@ -487,7 +487,11 @@ class Column
     public function gravatar($size = 30)
     {
         return $this->display(function ($value) use ($size) {
-            $src = sprintf('https://www.gravatar.com/avatar/%s?s=%d', md5(strtolower($value)), $size);
+            $src = sprintf(
+                'https://www.gravatar.com/avatar/%s?s=%d',
+                md5(strtolower($value)),
+                $size
+            );
 
             return "<img src='$src' class='img img-circle'/>";
         });
@@ -747,8 +751,20 @@ class Column
 
         Admin::script("$('.column-help').popover();");
 
+        $data = [
+            'container' => 'body',
+            'toggle'    => 'popover',
+            'trigger'   => 'hover',
+            'placement' => 'bottom',
+            'content'   => $this->help,
+        ];
+
+        $data = collect($data)->map(function ($val, $key) {
+            return "data-{$key}=\"{$val}\"";
+        })->implode(' ');
+
         return <<<HELP
-<a href="javascript:void(0);" class="column-help" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="{$this->help}">
+<a href="javascript:void(0);" class="column-help" {$data}>
     <i class="fa fa-question-circle"></i>
 </a>
 HELP;
