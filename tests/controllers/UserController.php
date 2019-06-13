@@ -81,7 +81,7 @@ class UserController extends Controller
             $grid->profile()->postcode('Post code');
             $grid->profile()->address();
             $grid->position('Position');
-            $grid->profile()->color();
+            $grid->column('profile.color');
             $grid->profile()->start_at('开始时间');
             $grid->profile()->end_at('结束时间');
 
