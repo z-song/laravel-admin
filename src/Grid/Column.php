@@ -33,6 +33,7 @@ use Illuminate\Support\Str;
  * @method Displayers\Expand        expand($callback = null)
  * @method Displayers\Modal         modal($callback = null)
  * @method Displayers\Carousel      carousel(int $width = 300, int $height = 200, $server = '')
+ * @method Displayers\Download      download($server = '')
  */
 class Column
 {
