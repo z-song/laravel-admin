@@ -250,7 +250,7 @@ class Column
      *
      * @param string $style
      *
-     * @return Column
+     * @return $this
      */
     public function style($style)
     {
@@ -262,7 +262,7 @@ class Column
      *
      * @param int $width
      *
-     * @return Column
+     * @return $this
      */
     public function width(int $width)
     {
@@ -350,7 +350,7 @@ class Column
      *
      * @param bool $sort
      *
-     * @return Column
+     * @return $this
      */
     public function sort($sort)
     {
@@ -362,7 +362,7 @@ class Column
     /**
      * Mark this column as sortable.
      *
-     * @return Column
+     * @return $this
      */
     public function sortable()
     {
@@ -372,7 +372,7 @@ class Column
     /**
      * Set cast name for sortable.
      *
-     * @return Column
+     * @return $this
      */
     public function cast($cast)
     {
@@ -401,7 +401,7 @@ class Column
      * @param string $abstract
      * @param array  $arguments
      *
-     * @return Column
+     * @return $this
      */
     public function displayUsing($abstract, $arguments = [])
     {
@@ -516,7 +516,7 @@ class Column
      * @param array $values
      * @param array $others
      *
-     * @return Column
+     * @return $this
      */
     public function loading($values = [], $others = [])
     {
@@ -813,7 +813,7 @@ HELP;
      * @param string $abstract
      * @param array  $arguments
      *
-     * @return Column
+     * @return $this
      */
     protected function resolveDisplayer($abstract, $arguments)
     {
@@ -830,7 +830,7 @@ HELP;
      * @param string $abstract
      * @param array  $arguments
      *
-     * @return Column
+     * @return $this
      */
     protected function callSupportDisplayer($abstract, $arguments)
     {
@@ -853,7 +853,7 @@ HELP;
      * @param string $abstract
      * @param array  $arguments
      *
-     * @return Column
+     * @return $this
      */
     protected function callBuiltinDisplayer($abstract, $arguments)
     {
