@@ -217,10 +217,12 @@ class MultipleFile extends Field
         $config = [];
 
         foreach ($files as $index => $file) {
-            $config[] = [
+            $preview = array_merge([
                 'caption' => basename($file),
                 'key'     => $index,
-            ];
+            ], $this->guessPreviewType($file));
+
+            $config[] = $preview;
         }
 
         return $config;

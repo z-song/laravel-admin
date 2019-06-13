@@ -69,6 +69,21 @@ trait UploadField
     protected $storagePermission;
 
     /**
+     * @var array
+     */
+    protected $fileTypes = [
+        'image'  => '/^(gif|png|jpe?g|svg)$/i',
+        'html'   => '/^(htm|html)$/i',
+        'office' => '/^(docx?|xlsx?|pptx?|pps|potx?)$/i',
+        'gdocs'  => '/^(docx?|xlsx?|pptx?|pps|potx?|rtf|ods|odt|pages|ai|dxf|ttf|tiff?|wmf|e?ps)$/i',
+        'text'   => '/^(txt|md|csv|nfo|ini|json|php|js|css|ts|sql)$/i',
+        'video'  => '/^(og?|mp4|webm|mp?g|mov|3gp)$/i',
+        'audio'  => '/^(og?|mp3|mp?g|wav)$/i',
+        'pdf'    => '/^(pdf)$/i',
+        'flash'  => '/^(swf)$/i',
+    ];
+
+    /**
      * Initialize the storage instance.
      *
      * @return void.
@@ -121,6 +136,30 @@ trait UploadField
         $initialPreviewConfig = $this->initialPreviewConfig();
 
         $this->options(compact('initialPreviewConfig'));
+    }
+
+    /**
+     * @return array|bool
+     */
+    protected function guessPreviewType($file)
+    {
+        $filetype = 'other';
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+        foreach ($this->fileTypes as $type => $pattern) {
+            if (preg_match($pattern, $ext) === 1) {
+                $filetype = $type;
+                break;
+            }
+        }
+
+        $extra = ['type' => $filetype];
+
+        if ($filetype == 'video') {
+            $extra['filetype'] = "video/{$ext}";
+        }
+
+        return $extra;
     }
 
     /**

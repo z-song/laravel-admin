@@ -161,9 +161,11 @@ class File extends Field
      */
     protected function initialPreviewConfig()
     {
-        return [
-            ['caption' => basename($this->value), 'key' => 0],
-        ];
+        $config = ['caption' => basename($this->value), 'key' => 0];
+
+        $config = array_merge($config, $this->guessPreviewType($this->value));
+
+        return [$config];
     }
 
     /**
@@ -232,7 +234,7 @@ EOT;
             unset($this->attributes['required']);
         }
 
-        $options = json_encode($this->options);
+        $options = json_encode_options($this->options);
 
         $this->setupScripts($options);
 
