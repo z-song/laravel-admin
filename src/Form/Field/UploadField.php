@@ -52,6 +52,11 @@ trait UploadField
     protected $retainable = false;
 
     /**
+     * @var bool
+     */
+    protected $downloadable = true;
+
+    /**
      * Configuration for setting up file actions for newly selected file thumbnails in the preview window.
      *
      * @var array
@@ -159,7 +164,24 @@ trait UploadField
             $extra['filetype'] = "video/{$ext}";
         }
 
+        if ($this->downloadable) {
+            $extra['downloadUrl'] = $this->objectUrl($file);
+        }
+
         return $extra;
+    }
+
+    /**
+     * Indicates if the underlying field is downloadable.
+     *
+     * @param bool $downloadable
+     * @return $this
+     */
+    public function downloadable($downloadable = true)
+    {
+        $this->downloadable = $downloadable;
+
+        return $this;
     }
 
     /**
