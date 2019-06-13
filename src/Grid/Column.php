@@ -270,6 +270,18 @@ class Column
     }
 
     /**
+     * Set the color of column.
+     *
+     * @param string $color
+     *
+     * @return $this
+     */
+    public function color($color)
+    {
+        return $this->style("color:$color;");
+    }
+
+    /**
      * Get name of this column.
      *
      * @return mixed
