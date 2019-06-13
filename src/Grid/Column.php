@@ -533,6 +533,30 @@ class Column
     }
 
     /**
+     * Display column as an font-awesome icon based on it's value.
+     *
+     * @param array $setting
+     * @param string $default
+     *
+     * @return $this
+     */
+    public function icon(array $setting, $default = '')
+    {
+        return $this->display(function ($value) use ($setting, $default) {
+
+            $fa = '';
+
+            if (isset($setting[$value])) {
+                $fa = $setting[$value];
+            } elseif ($default) {
+                $fa = $default;
+            }
+
+            return "<i class=\"fa fa-{$fa}\"></i>";
+        });
+    }
+
+    /**
      * Return a human readable format time.
      *
      * @param null $locale
