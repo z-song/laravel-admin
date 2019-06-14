@@ -14,6 +14,15 @@
         @endforeach
       </div>
     @endif
+    @if ($errors->hasBag('default'))
+      <div class="alert alert-warning alert-dismissable">
+
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        @foreach($errors->getBag("default")->toArray() as $message)
+            <p>{!!  \Illuminate\Support\Arr::get($message, 0) !!}</p>
+        @endforeach
+      </div>
+    @endif
 @endif
 
 @if($success = session()->get('success'))
