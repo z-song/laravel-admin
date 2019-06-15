@@ -549,7 +549,6 @@ class Column
     public function loading($values = [], $others = [])
     {
         return $this->display(function ($value) use ($values, $others) {
-
             $values = (array) $values;
 
             if (in_array($value, $values)) {
@@ -563,7 +562,7 @@ class Column
     /**
      * Display column as an font-awesome icon based on it's value.
      *
-     * @param array $setting
+     * @param array  $setting
      * @param string $default
      *
      * @return $this
@@ -571,7 +570,6 @@ class Column
     public function icon(array $setting, $default = '')
     {
         return $this->display(function ($value) use ($setting, $default) {
-
             $fa = '';
 
             if (isset($setting[$value])) {

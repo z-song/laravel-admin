@@ -98,8 +98,8 @@ trait ImageField
 
     /**
      * @param string|array $name
-     * @param int    $width
-     * @param int    $height
+     * @param int          $width
+     * @param int          $height
      *
      * @return $this
      */
@@ -163,7 +163,6 @@ trait ImageField
 
             // We merge original name + thumbnail name + extension
             $path = $path.'-'.$name.'.'.$ext;
-
 
             /** @var \Intervention\Image\Image $image */
             $image = InterventionImage::make($file);

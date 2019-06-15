@@ -280,18 +280,18 @@ if (!function_exists('prepare_options')) {
      */
     function prepare_options(array $options)
     {
-        $original  = [];
+        $original = [];
         $toReplace = [];
 
         foreach ($options as $key => &$value) {
             if (is_array($value)) {
-                $subArray  = prepare_options($value);
-                $value     = $subArray['options'];
-                $original  = array_merge($original, $subArray['original']);
+                $subArray = prepare_options($value);
+                $value = $subArray['options'];
+                $original = array_merge($original, $subArray['original']);
                 $toReplace = array_merge($toReplace, $subArray['toReplace']);
-            } elseif(strpos($value, 'function(') === 0){
-                $original[]  = $value;
-                $value       = "%{$key}%";
+            } elseif (strpos($value, 'function(') === 0) {
+                $original[] = $value;
+                $value = "%{$key}%";
                 $toReplace[] = "\"{$value}\"";
             }
         }
@@ -318,4 +318,3 @@ if (!function_exists('json_encode_options')) {
         return str_replace($data['toReplace'], $data['original'], $json);
     }
 }
-

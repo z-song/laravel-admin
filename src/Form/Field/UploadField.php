@@ -175,6 +175,7 @@ trait UploadField
      * Indicates if the underlying field is downloadable.
      *
      * @param bool $downloadable
+     *
      * @return $this
      */
     public function downloadable($downloadable = true)

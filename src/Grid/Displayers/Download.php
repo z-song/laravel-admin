@@ -14,7 +14,6 @@ class Download extends AbstractDisplayer
         }
 
         return collect((array) $this->value)->filter()->map(function ($value) use ($server) {
-
             if (empty($value)) {
                 return '';
             }

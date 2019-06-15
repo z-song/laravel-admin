@@ -20,7 +20,7 @@ class ColumnSelector extends AbstractTool
      */
     protected static $ignoredColumns = [
         Grid\Column::SELECT_COLUMN_NAME,
-        Grid\Column::ACTION_COLUMN_NAME
+        Grid\Column::ACTION_COLUMN_NAME,
     ];
 
     /**
@@ -113,6 +113,7 @@ EOT;
      * Is column ignored in column selector.
      *
      * @param string $name
+     *
      * @return bool
      */
     protected function isColumnIgnored($name)
