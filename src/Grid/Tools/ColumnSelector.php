@@ -16,6 +16,14 @@ class ColumnSelector extends AbstractTool
     protected $grid;
 
     /**
+     * @var array
+     */
+    protected static $ignoredColumns = [
+        Grid\Column::SELECT_COLUMN_NAME,
+        Grid\Column::ACTION_COLUMN_NAME
+    ];
+
+    /**
      * Create a new Export button instance.
      *
      * @param Grid $grid
@@ -93,12 +101,33 @@ EOT;
         return $this->grid->columns()->map(function (Grid\Column $column) {
             $name = $column->getName();
 
-            if (in_array($name, [Grid\Column::SELECT_COLUMN_NAME, Grid\Column::ACTION_COLUMN_NAME])) {
+            if ($this->isColumnIgnored($name)) {
                 return;
             }
 
             return [$name => $column->getLabel()];
         })->filter()->collapse();
+    }
+
+    /**
+     * Is column ignored in column selector.
+     *
+     * @param string $name
+     * @return bool
+     */
+    protected function isColumnIgnored($name)
+    {
+        return in_array($name, static::$ignoredColumns);
+    }
+
+    /**
+     * Ignore a column to display in column selector.
+     *
+     * @param string|array $name
+     */
+    public static function ignore($name)
+    {
+        static::$ignoredColumns = array_merge(static::$ignoredColumns, (array) $name);
     }
 
     /**
