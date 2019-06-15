@@ -42,7 +42,6 @@ class DateRange extends Field
     public function value($value = null)
     {
         if (is_null($value)) {
-
             if (is_null($this->value['start']) && is_null($this->value['end'])) {
                 return $this->getDefault();
             }

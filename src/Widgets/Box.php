@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Widgets;
 
-use Encore\Admin\Admin;
 use Illuminate\Contracts\Support\Renderable;
 
 class Box extends Widget implements Renderable

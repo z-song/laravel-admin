@@ -311,7 +311,7 @@ class Field implements Renderable
                 return '';
             }
 
-            $download = $download ? "download='$name'" : "";
+            $download = $download ? "download='$name'" : '';
 
             return <<<HTML
 <ul class="mailbox-attachments clearfix">

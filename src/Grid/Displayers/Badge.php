@@ -14,7 +14,6 @@ class Badge extends AbstractDisplayer
         }
 
         return collect((array) $this->value)->map(function ($name) use ($style) {
-
             if (is_array($style)) {
                 $style = Arr::get($style, $this->getColumn()->getOriginal(), 'red');
             }

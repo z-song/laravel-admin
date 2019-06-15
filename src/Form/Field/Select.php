@@ -116,7 +116,7 @@ class Select extends Field
         }
 
         $placeholder = json_encode([
-            'id' => '',
+            'id'   => '',
             'text' => trans('admin.choose'),
         ]);
 
@@ -160,7 +160,7 @@ EOT;
         $urlsStr = implode('^', $sourceUrls);
 
         $placeholder = json_encode([
-            'id' => '',
+            'id'   => '',
             'text' => trans('admin.choose'),
         ]);
 
