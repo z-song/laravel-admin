@@ -282,6 +282,16 @@ class Column
     }
 
     /**
+     * Get original column value.
+     *
+     * @return mixed
+     */
+    public function getOriginal()
+    {
+        return $this->original;
+    }
+
+    /**
      * Get name of this column.
      *
      * @return mixed
