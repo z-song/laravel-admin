@@ -437,6 +437,24 @@ class Column
     }
 
     /**
+     * Replace output value with giving map.
+     *
+     * @param array $replacements
+     *
+     * @return $this
+     */
+    public function replace(array $replacements)
+    {
+        return $this->display(function ($value) use ($replacements) {
+            if (isset($replacements[$value])) {
+                return $replacements[$value];
+            }
+
+            return $value;
+        });
+    }
+
+    /**
      * Render this column with the given view.
      *
      * @param string $view
