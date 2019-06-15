@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Encore\Admin\Layout\Content content(\Closure $callable = null)
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void css($css = null)
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void js($js = null)
+ * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void headerJs($js = null)
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void script($script = '')
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void style($style = '')
  * @method static \Illuminate\Contracts\Auth\Authenticatable|null user()
