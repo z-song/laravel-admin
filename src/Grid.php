@@ -187,7 +187,9 @@ class Grid
 
         $this->initialize();
 
-        $this->handleExportRequest();
+        if (!config('admin.swoole')) {
+            $this->handleExportRequest();
+        }
 
         $this->callInitCallbacks();
     }
@@ -234,8 +236,9 @@ class Grid
      * Handle export request.
      *
      * @param bool $forceExport
+     * @return mixed
      */
-    protected function handleExportRequest($forceExport = false)
+    public function handleExportRequest($forceExport = false)
     {
         if (!$scope = request(Exporter::$queryName)) {
             return;
@@ -251,11 +254,11 @@ class Grid
         if ($this->builder) {
             call_user_func($this->builder, $this);
 
-            $this->getExporter($scope)->export();
+            return $this->getExporter($scope)->export();
         }
 
         if ($forceExport) {
-            $this->getExporter($scope)->export();
+            return $this->getExporter($scope)->export();
         }
     }
 
@@ -363,7 +366,7 @@ class Grid
         $column->setGrid($this);
 
         return tap($column, function ($value) {
-            $this->columns->push($value);
+            $this->columns->put($value->getName(), $value);
         });
     }
 
