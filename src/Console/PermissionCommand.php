@@ -163,8 +163,8 @@ class PermissionCommand  extends Command
         return Str::kebab(Str::camel($table)) . '.' . $permission;
     }
 
-    private function generateName($table, $permission_zh)
+    private function generateName($table, $permission_lang)
     {
-        return Str::upper(Str::kebab(Str::camel($table))) . $permission_zh;
+        return Str::upper(Str::kebab(Str::camel($table))) . $permission_lang;
     }
 }
