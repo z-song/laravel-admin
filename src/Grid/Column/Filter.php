@@ -68,11 +68,22 @@ class Filter implements Renderable
             : $request->fullUrl();
     }
 
+    /**
+     * @param string $key
+     *
+     * @return array|null|string
+     */
     protected function trans($key)
     {
-        return __("dmin.{$key}");
+        return __("admin.{$key}");
     }
 
+    /**
+     * Add a query binding.
+     *
+     * @param mixed $value
+     * @param Model $model
+     */
     public function addBinding($value, Model $model)
     {
         //
