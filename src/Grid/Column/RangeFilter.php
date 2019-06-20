@@ -19,7 +19,7 @@ class RangeFilter extends Filter
      */
     public function __construct($type)
     {
-        $this->type  = $type;
+        $this->type = $type;
         $this->class = [
             'start' => uniqid('column-filter-start-'),
             'end'   => uniqid('column-filter-end-'),
@@ -30,12 +30,11 @@ class RangeFilter extends Filter
      * Add a binding to the query.
      *
      * @param mixed $value
-     *
      * @param Model $model
      */
     public function addBinding($value, Model $model)
     {
-        $value = array_filter((array)$value);
+        $value = array_filter((array) $value);
 
         if (empty($value)) {
             return;
@@ -79,7 +78,7 @@ class RangeFilter extends Filter
      */
     public function render()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.dropdown-menu input').click(function(e) {
     e.stopPropagation();
 });
@@ -89,7 +88,7 @@ SCRIPT;
 
         $this->addScript();
 
-        $value  = $this->getFilterValue(['start' => '', 'end' => '']);
+        $value = $this->getFilterValue(['start' => '', 'end' => '']);
         $active = empty(array_filter($value)) ? '' : 'text-yellow';
 
         return <<<EOT

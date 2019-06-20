@@ -124,7 +124,7 @@ trait HasHeader
                 return $item->toHtml();
             }
 
-            return (string)$item;
+            return (string) $item;
         })->implode('');
     }
 }

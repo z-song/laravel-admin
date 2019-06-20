@@ -31,7 +31,6 @@ class CheckFilter extends Filter
      * Add a binding to the query.
      *
      * @param array $value
-     *
      * @param Model $model
      */
     public function addBinding($value, Model $model)
@@ -92,7 +91,7 @@ HTML;
         $this->addScript();
 
         $allCheck = (count($value) == count($this->options)) ? 'checked' : '';
-        $active   = empty($value) ? '' : 'text-yellow';
+        $active = empty($value) ? '' : 'text-yellow';
 
         return <<<EOT
 <span class="dropdown">

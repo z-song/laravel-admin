@@ -39,9 +39,9 @@ class Sorter implements Renderable
      */
     public function __construct($sortName, $columnName, $cast)
     {
-        $this->sortName     = $sortName;
-        $this->columnName   = $columnName;
-        $this->cast         = $cast;
+        $this->sortName = $sortName;
+        $this->columnName = $columnName;
+        $this->cast = $cast;
     }
 
     /**

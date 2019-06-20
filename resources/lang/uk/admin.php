@@ -100,7 +100,7 @@ return [
     ],
     'grid_items_selected'    => '{n} елементів вибрано',
 
-    'menu_titles' => [],
+    'menu_titles'            => [],
     'prev'                   => 'Попередня',
     'next'                   => 'Наступна',
 ];

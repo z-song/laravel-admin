@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class PermissionCommand  extends Command
+class PermissionCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -52,6 +52,7 @@ class PermissionCommand  extends Command
 
         if (empty($tables)) {
             $this->info('table is not existed');
+
             return;
         }
 
@@ -65,10 +66,10 @@ class PermissionCommand  extends Command
                 $exists = Permission::where('slug', $slug)->exists();
                 if (!$exists) {
                     Permission::create([
-                        'name' => $name,
-                        'slug' => $slug,
+                        'name'        => $name,
+                        'slug'        => $slug,
                         'http_method' => $http_method,
-                        'http_path' => $http_path,
+                        'http_path'   => $http_path,
                     ]);
                     $this->info("$slug is generated");
                 } else {
@@ -101,10 +102,10 @@ class PermissionCommand  extends Command
     private function getPermissions()
     {
         return [
-            'list' => __('admin.list'),
-            'view' => __('admin.view'),
+            'list'   => __('admin.list'),
+            'view'   => __('admin.view'),
             'create' => __('admin.create'),
-            'edit' => __('admin.edit'),
+            'edit'   => __('admin.edit'),
             'delete' => __('admin.delete'),
             'export' => __('admin.export'),
             'filter' => __('admin.filter'),
@@ -129,6 +130,7 @@ class PermissionCommand  extends Command
             default:
                 $http_method = ['GET'];
         }
+
         return $http_method;
     }
 
@@ -137,19 +139,19 @@ class PermissionCommand  extends Command
         $resource = Str::kebab(Str::camel($table));
         switch ($permission) {
             case 'create':
-                $http_path = '/' . $resource;
+                $http_path = '/'.$resource;
                 break;
             case 'edit':
-                $http_path = '/' . $resource . '/*';
+                $http_path = '/'.$resource.'/*';
                 break;
             case 'delete':
-                $http_path = '/' . $resource . '/*';
+                $http_path = '/'.$resource.'/*';
                 break;
             case 'index':
-                $http_path = '/' . $resource;
+                $http_path = '/'.$resource;
                 break;
             case 'view':
-                $http_path = '/' . $resource . '/*';
+                $http_path = '/'.$resource.'/*';
                 break;
             default:
                 $http_path = '';
@@ -160,11 +162,11 @@ class PermissionCommand  extends Command
 
     private function generateSlug($table, $permission)
     {
-        return Str::kebab(Str::camel($table)) . '.' . $permission;
+        return Str::kebab(Str::camel($table)).'.'.$permission;
     }
 
     private function generateName($table, $permission_lang)
     {
-        return Str::upper(Str::kebab(Str::camel($table))) . $permission_lang;
+        return Str::upper(Str::kebab(Str::camel($table))).$permission_lang;
     }
 }
