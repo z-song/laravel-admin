@@ -399,7 +399,7 @@ HTML;
         $field = $this;
 
         return $this->unescape()->as(function ($value) use ($field) {
-            $content = json_decode($value, true);
+            $content = json_decode($value ?: '', true);
 
             if (json_last_error() == 0) {
                 $field->border = false;
