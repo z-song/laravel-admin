@@ -80,6 +80,8 @@ class Tools implements Renderable
     /**
      * Disable filter button.
      *
+     * @param bool $disable
+     *
      * @return void
      */
     public function disableFilterButton(bool $disable = true)

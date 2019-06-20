@@ -41,8 +41,9 @@ class Authenticate
         ]);
 
         return collect($excepts)
-            ->map('admin_base_path')
-            ->contains(function ($except) use ($request) {
+            ->map(function ($expect) {
+                return admin_base_path($expect, false);
+            })->contains(function ($except) use ($request) {
                 if ($except !== '/') {
                     $except = trim($except, '/');
                 }

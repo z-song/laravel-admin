@@ -82,7 +82,10 @@ class AuthController extends Controller
 
         $request->session()->invalidate();
 
-        return redirect(config('admin.route.prefix'));
+        $basePath = trim(config('admin.base_path'), '/').'/';
+        $basePath = ($basePath == '/') ? '' : $basePath;
+
+        return redirect($basePath.config('admin.route.prefix'));
     }
 
     /**
@@ -176,7 +179,10 @@ class AuthController extends Controller
             return $this->redirectTo();
         }
 
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : config('admin.route.prefix');
+        $basePath = trim(config('admin.base_path'), '/').'/';
+        $basePath = ($basePath == '/') ? '' : $basePath;
+
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : ($basePath.config('admin.route.prefix'));
     }
 
     /**
@@ -192,7 +198,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended($this->redirectPath());
+        return redirect()->to($this->redirectPath());
     }
 
     /**

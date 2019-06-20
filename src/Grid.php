@@ -779,7 +779,10 @@ class Grid
             return $this->resourcePath;
         }
 
-        return app('request')->getPathInfo();
+        $basePath = '/'.trim(config('admin.base_path'), '/');
+        $basePath = ($basePath == '/') ? '' : $basePath;
+
+        return $basePath.app('request')->getPathInfo();
     }
 
     /**

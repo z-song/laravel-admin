@@ -152,9 +152,12 @@ class Pjax
      */
     protected function setUriHeader(Response $response, Request $request)
     {
+        $basePath = '/'.trim(config('admin.base_path'), '/');
+        $basePath = ($basePath == '/') ? '' : $basePath;
+
         $response->header(
             'X-PJAX-URL',
-            $request->getRequestUri()
+            $basePath.$request->getRequestUri()
         );
     }
 }

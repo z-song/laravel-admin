@@ -367,4 +367,6 @@ return [
     'extensions' => [
 
     ],
+
+    'base_path' => '',
 ];

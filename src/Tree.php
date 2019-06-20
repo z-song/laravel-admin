@@ -7,6 +7,9 @@ use Encore\Admin\Tree\Tools;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property  $path
+ */
 class Tree implements Renderable
 {
     /**
@@ -85,7 +88,10 @@ class Tree implements Renderable
     {
         $this->model = $model;
 
-        $this->path = app('request')->getPathInfo();
+        $basePath = '/'.trim(config('admin.base_path'), '/');
+        $basePath = ($basePath == '/') ? '' : $basePath;
+
+        $this->path = $basePath.app('request')->getPathInfo();
         $this->elementId .= uniqid();
 
         $this->setupTools();

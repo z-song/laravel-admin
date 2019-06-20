@@ -608,9 +608,12 @@ class Filter implements Renderable
 
         $question = $request->getBaseUrl().$request->getPathInfo() == '/' ? '/?' : '?';
 
-        return count($request->query()) > 0
-            ? $request->url().$question.http_build_query($query)
-            : $request->fullUrl();
+        $basePath = '/'.trim(config('admin.base_path'), '/');
+        $basePath = ($basePath == '/') ? '' : $basePath;
+
+        return $request->getUriForPath($basePath.(count($request->query()) > 0
+            ? $request->getPathInfo().$question.http_build_query($query)
+            : $request->getPathInfo()));
     }
 
     /**

@@ -1384,13 +1384,19 @@ class Form implements Renderable
      */
     public function resource($slice = -2)
     {
-        $segments = explode('/', trim(app('request')->getUri(), '/'));
+        $segments = explode('/', trim(app('request')->path(), '/'));
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
         }
 
-        return implode('/', $segments);
+        $basePath = trim(config('admin.base_path'), '/');
+
+        if ($basePath != '') {
+            array_unshift($segments, $basePath);
+        }
+
+        return '/'.implode('/', $segments);
     }
 
     /**
