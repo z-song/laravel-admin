@@ -137,7 +137,7 @@ Other
 `laravel-admin` based on following plugins or services:
 
 + [Laravel](https://laravel.com/)
-+ [AdminLTE](https://almsaeedstudio.com/)
++ [AdminLTE](https://adminlte.io/)
 + [Datetimepicker](http://eonasdan.github.io/bootstrap-datetimepicker/)
 + [font-awesome](http://fontawesome.io)
 + [moment](http://momentjs.com/)
