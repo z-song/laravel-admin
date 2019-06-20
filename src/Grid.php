@@ -565,8 +565,21 @@ class Grid
             return;
         }
 
+        $checkAllBox = "<input type=\"checkbox\" class=\"{$this->getSelectAllName()}\" />&nbsp;";
+
         $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
-            ->displayUsing(Displayers\RowSelector::class);
+            ->displayUsing(Displayers\RowSelector::class)
+            ->addHeader($checkAllBox);
+    }
+
+    /**
+     * Apply column filter to grid query.
+     *
+     * @return void
+     */
+    protected function applyColumnFilter()
+    {
+        $this->columns->each->bindFilterQuery($this->model());
     }
 
     /**
@@ -581,6 +594,8 @@ class Grid
         }
 
         $this->applyQuickSearch();
+
+        $this->applyColumnFilter();
 
         $collection = $this->applyFilter(false);
 

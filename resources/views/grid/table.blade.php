@@ -25,12 +25,12 @@
     {!! $grid->renderHeader() !!}
 
     <!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
+    <div class="box-body no-padding">
         <table class="table table-hover" id="{{ $grid->tableID }}">
             <thead>
                 <tr>
                     @foreach($grid->visibleColumns() as $column)
-                    <th class="column-{!! $column->getName() !!}">{{$column->getLabel()}}{!! $column->sorter() !!}{!! $column->help() !!}</th>
+                    <th class="column-{!! $column->getName() !!}">{{$column->getLabel()}}{!! $column->renderHeader() !!}</th>
                     @endforeach
                 </tr>
             </thead>
