@@ -19,15 +19,14 @@ class InputFilter extends Filter
      */
     public function __construct($type)
     {
-        $this->type  = $type;
+        $this->type = $type;
         $this->class = uniqid('column-filter-');
     }
 
     /**
      * Add a binding to the query.
      *
-     * @param string $value
-     *
+     * @param string     $value
      * @param Model|null $model
      */
     public function addBinding($value, Model $model)
@@ -38,12 +37,14 @@ class InputFilter extends Filter
 
         if ($this->type == 'like') {
             $model->where($this->getColumnName(), 'like', "%{$value}%");
+
             return;
         }
 
         if (in_array($this->type, ['date', 'time'])) {
-            $method = 'where' . ucfirst($this->type);
+            $method = 'where'.ucfirst($this->type);
             $model->{$method}($this->getColumnName(), $value);
+
             return;
         }
 
@@ -84,7 +85,7 @@ class InputFilter extends Filter
      */
     public function render()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.dropdown-menu input').click(function(e) {
     e.stopPropagation();
 });

@@ -99,8 +99,8 @@ return [
         'filter_placeholder' => 'Фильтр',
     ],
     'grid_items_selected'    => '{n} элементов выбрано',
-    
-    'menu_titles' => [],
+
+    'menu_titles'            => [],
     'prev'                   => 'Предыдущая',
-    'next'                   => 'Следующая',    
+    'next'                   => 'Следующая',
 ];

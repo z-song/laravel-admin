@@ -151,7 +151,7 @@ class Column
      * Define a column globally.
      *
      * @param string $name
-     * @param mixed $definition
+     * @param mixed  $definition
      */
     public static function define($name, $definition)
     {
@@ -312,7 +312,7 @@ class Column
      */
     public function setRelation($relation, $relationColumn = null)
     {
-        $this->relation       = $relation;
+        $this->relation = $relation;
         $this->relationColumn = $relationColumn;
 
         return $this;
@@ -325,7 +325,7 @@ class Column
      */
     protected function isRelation()
     {
-        return (bool)$this->relation;
+        return (bool) $this->relation;
     }
 
     /**
@@ -396,7 +396,7 @@ class Column
      * Display using display abstract.
      *
      * @param string $abstract
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return $this
      */
@@ -418,7 +418,7 @@ class Column
      * Display column using array value map.
      *
      * @param array $values
-     * @param null $default
+     * @param null  $default
      *
      * @return $this
      */
@@ -536,7 +536,7 @@ class Column
     public function loading($values = [], $others = [])
     {
         return $this->display(function ($value) use ($values, $others) {
-            $values = (array)$values;
+            $values = (array) $values;
 
             if (in_array($value, $values)) {
                 return '<i class="fa fa-refresh fa-spin text-primary"></i>';
@@ -549,7 +549,7 @@ class Column
     /**
      * Display column as an font-awesome icon based on it's value.
      *
-     * @param array $setting
+     * @param array  $setting
      * @param string $default
      *
      * @return $this
@@ -601,7 +601,7 @@ class Column
      * Call all of the "display" callbacks column.
      *
      * @param mixed $value
-     * @param int $key
+     * @param int   $key
      *
      * @return mixed
      */
@@ -611,12 +611,12 @@ class Column
             $previous = $value;
 
             $callback = $this->bindOriginalRowModel($callback, $key);
-            $value    = call_user_func_array($callback, [$value, $this]);
+            $value = call_user_func_array($callback, [$value, $this]);
 
             if (($value instanceof static) &&
                 ($last = array_pop($this->displayCallbacks))
             ) {
-                $last  = $this->bindOriginalRowModel($last, $key);
+                $last = $this->bindOriginalRowModel($last, $key);
                 $value = call_user_func($last, $previous);
             }
         }
@@ -628,7 +628,7 @@ class Column
      * Set original grid data to column.
      *
      * @param Closure $callback
-     * @param int $key
+     * @param int     $key
      *
      * @return Closure
      */
@@ -700,7 +700,7 @@ class Column
             throw new \Exception("Invalid column definition [$class]");
         }
 
-        $grid   = $this->grid;
+        $grid = $this->grid;
         $column = $this;
 
         $this->display(function ($value) use ($grid, $column, $class) {
@@ -735,7 +735,7 @@ class Column
      * Find a displayer to display column.
      *
      * @param string $abstract
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return $this
      */
@@ -752,7 +752,7 @@ class Column
      * Call Illuminate/Support displayer.
      *
      * @param string $abstract
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return $this
      */
@@ -775,7 +775,7 @@ class Column
      * Call Builtin displayer.
      *
      * @param string $abstract
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return $this
      */
@@ -788,7 +788,7 @@ class Column
         }
 
         if (class_exists($abstract) && is_subclass_of($abstract, AbstractDisplayer::class)) {
-            $grid   = $this->grid;
+            $grid = $this->grid;
             $column = $this;
 
             return $this->display(function ($value) use ($abstract, $grid, $column, $arguments) {
@@ -808,14 +808,14 @@ class Column
      * Allow fluent calls on the Column object.
      *
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return $this
      */
     public function __call($method, $arguments)
     {
         if ($this->isRelation() && !$this->relationColumn) {
-            $this->name  = "{$this->relation}.$method";
+            $this->name = "{$this->relation}.$method";
             $this->label = $this->formatLabel($arguments[0] ?? null);
 
             $this->relationColumn = $method;
