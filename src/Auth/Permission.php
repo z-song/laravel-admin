@@ -29,7 +29,7 @@ class Permission
             return;
         }
 
-        if (Auth::guard('admin')->user()->cannot($permission)) {
+        if (Admin::user()->cannot($permission)) {
             static::error();
         }
     }
@@ -47,7 +47,7 @@ class Permission
             return true;
         }
 
-        if (!Auth::guard('admin')->user()->inRoles($roles)) {
+        if (!Admin::user()->inRoles($roles)) {
             static::error();
         }
     }
@@ -75,7 +75,7 @@ class Permission
             return true;
         }
 
-        if (Auth::guard('admin')->user()->inRoles($roles)) {
+        if (Admin::user()->inRoles($roles)) {
             static::error();
         }
     }
@@ -101,6 +101,6 @@ class Permission
      */
     public static function isAdministrator()
     {
-        return Auth::guard('admin')->user()->isRole('administrator');
+        return Admin::user()->isRole('administrator');
     }
 }

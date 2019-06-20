@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void script($script = '')
  * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void style($style = '')
  * @method static \Illuminate\Contracts\Auth\Authenticatable|null user()
+ * @method static \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard guard()
  * @method static string title()
  * @method static void navbar(\Closure $builder = null)
  * @method static void registerAuthRoutes()

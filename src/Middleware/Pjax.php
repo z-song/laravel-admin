@@ -3,6 +3,7 @@
 namespace Encore\Admin\Middleware;
 
 use Closure;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
@@ -23,7 +24,7 @@ class Pjax
     {
         $response = $next($request);
 
-        if (!$request->pjax() || $response->isRedirection() || Auth::guard('admin')->guest()) {
+        if (!$request->pjax() || $response->isRedirection() || Admin::guard()->guest()) {
             return $response;
         }
 
