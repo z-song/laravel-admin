@@ -5,7 +5,7 @@ namespace Encore\Admin\Grid\Displayers;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Storage;
 
-class Download extends AbstractDisplayer
+class Downloadable extends AbstractDisplayer
 {
     public function display($server = '')
     {

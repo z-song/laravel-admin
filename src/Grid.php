@@ -912,7 +912,7 @@ class Grid
             'expand'      => Displayers\Expand::class,
             'modal'       => Displayers\Modal::class,
             'carousel'    => Displayers\Carousel::class,
-            'download'    => Displayers\Download::class,
+            'downloadable'=> Displayers\Downloadable::class,
             'copyable'    => Displayers\Copyable::class,
         ];
 
