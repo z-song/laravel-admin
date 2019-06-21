@@ -236,6 +236,7 @@ class Grid
      * Handle export request.
      *
      * @param bool $forceExport
+     *
      * @return mixed
      */
     public function handleExportRequest($forceExport = false)
