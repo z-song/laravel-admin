@@ -65,6 +65,7 @@ $(document).on('pjax:complete', function (xhr) {
         }
     }
     NProgress.done();
+    $.admin.grid.selects = {};
 });
 
 $(document).click(function () {
