@@ -434,7 +434,7 @@ class Grid
     /**
      * Get Grid model.
      *
-     * @return Model
+     * @return Eloquent Model
      */
     public function model()
     {
