@@ -147,8 +147,8 @@ class PermissionCommand extends Command
             case 'delete':
                 $http_path = '/'.$resource.'/*';
                 break;
-            case 'index':
-                $http_path = '/'.$resource;
+            case 'list':
+                $http_path = '/'.$resource . '/*';
                 break;
             case 'view':
                 $http_path = '/'.$resource.'/*';
