@@ -913,6 +913,7 @@ class Grid
             'modal'       => Displayers\Modal::class,
             'carousel'    => Displayers\Carousel::class,
             'download'    => Displayers\Download::class,
+            'copyable'    => Displayers\Copyable::class,
         ];
 
         foreach ($map as $abstract => $class) {

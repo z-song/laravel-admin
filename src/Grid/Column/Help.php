@@ -29,8 +29,6 @@ class Help implements Renderable
      */
     public function render()
     {
-        Admin::script("$('.grid-column-help').tooltip();");
-
         $data = [
             'toggle'    => 'tooltip',
             'placement' => 'top',
