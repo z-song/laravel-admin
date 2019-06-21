@@ -914,6 +914,7 @@ class Grid
             'carousel'    => Displayers\Carousel::class,
             'downloadable'=> Displayers\Downloadable::class,
             'copyable'    => Displayers\Copyable::class,
+            'qrcode'      => Displayers\QRCode::class,
         ];
 
         foreach ($map as $abstract => $class) {

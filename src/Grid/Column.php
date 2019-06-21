@@ -34,6 +34,7 @@ use Illuminate\Support\Str;
  * @method $this carousel(int $width = 300, int $height = 200, $server = '')
  * @method $this downloadable($server = '')
  * @method $this copyable()
+ * @method $this qrcode($formatter = null, $width = 150, $height = 150)
  */
 class Column
 {
