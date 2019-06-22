@@ -120,12 +120,29 @@ class ListField extends Field
         $this->script = <<<SCRIPT
 
 $('.{$this->column}-add').on('click', function () {
-    var tpl = $('template.{$this->column}-tpl').html();
-    $('tbody.list-{$this->column}-table').append(tpl);
+    if ('{$this->max}') {
+        if ($(this).closest('tfoot').siblings('tbody').find('tr').length >= {$this->max}) {
+            toastr.error('最多设置 {$this->max} 项');
+        } else {
+            var tpl = $('template.{$this->column}-tpl').html();
+            $('tbody.list-{$this->column}-table').append(tpl);
+        }
+    } else {
+        var tpl = $('template.{$this->column}-tpl').html();
+        $('tbody.list-{$this->column}-table').append(tpl);
+    }
 });
 
 $('tbody').on('click', '.{$this->column}-remove', function () {
-    $(this).closest('tr').remove();
+    if ('{$this->min}') {
+        if ($(this).closest('tr').siblings().length >= {$this->min}) {
+            $(this).closest('tr').remove();
+        } else {
+            toastr.error('至少保留 {$this->min} 项');
+        }
+    } else {
+        $(this).closest('tr').remove();
+    }
 });
 
 SCRIPT;
