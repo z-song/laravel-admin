@@ -5,8 +5,7 @@ namespace Encore\Admin\Grid\Displayers;
 use Encore\Admin\Facades\Admin;
 
 /**
- * Class Copyable
- * @package Encore\Admin\Grid\Displayers
+ * Class Copyable.
  *
  * @see https://codepen.io/shaikmaqsood/pen/XmydxJ
  */
@@ -14,17 +13,17 @@ class Copyable extends AbstractDisplayer
 {
     protected function addScript()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.grid-column-copyable').click(function (e) {
     
     var content = $(this).data('content');
     
-    var \$temp = $('<input>');
+    var $temp = $('<input>');
     
-    \$("body").append(\$temp);
-    \$temp.val(content).select();
+    $("body").append($temp);
+    $temp.val(content).select();
     document.execCommand("copy");
-    \$temp.remove();
+    $temp.remove();
     
     $(this).tooltip('show');
 });

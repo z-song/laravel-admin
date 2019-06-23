@@ -5,15 +5,13 @@ namespace Encore\Admin\Grid\Displayers;
 use Encore\Admin\Facades\Admin;
 
 /**
- * Class QRCode
- *
- * @package Encore\Admin\Grid\Displayers
+ * Class QRCode.
  */
 class QRCode extends AbstractDisplayer
 {
     protected function addScript()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.grid-column-qrcode').popover({
     html: true,
     trigger: 'focus'

@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Grid\Column;
 
-use Encore\Admin\Admin;
 use Illuminate\Contracts\Support\Renderable;
 
 class Help implements Renderable
