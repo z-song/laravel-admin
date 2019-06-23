@@ -29,6 +29,7 @@ class Grid
         Concerns\HasTools,
         Concerns\HasTotalRow,
         Concerns\CanHidesColumns,
+        Concerns\HasHotKeys,
         Macroable {
             __call as macroCall;
         }
