@@ -40,6 +40,5 @@ SCRIPT;
     <i class="fa fa-qrcode"></i>
 </a>&nbsp;{$this->getValue()}
 HTML;
-HTML;
     }
 }
