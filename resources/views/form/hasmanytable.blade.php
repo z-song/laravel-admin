@@ -12,7 +12,11 @@
                 <thead>
                 <tr>
                     @foreach($headers as $header)
-                        <th>{{ $header }}</th>
+                        @if (empty($header['class']))
+                            <th>{{ $header['label'] }}</th>
+                        @else
+                            <th class="{{ $header['class'] }}">{{ $header['label'] }}</th>
+                        @endif
                     @endforeach
 
                     <th class="hidden"></th>

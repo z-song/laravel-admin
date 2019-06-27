@@ -637,10 +637,13 @@ EOT;
                 $hidden[] = $field->render();
             } else {
                 /* Hide label and set field width 100% */
+                $headers[] = [
+                    'class' => $field->getLabelClass(),
+                    'label' => $field->label(),
+                ];
                 $field->setLabelClass(['hidden']);
                 $field->setWidth(12, 0);
                 $fields[] = $field->render();
-                $headers[] = $field->label();
             }
 
             /*
