@@ -529,6 +529,22 @@ class Grid
     }
 
     /**
+     * Set grid batch-action callback.
+     *
+     * @param Closure $closure
+     *
+     * @return $this
+     */
+    public function batchActions(Closure $closure)
+    {
+        $this->tools(function (Tools $tools) use ($closure) {
+            $tools->batch($closure);
+        });
+
+        return $this;
+    }
+
+    /**
      * Add `actions` column for grid.
      *
      * @return void
