@@ -25,7 +25,7 @@
     {!! $grid->renderHeader() !!}
 
     <!-- /.box-header -->
-    <div class="box-body no-padding">
+    <div class="box-body table-responsive no-padding">
         <table class="table table-hover" id="{{ $grid->tableID }}">
             <thead>
                 <tr>
