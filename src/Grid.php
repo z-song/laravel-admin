@@ -499,16 +499,6 @@ class Grid
     }
 
     /**
-     * Disable all actions.
-     *
-     * @return $this
-     */
-    public function disableActions(bool $disable = true)
-    {
-        return $this->option('show_actions', !$disable);
-    }
-
-    /**
      * Set grid action callback.
      *
      * @param Closure|string $actions
@@ -529,6 +519,16 @@ class Grid
     }
 
     /**
+     * Disable all actions.
+     *
+     * @return $this
+     */
+    public function disableActions(bool $disable = true)
+    {
+        return $this->option('show_actions', !$disable);
+    }
+
+    /**
      * Set grid batch-action callback.
      *
      * @param Closure $closure
@@ -542,6 +542,18 @@ class Grid
         });
 
         return $this;
+    }
+
+    /**
+     * @param bool $disable
+     *
+     * @return Grid|mixed
+     */
+    public function disableBatchActions(bool $disable = true)
+    {
+        $this->tools->disableBatchActions($disable);
+
+        return $this->option('show_row_selector', !$disable);
     }
 
     /**
@@ -566,9 +578,7 @@ class Grid
      */
     public function disableRowSelector(bool $disable = true)
     {
-        $this->tools->disableBatchActions($disable);
-
-        return $this->option('show_row_selector', !$disable);
+        return $this->disableBatchActions($disable);
     }
 
     /**
