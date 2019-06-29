@@ -24,6 +24,16 @@ class HasMany extends Field
     protected $relationName = '';
 
     /**
+     * Records order
+     *
+     * @var array
+     */
+    protected $order = [
+        'column' => 'id',
+        'direction' => 'asc',
+    ];
+
+    /**
      * Form builder.
      *
      * @var \Closure
@@ -346,6 +356,29 @@ class HasMany extends Field
     public function useTable()
     {
         return $this->mode('table');
+    }
+
+    /**
+     * Sort hasmany field.
+     *
+     * @param string $column
+     * @param string $direction 'asc' or 'desc'
+     *
+     * @return HasMany
+     */
+    public function orderBy($column = 'id', $direction = 'asc') {
+        $this->order = [
+            'column' => $column,
+            'direction' => $direction,
+        ];
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOrder() : array {
+        return $this->order;
     }
 
     /**

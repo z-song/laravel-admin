@@ -1117,12 +1117,24 @@ class Form implements Renderable
      */
     protected function setFieldValue($id)
     {
-        $relations = $this->getRelations();
-
         $builder = $this->model();
 
         if ($this->isSoftDeletes) {
             $builder = $builder->withTrashed();
+        }
+
+        $relations = [];
+        foreach ($this->getRelations() as $relation) {
+            $field = $this->getFieldByColumn($relation);
+            if ($field instanceof Field\HasMany) {
+                $order = $field->getOrder();
+
+                $relations[$relation] = function($query) use ($order) {
+                    $query->orderBy($order['column'], $order['direction']);
+                };
+            } else {
+                $relations[$relation] = function($query) {};
+            }
         }
 
         $this->model = $builder->with($relations)->findOrFail($id);
