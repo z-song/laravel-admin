@@ -98,6 +98,9 @@ return [
         'filter_clear'       => 'Lihat semua',
         'filter_placeholder' => 'Saringan',
     ],
-
-    'menu_titles' => [],
+    'grid_items_selected'    => '{n} Item dipilih',
+    
+    'menu_titles'            => [],
+    'prev'                   => 'Sebelumnya',
+    'next'                   => 'Selanjutnya',
 ];
