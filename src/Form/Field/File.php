@@ -4,7 +4,6 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
@@ -90,7 +89,7 @@ class File extends Field
         $rules[$this->column] = $fieldRules;
         $attributes[$this->column] = $this->label;
 
-        return Validator::make($input, $rules, $this->validationMessages, $attributes);
+        return \validator($input, $rules, $this->getValidationMessages(), $attributes);
     }
 
     /**
@@ -124,8 +123,8 @@ class File extends Field
 
         $path = null;
 
-        if (!is_null($this->storage_permission)) {
-            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storage_permission);
+        if (!is_null($this->storagePermission)) {
+            $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         } else {
             $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
         }
@@ -162,9 +161,54 @@ class File extends Field
      */
     protected function initialPreviewConfig()
     {
-        return [
-            ['caption' => basename($this->value), 'key' => 0],
-        ];
+        $config = ['caption' => basename($this->value), 'key' => 0];
+
+        $config = array_merge($config, $this->guessPreviewType($this->value));
+
+        return [$config];
+    }
+
+    /**
+     * @param string $options
+     */
+    protected function setupScripts($options)
+    {
+        $this->script = <<<EOT
+$("input{$this->getElementClassSelector()}").fileinput({$options});
+EOT;
+
+        if ($this->fileActionSettings['showRemove']) {
+            $text = [
+                'title'   => trans('admin.delete_confirm'),
+                'confirm' => trans('admin.confirm'),
+                'cancel'  => trans('admin.cancel'),
+            ];
+
+            $this->script .= <<<EOT
+$("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
+    
+    return new Promise(function(resolve, reject) {
+    
+        var remove = resolve;
+    
+        swal({
+            title: "{$text['title']}",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "{$text['confirm']}",
+            showLoaderOnConfirm: true,
+            cancelButtonText: "{$text['cancel']}",
+            preConfirm: function() {
+                return new Promise(function(resolve) {
+                    resolve(remove());
+                });
+            }
+        });
+    });
+});
+EOT;
+        }
     }
 
     /**
@@ -174,7 +218,7 @@ class File extends Field
      */
     public function render()
     {
-        $this->options(['overwriteInitial' => true]);
+        $this->options(['overwriteInitial' => true, 'msgPlaceholder' => trans('admin.choose_file')]);
 
         $this->setupDefaultOptions();
 
@@ -190,13 +234,9 @@ class File extends Field
             unset($this->attributes['required']);
         }
 
-        $options = json_encode($this->options);
+        $options = json_encode_options($this->options);
 
-        $this->script = <<<EOT
-
-$("input{$this->getElementClassSelector()}").fileinput({$options});
-
-EOT;
+        $this->setupScripts($options);
 
         return parent::render();
     }

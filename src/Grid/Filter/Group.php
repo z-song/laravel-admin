@@ -286,8 +286,6 @@ class Group extends AbstractFilter
     {
         $script = <<<SCRIPT
 $(".{$this->name} li a").click(function(){
-
-console.log($(this).text());
     $(".{$this->name}-label").text($(this).text());
     $(".{$this->name}-operation").val($(this).data('index'));
 });

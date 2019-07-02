@@ -14,7 +14,7 @@ class Radio extends Field
     ];
 
     protected static $js = [
-        'vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',
+        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',
     ];
 
     /**

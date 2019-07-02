@@ -45,6 +45,18 @@ trait UploadField
     protected $useSequenceName = false;
 
     /**
+     * Retain file when delete record from DB.
+     *
+     * @var bool
+     */
+    protected $retainable = false;
+
+    /**
+     * @var bool
+     */
+    protected $downloadable = true;
+
+    /**
      * Configuration for setting up file actions for newly selected file thumbnails in the preview window.
      *
      * @var array
@@ -59,7 +71,22 @@ trait UploadField
      *
      * @var string
      */
-    protected $storage_permission;
+    protected $storagePermission;
+
+    /**
+     * @var array
+     */
+    protected $fileTypes = [
+        'image'  => '/^(gif|png|jpe?g|svg)$/i',
+        'html'   => '/^(htm|html)$/i',
+        'office' => '/^(docx?|xlsx?|pptx?|pps|potx?)$/i',
+        'gdocs'  => '/^(docx?|xlsx?|pptx?|pps|potx?|rtf|ods|odt|pages|ai|dxf|ttf|tiff?|wmf|e?ps)$/i',
+        'text'   => '/^(txt|md|csv|nfo|ini|json|php|js|css|ts|sql)$/i',
+        'video'  => '/^(og?|mp4|webm|mp?g|mov|3gp)$/i',
+        'audio'  => '/^(og?|mp3|mp?g|wav)$/i',
+        'pdf'    => '/^(pdf)$/i',
+        'flash'  => '/^(swf)$/i',
+    ];
 
     /**
      * Initialize the storage instance.
@@ -85,6 +112,7 @@ trait UploadField
             'cancelLabel'          => trans('admin.cancel'),
             'showRemove'           => false,
             'showUpload'           => false,
+            'showCancel'           => false,
             'dropZoneEnabled'      => false,
             'deleteExtraData'      => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
@@ -116,6 +144,48 @@ trait UploadField
     }
 
     /**
+     * @return array|bool
+     */
+    protected function guessPreviewType($file)
+    {
+        $filetype = 'other';
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+        foreach ($this->fileTypes as $type => $pattern) {
+            if (preg_match($pattern, $ext) === 1) {
+                $filetype = $type;
+                break;
+            }
+        }
+
+        $extra = ['type' => $filetype];
+
+        if ($filetype == 'video') {
+            $extra['filetype'] = "video/{$ext}";
+        }
+
+        if ($this->downloadable) {
+            $extra['downloadUrl'] = $this->objectUrl($file);
+        }
+
+        return $extra;
+    }
+
+    /**
+     * Indicates if the underlying field is downloadable.
+     *
+     * @param bool $downloadable
+     *
+     * @return $this
+     */
+    public function downloadable($downloadable = true)
+    {
+        $this->downloadable = $downloadable;
+
+        return $this;
+    }
+
+    /**
      * Allow use to remove file.
      *
      * @return $this
@@ -123,6 +193,18 @@ trait UploadField
     public function removable()
     {
         $this->fileActionSettings['showRemove'] = true;
+
+        return $this;
+    }
+
+    /**
+     * Indicates if the underlying field is retainable.
+     *
+     * @return $this
+     */
+    public function retainable($retainable = true)
+    {
+        $this->retainable = $retainable;
 
         return $this;
     }
@@ -296,8 +378,8 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        if (!is_null($this->storage_permission)) {
-            return $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storage_permission);
+        if (!is_null($this->storagePermission)) {
+            return $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         }
 
         return $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
@@ -360,15 +442,15 @@ trait UploadField
     {
         $index = 1;
         $extension = $file->getClientOriginalExtension();
-        $originalName = $file->getClientOriginalName();
-        $newName = $originalName.'_'.$index.'.'.$extension;
+        $original = $file->getClientOriginalName();
+        $new = sprintf('%s_%s.%s', $original, $index, $extension);
 
-        while ($this->storage->exists("{$this->getDirectory()}/$newName")) {
+        while ($this->storage->exists("{$this->getDirectory()}/$new")) {
             $index++;
-            $newName = $originalName.'_'.$index.'.'.$extension;
+            $new = sprintf('%s_%s.%s', $original, $index, $extension);
         }
 
-        return $newName;
+        return $new;
     }
 
     /**
@@ -378,14 +460,29 @@ trait UploadField
      */
     public function destroy()
     {
+        if ($this->retainable) {
+            return;
+        }
+
+        if (method_exists($this, 'destroyThumbnail')) {
+            $this->destroyThumbnail();
+        }
+
         if ($this->storage->exists($this->original)) {
             $this->storage->delete($this->original);
         }
     }
 
-    public function storage_permission($permission)
+    /**
+     * Set file permission when stored into storage.
+     *
+     * @param string $permission
+     *
+     * @return $this
+     */
+    public function storagePermission($permission)
     {
-        $this->storage_permission = $permission;
+        $this->storagePermission = $permission;
 
         return $this;
     }

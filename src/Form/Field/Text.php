@@ -61,57 +61,11 @@ class Text extends Field
      */
     public function inputmask($options)
     {
-        $options = $this->json_encode_options($options);
+        $options = json_encode_options($options);
 
         $this->script = "$('{$this->getElementClassSelector()}').inputmask($options);";
 
         return $this;
-    }
-
-    /**
-     * Encode options to Json.
-     *
-     * @param array $options
-     *
-     * @return $json
-     */
-    protected function json_encode_options($options)
-    {
-        $data = $this->prepare_options($options);
-
-        $json = json_encode($data['options']);
-
-        $json = str_replace($data['toReplace'], $data['original'], $json);
-
-        return $json;
-    }
-
-    /**
-     * Prepare options.
-     *
-     * @param array $options
-     *
-     * @return array
-     */
-    protected function prepare_options($options)
-    {
-        $original = [];
-        $toReplace = [];
-
-        foreach ($options as $key => &$value) {
-            if (is_array($value)) {
-                $subArray = $this->prepare_options($value);
-                $value = $subArray['options'];
-                $original = array_merge($original, $subArray['original']);
-                $toReplace = array_merge($toReplace, $subArray['toReplace']);
-            } elseif (preg_match('/function.*?/', $value)) {
-                $original[] = $value;
-                $value = "%{$key}%";
-                $toReplace[] = "\"{$value}\"";
-            }
-        }
-
-        return compact('original', 'toReplace', 'options');
     }
 
     /**

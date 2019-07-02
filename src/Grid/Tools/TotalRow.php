@@ -61,7 +61,7 @@ class TotalRow extends AbstractTool
      */
     public function render()
     {
-        $columns = $this->getGrid()->columns()->flatMap(function (Column $column) {
+        $columns = $this->getGrid()->visibleColumns()->flatMap(function (Column $column) {
             $name = $column->getName();
 
             $total = '';

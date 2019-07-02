@@ -88,7 +88,7 @@ abstract class AbstractExporter implements ExporterInterface
      */
     public function getQuery()
     {
-        $model = $this->grid->model();
+        $model = $this->grid->getFilter()->getModel();
 
         $queryBuilder = $model->getQueryBuilder();
 

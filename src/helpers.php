@@ -218,3 +218,103 @@ if (!function_exists('class_uses_deep')) {
         return array_unique($traits);
     }
 }
+
+if (!function_exists('admin_dump')) {
+
+    /**
+     * @param $var
+     *
+     * @return string
+     */
+    function admin_dump($var)
+    {
+        ob_start();
+
+        dump(...func_get_args());
+
+        $contents = ob_get_contents();
+
+        ob_end_clean();
+
+        return $contents;
+    }
+}
+
+if (!function_exists('file_size')) {
+
+    /**
+     * Convert file size to a human readable format like `100mb`.
+     *
+     * @param int $bytes
+     *
+     * @return string
+     *
+     * @see https://stackoverflow.com/a/5501447/9443583
+     */
+    function file_size($bytes)
+    {
+        if ($bytes >= 1073741824) {
+            $bytes = number_format($bytes / 1073741824, 2).' GB';
+        } elseif ($bytes >= 1048576) {
+            $bytes = number_format($bytes / 1048576, 2).' MB';
+        } elseif ($bytes >= 1024) {
+            $bytes = number_format($bytes / 1024, 2).' KB';
+        } elseif ($bytes > 1) {
+            $bytes = $bytes.' bytes';
+        } elseif ($bytes == 1) {
+            $bytes = $bytes.' byte';
+        } else {
+            $bytes = '0 bytes';
+        }
+
+        return $bytes;
+    }
+}
+
+if (!function_exists('prepare_options')) {
+
+    /**
+     * @param array $options
+     *
+     * @return array
+     */
+    function prepare_options(array $options)
+    {
+        $original = [];
+        $toReplace = [];
+
+        foreach ($options as $key => &$value) {
+            if (is_array($value)) {
+                $subArray = prepare_options($value);
+                $value = $subArray['options'];
+                $original = array_merge($original, $subArray['original']);
+                $toReplace = array_merge($toReplace, $subArray['toReplace']);
+            } elseif (strpos($value, 'function(') === 0) {
+                $original[] = $value;
+                $value = "%{$key}%";
+                $toReplace[] = "\"{$value}\"";
+            }
+        }
+
+        return compact('original', 'toReplace', 'options');
+    }
+}
+
+if (!function_exists('json_encode_options')) {
+
+    /**
+     * @param array $options
+     *
+     * @return string
+     *
+     * @see http://web.archive.org/web/20080828165256/http://solutoire.com/2008/06/12/sending-javascript-functions-over-json/
+     */
+    function json_encode_options(array $options)
+    {
+        $data = prepare_options($options);
+
+        $json = json_encode($data['options']);
+
+        return str_replace($data['toReplace'], $data['original'], $json);
+    }
+}

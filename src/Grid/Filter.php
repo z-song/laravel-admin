@@ -46,7 +46,7 @@ use Illuminate\Support\Str;
  * @method AbstractFilter     between($column, $label = '')
  * @method AbstractFilter     in($column, $label = '')
  * @method AbstractFilter     notIn($column, $label = '')
- * @method AbstractFilter     where($callback, $label)
+ * @method AbstractFilter     where($callback, $label = '', $column = null)
  * @method AbstractFilter     date($column, $label = '')
  * @method AbstractFilter     day($column, $label = '')
  * @method AbstractFilter     month($column, $label = '')
@@ -189,7 +189,12 @@ class Filter implements Renderable
      */
     public function getModel()
     {
-        return $this->model;
+        $conditions = array_merge(
+            $this->conditions(),
+            $this->scopeConditions()
+        );
+
+        return $this->model->addConditions($conditions);
     }
 
     /**
@@ -492,6 +497,11 @@ class Filter implements Renderable
      */
     public function execute($toArray = true)
     {
+        if (method_exists($this->model->eloquent(), 'paginate')) {
+            $this->model->usePaginate(true);
+
+            return $this->model->buildData($toArray);
+        }
         $conditions = array_merge(
             $this->conditions(),
             $this->scopeConditions()

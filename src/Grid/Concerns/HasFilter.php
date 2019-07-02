@@ -18,11 +18,13 @@ trait HasFilter
     /**
      * Setup grid filter.
      *
-     * @return void
+     * @return $this
      */
-    protected function setupFilter()
+    protected function initFilter()
     {
         $this->filter = new Filter($this->model());
+
+        return $this;
     }
 
     /**
@@ -54,7 +56,7 @@ trait HasFilter
      *
      * @return array|Collection|mixed
      */
-    public function processFilter($toArray = true)
+    public function applyFilter($toArray = true)
     {
         if ($this->builder) {
             call_user_func($this->builder, $this);

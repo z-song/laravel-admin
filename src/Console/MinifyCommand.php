@@ -33,17 +33,26 @@ class MinifyCommand extends Command
     ];
 
     /**
+     * @var array
+     */
+    protected $excepts = [];
+
+    /**
      * Execute the console command.
      */
     public function handle()
     {
-        if (!class_exists(Minify\Js::class)) {
+        if (!class_exists(Minify\Minify::class)) {
             $this->error('To use `admin:minify` command, please install [matthiasmullie/minify] first.');
+
+            return;
         }
 
         if ($this->option('clear')) {
             return $this->clearMinifiedFiles();
         }
+
+        $this->loadExcepts();
 
         AdminFacade::bootstrap();
 
@@ -60,6 +69,15 @@ class MinifyCommand extends Command
 
         $this->comment('Manifest successfully generated:');
         $this->line('  '.Admin::$manifest);
+    }
+
+    protected function loadExcepts()
+    {
+        $excepts = config('admin.minify_assets.excepts');
+
+        if (is_array($excepts)) {
+            $this->excepts = array_filter($excepts);
+        }
     }
 
     protected function clearMinifiedFiles()
@@ -85,12 +103,18 @@ class MinifyCommand extends Command
                     return;
                 }
 
+                if (in_array($css, $this->excepts)) {
+                    $this->assets['css'][] = $css;
+
+                    return;
+                }
+
                 if (Str::contains($css, '?')) {
                     $css = substr($css, 0, strpos($css, '?'));
                 }
 
                 return public_path($css);
-            });
+            })->filter();
 
         $minifier = new Minify\CSS();
 
@@ -109,12 +133,18 @@ class MinifyCommand extends Command
                     return;
                 }
 
+                if (in_array($js, $this->excepts)) {
+                    $this->assets['js'][] = $js;
+
+                    return;
+                }
+
                 if (Str::contains($js, '?')) {
                     $js = substr($js, 0, strpos($js, '?'));
                 }
 
                 return public_path($js);
-            });
+            })->filter();
 
         $minifier = new Minify\JS();
 

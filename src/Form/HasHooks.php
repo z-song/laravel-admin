@@ -34,10 +34,11 @@ trait HasHooks
      * Call hooks by giving name.
      *
      * @param string $name
+     * @param array  $parameters
      *
      * @return Response
      */
-    protected function callHooks($name)
+    protected function callHooks($name, $parameters = [])
     {
         $hooks = Arr::get($this->hooks, $name, []);
 
@@ -46,7 +47,7 @@ trait HasHooks
                 continue;
             }
 
-            $response = call_user_func($func, $this);
+            $response = call_user_func($func, $this, $parameters);
 
             if ($response instanceof Response) {
                 return $response;
@@ -165,11 +166,13 @@ trait HasHooks
     /**
      * Call hooks when deleting.
      *
+     * @param mixed $id
+     *
      * @return mixed
      */
-    protected function callDeleting()
+    protected function callDeleting($id)
     {
-        return $this->callHooks('deleting');
+        return $this->callHooks('deleting', $id);
     }
 
     /**

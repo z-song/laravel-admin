@@ -112,6 +112,8 @@ return [
 
         'controller' => App\Admin\Controllers\AuthController::class,
 
+        'guard' => 'admin',
+
         'guards' => [
             'admin' => [
                 'driver'   => 'session',
@@ -329,7 +331,21 @@ return [
     | Enable/Disable assets minify
     |--------------------------------------------------------------------------
     */
-    'minify_assets' => true,
+    'minify_assets' => [
+
+        // Assets will not be minified.
+        'excepts' => [
+
+        ],
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable/Disable sidebar menu search
+    |--------------------------------------------------------------------------
+    */
+    'enable_menu_search' => true,
 
     /*
     |--------------------------------------------------------------------------

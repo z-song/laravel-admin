@@ -4,75 +4,17 @@ namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 
-class PermissionController extends Controller
+class PermissionController extends AdminController
 {
-    use HasResourceActions;
-
     /**
-     * Index interface.
-     *
-     * @param Content $content
-     *
-     * @return Content
+     * {@inheritdoc}
      */
-    public function index(Content $content)
+    protected function title()
     {
-        return $content
-            ->header(trans('admin.permissions'))
-            ->description(trans('admin.list'))
-            ->body($this->grid()->render());
-    }
-
-    /**
-     * Show interface.
-     *
-     * @param mixed   $id
-     * @param Content $content
-     *
-     * @return Content
-     */
-    public function show($id, Content $content)
-    {
-        return $content
-            ->header(trans('admin.permissions'))
-            ->description(trans('admin.detail'))
-            ->body($this->detail($id));
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     * @param Content $content
-     *
-     * @return Content
-     */
-    public function edit($id, Content $content)
-    {
-        return $content
-            ->header(trans('admin.permissions'))
-            ->description(trans('admin.edit'))
-            ->body($this->form()->edit($id));
-    }
-
-    /**
-     * Create interface.
-     *
-     * @param Content $content
-     *
-     * @return Content
-     */
-    public function create(Content $content)
-    {
-        return $content
-            ->header(trans('admin.permissions'))
-            ->description(trans('admin.create'))
-            ->body($this->form());
+        return trans('admin.permissions');
     }
 
     /**
@@ -86,11 +28,11 @@ class PermissionController extends Controller
 
         $grid = new Grid(new $permissionModel());
 
-        $grid->id('ID')->sortable();
-        $grid->slug(trans('admin.slug'));
-        $grid->name(trans('admin.name'));
+        $grid->column('id', 'ID')->sortable();
+        $grid->column('slug', trans('admin.slug'));
+        $grid->column('name', trans('admin.name'));
 
-        $grid->http_path(trans('admin.route'))->display(function ($path) {
+        $grid->column('http_path', trans('admin.route'))->display(function ($path) {
             return collect(explode("\n", $path))->map(function ($path) {
                 $method = $this->http_method ?: ['ANY'];
 
@@ -113,8 +55,8 @@ class PermissionController extends Controller
             })->implode('');
         });
 
-        $grid->created_at(trans('admin.created_at'));
-        $grid->updated_at(trans('admin.updated_at'));
+        $grid->column('created_at', trans('admin.created_at'));
+        $grid->column('updated_at', trans('admin.updated_at'));
 
         $grid->tools(function (Grid\Tools $tools) {
             $tools->batch(function (Grid\Tools\BatchActions $actions) {
@@ -138,11 +80,11 @@ class PermissionController extends Controller
 
         $show = new Show($permissionModel::findOrFail($id));
 
-        $show->id('ID');
-        $show->slug(trans('admin.slug'));
-        $show->name(trans('admin.name'));
+        $show->field('id', 'ID');
+        $show->field('slug', trans('admin.slug'));
+        $show->field('name', trans('admin.name'));
 
-        $show->http_path(trans('admin.route'))->as(function ($path) {
+        $show->field('http_path', trans('admin.route'))->unescape()->as(function ($path) {
             return collect(explode("\r\n", $path))->map(function ($path) {
                 $method = $this->http_method ?: ['ANY'];
 
@@ -165,8 +107,8 @@ class PermissionController extends Controller
             })->implode('');
         });
 
-        $show->created_at(trans('admin.created_at'));
-        $show->updated_at(trans('admin.updated_at'));
+        $show->field('created_at', trans('admin.created_at'));
+        $show->field('updated_at', trans('admin.updated_at'));
 
         return $show;
     }
@@ -205,8 +147,8 @@ class PermissionController extends Controller
      */
     protected function getHttpMethodsOptions()
     {
-        $permissionModel = config('admin.database.permissions_model');
+        $model = config('admin.database.permissions_model');
 
-        return array_combine($permissionModel::$httpMethods, $permissionModel::$httpMethods);
+        return array_combine($model::$httpMethods, $model::$httpMethods);
     }
 }
