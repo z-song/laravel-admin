@@ -27,7 +27,7 @@
                 <ul class="dropdown-menu" role="menu" style="min-width: 210px;max-height: 300px;overflow: auto;">
                     @foreach(Admin::menuLinks() as $link)
                     <li>
-                        <a href="{{ admin_base_path($link['uri']) }}"><i class="fa {{ $link['icon'] }}"></i>{{ $link['title'] }}</a>
+                        <a href="{{ admin_base_path($link['uri']) }}"><i class="fa {{ $link['icon'] }}"></i>{{ admin_trans($link['title']) }}</a>
                     </li>
                     @endforeach
                 </ul>
