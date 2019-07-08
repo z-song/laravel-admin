@@ -390,6 +390,11 @@ class HasMany extends Field
                     ->fill($data);
             }
         } else {
+
+            if (empty($this->value)) {
+                return [];
+            }
+
             foreach ($this->value as $data) {
                 $key = Arr::get($data, $relation->getRelated()->getKeyName());
 

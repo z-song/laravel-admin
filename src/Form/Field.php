@@ -705,9 +705,11 @@ class Field implements Renderable
             return $rules;
         }
 
-        foreach ($rules as &$rule) {
-            if (is_string($rule)) {
-                $rule = str_replace('{{id}}', $id, $rule);
+        if (is_array($rules)) {
+            foreach ($rules as &$rule) {
+                if (is_string($rule)) {
+                    $rule = str_replace('{{id}}', $id, $rule);
+                }
             }
         }
 
