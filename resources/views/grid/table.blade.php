@@ -36,6 +36,11 @@
             </thead>
 
             <tbody>
+
+                @if($grid->rows()->isEmpty())
+                    @include('admin::grid.empty-grid')
+                @endif
+
                 @foreach($grid->rows() as $row)
                 <tr {!! $row->getRowAttributes() !!}>
                     @foreach($grid->visibleColumnNames() as $name)
