@@ -378,7 +378,7 @@ class Form implements Renderable
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-            return back()->withInput()->withErrors($validationMessages);
+            return $this->responseValidationError($validationMessages);
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -406,6 +406,24 @@ class Form implements Renderable
         }
 
         return $this->redirectAfterStore();
+    }
+
+    /**
+     * @param MessageBag $message
+     *
+     * @return $this|\Illuminate\Http\JsonResponse
+     */
+    protected function responseValidationError(MessageBag $message)
+    {
+        if (\request()->ajax()) {
+            return response()->json([
+                'status'     => false,
+                'validation' => $message,
+                'message'    => $message->first(),
+            ]);
+        }
+
+        return back()->withInput()->withErrors($message);
     }
 
     /**
