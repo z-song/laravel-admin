@@ -35,6 +35,10 @@
                 </tr>
             </thead>
 
+            @if ($grid->hasQuickCreate())
+                {!! $grid->renderQuickCreate() !!}
+            @endif
+
             <tbody>
 
                 @if($grid->rows()->isEmpty())
