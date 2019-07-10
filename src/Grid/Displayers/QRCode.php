@@ -31,7 +31,10 @@ SCRIPT;
             $content = call_user_func($formatter, $content, $this->row);
         }
 
-        $img = "<img src='https://api.qrserver.com/v1/create-qr-code/?size={$width}x{$height}&data={$content}' style='height: {$width}px;width: {$height}px;'/>";
+        $img = sprintf(
+            "<img src='https://api.qrserver.com/v1/create-qr-code/?size=%sx%s&data=%s' style='height:%spx;width:%spx;'/>",
+            $width, $height, $content, $height, $width
+        );
 
         return <<<HTML
 <a href="javascript:void(0);" class="grid-column-qrcode text-muted" data-content="{$img}" data-toggle='popover' tabindex='0'>
