@@ -1,5 +1,5 @@
 <style>
-    .quick-create  .select2-selection--multiple {
+    .quick-create .select2-selection--multiple {
         padding: 0 !important;
         height: 30px !important;
         width: 200px !important;
