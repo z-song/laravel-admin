@@ -130,7 +130,7 @@ class FileUploadTest extends TestCase
         }
 
         $this->visit('admin/files')
-            ->dontSeeInElement('td', 1);
+            ->seeInElement('td', 'svg');
     }
 
     public function testBatchDelete()
