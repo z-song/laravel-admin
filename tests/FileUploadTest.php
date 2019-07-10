@@ -157,9 +157,8 @@ class FileUploadTest extends TestCase
         $this->assertEquals(FileModel::count(), 0);
 
         $this->visit('admin/files')
-            ->dontSeeInElement('td', 1)
-            ->dontSeeInElement('td', 2)
-            ->dontSeeInElement('td', 3);
+            ->seeInElement('td', 'svg')
+        ;
 
         $this->assertEquals(iterator_count($fi), 0);
     }
