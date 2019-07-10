@@ -82,10 +82,12 @@ class BatchActions extends AbstractTool
 
         if (func_num_args() == 1) {
             $action = $title;
-            $action->setId($id);
         } elseif (func_num_args() == 2) {
-            $action->setId($id);
             $action->setTitle($title);
+        }
+
+        if (method_exists($action, 'setId')) {
+            $action->setId($id);
         }
 
         $this->actions->push($action);
@@ -105,7 +107,9 @@ class BatchActions extends AbstractTool
         foreach ($this->actions as $action) {
             $action->setGrid($this->grid);
 
-            Admin::script($action->script());
+            if (method_exists($action, 'script')) {
+                Admin::script($action->script());
+            }
         }
     }
 
