@@ -4,6 +4,7 @@ namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Column;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class AbstractDisplayer
 {
@@ -18,7 +19,7 @@ abstract class AbstractDisplayer
     protected $column;
 
     /**
-     * @var \stdClass
+     * @var Model
      */
     public $row;
 
