@@ -107,7 +107,7 @@ trait ImageField
     {
         if (func_num_args() == 1 && is_array($name)) {
             foreach ($name as $key => $size) {
-                if (count($size) == 2) {
+                if (count($size) >= 2) {
                     $this->thumbnails[$key] = $size;
                 }
             }
@@ -166,9 +166,10 @@ trait ImageField
 
             /** @var \Intervention\Image\Image $image */
             $image = InterventionImage::make($file);
-
+            
+            $action = $size[2] ?? 'resize';
             // Resize image with aspect ratio
-            $image->resize($size[0], $size[1], function (Constraint $constraint) {
+            $image->$action($size[0], $size[1], function (Constraint $constraint) {
                 $constraint->aspectRatio();
             })->resizeCanvas($size[0], $size[1], 'center', false, '#ffffff');
 
