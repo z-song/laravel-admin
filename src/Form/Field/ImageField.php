@@ -166,7 +166,7 @@ trait ImageField
 
             /** @var \Intervention\Image\Image $image */
             $image = InterventionImage::make($file);
-            
+
             $action = $size[2] ?? 'resize';
             // Resize image with aspect ratio
             $image->$action($size[0], $size[1], function (Constraint $constraint) {
