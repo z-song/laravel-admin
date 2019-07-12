@@ -103,4 +103,5 @@ return [
     'menu_titles'            => [],
     'prev'                   => 'Prev',
     'next'                   => 'Next',
+    'quick_create'           => 'Quick create'
 ];

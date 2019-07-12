@@ -2,7 +2,7 @@
     .quick-create .select2-selection--single {
         padding: 3px 12px !important;
         height: 30px !important;
-        width: 100px !important;
+        width: 150px !important;
     }
 </style>
 
