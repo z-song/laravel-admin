@@ -34,19 +34,9 @@ class QuickCreate implements Renderable
         $this->fields = Collection::make();
     }
 
-    /**
-     * @param string $column
-     * @param string $placeholder
-     *
-     * @return Text
-     */
-    public function text($column, $placeholder = '')
+    protected function formatPlaceholder($placeholder)
     {
-        $field = new Text($column, [$placeholder]);
-
-        $this->addField($field->width('200px'));
-
-        return $field;
+        return array_filter((array)$placeholder);
     }
 
     /**
@@ -55,11 +45,13 @@ class QuickCreate implements Renderable
      *
      * @return Text
      */
-    public function number($column, $placeholder = '')
+    public function text($column, $placeholder = '')
     {
-        return $this->text($column, $placeholder)
-            ->inputmask(['alias' => 'integer'])
-            ->width('100px');
+        $field = new Text($column, $this->formatPlaceholder($placeholder));
+
+        $this->addField($field->width('200px'));
+
+        return $field;
     }
 
     /**
@@ -146,7 +138,7 @@ class QuickCreate implements Renderable
      */
     public function select($column, $placeholder = '')
     {
-        $field = new Select($column, [$placeholder]);
+        $field = new Select($column, $this->formatPlaceholder($placeholder));
 
         $this->addField($field);
 
@@ -161,7 +153,7 @@ class QuickCreate implements Renderable
      */
     public function multipleSelect($column, $placeholder = '')
     {
-        $field = new MultipleSelect($column, [$placeholder]);
+        $field = new MultipleSelect($column, $this->formatPlaceholder($placeholder));
 
         $this->addField($field);
 
@@ -198,7 +190,7 @@ class QuickCreate implements Renderable
      */
     public function date($column, $placeholder = '')
     {
-        $field = new Field\Date($column, [$placeholder]);
+        $field = new Field\Date($column, $this->formatPlaceholder($placeholder));
 
         $this->addField($field);
 
