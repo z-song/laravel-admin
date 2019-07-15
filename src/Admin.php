@@ -324,6 +324,7 @@ class Admin
                 $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
 
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
+                $router->post('_handle_action_', 'HandleController@handleAction')->name('admin.handle-action');
             });
 
             $authController = config('admin.auth.controller', AuthController::class);

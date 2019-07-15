@@ -26,6 +26,7 @@ class AdminServiceProvider extends ServiceProvider
         Console\MinifyCommand::class,
         Console\FormCommand::class,
         Console\PermissionCommand::class,
+        Console\ActionCommand::class,
     ];
 
     /**

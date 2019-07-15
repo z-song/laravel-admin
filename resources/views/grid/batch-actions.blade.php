@@ -9,7 +9,11 @@
     </button>
     <ul class="dropdown-menu" role="menu">
         @foreach($actions as $action)
-            <li><a href="#" class="{{ $action->getElementClass(false) }}">{!! $action->render() !!} </a></li>
+            @if($action instanceof \Encore\Admin\Actions\BatchAction)
+                <li>{!! $action->render() !!}</li>
+            @else
+                <li><a href="#" class="{{ $action->getElementClass(false) }}">{!! $action->render() !!} </a></li>
+            @endif
         @endforeach
     </ul>
 </div>
