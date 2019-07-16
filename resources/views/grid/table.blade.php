@@ -30,7 +30,7 @@
             <thead>
                 <tr>
                     @foreach($grid->visibleColumns() as $column)
-                    <th class="column-{!! $column->getName() !!}">{{$column->getLabel()}}{!! $column->renderHeader() !!}</th>
+                    <th {!! $column->formatHtmlAttributes() !!}>{{$column->getLabel()}}{!! $column->renderHeader() !!}</th>
                     @endforeach
                 </tr>
             </thead>

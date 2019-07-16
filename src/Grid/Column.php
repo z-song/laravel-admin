@@ -136,6 +136,18 @@ class Column
         $this->name = $name;
 
         $this->label = $this->formatLabel($label);
+
+        $this->initAttributes();
+    }
+
+    /**
+     * Initialize column attributes.
+     */
+    protected function initAttributes()
+    {
+        $name = str_replace('.', '-', $this->name);
+
+        $this->setAttributes(['class' => "column-{$name}"]);
     }
 
     /**
@@ -203,7 +215,10 @@ class Column
      */
     public function setAttributes($attributes = [])
     {
-        static::$htmlAttributes[$this->name] = $attributes;
+        static::$htmlAttributes[$this->name] = array_merge(
+            Arr::get(static::$htmlAttributes, $this->name, []),
+            $attributes
+        );
 
         return $this;
     }
@@ -217,7 +232,22 @@ class Column
      */
     public static function getAttributes($name)
     {
-        return Arr::get(static::$htmlAttributes, $name, '');
+        return Arr::get(static::$htmlAttributes, $name, []);
+    }
+
+    /**
+     * Format attributes to html.
+     *
+     * @return string
+     */
+    public function formatHtmlAttributes()
+    {
+        $attrArr = [];
+        foreach (static::getAttributes($this->name) as $name => $val) {
+            $attrArr[] = "$name=\"$val\"";
+        }
+
+        return implode(' ', $attrArr);
     }
 
     /**
@@ -274,6 +304,18 @@ class Column
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    public function getClassName()
+    {
+        $name = str_replace('.', '-', $this->getName());
+
+        return "column-{$name}";
     }
 
     /**
