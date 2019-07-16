@@ -16,7 +16,7 @@ class Expand extends AbstractDisplayer
 
         $key = $this->getKey();
 
-        $this->uniqueKey = $key . '-' . $this->column->getName();
+        $this->uniqueKey = $key.'-'.$this->column->getName();
 
         $this->setupScript();
 
