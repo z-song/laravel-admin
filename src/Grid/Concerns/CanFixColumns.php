@@ -39,4 +39,3 @@ trait CanFixColumns
         return $this->fixColumns->rightColumns();
     }
 }
-

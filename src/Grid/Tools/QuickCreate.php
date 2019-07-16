@@ -36,7 +36,7 @@ class QuickCreate implements Renderable
 
     protected function formatPlaceholder($placeholder)
     {
-        return array_filter((array)$placeholder);
+        return array_filter((array) $placeholder);
     }
 
     /**
@@ -279,7 +279,6 @@ class QuickCreate implements Renderable
 SCRIPT;
 
         Admin::script($script);
-
     }
 
     /**

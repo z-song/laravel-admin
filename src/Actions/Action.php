@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Actions;
 
-use Encore\Admin\Actions\Interactor;
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Renderable;
@@ -15,7 +14,6 @@ use Illuminate\Http\Request;
  * @method $this info($title, $text = '', $options = [])
  * @method $this question($title, $text = '', $options = [])
  * @method $this confirm($title, $text = '', $options = [])
- *
  * @method Field\Text           text($column, $label = '')
  * @method Field\Email          email($column, $label = '')
  * @method Field\Integer        integer($column, $label = '')
@@ -123,6 +121,7 @@ abstract class Action implements Renderable
 
     /**
      * @param string $prefix
+     *
      * @return mixed|string
      */
     public function selector($prefix)
@@ -328,7 +327,7 @@ SCRIPT;
      */
     public function handleActionPromise()
     {
-        $resolve = <<<SCRIPT
+        $resolve = <<<'SCRIPT'
 var actionResolver = function (response) {
             if (typeof response !== 'object') {
                 return $.admin.swal({type: 'error', title: 'Oops!'});
@@ -374,18 +373,18 @@ SCRIPT;
 
         Admin::script($resolve);
 
-        return <<<SCRIPT
+        return <<<'SCRIPT'
 process.then(actionResolver).catch(actionCatcher);
 SCRIPT;
     }
 
     /**
      * @param string $method
-     * @param array $arguments
-     *
-     * @return mixed
+     * @param array  $arguments
      *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function __call($method, $arguments = [])
     {
@@ -401,7 +400,6 @@ SCRIPT;
      */
     public function html()
     {
-
     }
 
     /**

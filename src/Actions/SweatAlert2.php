@@ -35,8 +35,8 @@ class SweatAlert2
     {
         return [
             'swal' => [
-                'type' => $this->type,
-                'title' => $this->title
+                'type'  => $this->type,
+                'title' => $this->title,
             ],
         ];
     }

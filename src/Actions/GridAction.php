@@ -6,8 +6,7 @@ use Encore\Admin\Grid;
 use Illuminate\Http\Request;
 
 /**
- * Class GridAction
- * @package Encore\Admin\Actions
+ * Class GridAction.
  *
  * @method retrieveModel(Request $request)
  */
@@ -25,6 +24,7 @@ abstract class GridAction extends Action
 
     /**
      * @param Grid $grid
+     *
      * @return $this
      */
     public function setGrid(Grid $grid)

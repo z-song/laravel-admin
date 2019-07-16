@@ -1,11 +1,11 @@
 <?php
 
 namespace Encore\Admin\Actions;
+
 use Illuminate\Validation\ValidationException;
 
 /**
- * Class Response
- * @package Encore\Admin\Action
+ * Class Response.
  *
  * @method $this topCenter()
  * @method $this topLeft()
@@ -16,7 +16,6 @@ use Illuminate\Validation\ValidationException;
  * @method $this topFullWidth()
  * @method $this bottomFullWidth()
  * @method $this timeout($timeout = 5000)
- *
  */
 class Response
 {
@@ -34,9 +33,9 @@ class Response
      * @var array
      */
     public $toastrMethods = [
-        'topCenter', 'topLeft','topRight',
-        'bottomLeft', 'bottomCenter','bottomRight',
-        'topFullWidth', 'bottomFullWidth','timeout',
+        'topCenter', 'topLeft', 'topRight',
+        'bottomLeft', 'bottomCenter', 'bottomRight',
+        'topFullWidth', 'bottomFullWidth', 'timeout',
     ];
 
     /**
@@ -210,6 +209,7 @@ class Response
     /**
      * @param string $method
      * @param array  $arguments
+     *
      * @return $this
      */
     public function __call($method, $arguments)

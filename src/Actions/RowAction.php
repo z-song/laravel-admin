@@ -84,11 +84,11 @@ abstract class RowAction extends GridAction
      */
     public function href()
     {
-        return;
     }
 
     /**
      * @param Request $request
+     *
      * @return mixed
      */
     public function retrieveModel(Request $request)

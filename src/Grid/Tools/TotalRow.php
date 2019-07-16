@@ -98,7 +98,7 @@ class TotalRow extends AbstractTool
 
             return [
                 'class' => $column->getClassName(),
-                'value' => $total
+                'value' => $total,
             ];
         });
 

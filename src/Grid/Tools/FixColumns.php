@@ -14,12 +14,12 @@ class FixColumns
     protected $grid;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $head;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $tail;
 
@@ -42,8 +42,8 @@ class FixColumns
      * FixColumns constructor.
      *
      * @param Grid $grid
-     * @param integer $head
-     * @param integer $tail
+     * @param int  $head
+     * @param int  $tail
      */
     public function __construct(Grid $grid, $head, $tail = -1)
     {
@@ -165,7 +165,7 @@ SCRIPT;
      */
     protected function addStyle()
     {
-        $style = <<<STYLE
+        $style = <<<'STYLE'
 .tables-container {
     position:relative;
 }

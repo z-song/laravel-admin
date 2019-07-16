@@ -43,7 +43,7 @@ class ActionCommand extends GeneratorCommand
             [
                 'DummyName',
                 'DummySelector',
-                'DummyInteractor'
+                'DummyInteractor',
             ],
             [
                 $this->option('name'),
@@ -57,22 +57,22 @@ class ActionCommand extends GeneratorCommand
     protected function generateInteractor()
     {
         if ($this->option('form')) {
-            return <<<CODE
+            return <<<'CODE'
 
     public function form()
     {
-        \$this->text('name')->rules('required');
-        \$this->email('email')->rules('email');
-        \$this->datetime('created_at');
+        $this->text('name')->rules('required');
+        $this->email('email')->rules('email');
+        $this->datetime('created_at');
     }
 
 CODE;
         } elseif ($this->option('dialog')) {
-            return <<<CODE
+            return <<<'CODE'
 
     public function dialog()
     {
-        \$this->confirm('Confirm message...');
+        $this->confirm('Confirm message...');
     }
 
 CODE;

@@ -34,9 +34,9 @@ class HandleController extends Controller
     /**
      * @param Request $request
      *
-     * @return Form
-     *
      * @throws Exception
+     *
+     * @return Form
      */
     protected function resolveForm(Request $request)
     {
@@ -69,7 +69,7 @@ class HandleController extends Controller
     {
         $action = $this->resolveActionInstance($request);
 
-        $model     = null;
+        $model = null;
         $arguments = [];
 
         if ($action instanceof GridAction) {
@@ -101,9 +101,9 @@ class HandleController extends Controller
     /**
      * @param Request $request
      *
-     * @return Action
-     *
      * @throws Exception
+     *
+     * @return Action
      */
     protected function resolveActionInstance(Request $request)
     {
@@ -128,8 +128,7 @@ class HandleController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
+     * @param Request               $request
      * @param Model|Collection|bool $model
      *
      * @return array

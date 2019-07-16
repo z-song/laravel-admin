@@ -30,7 +30,7 @@ class Form extends Interactor
      */
     protected function formatLabel($label)
     {
-        return array_filter((array)$label);
+        return array_filter((array) $label);
     }
 
     /**
@@ -302,10 +302,10 @@ class Form extends Interactor
     /**
      * @param Request $request
      *
-     * @return void
-     *
      * @throws ValidationException
      * @throws \Exception
+     *
+     * @return void
      */
     public function validate(Request $request)
     {
@@ -418,13 +418,12 @@ SCRIPT;
     }
 
     /**
-     * @return string
      * @throws \Exception
+     *
+     * @return string
      */
     protected function buildActionPromise()
     {
-
-
         if ($this->action instanceof RowAction) {
             call_user_func([$this->action, 'form'], $this->action->getRow());
         } else {
