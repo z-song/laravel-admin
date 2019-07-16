@@ -25,12 +25,9 @@ class DropdownActions extends Actions
      */
     protected $defaultClass = [Edit::class, Show::class, Delete::class];
 
-    /**
-     *
-     */
     protected function script()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 (function ($) {
     $('.table-responsive').on('show.bs.dropdown', function () {
          $('.table-responsive').css( "overflow", "inherit" );

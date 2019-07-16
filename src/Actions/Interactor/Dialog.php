@@ -19,7 +19,7 @@ class Dialog extends Interactor
     /**
      * @param string $title
      * @param string $text
-     * @param array $options
+     * @param array  $options
      *
      * @return Dialog
      */
@@ -31,7 +31,7 @@ class Dialog extends Interactor
     /**
      * @param string $title
      * @param string $text
-     * @param array $options
+     * @param array  $options
      *
      * @return Dialog
      */
@@ -43,7 +43,7 @@ class Dialog extends Interactor
     /**
      * @param string $title
      * @param string $text
-     * @param array $options
+     * @param array  $options
      *
      * @return $this
      */
@@ -55,7 +55,7 @@ class Dialog extends Interactor
     /**
      * @param string $title
      * @param string $text
-     * @param array $options
+     * @param array  $options
      *
      * @return Dialog
      */
@@ -67,7 +67,7 @@ class Dialog extends Interactor
     /**
      * @param string $title
      * @param string $text
-     * @param array $options
+     * @param array  $options
      *
      * @return Dialog
      */
@@ -79,7 +79,7 @@ class Dialog extends Interactor
     /**
      * @param string $title
      * @param string $text
-     * @param array $options
+     * @param array  $options
      *
      * @return Dialog
      */
@@ -92,7 +92,7 @@ class Dialog extends Interactor
      * @param string $title
      * @param string $type
      * @param string $text
-     * @param array $options
+     * @param array  $options
      *
      * @return $this
      */
@@ -170,8 +170,8 @@ SCRIPT;
     {
         call_user_func([$this->action, 'dialog']);
 
-        $route       = $this->action->getHandleRoute();
-        $settings    = $this->formatSettings();
+        $route = $this->action->getHandleRoute();
+        $settings = $this->formatSettings();
         $calledClass = $this->action->getCalledClass();
 
         if ($this->uploadFile) {

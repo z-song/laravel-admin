@@ -32,6 +32,7 @@ SCRIPT;
 
     /**
      * @param Request $request
+     *
      * @return mixed
      */
     public function retrieveModel(Request $request)

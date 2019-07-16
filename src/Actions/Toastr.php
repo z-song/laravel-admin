@@ -29,7 +29,7 @@ class Toastr
      */
     public function show($type, $content = '')
     {
-        $this->type    = $type;
+        $this->type = $type;
         $this->content = $content;
 
         return $this;
@@ -38,6 +38,7 @@ class Toastr
     /**
      * @param $option
      * @param $value
+     *
      * @return $this
      */
     protected function options($option, $value)
@@ -49,6 +50,7 @@ class Toastr
 
     /**
      * @param $position
+     *
      * @return Toastr
      */
     protected function position($position)
