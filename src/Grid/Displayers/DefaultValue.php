@@ -1,7 +1,5 @@
 <?php
-
 namespace Encore\Admin\Grid\Displayers;
-
 class DefaultValue extends AbstractDisplayer
 {
     public function display($default = '')
