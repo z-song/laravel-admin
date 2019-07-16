@@ -1,7 +1,7 @@
 <tfoot>
     <tr>
         @foreach($columns as $column)
-            <td>{!! $column !!}</td>
+            <td class="{{ $column['class'] }}">{!! $column['value'] !!}</td>
         @endforeach
     </tr>
 </tfoot>
