@@ -31,10 +31,10 @@ class Delete extends RowAction
         try {
             $model->delete();
         } catch (\Exception $exception) {
-            return $this->getResponse()->error("{$trans['failed']} : {$exception->getMessage()}");
+            return $this->response()->error("{$trans['failed']} : {$exception->getMessage()}");
         }
 
-        return $this->getResponse()->success($trans['succeeded'])->refresh();
+        return $this->response()->success($trans['succeeded'])->refresh();
     }
 
     /**
@@ -42,6 +42,6 @@ class Delete extends RowAction
      */
     public function dialog()
     {
-        $this->question(trans('admin.delete_confirm'), ['confirmButtonColor' => '#d33']);
+        $this->question(trans('admin.delete_confirm'), '', ['confirmButtonColor' => '#d33']);
     }
 }
