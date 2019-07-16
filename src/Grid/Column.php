@@ -35,6 +35,7 @@ use Illuminate\Support\Str;
  * @method $this downloadable($server = '')
  * @method $this copyable()
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
+ * @method $this default($defalut = '')
  */
 class Column
 {
