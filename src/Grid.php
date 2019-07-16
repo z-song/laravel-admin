@@ -28,9 +28,10 @@ class Grid
         Concerns\HasFilter,
         Concerns\HasTools,
         Concerns\HasTotalRow,
-        Concerns\CanHidesColumns,
         Concerns\HasHotKeys,
         Concerns\HasQuickCreate,
+        Concerns\CanHidesColumns,
+        Concerns\CanFixColumns,
         Macroable {
             __call as macroCall;
         }
