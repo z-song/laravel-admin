@@ -141,6 +141,11 @@ class Grid
     protected $actionsCallback;
 
     /**
+     * @var []callable
+     */
+    protected $renderingCallbacks = [];
+
+    /**
      * Actions column display class.
      *
      * @var string
@@ -1034,6 +1039,32 @@ class Grid
     }
 
     /**
+     * Set rendering callback.
+     *
+     * @param callable $callback
+     *
+     * @return $this
+     */
+    public function rendering(callable $callback)
+    {
+        $this->renderingCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Call callbacks before render.
+     *
+     * @return void
+     */
+    protected function callRenderingCallback()
+    {
+        foreach ($this->renderingCallbacks as $callback) {
+            call_user_func($callback, $this);
+        }
+    }
+
+    /**
      * Get the string contents of the grid view.
      *
      * @return string
@@ -1047,6 +1078,8 @@ class Grid
         } catch (\Exception $e) {
             return Handler::renderException($e);
         }
+
+        $this->callRenderingCallback();
 
         return view($this->view, $this->variables())->render();
     }
