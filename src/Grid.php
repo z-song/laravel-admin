@@ -943,6 +943,7 @@ class Grid
             'downloadable'=> Displayers\Downloadable::class,
             'copyable'    => Displayers\Copyable::class,
             'qrcode'      => Displayers\QRCode::class,
+            'default'      => Displayers\DefaultValue::class,
         ];
 
         foreach ($map as $abstract => $class) {
