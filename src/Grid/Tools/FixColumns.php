@@ -155,7 +155,7 @@ class FixColumns
 
 SCRIPT;
 
-        Admin::script($script);
+        Admin::script($script, true);
 
         return $this;
     }
