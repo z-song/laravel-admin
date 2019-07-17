@@ -7,6 +7,7 @@
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
     </button>
+    @if(!$actions->isEmpty())
     <ul class="dropdown-menu" role="menu">
         @foreach($actions as $action)
             @if($action instanceof \Encore\Admin\Actions\BatchAction)
@@ -16,5 +17,6 @@
             @endif
         @endforeach
     </ul>
+    @endif
 </div>
 @endif
