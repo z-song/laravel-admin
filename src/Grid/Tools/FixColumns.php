@@ -107,12 +107,12 @@ class FixColumns
     var tfootHeight = $('.table-main tfoot tr').outerHeight();
     $('.table-fixed tfoot tr').outerHeight(tfootHeight);
     
-        $('.table-main tbody tr').each(function(i, obj) {
-            var height = $(obj).outerHeight();
-    
-            $('.table-fixed-left tbody tr').eq(i).outerHeight(height);
-            $('.table-fixed-right tbody tr').eq(i).outerHeight(height);
-        });
+    $('.table-main tbody tr').each(function(i, obj) {
+        var height = $(obj).outerHeight();
+
+        $('.table-fixed-left tbody tr').eq(i).outerHeight(height);
+        $('.table-fixed-right tbody tr').eq(i).outerHeight(height);
+    });
     
     if ($('.table-main').width() >= $('.table-main').prop('scrollWidth')) {
         $('.table-fixed').hide();
