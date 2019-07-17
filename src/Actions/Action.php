@@ -36,8 +36,6 @@ abstract class Action implements Renderable
 {
     use Authorizable;
 
-    const INPUT_NAME = '_input';
-
     /**
      * @var Response
      */
