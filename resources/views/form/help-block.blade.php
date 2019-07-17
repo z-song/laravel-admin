@@ -1,5 +1,5 @@
 @if($help)
 <span class="help-block">
-    <i class="fa {{ array_get($help, 'icon') }}"></i>&nbsp;{!! array_get($help, 'text') !!}
+    <i class="fa {{ \Illuminate\Support\Arr::get($help, 'icon') }}"></i>&nbsp;{!! \Illuminate\Support\Arr::get($help, 'text') !!}
 </span>
 @endif

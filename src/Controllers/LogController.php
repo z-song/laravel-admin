@@ -4,24 +4,16 @@ namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Auth\Database\OperationLog;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
-use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 
-class LogController extends Controller
+class LogController extends AdminController
 {
     /**
-     * Index interface.
-     *
-     * @param Content $content
-     *
-     * @return Content
+     * {@inheritdoc}
      */
-    public function index(Content $content)
+    protected function title()
     {
-        return $content
-            ->header(trans('admin.operation_log'))
-            ->description(trans('admin.list'))
-            ->body($this->grid());
+        return trans('admin.operation_log');
     }
 
     /**
@@ -33,18 +25,18 @@ class LogController extends Controller
 
         $grid->model()->orderBy('id', 'DESC');
 
-        $grid->id('ID')->sortable();
-        $grid->user()->name('User');
-        $grid->method()->display(function ($method) {
-            $color = array_get(OperationLog::$methodColors, $method, 'grey');
+        $grid->column('id', 'ID')->sortable();
+        $grid->column('user.name', 'User');
+        $grid->column('method')->display(function ($method) {
+            $color = Arr::get(OperationLog::$methodColors, $method, 'grey');
 
             return "<span class=\"badge bg-$color\">$method</span>";
         });
-        $grid->path()->label('info');
-        $grid->ip()->label('primary');
-        $grid->input()->display(function ($input) {
+        $grid->column('path')->label('info');
+        $grid->column('ip')->label('primary');
+        $grid->column('input')->display(function ($input) {
             $input = json_decode($input, true);
-            $input = array_except($input, ['_pjax', '_token', '_method', '_previous_']);
+            $input = Arr::except($input, ['_pjax', '_token', '_method', '_previous_']);
             if (empty($input)) {
                 return '<code>{}</code>';
             }
@@ -52,16 +44,16 @@ class LogController extends Controller
             return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).'</pre>';
         });
 
-        $grid->created_at(trans('admin.created_at'));
+        $grid->column('created_at', trans('admin.created_at'));
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableEdit();
             $actions->disableView();
         });
 
-        $grid->disableCreation();
+        $grid->disableCreateButton();
 
-        $grid->filter(function ($filter) {
+        $grid->filter(function (Grid\Filter $filter) {
             $userModel = config('admin.database.users_model');
 
             $filter->equal('user_id', 'User')->select($userModel::all()->pluck('name', 'id'));

@@ -5,44 +5,59 @@
     </div>
     @endif
 
-    @if ( $grid->allowTools() || $grid->allowExport() || $grid->allowCreation() )
+    @if ( $grid->showTools() || $grid->showExportBtn() || $grid->showCreateBtn() )
     <div class="box-header with-border">
         <div class="pull-right">
+            {!! $grid->renderColumnSelector() !!}
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}
         </div>
-        @if ( $grid->allowTools() )
-        <span>
+        @if ( $grid->showTools() )
+        <div class="pull-left">
             {!! $grid->renderHeaderTools() !!}
-        </span>
+        </div>
         @endif
     </div>
     @endif
 
     {!! $grid->renderFilter() !!}
 
+    {!! $grid->renderHeader() !!}
+
     <!-- /.box-header -->
     <div class="box-body table-responsive no-padding">
-        <table class="table table-hover">
+        <table class="table table-hover" id="{{ $grid->tableID }}">
             <thead>
                 <tr>
-                    @foreach($grid->columns() as $column)
-                    <th>{{$column->getLabel()}}{!! $column->sorter() !!}</th>
+                    @foreach($grid->visibleColumns() as $column)
+                    <th {!! $column->formatHtmlAttributes() !!}>{{$column->getLabel()}}{!! $column->renderHeader() !!}</th>
                     @endforeach
                 </tr>
             </thead>
 
+            @if ($grid->hasQuickCreate())
+                {!! $grid->renderQuickCreate() !!}
+            @endif
+
             <tbody>
+
+                @if($grid->rows()->isEmpty())
+                    @include('admin::grid.empty-grid')
+                @endif
+
                 @foreach($grid->rows() as $row)
                 <tr {!! $row->getRowAttributes() !!}>
-                    @foreach($grid->columnNames as $name)
-                    <td {!! $row->getColumnAttributes($name) !!}>
+                    @foreach($grid->visibleColumnNames() as $name)
+                    <td {!! $row->getColumnAttributes($name) !!} class="column-{!! $name !!}">
                         {!! $row->column($name) !!}
                     </td>
                     @endforeach
                 </tr>
                 @endforeach
             </tbody>
+
+            {!! $grid->renderTotalRow() !!}
+
         </table>
 
     </div>

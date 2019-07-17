@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Grid\Filter;
 
+use Illuminate\Support\Arr;
+
 class NotEqual extends AbstractFilter
 {
     /**
@@ -9,7 +11,7 @@ class NotEqual extends AbstractFilter
      */
     public function condition($inputs)
     {
-        $value = array_get($inputs, $this->column);
+        $value = Arr::get($inputs, $this->column);
 
         if (!isset($value)) {
             return;

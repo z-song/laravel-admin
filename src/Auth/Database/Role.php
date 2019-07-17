@@ -54,6 +54,20 @@ class Role extends Model
     }
 
     /**
+     * A role belongs to many menus.
+     *
+     * @return BelongsToMany
+     */
+    public function menus() : BelongsToMany
+    {
+        $pivotTable = config('admin.database.role_menu_table');
+
+        $relatedModel = config('admin.database.menu_model');
+
+        return $this->belongsToMany($relatedModel, $pivotTable, 'role_id', 'menu_id');
+    }
+
+    /**
      * Check user has permission.
      *
      * @param $permission

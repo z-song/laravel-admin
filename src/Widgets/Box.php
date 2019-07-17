@@ -14,7 +14,7 @@ class Box extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $title = 'Box header';
+    protected $title = '';
 
     /**
      * @var string
@@ -22,9 +22,19 @@ class Box extends Widget implements Renderable
     protected $content = 'here is the box content.';
 
     /**
+     * @var string
+     */
+    protected $footer = '';
+
+    /**
      * @var array
      */
     protected $tools = [];
+
+    /**
+     * @var string
+     */
+    protected $script;
 
     /**
      * Box constructor.
@@ -32,7 +42,7 @@ class Box extends Widget implements Renderable
      * @param string $title
      * @param string $content
      */
-    public function __construct($title = '', $content = '')
+    public function __construct($title = '', $content = '', $footer = '')
     {
         if ($title) {
             $this->title($title);
@@ -40,6 +50,10 @@ class Box extends Widget implements Renderable
 
         if ($content) {
             $this->content($content);
+        }
+
+        if ($footer) {
+            $this->footer($footer);
         }
 
         $this->class('box');
@@ -58,6 +72,24 @@ class Box extends Widget implements Renderable
             $this->content = $content->render();
         } else {
             $this->content = (string) $content;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set box footer.
+     *
+     * @param string $footer
+     *
+     * @return $this
+     */
+    public function footer($footer)
+    {
+        if ($footer instanceof Renderable) {
+            $this->footer = $footer->render();
+        } else {
+            $this->footer = (string) $footer;
         }
 
         return $this;
@@ -86,6 +118,26 @@ class Box extends Widget implements Renderable
     {
         $this->tools[] =
             '<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
+
+        return $this;
+    }
+
+    /**
+     *  Set box body scrollable.
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function scrollable($options = [], $nodeSelector = '')
+    {
+        $this->id = uniqid('box-slim-scroll-');
+        $scrollOptions = json_encode($options);
+        $nodeSelector = $nodeSelector ?: '.box-body';
+
+        $this->script = <<<SCRIPT
+$("#{$this->id} {$nodeSelector}").slimScroll({$scrollOptions});
+SCRIPT;
 
         return $this;
     }
@@ -145,8 +197,10 @@ class Box extends Widget implements Renderable
         return [
             'title'      => $this->title,
             'content'    => $this->content,
+            'footer'     => $this->footer,
             'tools'      => $this->tools,
             'attributes' => $this->formatAttributes(),
+            'script'     => $this->script,
         ];
     }
 

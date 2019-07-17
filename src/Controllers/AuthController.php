@@ -7,13 +7,17 @@ use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    /**
+     * @var string
+     */
+    protected $loginView = 'admin::login';
+
     /**
      * Show the login page.
      *
@@ -25,7 +29,7 @@ class AuthController extends Controller
             return redirect($this->redirectPath());
         }
 
-        return view('admin::login');
+        return view($this->loginView);
     }
 
     /**
@@ -37,24 +41,32 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
+        $this->loginValidator($request->all())->validate();
+
         $credentials = $request->only([$this->username(), 'password']);
+        $remember = $request->get('remember', false);
 
-        /** @var \Illuminate\Validation\Validator $validator */
-        $validator = Validator::make($credentials, [
-            $this->username()   => 'required',
-            'password'          => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withInput()->withErrors($validator);
-        }
-
-        if ($this->guard()->attempt($credentials)) {
+        if ($this->guard()->attempt($credentials, $remember)) {
             return $this->sendLoginResponse($request);
         }
 
         return back()->withInput()->withErrors([
             $this->username() => $this->getFailedLoginMessage(),
+        ]);
+    }
+
+    /**
+     * Get a validator for an incoming login request.
+     *
+     * @param array $data
+     *
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function loginValidator(array $data)
+    {
+        return Validator::make($data, [
+            $this->username()   => 'required',
+            'password'          => 'required',
         ]);
     }
 
@@ -89,7 +101,7 @@ class AuthController extends Controller
         );
 
         return $content
-            ->header(trans('admin.user_setting'))
+            ->title(trans('admin.user_setting'))
             ->body($form->edit(Admin::user()->id));
     }
 
@@ -199,6 +211,6 @@ class AuthController extends Controller
      */
     protected function guard()
     {
-        return Auth::guard('admin');
+        return Admin::guard();
     }
 }

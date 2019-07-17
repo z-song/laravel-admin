@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
@@ -38,14 +39,14 @@ class TestCase extends BaseTestCase
 
         $this->app['config']->set('database.default', 'mysql');
         $this->app['config']->set('database.connections.mysql.host', env('MYSQL_HOST', 'localhost'));
-        $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
+        $this->app['config']->set('database.connections.mysql.database', 'laravel_admin_test');
         $this->app['config']->set('database.connections.mysql.username', 'root');
         $this->app['config']->set('database.connections.mysql.password', '');
         $this->app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
         $this->app['config']->set('admin', $adminConfig);
 
-        foreach (array_dot(array_get($adminConfig, 'auth'), 'auth.') as $key => $value) {
+        foreach (Arr::dot(Arr::get($adminConfig, 'auth'), 'auth.') as $key => $value) {
             $this->app['config']->set($key, $value);
         }
 

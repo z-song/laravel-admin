@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
 
 class Editable extends AbstractDisplayer
 {
@@ -28,6 +29,11 @@ class Editable extends AbstractDisplayer
     ];
 
     /**
+     * @var array
+     */
+    protected $attributes = [];
+
+    /**
      * Add options for editable.
      *
      * @param array $options
@@ -35,6 +41,16 @@ class Editable extends AbstractDisplayer
     public function addOptions($options = [])
     {
         $this->options = array_merge($this->options, $options);
+    }
+
+    /**
+     * Add attributes for editable.
+     *
+     * @param array $attributes
+     */
+    public function addAttributes($attributes = [])
+    {
+        $this->attributes = array_merge($this->attributes, $attributes);
     }
 
     /**
@@ -54,24 +70,28 @@ class Editable extends AbstractDisplayer
     /**
      * Select type editable.
      *
-     * @param array $options
+     * @param array|\Closure $options
      */
     public function select($options = [])
     {
+        $useClosure = false;
+
         if ($options instanceof \Closure) {
+            $useClosure = true;
             $options = $options->call($this, $this->row);
         }
 
         $source = [];
 
-        foreach ($options as $key => $value) {
-            $source[] = [
-                'value' => $key,
-                'text'  => $value,
-            ];
+        foreach ($options as $value => $text) {
+            $source[] = compact('value', 'text');
         }
 
-        $this->addOptions(['source' => $source]);
+        if ($useClosure) {
+            $this->addAttributes(['data-source' => json_encode($source)]);
+        } else {
+            $this->addOptions(compact('source'));
+        }
     }
 
     /**
@@ -115,6 +135,14 @@ class Editable extends AbstractDisplayer
     }
 
     /**
+     * Time type editable.
+     */
+    public function time()
+    {
+        $this->combodate('HH:mm:ss');
+    }
+
+    /**
      * Combodate type editable.
      *
      * @param string $format
@@ -135,7 +163,7 @@ class Editable extends AbstractDisplayer
 
     protected function buildEditableOptions(array $arguments = [])
     {
-        $this->type = array_get($arguments, 0, 'text');
+        $this->type = Arr::get($arguments, 0, 'text');
 
         call_user_func_array([$this, $this->type], array_slice($arguments, 1));
     }
@@ -152,6 +180,8 @@ class Editable extends AbstractDisplayer
 
         Admin::script("$('.$class').editable($options);");
 
+        $this->value = htmlentities($this->value);
+
         $attributes = [
             'href'       => '#',
             'class'      => "$class",
@@ -160,6 +190,10 @@ class Editable extends AbstractDisplayer
             'data-url'   => "{$this->grid->resource()}/{$this->getKey()}",
             'data-value' => "{$this->value}",
         ];
+
+        if (!empty($this->attributes)) {
+            $attributes = array_merge($attributes, $this->attributes);
+        }
 
         $attributes = collect($attributes)->map(function ($attribute, $name) {
             return "$name='$attribute'";

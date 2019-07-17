@@ -86,10 +86,12 @@ class Select extends Presenter
             $configs = substr($configs, 1, strlen($configs) - 2);
 
             $this->script = <<<SCRIPT
-$(".{$this->getElementClass()}").select2({
-  placeholder: $placeholder,
-  $configs
-});
+(function ($){
+    $(".{$this->getElementClass()}").select2({
+      placeholder: $placeholder,
+      $configs
+    });
+})(jQuery);
 
 SCRIPT;
         }
@@ -125,7 +127,7 @@ SCRIPT;
 
             if (is_array($value)) {
                 if (Arr::isAssoc($value)) {
-                    $resources[] = array_get($value, $idField);
+                    $resources[] = Arr::get($value, $idField);
                 } else {
                     $resources = array_column($value, $idField);
                 }
@@ -151,7 +153,8 @@ SCRIPT;
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters),
+            'url'  => $url,
+            'data' => $parameters,
         ];
         $configs = array_merge([
             'allowClear'         => true,
@@ -166,13 +169,18 @@ SCRIPT;
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options), JSON_UNESCAPED_UNICODE);
 
+        $values = (array) $this->filter->getValue();
+        $values = array_filter($values);
+        $values = json_encode($values);
+
         $this->script = <<<EOT
 
 $.ajax($ajaxOptions).done(function(data) {
   $(".{$this->getElementClass()}").select2({
     data: data,
     $configs
-  });
+  }).val($values).trigger("change");
+  
 });
 
 EOT;
@@ -271,7 +279,7 @@ EOT;
 $(document).off('change', ".{$this->getClass($column)}");
 $(document).on('change', ".{$this->getClass($column)}", function () {
     var target = $(this).closest('form').find(".{$this->getClass($target)}");
-    $.get("$resourceUrl?q="+this.value, function (data) {
+    $.get("$resourceUrl",{q : this.value}, function (data) {
         target.find("option").remove();
         $.each(data, function (i, item) {
             $(target).append($('<option>', {
@@ -280,7 +288,7 @@ $(document).on('change', ".{$this->getClass($column)}", function () {
             }));
         });
         
-        $(target).trigger('change');
+        $(target).val(null).trigger('change');
     });
 });
 EOT;

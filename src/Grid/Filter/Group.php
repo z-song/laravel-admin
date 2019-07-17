@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid\Filter;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class Group extends AbstractFilter
@@ -261,7 +262,7 @@ class Group extends AbstractFilter
      */
     public function condition($inputs)
     {
-        $value = array_get($inputs, $this->column);
+        $value = Arr::get($inputs, $this->column);
 
         if (!isset($value)) {
             return;
@@ -269,7 +270,7 @@ class Group extends AbstractFilter
 
         $this->value = $value;
 
-        $group = array_get($inputs, "{$this->id}_group");
+        $group = Arr::get($inputs, "{$this->id}_group");
 
         call_user_func($this->builder, $this);
 
@@ -285,8 +286,6 @@ class Group extends AbstractFilter
     {
         $script = <<<SCRIPT
 $(".{$this->name} li a").click(function(){
-
-console.log($(this).text());
     $(".{$this->name}-label").text($(this).text());
     $(".{$this->name}-operation").val($(this).data('index'));
 });
