@@ -1147,7 +1147,7 @@ class Field implements Renderable
      *
      * @return array
      */
-    protected function getElementClass()
+    public function getElementClass()
     {
         if (!$this->elementClass) {
             $name = $this->elementName ?: $this->formatName($this->column);
@@ -1212,9 +1212,7 @@ class Field implements Renderable
     public function addElementClass($class)
     {
         if (is_array($class) || is_string($class)) {
-            $this->elementClass = array_merge($this->elementClass, (array) $class);
-
-            $this->elementClass = array_unique($this->elementClass);
+            $this->elementClass = array_unique(array_merge($this->elementClass, (array) $class));
         }
 
         return $this;

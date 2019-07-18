@@ -31,6 +31,7 @@ use Illuminate\Http\Request;
  * @method Field\Date           date($column, $label = '')
  * @method Field\Datetime       datetime($column, $label = '')
  * @method Field\Time           time($column, $label = '')
+ * @method Field\Hidden         hidden($column, $label = '')
  */
 abstract class Action implements Renderable
 {

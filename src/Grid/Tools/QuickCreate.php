@@ -204,6 +204,10 @@ class QuickCreate implements Renderable
      */
     protected function addField(Field $field)
     {
+        $elementClass = array_merge(['quick-create'], $field->getElementClass());
+
+        $field->addElementClass($elementClass);
+
         $field->setView($this->resolveView(get_class($field)));
 
         $this->fields->push($field);

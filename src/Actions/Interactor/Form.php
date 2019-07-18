@@ -270,6 +270,21 @@ class Form extends Interactor
     }
 
     /**
+     * @param string $column
+     * @param string $label
+     *
+     * @return Field\Hidden
+     */
+    public function hidden($column, $label = '')
+    {
+        $field = new Field\Hidden($column, $this->formatLabel($label));
+
+        $this->addField($field);
+
+        return $field;
+    }
+
+    /**
      * @param string $content
      * @param string $selector
      *
@@ -292,6 +307,10 @@ class Form extends Interactor
      */
     protected function addField(Field $field)
     {
+        $elementClass = array_merge(['action'], $field->getElementClass());
+
+        $field->addElementClass($elementClass);
+
         $field->setView($this->resolveView(get_class($field)));
 
         array_push($this->fields, $field);
@@ -386,7 +405,7 @@ class Form extends Interactor
     /**
      * @return string
      */
-    protected function getModalId()
+    public function getModalId()
     {
         if (!$this->modalId) {
 
