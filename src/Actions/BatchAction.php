@@ -57,15 +57,20 @@ SCRIPT;
     {
         $this->addScript();
 
-        $content = $this->html();
+        $modalId = '';
 
-        if ($content && $this->interactor instanceof Interactor\Form) {
-            return $this->interactor->addElementAttr($content, $this->selector);
+        if ($this->interactor instanceof Interactor\Form) {
+            $modalId = $this->interactor->getModalId();
+
+            if ($content = $this->html()) {
+                return $this->interactor->addElementAttr($content, $this->selector);
+            }
         }
 
         return sprintf(
-            "<a href='javascript:void(0);' class='%s'>%s</a>",
+            "<a href='javascript:void(0);' class='%s' %s>%s</a>",
             $this->getElementClass(),
+            $modalId ? "modal='{$modalId}'" : '',
             $this->name()
         );
     }
