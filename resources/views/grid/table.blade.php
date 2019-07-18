@@ -48,7 +48,7 @@
                 @foreach($grid->rows() as $row)
                 <tr {!! $row->getRowAttributes() !!}>
                     @foreach($grid->visibleColumnNames() as $name)
-                    <td {!! $row->getColumnAttributes($name) !!} class="column-{!! $name !!}">
+                    <td {!! $row->getColumnAttributes($name) !!}>
                         {!! $row->column($name) !!}
                     </td>
                     @endforeach

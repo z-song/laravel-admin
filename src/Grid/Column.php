@@ -123,6 +123,11 @@ class Column
     protected static $htmlAttributes = [];
 
     /**
+     * @var array
+     */
+    protected static $rowAttributes = [];
+
+    /**
      * @var Model
      */
     protected static $model;
@@ -213,8 +218,17 @@ class Column
      *
      * @return $this
      */
-    public function setAttributes($attributes = [])
+    public function setAttributes($attributes = [], $key = null)
     {
+        if ($key) {
+            static::$rowAttributes[$this->name][$key] = array_merge(
+                Arr::get(static::$rowAttributes, "{$this->name}.{$key}", []),
+                $attributes
+            );
+
+            return $this;
+        }
+
         static::$htmlAttributes[$this->name] = array_merge(
             Arr::get(static::$htmlAttributes, $this->name, []),
             $attributes
@@ -230,9 +244,17 @@ class Column
      *
      * @return mixed
      */
-    public static function getAttributes($name)
+    public static function getAttributes($name, $key = null)
     {
-        return Arr::get(static::$htmlAttributes, $name, []);
+        $rowAttributes = [];
+
+        if ($key && Arr::has(static::$rowAttributes, "{$name}.{$key}")) {
+            $rowAttributes = Arr::get(static::$rowAttributes, "{$name}.{$key}", []);
+        }
+
+        $columnAttributes = Arr::get(static::$htmlAttributes, $name, []);
+
+        return array_merge($rowAttributes, $columnAttributes);
     }
 
     /**

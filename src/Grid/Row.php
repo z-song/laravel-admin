@@ -32,16 +32,21 @@ class Row
     protected $attributes = [];
 
     /**
+     * @var string
+     */
+    protected $keyName;
+
+    /**
      * Constructor.
      *
      * @param $number
      * @param $data
      */
-    public function __construct($number, $data)
+    public function __construct($number, $data, $keyName)
     {
-        $this->number = $number;
-
-        $this->data = $data;
+        $this->data    = $data;
+        $this->number  = $number;
+        $this->keyName = $keyName;
     }
 
     /**
@@ -51,7 +56,7 @@ class Row
      */
     public function getKey()
     {
-        return $this->model->getKey();
+        return Arr::get($this->data, $this->keyName);
     }
 
     /**
@@ -73,7 +78,7 @@ class Row
      */
     public function getColumnAttributes($column)
     {
-        if ($attributes = Column::getAttributes($column)) {
+        if ($attributes = Column::getAttributes($column, $this->getKey())) {
             return $this->formatHtmlAttribute($attributes);
         }
 
