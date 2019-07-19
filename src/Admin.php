@@ -374,20 +374,22 @@ class Admin
     {
         $this->fireBootingCallbacks();
 
-        Form::registerBuiltinFields();
-
-        Grid::registerColumnDisplayer();
-
-        Grid\Filter::registerFilters();
-
         require config('admin.bootstrap', admin_path('bootstrap.php'));
 
+        $this->addAdminAssets();
+
+        $this->fireBootedCallbacks();
+    }
+
+    /**
+     * Add JS & CSS assets to pages.
+     */
+    protected function addAdminAssets()
+    {
         $assets = Form::collectFieldAssets();
 
         self::css($assets['css']);
         self::js($assets['js']);
-
-        $this->fireBootedCallbacks();
     }
 
     /**

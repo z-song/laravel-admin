@@ -922,41 +922,6 @@ class Grid
     }
 
     /**
-     * Register column displayers.
-     *
-     * @return void.
-     */
-    public static function registerColumnDisplayer()
-    {
-        $map = [
-            'editable'    => Displayers\Editable::class,
-            'switch'      => Displayers\SwitchDisplay::class,
-            'switchGroup' => Displayers\SwitchGroup::class,
-            'select'      => Displayers\Select::class,
-            'image'       => Displayers\Image::class,
-            'label'       => Displayers\Label::class,
-            'button'      => Displayers\Button::class,
-            'link'        => Displayers\Link::class,
-            'badge'       => Displayers\Badge::class,
-            'progressBar' => Displayers\ProgressBar::class,
-            'radio'       => Displayers\Radio::class,
-            'checkbox'    => Displayers\Checkbox::class,
-            'orderable'   => Displayers\Orderable::class,
-            'table'       => Displayers\Table::class,
-            'expand'      => Displayers\Expand::class,
-            'modal'       => Displayers\Modal::class,
-            'carousel'    => Displayers\Carousel::class,
-            'downloadable'=> Displayers\Downloadable::class,
-            'copyable'    => Displayers\Copyable::class,
-            'qrcode'      => Displayers\QRCode::class,
-        ];
-
-        foreach ($map as $abstract => $class) {
-            Column::extend($abstract, $class);
-        }
-    }
-
-    /**
      * Add variables to grid view.
      *
      * @param array $variables
