@@ -297,7 +297,7 @@ abstract class AbstractFilter
      */
     public function date($options = [])
     {
-        return $this->datetime($options+['format' => 'YYYY-MM-DD']);
+        return $this->datetime($options + ['format' => 'YYYY-MM-DD']);
     }
 
     /**

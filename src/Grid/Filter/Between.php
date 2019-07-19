@@ -105,7 +105,8 @@ class Between extends AbstractFilter
      */
     protected function setupDatetime($options = [])
     {
-        $endDay=$options['endDay']??false;unset($options['endDay']);
+        $endDay = $options['endDay'] ?? false;
+        unset($options['endDay']);
 
         $options['format'] = Arr::get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
         $options['locale'] = Arr::get($options, 'locale', config('app.locale'));
@@ -113,8 +114,8 @@ class Between extends AbstractFilter
         $startOptions = json_encode($options);
         $endOptions = json_encode($options + ['useCurrent' => false]);
 
-        if($endDay){
-            $options['format']='YYYY-MM-DD 23:59:59';
+        if ($endDay) {
+            $options['format'] = 'YYYY-MM-DD 23:59:59';
             $endOptions = json_encode($options + ['useCurrent' => false]);
         }
 
