@@ -24,7 +24,7 @@ use Illuminate\Support\Str;
  * @method $this button($style = null)
  * @method $this link($href = '', $target = '_blank')
  * @method $this badge($style = 'red')
- * @method $this progressBar($style = 'primary', $size = 'sm', $max = 100)
+ * @method $this progress($style = 'primary', $size = 'sm', $max = 100)
  * @method $this radio($options = [])
  * @method $this checkbox($options = [])
  * @method $this orderable($column, $label = '')
@@ -121,6 +121,7 @@ class Column
         'link'        => Displayers\Link::class,
         'badge'       => Displayers\Badge::class,
         'progressBar' => Displayers\ProgressBar::class,
+        'progress'    => Displayers\ProgressBar::class,
         'radio'       => Displayers\Radio::class,
         'checkbox'    => Displayers\Checkbox::class,
         'orderable'   => Displayers\Orderable::class,
