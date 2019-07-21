@@ -678,6 +678,20 @@ class Column
     }
 
     /**
+     * Returns a string formatted according to the given format string.
+     *
+     * @param string $format
+     *
+     * @return $this
+     */
+    public function date($format)
+    {
+        return $this->display(function ($value) use ($format) {
+            return date($format, strtotime($value));
+        });
+    }
+
+    /**
      * If has display callbacks.
      *
      * @return bool
