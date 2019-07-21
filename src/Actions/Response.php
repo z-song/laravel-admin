@@ -85,7 +85,7 @@ class Response
      *
      * @return $this
      */
-    public function success(?string $message)
+    public function success(string $message = '')
     {
         return $this->show('success', $message);
     }
@@ -95,7 +95,7 @@ class Response
      *
      * @return $this
      */
-    public function info(?string $message)
+    public function info(string $message = '')
     {
         return $this->show('info', $message);
     }
@@ -105,7 +105,7 @@ class Response
      *
      * @return $this
      */
-    public function warning(?string $message)
+    public function warning(string $message = '')
     {
         return $this->show('warning', $message);
     }
@@ -115,7 +115,7 @@ class Response
      *
      * @return $this
      */
-    public function error(?string $message)
+    public function error(string $message = '')
     {
         return $this->show('error', $message);
     }
