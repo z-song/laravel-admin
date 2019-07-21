@@ -25,16 +25,21 @@ class DropdownActions extends Actions
      */
     protected $defaultClass = [Edit::class, Show::class, Delete::class];
 
-    protected function script()
+    /**
+     * Add JS script into pages.
+     *
+     * @return void.
+     */
+    protected function addScript()
     {
         $script = <<<'SCRIPT'
 (function ($) {
     $('.table-responsive').on('show.bs.dropdown', function () {
-         $('.table-responsive').css( "overflow", "inherit" );
+         $('.table-responsive').css("overflow", "inherit" );
     });
     
     $('.table-responsive').on('hide.bs.dropdown', function () {
-         $('.table-responsive').css( "overflow", "auto" );
+         $('.table-responsive').css("overflow", "auto");
     })
 })(jQuery);
 SCRIPT;
@@ -56,6 +61,9 @@ SCRIPT;
         return $this;
     }
 
+    /**
+     * Prepend default `edit` `view` `delete` actions.
+     */
     protected function prependDefaultActions()
     {
         foreach ($this->defaultClass as $class) {
@@ -81,6 +89,8 @@ SCRIPT;
     /**
      * Disable view action.
      *
+     * @param bool $disable
+     *
      * @return $this
      */
     public function disableView(bool $disable = true)
@@ -96,6 +106,8 @@ SCRIPT;
 
     /**
      * Disable delete.
+     *
+     * @param bool $disable
      *
      * @return $this.
      */
@@ -113,7 +125,9 @@ SCRIPT;
     /**
      * Disable edit.
      *
-     * @return $this.
+     * @param bool $disable
+     *
+     * @return $this
      */
     public function disableEdit(bool $disable = true)
     {
@@ -133,7 +147,7 @@ SCRIPT;
      */
     public function display($callback = null)
     {
-        $this->script();
+        $this->addScript();
 
         if ($callback instanceof \Closure) {
             $callback->call($this, $this);

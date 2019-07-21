@@ -151,7 +151,7 @@ class Grid
      *
      * @var string
      */
-    protected $actionsClass = Displayers\Actions::class;
+    protected $actionsClass;
 
     /**
      * Options for grid.
@@ -518,8 +518,36 @@ class Grid
             $this->actionsCallback = $actions;
         }
 
-        if (is_string($actions) && is_subclass_of($actions, Displayers\Actions::class)) {
-            $this->actionsClass = $actions;
+        return $this;
+    }
+
+    /**
+     * Get action display class.
+     *
+     * @return \Illuminate\Config\Repository|mixed|string
+     */
+    public function getActionClass()
+    {
+        if ($this->actionsClass) {
+            return $this->actionsClass;
+        }
+
+        if ($class = config('admin.grid_action_class')) {
+            return $class;
+        }
+
+        return Displayers\Actions::class;
+    }
+
+    /**
+     * @param string $actionClass
+     *
+     * @return $this
+     */
+    public function setActionClass(string $actionClass)
+    {
+        if (is_subclass_of($actionClass, Displayers\Actions::class)) {
+            $this->actionsClass = $actionClass;
         }
 
         return $this;
@@ -575,7 +603,7 @@ class Grid
         }
 
         $this->addColumn(Column::ACTION_COLUMN_NAME, trans('admin.action'))
-            ->displayUsing($this->actionsClass, [$this->actionsCallback]);
+            ->displayUsing($this->getActionClass(), [$this->actionsCallback]);
     }
 
     /**
