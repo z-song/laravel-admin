@@ -44,8 +44,8 @@ class Row
      */
     public function __construct($number, $data, $keyName)
     {
-        $this->data    = $data;
-        $this->number  = $number;
+        $this->data = $data;
+        $this->number = $number;
         $this->keyName = $keyName;
     }
 
