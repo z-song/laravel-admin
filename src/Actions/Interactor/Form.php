@@ -408,7 +408,6 @@ class Form extends Interactor
     public function getModalId()
     {
         if (!$this->modalId) {
-
             if ($this->action instanceof RowAction) {
                 $this->modalId = uniqid('row-action-modal-');
             } else {

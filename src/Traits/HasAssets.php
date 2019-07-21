@@ -195,7 +195,6 @@ trait HasAssets
     public static function script($script = '', $deferred = false)
     {
         if (!empty($script)) {
-
             if ($deferred) {
                 return self::$deferredScript = array_merge(self::$deferredScript, (array) $script);
             }

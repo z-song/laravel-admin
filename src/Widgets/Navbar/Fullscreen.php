@@ -6,7 +6,7 @@ use Encore\Admin\Admin;
 use Illuminate\Contracts\Support\Renderable;
 
 /**
- * Class FullScreen
+ * Class FullScreen.
  *
  * @see  https://javascript.ruanyifeng.com/htmlapi/fullscreen.html
  */
