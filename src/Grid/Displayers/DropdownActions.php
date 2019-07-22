@@ -96,9 +96,9 @@ SCRIPT;
     public function disableView(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->default, Show::class);
-        } elseif (!in_array(Show::class, $this->default)) {
-            array_push($this->default, Show::class);
+            array_delete($this->defaultClass, Show::class);
+        } elseif (!in_array(Show::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Show::class);
         }
 
         return $this;
@@ -114,9 +114,9 @@ SCRIPT;
     public function disableDelete(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->default, Delete::class);
-        } elseif (!in_array(Delete::class, $this->default)) {
-            array_push($this->default, Delete::class);
+            array_delete($this->defaultClass, Delete::class);
+        } elseif (!in_array(Delete::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Delete::class);
         }
 
         return $this;
@@ -132,9 +132,9 @@ SCRIPT;
     public function disableEdit(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->default, Edit::class);
-        } elseif (!in_array(Edit::class, $this->default)) {
-            array_push($this->default, Edit::class);
+            array_delete($this->defaultClass, Edit::class);
+        } elseif (!in_array(Edit::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Edit::class);
         }
 
         return $this;
