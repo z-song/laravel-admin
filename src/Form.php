@@ -463,7 +463,7 @@ class Form implements Renderable
      */
     protected function responseValidationError(MessageBag $message)
     {
-        if (\request()->ajax()) {
+        if (\request()->ajax() && !\request()->pjax()) {
             return response()->json([
                 'status'     => false,
                 'validation' => $message,
