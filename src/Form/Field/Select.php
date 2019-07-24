@@ -123,7 +123,7 @@ class Select extends Field
         $script = <<<EOT
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
-    var target = $(this).closest('.fields-group').find(".$class");
+    var target = $(this).closest('.fields-group, .modal-body').find(".$class");
     $.get("$sourceUrl",{q : this.value}, function (data) {
         target.find("option").remove();
         $(target).select2({
