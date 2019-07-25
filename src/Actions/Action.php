@@ -104,7 +104,7 @@ abstract class Action implements Renderable
         }
 
         if ($hasForm && $hasDialog) {
-            throw new \Exception('不能同时定义form和dialog方法');
+            throw new \Exception('Can only define one of the methods in `form` and `dialog`');
         }
     }
 
