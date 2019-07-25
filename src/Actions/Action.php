@@ -141,7 +141,7 @@ abstract class Action implements Renderable
     public static function makeSelector($class, $prefix)
     {
         if (!isset(static::$selectors[$class])) {
-            static::$selectors[$class] = uniqid($prefix).rand(1000, 9999);
+            static::$selectors[$class] = uniqid($prefix).mt_rand(1000, 9999);
         }
 
         return static::$selectors[$class];
