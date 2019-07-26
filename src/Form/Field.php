@@ -528,8 +528,8 @@ class Field implements Renderable
             return;
         }
 
-        if ($this instanceof Form\Field\MultipleFile
-            || $this instanceof Form\Field\File) {
+        // Only text field has `required` attribute.
+        if (!$this instanceof Form\Field\Text) {
             return;
         }
 
