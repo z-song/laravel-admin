@@ -223,7 +223,7 @@ abstract class Action implements Renderable
      */
     public function getHandleRoute()
     {
-        return route('admin.handle-action');
+        return admin_url('_handle_action_');
     }
 
     /**
