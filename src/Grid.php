@@ -724,7 +724,7 @@ class Grid
     }
 
     /**
-     * Get current resource uri.
+     * Get current resource url.
      *
      * @param string $path
      *
@@ -742,7 +742,7 @@ class Grid
             return $this->resourcePath;
         }
 
-        return app('request')->getPathInfo();
+        return url()->current();
     }
 
     /**
