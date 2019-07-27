@@ -104,7 +104,7 @@ abstract class Action implements Renderable
         }
 
         if ($hasForm && $hasDialog) {
-            throw new \Exception('不能同时定义form和dialog方法');
+            throw new \Exception('Can only define one of the methods in `form` and `dialog`');
         }
     }
 
@@ -141,7 +141,7 @@ abstract class Action implements Renderable
     public static function makeSelector($class, $prefix)
     {
         if (!isset(static::$selectors[$class])) {
-            static::$selectors[$class] = uniqid($prefix);
+            static::$selectors[$class] = uniqid($prefix).mt_rand(1000, 9999);
         }
 
         return static::$selectors[$class];
@@ -223,7 +223,7 @@ abstract class Action implements Renderable
      */
     public function getHandleRoute()
     {
-        return route('admin.handle-action');
+        return admin_url('_handle_action_');
     }
 
     /**
