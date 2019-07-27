@@ -178,6 +178,26 @@ class Editable extends AbstractDisplayer
 
         $options = json_encode($this->options);
 
+        $options = substr($options, 0, -1) . <<<STR
+,
+"success":function(response, newValue){
+    if (response.status){
+        toastr.success(response.message);
+    }else{
+        toastr.error(response.message);
+        setTimeout(function(){location.reload();},3000)
+    }
+},
+"error":function(XMLHttpRequest, textStatus, errorThrown){
+    if (XMLHttpRequest.hasOwnProperty("responseJSON") && XMLHttpRequest.responseJSON.hasOwnProperty("message")){
+        toastr.error(XMLHttpRequest.responseJSON.message);
+    }else{
+        toastr.error(XMLHttpRequest.responseText);
+    }
+}
+}
+STR;
+
         Admin::script("$('.$class').editable($options);");
 
         $this->value = htmlentities($this->value);
