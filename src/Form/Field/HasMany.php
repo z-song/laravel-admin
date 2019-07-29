@@ -140,7 +140,6 @@ class HasMany extends Field
 
         $newRules = [];
         $newInput = [];
-
         foreach ($rules as $column => $rule) {
             foreach (array_keys($input[$this->column]) as $key) {
                 $newRules["{$this->column}.$key.$column"] = $rule;
@@ -283,16 +282,15 @@ class HasMany extends Field
      *
      * @return NestedForm
      */
-    protected function buildNestedForm($column, \Closure $builder, $model = null)
+    protected function buildNestedForm($column, \Closure $builder,$key = null,$model = null)
     {
-        $form = new Form\NestedForm($column, $model);
+        $form = new Form\NestedForm($column, $model,$key);
 
         $form->setForm($this->form);
 
         call_user_func($builder, $form);
-
+        
         $form->hidden($this->getKeyName());
-
         $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->addElementClass(NestedForm::REMOVE_FLAG_CLASS);
 
         return $form;
@@ -383,23 +381,18 @@ class HasMany extends Field
                 if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
                     continue;
                 }
-
                 $model = $relation->getRelated()->replicate()->forceFill($data);
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $model)
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder,$key, $model)
                     ->fill($data);
             }
         } else {
-            if (empty($this->value)) {
-                return [];
-            }
-
             foreach ($this->value as $data) {
                 $key = Arr::get($data, $relation->getRelated()->getKeyName());
 
                 $model = $relation->getRelated()->replicate()->forceFill($data);
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $model)
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder,null, $model)
                     ->fill($data);
             }
         }

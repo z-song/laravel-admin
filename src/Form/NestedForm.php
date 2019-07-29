@@ -103,11 +103,13 @@ class NestedForm
      * @param string $relation
      * @param Model  $model
      */
-    public function __construct($relation, $model = null)
+    public function __construct($relation, $model = null,$key = null)
     {
         $this->relationName = $relation;
 
         $this->model = $model;
+
+        $this->key = $key;
 
         $this->fields = new Collection();
     }
@@ -140,6 +142,7 @@ class NestedForm
         if (isset($key)) {
             return $key;
         }
+
 
         return 'new_'.static::DEFAULT_KEY_NAME;
     }
@@ -394,11 +397,8 @@ class NestedForm
     protected function formatField(Field $field)
     {
         $column = $field->column();
-
         $elementName = $elementClass = $errorKey = [];
-
         $key = $this->getKey();
-
         if (is_array($column)) {
             foreach ($column as $k => $name) {
                 $errorKey[$k] = sprintf('%s.%s.%s', $this->relationName, $key, $name);
@@ -437,7 +437,6 @@ class NestedForm
             $field = $this->formatField($field);
 
             $this->pushField($field);
-
             return $field;
         }
 
