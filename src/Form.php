@@ -1354,6 +1354,26 @@ class Form implements Renderable
     }
 
     /**
+     * Indicates if current form page is creating.
+     *
+     * @return bool
+     */
+    public function isCreating()
+    {
+        return Str::endsWith(\request()->route()->getName(), '.create');
+    }
+
+    /**
+     * Indicates if current form page is editing.
+     *
+     * @return bool
+     */
+    public function isEditing()
+    {
+        return Str::endsWith(\request()->route()->getName(), '.edit');
+    }
+
+    /**
      * Disable form submit.
      *
      * @param bool $disable
