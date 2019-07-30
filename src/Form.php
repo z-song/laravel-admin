@@ -1470,7 +1470,7 @@ class Form implements Renderable
      */
     public function resource($slice = -2)
     {
-        $segments = explode('/', trim(app('request')->getUri(), '/'));
+        $segments = explode('/', trim(\request()->getUri(), '/'));
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
