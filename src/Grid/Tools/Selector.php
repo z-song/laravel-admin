@@ -28,10 +28,10 @@ class Selector implements Renderable
     }
 
     /**
-     * @param string $column
-     * @param string|array $label
+     * @param string         $column
+     * @param string|array   $label
      * @param array|\Closure $options
-     * @param null|\Closure $query
+     * @param null|\Closure  $query
      *
      * @return $this
      */
@@ -41,9 +41,9 @@ class Selector implements Renderable
     }
 
     /**
-     * @param string $column
-     * @param string $label
-     * @param array $options
+     * @param string        $column
+     * @param string        $label
+     * @param array         $options
      * @param null|\Closure $query
      *
      * @return $this
@@ -56,8 +56,8 @@ class Selector implements Renderable
     /**
      * @param string $column
      * @param string $label
-     * @param array $options
-     * @param null $query
+     * @param array  $options
+     * @param null   $query
      * @param string $type
      *
      * @return $this
@@ -65,13 +65,12 @@ class Selector implements Renderable
     protected function addSelector($column, $label, $options = [], $query = null, $type = 'many')
     {
         if (is_array($label)) {
-
             if ($options instanceof \Closure) {
                 $query = $options;
             }
 
             $options = $label;
-            $label   = __(Str::title($column));
+            $label = __(Str::title($column));
         }
 
         $this->selectors[$column] = compact(
@@ -119,14 +118,14 @@ class Selector implements Renderable
 
     /**
      * @param string $column
-     * @param mixed $value
-     * @param bool $add
+     * @param mixed  $value
+     * @param bool   $add
      *
      * @return string
      */
     public static function url($column, $value = null, $add = false)
     {
-        $query    = request()->query();
+        $query = request()->query();
         $selected = static::parseSelected();
 
         $options = Arr::get($selected, $column, []);

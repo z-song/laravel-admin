@@ -184,7 +184,7 @@ class Editable extends AbstractDisplayer
 
         $options = json_encode($this->options);
 
-        $options = substr($options, 0, -1) . <<<STR
+        $options = substr($options, 0, -1).<<<'STR'
     ,
     "success":function(response, newValue){
         if (response.status){
