@@ -43,8 +43,10 @@ class UserGridTest extends TestCase
             ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][start]']")
             ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][end]']");
 
-        $this->seeInElement('a[href="/admin/users?_export_=all"]', 'All')
-            ->seeInElement('a[href="/admin/users/create"]', 'New');
+        $urlAll=url('/admin/users?_export_=all');
+        $urlNew=url("/admin/users/create");
+        $this->seeInElement("a[href=\"{$urlAll}\"]", 'All')
+            ->seeInElement("a[href=\"{$urlNew}\"]", 'New');
     }
 
     protected function seedsTable($count = 100)
