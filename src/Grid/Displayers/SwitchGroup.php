@@ -8,8 +8,8 @@ use Illuminate\Support\Arr;
 class SwitchGroup extends AbstractDisplayer
 {
     protected $states = [
-        'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
-        'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
+        'on'  => ['value' => 'on', 'text' => 'ON', 'color' => 'primary'],
+        'off' => ['value' => 'off', 'text' => 'OFF', 'color' => 'default'],
     ];
 
     protected function updateStates($states)
