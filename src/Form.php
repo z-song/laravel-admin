@@ -1354,6 +1354,26 @@ class Form implements Renderable
     }
 
     /**
+     * Indicates if current form page is creating.
+     *
+     * @return bool
+     */
+    public function isCreating()
+    {
+        return Str::endsWith(\request()->route()->getName(), '.create');
+    }
+
+    /**
+     * Indicates if current form page is editing.
+     *
+     * @return bool
+     */
+    public function isEditing()
+    {
+        return Str::endsWith(\request()->route()->getName(), '.edit');
+    }
+
+    /**
      * Disable form submit.
      *
      * @param bool $disable
@@ -1450,7 +1470,7 @@ class Form implements Renderable
      */
     public function resource($slice = -2)
     {
-        $segments = explode('/', trim(app('request')->getUri(), '/'));
+        $segments = explode('/', trim(\request()->getUri(), '/'));
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);

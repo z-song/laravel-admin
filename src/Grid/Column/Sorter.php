@@ -51,7 +51,7 @@ class Sorter implements Renderable
      */
     protected function isSorted()
     {
-        $this->sort = app('request')->get($this->sortName);
+        $this->sort = \request()->get($this->sortName);
 
         if (empty($this->sort)) {
             return false;
@@ -80,7 +80,7 @@ class Sorter implements Renderable
             $sort['cast'] = $this->cast;
         }
 
-        $query = app('request')->all();
+        $query = \request()->all();
         $query = array_merge($query, [$this->sortName => $sort]);
 
         $url = url()->current().'?'.http_build_query($query);

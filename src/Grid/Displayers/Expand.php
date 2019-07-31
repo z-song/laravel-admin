@@ -6,18 +6,18 @@ use Encore\Admin\Admin;
 
 class Expand extends AbstractDisplayer
 {
-    public function display($callback = null)
+    public function display(\Closure $callback = null, $isExpand = false)
     {
         $callback = $callback->bindTo($this->row);
 
         $html = call_user_func_array($callback, [$this->row]);
 
-        $this->setupScript();
+        $this->addScript($isExpand);
 
         $key = $this->column->getName().'-'.$this->getKey();
 
         return <<<EOT
-<span class="grid-expand" data-inserted="0" data-key="{$key}" data-toggle="collapse" data-target="#grid-collapse-{$key}">
+<span class="{$this->getElementClass()}" data-inserted="0" data-key="{$key}" data-toggle="collapse" data-target="#grid-collapse-{$key}">
    <a href="javascript:void(0)"><i class="fa fa-angle-double-down"></i>&nbsp;&nbsp;{$this->value}</a>
 </span>
 <template class="grid-expand-{$key}">
@@ -28,11 +28,11 @@ class Expand extends AbstractDisplayer
 EOT;
     }
 
-    protected function setupScript()
+    protected function addScript($isExpand)
     {
-        $script = <<<'EOT'
+        $script = <<<EOT
 
-$('.grid-expand').on('click', function () {
+$('.{$this->getElementClass()}').on('click', function () {
     
     if ($(this).data('inserted') == '0') {
     
@@ -48,6 +48,19 @@ $('.grid-expand').on('click', function () {
     $("i", this).toggleClass("fa-angle-double-down fa-angle-double-up");
 });
 EOT;
+
+        if($isExpand) {
+            $script .= "$('.{$this->getElementClass()}').trigger('click');";
+        }
+
         Admin::script($script);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getElementClass()
+    {
+        return "grid-expand-{$this->grid->getGridRowName()}";
     }
 }
