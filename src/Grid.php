@@ -31,6 +31,7 @@ class Grid
         Concerns\HasHotKeys,
         Concerns\HasQuickCreate,
         Concerns\HasActions,
+        Concerns\HasSelector,
         Concerns\CanHidesColumns,
         Concerns\CanFixColumns,
         Macroable {
@@ -531,6 +532,32 @@ class Grid
     }
 
     /**
+     * @return array|Collection|mixed
+     */
+    protected function applyQuery()
+    {
+        $this->applyQuickSearch();
+
+        $this->applyColumnFilter();
+
+        $this->applySelectorQuery();
+
+        return $this->applyFilter(false);
+    }
+
+    /**
+     * Add row selector columns and action columns before and after the grid.
+     *
+     * @return void
+     */
+    protected function addDefaultColumns()
+    {
+        $this->prependRowSelectorColumn();
+
+        $this->appendActionsColumn();
+    }
+
+    /**
      * Build the grid.
      *
      * @return void
@@ -541,14 +568,9 @@ class Grid
             return;
         }
 
-        $this->applyQuickSearch();
+        $collection = $this->applyQuery();
 
-        $this->applyColumnFilter();
-
-        $collection = $this->applyFilter(false);
-
-        $this->prependRowSelectorColumn();
-        $this->appendActionsColumn();
+        $this->addDefaultColumns();
 
         Column::setOriginalGridModels($collection);
 
