@@ -98,7 +98,7 @@ return [
         'filter_clear'       => 'Tümünü göster',
         'filter_placeholder' => 'Filtrele',
     ],
-    'menu_titles'           => [],
+    'menu_titles'            => [],
     'grid_items_selected'    => '{n} öğe seçildi',
     'menu_titles'            => [],
     'prev'                   => 'Önceki',

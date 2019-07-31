@@ -49,7 +49,7 @@ $('.{$this->getElementClass()}').on('click', function () {
 });
 EOT;
 
-        if($isExpand) {
+        if ($isExpand) {
             $script .= "$('.{$this->getElementClass()}').trigger('click');";
         }
 

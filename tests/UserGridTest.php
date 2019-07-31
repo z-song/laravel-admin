@@ -43,8 +43,8 @@ class UserGridTest extends TestCase
             ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][start]']")
             ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][end]']");
 
-        $urlAll=url('/admin/users?_export_=all');
-        $urlNew=url("/admin/users/create");
+        $urlAll = url('/admin/users?_export_=all');
+        $urlNew = url('/admin/users/create');
         $this->seeInElement("a[href=\"{$urlAll}\"]", 'All')
             ->seeInElement("a[href=\"{$urlNew}\"]", 'New');
     }
