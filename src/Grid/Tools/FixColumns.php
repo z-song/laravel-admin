@@ -96,7 +96,10 @@ class FixColumns
      */
     protected function addScript()
     {
+        $allName = $this->grid->getSelectAllName();
         $rowName = $this->grid->getGridRowName();
+
+        $selected = trans('admin.grid_items_selected');
 
         $script = <<<SCRIPT
 
@@ -150,6 +153,25 @@ class FixColumns
             $('.table-fixed-left tbody tr').eq(index).css('background-color', '');
             $('.table-fixed-right tbody tr').eq(index).css('background-color', '');
         }
+    }).on('ifClicked', function () {
+    
+        var id = $(this).data('id');
+        
+        if (this.checked) {
+            $.admin.grid.unselect(id);
+        } else {
+            $.admin.grid.select(id);
+        }
+        
+        var selected = $.admin.grid.selected().length;
+        
+        if (selected > 0) {
+            $('.{$allName}-btn').show();
+        } else {
+            $('.{$allName}-btn').hide();
+        }
+        
+        $('.{$allName}-btn .selected').html("{$selected}".replace('{n}', selected));
     });
 })();
 
