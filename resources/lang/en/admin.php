@@ -104,4 +104,6 @@ return [
     'prev'                   => 'Prev',
     'next'                   => 'Next',
     'quick_create'           => 'Quick create',
+    'copy'                   => 'Copy',
+    'copied'                 => 'Copied!'
 ];

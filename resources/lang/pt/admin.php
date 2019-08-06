@@ -99,4 +99,6 @@ return [
         'filter_placeholder' => 'Filtrar',
     ],
     'menu_titles'           => [],
+    'copy'                  => 'Copiar',
+    'copied'                => 'Copiado!'
 ];
