@@ -874,7 +874,7 @@ class Form implements Renderable
                     $parent->save();
 
                     // When in creating, associate two models
-                    $foreignKeyMethod = (app()->version() < '5.8.0') ? 'getForeignKey' : 'getForeignKeyName';
+                    $foreignKeyMethod = version_compare(app()->version(), '5.8.0', '<') ? 'getForeignKey' : 'getForeignKeyName';
                     if (!$this->model->{$relation->{$foreignKeyMethod}()}) {
                         $this->model->{$relation->{$foreignKeyMethod}()} = $parent->getKey();
 
