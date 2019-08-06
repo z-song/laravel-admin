@@ -525,7 +525,7 @@ class Model
      */
     protected function findQueryByMethod($method)
     {
-        return $this->queries->first(function ($query) use ($method) {
+        return $this->queries->last(function ($query) use ($method) {
             return $query['method'] == $method;
         });
     }
