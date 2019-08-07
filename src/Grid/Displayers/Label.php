@@ -16,7 +16,6 @@ class Label extends AbstractDisplayer
         return collect((array) $this->value)->map(function ($item) use ($style) {
             if (is_array($style)) {
                 if(is_string($this->getColumn()->getOriginal()) || is_int($this->getColumn()->getOriginal())) {
-                    var_dump($this->getColumn()->getOriginal());
                     $style = Arr::get($style, $this->getColumn()->getOriginal(), 'success');
                 } else {
                     $style = Arr::get($style, $item, 'success');
