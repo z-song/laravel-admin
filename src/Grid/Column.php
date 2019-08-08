@@ -692,6 +692,22 @@ class Column
     }
 
     /**
+     * Display column as boolean , `✓` for true, and `✗` for false.
+     *
+     * @param array $map
+     *
+     * @return $this
+     */
+    public function bool(array $map = [])
+    {
+        return $this->display(function ($value) use ($map) {
+            $bool = empty($map) ? boolval($value) : $map[$value];
+
+            return $bool ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
+        });
+    }
+
+    /**
      * If has display callbacks.
      *
      * @return bool
