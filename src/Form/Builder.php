@@ -598,6 +598,7 @@ SCRIPT;
             'form'   => $this,
             'tabObj' => $tabObj,
             'width'  => $this->width,
+            'layout' => $this->form->getLayout(),
         ];
 
         return view($this->view, $data)->render();

@@ -7,6 +7,7 @@ use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\HasHooks;
+use Encore\Admin\Form\Layout\Layout;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
 use Illuminate\Contracts\Support\Renderable;
@@ -117,6 +118,11 @@ class Form implements Renderable
      * @var array
      */
     protected $inputs = [];
+
+    /**
+     * @var Layout
+     */
+    protected $layout;
 
     /**
      * Available fields.
@@ -230,6 +236,8 @@ class Form implements Renderable
 
         $this->builder = new Builder($this);
 
+        $this->initLayout();
+
         if ($callback instanceof Closure) {
             $callback($this);
         }
@@ -273,6 +281,7 @@ class Form implements Renderable
         $field->setForm($this);
 
         $this->builder->fields()->push($field);
+        $this->layout->addField($field);
 
         return $this;
     }
@@ -1601,6 +1610,31 @@ class Form implements Renderable
     }
 
     /**
+     * Add a new layout column.
+     *
+     * @param int      $width
+     * @param \Closure $closure
+     *
+     * @return $this
+     */
+    public function column($width, \Closure $closure)
+    {
+        $width = $width < 1 ? round(12 * $width) : $width;
+
+        $this->layout->column($width, $closure);
+
+        return $this;
+    }
+
+    /**
+     * Initialize filter layout.
+     */
+    protected function initLayout()
+    {
+        $this->layout = new Layout($this);
+    }
+
+    /**
      * Getter.
      *
      * @param string $name
@@ -1648,5 +1682,13 @@ class Form implements Renderable
         admin_error('Error', "Field type [$method] does not exist.");
 
         return new Field\Nullable();
+    }
+
+    /**
+     * @return Layout
+     */
+    public function getLayout(): Layout
+    {
+        return $this->layout;
     }
 }
