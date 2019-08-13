@@ -70,6 +70,4 @@ class Column
     {
         return $this->width;
     }
-
-
 }
