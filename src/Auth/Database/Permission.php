@@ -4,6 +4,7 @@ namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -114,9 +115,8 @@ class Permission extends Model
             $path = trim($match['path'], '/');
         }
 
-        if (!$request->is($path)) {
-            return false;
-        }
+
+        if (!Str::is($path, Route::getCurrentRoute()->uri)) return false;
 
         $method = collect($match['method'])->filter()->map(function ($method) {
             return strtoupper($method);
