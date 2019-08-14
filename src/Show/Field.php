@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Show;
 
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Carousel;
 use Illuminate\Contracts\Support\Arrayable;
@@ -209,10 +210,14 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function image($server = '', $width = 200, $height = 200)
+    public function image($server = '', $width = 200, $height = 200, $is_zoom = false)
     {
-        return $this->unescape()->as(function ($images) use ($server, $width, $height) {
-            return collect($images)->map(function ($path) use ($server, $width, $height) {
+        if ($is_zoom){
+            Admin::css('/vendor/laravel-admin/image-zoom/zoom.css');
+            Admin::js('/vendor/laravel-admin/image-zoom/zoom.js');
+        }
+        return $this->unescape()->as(function ($images) use ($server, $width, $height, $is_zoom) {
+            return collect($images)->map(function ($path) use ($server, $width, $height, $is_zoom) {
                 if (empty($path)) {
                     return '';
                 }
@@ -230,8 +235,8 @@ class Field implements Renderable
                         return '';
                     }
                 }
-
-                return "<img src='$src' style='max-width:{$width}px;max-height:{$height}px' class='img' />";
+                $zoom_attr = $is_zoom ? 'data-action="zoom"' : '';
+                return "<img src='$src' {$zoom_attr} style='max-width:{$width}px;max-height:{$height}px' class='img' />";
             })->implode('&nbsp;');
         });
     }
