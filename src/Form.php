@@ -280,8 +280,8 @@ class Form implements Renderable
     {
         $field->setForm($this);
 
-        $width=$this->builder->getWidth();
-        $field->setWidth($width["field"],$width['label']);
+        $width = $this->builder->getWidth();
+        $field->setWidth($width['field'], $width['label']);
 
         $this->builder->fields()->push($field);
         $this->layout->addField($field);
