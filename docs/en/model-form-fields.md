@@ -19,6 +19,11 @@ $form->text('title')->default('text...');
 $form->text('title')->help('help...');
 ```
 
+### Set fa-icon class
+```php
+$form->text('title')->icon('fa-copy');
+```
+
 ### Set attributes of field element
 ```php
 $form->text('title')->attribute(['data-title' => 'title...']);

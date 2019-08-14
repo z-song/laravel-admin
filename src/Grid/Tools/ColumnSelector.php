@@ -16,6 +16,14 @@ class ColumnSelector extends AbstractTool
     protected $grid;
 
     /**
+     * @var array
+     */
+    protected static $ignoredColumns = [
+        Grid\Column::SELECT_COLUMN_NAME,
+        Grid\Column::ACTION_COLUMN_NAME,
+    ];
+
+    /**
      * Create a new Export button instance.
      *
      * @param Grid $grid
@@ -32,26 +40,34 @@ class ColumnSelector extends AbstractTool
      */
     public function render()
     {
-        $show = array_filter(explode(',', request(static::SELECT_COLUMN_NAME)));
+        if (!$this->grid->showColumnSelector()) {
+            return '';
+        }
 
-        $columns = $this->getGridColumns();
+        $show = $this->grid->visibleColumnNames();
 
-        $this->setupScript($show, $columns);
-
-        $lists = $columns->map(function ($val, $key) use ($show) {
+        $lists = $this->getGridColumns()->map(function ($label, $key) use ($show) {
             if (empty($show)) {
                 $checked = 'checked';
             } else {
                 $checked = in_array($key, $show) ? 'checked' : '';
             }
 
-            return "<li><a href=\"#\" data-value=\"{$key}\" tabIndex=\"-1\"><input type=\"checkbox\" {$checked}/>&nbsp;&nbsp;&nbsp;{$val}</a></li>";
+            return <<<HTML
+<li class="checkbox icheck" style="margin: 0;">
+    <label style="width: 100%;padding: 3px;">
+        <input type="checkbox" class="column-select-item" value="{$key}" {$checked}/>&nbsp;&nbsp;&nbsp;{$label}
+    </label>
+</li>
+HTML;
         })->implode("\r\n");
 
         $btns = [
             'all'    => __('admin.all'),
             'submit' => __('admin.submit'),
         ];
+
+        $this->setupScript();
 
         return <<<EOT
 
@@ -61,12 +77,16 @@ class ColumnSelector extends AbstractTool
         &nbsp;
         <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu" role="menu">
-        {$lists}
+    <ul class="dropdown-menu" role="menu" style="padding: 10px;height: auto;max-height: 500px;overflow-x: hidden;">
+        <li>
+            <ul style='padding: 0;'>
+                {$lists}
+            </ul>
+        </li>
         <li class="divider"></li>
-        <li style="padding: 0 15px;">
-            <button class="btn btn-xs btn-instagram column-select-all">{$btns['all']}</button>
-            <button class="btn btn-xs btn-primary column-select-submit" style="float: right">{$btns['submit']}</button>
+        <li class="text-right">
+            <button class="btn btn-sm btn-default column-select-all">{$btns['all']}</button>&nbsp;&nbsp;
+            <button class="btn btn-sm btn-primary column-select-submit">{$btns['submit']}</button>
         </li>
     </ul>
 </div>
@@ -81,7 +101,7 @@ EOT;
         return $this->grid->columns()->map(function (Grid\Column $column) {
             $name = $column->getName();
 
-            if (in_array($name, ['__row_selector__', '__actions__'])) {
+            if ($this->isColumnIgnored($name)) {
                 return;
             }
 
@@ -90,66 +110,67 @@ EOT;
     }
 
     /**
-     * @param $show
-     * @param $columns
+     * Is column ignored in column selector.
+     *
+     * @param string $name
+     *
+     * @return bool
      */
-    protected function setupScript($show, $columns)
+    protected function isColumnIgnored($name)
     {
-        if (empty($show)) {
-            $show = $columns->keys()->toArray();
-        }
+        return in_array($name, static::$ignoredColumns);
+    }
 
-        $show = json_encode($show);
+    /**
+     * Ignore a column to display in column selector.
+     *
+     * @param string|array $name
+     */
+    public static function ignore($name)
+    {
+        static::$ignoredColumns = array_merge(static::$ignoredColumns, (array) $name);
+    }
+
+    /**
+     * Setup script.
+     */
+    protected function setupScript()
+    {
+        $defaults = json_encode($this->grid->getDefaultVisibleColumnNames());
 
         $script = <<<SCRIPT
 
-var selected_columns = {$show};
-
-$('.column-selector .dropdown-menu a').on('click', function(event) {
-
-   var \$target = $( event.currentTarget ),
-       val = \$target.attr('data-value'),
-       \$inp = \$target.find('input'),
-       idx;
-       
-   if ((idx = selected_columns.indexOf(val)) > -1) {
-      selected_columns.splice(idx, 1);
-      setTimeout(function() {\$inp.prop('checked', false)}, 0);
-   } else {
-      selected_columns.push(val);
-      setTimeout(function() {\$inp.prop('checked', true)}, 0);
-   }
-
-   $(event.target).blur();
-   
-   return false;
-});
-
 $('.column-select-submit').on('click', function () {
-    if (selected_columns.length == 0) {
+    
+    var defaults = $defaults;
+    var selected = [];
+    
+    $('.column-select-item:checked').each(function () {
+        selected.push($(this).val());
+    });
+
+    if (selected.length == 0) {
         return;
     }
 
     var url = new URL(location);
     
-    // select all
-    if ($('.column-selector .dropdown-menu a input').length == selected_columns.length) {
+    if (selected.sort().toString() == defaults.sort().toString()) {
         url.searchParams.delete('_columns_');
     } else {
-        url.searchParams.set('_columns_', selected_columns.join());
+        url.searchParams.set('_columns_', selected.join());
     }
 
-    $.pjax({container:'#pjax-container', url: url.toString() });
+    $.pjax({container:'#pjax-container', url: url.toString()});
 });
 
 $('.column-select-all').on('click', function () {
-    selected_columns = [];
-    $('.column-selector .dropdown-menu a input').prop('checked', true);
-    $('.column-selector .dropdown-menu a').each(function (_, val) {
-        selected_columns.push($(val).data('value'));
-    });
-    
+    $('.column-select-item').iCheck('check');
     return false;
+});
+
+$('.column-select-item').iCheck({
+    checkboxClass:'icheckbox_minimal-blue'
 });
 
 SCRIPT;

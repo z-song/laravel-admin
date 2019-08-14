@@ -106,7 +106,7 @@ class Select extends Field
      *
      * @return $this
      */
-    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
+    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text', bool $allowClear = true)
     {
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
@@ -115,13 +115,20 @@ class Select extends Field
             $class = $field;
         }
 
+        $placeholder = json_encode([
+            'id'   => '',
+            'text' => trans('admin.choose'),
+        ]);
+
         $script = <<<EOT
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
-    $.get("$sourceUrl?q="+this.value, function (data) {
+    $.get("$sourceUrl",{q : this.value}, function (data) {
         target.find("option").remove();
         $(target).select2({
+            placeholder: $placeholder,
+            allowClear: $allowClear,
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
@@ -140,17 +147,23 @@ EOT;
     /**
      * Load options for other selects on change.
      *
-     * @param string $fields
-     * @param string $sourceUrls
+     * @param array  $fields
+     * @param array  $sourceUrls
      * @param string $idField
      * @param string $textField
      *
      * @return $this
      */
-    public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text')
+    public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text', bool $allowClear = true)
     {
         $fieldsStr = implode('.', $fields);
         $urlsStr = implode('^', $sourceUrls);
+
+        $placeholder = json_encode([
+            'id'   => '',
+            'text' => trans('admin.choose'),
+        ]);
+
         $script = <<<EOT
 var fields = '$fieldsStr'.split('.');
 var urls = '$urlsStr'.split('^');
@@ -159,6 +172,8 @@ var refreshOptions = function(url, target) {
     $.get(url).then(function(data) {
         target.find("option").remove();
         $(target).select2({
+            placeholder: $placeholder,
+            allowClear: $allowClear,        
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
@@ -176,10 +191,6 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
     fields.forEach(function(field, index){
         var target = $(_this).closest('.fields-group').find('.' + fields[index]);
         promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
-    });
-
-    $.when(promises).then(function() {
-        console.log('开始更新其它select的选择options');
     });
 });
 EOT;
@@ -216,7 +227,7 @@ EOT;
 
             if (is_array($value)) {
                 if (Arr::isAssoc($value)) {
-                    $resources[] = array_get($value, $idField);
+                    $resources[] = Arr::get($value, $idField);
                 } else {
                     $resources = array_column($value, $idField);
                 }

@@ -25,6 +25,10 @@ class Permission
      */
     public function handle(Request $request, \Closure $next, ...$args)
     {
+        if (config('admin.check_route_permission') === false) {
+            return $next($request);
+        }
+
         if (!Admin::user() || !empty($args) || $this->shouldPassThrough($request)) {
             return $next($request);
         }
@@ -80,21 +84,19 @@ class Permission
      */
     protected function shouldPassThrough($request)
     {
-        $excepts = [
-            admin_base_path('auth/login'),
-            admin_base_path('auth/logout'),
-        ];
+        $excepts = config('admin.auth.excepts', [
+            'auth/login',
+            'auth/logout',
+        ]);
 
-        foreach ($excepts as $except) {
-            if ($except !== '/') {
-                $except = trim($except, '/');
-            }
+        return collect($excepts)
+            ->map('admin_base_path')
+            ->contains(function ($except) use ($request) {
+                if ($except !== '/') {
+                    $except = trim($except, '/');
+                }
 
-            if ($request->is($except)) {
-                return true;
-            }
-        }
-
-        return false;
+                return $request->is($except);
+            });
     }
 }

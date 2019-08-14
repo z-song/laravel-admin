@@ -12,6 +12,13 @@ class Row implements Buildable, Renderable
     protected $columns = [];
 
     /**
+     * row classes.
+     *
+     * @var array
+     */
+    protected $class = [];
+
+    /**
      * Row constructor.
      *
      * @param string $content
@@ -36,6 +43,22 @@ class Row implements Buildable, Renderable
         $column = new Column($content, $width);
 
         $this->addColumn($column);
+    }
+
+    /**
+     * Add class in row.
+     *
+     * @param array|string $class
+     */
+    public function class($class)
+    {
+        if (is_string($class)) {
+            $class = [$class];
+        }
+
+        $this->class = $class;
+
+        return $this;
     }
 
     /**
@@ -65,7 +88,9 @@ class Row implements Buildable, Renderable
      */
     protected function startRow()
     {
-        echo '<div class="row">';
+        $class = $this->class;
+        $class[] = 'row';
+        echo '<div class="'.implode(' ', $class).'">';
     }
 
     /**

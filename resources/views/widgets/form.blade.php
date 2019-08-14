@@ -14,9 +14,9 @@
     <!-- /.box-body -->
     @if(count($buttons) > 0)
     <div class="box-footer">
-        <div class="col-md-2"></div>
+        <div class="col-md-{{$width['label']}}"></div>
 
-        <div class="col-md-8">
+        <div class="col-md-{{$width['field']}}">
             @if(in_array('reset', $buttons))
             <div class="btn-group pull-left">
                 <button type="reset" class="btn btn-warning pull-right">{{ trans('admin.reset') }}</button>

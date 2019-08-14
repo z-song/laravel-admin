@@ -65,6 +65,11 @@ $(document).on('pjax:complete', function (xhr) {
         }
     }
     NProgress.done();
+    $.admin.grid.selects = {};
+});
+
+$(document).click(function () {
+    $('.sidebar-form .dropdown-menu').hide();
 });
 
 $(function () {
@@ -78,10 +83,95 @@ $(function () {
     menu.parents('li.treeview').addClass('active');
 
     $('[data-toggle="popover"]').popover();
+
+    // Sidebar form autocomplete
+    $('.sidebar-form .autocomplete').on('keyup focus', function () {
+        var $menu = $('.sidebar-form .dropdown-menu');
+        var text = $(this).val();
+
+        if (text === '') {
+            $menu.hide();
+            return;
+        }
+
+        var regex = new RegExp(text, 'i');
+        var matched = false;
+
+        $menu.find('li').each(function () {
+            if (!regex.test($(this).find('a').text())) {
+                $(this).hide();
+            } else {
+                $(this).show();
+                matched = true;
+            }
+        });
+
+        if (matched) {
+            $menu.show();
+        }
+    }).click(function(event){
+        event.stopPropagation();
+    });
+
+    $('.sidebar-form .dropdown-menu li a').click(function (){
+        $('.sidebar-form .autocomplete').val($(this).text());
+    });
+});
+
+$(window).scroll(function() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        $('#totop').fadeIn(500);
+    } else {
+        $('#totop').fadeOut(500);
+    }
+});
+
+$('#totop').on('click', function (e) {
+    e.preventDefault();
+    $('html,body').animate({scrollTop: 0}, 500);
 });
 
 (function ($) {
+
+    var Grid = function () {
+        this.selects = {};
+    };
+
+    Grid.prototype.select = function (id) {
+        this.selects[id] = id;
+    };
+
+    Grid.prototype.unselect = function (id) {
+        delete this.selects[id];
+    };
+
+    Grid.prototype.selected = function () {
+        var rows = [];
+        $.each(this.selects, function (key, val) {
+            rows.push(key);
+        });
+
+        return rows;
+    };
+
     $.fn.admin = LA;
     $.admin = LA;
+    $.admin.swal = swal;
+    $.admin.toastr = toastr;
+    $.admin.grid = new Grid();
+
+    $.admin.reload = function () {
+        $.pjax.reload('#pjax-container');
+        $.admin.grid = new Grid();
+    };
+
+    $.admin.redirect = function (url) {
+        $.pjax({container:'#pjax-container', url: url });
+        $.admin.grid = new Grid();
+    };
+
+    $.admin.getToken = function () {
+        return $('meta[name="csrf-token"]').attr('content');
+    };
 
 })(jQuery);

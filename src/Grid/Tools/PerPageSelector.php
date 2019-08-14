@@ -38,7 +38,7 @@ class PerPageSelector extends AbstractTool
     {
         $this->perPageName = $this->grid->model()->getPerPageName();
 
-        $this->perPage = (int) app('request')->input(
+        $this->perPage = (int) \request()->input(
             $this->perPageName,
             $this->grid->perPage
         );
@@ -69,23 +69,25 @@ class PerPageSelector extends AbstractTool
 
         $options = $this->getOptions()->map(function ($option) {
             $selected = ($option == $this->perPage) ? 'selected' : '';
-            $url = app('request')->fullUrlWithQuery([$this->perPageName => $option]);
+            $url = \request()->fullUrlWithQuery([$this->perPageName => $option]);
 
             return "<option value=\"$url\" $selected>$option</option>";
         })->implode("\r\n");
 
-        $show = trans('admin.show');
-        $entries = trans('admin.entries');
+        $trans = [
+            'show'    => trans('admin.show'),
+            'entries' => trans('admin.entries'),
+        ];
 
         return <<<EOT
 
 <label class="control-label pull-right" style="margin-right: 10px; font-weight: 100;">
 
-        <small>$show</small>&nbsp;
+        <small>{$trans['show']}</small>&nbsp;
         <select class="input-sm {$this->grid->getPerPageName()}" name="per-page">
             $options
         </select>
-        &nbsp;<small>$entries</small>
+        &nbsp;<small>{$trans['entries']}</small>
     </label>
 
 EOT;

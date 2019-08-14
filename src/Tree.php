@@ -85,7 +85,7 @@ class Tree implements Renderable
     {
         $this->model = $model;
 
-        $this->path = app('request')->getPathInfo();
+        $this->path = \request()->getPathInfo();
         $this->elementId .= uniqid();
 
         $this->setupTools();
@@ -219,12 +219,14 @@ class Tree implements Renderable
      */
     protected function script()
     {
-        $deleteConfirm = trans('admin.delete_confirm');
-        $saveSucceeded = trans('admin.save_succeeded');
-        $refreshSucceeded = trans('admin.refresh_succeeded');
-        $deleteSucceeded = trans('admin.delete_succeeded');
-        $confirm = trans('admin.confirm');
-        $cancel = trans('admin.cancel');
+        $trans = [
+            'delete_confirm'    => trans('admin.delete_confirm'),
+            'save_succeeded'    => trans('admin.save_succeeded'),
+            'refresh_succeeded' => trans('admin.refresh_succeeded'),
+            'delete_succeeded'  => trans('admin.delete_succeeded'),
+            'confirm'           => trans('admin.confirm'),
+            'cancel'            => trans('admin.cancel'),
+        ];
 
         $nestableOptions = json_encode($this->nestableOptions);
 
@@ -237,13 +239,13 @@ class Tree implements Renderable
         $('.tree_branch_delete').click(function() {
             var id = $(this).data('id');
             swal({
-                title: "$deleteConfirm",
+                title: "{$trans['delete_confirm']}",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "$confirm",
+                confirmButtonText: "{$trans['confirm']}",
                 showLoaderOnConfirm: true,
-                cancelButtonText: "$cancel",
+                cancelButtonText: "{$trans['cancel']}",
                 preConfirm: function() {
                     return new Promise(function(resolve) {
                         $.ajax({
@@ -255,7 +257,7 @@ class Tree implements Renderable
                             },
                             success: function (data) {
                                 $.pjax.reload('#pjax-container');
-                                toastr.success('{$deleteSucceeded}');
+                                toastr.success('{$trans['delete_succeeded']}');
                                 resolve(data);
                             }
                         });
@@ -282,13 +284,13 @@ class Tree implements Renderable
             },
             function(data){
                 $.pjax.reload('#pjax-container');
-                toastr.success('{$saveSucceeded}');
+                toastr.success('{$trans['save_succeeded']}');
             });
         });
 
         $('.{$this->elementId}-refresh').click(function () {
             $.pjax.reload('#pjax-container');
-            toastr.success('{$refreshSucceeded}');
+            toastr.success('{$trans['refresh_succeeded']}');
         });
 
         $('.{$this->elementId}-tree-tools').on('click', function(e){

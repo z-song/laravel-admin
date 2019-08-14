@@ -3,6 +3,7 @@
 namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
 
 class Dashboard
 {
@@ -24,7 +25,7 @@ class Dashboard
             ['name' => 'Laravel version',   'value' => app()->version()],
             ['name' => 'CGI',               'value' => php_sapi_name()],
             ['name' => 'Uname',             'value' => php_uname()],
-            ['name' => 'Server',            'value' => array_get($_SERVER, 'SERVER_SOFTWARE')],
+            ['name' => 'Server',            'value' => Arr::get($_SERVER, 'SERVER_SOFTWARE')],
 
             ['name' => 'Cache driver',      'value' => config('cache.default')],
             ['name' => 'Session driver',    'value' => config('session.driver')],
@@ -108,6 +109,8 @@ class Dashboard
         $json = file_get_contents(base_path('composer.json'));
 
         $dependencies = json_decode($json, true)['require'];
+
+        Admin::script("$('.dependencies').slimscroll({height:'510px',size:'3px'});");
 
         return view('admin::dashboard.dependencies', compact('dependencies'));
     }

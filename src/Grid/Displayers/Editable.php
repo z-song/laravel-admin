@@ -3,6 +3,7 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
 
 class Editable extends AbstractDisplayer
 {
@@ -134,6 +135,14 @@ class Editable extends AbstractDisplayer
     }
 
     /**
+     * Time type editable.
+     */
+    public function time()
+    {
+        $this->combodate('HH:mm:ss');
+    }
+
+    /**
      * Combodate type editable.
      *
      * @param string $format
@@ -152,13 +161,19 @@ class Editable extends AbstractDisplayer
         ]);
     }
 
+    /**
+     * @param array $arguments
+     */
     protected function buildEditableOptions(array $arguments = [])
     {
-        $this->type = array_get($arguments, 0, 'text');
+        $this->type = Arr::get($arguments, 0, 'text');
 
         call_user_func_array([$this, $this->type], array_slice($arguments, 1));
     }
 
+    /**
+     * @return string
+     */
     public function display()
     {
         $this->options['name'] = $column = $this->column->getName();
@@ -168,6 +183,18 @@ class Editable extends AbstractDisplayer
         $this->buildEditableOptions(func_get_args());
 
         $options = json_encode($this->options);
+
+        $options = substr($options, 0, -1).<<<'STR'
+    ,
+    "success":function(response, newValue){
+        if (response.status){
+            $.admin.toastr.success(response.message, '', {positionClass:"toast-top-center"});
+        } else {
+            $.admin.toastr.error(response.message, '', {positionClass:"toast-top-center"});
+        }
+    }
+}
+STR;
 
         Admin::script("$('.$class').editable($options);");
 

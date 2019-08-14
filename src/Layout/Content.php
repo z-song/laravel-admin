@@ -4,15 +4,16 @@ namespace Encore\Admin\Layout;
 
 use Closure;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 
 class Content implements Renderable
 {
     /**
-     * Content header.
+     * Content title.
      *
      * @var string
      */
-    protected $header = ' ';
+    protected $title = ' ';
 
     /**
      * Content description.
@@ -46,7 +47,7 @@ class Content implements Renderable
     }
 
     /**
-     * Set header of content.
+     * Alias of method `title`.
      *
      * @param string $header
      *
@@ -54,7 +55,17 @@ class Content implements Renderable
      */
     public function header($header = '')
     {
-        $this->header = $header;
+        return $this->title($header);
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return $this
+     */
+    public function title($title)
+    {
+        $this->title = $title;
 
         return $this;
     }
@@ -101,7 +112,7 @@ class Content implements Renderable
     protected function validateBreadcrumb(array $breadcrumb)
     {
         foreach ($breadcrumb as $item) {
-            if (!is_array($item) || !array_has($item, 'text')) {
+            if (!is_array($item) || !Arr::has($item, 'text')) {
                 throw new  \Exception('Breadcrumb format error!');
             }
         }
@@ -139,6 +150,29 @@ class Content implements Renderable
         }
 
         return $this;
+    }
+
+    /**
+     * Render giving view as content body.
+     *
+     * @param string $view
+     * @param array  $data
+     *
+     * @return Content
+     */
+    public function view($view, $data)
+    {
+        return $this->body(view($view, $data));
+    }
+
+    /**
+     * @param $var
+     *
+     * @return Content
+     */
+    public function dump($var)
+    {
+        return $this->row(admin_dump(...func_get_args()));
     }
 
     /**
@@ -239,7 +273,7 @@ class Content implements Renderable
     public function render()
     {
         $items = [
-            'header'      => $this->header,
+            'header'      => $this->title,
             'description' => $this->description,
             'breadcrumb'  => $this->breadcrumb,
             'content'     => $this->build(),

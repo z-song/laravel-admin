@@ -40,7 +40,7 @@ class AuthTest extends TestCase
 
             ->see('Dependencies')
             ->see('php')
-            ->see('>=7.0.0')
+//            ->see('>=7.0.0')
             ->see('laravel/framework');
 
         $this

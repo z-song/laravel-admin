@@ -6,6 +6,8 @@ use Illuminate\Contracts\Support\Renderable;
 
 class Tab extends Widget implements Renderable
 {
+    use ContainsForms;
+
     const TYPE_CONTENT = 1;
     const TYPE_LINK = 2;
 

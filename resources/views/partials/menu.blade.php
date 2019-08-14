@@ -1,4 +1,4 @@
-@if(Admin::user()->visible($item['roles']) && (empty($item['permission']) ?: Admin::user()->can($item['permission'])))
+@if(Admin::user()->visible(\Illuminate\Support\Arr::get($item, 'roles', [])) && Admin::user()->can(\Illuminate\Support\Arr::get($item, 'permission')))
     @if(!isset($item['children']))
         <li>
             @if(url()->isValidUrl($item['uri']))
@@ -10,7 +10,7 @@
                 @if (Lang::has($titleTranslation = 'admin.menu_titles.' . trim(str_replace(' ', '_', strtolower($item['title'])))))
                     <span>{{ __($titleTranslation) }}</span>
                 @else
-                    <span>{{ $item['title'] }}</span>
+                    <span>{{ admin_trans($item['title']) }}</span>
                 @endif
             </a>
         </li>
@@ -21,7 +21,7 @@
                 @if (Lang::has($titleTranslation = 'admin.menu_titles.' . trim(str_replace(' ', '_', strtolower($item['title'])))))
                     <span>{{ __($titleTranslation) }}</span>
                 @else
-                    <span>{{ $item['title'] }}</span>
+                    <span>{{ admin_trans($item['title']) }}</span>
                 @endif
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
