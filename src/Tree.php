@@ -230,6 +230,8 @@ class Tree implements Renderable
 
         $nestableOptions = json_encode($this->nestableOptions);
 
+        $url = url($this->path);
+
         return <<<SCRIPT
 
         $('#{$this->elementId}').nestable($nestableOptions);
@@ -248,7 +250,7 @@ class Tree implements Renderable
                     return new Promise(function(resolve) {
                         $.ajax({
                             method: 'post',
-                            url: '{$this->path}/' + id,
+                            url: '{$url}/' + id,
                             data: {
                                 _method:'delete',
                                 _token:LA.token,
@@ -276,7 +278,7 @@ class Tree implements Renderable
         $('.{$this->elementId}-save').click(function () {
             var serialize = $('#{$this->elementId}').nestable('serialize');
 
-            $.post('{$this->path}', {
+            $.post('{$url}', {
                 _token: LA.token,
                 _order: JSON.stringify(serialize)
             },
