@@ -9,7 +9,11 @@
         @endforeach
 
         @if(!empty($custom))
-            <li class="divider"></li>
+
+            @if(!empty($default))
+                <li class="divider"></li>
+            @endif
+
             @foreach($custom as $action)
             <li>{!! $action->render() !!}</li>
             @endforeach

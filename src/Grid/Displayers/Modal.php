@@ -23,7 +23,7 @@ class Modal extends AbstractDisplayer
    <a href="javascript:void(0)"><i class="fa fa-clone"></i>&nbsp;&nbsp;{$this->value}</a>
 </span>
 
-<div class="modal fade" id="grid-modal-{$key}" tabindex="-1" role="dialog">
+<div class="modal" id="grid-modal-{$key}" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
