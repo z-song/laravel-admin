@@ -284,7 +284,7 @@ class Filter implements Renderable
      *
      * @param mixed $id
      */
-    protected function removeFilterByID($id)
+    public function removeFilterByID($id)
     {
         $this->filters = array_filter($this->filters, function (AbstractFilter $filter) use ($id) {
             return $filter->getId() != $id;
