@@ -52,9 +52,9 @@ class MinifyCommand extends Command
             return $this->clearMinifiedFiles();
         }
 
-        $this->loadExcepts();
-
         AdminFacade::bootstrap();
+
+        $this->loadExcepts();
 
         $this->minifyCSS();
         $this->minifyJS();
@@ -73,11 +73,9 @@ class MinifyCommand extends Command
 
     protected function loadExcepts()
     {
-        $excepts = config('admin.minify_assets.excepts');
+        $excepts = config('admin.minify_assets.excepts', []);
 
-        if (is_array($excepts)) {
-            $this->excepts = array_filter($excepts);
-        }
+        $this->excepts = array_merge($excepts, Admin::$minifyIgnores);
     }
 
     protected function clearMinifiedFiles()
