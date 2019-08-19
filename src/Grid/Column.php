@@ -4,6 +4,7 @@ namespace Encore\Admin\Grid;
 
 use Carbon\Carbon;
 use Closure;
+use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\AbstractDisplayer;
 use Illuminate\Contracts\Support\Arrayable;
@@ -705,6 +706,31 @@ class Column
             $bool = empty($map) ? boolval($value) : Arr::get($map, $value, $default);
 
             return $bool ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
+        });
+    }
+
+    /**
+     * Display column using a grid row action.
+     *
+     * @param string $action
+     *
+     * @return Column
+     */
+    public function action($action)
+    {
+        if (!is_subclass_of($action, RowAction::class)) {
+            throw new \InvalidArgumentException("Action class [$action] must be sub-class of [Encore\Admin\Actions\GridAction]");
+        }
+
+        $grid = $this->grid;
+
+        return $this->display(function ($value, $column) use ($action, $grid) {
+            /** @var RowAction $action */
+            $action = new $action();
+
+            return $action->setGrid($grid)
+                ->setColumn($column)
+                ->setRow($this);
         });
     }
 
