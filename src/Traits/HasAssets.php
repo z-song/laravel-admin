@@ -205,8 +205,7 @@ trait HasAssets
 
     /**
      * @param string $assets
-     *
-     * @param bool $ignore
+     * @param bool   $ignore
      */
     public static function ignoreMinify($assets, $ignore = true)
     {

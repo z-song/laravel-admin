@@ -714,7 +714,7 @@ class Column
      *
      * @param string $action
      *
-     * @return Column
+     * @return $this
      */
     public function action($action)
     {
@@ -737,9 +737,10 @@ class Column
     /**
      * Add a `dot` before column text.
      *
-     * @param array $options
+     * @param array  $options
      * @param string $default
-     * @return Column
+     *
+     * @return $this
      */
     public function dot($options = [], $default = '')
     {
