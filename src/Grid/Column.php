@@ -36,8 +36,8 @@ use Illuminate\Support\Str;
  * @method $this downloadable($server = '')
  * @method $this copyable()
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
- * @method $this prefix($prefix)
- * @method $this suffix($suffix)
+ * @method $this prefix($prefix, $delimiter = '&nbsp;')
+ * @method $this suffix($suffix, $delimiter = '&nbsp;')
  */
 class Column
 {
@@ -732,6 +732,26 @@ class Column
                 ->setColumn($column)
                 ->setRow($this);
         });
+    }
+
+    /**
+     * Add a `dot` before column text.
+     *
+     * @param array $options
+     * @param string $default
+     * @return Column
+     */
+    public function dot($options = [], $default = '')
+    {
+        return $this->prefix(function ($_, $original) use ($options, $default) {
+            if (is_null($original)) {
+                $style = $default;
+            } else {
+                $style = Arr::get($options, $original);
+            }
+
+            return "<span class=\"label-{$style}\" style='width: 8px;height: 8px;padding: 0;border-radius: 50%;display: inline-block;'></span>";
+        }, '&nbsp;&nbsp;');
     }
 
     /**
