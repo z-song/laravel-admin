@@ -357,8 +357,10 @@ class Form implements Renderable
      */
     protected function getVariables()
     {
+        $data = $this->data();
+
         foreach ($this->fields as $field) {
-            $field->fill($this->data());
+            $field->fill($data);
         }
 
         return [
