@@ -724,11 +724,13 @@ class Column
 
         $grid = $this->grid;
 
-        return $this->display(function ($value, $column) use ($action, $grid) {
+        return $this->display(function ($_, $column) use ($action, $grid) {
             /** @var RowAction $action */
             $action = new $action();
 
-            return $action->setGrid($grid)
+            return $action
+                ->asColumn()
+                ->setGrid($grid)
                 ->setColumn($column)
                 ->setRow($this);
         });
