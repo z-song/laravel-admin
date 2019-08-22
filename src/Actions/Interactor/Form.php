@@ -432,6 +432,7 @@ class Form extends Interactor
 (function ($) {
     $('{$this->action->selector($this->action->selectorPrefix)}').off('{$this->action->event}').on('{$this->action->event}', function() {
         var data = $(this).data();
+        var target = $(this);
         var modalId = $(this).attr('modal');
         Object.assign(data, {$parameters});
         {$this->action->actionScript()}
@@ -485,7 +486,7 @@ SCRIPT;
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        resolve(data);
+                        resolve([data, target]);
                         if (data.status === true) {
                             $('#'+modalId).modal('hide');
                         }
