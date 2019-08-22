@@ -6,8 +6,6 @@ use Encore\Admin\Facades\Admin;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Trait Authorizable
- *
  * @mixin Action
  */
 trait Authorizable
