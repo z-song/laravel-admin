@@ -119,6 +119,11 @@ abstract class RowAction extends GridAction
         return $modelClass::findOrFail($key);
     }
 
+    public function display($value)
+    {
+
+    }
+
     /**
      * Render row action.
      *
@@ -138,7 +143,7 @@ abstract class RowAction extends GridAction
             "<a data-_key='%s' href='javascript:void(0);' class='%s' {$attributes}>%s</a>",
             $this->getKey(),
             $this->getElementClass(),
-            $this->asColumn ? $this->html() : $this->name()
+            $this->asColumn ? $this->display($this->row($this->column->getName())) : $this->name()
         );
     }
 }
