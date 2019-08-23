@@ -121,7 +121,6 @@ abstract class RowAction extends GridAction
 
     public function display($value)
     {
-
     }
 
     /**

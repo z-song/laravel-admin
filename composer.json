@@ -5,6 +5,7 @@
     "keywords": ["laravel", "admin", "grid", "form"],
     "homepage": "https://github.com/z-song/laravel-admin",
     "license": "MIT",
+    "version": "v1.7.6",
     "authors": [
         {
             "name": "zsong",
