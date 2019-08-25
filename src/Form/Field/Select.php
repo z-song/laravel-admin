@@ -61,7 +61,7 @@ class Select extends Field
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array) $options;
+            $this->options = (array)$options;
         }
 
         return $this;
@@ -116,7 +116,7 @@ class Select extends Field
         }
 
         $placeholder = json_encode([
-            'id'   => '',
+            'id' => '',
             'text' => trans('admin.choose'),
         ]);
 
@@ -126,7 +126,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     $.get("$sourceUrl",{q : this.value}, function (data) {
         target.find("option").remove();
-        $(target).select2({
+        target.select2({
             placeholder: $placeholder,
             allowClear: $allowClear,
             data: $.map(data, function (d) {
@@ -134,9 +134,14 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
                 d.text = d.$textField;
                 return d;
             })
-        }).trigger('change');
+        }).val(target.data('value').split(',')).trigger('change');
     });
 });
+$("{$this->getElementClassSelector()}").each(function(){
+    if ($(this).data('value')) {
+        $(this).trigger('change');
+    }
+})
 EOT;
 
         Admin::script($script);
@@ -147,8 +152,8 @@ EOT;
     /**
      * Load options for other selects on change.
      *
-     * @param array  $fields
-     * @param array  $sourceUrls
+     * @param array $fields
+     * @param array $sourceUrls
      * @param string $idField
      * @param string $textField
      *
@@ -160,18 +165,15 @@ EOT;
         $urlsStr = implode('^', $sourceUrls);
 
         $placeholder = json_encode([
-            'id'   => '',
+            'id' => '',
             'text' => trans('admin.choose'),
         ]);
 
         $script = <<<EOT
-var fields = '$fieldsStr'.split('.');
-var urls = '$urlsStr'.split('^');
-
-var refreshOptions = function(url, target) {
+var fields = '$fieldsStr'.split('.'), urls = '$urlsStr'.split('^'), refreshOptions = function(url, target) {
     $.get(url).then(function(data) {
         target.find("option").remove();
-        $(target).select2({
+        target.select2({
             placeholder: $placeholder,
             allowClear: $allowClear,        
             data: $.map(data, function (d) {
@@ -179,20 +181,22 @@ var refreshOptions = function(url, target) {
                 d.text = d.$textField;
                 return d;
             })
-        }).trigger('change');
+        }).val(target.data('value').split(',')).trigger('change');
     });
 };
-
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
-    var _this = this;
-    var promises = [];
-
+    var _this = this, promises = [];
     fields.forEach(function(field, index){
         var target = $(_this).closest('.fields-group').find('.' + fields[index]);
         promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
     });
 });
+$("{$this->getElementClassSelector()}").each(function(){
+    if ($(this).data('value')) {
+        $(this).trigger('change');
+    }
+})
 EOT;
 
         Admin::script($script);
@@ -245,21 +249,21 @@ EOT;
      * Load options from remote.
      *
      * @param string $url
-     * @param array  $parameters
-     * @param array  $options
+     * @param array $parameters
+     * @param array $options
      *
      * @return $this
      */
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters),
+            'url' => $url . '?' . http_build_query($parameters),
         ];
         $configs = array_merge([
-            'allowClear'         => true,
-            'placeholder'        => [
-                'id'        => '',
-                'text'      => trans('admin.choose'),
+            'allowClear' => true,
+            'placeholder' => [
+                'id' => '',
+                'text' => trans('admin.choose'),
             ],
         ], $this->config);
 
@@ -304,8 +308,8 @@ EOT;
     public function ajax($url, $idField = 'id', $textField = 'text')
     {
         $configs = array_merge([
-            'allowClear'         => true,
-            'placeholder'        => $this->label,
+            'allowClear' => true,
+            'placeholder' => $this->label,
             'minimumInputLength' => 1,
         ], $this->config);
 
@@ -358,7 +362,7 @@ EOT;
      * all configurations see https://select2.org/configuration/options-api
      *
      * @param string $key
-     * @param mixed  $val
+     * @param mixed $val
      *
      * @return $this
      */
@@ -403,9 +407,9 @@ EOT;
     public function render()
     {
         $configs = array_merge([
-            'allowClear'  => true,
+            'allowClear' => true,
             'placeholder' => [
-                'id'   => '',
+                'id' => '',
                 'text' => $this->label,
             ],
         ], $this->config);
@@ -428,10 +432,10 @@ EOT;
 
         $this->addVariables([
             'options' => $this->options,
-            'groups'  => $this->groups,
+            'groups' => $this->groups,
         ]);
 
-        $this->attribute('data-value', implode(',', (array) $this->value()));
+        $this->attribute('data-value', implode(',', (array)$this->value()));
 
         return parent::render();
     }
