@@ -1145,6 +1145,9 @@ class Form implements Renderable
 
         $data = $this->model->toArray();
 
+        // resolve CamelCase Model relation method name
+        $data = $this->solveCamelCaseModelRelationMethodNames($data, $relations);
+
         $this->builder->fields()->each(function (Field $field) use ($data) {
             if (!in_array($field->column(), $this->ignored)) {
                 $field->fill($data);
@@ -1693,5 +1696,37 @@ class Form implements Renderable
     public function getLayout(): Layout
     {
         return $this->layout;
+    }
+
+    /**
+     * @author Hamid Moladoust
+     * @todo If model method name be camelCase, laravel-admin One to one && One to many field can not get data.
+     *      because ->toArray() : Form.php (vendor/encore/laravel-admin/src/Form.php:1134) convert camelCase method name to under_sored, so not fill theme.
+     */
+    protected function solveCamelCaseModelRelationMethodNames($data, $relations)
+    {
+        $relationsUnderScored = array_map(function ($s) {
+            return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $s));
+        }, $relations);
+        $relationsDict = array_combine($relations, $relationsUnderScored);
+
+        function replaceKeys (array $input, array $relationsDict) {
+            $return = [];
+            foreach ($input as $key => $value) {
+                if (is_array($value)) {
+                    if (in_array($key, $relationsDict)) {
+                        if (false !== $pos = array_search($key, $relationsDict)) {
+                            $key = $pos;
+                        }
+                    }
+                    $value = replaceKeys($value, $relationsDict);
+                }
+                $return[$key] = $value;
+            }
+            return $return;
+        };
+        $data = replaceKeys($data, $relationsDict);
+        
+        return $data;
     }
 }
