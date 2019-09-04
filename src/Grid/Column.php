@@ -38,6 +38,7 @@ use Illuminate\Support\Str;
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
  * @method $this prefix($prefix, $delimiter = '&nbsp;')
  * @method $this suffix($suffix, $delimiter = '&nbsp;')
+ * @method $this secret($dotCount = 6)
  */
 class Column
 {
@@ -135,6 +136,7 @@ class Column
         'qrcode'      => Displayers\QRCode::class,
         'prefix'      => Displayers\Prefix::class,
         'suffix'      => Displayers\Suffix::class,
+        'secret'      => Displayers\Secret::class,
     ];
 
     /**
