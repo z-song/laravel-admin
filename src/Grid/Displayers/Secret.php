@@ -24,13 +24,12 @@ HTML;
 
     protected function addScript()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.secret-wrapper i').click(function () {
     $(this).toggleClass('fa-eye fa-eye-slash').parent().find('.secret-placeholder,.secret-content').toggle();
 });
 SCRIPT;
 
         Admin::script($script);
-
     }
 }
