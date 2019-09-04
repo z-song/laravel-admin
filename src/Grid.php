@@ -532,6 +532,16 @@ class Grid
     }
 
     /**
+     * Apply column search to grid query.
+     *
+     * @return void
+     */
+    protected function applyColumnSearch()
+    {
+        $this->columns->each->bindSearchQuery($this->model());
+    }
+
+    /**
      * @return array|Collection|mixed
      */
     protected function applyQuery()
@@ -539,6 +549,8 @@ class Grid
         $this->applyQuickSearch();
 
         $this->applyColumnFilter();
+
+        $this->applyColumnSearch();
 
         $this->applySelectorQuery();
 
