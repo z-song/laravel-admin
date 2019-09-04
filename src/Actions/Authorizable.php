@@ -17,11 +17,11 @@ trait Authorizable
      */
     public function passesAuthorization($model = null)
     {
-        if (!method_exists($this, 'authorize')) {
+        if (!method_exists($model, 'authorize')) {
             return true;
         }
 
-        return $this->authorize(Admin::user(), $model) === true;
+        return $model->authorize(Admin::user()) === true;
     }
 
     /**
