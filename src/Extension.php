@@ -2,7 +2,9 @@
 
 namespace Encore\Admin;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -61,9 +63,10 @@ abstract class Extension
      * @var array
      */
     protected $menuValidationRules = [
-        'title' => 'required',
-        'path'  => 'required',
-        'icon'  => 'required',
+        'title'    => 'required',
+        'path'     => 'required',
+        'icon'     => 'required',
+        'children' => 'nullable|array',
     ];
 
     /**
@@ -233,8 +236,11 @@ abstract class Extension
 
         if ($menu = $extension->menu()) {
             if ($extension->validateMenu($menu)) {
-                extract($menu);
-                static::createMenu($title, $path, $icon);
+                DB::transaction(function () use ($menu) {
+                    extract($menu);
+                    $children = Arr::get($menu, 'children', []);
+                    static::createMenu($title, $path, $icon, 0, $children);
+                });
             }
         }
 
@@ -299,20 +305,41 @@ abstract class Extension
      * @param string $uri
      * @param string $icon
      * @param int    $parentId
+     * @param array  $children
+     *
+     * @throws \Exception
+     *
+     * @return Model
      */
-    protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0)
+    protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0, array $children = [])
     {
         $menuModel = config('admin.database.menu_model');
 
         $lastOrder = $menuModel::max('order');
-
-        $menuModel::create([
+        /**
+         * @var Model
+         */
+        $menu = $menuModel::create([
             'parent_id' => $parentId,
             'order'     => $lastOrder + 1,
             'title'     => $title,
             'icon'      => $icon,
             'uri'       => $uri,
         ]);
+        if (!empty($children)) {
+            $extension = static::getInstance();
+            foreach ($children as $child) {
+                if ($extension->validateMenu($child)) {
+                    $subTitle = Arr::get($child, 'title');
+                    $subUri = Arr::get($child, 'path');
+                    $subIcon = Arr::get($child, 'icon');
+                    $subChildren = Arr::get($child, 'children', []);
+                    static::createMenu($subTitle, $subUri, $subIcon, $menu->getKey(), $subChildren);
+                }
+            }
+        }
+
+        return $menu;
     }
 
     /**
