@@ -22,7 +22,7 @@ class CreateAdminTables extends Migration
     public function up()
     {
         Schema::create(config('admin.database.users_table'), function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('username', 190)->unique();
             $table->string('password', 60);
             $table->string('name');
@@ -32,14 +32,14 @@ class CreateAdminTables extends Migration
         });
 
         Schema::create(config('admin.database.roles_table'), function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name', 50)->unique();
             $table->string('slug', 50)->unique();
             $table->timestamps();
         });
 
         Schema::create(config('admin.database.permissions_table'), function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name', 50)->unique();
             $table->string('slug', 50)->unique();
             $table->string('http_method')->nullable();
@@ -48,7 +48,7 @@ class CreateAdminTables extends Migration
         });
 
         Schema::create(config('admin.database.menu_table'), function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('parent_id')->default(0);
             $table->integer('order')->default(0);
             $table->string('title', 50);
@@ -88,7 +88,7 @@ class CreateAdminTables extends Migration
         });
 
         Schema::create(config('admin.database.operation_log_table'), function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('user_id');
             $table->string('path');
             $table->string('method', 10);
