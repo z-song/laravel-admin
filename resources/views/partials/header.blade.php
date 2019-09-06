@@ -11,13 +11,22 @@
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">
-        <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-        </a>
-        <ul class="nav navbar-nav">
-        {!! Admin::getNavbar()->render('left') !!}
-        </ul>
+        <div class="navbar-header">
+            <!-- Sidebar toggle button-->
+            <a href="javascript:void(0);" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar-collapse">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse pull-left" id="header-navbar-collapse">
+            <ul class="nav navbar-nav">
+                {!! Admin::getNavbar()->render('left') !!}
+            </ul>
+        </div>
 
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
@@ -54,10 +63,6 @@
                         </li>
                     </ul>
                 </li>
-                <!-- Control Sidebar Toggle Button -->
-                {{--<li>--}}
-                    {{--<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>--}}
-                {{--</li>--}}
             </ul>
         </div>
     </nav>
