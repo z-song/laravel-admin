@@ -88,7 +88,7 @@ return [
     'current_page'          => 'Halaman ini',
     'selected_rows'         => 'Baris terpilih',
     'upload'                => 'Unggah',
-    'new_folder'            => 'Folder aru',
+    'new_folder'            => 'Folder Baru',
     'time'                  => 'Waktu',
     'size'                  => 'Ukuran',
     'listbox'               => [
