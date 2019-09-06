@@ -120,7 +120,7 @@ class Row
     public function style($style)
     {
         if (is_array($style)) {
-            $style = implode('', array_map(function ($key, $val) {
+            $style = implode(';', array_map(function ($key, $val) {
                 return "$key:$val";
             }, array_keys($style), array_values($style)));
         }

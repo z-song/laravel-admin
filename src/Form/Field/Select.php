@@ -272,19 +272,17 @@ EOT;
 
 $.ajax($ajaxOptions).done(function(data) {
 
-  var select = $("{$this->getElementClassSelector()}");
-
-  select.select2({
-    data: data,
-    $configs
+  $("{$this->getElementClassSelector()}").each(function(index, element) {
+      $(element).select2({
+        data: data,
+        $configs
+      });
+      var value = $(element).data('value') + '';
+      if (value) {
+        value = value.split(',');
+        $(element).select2('val', value);
+      }
   });
-  
-  var value = select.data('value') + '';
-  
-  if (value) {
-    value = value.split(',');
-    select.select2('val', value);
-  }
 });
 
 EOT;

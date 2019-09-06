@@ -38,6 +38,7 @@ use Illuminate\Support\Str;
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
  * @method $this prefix($prefix, $delimiter = '&nbsp;')
  * @method $this suffix($suffix, $delimiter = '&nbsp;')
+ * @method $this secret($dotCount = 6)
  */
 class Column
 {
@@ -135,6 +136,7 @@ class Column
         'qrcode'      => Displayers\QRCode::class,
         'prefix'      => Displayers\Prefix::class,
         'suffix'      => Displayers\Suffix::class,
+        'secret'      => Displayers\Secret::class,
     ];
 
     /**
@@ -158,6 +160,11 @@ class Column
      * @var Model
      */
     protected static $model;
+
+    /**
+     * @var bool
+     */
+    protected $searchable = false;
 
     /**
      * @param string $name
@@ -467,6 +474,43 @@ class Column
     public function filter($builder = null)
     {
         return $this->addFilter(...func_get_args());
+    }
+
+    /**
+     * Set column as searchable.
+     *
+     * @return $this
+     */
+    public function searchable()
+    {
+        $this->searchable = true;
+
+        $name = $this->getName();
+        $query = request()->query();
+
+        $this->prefix(function ($_, $original) use ($name, $query) {
+            Arr::set($query, $name, $original);
+
+            $url = request()->fullUrlWithQuery($query);
+
+            return "<a href=\"{$url}\"><i class=\"fa fa-search\"></i></a>";
+        }, '&nbsp;&nbsp;');
+
+        return $this;
+    }
+
+    /**
+     * Bind search query to grid model.
+     *
+     * @param Model $model
+     */
+    public function bindSearchQuery(Model $model)
+    {
+        if (!$this->searchable || !request()->has($this->getName())) {
+            return;
+        }
+
+        $model->where($this->getName(), request($this->getName()));
     }
 
     /**
