@@ -359,7 +359,7 @@ var actionResolver = function (data) {
                 $.admin.swal(response.swal);
             }
             
-            if (typeof response.toastr === 'object') {
+            if (typeof response.toastr === 'object' && response.toastr.type) {
                 $.admin.toastr[response.toastr.type](response.toastr.content, '', response.toastr.options);
             }
             
