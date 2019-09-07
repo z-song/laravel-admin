@@ -349,6 +349,10 @@ var actionResolver = function (data) {
                 if (then.action == 'redirect') {
                     $.admin.redirect(then.value);
                 }
+                
+                if (then.action == 'location') {
+                    window.location = then.value;
+                }
             };
             
             if (typeof response.html === 'string') {
