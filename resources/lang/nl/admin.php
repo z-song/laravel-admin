@@ -98,5 +98,10 @@ return [
         'filter_clear'       => 'Toon alle',
         'filter_placeholder' => 'Filter',
     ],
+    'grid_items_selected'    => '{n} items geselecteerd',
+
+    'prev'                   => 'Vorige',
+    'next'                   => 'Volgende',
+    'quick_create'           => 'Snel aanmaken',
     'menu_titles'           => [],
 ];
