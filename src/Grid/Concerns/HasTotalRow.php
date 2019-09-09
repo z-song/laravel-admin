@@ -28,7 +28,7 @@ trait HasTotalRow
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
-    public function renderTotalRow()
+    public function renderTotalRow($columns = null)
     {
         if (empty($this->totalRowColumns)) {
             return '';
@@ -39,6 +39,10 @@ trait HasTotalRow
         $totalRow = new TotalRow($query, $this->totalRowColumns);
 
         $totalRow->setGrid($this);
+
+        if ($columns) {
+            $totalRow->setVisibleColumns($columns);
+        }
 
         return $totalRow->render();
     }

@@ -24,6 +24,13 @@
 </head>
 
 <body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
+
+@if($alert = config('admin.top_alert'))
+    <div style="text-align: center;padding: 5px;font-size: 12px;background-color: #ffffd5;color: #ff0000;">
+        {!! $alert !!}
+    </div>
+@endif
+
 <div class="wrapper">
 
     @include('admin::partials.header')
@@ -36,13 +43,12 @@
         @yield('content')
         </div>
         {!! Admin::script() !!}
+        {!! Admin::html() !!}
     </div>
 
     @include('admin::partials.footer')
 
 </div>
-
-{!! Admin::html() !!}
 
 <button id="totop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up"></i></button>
 

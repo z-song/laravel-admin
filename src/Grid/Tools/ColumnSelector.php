@@ -77,7 +77,7 @@ HTML;
         &nbsp;
         <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu" role="menu" style="padding: 10px;">
+    <ul class="dropdown-menu" role="menu" style="padding: 10px;height: auto;max-height: 500px;overflow-x: hidden;">
         <li>
             <ul style='padding: 0;'>
                 {$lists}

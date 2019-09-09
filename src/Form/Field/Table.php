@@ -36,9 +36,9 @@ class Table extends HasMany
      */
     protected function buildRelatedForms()
     {
-        if (is_null($this->form)) {
-            return [];
-        }
+//        if (is_null($this->form)) {
+//            return [];
+//        }
 
         $forms = [];
 

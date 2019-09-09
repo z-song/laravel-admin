@@ -31,7 +31,7 @@ trait HasQuickSearch
     /**
      * @param array|string|\Closure
      *
-     * @return $this
+     * @return Tools\QuickSearch
      */
     public function quickSearch($search = null)
     {
@@ -41,9 +41,9 @@ trait HasQuickSearch
             $this->search = $search;
         }
 
-        $this->tools->append(new Tools\QuickSearch());
-
-        return $this;
+        return tap(new Tools\QuickSearch(), function ($search) {
+            $this->tools->append($search);
+        });
     }
 
     /**
@@ -183,7 +183,7 @@ trait HasQuickSearch
     {
         $method = ($or ? 'orWhere' : 'where').ucfirst($function);
 
-        $this->model()->$method($column, $value);
+        $this->model()->{$method}($column, $value);
     }
 
     /**
@@ -208,7 +208,7 @@ trait HasQuickSearch
 
         $method = $where.($not ? 'NotIn' : 'In');
 
-        $this->model()->$method($column, $values);
+        $this->model()->{$method}($column, $values);
     }
 
     /**
@@ -223,7 +223,7 @@ trait HasQuickSearch
     {
         $method = $or ? 'orWhereBetween' : 'whereBetween';
 
-        $this->model()->$method($column, [$start, $end]);
+        $this->model()->{$method}($column, [$start, $end]);
     }
 
     /**
