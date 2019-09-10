@@ -68,6 +68,13 @@ class HasMany extends Field
     ];
 
     /**
+     * Distinct fields.
+     *
+     * @var array
+     */
+    protected $distinctFields = [];
+
+    /**
      * Create a new HasMany field instance.
      *
      * @param $relationName
@@ -157,7 +164,35 @@ class HasMany extends Field
             $newInput = $input;
         }
 
+        $this->appendDistinctRules($newRules);
+
         return \validator($newInput, $newRules, $this->getValidationMessages(), $attributes);
+    }
+
+    /**
+     * Set distinct fields.
+     *
+     * @param array $fields
+     *
+     * @return $this
+     */
+    public function distinctFields(array $fields)
+    {
+        $this->distinctFields = $fields;
+
+        return $this;
+    }
+
+    /**
+     * Append distinct rules.
+     *
+     * @param array $rules
+     */
+    protected function appendDistinctRules(array &$rules)
+    {
+        foreach ($this->distinctFields as $field) {
+            $rules["{$this->column}.*.$field"] = 'distinct';
+        }
     }
 
     /**
