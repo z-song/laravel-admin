@@ -39,7 +39,7 @@ class CreateUserCommand extends Command
         /** @var array $selected */
         $selectedOption = $roles->pluck('name')->toArray();
         
-        if (empty($selectedOption)) { 
+        if (empty($selectedOption)) {
             $selected = $this->choice('Please choose a role for the user', $selectedOption, null, null, true);
 
             $roles = $roles->filter(function ($role) use ($selected) {
@@ -51,7 +51,7 @@ class CreateUserCommand extends Command
 
         $user->save();
 
-        if (isset($roles)) { 
+        if (isset($roles)) {
             $user->roles()->attach($roles);
         }
 
