@@ -349,6 +349,10 @@ var actionResolver = function (data) {
                 if (then.action == 'redirect') {
                     $.admin.redirect(then.value);
                 }
+                
+                if (then.action == 'location') {
+                    window.location = then.value;
+                }
             };
             
             if (typeof response.html === 'string') {
@@ -359,7 +363,7 @@ var actionResolver = function (data) {
                 $.admin.swal(response.swal);
             }
             
-            if (typeof response.toastr === 'object') {
+            if (typeof response.toastr === 'object' && response.toastr.type) {
                 $.admin.toastr[response.toastr.type](response.toastr.content, '', response.toastr.options);
             }
             

@@ -153,6 +153,20 @@ class Response
     }
 
     /**
+     * Send a location redirect response.
+     *
+     * @param string $location
+     *
+     * @return $this
+     */
+    public function location(string $location)
+    {
+        $this->then = ['action' => 'location', 'value' => $location];
+
+        return $this;
+    }
+
+    /**
      * Send a download response.
      *
      * @param string $url

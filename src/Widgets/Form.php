@@ -472,7 +472,7 @@ class Form implements Renderable
     {
         if (method_exists($this, 'handle')) {
             $this->method('POST');
-            $this->action(route('admin.handle-form'));
+            $this->action(admin_url('_handle_form_'));
             $this->hidden('_form_')->default(get_called_class());
         }
     }
