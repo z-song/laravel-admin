@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Grid;
 
+use Encore\Admin\Actions\GridAction;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Tools\AbstractTool;
 use Encore\Admin\Grid\Tools\BatchActions;
@@ -58,6 +59,10 @@ class Tools implements Renderable
      */
     public function append($tool)
     {
+        if ($tool instanceof GridAction) {
+            $tool->setGrid($this->grid);
+        }
+
         $this->tools->push($tool);
 
         return $this;

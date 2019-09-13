@@ -32,7 +32,7 @@ a.editable-empty {
 }
 
 .form-group > label.asterisk:before {
-    content: " *";
+    content: "* ";
     color: red;
 }
 

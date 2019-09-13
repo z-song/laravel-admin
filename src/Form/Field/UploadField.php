@@ -149,7 +149,7 @@ trait UploadField
     protected function guessPreviewType($file)
     {
         $filetype = 'other';
-        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        $ext = strtok(strtolower(pathinfo($file, PATHINFO_EXTENSION)), '?');
 
         foreach ($this->fileTypes as $type => $pattern) {
             if (preg_match($pattern, $ext) === 1) {
@@ -162,6 +162,10 @@ trait UploadField
 
         if ($filetype == 'video') {
             $extra['filetype'] = "video/{$ext}";
+        }
+
+        if ($filetype == 'audio') {
+            $extra['filetype'] = "audio/{$ext}";
         }
 
         if ($this->downloadable) {

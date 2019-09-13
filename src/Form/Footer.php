@@ -36,6 +36,11 @@ class Footer implements Renderable
     protected $checkboxes = ['view', 'continue_editing', 'continue_creating'];
 
     /**
+     * @var string
+     */
+    protected $defaultCheck;
+
+    /**
      * Footer constructor.
      *
      * @param Builder $builder
@@ -126,6 +131,42 @@ class Footer implements Renderable
     }
 
     /**
+     * Set `view` as default check.
+     *
+     * @return $this
+     */
+    public function checkView()
+    {
+        $this->defaultCheck = 'view';
+
+        return $this;
+    }
+
+    /**
+     * Set `continue_creating` as default check.
+     *
+     * @return $this
+     */
+    public function checkCreating()
+    {
+        $this->defaultCheck = 'continue_creating';
+
+        return $this;
+    }
+
+    /**
+     * Set `continue_editing` as default check.
+     *
+     * @return $this
+     */
+    public function checkEditing()
+    {
+        $this->defaultCheck = 'continue_editing';
+
+        return $this;
+    }
+
+    /**
      * Setup scripts.
      */
     protected function setupScript()
@@ -148,10 +189,18 @@ EOT;
     {
         $this->setupScript();
 
+        $submitRedirects = [
+            1 => 'continue_editing',
+            2 => 'continue_creating',
+            3 => 'view',
+        ];
+
         $data = [
-            'buttons'      => $this->buttons,
-            'checkboxes'   => $this->checkboxes,
-            'width'        => $this->builder->getWidth(),
+            'width'            => $this->builder->getWidth(),
+            'buttons'          => $this->buttons,
+            'checkboxes'       => $this->checkboxes,
+            'submit_redirects' => $submitRedirects,
+            'default_check'    => $this->defaultCheck,
         ];
 
         return view($this->view, $data)->render();

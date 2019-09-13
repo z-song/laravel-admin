@@ -12,6 +12,7 @@ class Link extends AbstractDisplayer
         } else {
             $href = $callback ?: $this->value;
         }
+
         return "<a href='$href' target='$target'>{$this->value}</a>";
     }
 }

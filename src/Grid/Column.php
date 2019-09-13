@@ -4,10 +4,11 @@ namespace Encore\Admin\Grid;
 
 use Carbon\Carbon;
 use Closure;
+use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\AbstractDisplayer;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ use Illuminate\Support\Str;
  * @method $this button($style = null)
  * @method $this link($href = '', $target = '_blank')
  * @method $this badge($style = 'red')
- * @method $this progressBar($style = 'primary', $size = 'sm', $max = 100)
+ * @method $this progress($style = 'primary', $size = 'sm', $max = 100)
  * @method $this radio($options = [])
  * @method $this checkbox($options = [])
  * @method $this orderable($column, $label = '')
@@ -35,6 +36,9 @@ use Illuminate\Support\Str;
  * @method $this downloadable($server = '')
  * @method $this copyable()
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
+ * @method $this prefix($prefix, $delimiter = '&nbsp;')
+ * @method $this suffix($suffix, $delimiter = '&nbsp;')
+ * @method $this secret($dotCount = 6)
  */
 class Column
 {
@@ -108,7 +112,32 @@ class Column
      *
      * @var array
      */
-    public static $displayers = [];
+    public static $displayers = [
+        'editable'    => Displayers\Editable::class,
+        'switch'      => Displayers\SwitchDisplay::class,
+        'switchGroup' => Displayers\SwitchGroup::class,
+        'select'      => Displayers\Select::class,
+        'image'       => Displayers\Image::class,
+        'label'       => Displayers\Label::class,
+        'button'      => Displayers\Button::class,
+        'link'        => Displayers\Link::class,
+        'badge'       => Displayers\Badge::class,
+        'progressBar' => Displayers\ProgressBar::class,
+        'progress'    => Displayers\ProgressBar::class,
+        'radio'       => Displayers\Radio::class,
+        'checkbox'    => Displayers\Checkbox::class,
+        'orderable'   => Displayers\Orderable::class,
+        'table'       => Displayers\Table::class,
+        'expand'      => Displayers\Expand::class,
+        'modal'       => Displayers\Modal::class,
+        'carousel'    => Displayers\Carousel::class,
+        'downloadable'=> Displayers\Downloadable::class,
+        'copyable'    => Displayers\Copyable::class,
+        'qrcode'      => Displayers\QRCode::class,
+        'prefix'      => Displayers\Prefix::class,
+        'suffix'      => Displayers\Suffix::class,
+        'secret'      => Displayers\Secret::class,
+    ];
 
     /**
      * Defined columns.
@@ -123,9 +152,19 @@ class Column
     protected static $htmlAttributes = [];
 
     /**
+     * @var array
+     */
+    protected static $rowAttributes = [];
+
+    /**
      * @var Model
      */
     protected static $model;
+
+    /**
+     * @var bool
+     */
+    protected $searchable = false;
 
     /**
      * @param string $name
@@ -136,6 +175,18 @@ class Column
         $this->name = $name;
 
         $this->label = $this->formatLabel($label);
+
+        $this->initAttributes();
+    }
+
+    /**
+     * Initialize column attributes.
+     */
+    protected function initAttributes()
+    {
+        $name = str_replace('.', '-', $this->name);
+
+        $this->setAttributes(['class' => "column-{$name}"]);
     }
 
     /**
@@ -179,7 +230,7 @@ class Column
      */
     public function setModel($model)
     {
-        if (is_null(static::$model) && ($model instanceof Model)) {
+        if (is_null(static::$model) && ($model instanceof BaseModel)) {
             static::$model = $model->newInstance();
         }
     }
@@ -201,9 +252,21 @@ class Column
      *
      * @return $this
      */
-    public function setAttributes($attributes = [])
+    public function setAttributes($attributes = [], $key = null)
     {
-        static::$htmlAttributes[$this->name] = $attributes;
+        if ($key) {
+            static::$rowAttributes[$this->name][$key] = array_merge(
+                Arr::get(static::$rowAttributes, "{$this->name}.{$key}", []),
+                $attributes
+            );
+
+            return $this;
+        }
+
+        static::$htmlAttributes[$this->name] = array_merge(
+            Arr::get(static::$htmlAttributes, $this->name, []),
+            $attributes
+        );
 
         return $this;
     }
@@ -215,9 +278,32 @@ class Column
      *
      * @return mixed
      */
-    public static function getAttributes($name)
+    public static function getAttributes($name, $key = null)
     {
-        return Arr::get(static::$htmlAttributes, $name, '');
+        $rowAttributes = [];
+
+        if ($key && Arr::has(static::$rowAttributes, "{$name}.{$key}")) {
+            $rowAttributes = Arr::get(static::$rowAttributes, "{$name}.{$key}", []);
+        }
+
+        $columnAttributes = Arr::get(static::$htmlAttributes, $name, []);
+
+        return array_merge($rowAttributes, $columnAttributes);
+    }
+
+    /**
+     * Format attributes to html.
+     *
+     * @return string
+     */
+    public function formatHtmlAttributes()
+    {
+        $attrArr = [];
+        foreach (static::getAttributes($this->name) as $name => $val) {
+            $attrArr[] = "$name=\"$val\"";
+        }
+
+        return implode(' ', $attrArr);
     }
 
     /**
@@ -274,6 +360,16 @@ class Column
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName()
+    {
+        $name = str_replace('.', '-', $this->getName());
+
+        return "column-{$name}";
     }
 
     /**
@@ -378,6 +474,43 @@ class Column
     public function filter($builder = null)
     {
         return $this->addFilter(...func_get_args());
+    }
+
+    /**
+     * Set column as searchable.
+     *
+     * @return $this
+     */
+    public function searchable()
+    {
+        $this->searchable = true;
+
+        $name = $this->getName();
+        $query = request()->query();
+
+        $this->prefix(function ($_, $original) use ($name, $query) {
+            Arr::set($query, $name, $original);
+
+            $url = request()->fullUrlWithQuery($query);
+
+            return "<a href=\"{$url}\"><i class=\"fa fa-search\"></i></a>";
+        }, '&nbsp;&nbsp;');
+
+        return $this;
+    }
+
+    /**
+     * Bind search query to grid model.
+     *
+     * @param Model $model
+     */
+    public function bindSearchQuery(Model $model)
+    {
+        if (!$this->searchable || !request()->has($this->getName())) {
+            return;
+        }
+
+        $model->where($this->getName(), request($this->getName()));
     }
 
     /**
@@ -587,6 +720,85 @@ class Column
         return $this->display(function ($value) {
             return Carbon::parse($value)->diffForHumans();
         });
+    }
+
+    /**
+     * Returns a string formatted according to the given format string.
+     *
+     * @param string $format
+     *
+     * @return $this
+     */
+    public function date($format)
+    {
+        return $this->display(function ($value) use ($format) {
+            return date($format, strtotime($value));
+        });
+    }
+
+    /**
+     * Display column as boolean , `✓` for true, and `✗` for false.
+     *
+     * @param array $map
+     * @param bool  $default
+     *
+     * @return $this
+     */
+    public function bool(array $map = [], $default = false)
+    {
+        return $this->display(function ($value) use ($map, $default) {
+            $bool = empty($map) ? boolval($value) : Arr::get($map, $value, $default);
+
+            return $bool ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
+        });
+    }
+
+    /**
+     * Display column using a grid row action.
+     *
+     * @param string $action
+     *
+     * @return $this
+     */
+    public function action($action)
+    {
+        if (!is_subclass_of($action, RowAction::class)) {
+            throw new \InvalidArgumentException("Action class [$action] must be sub-class of [Encore\Admin\Actions\GridAction]");
+        }
+
+        $grid = $this->grid;
+
+        return $this->display(function ($_, $column) use ($action, $grid) {
+            /** @var RowAction $action */
+            $action = new $action();
+
+            return $action
+                ->asColumn()
+                ->setGrid($grid)
+                ->setColumn($column)
+                ->setRow($this);
+        });
+    }
+
+    /**
+     * Add a `dot` before column text.
+     *
+     * @param array  $options
+     * @param string $default
+     *
+     * @return $this
+     */
+    public function dot($options = [], $default = '')
+    {
+        return $this->prefix(function ($_, $original) use ($options, $default) {
+            if (is_null($original)) {
+                $style = $default;
+            } else {
+                $style = Arr::get($options, $original);
+            }
+
+            return "<span class=\"label-{$style}\" style='width: 8px;height: 8px;padding: 0;border-radius: 50%;display: inline-block;'></span>";
+        }, '&nbsp;&nbsp;');
     }
 
     /**

@@ -3,7 +3,7 @@
     <!-- To the right -->
     <div class="pull-right hidden-xs">
         @if(config('admin.show_environment'))
-            <strong>Env</strong>&nbsp;&nbsp; {!! env('APP_ENV') !!}
+            <strong>Env</strong>&nbsp;&nbsp; {!! config('app.env') !!}
         @endif
 
         &nbsp;&nbsp;&nbsp;&nbsp;
