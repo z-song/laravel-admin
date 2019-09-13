@@ -15,7 +15,6 @@ use Encore\Admin\Grid\Tools;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
@@ -532,6 +531,16 @@ class Grid
     }
 
     /**
+     * Apply column search to grid query.
+     *
+     * @return void
+     */
+    protected function applyColumnSearch()
+    {
+        $this->columns->each->bindSearchQuery($this->model());
+    }
+
+    /**
      * @return array|Collection|mixed
      */
     protected function applyQuery()
@@ -539,6 +548,8 @@ class Grid
         $this->applyQuickSearch();
 
         $this->applyColumnFilter();
+
+        $this->applyColumnSearch();
 
         $this->applySelectorQuery();
 
@@ -645,7 +656,7 @@ class Grid
      */
     public function getExportUrl($scope = 1, $args = null)
     {
-        $input = array_merge(Input::all(), Exporter::formatExportQuery($scope, $args));
+        $input = array_merge(request()->all(), Exporter::formatExportQuery($scope, $args));
 
         if ($constraints = $this->model()->getConstraints()) {
             $input = array_merge($input, $constraints);
@@ -764,7 +775,7 @@ class Grid
             return $this->resourcePath;
         }
 
-        return url()->current();
+        return url(app('request')->getPathInfo());
     }
 
     /**

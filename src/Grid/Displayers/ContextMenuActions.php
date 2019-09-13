@@ -57,7 +57,7 @@ SCRIPT;
     public function display($callback = null)
     {
         Admin::html('<div id="grid-context-menu"></div>');
-        Admin::style(".column-__actions__ {display: none !important;}");
+        Admin::style('.column-__actions__ {display: none !important;}');
 
         return parent::display($callback);
     }

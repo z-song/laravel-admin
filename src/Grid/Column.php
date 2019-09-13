@@ -4,6 +4,7 @@ namespace Encore\Admin\Grid;
 
 use Carbon\Carbon;
 use Closure;
+use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Grid;
 use Encore\Admin\Grid\Displayers\AbstractDisplayer;
 use Illuminate\Contracts\Support\Arrayable;
@@ -35,8 +36,9 @@ use Illuminate\Support\Str;
  * @method $this downloadable($server = '')
  * @method $this copyable()
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
- * @method $this prefix($prefix)
- * @method $this suffix($suffix)
+ * @method $this prefix($prefix, $delimiter = '&nbsp;')
+ * @method $this suffix($suffix, $delimiter = '&nbsp;')
+ * @method $this secret($dotCount = 6)
  */
 class Column
 {
@@ -134,6 +136,7 @@ class Column
         'qrcode'      => Displayers\QRCode::class,
         'prefix'      => Displayers\Prefix::class,
         'suffix'      => Displayers\Suffix::class,
+        'secret'      => Displayers\Secret::class,
     ];
 
     /**
@@ -157,6 +160,11 @@ class Column
      * @var Model
      */
     protected static $model;
+
+    /**
+     * @var bool
+     */
+    protected $searchable = false;
 
     /**
      * @param string $name
@@ -469,6 +477,43 @@ class Column
     }
 
     /**
+     * Set column as searchable.
+     *
+     * @return $this
+     */
+    public function searchable()
+    {
+        $this->searchable = true;
+
+        $name = $this->getName();
+        $query = request()->query();
+
+        $this->prefix(function ($_, $original) use ($name, $query) {
+            Arr::set($query, $name, $original);
+
+            $url = request()->fullUrlWithQuery($query);
+
+            return "<a href=\"{$url}\"><i class=\"fa fa-search\"></i></a>";
+        }, '&nbsp;&nbsp;');
+
+        return $this;
+    }
+
+    /**
+     * Bind search query to grid model.
+     *
+     * @param Model $model
+     */
+    public function bindSearchQuery(Model $model)
+    {
+        if (!$this->searchable || !request()->has($this->getName())) {
+            return;
+        }
+
+        $model->where($this->getName(), request($this->getName()));
+    }
+
+    /**
      * Add a display callback.
      *
      * @param Closure $callback
@@ -689,6 +734,71 @@ class Column
         return $this->display(function ($value) use ($format) {
             return date($format, strtotime($value));
         });
+    }
+
+    /**
+     * Display column as boolean , `✓` for true, and `✗` for false.
+     *
+     * @param array $map
+     * @param bool  $default
+     *
+     * @return $this
+     */
+    public function bool(array $map = [], $default = false)
+    {
+        return $this->display(function ($value) use ($map, $default) {
+            $bool = empty($map) ? boolval($value) : Arr::get($map, $value, $default);
+
+            return $bool ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
+        });
+    }
+
+    /**
+     * Display column using a grid row action.
+     *
+     * @param string $action
+     *
+     * @return $this
+     */
+    public function action($action)
+    {
+        if (!is_subclass_of($action, RowAction::class)) {
+            throw new \InvalidArgumentException("Action class [$action] must be sub-class of [Encore\Admin\Actions\GridAction]");
+        }
+
+        $grid = $this->grid;
+
+        return $this->display(function ($_, $column) use ($action, $grid) {
+            /** @var RowAction $action */
+            $action = new $action();
+
+            return $action
+                ->asColumn()
+                ->setGrid($grid)
+                ->setColumn($column)
+                ->setRow($this);
+        });
+    }
+
+    /**
+     * Add a `dot` before column text.
+     *
+     * @param array  $options
+     * @param string $default
+     *
+     * @return $this
+     */
+    public function dot($options = [], $default = '')
+    {
+        return $this->prefix(function ($_, $original) use ($options, $default) {
+            if (is_null($original)) {
+                $style = $default;
+            } else {
+                $style = Arr::get($options, $original);
+            }
+
+            return "<span class=\"label-{$style}\" style='width: 8px;height: 8px;padding: 0;border-radius: 50%;display: inline-block;'></span>";
+        }, '&nbsp;&nbsp;');
     }
 
     /**

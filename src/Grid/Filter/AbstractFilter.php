@@ -467,6 +467,7 @@ abstract class AbstractFilter
     {
         return array_merge([
             'id'        => $this->id,
+            'column'    => $this->column,
             'name'      => $this->formatName($this->column),
             'label'     => $this->label,
             'value'     => $this->value ?: $this->defaultValue,

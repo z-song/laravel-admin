@@ -95,14 +95,22 @@ trait HasAssets
     public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js';
 
     /**
+     * @var array
+     */
+    public static $minifyIgnores = [];
+
+    /**
      * Add css or get all css.
      *
      * @param null $css
+     * @param bool $minify
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function css($css = null)
+    public static function css($css = null, $minify = true)
     {
+        static::ignoreMinify($css, $minify);
+
         if (!is_null($css)) {
             return self::$css = array_merge(self::$css, (array) $css);
         }
@@ -118,11 +126,14 @@ trait HasAssets
 
     /**
      * @param null $css
+     * @param bool $minify
      *
      * @return array|null
      */
-    public static function baseCss($css = null)
+    public static function baseCss($css = null, $minify = true)
     {
+        static::ignoreMinify($css, $minify);
+
         if (!is_null($css)) {
             return static::$baseCss = $css;
         }
@@ -138,11 +149,14 @@ trait HasAssets
      * Add js or get all js.
      *
      * @param null $js
+     * @param bool $minify
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function js($js = null)
+    public static function js($js = null, $minify = true)
     {
+        static::ignoreMinify($js, $minify);
+
         if (!is_null($js)) {
             return self::$js = array_merge(self::$js, (array) $js);
         }
@@ -174,16 +188,30 @@ trait HasAssets
 
     /**
      * @param null $js
+     * @param bool $minify
      *
      * @return array|null
      */
-    public static function baseJs($js = null)
+    public static function baseJs($js = null, $minify = true)
     {
+        static::ignoreMinify($js, $minify);
+
         if (!is_null($js)) {
             return static::$baseJs = $js;
         }
 
         return static::$baseJs;
+    }
+
+    /**
+     * @param string $assets
+     * @param bool   $ignore
+     */
+    public static function ignoreMinify($assets, $ignore = true)
+    {
+        if (!$ignore) {
+            static::$minifyIgnores[] = $assets;
+        }
     }
 
     /**
