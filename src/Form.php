@@ -558,6 +558,7 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
+            $column = \Illuminate\Support\Str::camel($column);
             if (!method_exists($this->model, $column)) {
                 continue;
             }
