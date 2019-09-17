@@ -467,7 +467,7 @@ class Column
     /**
      * Set column filter.
      *
-     * @param null $builder
+     * @param string|array|null $builder
      *
      * @return $this
      */
