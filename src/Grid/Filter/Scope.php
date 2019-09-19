@@ -66,6 +66,10 @@ class Scope implements Renderable
      */
     public function render()
     {
+        if ($this->key == 'separator') {
+            return '<li role="separator" class="divider"></li>';
+        }
+
         $url = request()->fullUrlWithQuery([static::QUERY_NAME => $this->key]);
 
         return "<li><a href=\"{$url}\">{$this->label}</a></li>";
