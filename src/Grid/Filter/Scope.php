@@ -10,7 +10,7 @@ class Scope implements Renderable
 {
     const QUERY_NAME = '_scope_';
     const SCOPE_SEPARATOR = '_separator_';
-    
+
     /**
      * @var string
      */
