@@ -423,7 +423,7 @@ class Filter implements Renderable
     }
 
     /**
-     * Add separator in filter scope
+     * Add separator in filter scope.
      *
      * @return mixed
      */
