@@ -423,6 +423,16 @@ class Filter implements Renderable
     }
 
     /**
+     * Add separator in filter scope
+     *
+     * @return mixed
+     */
+    public function scopeSeparator()
+    {
+        return $this->scope('separator');
+    }
+
+    /**
      * Get all filter scopes.
      *
      * @return Collection
