@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 class Scope implements Renderable
 {
     const QUERY_NAME = '_scope_';
-
+    const SCOPE_SEPARATOR = '_separator_';
+    
     /**
      * @var string
      */
@@ -66,7 +67,7 @@ class Scope implements Renderable
      */
     public function render()
     {
-        if ($this->key == 'separator') {
+        if ($this->key == static::SCOPE_SEPARATOR) {
             return '<li role="separator" class="divider"></li>';
         }
 
