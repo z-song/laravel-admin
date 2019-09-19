@@ -15,9 +15,13 @@
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
-        <ul class="nav navbar-nav">
-        {!! Admin::getNavbar()->render('left') !!}
-        </ul>
+        
+        <!-- Navbar Left Menu -->
+        <div class="navbar-custom-menu pull-left">
+            <ul class="nav navbar-nav">
+                {!! Admin::getNavbar()->render('left') !!}
+            </ul>
+        </div>
 
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
