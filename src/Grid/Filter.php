@@ -429,7 +429,7 @@ class Filter implements Renderable
      */
     public function scopeSeparator()
     {
-        return $this->scope('separator');
+        return $this->scope(Scope::SCOPE_SEPARATOR);
     }
 
     /**
