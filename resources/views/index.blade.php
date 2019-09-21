@@ -37,7 +37,7 @@
 
     @include('admin::partials.sidebar')
 
-    <div class="content-wrapper" id="pjax-container">
+    <div class="content-wrapper" id="pjax-container" style="padding-top: 1px;">
         {!! Admin::style() !!}
         <div id="app">
         @yield('content')
