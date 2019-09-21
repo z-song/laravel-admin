@@ -1,4 +1,4 @@
-<div class="box box-widget" {{ $expand?'':'hide' }}" id="{{ $filterID }}">
+<div class="box box-widget {{ $expand?'':'hide' }}" id="{{ $filterID }}">
     <form action="{!! $action !!}" class="form-horizontal" pjax-container method="get">
         <div class="box-body">
             <div class="row">
