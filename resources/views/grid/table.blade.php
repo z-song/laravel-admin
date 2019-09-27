@@ -41,7 +41,7 @@
 
             <tbody>
 
-                @if($grid->rows()->isEmpty())
+                @if($grid->rows()->isEmpty() && $grid->showDefineEmptyPage())
                     @include('admin::grid.empty-grid')
                 @endif
 
