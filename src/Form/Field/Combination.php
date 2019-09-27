@@ -77,7 +77,7 @@ class Combination extends Field
      */
     public function render()
     {
-        $this->script = <<<EOT
+        $this->script = <<<'EOT'
         $('#bootstrap-combination').bootstrapCombinations();
 EOT;
 
