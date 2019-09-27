@@ -19,22 +19,23 @@ class Combination extends Field
     ];
 
     /**
-     * @var string 
+     * @var string
      */
     protected $views = 'admin::form.combination';
 
     /**
-     * @var string 
+     * @var string
      */
     protected $attribute_class = '';
 
     /**
-     * @var array 
+     * @var array
      */
     protected $grid = [];
 
     /**
      * Combination constructor.
+     *
      * @param $attributeClass
      */
     public function __construct($attributeClass)
@@ -50,22 +51,24 @@ class Combination extends Field
     public function variables()
     {
         return array_merge($this->variables, [
-            'viewClass'   => $this->getViewElementClasses(),
+            'viewClass'       => $this->getViewElementClasses(),
             'attribute_class' => $this->attribute_class,
-            'grid' => $this->grid,
-            'dataValue' => $this->value(),
+            'grid'            => $this->grid,
+            'dataValue'       => $this->value(),
         ]);
     }
 
     /**
-     * combination grid
+     * combination grid.
      *
      * @param array $grid
+     *
      * @return $this
      */
     public function grid($grid)
     {
         $this->grid = json_encode($grid);
+
         return $this;
     }
 
@@ -74,9 +77,10 @@ class Combination extends Field
      */
     public function render()
     {
-        $this->script = <<<EOT
+        $this->script = <<<'EOT'
         $('#bootstrap-combination').bootstrapCombinations();
 EOT;
+
         return parent::render();
     }
 }
