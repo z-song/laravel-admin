@@ -51,6 +51,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\DateTimeRange  datetimeRange($start, $end, $label = '')
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Number         number($column, $label = '')
+ * @method Field\Combination    combination($attributeColumn)
  * @method Field\Currency       currency($column, $label = '')
  * @method Field\HasMany        hasMany($relationName, $label = '', $callback)
  * @method Field\SwitchField    switch($column, $label = '')
@@ -133,6 +134,7 @@ class Form implements Renderable
         'button'         => Field\Button::class,
         'checkbox'       => Field\Checkbox::class,
         'color'          => Field\Color::class,
+        'combination'    => Field\Combination::class,
         'currency'       => Field\Currency::class,
         'date'           => Field\Date::class,
         'dateRange'      => Field\DateRange::class,

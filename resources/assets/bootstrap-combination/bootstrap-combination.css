@@ -1,0 +1,24 @@
+.disabled {
+    pointer-events: none;
+}
+
+#bootstrap-combination .table-responsive {
+    overflow-x: visible;
+    font-size: 10px;
+}
+
+#bootstrap-combination .labels .attribute-groups {
+    margin-bottom: 0;
+}
+
+#bootstrap-combination .box-body .table .tr-th .table-th {
+    line-height:1.9;
+}
+
+#bootstrap-combination .table-input {
+    width: 80px;
+    padding-left: 5px;
+}
+#bootstrap-combination th {
+    text-align: center;
+}

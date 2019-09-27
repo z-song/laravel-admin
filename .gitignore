@@ -4,6 +4,6 @@ phpunit.phar
 composer.phar
 composer.lock
 *.project
-.idea/
+/.idea
 .php_cs.cache
-.vscode/
+/.vscode
