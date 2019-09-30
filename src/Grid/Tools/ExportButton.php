@@ -70,7 +70,6 @@ SCRIPT;
         $page = request('page', 1);
 
         return <<<EOT
-
 <div class="btn-group pull-right" style="margin-right: 10px">
     <a class="btn btn-sm btn-twitter" title="{$trans['export']}"><i class="fa fa-download"></i><span class="hidden-xs"> {$trans['export']}</span></a>
     <button type="button" class="btn btn-sm btn-twitter dropdown-toggle" data-toggle="dropdown">
@@ -80,9 +79,18 @@ SCRIPT;
     <ul class="dropdown-menu" role="menu">
         <li><a href="{$this->grid->getExportUrl('all')}" target="_blank">{$trans['all']}</a></li>
         <li><a href="{$this->grid->getExportUrl('page', $page)}" target="_blank">{$trans['current_page']}</a></li>
-        <li><a href="{$this->grid->getExportUrl('selected', '__rows__')}" target="_blank" class='{$this->grid->getExportSelectedName()}'>{$trans['selected_rows']}</a></li>
+        {$this->showRowSelectExportIfHasRowSelector($trans['selected_rows'])}
     </ul>
 </div>
 EOT;
+    }
+
+    private function showRowSelectExportIfHasRowSelector($text)
+    {
+        if ($this->grid->option('show_row_selector') === true) {
+            return '<li><a href="'.$this->grid->getExportUrl('selected', '__rows__').'" target="_blank" class="'.$this->grid->getExportSelectedName().'">'.$text.'</a></li>';
+        }
+
+        return '';
     }
 }
