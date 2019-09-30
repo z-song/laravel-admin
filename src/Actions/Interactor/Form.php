@@ -270,6 +270,21 @@ class Form extends Interactor
     }
 
     /**
+     * @param string $column
+     * @param string $label
+     *
+     * @return Field\Hidden
+     */
+    public function hidden($column, $label = '')
+    {
+        $field = new Field\Hidden($column, $this->formatLabel($label));
+
+        $this->addField($field);
+
+        return $field;
+    }
+
+    /**
      * @param string $content
      * @param string $selector
      *
@@ -280,7 +295,7 @@ class Form extends Interactor
         $crawler = new Crawler($content);
 
         $node = $crawler->filter($selector)->getNode(0);
-        $node->setAttribute('modal', $this->modalId);
+        $node->setAttribute('modal', $this->getModalId());
 
         return $crawler->children()->html();
     }
@@ -292,6 +307,10 @@ class Form extends Interactor
      */
     protected function addField(Field $field)
     {
+        $elementClass = array_merge(['action'], $field->getElementClass());
+
+        $field->addElementClass($elementClass);
+
         $field->setView($this->resolveView(get_class($field)));
 
         array_push($this->fields, $field);
@@ -368,14 +387,14 @@ class Form extends Interactor
     }
 
     /**
-     * @param string $modalID
+     * @return void
      */
-    public function addModalHtml($modalID)
+    public function addModalHtml()
     {
         $data = [
             'fields'   => $this->fields,
             'title'    => $this->action->name(),
-            'modal_id' => $modalID,
+            'modal_id' => $this->getModalId(),
         ];
 
         $modal = view('admin::actions.form.modal', $data)->render();
@@ -384,13 +403,27 @@ class Form extends Interactor
     }
 
     /**
+     * @return string
+     */
+    public function getModalId()
+    {
+        if (!$this->modalId) {
+            if ($this->action instanceof RowAction) {
+                $this->modalId = uniqid('row-action-modal-').mt_rand(1000, 9999);
+            } else {
+                $this->modalId = strtolower(str_replace('\\', '-', get_class($this->action)));
+            }
+        }
+
+        return $this->modalId;
+    }
+
+    /**
      * @return void
      */
     public function addScript()
     {
-        $this->modalId = uniqid('action-modal-');
-
-        $this->action->attribute('modal', $this->modalId);
+        $this->action->attribute('modal', $this->getModalId());
 
         $parameters = json_encode($this->action->parameters());
 
@@ -399,6 +432,7 @@ class Form extends Interactor
 (function ($) {
     $('{$this->action->selector($this->action->selectorPrefix)}').off('{$this->action->event}').on('{$this->action->event}', function() {
         var data = $(this).data();
+        var target = $(this);
         var modalId = $(this).attr('modal');
         Object.assign(data, {$parameters});
         {$this->action->actionScript()}
@@ -430,7 +464,7 @@ SCRIPT;
             call_user_func([$this->action, 'form']);
         }
 
-        $this->addModalHtml($this->modalId);
+        $this->addModalHtml();
 
         return <<<SCRIPT
             var process = new Promise(function (resolve,reject) {
@@ -452,7 +486,7 @@ SCRIPT;
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        resolve(data);
+                        resolve([data, target]);
                         if (data.status === true) {
                             $('#'+modalId).modal('hide');
                         }

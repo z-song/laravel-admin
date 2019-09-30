@@ -6,6 +6,9 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Tree;
 
+/**
+ * @deprecated
+ */
 trait AdminBuilder
 {
     /**
@@ -25,8 +28,6 @@ trait AdminBuilder
      */
     public static function form(\Closure $callback)
     {
-        Form::registerBuiltinFields();
-
         return new Form(new static(), $callback);
     }
 

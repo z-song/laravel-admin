@@ -25,16 +25,21 @@ class DropdownActions extends Actions
      */
     protected $defaultClass = [Edit::class, Show::class, Delete::class];
 
-    protected function script()
+    /**
+     * Add JS script into pages.
+     *
+     * @return void.
+     */
+    protected function addScript()
     {
         $script = <<<'SCRIPT'
 (function ($) {
     $('.table-responsive').on('show.bs.dropdown', function () {
-         $('.table-responsive').css( "overflow", "inherit" );
+         $('.table-responsive').css("overflow", "inherit" );
     });
     
     $('.table-responsive').on('hide.bs.dropdown', function () {
-         $('.table-responsive').css( "overflow", "auto" );
+         $('.table-responsive').css("overflow", "auto");
     })
 })(jQuery);
 SCRIPT;
@@ -56,6 +61,9 @@ SCRIPT;
         return $this;
     }
 
+    /**
+     * Prepend default `edit` `view` `delete` actions.
+     */
     protected function prependDefaultActions()
     {
         foreach ($this->defaultClass as $class) {
@@ -81,14 +89,16 @@ SCRIPT;
     /**
      * Disable view action.
      *
+     * @param bool $disable
+     *
      * @return $this
      */
     public function disableView(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->default, Show::class);
-        } elseif (!in_array(Show::class, $this->default)) {
-            array_push($this->default, Show::class);
+            array_delete($this->defaultClass, Show::class);
+        } elseif (!in_array(Show::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Show::class);
         }
 
         return $this;
@@ -97,14 +107,16 @@ SCRIPT;
     /**
      * Disable delete.
      *
+     * @param bool $disable
+     *
      * @return $this.
      */
     public function disableDelete(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->default, Delete::class);
-        } elseif (!in_array(Delete::class, $this->default)) {
-            array_push($this->default, Delete::class);
+            array_delete($this->defaultClass, Delete::class);
+        } elseif (!in_array(Delete::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Delete::class);
         }
 
         return $this;
@@ -113,14 +125,16 @@ SCRIPT;
     /**
      * Disable edit.
      *
-     * @return $this.
+     * @param bool $disable
+     *
+     * @return $this
      */
     public function disableEdit(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->default, Edit::class);
-        } elseif (!in_array(Edit::class, $this->default)) {
-            array_push($this->default, Edit::class);
+            array_delete($this->defaultClass, Edit::class);
+        } elseif (!in_array(Edit::class, $this->defaultClass)) {
+            array_push($this->defaultClass, Edit::class);
         }
 
         return $this;
@@ -133,7 +147,7 @@ SCRIPT;
      */
     public function display($callback = null)
     {
-        $this->script();
+        $this->addScript();
 
         if ($callback instanceof \Closure) {
             $callback->call($this, $this);

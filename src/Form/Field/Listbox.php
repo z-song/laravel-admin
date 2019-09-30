@@ -33,7 +33,7 @@ class Listbox extends MultipleSelect
      *
      * @return Listbox
      */
-    public function height($height = 100)
+    public function height($height = 200)
     {
         return $this->settings(['selectorMinimalHeight' => $height]);
     }
@@ -73,13 +73,14 @@ EOT;
 
     public function render()
     {
-        $settings = array_merge($this->settings, [
-            'infoText'          => trans('admin.listbox.text_total'),
-            'infoTextEmpty'     => trans('admin.listbox.text_empty'),
-            'infoTextFiltered'  => trans('admin.listbox.filtered'),
-            'filterTextClear'   => trans('admin.listbox.filter_clear'),
-            'filterPlaceHolder' => trans('admin.listbox.filter_placeholder'),
-        ]);
+        $settings = array_merge([
+            'infoText'              => trans('admin.listbox.text_total'),
+            'infoTextEmpty'         => trans('admin.listbox.text_empty'),
+            'infoTextFiltered'      => trans('admin.listbox.filtered'),
+            'filterTextClear'       => trans('admin.listbox.filter_clear'),
+            'filterPlaceHolder'     => trans('admin.listbox.filter_placeholder'),
+            'selectorMinimalHeight' => 200,
+        ], $this->settings);
 
         $settings = json_encode($settings);
 

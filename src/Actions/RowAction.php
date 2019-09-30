@@ -23,6 +23,11 @@ abstract class RowAction extends GridAction
     public $selectorPrefix = '.grid-row-action-';
 
     /**
+     * @var bool
+     */
+    protected $asColumn = false;
+
+    /**
      * Get primary key value of current row.
      *
      * @return mixed
@@ -80,6 +85,18 @@ abstract class RowAction extends GridAction
     }
 
     /**
+     * Show this action as a column.
+     *
+     * @return $this
+     */
+    public function asColumn()
+    {
+        $this->asColumn = true;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function href()
@@ -102,6 +119,10 @@ abstract class RowAction extends GridAction
         return $modelClass::findOrFail($key);
     }
 
+    public function display($value)
+    {
+    }
+
     /**
      * Render row action.
      *
@@ -109,20 +130,19 @@ abstract class RowAction extends GridAction
      */
     public function render()
     {
-        if (!$href = $this->href()) {
-            $href = 'javascript:void(0);';
-
-            $this->addScript();
+        if ($href = $this->href()) {
+            return "<a href='{$href}'>{$this->name()}</a>";
         }
+
+        $this->addScript();
 
         $attributes = $this->formatAttributes();
 
         return sprintf(
-            "<a data-_key='%s' href='%s' class='%s' {$attributes}>%s</a>",
+            "<a data-_key='%s' href='javascript:void(0);' class='%s' {$attributes}>%s</a>",
             $this->getKey(),
-            $href,
             $this->getElementClass(),
-            $this->name()
+            $this->asColumn ? $this->display($this->row($this->column->getName())) : $this->name()
         );
     }
 }

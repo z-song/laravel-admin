@@ -135,16 +135,7 @@ class HandleController extends Controller
      */
     protected function resolveActionArgs(Request $request, $model = null)
     {
-        $input = $request;
-
-        if ($request->has(GridAction::INPUT_NAME)) {
-            $input = $request->file(
-                GridAction::INPUT_NAME,
-                $request->get(GridAction::INPUT_NAME)
-            );
-        }
-
-        $args = [$input];
+        $args = [$request];
 
         if (!empty($model)) {
             array_unshift($args, $model);

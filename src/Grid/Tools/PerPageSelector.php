@@ -38,7 +38,7 @@ class PerPageSelector extends AbstractTool
     {
         $this->perPageName = $this->grid->model()->getPerPageName();
 
-        $this->perPage = (int) app('request')->input(
+        $this->perPage = (int) \request()->input(
             $this->perPageName,
             $this->grid->perPage
         );
@@ -69,7 +69,7 @@ class PerPageSelector extends AbstractTool
 
         $options = $this->getOptions()->map(function ($option) {
             $selected = ($option == $this->perPage) ? 'selected' : '';
-            $url = app('request')->fullUrlWithQuery([$this->perPageName => $option]);
+            $url = \request()->fullUrlWithQuery([$this->perPageName => $option]);
 
             return "<option value=\"$url\" $selected>$option</option>";
         })->implode("\r\n");

@@ -15,7 +15,6 @@ use Encore\Admin\Grid\Tools;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
@@ -30,6 +29,8 @@ class Grid
         Concerns\HasTotalRow,
         Concerns\HasHotKeys,
         Concerns\HasQuickCreate,
+        Concerns\HasActions,
+        Concerns\HasSelector,
         Concerns\CanHidesColumns,
         Concerns\CanFixColumns,
         Macroable {
@@ -39,7 +40,7 @@ class Grid
     /**
      * The grid data model instance.
      *
-     * @var \Encore\Admin\Grid\Model
+     * @var \Encore\Admin\Grid\Model|\Illuminate\Database\Eloquent\Builder
      */
     protected $model;
 
@@ -135,23 +136,9 @@ class Grid
     public $perPage = 20;
 
     /**
-     * Callback for grid actions.
-     *
-     * @var Closure
-     */
-    protected $actionsCallback;
-
-    /**
      * @var []callable
      */
     protected $renderingCallbacks = [];
-
-    /**
-     * Actions column display class.
-     *
-     * @var string
-     */
-    protected $actionsClass = Displayers\Actions::class;
 
     /**
      * Options for grid.
@@ -167,6 +154,7 @@ class Grid
         'show_row_selector'      => true,
         'show_create_btn'        => true,
         'show_column_selector'   => true,
+        'show_define_empty_page' => true,
     ];
 
     /**
@@ -442,7 +430,7 @@ class Grid
     /**
      * Get Grid model.
      *
-     * @return Model
+     * @return Model|\Illuminate\Database\Eloquent\Builder
      */
     public function model()
     {
@@ -506,79 +494,6 @@ class Grid
     }
 
     /**
-     * Set grid action callback.
-     *
-     * @param Closure|string $actions
-     *
-     * @return $this
-     */
-    public function actions($actions)
-    {
-        if ($actions instanceof Closure) {
-            $this->actionsCallback = $actions;
-        }
-
-        if (is_string($actions) && is_subclass_of($actions, Displayers\Actions::class)) {
-            $this->actionsClass = $actions;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Disable all actions.
-     *
-     * @return $this
-     */
-    public function disableActions(bool $disable = true)
-    {
-        return $this->option('show_actions', !$disable);
-    }
-
-    /**
-     * Set grid batch-action callback.
-     *
-     * @param Closure $closure
-     *
-     * @return $this
-     */
-    public function batchActions(Closure $closure)
-    {
-        $this->tools(function (Tools $tools) use ($closure) {
-            $tools->batch($closure);
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param bool $disable
-     *
-     * @return Grid|mixed
-     */
-    public function disableBatchActions(bool $disable = true)
-    {
-        $this->tools->disableBatchActions($disable);
-
-        return $this->option('show_row_selector', !$disable);
-    }
-
-    /**
-     * Add `actions` column for grid.
-     *
-     * @return void
-     */
-    protected function appendActionsColumn()
-    {
-        if (!$this->option('show_actions')) {
-            return;
-        }
-
-        $this->addColumn(Column::ACTION_COLUMN_NAME, trans('admin.action'))
-            ->displayUsing($this->actionsClass, [$this->actionsCallback]);
-    }
-
-    /**
      * Disable row selector.
      *
      * @return Grid|mixed
@@ -617,6 +532,44 @@ class Grid
     }
 
     /**
+     * Apply column search to grid query.
+     *
+     * @return void
+     */
+    protected function applyColumnSearch()
+    {
+        $this->columns->each->bindSearchQuery($this->model());
+    }
+
+    /**
+     * @return array|Collection|mixed
+     */
+    protected function applyQuery()
+    {
+        $this->applyQuickSearch();
+
+        $this->applyColumnFilter();
+
+        $this->applyColumnSearch();
+
+        $this->applySelectorQuery();
+
+        return $this->applyFilter(false);
+    }
+
+    /**
+     * Add row selector columns and action columns before and after the grid.
+     *
+     * @return void
+     */
+    protected function addDefaultColumns()
+    {
+        $this->prependRowSelectorColumn();
+
+        $this->appendActionsColumn();
+    }
+
+    /**
      * Build the grid.
      *
      * @return void
@@ -627,14 +580,9 @@ class Grid
             return;
         }
 
-        $this->applyQuickSearch();
+        $collection = $this->applyQuery();
 
-        $this->applyColumnFilter();
-
-        $collection = $this->applyFilter(false);
-
-        $this->prependRowSelectorColumn();
-        $this->appendActionsColumn();
+        $this->addDefaultColumns();
 
         Column::setOriginalGridModels($collection);
 
@@ -661,7 +609,7 @@ class Grid
     protected function buildRows(array $data)
     {
         $this->rows = collect($data)->map(function ($model, $number) {
-            return new Row($number, $model);
+            return new Row($number, $model, $this->keyName);
         });
 
         if ($this->rowsCallback) {
@@ -709,7 +657,7 @@ class Grid
      */
     public function getExportUrl($scope = 1, $args = null)
     {
-        $input = array_merge(Input::all(), Exporter::formatExportQuery($scope, $args));
+        $input = array_merge(request()->all(), Exporter::formatExportQuery($scope, $args));
 
         if ($constraints = $this->model()->getConstraints()) {
             $input = array_merge($input, $constraints);
@@ -790,6 +738,26 @@ class Grid
     }
 
     /**
+     * Remove define empty page on grid.
+     *
+     * @return $this
+     */
+    public function disableDefineEmptyPage(bool $disable = true)
+    {
+        return $this->option('show_define_empty_page', !$disable);
+    }
+
+    /**
+     * If grid show define empty page on grid.
+     *
+     * @return bool
+     */
+    public function showDefineEmptyPage()
+    {
+        return $this->option('show_define_empty_page');
+    }
+
+    /**
      * If allow creation.
      *
      * @return bool
@@ -810,7 +778,7 @@ class Grid
     }
 
     /**
-     * Get current resource uri.
+     * Get current resource url.
      *
      * @param string $path
      *
@@ -828,7 +796,7 @@ class Grid
             return $this->resourcePath;
         }
 
-        return app('request')->getPathInfo();
+        return url(app('request')->getPathInfo());
     }
 
     /**
@@ -919,41 +887,6 @@ class Grid
         }
 
         return $this->addColumn($method, $label);
-    }
-
-    /**
-     * Register column displayers.
-     *
-     * @return void.
-     */
-    public static function registerColumnDisplayer()
-    {
-        $map = [
-            'editable'    => Displayers\Editable::class,
-            'switch'      => Displayers\SwitchDisplay::class,
-            'switchGroup' => Displayers\SwitchGroup::class,
-            'select'      => Displayers\Select::class,
-            'image'       => Displayers\Image::class,
-            'label'       => Displayers\Label::class,
-            'button'      => Displayers\Button::class,
-            'link'        => Displayers\Link::class,
-            'badge'       => Displayers\Badge::class,
-            'progressBar' => Displayers\ProgressBar::class,
-            'radio'       => Displayers\Radio::class,
-            'checkbox'    => Displayers\Checkbox::class,
-            'orderable'   => Displayers\Orderable::class,
-            'table'       => Displayers\Table::class,
-            'expand'      => Displayers\Expand::class,
-            'modal'       => Displayers\Modal::class,
-            'carousel'    => Displayers\Carousel::class,
-            'downloadable'=> Displayers\Downloadable::class,
-            'copyable'    => Displayers\Copyable::class,
-            'qrcode'      => Displayers\QRCode::class,
-        ];
-
-        foreach ($map as $abstract => $class) {
-            Column::extend($abstract, $class);
-        }
     }
 
     /**

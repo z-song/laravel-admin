@@ -7,6 +7,7 @@ use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\HasHooks;
+use Encore\Admin\Form\Layout\Layout;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
 use Illuminate\Contracts\Support\Renderable;
@@ -119,11 +120,64 @@ class Form implements Renderable
     protected $inputs = [];
 
     /**
+     * @var Layout
+     */
+    protected $layout;
+
+    /**
      * Available fields.
      *
      * @var array
      */
-    public static $availableFields = [];
+    public static $availableFields = [
+        'button'         => Field\Button::class,
+        'checkbox'       => Field\Checkbox::class,
+        'color'          => Field\Color::class,
+        'currency'       => Field\Currency::class,
+        'date'           => Field\Date::class,
+        'dateRange'      => Field\DateRange::class,
+        'datetime'       => Field\Datetime::class,
+        'dateTimeRange'  => Field\DatetimeRange::class,
+        'datetimeRange'  => Field\DatetimeRange::class,
+        'decimal'        => Field\Decimal::class,
+        'display'        => Field\Display::class,
+        'divider'        => Field\Divider::class,
+        'embeds'         => Field\Embeds::class,
+        'email'          => Field\Email::class,
+        'file'           => Field\File::class,
+        'hasMany'        => Field\HasMany::class,
+        'hidden'         => Field\Hidden::class,
+        'id'             => Field\Id::class,
+        'image'          => Field\Image::class,
+        'ip'             => Field\Ip::class,
+        'mobile'         => Field\Mobile::class,
+        'month'          => Field\Month::class,
+        'multipleSelect' => Field\MultipleSelect::class,
+        'number'         => Field\Number::class,
+        'password'       => Field\Password::class,
+        'radio'          => Field\Radio::class,
+        'rate'           => Field\Rate::class,
+        'select'         => Field\Select::class,
+        'slider'         => Field\Slider::class,
+        'switch'         => Field\SwitchField::class,
+        'text'           => Field\Text::class,
+        'textarea'       => Field\Textarea::class,
+        'time'           => Field\Time::class,
+        'timeRange'      => Field\TimeRange::class,
+        'url'            => Field\Url::class,
+        'year'           => Field\Year::class,
+        'html'           => Field\Html::class,
+        'tags'           => Field\Tags::class,
+        'icon'           => Field\Icon::class,
+        'multipleFile'   => Field\MultipleFile::class,
+        'multipleImage'  => Field\MultipleImage::class,
+        'captcha'        => Field\Captcha::class,
+        'listbox'        => Field\Listbox::class,
+        'table'          => Field\Table::class,
+        'timezone'       => Field\Timezone::class,
+        'keyValue'       => Field\KeyValue::class,
+        'list'           => Field\ListField::class,
+    ];
 
     /**
      * Form field alias.
@@ -182,6 +236,8 @@ class Form implements Renderable
 
         $this->builder = new Builder($this);
 
+        $this->initLayout();
+
         if ($callback instanceof Closure) {
             $callback($this);
         }
@@ -224,7 +280,11 @@ class Form implements Renderable
     {
         $field->setForm($this);
 
+        $width = $this->builder->getWidth();
+        $field->setWidth($width['field'], $width['label']);
+
         $this->builder->fields()->push($field);
+        $this->layout->addField($field);
 
         return $this;
     }
@@ -415,7 +475,7 @@ class Form implements Renderable
      */
     protected function responseValidationError(MessageBag $message)
     {
-        if (\request()->ajax()) {
+        if (\request()->ajax() && !\request()->pjax()) {
             return response()->json([
                 'status'     => false,
                 'validation' => $message,
@@ -498,6 +558,7 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
+            $column = \Illuminate\Support\Str::camel($column);
             if (!method_exists($this->model, $column)) {
                 continue;
             }
@@ -826,7 +887,7 @@ class Form implements Renderable
                     $parent->save();
 
                     // When in creating, associate two models
-                    $foreignKeyMethod = (app()->version() < '5.8.0') ? 'getForeignKey' : 'getForeignKeyName';
+                    $foreignKeyMethod = version_compare(app()->version(), '5.8.0', '<') ? 'getForeignKey' : 'getForeignKeyName';
                     if (!$this->model->{$relation->{$foreignKeyMethod}()}) {
                         $this->model->{$relation->{$foreignKeyMethod}()} = $parent->getKey();
 
@@ -1306,6 +1367,26 @@ class Form implements Renderable
     }
 
     /**
+     * Indicates if current form page is creating.
+     *
+     * @return bool
+     */
+    public function isCreating()
+    {
+        return Str::endsWith(\request()->route()->getName(), '.create');
+    }
+
+    /**
+     * Indicates if current form page is editing.
+     *
+     * @return bool
+     */
+    public function isEditing()
+    {
+        return Str::endsWith(\request()->route()->getName(), '.edit');
+    }
+
+    /**
      * Disable form submit.
      *
      * @param bool $disable
@@ -1402,7 +1483,7 @@ class Form implements Renderable
      */
     public function resource($slice = -2)
     {
-        $segments = explode('/', trim(app('request')->getUri(), '/'));
+        $segments = explode('/', trim(\request()->getUri(), '/'));
 
         if ($slice != 0) {
             $segments = array_slice($segments, 0, $slice);
@@ -1440,68 +1521,6 @@ class Form implements Renderable
         }
 
         return Arr::set($this->inputs, $key, $value);
-    }
-
-    /**
-     * Register builtin fields.
-     *
-     * @return void
-     */
-    public static function registerBuiltinFields()
-    {
-        $map = [
-            'button'         => Field\Button::class,
-            'checkbox'       => Field\Checkbox::class,
-            'color'          => Field\Color::class,
-            'currency'       => Field\Currency::class,
-            'date'           => Field\Date::class,
-            'dateRange'      => Field\DateRange::class,
-            'datetime'       => Field\Datetime::class,
-            'dateTimeRange'  => Field\DatetimeRange::class,
-            'datetimeRange'  => Field\DatetimeRange::class,
-            'decimal'        => Field\Decimal::class,
-            'display'        => Field\Display::class,
-            'divider'        => Field\Divider::class,
-            'embeds'         => Field\Embeds::class,
-            'email'          => Field\Email::class,
-            'file'           => Field\File::class,
-            'hasMany'        => Field\HasMany::class,
-            'hidden'         => Field\Hidden::class,
-            'id'             => Field\Id::class,
-            'image'          => Field\Image::class,
-            'ip'             => Field\Ip::class,
-            'mobile'         => Field\Mobile::class,
-            'month'          => Field\Month::class,
-            'multipleSelect' => Field\MultipleSelect::class,
-            'number'         => Field\Number::class,
-            'password'       => Field\Password::class,
-            'radio'          => Field\Radio::class,
-            'rate'           => Field\Rate::class,
-            'select'         => Field\Select::class,
-            'slider'         => Field\Slider::class,
-            'switch'         => Field\SwitchField::class,
-            'text'           => Field\Text::class,
-            'textarea'       => Field\Textarea::class,
-            'time'           => Field\Time::class,
-            'timeRange'      => Field\TimeRange::class,
-            'url'            => Field\Url::class,
-            'year'           => Field\Year::class,
-            'html'           => Field\Html::class,
-            'tags'           => Field\Tags::class,
-            'icon'           => Field\Icon::class,
-            'multipleFile'   => Field\MultipleFile::class,
-            'multipleImage'  => Field\MultipleImage::class,
-            'captcha'        => Field\Captcha::class,
-            'listbox'        => Field\Listbox::class,
-            'table'          => Field\Table::class,
-            'timezone'       => Field\Timezone::class,
-            'keyValue'       => Field\KeyValue::class,
-            'list'           => Field\ListField::class,
-        ];
-
-        foreach ($map as $abstract => $class) {
-            static::extend($abstract, $class);
-        }
     }
 
     /**
@@ -1595,6 +1614,31 @@ class Form implements Renderable
     }
 
     /**
+     * Add a new layout column.
+     *
+     * @param int      $width
+     * @param \Closure $closure
+     *
+     * @return $this
+     */
+    public function column($width, \Closure $closure)
+    {
+        $width = $width < 1 ? round(12 * $width) : $width;
+
+        $this->layout->column($width, $closure);
+
+        return $this;
+    }
+
+    /**
+     * Initialize filter layout.
+     */
+    protected function initLayout()
+    {
+        $this->layout = new Layout($this);
+    }
+
+    /**
      * Getter.
      *
      * @param string $name
@@ -1642,5 +1686,13 @@ class Form implements Renderable
         admin_error('Error', "Field type [$method] does not exist.");
 
         return new Field\Nullable();
+    }
+
+    /**
+     * @return Layout
+     */
+    public function getLayout(): Layout
+    {
+        return $this->layout;
     }
 }
