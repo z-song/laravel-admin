@@ -14,5 +14,7 @@
 
     </div>
     <!-- Default to the left -->
-    <strong>Powered by <a href="https://github.com/z-song/laravel-admin" target="_blank">laravel-admin</a></strong>
+    @if(config('admin.show_copyright'))
+    <strong>版权所有©️ <a href="/" target="_blank">{{ config('app.name') }}</a></strong>
+    @endif
 </footer>
