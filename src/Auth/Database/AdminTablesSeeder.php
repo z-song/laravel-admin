@@ -18,7 +18,7 @@ class AdminTablesSeeder extends Seeder
         Administrator::create([
             'username' => 'admin',
             'password' => bcrypt('admin'),
-            'name'     => 'Administrator',
+            'name'     => '超级管理员',
         ]);
 
         // create a role.
@@ -74,49 +74,49 @@ class AdminTablesSeeder extends Seeder
             [
                 'parent_id' => 0,
                 'order'     => 1,
-                'title'     => 'Dashboard',
+                'title'     => '首页',
                 'icon'      => 'fa-bar-chart',
                 'uri'       => '/',
             ],
             [
                 'parent_id' => 0,
                 'order'     => 2,
-                'title'     => 'Admin',
+                'title'     => '系统管理',
                 'icon'      => 'fa-tasks',
                 'uri'       => '',
             ],
             [
                 'parent_id' => 2,
                 'order'     => 3,
-                'title'     => 'Users',
+                'title'     => '用户管理',
                 'icon'      => 'fa-users',
                 'uri'       => 'auth/users',
             ],
             [
                 'parent_id' => 2,
                 'order'     => 4,
-                'title'     => 'Roles',
+                'title'     => '角色管理',
                 'icon'      => 'fa-user',
                 'uri'       => 'auth/roles',
             ],
             [
                 'parent_id' => 2,
                 'order'     => 5,
-                'title'     => 'Permission',
+                'title'     => '权限管理',
                 'icon'      => 'fa-ban',
                 'uri'       => 'auth/permissions',
             ],
             [
                 'parent_id' => 2,
                 'order'     => 6,
-                'title'     => 'Menu',
+                'title'     => '菜单管理',
                 'icon'      => 'fa-bars',
                 'uri'       => 'auth/menu',
             ],
             [
                 'parent_id' => 2,
                 'order'     => 7,
-                'title'     => 'Operation log',
+                'title'     => '日志审计',
                 'icon'      => 'fa-history',
                 'uri'       => 'auth/logs',
             ],
