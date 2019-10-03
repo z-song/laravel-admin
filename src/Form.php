@@ -343,7 +343,7 @@ class Form implements Renderable
      *
      * @return Tab
      */
-    public function getTab(): Tab
+    public function getTab()
     {
         return $this->tab;
     }
