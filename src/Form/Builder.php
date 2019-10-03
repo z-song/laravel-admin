@@ -567,7 +567,7 @@ class Builder
     {
         $this->removeReservedFields();
 
-        $tabObj = $this->form->getTab();
+        $tabObj = $this->form->setTab();
 
         if (!$tabObj->isEmpty()) {
             $script = <<<'SCRIPT'
