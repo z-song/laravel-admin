@@ -6,6 +6,7 @@ use Intervention\Image\Constraint;
 use Intervention\Image\Facades\Image as InterventionImage;
 use Intervention\Image\ImageManagerStatic;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Str;
 
 trait ImageField
 {
@@ -134,7 +135,7 @@ trait ImageField
             $ext = pathinfo($this->original, PATHINFO_EXTENSION);
 
             // We remove extension from file name so we can append thumbnail type
-            $path = str_replace_last('.'.$ext, '', $this->original);
+            $path = Str::replaceLast('.'.$ext, '', $this->original);
 
             // We merge original name + thumbnail name + extension
             $path = $path.'-'.$name.'.'.$ext;
@@ -159,7 +160,7 @@ trait ImageField
             $ext = pathinfo($this->name, PATHINFO_EXTENSION);
 
             // We remove extension from file name so we can append thumbnail type
-            $path = str_replace_last('.'.$ext, '', $this->name);
+            $path = Str::replaceLast('.'.$ext, '', $this->name);
 
             // We merge original name + thumbnail name + extension
             $path = $path.'-'.$name.'.'.$ext;
