@@ -325,9 +325,9 @@ class Form implements Renderable
     /**
      * Use tab to split form.
      *
-     * @param string $title
+     * @param string  $title
      * @param Closure $content
-     * @param bool $active
+     * @param bool    $active
      *
      * @return $this
      */
