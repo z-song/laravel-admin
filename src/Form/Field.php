@@ -524,7 +524,7 @@ class Field implements Renderable
             return;
         }
 
-        if (! in_array('required', $rules, true)) {
+        if (!in_array('required', $rules, true)) {
             return;
         }
 
@@ -1455,7 +1455,7 @@ class Field implements Renderable
      *
      * @return \Encore\Admin\Form\Field
      */
-    public function with(Closure $callback): Field
+    public function with(Closure $callback): self
     {
         $this->callback = $callback;
 

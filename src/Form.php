@@ -325,9 +325,9 @@ class Form implements Renderable
     /**
      * Use tab to split form.
      *
-     * @param  string  $title
-     * @param  Closure  $content
-     * @param  bool  $active
+     * @param string $title
+     * @param Closure $content
+     * @param bool $active
      *
      * @return $this
      */
@@ -1158,7 +1158,7 @@ class Form implements Renderable
         $data = $this->model->toArray();
 
         $this->builder->fields()->each(function (Field $field) use ($data) {
-            if (! in_array($field->column(), $this->ignored, true)) {
+            if (!in_array($field->column(), $this->ignored, true)) {
                 $field->fill($data);
             }
         });
@@ -1474,7 +1474,7 @@ class Form implements Renderable
     /**
      * Footer setting for form.
      *
-     * @param  Closure  $callback
+     * @param Closure $callback
      *
      * @return \Encore\Admin\Form\Footer
      */
@@ -1614,7 +1614,7 @@ class Form implements Renderable
                 continue;
             }
 
-            $assets = $field->getAssets();
+            $assets = call_user_func([$field, 'getAssets']);
 
             $css->push(Arr::get($assets, 'css'));
             $js->push(Arr::get($assets, 'js'));
