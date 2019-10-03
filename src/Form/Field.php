@@ -268,7 +268,7 @@ class Field implements Renderable
      *
      * @return array
      */
-    public static function getAssets(): array
+    public static function getAssets()
     {
         return [
             'css' => static::$css,
@@ -451,7 +451,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setForm(Form $form = null): self
+    public function setForm(Form $form = null)
     {
         $this->form = $form;
 
@@ -483,7 +483,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function options($options = []): self
+    public function options($options = [])
     {
         if ($options instanceof Arrayable) {
             $options = $options->toArray();
@@ -501,7 +501,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function checked($checked = []): self
+    public function checked($checked = [])
     {
         if ($checked instanceof Arrayable) {
             $checked = $checked->toArray();
@@ -1054,7 +1054,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function readonly(): self
+    public function readonly()
     {
         return $this->attribute('readonly', true);
     }
