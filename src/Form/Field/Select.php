@@ -124,18 +124,28 @@ class Select extends Field
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
-    $.get("$sourceUrl",{q : this.value}, function (data) {
-        target.find("option").remove();
-        $(target).select2({
-            placeholder: $placeholder,
-            allowClear: $allowClear,
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        }).trigger('change');
-    });
+    var query=this.value;
+    target.find("option").remove();
+    $(target).select2({
+        ajax: {
+            url:"$sourceUrl",
+            dataType: 'json',
+            type:'GET',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: query                       
+                };
+            },
+            processResults: function (data, params) {
+                return {
+                    results: data
+                };
+            }
+        },
+        placeholder: $placeholder,
+        allowClear: $allowClear          
+    }).trigger('change');
 });
 EOT;
 
@@ -173,7 +183,7 @@ var refreshOptions = function(url, target) {
         target.find("option").remove();
         $(target).select2({
             placeholder: $placeholder,
-            allowClear: $allowClear,        
+            allowClear: $allowClear,     
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
