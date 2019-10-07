@@ -120,34 +120,34 @@ class Select extends Field
             'text' => trans('admin.choose'),
         ]);
 
-        $script = <<<EOT
+        $script = <<<JS
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
     var query=this.value;
-    target.find("option").remove();
-    $(target).select2({
-        ajax: {
-            url:"$sourceUrl",
-            dataType: 'json',
-            type:'GET',
-            delay: 250,
-            data: function (params) {
-                return {
-                    q: query                       
-                };
-            },
-            processResults: function (data, params) {
-                return {
-                    results: data
-                };
-            }
+    $.ajax({
+        url:"$sourceUrl",
+        dataType:'json',
+        type:'GET',
+        data:{
+            q:query
         },
-        placeholder: $placeholder,
-        allowClear: $allowClear          
-    }).trigger('change');
+        success:function(data) {
+          target.find("option").remove();
+          target.append('<option value=""></option>');
+            $(target).select2({
+                placeholder: $placeholder,
+                allowClear: $allowClear,               
+                data: $.map(data, function (d) {
+                    d.id = d.{$idField};
+                    d.text = d.{$textField};
+                    return d;
+                })
+            }).trigger('change');
+        }
+    });
 });
-EOT;
+JS;
 
         Admin::script($script);
 
@@ -174,22 +174,27 @@ EOT;
             'text' => trans('admin.choose'),
         ]);
 
-        $script = <<<EOT
+        $script = <<<JS
 var fields = '$fieldsStr'.split('.');
 var urls = '$urlsStr'.split('^');
 
 var refreshOptions = function(url, target) {
-    $.get(url).then(function(data) {
-        target.find("option").remove();
-        $(target).select2({
-            placeholder: $placeholder,
-            allowClear: $allowClear,     
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        }).trigger('change');
+    $.ajax({
+        url:url,
+        dataType:'json',
+        success:function(data) {
+          target.find("option").remove();
+          target.append('<option value=""></option>');
+            $(target).select2({
+                placeholder: $placeholder,
+                allowClear: $allowClear,               
+                data: $.map(data, function (d) {
+                    d.id = d.{$idField};
+                    d.text = d.{$textField};
+                    return d;
+                })
+            }).trigger('change');
+        }
     });
 };
 
@@ -203,7 +208,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
         promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
     });
 });
-EOT;
+JS;
 
         Admin::script($script);
 
