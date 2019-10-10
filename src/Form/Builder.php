@@ -216,6 +216,7 @@ class Builder
 
     /**
      * @param int|null $slice
+     * 
      * @return string
      */
     public function getResource(int $slice = null): string
