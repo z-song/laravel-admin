@@ -534,7 +534,7 @@ class Field implements Renderable
         }
 
         //do not use required attribute with tabs
-        if ($this->form->getTab()) {
+        if ($this->form && $this->form->getTab()) {
             return;
         }
 
