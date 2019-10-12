@@ -155,7 +155,7 @@ class Builder
     /**
      * @return string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
     }
@@ -167,9 +167,9 @@ class Builder
      *
      * @return bool
      */
-    public function isMode($mode)
+    public function isMode($mode): bool
     {
-        return $this->mode == $mode;
+        return $this->mode === $mode;
     }
 
     /**
@@ -177,7 +177,7 @@ class Builder
      *
      * @return bool
      */
-    public function isCreating()
+    public function isCreating(): bool
     {
         return $this->isMode(static::MODE_CREATE);
     }
@@ -187,7 +187,7 @@ class Builder
      *
      * @return bool
      */
-    public function isEditing()
+    public function isEditing(): bool
     {
         return $this->isMode(static::MODE_EDIT);
     }
@@ -215,11 +215,13 @@ class Builder
     }
 
     /**
+     * @param int|null $slice
+     *
      * @return string
      */
-    public function getResource($slice = null)
+    public function getResource(int $slice = null): string
     {
-        if ($this->mode == self::MODE_CREATE) {
+        if ($this->mode === self::MODE_CREATE) {
             return $this->form->resource(-1);
         }
         if ($slice !== null) {
@@ -235,7 +237,7 @@ class Builder
      *
      * @return $this
      */
-    public function setWidth($field = 8, $label = 2)
+    public function setWidth($field = 8, $label = 2): self
     {
         $this->width = [
             'label' => $label,
@@ -250,7 +252,7 @@ class Builder
      *
      * @return array
      */
-    public function getWidth()
+    public function getWidth(): array
     {
         return $this->width;
     }
@@ -270,7 +272,7 @@ class Builder
      *
      * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         if ($this->action) {
             return $this->action;
@@ -294,7 +296,7 @@ class Builder
      *
      * @return $this
      */
-    public function setView($view)
+    public function setView($view): self
     {
         $this->view = $view;
 
@@ -308,7 +310,7 @@ class Builder
      *
      * @return $this
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -320,7 +322,7 @@ class Builder
      *
      * @return Collection
      */
-    public function fields()
+    public function fields(): Collection
     {
         return $this->fields;
     }
@@ -335,7 +337,7 @@ class Builder
     public function field($name)
     {
         return $this->fields()->first(function (Field $field) use ($name) {
-            return $field->column() == $name;
+            return $field->column() === $name;
         });
     }
 
@@ -344,7 +346,7 @@ class Builder
      *
      * @return bool
      */
-    public function hasRows()
+    public function hasRows(): bool
     {
         return !empty($this->form->rows);
     }
@@ -354,7 +356,7 @@ class Builder
      *
      * @return array
      */
-    public function getRows()
+    public function getRows(): array
     {
         return $this->form->rows;
     }
@@ -362,7 +364,7 @@ class Builder
     /**
      * @return array
      */
-    public function getHiddenFields()
+    public function getHiddenFields(): array
     {
         return $this->hiddenFields;
     }
@@ -403,7 +405,7 @@ class Builder
      */
     public function option($option, $value = null)
     {
-        if (func_num_args() == 1) {
+        if (func_num_args() === 1) {
             return Arr::get($this->options, $option);
         }
 
@@ -415,17 +417,17 @@ class Builder
     /**
      * @return string
      */
-    public function title()
+    public function title(): string
     {
         if ($this->title) {
             return $this->title;
         }
 
-        if ($this->mode == static::MODE_CREATE) {
+        if ($this->mode === static::MODE_CREATE) {
             return trans('admin.create');
         }
 
-        if ($this->mode == static::MODE_EDIT) {
+        if ($this->mode === static::MODE_EDIT) {
             return trans('admin.edit');
         }
 
@@ -437,7 +439,7 @@ class Builder
      *
      * @return bool
      */
-    public function hasFile()
+    public function hasFile(): bool
     {
         foreach ($this->fields() as $field) {
             if ($field instanceof Field\File) {
@@ -457,7 +459,7 @@ class Builder
     {
         $previous = URL::previous();
 
-        if (!$previous || $previous == URL::current()) {
+        if (!$previous || $previous === URL::current()) {
             return;
         }
 
@@ -473,7 +475,7 @@ class Builder
      *
      * @return string
      */
-    public function open($options = [])
+    public function open($options = []): string
     {
         $attributes = [];
 
@@ -506,7 +508,7 @@ class Builder
      *
      * @return string
      */
-    public function close()
+    public function close(): string
     {
         $this->form = null;
         $this->fields = null;
@@ -534,7 +536,7 @@ class Builder
         $this->form->getLayout()->removeReservedFields($reservedColumns);
 
         $this->fields = $this->fields()->reject(function (Field $field) use ($reservedColumns) {
-            return in_array($field->column(), $reservedColumns);
+            return in_array($field->column(), $reservedColumns, true);
         });
     }
 
@@ -543,7 +545,7 @@ class Builder
      *
      * @return string
      */
-    public function renderTools()
+    public function renderTools(): string
     {
         return $this->tools->render();
     }
@@ -553,7 +555,7 @@ class Builder
      *
      * @return string
      */
-    public function renderFooter()
+    public function renderFooter(): string
     {
         return $this->footer->render();
     }
@@ -563,11 +565,11 @@ class Builder
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $this->removeReservedFields();
 
-        $tabObj = $this->form->getTab();
+        $tabObj = $this->form->setTab();
 
         if (!$tabObj->isEmpty()) {
             $script = <<<'SCRIPT'
