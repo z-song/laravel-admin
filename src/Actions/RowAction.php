@@ -28,6 +28,11 @@ abstract class RowAction extends GridAction
     protected $asColumn = false;
 
     /**
+     * @var bool
+     */
+    protected $withTrashed = false;
+
+    /**
      * Get primary key value of current row.
      *
      * @return mixed
@@ -115,6 +120,10 @@ abstract class RowAction extends GridAction
         }
 
         $modelClass = str_replace('_', '\\', $request->get('_model'));
+
+        if ($this->withTrashed) {
+            return $modelClass::withTrashed()->findOrFail($key);
+        }
 
         return $modelClass::findOrFail($key);
     }

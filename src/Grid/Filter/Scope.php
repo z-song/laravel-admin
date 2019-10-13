@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 class Scope implements Renderable
 {
     const QUERY_NAME = '_scope_';
+    const SEPARATOR = '_separator_';
 
     /**
      * @var string
@@ -66,6 +67,10 @@ class Scope implements Renderable
      */
     public function render()
     {
+        if ($this->key == static::SEPARATOR) {
+            return '<li role="separator" class="divider"></li>';
+        }
+
         $url = request()->fullUrlWithQuery([static::QUERY_NAME => $this->key]);
 
         return "<li><a href=\"{$url}\">{$this->label}</a></li>";
