@@ -45,7 +45,7 @@ class MultipleSelect extends Select
      */
     public function fill($data)
     {
-        $relations = Arr::get($data, $this->column);
+        $relations = Arr::get($data, \Illuminate\Support\Str::snake($this->column));
 
         if (is_string($relations)) {
             $this->value = explode(',', $relations);

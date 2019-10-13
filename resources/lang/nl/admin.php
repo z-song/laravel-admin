@@ -103,5 +103,5 @@ return [
     'prev'                   => 'Vorige',
     'next'                   => 'Volgende',
     'quick_create'           => 'Snel aanmaken',
-    'menu_titles'           => [],
+    'menu_titles'            => [],
 ];
