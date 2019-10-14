@@ -7,6 +7,7 @@ use Encore\Admin\Form\Field;
 class Divider extends Field
 {
     protected $title;
+    protected $class='divider';
 
     public function __construct($title = '')
     {
@@ -20,11 +21,23 @@ class Divider extends Field
         }
 
         return <<<HTML
-<div class="divider">
-  <span class="divider-title">
+<div class="{$this->class}">
+  <span class="$this->class-title">
     {$this->title}
   </span>
 </div>
 HTML;
     }
+    /**
+     * Add note style for divider.
+     *
+     * @return $this
+     */
+    public function note()
+    {              
+      $this->class='note';
+      return $this;
+    }
+
+
 }

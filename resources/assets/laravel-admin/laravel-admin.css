@@ -94,3 +94,17 @@ span.divider-title {
     padding: 0 10px;
 }
 
+div.note {
+    text-align: justify;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    background-color: #dddcdc;
+    padding: 5px 10px;
+}
+
+span.note-title {
+    font-style: italic;
+    font-size: 16px;
+}
+
+
