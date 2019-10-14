@@ -28,16 +28,17 @@ class Divider extends Field
 </div>
 HTML;
     }
+
     /**
      * Add note style for divider.
      *
      * @return $this
      */
     public function note()
-    {              
-      $this->class = 'note';
+    {      
+        $this->class = 'note';
 
-      return $this;
+        return $this;
     }
 
 }
