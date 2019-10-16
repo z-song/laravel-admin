@@ -77,7 +77,7 @@ trait UploadField
      * @var array
      */
     protected $fileTypes = [
-        'image'  => '/^(gif|png|jpe?g|svg)$/i',
+        'image'  => '/^(gif|png|jpe?g|svg|webp)$/i',
         'html'   => '/^(htm|html)$/i',
         'office' => '/^(docx?|xlsx?|pptx?|pps|potx?)$/i',
         'gdocs'  => '/^(docx?|xlsx?|pptx?|pps|potx?|rtf|ods|odt|pages|ai|dxf|ttf|tiff?|wmf|e?ps)$/i',
