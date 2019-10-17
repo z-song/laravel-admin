@@ -4,6 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class MultipleSelect extends Select
 {
@@ -46,6 +47,11 @@ class MultipleSelect extends Select
     public function fill($data)
     {
         $relations = Arr::get($data, \Illuminate\Support\Str::snake($this->column));
+
+        if (is_null($relations)) {
+            $snake_column = Str::snake($this->column);
+            $relations = Arr::get($data, $snake_column);
+        }
 
         if (is_string($relations)) {
             $this->value = explode(',', $relations);
