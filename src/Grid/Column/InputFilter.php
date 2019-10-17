@@ -110,8 +110,8 @@ SCRIPT;
         </li>
         <li class="divider"></li>
         <li class="text-right">
-            <button class="btn btn-sm btn-flat btn-primary column-filter-submit pull-left">{$this->trans('submit')}</button>
-            <button class="btn btn-sm btn-flat btn-default column-filter-all">{$this->trans('reset')}</button>
+            <button class="btn btn-sm btn-flat btn-primary column-filter-submit pull-left" data-loading-text="{$this->trans('search')}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{$this->trans('search')}</button>
+            <button class="btn btn-sm btn-flat btn-default column-filter-all" data-loading-text="..."><i class="fa fa-undo"></i></button>
         </li>
     </ul>
     </form>
