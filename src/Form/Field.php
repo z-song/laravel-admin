@@ -1391,7 +1391,7 @@ class Field implements Renderable
      *
      * @return string
      */
-    public function setView($view): string
+    public function setView($view): self
     {
         $this->view = $view;
 
