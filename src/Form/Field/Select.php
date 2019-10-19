@@ -134,7 +134,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
                 d.text = d.$textField;
                 return d;
             })
-        }).val(target.data('value').split(',')).trigger('change');
+        }).val(target.data('value').toString().split(',')).trigger('change');
     });
 });
 $("{$this->getElementClassSelector()}").each(function(){
@@ -181,7 +181,7 @@ var fields = '$fieldsStr'.split('.'), urls = '$urlsStr'.split('^'), refreshOptio
                 d.text = d.$textField;
                 return d;
             })
-        }).val(target.data('value').split(',')).trigger('change');
+        }).val(target.data('value').toString().split(',')).trigger('change');
     });
 };
 $(document).off('change', "{$this->getElementClassSelector()}");
