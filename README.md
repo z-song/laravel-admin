@@ -14,11 +14,11 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/z-song/laravel-admin">
-        <img src="https://travis-ci.org/z-song/laravel-admin.svg?branch=master" alt="Build Status">
+    <a href="https://travis-ci.org/muhlisabdi/laravel-admin">
+        <img src="https://travis-ci.org/muhlisabdi/laravel-admin.svg?branch=master" alt="Build Status">
     </a>
-    <a href="https://styleci.io/repos/48796179">
-        <img src="https://styleci.io/repos/48796179/shield" alt="StyleCI">
+    <a href="https://styleci.io/repos/213185685">
+        <img src="https://styleci.io/repos/213185685/shield" alt="StyleCI">
     </a>
     <a href="https://packagist.org/packages/encore/laravel-admin">
         <img src="https://img.shields.io/packagist/l/encore/laravel-admin.svg?maxAge=2592000&&style=flat-square" alt="Packagist">
