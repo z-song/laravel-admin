@@ -35,10 +35,9 @@ HTML;
      * @return $this
      */
     public function note()
-    {      
+    {
         $this->class = 'note';
 
         return $this;
     }
-
 }
