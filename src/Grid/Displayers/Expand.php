@@ -40,7 +40,7 @@ $('.{$this->getElementClass()}').on('click', function () {
         var row = $(this).closest('tr');
         var html = $('template.grid-expand-'+key).html();
 
-        row.after("<tr style='background-color: #ecf0f5;'><td colspan='"+(row.find('td').length)+"' style='padding:0 !important; border:0;'>"+html+"</td></tr>");
+        row.after("<tr style='background-color: #ecf0f5;height: 0px'><td colspan='"+(row.find('td').length)+"' style='padding:0 !important; border:0;'>"+html+"</td></tr>");
 
         $(this).data('inserted', 1);
     }
