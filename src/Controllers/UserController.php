@@ -73,6 +73,11 @@ class UserController extends AdminController
         })->label();
         $show->field('created_at', trans('admin.created_at'));
         $show->field('updated_at', trans('admin.updated_at'));
+        $show->panel()->tools(function ($tools) use ($id) {
+            if ($id == 1) {
+                $tools->disableDelete();
+            }
+        });
 
         return $show;
     }
