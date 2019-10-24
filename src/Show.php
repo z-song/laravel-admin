@@ -220,8 +220,9 @@ class Show implements Renderable
         $field = new Field($name, $label);
 
         $field->setParent($this);
-
-        $this->overwriteExistingField($name);
+        if (config('admin.overwrite_show_field')) {
+            $this->overwriteExistingField($name);
+        }
 
         return tap($field, function ($field) {
             $this->fields->push($field);
@@ -243,7 +244,9 @@ class Show implements Renderable
 
         $relation->setParent($this);
 
-        $this->overwriteExistingRelation($name);
+        if (config('admin.overwrite_show_relation')) {
+            $this->overwriteExistingRelation($name);
+        }
 
         return tap($relation, function ($relation) {
             $this->relations->push($relation);
