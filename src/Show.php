@@ -153,11 +153,11 @@ class Show implements Renderable
     /**
      * Overwrite properties for field and relation.
      *
-     * @return Bool
+     * @return bool
      */
     protected function overWrite()
     {
-        $this->overWrite= true;
+        $this->overWrite = true;
 
         return $this;
     }
