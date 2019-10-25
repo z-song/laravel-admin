@@ -155,7 +155,7 @@ class Show implements Renderable
      *
      * @return Bool
      */
-    protected function overWrite()
+    public function overWrite()
     {
         $this->overWrite= true;
 
