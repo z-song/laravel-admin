@@ -58,6 +58,13 @@ class Show implements Renderable
     protected $relations;
 
     /**
+     * Enable overwrite field and relation.
+     *
+     * @var Overwrite
+     */
+    protected $overWrite = false;
+
+    /**
      * @var Panel
      */
     protected $panel;
@@ -144,6 +151,18 @@ class Show implements Renderable
     }
 
     /**
+     * Overwrite properties for field and relation.
+     *
+     * @return Bool
+     */
+    protected function overWrite()
+    {
+        $this->overWrite= true;
+
+        return $this;
+    }
+
+    /**
      * Add a model field to show.
      *
      * @param string $name
@@ -220,7 +239,7 @@ class Show implements Renderable
         $field = new Field($name, $label);
 
         $field->setParent($this);
-        if (config('admin.overwrite_show_field')) {
+        if ($this->overWrite) {
             $this->overwriteExistingField($name);
         }
 
@@ -244,7 +263,7 @@ class Show implements Renderable
 
         $relation->setParent($this);
 
-        if (config('admin.overwrite_show_relation')) {
+        if ($this->overWrite) {
             $this->overwriteExistingRelation($name);
         }
 
