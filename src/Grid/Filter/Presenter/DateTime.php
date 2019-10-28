@@ -32,7 +32,7 @@ class DateTime extends Presenter
      *
      * @return mixed
      */
-    protected function getOptions(array  $options) : array
+    protected function getOptions(array $options) : array
     {
         $options['format'] = Arr::get($options, 'format', $this->format);
         $options['locale'] = Arr::get($options, 'locale', config('app.locale'));
