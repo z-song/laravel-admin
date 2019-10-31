@@ -108,3 +108,6 @@ span.note-title {
 }
 
 
+.file-input .glyphicon-folder-open {
+    display: inline;
+}
