@@ -61,7 +61,6 @@ trait HasAssets
      * @var array
      */
     public static $baseCss = [
-        'vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css',
         'vendor/laravel-admin/font-awesome/css/font-awesome.min.css',
         'vendor/laravel-admin/laravel-admin/laravel-admin.css',
         'vendor/laravel-admin/nprogress/nprogress.css',
@@ -93,6 +92,11 @@ trait HasAssets
      * @var string
      */
     public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js';
+
+    /**
+     * @var string
+     */
+    public static $bootstrapCss = 'vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css';
 
     /**
      * @var array
@@ -311,5 +315,13 @@ trait HasAssets
     public function jQuery()
     {
         return admin_asset(static::$jQuery);
+    }
+
+    /**
+     * @return string
+     */
+    public function bootstrapCss()
+    {
+        return admin_asset(static::$bootstrapCss);
     }
 }

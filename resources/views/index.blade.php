@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="{{$favicon}}">
     @endif
 
+    <link rel="stylesheet" href="{{ Admin::bootstrapCss() }}">
     {!! Admin::css() !!}
 
     <script src="{{ Admin::jQuery() }}"></script>
