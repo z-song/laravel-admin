@@ -25,7 +25,7 @@
     {!! $grid->renderHeader() !!}
 
     <!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
+    <div class="box-body table-responsive">
         <div class="tables-container">
             <div class="table-wrap table-main">
                 <table class="table " id="{{ $grid->tableID }}">
