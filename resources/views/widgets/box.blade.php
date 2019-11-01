@@ -9,7 +9,7 @@
             </div><!-- /.box-tools -->
         </div><!-- /.box-header -->
     @endif
-    <div class="box-body" style="display: block;">
+    <div class="box-body table-responsive" style="display: block;">
         {!! $content !!}
     </div><!-- /.box-body -->
     @if($footer)
