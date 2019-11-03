@@ -60,7 +60,7 @@ class MultipleSelect extends Select
 
     public function setOriginal($data)
     {
-        $relations = array_get($data, $this->column);
+        $relations = Arr::get($data, snake_case($this->column));
 
         if (is_string($relations)) {
             $this->original = explode(',', $relations);
