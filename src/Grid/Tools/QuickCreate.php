@@ -231,7 +231,7 @@ class QuickCreate implements Renderable
 
     protected function script()
     {
-        $url = request()->url();
+        $url = $this->parent->resource();
 
         $script = <<<SCRIPT
 
