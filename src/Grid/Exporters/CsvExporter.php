@@ -32,11 +32,11 @@ class CsvExporter extends AbstractExporter
                     $titles = $this->getHeaderRowFromRecords($records);
 
                     // Add CSV headers
-                    fputcsv($handle, $titles);
+                    fputcsv($handle, $titles, ';');
                 }
 
                 foreach ($records as $record) {
-                    fputcsv($handle, $this->getFormattedRecord($record));
+                    fputcsv($handle, $this->getFormattedRecord($record), ';');
                 }
             });
 
@@ -54,7 +54,7 @@ class CsvExporter extends AbstractExporter
      */
     public function getHeaderRowFromRecords(Collection $records): array
     {
-        $titles = collect(Arr::dot($records->first()->toArray()))->keys()->map(
+        $titles = collect(Arr::dot($records->first()->getAttributes()))->keys()->map(
             function ($key) {
                 $key = str_replace('.', ' ', $key);
 
