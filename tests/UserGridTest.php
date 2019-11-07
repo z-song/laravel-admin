@@ -56,7 +56,7 @@ class UserGridTest extends TestCase
             ->each(function ($u) {
                 $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
                 $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
-                $u->data = ['json' => ['field' => random_int(0,50)]];
+                $u->data = ['json' => ['field' => random_int(0, 50)]];
                 $u->save();
             });
     }
@@ -103,7 +103,7 @@ class UserGridTest extends TestCase
         $this->assertCount(10, $jsonTds);
         $prevValue = PHP_INT_MAX;
         foreach ($jsonTds as $jsonTd) {
-            $currentValue = (int)$jsonTd->nodeValue;
+            $currentValue = (int) $jsonTd->nodeValue;
             $this->assertTrue($currentValue <= $prevValue);
             $prevValue = $currentValue;
         }
