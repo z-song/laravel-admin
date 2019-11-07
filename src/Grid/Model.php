@@ -547,29 +547,22 @@ class Model
         }
 
         $columnNameContainsDots = Str::contains($columnName, '.');
-        if ($columnNameContainsDots === true) {
-            $isRelation = $this->queries->contains(function ($query) use ($columnName) {
-                return $query['method'] === 'with' && in_array($columnName, $query['arguments'], true);
-            });
-            if ($isRelation === true) {
-                $this->setRelationSort($columnName);
-            } else {
+        $isRelation = $this->queries->contains(function ($query) use ($columnName) {
+            return $query['method'] === 'with' && in_array($columnName, $query['arguments'], true);
+        });
+        if ($columnNameContainsDots === true && $isRelation) {
+            $this->setRelationSort($columnName);
+        } else {
+            $this->resetOrderBy();
+
+            if ($columnNameContainsDots === true) {
                 //json
                 $this->resetOrderBy();
                 $explodedCols = explode('.', $this->sort['column']);
                 $col = array_shift($explodedCols);
                 $parts = implode('.', $explodedCols);
-                $column = "{$col}->>'$.{$parts}' {$this->sort['type']}";
-                $method = 'orderByRaw';
-                $arguments = [$column];
-
-                $this->queries->push([
-                    'method'    => $method,
-                    'arguments' => $arguments,
-                ]);
+                $columnName = "{$col}->>'$.{$parts}'";
             }
-        } else {
-            $this->resetOrderBy();
 
             // get column. if contains "cast", set set column as cast
             if (!empty($this->sort['cast'])) {

@@ -56,6 +56,8 @@ class UserGridTest extends TestCase
             ->each(function ($u) {
                 $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
                 $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+                $u->data = ['json' => ['field' => random_int(0,50)]];
+                $u->save();
             });
     }
 
@@ -88,6 +90,23 @@ class UserGridTest extends TestCase
 
         $this->click(1)->seePageIs('admin/users?page=1');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
+    }
+
+    public function testOrderByJson()
+    {
+        $this->seedsTable(10);
+        $this->assertCount(10, UserModel::all());
+
+        $this->visit('admin/users?_sort[column]=data.json.field&_sort[type]=desc&_sort[cast]=unsigned');
+
+        $jsonTds = $this->crawler->filter('table.table tbody td.column-data-json-field');
+        $this->assertCount(10, $jsonTds);
+        $prevValue = PHP_INT_MAX;
+        foreach ($jsonTds as $jsonTd) {
+            $currentValue = (int)$jsonTd->nodeValue;
+            $this->assertTrue($currentValue <= $prevValue);
+            $prevValue = $currentValue;
+        }
     }
 
     public function testEqualFilter()
