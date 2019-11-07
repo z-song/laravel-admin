@@ -557,11 +557,11 @@ class Model
                 //json
                 $this->resetOrderBy();
                 $explodedCols = explode('.', $this->sort['column']);
-                $col          = array_shift($explodedCols);
-                $parts        = implode('.', $explodedCols);
-                $column       = "{$col}->>'$.{$parts}' {$this->sort['type']}";
-                $method       = 'orderByRaw';
-                $arguments    = [$column];
+                $col = array_shift($explodedCols);
+                $parts = implode('.', $explodedCols);
+                $column = "{$col}->>'$.{$parts}' {$this->sort['type']}";
+                $method = 'orderByRaw';
+                $arguments = [$column];
 
                 $this->queries->push([
                     'method'    => $method,
@@ -573,12 +573,12 @@ class Model
 
             // get column. if contains "cast", set set column as cast
             if (!empty($this->sort['cast'])) {
-                $column    = "CAST({$columnName} AS {$this->sort['cast']}) {$this->sort['type']}";
-                $method    = 'orderByRaw';
+                $column = "CAST({$columnName} AS {$this->sort['cast']}) {$this->sort['type']}";
+                $method = 'orderByRaw';
                 $arguments = [$column];
             } else {
-                $column    = $columnName;
-                $method    = 'orderBy';
+                $column = $columnName;
+                $method = 'orderBy';
                 $arguments = [$column, $this->sort['type']];
             }
 
