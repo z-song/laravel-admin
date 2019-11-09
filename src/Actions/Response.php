@@ -223,7 +223,7 @@ class Response
             $message = $exception->getMessage();
         }
 
-        return $response->toastr()->topCenter()->error($message);
+        return $response->toastr()->error($message);
     }
 
     /**
