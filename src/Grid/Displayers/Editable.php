@@ -188,9 +188,9 @@ class Editable extends AbstractDisplayer
     ,
     "success":function(response, newValue){
         if (response.status){
-            $.admin.toastr.success(response.message, '', {positionClass:"toast-top-center"});
+            $.admin.toastr.success(response.message, '', {positionClass:"toast-bottom-right"});
         } else {
-            $.admin.toastr.error(response.message, '', {positionClass:"toast-top-center"});
+            $.admin.toastr.error(response.message, '', {positionClass:"toast-bottom-right"});
         }
     }
 }

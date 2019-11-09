@@ -136,7 +136,7 @@ class Toastr
     public function getOptions()
     {
         if (!isset($this->options['positionClass'])) {
-            $this->topCenter();
+            $this->bottomRight();
         }
 
         return [

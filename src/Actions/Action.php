@@ -374,7 +374,7 @@ var actionResolver = function (data) {
         
         var actionCatcher = function (request) {
             if (request && typeof request.responseJSON === 'object') {
-                $.admin.toastr.error(request.responseJSON.message, '', {positionClass:"toast-bottom-center", timeOut: 10000}).css("width","500px")
+                $.admin.toastr.error(request.responseJSON.message, '', {positionClass:"toast-bottom-right", timeOut: 10000}).css("width","500px")
             }
         };
 SCRIPT;

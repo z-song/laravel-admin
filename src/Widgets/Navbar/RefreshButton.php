@@ -14,7 +14,7 @@ class RefreshButton implements Renderable
         $script = <<<SCRIPT
 $('.container-refresh').off('click').on('click', function() {
     $.admin.reload();
-    $.admin.toastr.success('{$message}', '', {positionClass:"toast-top-center"});
+    $.admin.toastr.success('{$message}', '', {positionClass:"toast-bottom-right"});
 });
 SCRIPT;
 

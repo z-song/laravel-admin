@@ -241,40 +241,40 @@ class QuickCreate implements Renderable
         $('.quick-create .create-form').show();
         $(this).hide();
     });
-    
+
     $('.quick-create .cancel').click(function () {
         $('.quick-create .create-form').hide();
         $('.quick-create .create').show();
     });
-    
+
     $('.quick-create .create-form').submit(function (e) {
-    
+
         e.preventDefault();
-    
+
         $.ajax({
             url: '{$url}',
             type: 'POST',
             data: $(this).serialize(),
             success: function(data, textStatus, jqXHR) {
                 console.info(data);
-                
+
                 if (data.status == true) {
-                    $.admin.toastr.success(data.message, '', {positionClass:"toast-top-center"});
+                    $.admin.toastr.success(data.message, '', {positionClass:"toast-bottom-right"});
                     $.admin.reload();
                     return;
                 }
-                
+
                 if (typeof data.validation !== 'undefined') {
-                    $.admin.toastr.warning(data.message, '', {positionClass:"toast-top-center"})
+                    $.admin.toastr.warning(data.message, '', {positionClass:"toast-bottom-right"})
                 }
             },
             error:function(XMLHttpRequest, textStatus){
                 if (typeof XMLHttpRequest.responseJSON === 'object') {
-                    $.admin.toastr.error(XMLHttpRequest.responseJSON.message, '', {positionClass:"toast-top-center", timeOut: 10000});
+                    $.admin.toastr.error(XMLHttpRequest.responseJSON.message, '', {positionClass:"toast-bottom-right", timeOut: 10000});
                 }
             }
         });
-        
+
         return false;
     });
 

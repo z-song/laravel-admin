@@ -16,7 +16,7 @@ trait HasHotKeys
 
 $(document).off('keydown').keydown(function(e) {
     var tag = e.target.tagName.toLowerCase();
-    
+
     if (tag == 'input' || tag == 'textarea') {
         return;
     }
@@ -27,17 +27,17 @@ $(document).off('keydown').keydown(function(e) {
     switch(e.which) {
         case 82: // `r` for reload
             $.admin.reload();
-            $.admin.toastr.success('{$refreshMessage}', '', {positionClass:"toast-top-center"});
+            $.admin.toastr.success('{$refreshMessage}', '', {positionClass:"toast-bottom-right"});
             break;
         case 83: // `s` for search
             \$box.find('input.grid-quick-search').trigger('focus');
-            break; 
+            break;
         case 70: // `f` for open filter
             \$box.find('#{$filterID}').toggleClass('hide');
             break;
-        case 67: // `c` go to create page 
+        case 67: // `c` go to create page
             \$box.find('.grid-create-btn>a').trigger('click');
-            break; 
+            break;
         case 37: // `left` for go to prev page
             \$current_page.prev().find('a').trigger('click');
             break;

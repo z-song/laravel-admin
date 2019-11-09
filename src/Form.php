@@ -701,7 +701,7 @@ class Form implements Renderable
             $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
         }
 
-        admin_toastr(trans('admin.save_succeeded'));
+        admin_toastr(trans('admin.save_succeeded'),'success', ['positionClass' => 'toast-bottom-right']);
 
         return redirect($url);
     }
