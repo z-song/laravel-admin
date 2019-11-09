@@ -28,8 +28,6 @@ $(document).pjax('a:not(a[target="_blank"])', {
     container: '#pjax-container'
 });
 
-NProgress.configure({parent: '#app'});
-
 $(document).on('pjax:timeout', function (event) {
     event.preventDefault();
 })
