@@ -1,6 +1,5 @@
 <!-- Main Header -->
 <header class="main-header">
-
     <!-- Logo -->
     <a href="{{ admin_url('/') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -8,23 +7,22 @@
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">{!! config('admin.logo', config('admin.name')) !!}</span>
     </a>
-
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
-        <ul class="nav navbar-nav hidden-sm visible-lg-block">
-        {!! Admin::getNavbar()->render('left') !!}
-        </ul>
-
-        <!-- Navbar Right Menu -->
-        <div class="navbar-custom-menu">
+        <!-- Navbar Left Menu -->
+        <div class="navbar-custom-menu pull-left">
             <ul class="nav navbar-nav">
-
+                {!! Admin::getNavbar()->render('left') !!}
+            </ul>
+        </div>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu pull-right">
+            <ul class="nav navbar-nav">
                 {!! Admin::getNavbar()->render() !!}
-
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
@@ -38,7 +36,6 @@
                         <!-- The user image in the menu -->
                         <li class="user-header">
                             <img src="{{ Admin::user()->avatar }}" class="img-circle" alt="User Image">
-
                             <p>
                                 {{ Admin::user()->name }}
                                 <small>Member since admin {{ Admin::user()->created_at }}</small>
