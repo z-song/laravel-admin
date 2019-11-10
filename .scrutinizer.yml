@@ -1,0 +1,6 @@
+build:
+  nodes:
+    my-tests:
+      environment:
+        php:
+          version: 7.3
