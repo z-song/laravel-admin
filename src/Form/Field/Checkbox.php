@@ -11,7 +11,7 @@ class Checkbox extends MultipleSelect
     protected $canCheckAll = false;
 
     protected static $css = [
-        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.css',
+        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.min.css',
     ];
 
     protected static $js = [

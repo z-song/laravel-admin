@@ -63,12 +63,12 @@ trait HasAssets
     public static $baseCss = [
         'vendor/laravel-admin/font-awesome/css/font-awesome.min.css',
         'vendor/laravel-admin/laravel-admin/laravel-admin.css',
-        'vendor/laravel-admin/nprogress/nprogress.css',
-        'vendor/laravel-admin/sweetalert2/dist/sweetalert2.css',
-        'vendor/laravel-admin/nestable/nestable.css',
+        'vendor/laravel-admin/nprogress/nprogress.min.css',
+        'vendor/laravel-admin/sweetalert2/dist/sweetalert2.min.css',
+        'vendor/laravel-admin/nestable/nestable.min.css',
         'vendor/laravel-admin/toastr/build/toastr.min.css',
-        'vendor/laravel-admin/bootstrap3-editable/css/bootstrap-editable.css',
-        'vendor/laravel-admin/google-fonts/fonts.css',
+        'vendor/laravel-admin/bootstrap3-editable/css/bootstrap-editable.min.css',
+        'vendor/laravel-admin/google-fonts/fonts.min.css',
         'vendor/laravel-admin/AdminLTE/dist/css/AdminLTE.min.css',
     ];
 
@@ -79,9 +79,9 @@ trait HasAssets
         'vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js',
         'vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',
         'vendor/laravel-admin/AdminLTE/dist/js/app.min.js',
-        'vendor/laravel-admin/jquery-pjax/jquery.pjax.js',
-        'vendor/laravel-admin/nprogress/nprogress.js',
-        'vendor/laravel-admin/nestable/jquery.nestable.js',
+        'vendor/laravel-admin/jquery-pjax/jquery.pjax.min.js',
+        'vendor/laravel-admin/nprogress/nprogress.min.js',
+        'vendor/laravel-admin/nestable/jquery.nestable.min.js',
         'vendor/laravel-admin/toastr/build/toastr.min.js',
         'vendor/laravel-admin/bootstrap3-editable/js/bootstrap-editable.min.js',
         'vendor/laravel-admin/sweetalert2/dist/sweetalert2.min.js',
@@ -91,7 +91,7 @@ trait HasAssets
     /**
      * @var string
      */
-    public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js';
+    public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.2.4.min.js';
 
     /**
      * @var string
@@ -279,7 +279,8 @@ trait HasAssets
         }
 
         static::$manifestData = json_decode(
-            file_get_contents(public_path(static::$manifest)), true
+            file_get_contents(public_path(static::$manifest)),
+            true
         );
 
         return static::$manifestData[$key];
