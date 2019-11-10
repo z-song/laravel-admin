@@ -10,7 +10,7 @@ class Radio extends Field
     protected $inline = true;
 
     protected static $css = [
-        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.css',
+        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.min.css',
     ];
 
     protected static $js = [
