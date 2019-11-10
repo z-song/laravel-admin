@@ -1,8 +1,7 @@
-@if(in_array('submit', $buttons))
+@if(!empty($checkboxes))
 <div class="box-footer">
     <div class="col-sm-{{$width['label']}}"><label class="control-label">Option</label>
     </div>
-
     <div class="col-sm-{{$width['field']}}">
         @foreach($submit_redirects as $value => $redirect)
             @if(in_array($redirect, $checkboxes))
@@ -21,20 +20,20 @@
 
     <div class="col-md-{{$width['label']}}">
     </div>
-
     <div class="col-md-{{$width['field']}}">
-
-        @if(in_array('submit', $buttons))
         <div class="btn-group pull-right">
+        @if(in_array('submit', $buttons))
             <button type="submit" class="btn btn-primary">{{ trans('admin.submit') }}</button>
-        </div>
+        @else
+            <button type="submit" class="btn btn-primary" disabled>{{ trans('admin.submit') }}</button>
         @endif
-
-        @if(in_array('reset', $buttons))
+        </div>
         <div class="btn-group pull-left">
+        @if(in_array('reset', $buttons))
             <button type="reset" class="btn btn-warning">{{ trans('admin.reset') }}</button>
-        </div>
+        @else
+            <button type="reset" class="btn btn-warning" disabled>{{ trans('admin.reset') }}</button>
         @endif
-
+        </div>
     </div>
 </div>
