@@ -12,8 +12,8 @@
             @endif
         @endforeach
     </div>
-@endif
 </div>
+@endif
 
 <div class="box-footer">
 
