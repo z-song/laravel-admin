@@ -60,7 +60,7 @@ class Show implements Renderable
     /**
      * Enable overwrite field and relation.
      *
-     * @var Overwrite
+     * @var bool
      */
     protected $overWrite = false;
 
@@ -153,7 +153,7 @@ class Show implements Renderable
     /**
      * Overwrite properties for field and relation.
      *
-     * @return bool
+     * @return Show
      */
     public function overWrite()
     {
