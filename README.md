@@ -16,6 +16,9 @@
     <a href="https://travis-ci.org/muhlisabdi/laravel-admin">
         <img src="https://travis-ci.org/muhlisabdi/laravel-admin.svg?branch=master" alt="Build Status">
     </a>
+    <a href="https://scrutinizer-ci.com/g/muhlisabdi/laravel-admin">
+        <img src="https://scrutinizer-ci.com/g/muhlisabdi/laravel-admin/badges/quality-score.png?b=master" title="Scrutinizer Code Quality">
+    </a>
     <a href="https://styleci.io/repos/213185685">
         <img src="https://styleci.io/repos/213185685/shield" alt="StyleCI">
     </a>
