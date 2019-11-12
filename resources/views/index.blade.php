@@ -55,7 +55,7 @@
 <script>
     function LA() {}
     LA.token = "{{ csrf_token() }}";
-    LA.user = @json($_user_);
+    LA.user = @json($_user_ ?? '');
 </script>
 
 <!-- REQUIRED JS SCRIPTS -->
