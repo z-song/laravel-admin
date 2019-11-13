@@ -72,7 +72,7 @@ if (!function_exists('admin_toastr')) {
      * @param string $type
      * @param array  $options
      */
-    function admin_toastr($message = '', $type = 'success', $options = [])
+    function admin_toastr($message = '', $type = 'success', $options = ['positionClass' => 'toast-bottom-right'])
     {
         $toastr = new MessageBag(get_defined_vars());
 
