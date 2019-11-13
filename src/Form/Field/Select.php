@@ -1,11 +1,14 @@
 <?php
+
 namespace Encore\Admin\Form\Field;
+
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+
 class Select extends Field
 {
     /**
@@ -28,6 +31,7 @@ class Select extends Field
      * @var array
      */
     protected $config = [];
+
     /**
      * Set options.
      *
@@ -43,6 +47,7 @@ class Select extends Field
             if (class_exists($options) && in_array(Model::class, class_parents($options))) {
                 return $this->model(...func_get_args());
             }
+
             return $this->loadRemoteOptions(...func_get_args());
         }
         if ($options instanceof Arrayable) {
@@ -53,11 +58,14 @@ class Select extends Field
         } else {
             $this->options = (array) $options;
         }
+
         return $this;
     }
+
     /**
      * @param array $groups
      */
+
     /**
      * Set option groups.
      *
@@ -79,8 +87,10 @@ class Select extends Field
     public function groups(array $groups)
     {
         $this->groups = $groups;
+
         return $this;
     }
+
     /**
      * Load options for other select on change.
      *
@@ -145,8 +155,10 @@ $("{$this->getElementClassSelector()}").each(function(){
 });
 JS;
         Admin::script($script);
+
         return $this;
     }
+
     /**
      * Load options for other selects on change.
      *
@@ -198,8 +210,10 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
 });
 JS;
         Admin::script($script);
+
         return $this;
     }
+
     /**
      * Load options from current selected resource(s).
      *
@@ -231,10 +245,13 @@ JS;
             } else {
                 $resources[] = $value;
             }
+
             return $model::find($resources)->pluck($textField, $idField)->toArray();
         };
+
         return $this;
     }
+
     /**
      * Load options from remote.
      *
@@ -274,8 +291,10 @@ $.ajax($ajaxOptions).done(function(data) {
   });
 });
 EOT;
+
         return $this;
     }
+
     /**
      * Load options from ajax results.
      *
@@ -327,8 +346,10 @@ $("{$this->getElementClassSelector()}").select2({
   }
 });
 EOT;
+
         return $this;
     }
+
     /**
      * Set config for select2.
      *
@@ -342,8 +363,10 @@ EOT;
     public function config($key, $val)
     {
         $this->config[$key] = $val;
+
         return $this;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -368,8 +391,10 @@ $(document).ready(function(){
 });
 EOT;
         Admin::script($script);
+
         return parent::readOnly();
     }
+
     /**
      * {@inheritdoc}
      */
@@ -398,6 +423,7 @@ EOT;
             'groups'  => $this->groups,
         ]);
         $this->attribute('data-value', implode(',', (array) $this->value()));
+
         return parent::render();
     }
 }
