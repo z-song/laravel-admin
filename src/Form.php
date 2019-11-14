@@ -587,7 +587,7 @@ class Form implements Renderable
     /**
      * Handle update.
      *
-     * @param int  $id
+     * @param int $id
      * @param $data
      *
      * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed|null|Response
