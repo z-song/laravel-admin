@@ -588,7 +588,7 @@ class Form implements Renderable
      * Handle update.
      *
      * @param int  $id
-     * @param null $data
+     * @param $data
      *
      * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed|null|Response
      */
@@ -1523,7 +1523,7 @@ class Form implements Renderable
      * Get or set input data.
      *
      * @param string $key
-     * @param null   $value
+     * @param $value
      *
      * @return array|mixed
      */
