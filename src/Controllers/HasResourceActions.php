@@ -13,7 +13,7 @@ trait HasResourceActions
      */
     public function update($id)
     {
-        return $this->form()->update($id);
+        return $this->form(true)->update($id);
     }
 
     /**
@@ -23,7 +23,7 @@ trait HasResourceActions
      */
     public function store()
     {
-        return $this->form()->store();
+        return $this->form(false)->store();
     }
 
     /**
