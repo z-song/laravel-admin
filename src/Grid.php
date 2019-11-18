@@ -836,9 +836,10 @@ class Grid
             return false;
         }
 
-        if ($relation instanceof Relations\HasOne ||
-            $relation instanceof Relations\BelongsTo ||
-            $relation instanceof Relations\MorphOne
+        if ($relation instanceof Relations\HasOne
+            || $relation instanceof Relations\BelongsTo
+            || $relation instanceof Relations\MorphOne
+            || $relation instanceof \Znck\Eloquent\Relations\belongsToThrough
         ) {
             $this->model()->with($method);
 
