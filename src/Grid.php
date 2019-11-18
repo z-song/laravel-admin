@@ -839,7 +839,9 @@ class Grid
         if ($relation instanceof Relations\HasOne
             || $relation instanceof Relations\BelongsTo
             || $relation instanceof Relations\MorphOne
+            || $relation instanceof Relations\HasOneThrough
             || $relation instanceof \Znck\Eloquent\Relations\belongsToThrough
+            || $relation instanceof \Staudenmeir\EloquentHasManyDeep\HasOneDeep
         ) {
             $this->model()->with($method);
 
