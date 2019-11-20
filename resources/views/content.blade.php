@@ -60,7 +60,7 @@
         @include('admin::partials.toastr')
 
         @if($_view_)
-            @include($_view_['view'], $_view_['data']);
+            @include($_view_['view'], $_view_['data'])
         @else
             {!! $_content_ !!}
         @endif
