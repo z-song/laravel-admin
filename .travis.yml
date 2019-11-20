@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 7
+  - 7.3
 
 matrix:
   fast_finish: true
