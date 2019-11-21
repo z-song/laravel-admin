@@ -31,7 +31,7 @@ class TestCase extends BaseTestCase
         return $app;
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
