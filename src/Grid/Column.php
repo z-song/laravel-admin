@@ -39,6 +39,7 @@ use Illuminate\Support\Str;
  * @method $this prefix($prefix, $delimiter = '&nbsp;')
  * @method $this suffix($suffix, $delimiter = '&nbsp;')
  * @method $this secret($dotCount = 6)
+ * @method $this pluck($column)
  */
 class Column
 {
