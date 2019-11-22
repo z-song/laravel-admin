@@ -67,7 +67,7 @@ class TestCase extends BaseTestCase
         require __DIR__.'/seeds/factory.php';
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         (new CreateAdminTables())->down();
 
