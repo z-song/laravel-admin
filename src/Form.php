@@ -220,7 +220,7 @@ class Form implements Renderable
     /**
      * Initialization closure array.
      *
-     * @var []Closure
+     * @var array|\Closure
      */
     protected static $initCallbacks;
 

@@ -103,7 +103,7 @@ class Column
     protected static $originalGridModels;
 
     /**
-     * @var []Closure
+     * @var array|\Closure
      */
     protected $displayCallbacks = [];
 
@@ -553,7 +553,7 @@ class Column
      * Display column using array value map.
      *
      * @param array $values
-     * @param null  $default
+     * @param $default
      *
      * @return $this
      */
