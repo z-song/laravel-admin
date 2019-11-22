@@ -106,7 +106,7 @@ trait HasAssets
     /**
      * Add css or get all css.
      *
-     * @param null $css
+     * @param $css
      * @param bool $minify
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -129,7 +129,7 @@ trait HasAssets
     }
 
     /**
-     * @param null $css
+     * @param $css
      * @param bool $minify
      *
      * @return array|null
@@ -152,7 +152,7 @@ trait HasAssets
     /**
      * Add js or get all js.
      *
-     * @param null $js
+     * @param $js
      * @param bool $minify
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -177,7 +177,7 @@ trait HasAssets
     /**
      * Add js or get all js.
      *
-     * @param null $js
+     * @param $js
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -191,7 +191,7 @@ trait HasAssets
     }
 
     /**
-     * @param null $js
+     * @param $js
      * @param bool $minify
      *
      * @return array|null

@@ -112,7 +112,7 @@ class Exporter
      * Format query for export url.
      *
      * @param int  $scope
-     * @param null $args
+     * @param $args
      *
      * @return array
      */

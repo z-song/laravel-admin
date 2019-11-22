@@ -180,7 +180,7 @@ abstract class AbstractFilter
     /**
      * Get siblings of current filter.
      *
-     * @param null $index
+     * @param $index
      *
      * @return AbstractFilter[]|mixed
      */
@@ -388,7 +388,7 @@ abstract class AbstractFilter
     /**
      * Set default value for filter.
      *
-     * @param null $default
+     * @param $default
      *
      * @return $this
      */

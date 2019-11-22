@@ -617,7 +617,7 @@ class Column
     /**
      * Add column to total-row.
      *
-     * @param null $display
+     * @param $display
      *
      * @return $this
      */
@@ -707,7 +707,7 @@ class Column
     /**
      * Return a human readable format time.
      *
-     * @param null $locale
+     * @param $locale
      *
      * @return $this
      */

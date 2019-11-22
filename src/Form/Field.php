@@ -785,7 +785,7 @@ class Field implements Renderable
     /**
      * Set or get value of the field.
      *
-     * @param null $value
+     * @param $value
      *
      * @return mixed
      */
