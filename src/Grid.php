@@ -650,7 +650,7 @@ class Grid
     /**
      * Get the export url.
      *
-     * @param int  $scope
+     * @param int $scope
      * @param $args
      *
      * @return string
