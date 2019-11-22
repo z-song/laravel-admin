@@ -5,7 +5,7 @@ use Tests\Models\User as UserModel;
 
 class UserFormTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -5,7 +5,7 @@ use Encore\Admin\Auth\Database\Role;
 
 class RolesTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

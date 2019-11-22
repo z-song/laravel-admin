@@ -6,7 +6,7 @@ use Tests\Models\File as FileModel;
 
 class FileUploadTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

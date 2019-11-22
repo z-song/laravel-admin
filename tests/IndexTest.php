@@ -4,7 +4,7 @@ use Encore\Admin\Auth\Database\Administrator;
 
 class IndexTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
