@@ -285,14 +285,14 @@ class Content implements Renderable
         return Arr::only($user->toArray(), ['id', 'username', 'email', 'name', 'avatar']);
     }
 
-    /**
-     * Render this content.
+     /**
+     * Get the content variables.
      *
-     * @return string
+     * @return array
      */
-    public function render()
+    public function variables()
     {
-        $items = [
+        return [
             'header'      => $this->title,
             'description' => $this->description,
             'breadcrumb'  => $this->breadcrumb,
@@ -300,7 +300,15 @@ class Content implements Renderable
             '_view_'      => $this->view,
             '_user_'      => $this->getUserData(),
         ];
-
-        return view('admin::content', $items)->render();
+    }
+    
+    /**
+     * Render this content.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        return view('admin::content', $this->variables())->render();
     }
 }
