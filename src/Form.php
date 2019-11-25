@@ -1384,7 +1384,7 @@ class Form implements Renderable
      */
     public function isCreating(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), '.create');
+        return Str::endsWith(\request()->route()->getName(), ['.create', '.store']);
     }
 
     /**
@@ -1394,7 +1394,7 @@ class Form implements Renderable
      */
     public function isEditing(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), '.edit');
+        return Str::endsWith(\request()->route()->getName(), '.edit', '.update');
     }
 
     /**
