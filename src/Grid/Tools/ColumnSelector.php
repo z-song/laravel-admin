@@ -40,7 +40,7 @@ class ColumnSelector extends AbstractTool
      */
     public function render()
     {
-        if (!$this->grid->showColumnSelector()) {
+        if (! $this->grid->showColumnSelector()) {
             return '';
         }
 

@@ -184,7 +184,7 @@ class Show implements Renderable
      */
     public function fields(array $fields = [])
     {
-        if (!Arr::isAssoc($fields)) {
+        if (! Arr::isAssoc($fields)) {
             $fields = array_combine($fields, $fields);
         }
 
@@ -444,11 +444,11 @@ class Show implements Renderable
      */
     protected function handleRelationField($method, $arguments)
     {
-        if (!method_exists($this->model, $method)) {
+        if (! method_exists($this->model, $method)) {
             return false;
         }
 
-        if (!($relation = $this->model->$method()) instanceof EloquentRelation) {
+        if (! ($relation = $this->model->$method()) instanceof EloquentRelation) {
             return false;
         }
 

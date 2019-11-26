@@ -23,11 +23,11 @@ class Pjax
     {
         $response = $next($request);
 
-        if (!$request->pjax() || $response->isRedirection() || Admin::guard()->guest()) {
+        if (! $request->pjax() || $response->isRedirection() || Admin::guard()->guest()) {
             return $response;
         }
 
-        if (!$response->isSuccessful()) {
+        if (! $response->isSuccessful()) {
             return $this->handleErrorResponse($response);
         }
 
@@ -123,7 +123,7 @@ class Pjax
     {
         $content = $crawler->filter($container);
 
-        if (!$content->count()) {
+        if (! $content->count()) {
             abort(422);
         }
 

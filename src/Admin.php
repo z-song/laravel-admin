@@ -163,7 +163,7 @@ class Admin
      */
     public function menu()
     {
-        if (!empty($this->menu)) {
+        if (! empty($this->menu)) {
             return $this->menu;
         }
 
@@ -189,7 +189,7 @@ class Admin
         $links = [];
 
         foreach ($menu as $item) {
-            if (!empty($item['children'])) {
+            if (! empty($item['children'])) {
                 $links = array_merge($links, $this->menuLinks($item['children']));
             } else {
                 $links[] = Arr::only($item, ['title', 'uri', 'icon']);

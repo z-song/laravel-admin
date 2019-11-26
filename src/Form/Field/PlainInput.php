@@ -35,7 +35,7 @@ trait PlainInput
 
     protected function defaultAttribute($attribute, $value)
     {
-        if (!array_key_exists($attribute, $this->attributes)) {
+        if (! array_key_exists($attribute, $this->attributes)) {
             $this->attribute($attribute, $value);
         }
 

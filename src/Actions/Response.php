@@ -58,7 +58,7 @@ class Response
      */
     public function toastr()
     {
-        if (!$this->plugin instanceof Toastr) {
+        if (! $this->plugin instanceof Toastr) {
             $this->plugin = new Toastr();
         }
 
@@ -70,7 +70,7 @@ class Response
      */
     public function swal()
     {
-        if (!$this->plugin instanceof SweatAlert2) {
+        if (! $this->plugin instanceof SweatAlert2) {
             $this->plugin = new SweatAlert2();
         }
 

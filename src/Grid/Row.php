@@ -198,7 +198,7 @@ class Row
             $value = $value->toJson();
         }
 
-        if (!is_null($value) && !is_scalar($value)) {
+        if (! is_null($value) && ! is_scalar($value)) {
             return sprintf('<pre>%s</pre>', var_export($value, true));
         }
 

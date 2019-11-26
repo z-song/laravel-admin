@@ -307,7 +307,7 @@ class Field implements Renderable
                 }
             }
 
-            if (!$url) {
+            if (! $url) {
                 return '';
             }
 
@@ -477,7 +477,7 @@ HTML;
     public function setValue(Model $model)
     {
         if ($this->relation) {
-            if (!$relationValue = $model->{$this->relation}) {
+            if (! $relationValue = $model->{$this->relation}) {
                 return $this;
             }
 
@@ -545,20 +545,20 @@ HTML;
             $extend = $abstract;
         }
 
-        if (!isset($extend)) {
+        if (! isset($extend)) {
             admin_warning("[$abstract] is not a valid Show field.");
 
             return $this;
         }
 
-        if (!$extend->escape) {
+        if (! $extend->escape) {
             $this->unescape();
         }
 
         $field = $this;
 
         return $this->as(function ($value) use ($extend, $field, $arguments) {
-            if (!$extend->border) {
+            if (! $extend->border) {
                 $field->border = false;
             }
 

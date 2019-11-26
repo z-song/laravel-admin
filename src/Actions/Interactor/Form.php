@@ -338,11 +338,11 @@ class Form extends Interactor
 
         /** @var Field $field */
         foreach ($this->fields as $field) {
-            if (!$validator = $field->getValidator($request->all())) {
+            if (! $validator = $field->getValidator($request->all())) {
                 continue;
             }
 
-            if (($validator instanceof Validator) && !$validator->passes()) {
+            if (($validator instanceof Validator) && ! $validator->passes()) {
                 $failedValidators[] = $validator;
             }
         }
@@ -407,7 +407,7 @@ class Form extends Interactor
      */
     public function getModalId()
     {
-        if (!$this->modalId) {
+        if (! $this->modalId) {
             if ($this->action instanceof RowAction) {
                 $this->modalId = uniqid('row-action-modal-').mt_rand(1000, 9999);
             } else {

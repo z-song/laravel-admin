@@ -72,13 +72,13 @@ class MultipleFile extends Field
 
         $attributes = [];
 
-        if (!$fieldRules = $this->getRules()) {
+        if (! $fieldRules = $this->getRules()) {
             return false;
         }
 
         $attributes[$this->column] = $this->label;
 
-        list($rules, $input) = $this->hydrateFiles(Arr::get($input, $this->column, []));
+        [$rules, $input] = $this->hydrateFiles(Arr::get($input, $this->column, []));
 
         return \validator($input, $rules, $this->getValidationMessages(), $attributes);
     }
@@ -314,7 +314,7 @@ EOT;
 
         $this->setupDefaultOptions();
 
-        if (!empty($this->value)) {
+        if (! empty($this->value)) {
             $this->options(['initialPreview' => $this->preview()]);
             $this->setupPreviewOptions();
         }
@@ -339,7 +339,7 @@ EOT;
 
         $file = Arr::get($files, $key);
 
-        if (!$this->retainable && $this->storage->exists($file)) {
+        if (! $this->retainable && $this->storage->exists($file)) {
             $this->storage->delete($file);
         }
 

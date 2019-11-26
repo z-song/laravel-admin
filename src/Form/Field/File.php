@@ -82,7 +82,7 @@ class File extends Field
 
         $rules = $attributes = [];
 
-        if (!$fieldRules = $this->getRules()) {
+        if (! $fieldRules = $this->getRules()) {
             return false;
         }
 
@@ -123,7 +123,7 @@ class File extends Field
 
         $path = null;
 
-        if (!is_null($this->storagePermission)) {
+        if (! is_null($this->storagePermission)) {
             $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         } else {
             $path = $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
@@ -222,7 +222,7 @@ EOT;
 
         $this->setupDefaultOptions();
 
-        if (!empty($this->value)) {
+        if (! empty($this->value)) {
             $this->attribute('data-initial-preview', $this->preview());
             $this->attribute('data-initial-caption', $this->initialCaption($this->value));
 

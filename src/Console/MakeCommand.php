@@ -39,7 +39,7 @@ class MakeCommand extends GeneratorCommand
      */
     public function handle()
     {
-        if (!$this->modelExists()) {
+        if (! $this->modelExists()) {
             $this->error('Model does not exists !');
 
             return false;
@@ -47,7 +47,7 @@ class MakeCommand extends GeneratorCommand
 
         $stub = $this->option('stub');
 
-        if ($stub and !is_file($stub)) {
+        if ($stub and ! is_file($stub)) {
             $this->error('The stub file dose not exist.');
 
             return false;

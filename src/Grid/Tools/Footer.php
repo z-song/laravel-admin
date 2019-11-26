@@ -31,7 +31,7 @@ class Footer extends AbstractTool
      */
     public function queryBuilder()
     {
-        if (!$this->queryBuilder) {
+        if (! $this->queryBuilder) {
             $this->queryBuilder = $this->grid->model()->getQueryBuilder();
         }
 

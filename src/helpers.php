@@ -2,7 +2,7 @@
 
 use Illuminate\Support\MessageBag;
 
-if (!function_exists('admin_path')) {
+if (! function_exists('admin_path')) {
 
     /**
      * Get admin path.
@@ -17,7 +17,7 @@ if (!function_exists('admin_path')) {
     }
 }
 
-if (!function_exists('admin_url')) {
+if (! function_exists('admin_url')) {
     /**
      * Get admin url.
      *
@@ -39,7 +39,7 @@ if (!function_exists('admin_url')) {
     }
 }
 
-if (!function_exists('admin_base_path')) {
+if (! function_exists('admin_base_path')) {
     /**
      * Get admin url.
      *
@@ -63,7 +63,7 @@ if (!function_exists('admin_base_path')) {
     }
 }
 
-if (!function_exists('admin_toastr')) {
+if (! function_exists('admin_toastr')) {
 
     /**
      * Flash a toastr message bag to session.
@@ -80,7 +80,7 @@ if (!function_exists('admin_toastr')) {
     }
 }
 
-if (!function_exists('admin_success')) {
+if (! function_exists('admin_success')) {
 
     /**
      * Flash a success message bag to session.
@@ -94,7 +94,7 @@ if (!function_exists('admin_success')) {
     }
 }
 
-if (!function_exists('admin_error')) {
+if (! function_exists('admin_error')) {
 
     /**
      * Flash a error message bag to session.
@@ -108,7 +108,7 @@ if (!function_exists('admin_error')) {
     }
 }
 
-if (!function_exists('admin_warning')) {
+if (! function_exists('admin_warning')) {
 
     /**
      * Flash a warning message bag to session.
@@ -122,7 +122,7 @@ if (!function_exists('admin_warning')) {
     }
 }
 
-if (!function_exists('admin_info')) {
+if (! function_exists('admin_info')) {
 
     /**
      * Flash a message bag to session.
@@ -139,7 +139,7 @@ if (!function_exists('admin_info')) {
     }
 }
 
-if (!function_exists('admin_asset')) {
+if (! function_exists('admin_asset')) {
 
     /**
      * @param $path
@@ -152,7 +152,7 @@ if (!function_exists('admin_asset')) {
     }
 }
 
-if (!function_exists('admin_trans')) {
+if (! function_exists('admin_trans')) {
 
     /**
      * Translate the given message.
@@ -167,7 +167,7 @@ if (!function_exists('admin_trans')) {
     {
         $line = __($key, $replace, $locale);
 
-        if (!is_string($line)) {
+        if (! is_string($line)) {
             return $key;
         }
 
@@ -175,7 +175,7 @@ if (!function_exists('admin_trans')) {
     }
 }
 
-if (!function_exists('array_delete')) {
+if (! function_exists('array_delete')) {
 
     /**
      * Delete from array by value.
@@ -193,7 +193,7 @@ if (!function_exists('array_delete')) {
     }
 }
 
-if (!function_exists('class_uses_deep')) {
+if (! function_exists('class_uses_deep')) {
 
     /**
      * To get ALL traits including those used by parent classes and other traits.
@@ -219,7 +219,7 @@ if (!function_exists('class_uses_deep')) {
     }
 }
 
-if (!function_exists('admin_dump')) {
+if (! function_exists('admin_dump')) {
 
     /**
      * @param $var
@@ -240,7 +240,7 @@ if (!function_exists('admin_dump')) {
     }
 }
 
-if (!function_exists('file_size')) {
+if (! function_exists('file_size')) {
 
     /**
      * Convert file size to a human readable format like `100mb`.
@@ -271,7 +271,7 @@ if (!function_exists('file_size')) {
     }
 }
 
-if (!function_exists('prepare_options')) {
+if (! function_exists('prepare_options')) {
 
     /**
      * @param array $options
@@ -300,7 +300,7 @@ if (!function_exists('prepare_options')) {
     }
 }
 
-if (!function_exists('json_encode_options')) {
+if (! function_exists('json_encode_options')) {
 
     /**
      * @param array $options

@@ -78,7 +78,7 @@ class Tab
 
             foreach ($rowFields as $field) {
                 if (($index = array_search($field, $all)) !== false) {
-                    if (!$match) {
+                    if (! $match) {
                         $fields->put($index, $row);
                     } else {
                         $fields->pull($index);

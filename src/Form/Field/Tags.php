@@ -76,7 +76,7 @@ class Tags extends Field
      */
     public function pluck($visibleColumn, $key)
     {
-        if (!empty($visibleColumn) && !empty($key)) {
+        if (! empty($visibleColumn) && ! empty($key)) {
             $this->keyAsValue = true;
         }
 
@@ -95,7 +95,7 @@ class Tags extends Field
      */
     public function options($options = [])
     {
-        if (!$this->keyAsValue) {
+        if (! $this->keyAsValue) {
             return parent::options($options);
         }
 
@@ -137,7 +137,7 @@ class Tags extends Field
             return is_null($this->saveAction) ? $value : ($this->saveAction)($value);
         }
 
-        if (is_array($value) && !Arr::isAssoc($value)) {
+        if (is_array($value) && ! Arr::isAssoc($value)) {
             $value = implode(',', $value);
         }
 

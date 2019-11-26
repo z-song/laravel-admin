@@ -348,7 +348,7 @@ class Builder
      */
     public function hasRows(): bool
     {
-        return !empty($this->form->rows);
+        return ! empty($this->form->rows);
     }
 
     /**
@@ -459,7 +459,7 @@ class Builder
     {
         $previous = URL::previous();
 
-        if (!$previous || $previous === URL::current()) {
+        if (! $previous || $previous === URL::current()) {
             return;
         }
 
@@ -523,7 +523,7 @@ class Builder
      */
     protected function removeReservedFields()
     {
-        if (!$this->isCreating()) {
+        if (! $this->isCreating()) {
             return;
         }
 
@@ -571,7 +571,7 @@ class Builder
 
         $tabObj = $this->form->setTab();
 
-        if (!$tabObj->isEmpty()) {
+        if (! $tabObj->isEmpty()) {
             $script = <<<'SCRIPT'
 
 var hash = document.location.hash;

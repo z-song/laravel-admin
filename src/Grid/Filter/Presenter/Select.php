@@ -112,8 +112,8 @@ SCRIPT;
      */
     public function model($model, $idField = 'id', $textField = 'name')
     {
-        if (!class_exists($model)
-            || !in_array(Model::class, class_parents($model))
+        if (! class_exists($model)
+            || ! in_array(Model::class, class_parents($model))
         ) {
             throw new \InvalidArgumentException("[$model] must be a valid model class");
         }

@@ -13,7 +13,7 @@ class NotEqual extends AbstractFilter
     {
         $value = Arr::get($inputs, $this->column);
 
-        if (!isset($value)) {
+        if (! isset($value)) {
             return;
         }
 

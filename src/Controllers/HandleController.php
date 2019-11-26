@@ -40,20 +40,20 @@ class HandleController extends Controller
      */
     protected function resolveForm(Request $request)
     {
-        if (!$request->has('_form_')) {
+        if (! $request->has('_form_')) {
             throw new Exception('Invalid form request.');
         }
 
         $formClass = $request->get('_form_');
 
-        if (!class_exists($formClass)) {
+        if (! class_exists($formClass)) {
             throw new Exception("Form [{$formClass}] does not exist.");
         }
 
         /** @var Form $form */
         $form = app($formClass);
 
-        if (!method_exists($form, 'handle')) {
+        if (! method_exists($form, 'handle')) {
             throw new Exception("Form method {$formClass}::handle() does not exist.");
         }
 
@@ -77,7 +77,7 @@ class HandleController extends Controller
             $arguments[] = $model;
         }
 
-        if (!$action->passesAuthorization($model)) {
+        if (! $action->passesAuthorization($model)) {
             return $action->failedAuthorization();
         }
 
@@ -107,20 +107,20 @@ class HandleController extends Controller
      */
     protected function resolveActionInstance(Request $request)
     {
-        if (!$request->has('_action')) {
+        if (! $request->has('_action')) {
             throw new Exception('Invalid action request.');
         }
 
         $actionClass = str_replace('_', '\\', $request->get('_action'));
 
-        if (!class_exists($actionClass)) {
+        if (! class_exists($actionClass)) {
             throw new Exception("Form [{$actionClass}] does not exist.");
         }
 
         /** @var GridAction $form */
         $action = app($actionClass);
 
-        if (!method_exists($action, 'handle')) {
+        if (! method_exists($action, 'handle')) {
             throw new Exception("Action method {$actionClass}::handle() does not exist.");
         }
 
@@ -137,7 +137,7 @@ class HandleController extends Controller
     {
         $args = [$request];
 
-        if (!empty($model)) {
+        if (! empty($model)) {
             array_unshift($args, $model);
         }
 

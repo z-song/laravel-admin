@@ -140,7 +140,7 @@ abstract class Action implements Renderable
      */
     public static function makeSelector($class, $prefix)
     {
-        if (!isset(static::$selectors[$class])) {
+        if (! isset(static::$selectors[$class])) {
             static::$selectors[$class] = uniqid($prefix).mt_rand(1000, 9999);
         }
 
@@ -261,7 +261,7 @@ abstract class Action implements Renderable
      */
     protected function addScript()
     {
-        if (!is_null($this->interactor)) {
+        if (! is_null($this->interactor)) {
             return $this->interactor->addScript();
         }
 

@@ -470,7 +470,7 @@ class Model
             return $query['method'] == 'paginate';
         });
 
-        if (!$this->usePaginate) {
+        if (! $this->usePaginate) {
             $query = [
                 'method'    => 'get',
                 'arguments' => [],
@@ -537,7 +537,7 @@ class Model
     protected function setSort()
     {
         $this->sort = \request($this->sortName, []);
-        if (!is_array($this->sort)) {
+        if (! is_array($this->sort)) {
             return;
         }
 
@@ -551,7 +551,7 @@ class Model
             $this->resetOrderBy();
 
             // get column. if contains "cast", set set column as cast
-            if (!empty($this->sort['cast'])) {
+            if (! empty($this->sort['cast'])) {
                 $column = "CAST({$this->sort['column']} AS {$this->sort['cast']}) {$this->sort['type']}";
                 $method = 'orderByRaw';
                 $arguments = [$column];
@@ -577,7 +577,7 @@ class Model
      */
     protected function setRelationSort($column)
     {
-        list($relationName, $relationColumn) = explode('.', $column);
+        [$relationName, $relationColumn] = explode('.', $column);
 
         if ($this->queries->contains(function ($query) use ($relationName) {
             return $query['method'] == 'with' && in_array($relationName, $query['arguments']);

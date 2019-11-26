@@ -40,9 +40,9 @@ class RangeFilter extends Filter
             return;
         }
 
-        if (!isset($value['start'])) {
+        if (! isset($value['start'])) {
             return $model->where($this->getColumnName(), '<', $value['end']);
-        } elseif (!isset($value['end'])) {
+        } elseif (! isset($value['end'])) {
             return $model->where($this->getColumnName(), '>', $value['start']);
         } else {
             return $model->whereBetween($this->getColumnName(), array_values($value));

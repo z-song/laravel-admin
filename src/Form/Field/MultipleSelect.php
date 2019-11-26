@@ -51,7 +51,7 @@ class MultipleSelect extends Select
             $this->value = explode(',', $relations);
         }
 
-        if (!is_array($relations)) {
+        if (! is_array($relations)) {
             return;
         }
 
@@ -83,7 +83,7 @@ class MultipleSelect extends Select
             $this->original = explode(',', $relations);
         }
 
-        if (!is_array($relations)) {
+        if (! is_array($relations)) {
             return;
         }
 

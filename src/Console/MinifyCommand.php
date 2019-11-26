@@ -42,7 +42,7 @@ class MinifyCommand extends Command
      */
     public function handle()
     {
-        if (!class_exists(Minify\Minify::class)) {
+        if (! class_exists(Minify\Minify::class)) {
             $this->error('To use `admin:minify` command, please install [matthiasmullie/minify] first.');
 
             return;

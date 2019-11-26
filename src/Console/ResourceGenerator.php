@@ -66,7 +66,7 @@ class ResourceGenerator
             return $model;
         }
 
-        if (!class_exists($model) || !is_string($model) || !is_subclass_of($model, Model::class)) {
+        if (! class_exists($model) || ! is_string($model) || ! is_subclass_of($model, Model::class)) {
             throw new \InvalidArgumentException("Invalid model [$model] !");
         }
 
@@ -213,7 +213,7 @@ class ResourceGenerator
      */
     protected function getTableColumns()
     {
-        if (!$this->model->getConnection()->isDoctrineAvailable()) {
+        if (! $this->model->getConnection()->isDoctrineAvailable()) {
             throw new \Exception(
                 'You need to require doctrine/dbal: ~2.3 in your own composer.json to get database columns. '
             );
@@ -234,7 +234,7 @@ class ResourceGenerator
 
         $database = null;
         if (strpos($table, '.')) {
-            list($database, $table) = explode('.', $table);
+            [$database, $table] = explode('.', $table);
         }
 
         return $schema->listTableColumns($table, $database);

@@ -75,7 +75,7 @@ class Actions extends AbstractDisplayer
     {
         if ($disable) {
             array_delete($this->actions, 'view');
-        } elseif (!in_array('view', $this->actions)) {
+        } elseif (! in_array('view', $this->actions)) {
             array_push($this->actions, 'view');
         }
 
@@ -91,7 +91,7 @@ class Actions extends AbstractDisplayer
     {
         if ($disable) {
             array_delete($this->actions, 'delete');
-        } elseif (!in_array('delete', $this->actions)) {
+        } elseif (! in_array('delete', $this->actions)) {
             array_push($this->actions, 'delete');
         }
 
@@ -107,7 +107,7 @@ class Actions extends AbstractDisplayer
     {
         if ($disable) {
             array_delete($this->actions, 'edit');
-        } elseif (!in_array('edit', $this->actions)) {
+        } elseif (! in_array('edit', $this->actions)) {
             array_push($this->actions, 'edit');
         }
 

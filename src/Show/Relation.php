@@ -103,7 +103,7 @@ class Relation extends Field
         ) {
             $model = $this->model->{$this->name};
 
-            if (!$model instanceof Model) {
+            if (! $model instanceof Model) {
                 $model = $relation->getRelated();
             }
 

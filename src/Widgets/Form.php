@@ -147,7 +147,7 @@ class Form implements Renderable
             $data = $data->toArray();
         }
 
-        if (!empty($data)) {
+        if (! empty($data)) {
             $this->data = $data;
         }
 
@@ -401,11 +401,11 @@ class Form implements Renderable
 
         /** @var Field $field */
         foreach ($this->fields() as $field) {
-            if (!$validator = $field->getValidator($request->all())) {
+            if (! $validator = $field->getValidator($request->all())) {
                 continue;
             }
 
-            if (($validator instanceof Validator) && !$validator->passes()) {
+            if (($validator instanceof Validator) && ! $validator->passes()) {
                 $failedValidators[] = $validator;
             }
         }
@@ -490,7 +490,7 @@ class Form implements Renderable
 
         $form = view('admin::widgets.form', $this->getVariables())->render();
 
-        if (!($title = $this->title()) || !$this->inbox) {
+        if (! ($title = $this->title()) || ! $this->inbox) {
             return $form;
         }
 
@@ -507,7 +507,7 @@ class Form implements Renderable
      */
     public function __call($method, $arguments)
     {
-        if (!$this->hasField($method)) {
+        if (! $this->hasField($method)) {
             return $this;
         }
 

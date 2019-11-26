@@ -233,7 +233,7 @@ class Grid
      */
     protected function handleExportRequest($forceExport = false)
     {
-        if (!$scope = request(Exporter::$queryName)) {
+        if (! $scope = request(Exporter::$queryName)) {
             return;
         }
 
@@ -373,11 +373,11 @@ class Grid
      */
     protected function addRelationColumn($name, $label = '')
     {
-        list($relation, $column) = explode('.', $name);
+        [$relation, $column] = explode('.', $name);
 
         $model = $this->model()->eloquent();
 
-        if (!method_exists($model, $relation) || !$model->{$relation}() instanceof Relations\Relation) {
+        if (! method_exists($model, $relation) || ! $model->{$relation}() instanceof Relations\Relation) {
             $class = get_class($model);
 
             admin_error("Call to undefined relationship [{$relation}] on model [{$class}].");
@@ -468,9 +468,9 @@ class Grid
      */
     public function disablePagination(bool $disable = true)
     {
-        $this->model->usePaginate(!$disable);
+        $this->model->usePaginate(! $disable);
 
-        return $this->option('show_pagination', !$disable);
+        return $this->option('show_pagination', ! $disable);
     }
 
     /**
@@ -510,7 +510,7 @@ class Grid
      */
     protected function prependRowSelectorColumn()
     {
-        if (!$this->option('show_row_selector')) {
+        if (! $this->option('show_row_selector')) {
             return;
         }
 
@@ -702,7 +702,7 @@ class Grid
      */
     public function disableExport(bool $disable = true)
     {
-        return $this->option('show_exporter', !$disable);
+        return $this->option('show_exporter', ! $disable);
     }
 
     /**
@@ -734,7 +734,7 @@ class Grid
      */
     public function disableCreateButton(bool $disable = true)
     {
-        return $this->option('show_create_btn', !$disable);
+        return $this->option('show_create_btn', ! $disable);
     }
 
     /**
@@ -744,7 +744,7 @@ class Grid
      */
     public function disableDefineEmptyPage(bool $disable = true)
     {
-        return $this->option('show_define_empty_page', !$disable);
+        return $this->option('show_define_empty_page', ! $disable);
     }
 
     /**
@@ -786,13 +786,13 @@ class Grid
      */
     public function resource($path = null)
     {
-        if (!empty($path)) {
+        if (! empty($path)) {
             $this->resourcePath = $path;
 
             return $this;
         }
 
-        if (!empty($this->resourcePath)) {
+        if (! empty($this->resourcePath)) {
             return $this->resourcePath;
         }
 
@@ -828,11 +828,11 @@ class Grid
     {
         $model = $this->model()->eloquent();
 
-        if (!method_exists($model, $method)) {
+        if (! method_exists($model, $method)) {
             return false;
         }
 
-        if (!($relation = $model->$method()) instanceof Relations\Relation) {
+        if (! ($relation = $model->$method()) instanceof Relations\Relation) {
             return false;
         }
 
@@ -926,7 +926,7 @@ class Grid
      */
     public function setView($view, $variables = [])
     {
-        if (!empty($variables)) {
+        if (! empty($variables)) {
             $this->with($variables);
         }
 

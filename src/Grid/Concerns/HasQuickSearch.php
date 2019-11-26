@@ -53,7 +53,7 @@ trait HasQuickSearch
      */
     protected function applyQuickSearch()
     {
-        if (!$query = request()->get(static::$searchKey)) {
+        if (! $query = request()->get(static::$searchKey)) {
             return;
         }
 
@@ -83,7 +83,7 @@ trait HasQuickSearch
     {
         $queries = preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', trim($query));
 
-        foreach ($this->parseQueryBindings($queries) as list($column, $condition, $or)) {
+        foreach ($this->parseQueryBindings($queries) as [$column, $condition, $or]) {
             if (preg_match('/(?<not>!?)\((?<values>.+)\)/', $condition, $match) !== 0) {
                 $this->addWhereInBinding($column, $or, (bool) $match['not'], $match['values']);
                 continue;
@@ -141,7 +141,7 @@ trait HasQuickSearch
 
             $or = false;
 
-            list($column, $condition) = $segments;
+            [$column, $condition] = $segments;
 
             if (Str::startsWith($column, '|')) {
                 $or = true;

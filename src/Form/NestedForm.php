@@ -133,7 +133,7 @@ class NestedForm
             $key = $this->model->getKey();
         }
 
-        if (!is_null($this->key)) {
+        if (! is_null($this->key)) {
             $key = $this->key;
         }
 
@@ -308,7 +308,7 @@ class NestedForm
         if (is_array($columns)) {
             $value = [];
             foreach ($columns as $name => $column) {
-                if (!Arr::has($data, $column)) {
+                if (! Arr::has($data, $column)) {
                     continue;
                 }
                 $value[$name] = Arr::get($data, $column);

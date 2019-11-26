@@ -69,7 +69,7 @@ class Column implements Buildable
      */
     public function row($content)
     {
-        if (!$content instanceof \Closure) {
+        if (! $content instanceof \Closure) {
             $row = new Row($content);
         } else {
             $row = new Row();

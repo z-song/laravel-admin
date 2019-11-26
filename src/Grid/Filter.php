@@ -251,7 +251,7 @@ class Filter implements Renderable
      */
     public function disableIdFilter(bool $disable = true)
     {
-        $this->useIdFilter = !$disable;
+        $this->useIdFilter = ! $disable;
 
         return $this;
     }
@@ -261,7 +261,7 @@ class Filter implements Renderable
      */
     public function removeIDFilterIfNeeded()
     {
-        if (!$this->useIdFilter && !$this->idFilterRemoved) {
+        if (! $this->useIdFilter && ! $this->idFilterRemoved) {
             $this->removeDefaultIDFilter();
 
             $this->layout->removeDefaultIDFilter();
@@ -300,7 +300,7 @@ class Filter implements Renderable
         $inputs = Arr::dot(request()->all());
 
         $inputs = array_filter($inputs, function ($input) {
-            return $input !== '' && !is_null($input);
+            return $input !== '' && ! is_null($input);
         });
 
         $this->sanitizeInputs($inputs);
@@ -328,7 +328,7 @@ class Filter implements Renderable
         }
 
         return tap(array_filter($conditions), function ($conditions) {
-            if (!empty($conditions)) {
+            if (! empty($conditions)) {
                 $this->expand();
             }
         });
@@ -341,7 +341,7 @@ class Filter implements Renderable
      */
     protected function sanitizeInputs(&$inputs)
     {
-        if (!$this->name) {
+        if (! $this->name) {
             return $inputs;
         }
 
@@ -630,7 +630,7 @@ class Filter implements Renderable
      */
     public static function extend($name, $filterClass)
     {
-        if (!is_subclass_of($filterClass, AbstractFilter::class)) {
+        if (! is_subclass_of($filterClass, AbstractFilter::class)) {
             throw new \InvalidArgumentException("The class [$filterClass] must be a type of ".AbstractFilter::class.'.');
         }
 

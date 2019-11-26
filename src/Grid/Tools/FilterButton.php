@@ -31,7 +31,7 @@ class FilterButton extends AbstractTool
      */
     protected function getElementClassName()
     {
-        if (!$this->btnClassName) {
+        if (! $this->btnClassName) {
             $this->btnClassName = uniqid().'-filter-btn';
         }
 

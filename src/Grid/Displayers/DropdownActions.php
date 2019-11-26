@@ -109,7 +109,7 @@ SCRIPT;
     {
         if ($disable) {
             array_delete($this->defaultClass, Show::class);
-        } elseif (!in_array(Show::class, $this->defaultClass)) {
+        } elseif (! in_array(Show::class, $this->defaultClass)) {
             array_push($this->defaultClass, Show::class);
         }
 
@@ -127,7 +127,7 @@ SCRIPT;
     {
         if ($disable) {
             array_delete($this->defaultClass, Delete::class);
-        } elseif (!in_array(Delete::class, $this->defaultClass)) {
+        } elseif (! in_array(Delete::class, $this->defaultClass)) {
             array_push($this->defaultClass, Delete::class);
         }
 
@@ -145,7 +145,7 @@ SCRIPT;
     {
         if ($disable) {
             array_delete($this->defaultClass, Edit::class);
-        } elseif (!in_array(Edit::class, $this->defaultClass)) {
+        } elseif (! in_array(Edit::class, $this->defaultClass)) {
             array_push($this->defaultClass, Edit::class);
         }
 

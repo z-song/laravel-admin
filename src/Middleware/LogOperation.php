@@ -46,7 +46,7 @@ class LogOperation
     protected function shouldLogOperation(Request $request)
     {
         return config('admin.operation_log.enable')
-            && !$this->inExceptArray($request)
+            && ! $this->inExceptArray($request)
             && $this->inAllowedMethods($request->method())
             && Admin::user();
     }
@@ -88,7 +88,7 @@ class LogOperation
             $methods = [];
 
             if (Str::contains($except, ':')) {
-                list($methods, $except) = explode(':', $except);
+                [$methods, $except] = explode(':', $except);
                 $methods = explode(',', $methods);
             }
 
