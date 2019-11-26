@@ -118,7 +118,7 @@ class Content implements Renderable
     protected function validateBreadcrumb(array $breadcrumb)
     {
         foreach ($breadcrumb as $item) {
-            if (!is_array($item) || !Arr::has($item, 'text')) {
+            if (! is_array($item) || ! Arr::has($item, 'text')) {
                 throw new  \Exception('Breadcrumb format error!');
             }
         }
@@ -278,7 +278,7 @@ class Content implements Renderable
      */
     protected function getUserData()
     {
-        if (!$user = Admin::user()) {
+        if (! $user = Admin::user()) {
             return [];
         }
 

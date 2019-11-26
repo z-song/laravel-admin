@@ -186,7 +186,7 @@ abstract class AbstractFilter
      */
     public function siblings($index = null)
     {
-        if (!is_null($index)) {
+        if (! is_null($index)) {
             return Arr::get($this->parent->filters(), $index);
         }
 
@@ -236,7 +236,7 @@ abstract class AbstractFilter
 
         $value = Arr::get($inputs, $this->column);
 
-        if (!isset($value)) {
+        if (! isset($value)) {
             return;
         }
 
@@ -472,7 +472,7 @@ abstract class AbstractFilter
     {
         $args = func_get_args();
 
-        list($relation, $args[0]) = explode('.', $this->column);
+        [$relation, $args[0]] = explode('.', $this->column);
 
         return ['whereHas' => [$relation, function ($relation) use ($args) {
             call_user_func_array([$relation, $this->query], $args);

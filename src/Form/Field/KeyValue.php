@@ -38,17 +38,17 @@ class KeyValue extends Field
             return $this->validator->call($this, $input);
         }
 
-        if (!is_string($this->column)) {
+        if (! is_string($this->column)) {
             return false;
         }
 
         $rules = $attributes = [];
 
-        if (!$fieldRules = $this->getRules()) {
+        if (! $fieldRules = $this->getRules()) {
             return false;
         }
 
-        if (!Arr::has($input, $this->column)) {
+        if (! Arr::has($input, $this->column)) {
             return false;
         }
 

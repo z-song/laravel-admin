@@ -49,7 +49,7 @@ class BatchActions extends AbstractTool
      */
     public function disableDelete(bool $disable = true)
     {
-        $this->enableDelete = !$disable;
+        $this->enableDelete = ! $disable;
 
         return $this;
     }
@@ -166,7 +166,7 @@ EOT;
      */
     public function render()
     {
-        if (!$this->enableDelete) {
+        if (! $this->enableDelete) {
             $this->actions->shift();
         }
 

@@ -34,7 +34,7 @@ trait HasQuickCreate
      */
     public function hasQuickCreate()
     {
-        return !is_null($this->quickCreate);
+        return ! is_null($this->quickCreate);
     }
 
     /**

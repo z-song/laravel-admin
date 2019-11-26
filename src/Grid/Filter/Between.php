@@ -59,7 +59,7 @@ class Between extends AbstractFilter
      */
     public function condition($inputs)
     {
-        if (!Arr::has($inputs, $this->column)) {
+        if (! Arr::has($inputs, $this->column)) {
             return;
         }
 
@@ -73,11 +73,11 @@ class Between extends AbstractFilter
             return;
         }
 
-        if (!isset($value['start'])) {
+        if (! isset($value['start'])) {
             return $this->buildCondition($this->column, '<=', $value['end']);
         }
 
-        if (!isset($value['end'])) {
+        if (! isset($value['end'])) {
             return $this->buildCondition($this->column, '>=', $value['start']);
         }
 

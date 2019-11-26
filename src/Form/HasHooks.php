@@ -43,7 +43,7 @@ trait HasHooks
         $hooks = Arr::get($this->hooks, $name, []);
 
         foreach ($hooks as $func) {
-            if (!$func instanceof Closure) {
+            if (! $func instanceof Closure) {
                 continue;
             }
 

@@ -24,7 +24,7 @@ trait CanHidesColumns
      */
     public function disableColumnSelector(bool $disable = true)
     {
-        return $this->option('show_column_selector', !$disable);
+        return $this->option('show_column_selector', ! $disable);
     }
 
     /**

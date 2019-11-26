@@ -21,7 +21,7 @@ trait HasFooter
      */
     public function footer(Closure $closure = null)
     {
-        if (!$closure) {
+        if (! $closure) {
             return $this->footer;
         }
 
@@ -37,7 +37,7 @@ trait HasFooter
      */
     public function renderFooter()
     {
-        if (!$this->footer) {
+        if (! $this->footer) {
             return '';
         }
 

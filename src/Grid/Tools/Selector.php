@@ -95,18 +95,18 @@ class Selector implements Renderable
      */
     public static function parseSelected()
     {
-        if (!is_null(static::$selected)) {
+        if (! is_null(static::$selected)) {
             return static::$selected;
         }
 
         $selected = request('_selector', []);
 
-        if (!is_array($selected)) {
+        if (! is_array($selected)) {
             return [];
         }
 
         $selected = array_filter($selected, function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         });
 
         foreach ($selected as &$value) {
@@ -146,7 +146,7 @@ class Selector implements Renderable
             array_push($options, $value);
         }
 
-        if (!empty($options)) {
+        if (! empty($options)) {
             Arr::set($query, "_selector.{$column}", implode(',', $options));
         } else {
             Arr::forget($query, "_selector.{$column}");

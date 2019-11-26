@@ -242,7 +242,7 @@ trait UploadField
         try {
             $this->storage = Storage::disk($disk);
         } catch (\Exception $exception) {
-            if (!array_key_exists($disk, config('filesystems.disks'))) {
+            if (! array_key_exists($disk, config('filesystems.disks'))) {
                 admin_error(
                     'Config error.',
                     "Disk [$disk] not configured, please add a disk config in `config/filesystems.php`."
@@ -383,7 +383,7 @@ trait UploadField
     {
         $this->renameIfExists($file);
 
-        if (!is_null($this->storagePermission)) {
+        if (! is_null($this->storagePermission)) {
             return $this->storage->putFileAs($this->getDirectory(), $file, $this->name, $this->storagePermission);
         }
 

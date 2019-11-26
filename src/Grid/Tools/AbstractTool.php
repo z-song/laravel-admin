@@ -36,7 +36,7 @@ abstract class AbstractTool implements Renderable
      */
     public function allowed()
     {
-        return !$this->disabled;
+        return ! $this->disabled;
     }
 
     /**

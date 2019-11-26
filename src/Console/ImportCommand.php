@@ -31,13 +31,13 @@ class ImportCommand extends Command
     {
         $extension = $this->argument('extension');
 
-        if (empty($extension) || !Arr::has(Admin::$extensions, $extension)) {
+        if (empty($extension) || ! Arr::has(Admin::$extensions, $extension)) {
             $extension = $this->choice('Please choose a extension to import', array_keys(Admin::$extensions));
         }
 
         $className = Arr::get(Admin::$extensions, $extension);
 
-        if (!class_exists($className) || !method_exists($className, 'import')) {
+        if (! class_exists($className) || ! method_exists($className, 'import')) {
             $this->error("Invalid Extension [$className]");
 
             return;

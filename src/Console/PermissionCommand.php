@@ -64,7 +64,7 @@ class PermissionCommand extends Command
                 $slug = $this->generateSlug($table, $permission);
                 $name = $this->generateName($table, $permission_lang);
                 $exists = Permission::where('slug', $slug)->exists();
-                if (!$exists) {
+                if (! $exists) {
                     Permission::create([
                         'name'        => $name,
                         'slug'        => $slug,

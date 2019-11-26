@@ -80,14 +80,14 @@ class ExtendCommand extends Command
             $this->extensionDir = $this->ask('Please input a directory to store your extension:');
         }
 
-        if (!file_exists($this->extensionDir)) {
+        if (! file_exists($this->extensionDir)) {
             $this->makeDir();
         }
 
         $this->package = $this->argument('extension');
 
         InputExtensionName:
-        if (!$this->validateExtensionName($this->package)) {
+        if (! $this->validateExtensionName($this->package)) {
             $this->package = $this->ask("[$this->package] is not a valid package name, please input a name like (<vendor>/<name>)");
             goto InputExtensionName;
         }
@@ -194,8 +194,8 @@ TREE;
      */
     protected function getRootNameSpace()
     {
-        if (!$namespace = $this->option('namespace')) {
-            list($vendor, $name) = explode('/', $this->package);
+        if (! $namespace = $this->option('namespace')) {
+            [$vendor, $name] = explode('/', $this->package);
 
             $default = str_replace(['-', '-'], '', Str::title($vendor).'\\'.Str::title($name));
 
@@ -284,7 +284,7 @@ TREE;
             return;
         }
 
-        if (!file_exists($from)) {
+        if (! file_exists($from)) {
             return;
         }
 

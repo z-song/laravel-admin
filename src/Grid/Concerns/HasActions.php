@@ -76,7 +76,7 @@ trait HasActions
      */
     public function disableActions(bool $disable = true)
     {
-        return $this->option('show_actions', !$disable);
+        return $this->option('show_actions', ! $disable);
     }
 
     /**
@@ -104,7 +104,7 @@ trait HasActions
     {
         $this->tools->disableBatchActions($disable);
 
-        return $this->option('show_row_selector', !$disable);
+        return $this->option('show_row_selector', ! $disable);
     }
 
     /**
@@ -114,7 +114,7 @@ trait HasActions
      */
     protected function appendActionsColumn()
     {
-        if (!$this->option('show_actions')) {
+        if (! $this->option('show_actions')) {
             return;
         }
 

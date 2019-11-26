@@ -50,7 +50,7 @@ trait HasPermissions
      */
     public function cannot(string $permission) : bool
     {
-        return !$this->can($permission);
+        return ! $this->can($permission);
     }
 
     /**

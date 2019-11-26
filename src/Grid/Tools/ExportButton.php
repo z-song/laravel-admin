@@ -54,7 +54,7 @@ SCRIPT;
      */
     public function render()
     {
-        if (!$this->grid->showExportBtn()) {
+        if (! $this->grid->showExportBtn()) {
             return '';
         }
 

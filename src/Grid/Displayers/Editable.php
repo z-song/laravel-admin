@@ -209,7 +209,7 @@ STR;
             'data-value' => "{$this->value}",
         ];
 
-        if (!empty($this->attributes)) {
+        if (! empty($this->attributes)) {
             $attributes = array_merge($attributes, $this->attributes);
         }
 

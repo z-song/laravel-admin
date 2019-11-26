@@ -35,7 +35,7 @@ trait HasTools
      */
     public function disableTools(bool $disable = true)
     {
-        return $this->option('show_tools', !$disable);
+        return $this->option('show_tools', ! $disable);
     }
 
     /**

@@ -91,7 +91,7 @@ class Exporter
      */
     protected function getExporter($driver)
     {
-        if (!array_key_exists($driver, static::$drivers)) {
+        if (! array_key_exists($driver, static::$drivers)) {
             return $this->getDefaultExporter();
         }
 

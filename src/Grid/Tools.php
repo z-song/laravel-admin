@@ -145,7 +145,7 @@ class Tools implements Renderable
     {
         return $this->tools->map(function ($tool) {
             if ($tool instanceof AbstractTool) {
-                if (!$tool->allowed()) {
+                if (! $tool->allowed()) {
                     return '';
                 }
 

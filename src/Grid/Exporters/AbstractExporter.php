@@ -121,7 +121,7 @@ abstract class AbstractExporter implements ExporterInterface
             return $this;
         }
 
-        list($scope, $args) = explode(':', $scope);
+        [$scope, $args] = explode(':', $scope);
 
         if ($scope == Grid\Exporter::SCOPE_CURRENT_PAGE) {
             $this->grid->model()->usePaginate(true);

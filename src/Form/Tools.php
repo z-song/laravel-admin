@@ -84,7 +84,7 @@ class Tools implements Renderable
     {
         if ($disable) {
             array_delete($this->tools, 'list');
-        } elseif (!in_array('list', $this->tools)) {
+        } elseif (! in_array('list', $this->tools)) {
             array_push($this->tools, 'list');
         }
 
@@ -100,7 +100,7 @@ class Tools implements Renderable
     {
         if ($disable) {
             array_delete($this->tools, 'delete');
-        } elseif (!in_array('delete', $this->tools)) {
+        } elseif (! in_array('delete', $this->tools)) {
             array_push($this->tools, 'delete');
         }
 
@@ -116,7 +116,7 @@ class Tools implements Renderable
     {
         if ($disable) {
             array_delete($this->tools, 'view');
-        } elseif (!in_array('view', $this->tools)) {
+        } elseif (! in_array('view', $this->tools)) {
             array_push($this->tools, 'view');
         }
 

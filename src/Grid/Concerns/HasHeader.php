@@ -21,7 +21,7 @@ trait HasHeader
      */
     public function header(Closure $closure = null)
     {
-        if (!$closure) {
+        if (! $closure) {
             return $this->header;
         }
 
@@ -35,7 +35,7 @@ trait HasHeader
      */
     public function renderHeader()
     {
-        if (!$this->header) {
+        if (! $this->header) {
             return '';
         }
 

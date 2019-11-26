@@ -36,7 +36,7 @@ abstract class Widget extends Fluent
         $html = [];
         foreach ((array) $this->getAttributes() as $key => $value) {
             $element = $this->attributeElement($key, $value);
-            if (!is_null($element)) {
+            if (! is_null($element)) {
                 $html[] = $element;
             }
         }
@@ -57,7 +57,7 @@ abstract class Widget extends Fluent
         if (is_numeric($key)) {
             $key = $value;
         }
-        if (!is_null($value)) {
+        if (! is_null($value)) {
             return $key.'="'.htmlentities($value, ENT_QUOTES, 'UTF-8').'"';
         }
     }

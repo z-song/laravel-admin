@@ -55,7 +55,7 @@ class MultipleSteps implements Renderable
     {
         $current = $current ?: request($this->stepName, 0);
 
-        if (!isset($steps[$current])) {
+        if (! isset($steps[$current])) {
             $current = key($steps);
         }
 
@@ -69,7 +69,7 @@ class MultipleSteps implements Renderable
     {
         $class = $this->steps[$this->current];
 
-        if (!is_subclass_of($class, StepForm::class)) {
+        if (! is_subclass_of($class, StepForm::class)) {
             admin_error("Class [{$class}] must be a sub-class of [Encore\Admin\Widgets\StepForm].");
 
             return;

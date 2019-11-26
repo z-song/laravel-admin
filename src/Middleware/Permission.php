@@ -29,7 +29,7 @@ class Permission
             return $next($request);
         }
 
-        if (!Admin::user() || !empty($args) || $this->shouldPassThrough($request)) {
+        if (! Admin::user() || ! empty($args) || $this->shouldPassThrough($request)) {
             return $next($request);
         }
 
@@ -37,7 +37,7 @@ class Permission
             return $next($request);
         }
 
-        if (!Admin::user()->allPermissions()->first(function ($permission) use ($request) {
+        if (! Admin::user()->allPermissions()->first(function ($permission) use ($request) {
             return $permission->shouldPassThrough($request);
         })) {
             Checker::error();
@@ -56,7 +56,7 @@ class Permission
      */
     public function checkRoutePermission(Request $request)
     {
-        if (!$middleware = collect($request->route()->middleware())->first(function ($middleware) {
+        if (! $middleware = collect($request->route()->middleware())->first(function ($middleware) {
             return Str::startsWith($middleware, $this->middlewarePrefix);
         })) {
             return false;
@@ -66,7 +66,7 @@ class Permission
 
         $method = array_shift($args);
 
-        if (!method_exists(Checker::class, $method)) {
+        if (! method_exists(Checker::class, $method)) {
             throw new \InvalidArgumentException("Invalid permission method [$method].");
         }
 

@@ -43,7 +43,7 @@ trait ImageField
      */
     public function callInterventionMethods($target)
     {
-        if (!empty($this->interventionCalls)) {
+        if (! empty($this->interventionCalls)) {
             $image = ImageManagerStatic::make($target);
 
             foreach ($this->interventionCalls as $call) {
@@ -73,7 +73,7 @@ trait ImageField
             return $this;
         }
 
-        if (!class_exists(ImageManagerStatic::class)) {
+        if (! class_exists(ImageManagerStatic::class)) {
             throw new \Exception('To use image handling and manipulation, please install [intervention/image] first.');
         }
 
@@ -174,7 +174,7 @@ trait ImageField
                 $constraint->aspectRatio();
             })->resizeCanvas($size[0], $size[1], 'center', false, '#ffffff');
 
-            if (!is_null($this->storagePermission)) {
+            if (! is_null($this->storagePermission)) {
                 $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode(), $this->storagePermission);
             } else {
                 $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode());

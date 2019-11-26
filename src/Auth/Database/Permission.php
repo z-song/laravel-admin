@@ -70,7 +70,7 @@ class Permission extends Model
             $path = trim(config('admin.route.prefix'), '/').$path;
 
             if (Str::contains($path, ':')) {
-                list($method, $path) = explode(':', $path);
+                [$method, $path] = explode(':', $path);
                 $method = explode(',', $method);
             }
 
@@ -114,7 +114,7 @@ class Permission extends Model
             $path = trim($match['path'], '/');
         }
 
-        if (!$request->is($path)) {
+        if (! $request->is($path)) {
             return false;
         }
 

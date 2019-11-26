@@ -423,7 +423,7 @@ class Form implements Renderable
     protected function deleteFiles(Model $model, $forceDelete = false)
     {
         // If it's a soft delete, the files in the data will not be deleted.
-        if (!$forceDelete && $this->isSoftDeletes) {
+        if (! $forceDelete && $this->isSoftDeletes) {
             return;
         }
 
@@ -486,7 +486,7 @@ class Form implements Renderable
      */
     protected function responseValidationError(MessageBag $message)
     {
-        if (\request()->ajax() && !\request()->pjax()) {
+        if (\request()->ajax() && ! \request()->pjax()) {
             return response()->json([
                 'status'     => false,
                 'validation' => $message,
@@ -509,7 +509,7 @@ class Form implements Renderable
         $request = Request::capture();
 
         // ajax but not pjax
-        if ($request->ajax() && !$request->pjax()) {
+        if ($request->ajax() && ! $request->pjax()) {
             return response()->json([
                 'status'  => true,
                 'message' => $message,
@@ -570,7 +570,7 @@ class Form implements Renderable
 
         foreach ($inputs as $column => $value) {
             $column = \Illuminate\Support\Str::camel($column);
-            if (!method_exists($this->model, $column)) {
+            if (! method_exists($this->model, $column)) {
                 continue;
             }
 
@@ -615,7 +615,7 @@ class Form implements Renderable
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-            if (!$isEditable) {
+            if (! $isEditable) {
                 return back()->withInput()->withErrors($validationMessages);
             }
 
@@ -788,7 +788,7 @@ class Form implements Renderable
      */
     protected function handleFileSort(array $input = []): array
     {
-        if (!array_key_exists(Field::FILE_SORT_FLAG, $input)) {
+        if (! array_key_exists(Field::FILE_SORT_FLAG, $input)) {
             return $input;
         }
 
@@ -840,7 +840,7 @@ class Form implements Renderable
     protected function updateRelation($relationsData)
     {
         foreach ($relationsData as $name => $values) {
-            if (!method_exists($this->model, $name)) {
+            if (! method_exists($this->model, $name)) {
                 continue;
             }
 
@@ -899,7 +899,7 @@ class Form implements Renderable
 
                     // When in creating, associate two models
                     $foreignKeyMethod = version_compare(app()->version(), '5.8.0', '<') ? 'getForeignKey' : 'getForeignKeyName';
-                    if (!$this->model->{$relation->{$foreignKeyMethod}()}) {
+                    if (! $this->model->{$relation->{$foreignKeyMethod}()}) {
                         $this->model->{$relation->{$foreignKeyMethod}()} = $parent->getKey();
 
                         $this->model->save();
@@ -962,7 +962,7 @@ class Form implements Renderable
             $columns = $field->column();
 
             // If column not in input array data, then continue.
-            if (!Arr::has($updates, $columns)) {
+            if (! Arr::has($updates, $columns)) {
                 continue;
             }
 
@@ -995,8 +995,8 @@ class Form implements Renderable
     protected function isInvalidColumn($columns, $containsDot = false): bool
     {
         foreach ((array) $columns as $column) {
-            if ((!$containsDot && Str::contains($column, '.')) ||
-                ($containsDot && !Str::contains($column, '.'))) {
+            if ((! $containsDot && Str::contains($column, '.')) ||
+                ($containsDot && ! Str::contains($column, '.'))) {
                 return true;
             }
         }
@@ -1046,7 +1046,7 @@ class Form implements Renderable
     {
         $first = current($inserts);
 
-        if (!is_array($first)) {
+        if (! is_array($first)) {
             return false;
         }
 
@@ -1086,7 +1086,7 @@ class Form implements Renderable
         if (is_array($columns)) {
             $value = [];
             foreach ($columns as $name => $column) {
-                if (!Arr::has($data, $column)) {
+                if (! Arr::has($data, $column)) {
                     continue;
                 }
                 $value[$name] = Arr::get($data, $column);
@@ -1158,7 +1158,7 @@ class Form implements Renderable
         $data = $this->model->toArray();
 
         $this->builder->fields()->each(function (Field $field) use ($data) {
-            if (!in_array($field->column(), $this->ignored, true)) {
+            if (! in_array($field->column(), $this->ignored, true)) {
                 $field->fill($data);
             }
         });
@@ -1212,11 +1212,11 @@ class Form implements Renderable
 
         /** @var Field $field */
         foreach ($this->builder->fields() as $field) {
-            if (!$validator = $field->getValidator($input)) {
+            if (! $validator = $field->getValidator($input)) {
                 continue;
             }
 
-            if (($validator instanceof Validator) && !$validator->passes()) {
+            if (($validator instanceof Validator) && ! $validator->passes()) {
                 $failedValidators[] = $validator;
             }
         }
@@ -1260,7 +1260,7 @@ class Form implements Renderable
 
         foreach (Arr::flatten($columns) as $column) {
             if (Str::contains($column, '.')) {
-                list($relation) = explode('.', $column);
+                [$relation] = explode('.', $column);
 
                 if (method_exists($this->model, $relation) &&
                     $this->model->$relation() instanceof Relations\Relation
@@ -1268,7 +1268,7 @@ class Form implements Renderable
                     $relations[] = $relation;
                 }
             } elseif (method_exists($this->model, $column) &&
-                !method_exists(Model::class, $column)
+                ! method_exists(Model::class, $column)
             ) {
                 $relations[] = $column;
             }
@@ -1602,7 +1602,7 @@ class Form implements Renderable
      */
     public static function collectFieldAssets(): array
     {
-        if (!empty(static::$collectedAssets)) {
+        if (! empty(static::$collectedAssets)) {
             return static::$collectedAssets;
         }
 
@@ -1610,7 +1610,7 @@ class Form implements Renderable
         $js = collect();
 
         foreach (static::$availableFields as $field) {
-            if (!method_exists($field, 'getAssets')) {
+            if (! method_exists($field, 'getAssets')) {
                 continue;
             }
 

@@ -23,7 +23,7 @@ class SwitchGroup extends AbstractDisplayer
     {
         $this->updateStates($states);
 
-        if (!Arr::isAssoc($columns)) {
+        if (! Arr::isAssoc($columns)) {
             $labels = array_map('ucfirst', $columns);
 
             $columns = array_combine($columns, $labels);

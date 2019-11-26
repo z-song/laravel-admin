@@ -520,16 +520,16 @@ class Field implements Renderable
      */
     protected function addRequiredAttribute($rules)
     {
-        if (!is_array($rules)) {
+        if (! is_array($rules)) {
             return;
         }
 
-        if (!in_array('required', $rules, true)) {
+        if (! in_array('required', $rules, true)) {
             return;
         }
 
         // Only text field has `required` attribute.
-        if (!$this instanceof Form\Field\Text) {
+        if (! $this instanceof Form\Field\Text) {
             return;
         }
 
@@ -584,7 +584,7 @@ class Field implements Renderable
         if ($input instanceof Closure) {
             $rules = $input;
         } else {
-            if (!empty($original)) {
+            if (! empty($original)) {
                 $original = $this->formatRules($original);
             }
 
@@ -702,11 +702,11 @@ class Field implements Renderable
             $rules = array_filter(explode('|', $rules));
         }
 
-        if (!$this->form) {
+        if (! $this->form) {
             return $rules;
         }
 
-        if (!$id = $this->form->model()->getKey()) {
+        if (! $id = $this->form->model()->getKey()) {
             return $rules;
         }
 
@@ -736,7 +736,7 @@ class Field implements Renderable
             return;
         }
 
-        if (!is_string($this->rules)) {
+        if (! is_string($this->rules)) {
             return;
         }
 
@@ -906,12 +906,12 @@ class Field implements Renderable
 
         $rules = $attributes = [];
 
-        if (!$fieldRules = $this->getRules()) {
+        if (! $fieldRules = $this->getRules()) {
             return false;
         }
 
         if (is_string($this->column)) {
-            if (!Arr::has($input, $this->column)) {
+            if (! Arr::has($input, $this->column)) {
                 return false;
             }
 
@@ -923,7 +923,7 @@ class Field implements Renderable
 
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
-                if (!array_key_exists($column, $input)) {
+                if (! array_key_exists($column, $input)) {
                     continue;
                 }
                 $input[$column.$key] = Arr::get($input, $column);
@@ -1168,7 +1168,7 @@ class Field implements Renderable
      */
     public function getElementClass(): array
     {
-        if (!$this->elementClass) {
+        if (! $this->elementClass) {
             $name = $this->elementName ?: $this->formatName($this->column);
 
             $this->elementClass = (array) str_replace(['[', ']'], '_', $name);
@@ -1375,7 +1375,7 @@ class Field implements Renderable
      */
     public function getView(): string
     {
-        if (!empty($this->view)) {
+        if (! empty($this->view)) {
             return $this->view;
         }
 
@@ -1443,7 +1443,7 @@ class Field implements Renderable
      */
     protected function shouldRender(): bool
     {
-        if (!$this->display) {
+        if (! $this->display) {
             return false;
         }
 
@@ -1469,7 +1469,7 @@ class Field implements Renderable
      */
     public function render()
     {
-        if (!$this->shouldRender()) {
+        if (! $this->shouldRender()) {
             return '';
         }
 

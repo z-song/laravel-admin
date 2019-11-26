@@ -37,7 +37,7 @@ SCRIPT;
      */
     public function retrieveModel(Request $request)
     {
-        if (!$key = $request->get('_key')) {
+        if (! $key = $request->get('_key')) {
             return false;
         }
 
