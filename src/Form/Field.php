@@ -528,6 +528,8 @@ class Field implements Renderable
             return;
         }
 
+        $this->setLabelClass(['asterisk']);
+
         // Only text field has `required` attribute.
         if (!$this instanceof Form\Field\Text) {
             return;
