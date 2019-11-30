@@ -490,7 +490,7 @@ $('#has-many-{$this->column}').off('click', '.add').on('click', '.add', function
 });
 
 $('#has-many-{$this->column}').off('click', '.remove').on('click', '.remove', function () {
-    $(this).closest('.has-many-{$this->column}-form').hide();
+    $(this).closest('.has-many-{$this->column}-form').remove();
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
     return false;
 });
@@ -589,7 +589,7 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
 });
 
 $('#has-many-{$this->column}').on('click', '.remove', function () {
-    $(this).closest('.has-many-{$this->column}-form').hide();
+    $(this).closest('.has-many-{$this->column}-form').remove();
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
     return false;
 });
