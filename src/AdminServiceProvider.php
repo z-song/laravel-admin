@@ -16,7 +16,6 @@ class AdminServiceProvider extends ServiceProvider
         Console\MakeCommand::class,
         Console\MenuCommand::class,
         Console\InstallCommand::class,
-        Console\PublishCommand::class,
         Console\UninstallCommand::class,
         Console\ImportCommand::class,
         Console\CreateUserCommand::class,
@@ -74,8 +73,6 @@ class AdminServiceProvider extends ServiceProvider
             $this->loadRoutesFrom($routes);
         }
 
-        $this->registerPublishing();
-
         $this->compatibleBlade();
     }
 
@@ -89,21 +86,6 @@ class AdminServiceProvider extends ServiceProvider
         if (config('admin.https') || config('admin.secure')) {
             url()->forceScheme('https');
             $this->app['request']->server->set('HTTPS', true);
-        }
-    }
-
-    /**
-     * Register the package's publishable resources.
-     *
-     * @return void
-     */
-    protected function registerPublishing()
-    {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([__DIR__.'/../config' => config_path()], 'laravel-admin-config');
-            $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang')], 'laravel-admin-lang');
-            $this->publishes([__DIR__.'/../database/migrations' => database_path('migrations')], 'laravel-admin-migrations');
-            $this->publishes([__DIR__.'/../resources/assets' => public_path('vendor/laravel-admin')], 'laravel-admin-assets');
         }
     }
 
