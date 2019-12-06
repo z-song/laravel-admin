@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
@@ -167,10 +168,7 @@ class Tags extends Field
      */
     public function render()
     {
-        $this->script = "$(\"{$this->getElementClassSelector()}\").select2({
-            tags: true,
-            tokenSeparators: [',']
-        });";
+        $this->setupScript();
 
         if ($this->keyAsValue) {
             $options = $this->value + $this->options;
@@ -182,5 +180,43 @@ class Tags extends Field
             'options'    => $options,
             'keyAsValue' => $this->keyAsValue,
         ]);
+    }
+
+    protected function setupScript()
+    {
+        $this->script = <<<JS
+$("{$this->getElementClassSelector()}").select2({
+    tags: true,
+    tokenSeparators: [',', ';', '，', '；', ' '],
+    createTag: function(params) {
+        if (/[,;，； ]/.test(params.term)) {
+            var str = params.term.trim().replace(/[,;，；]*$/, '');
+            return { id: str, text: str }
+        } else {
+            return null;
+        }
+    }
+});
+JS;
+
+        Admin::script(
+            <<<'JS'
+$(document).off('keyup', '.select2-selection--multiple .select2-search__field').on('keyup', '.select2-selection--multiple .select2-search__field', function (event) {
+    try {
+        if (event.keyCode == 13) {
+            var $this = $(this), optionText = $this.val();
+            if (optionText != "" && $this.find("option[value='" + optionText + "']").length === 0) {
+                var $select = $this.parents('.select2-container').prev("select");
+                var newOption = new Option(optionText, optionText, true, true);
+                $select.append(newOption).trigger('change');
+                $this.val('');
+            }
+        }
+    } catch (e) {
+        console.error(e);
+    }
+});
+JS
+        );
     }
 }
