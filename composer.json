@@ -12,6 +12,12 @@
             "email": "zosong@126.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/muhlisabdi/helpers"
+        }
+    ],
     "require": {
         "php": ">=7.0.0",
         "symfony/dom-crawler": "~3.1|~4.0|~5.0",
@@ -20,7 +26,8 @@
         "staudenmeir/belongs-to-through": "2.7",
         "staudenmeir/eloquent-has-many-deep": "1.11"
     },
-    "require-dev": {
+    "require-dev": {        
+        "laravel-admin-ext/helpers": "dev-master",
         "phpunit/phpunit": "~6.0|~8.0",
         "laravel/laravel": "~5.5|~6.0",
         "symfony/css-selector": "~4.0",
