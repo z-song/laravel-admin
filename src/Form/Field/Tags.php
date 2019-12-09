@@ -210,6 +210,7 @@ $(document).off('keyup', '.select2-selection--multiple .select2-search__field').
                 var newOption = new Option(optionText, optionText, true, true);
                 $select.append(newOption).trigger('change');
                 $this.val('');
+                $select.select2('close');
             }
         }
     } catch (e) {
