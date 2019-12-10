@@ -24,7 +24,7 @@ class DummyClass extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new DummyModel);
+        $grid = new Grid(new DummyModel());
 
 DummyGrid
 
@@ -53,7 +53,7 @@ DummyShow
      */
     protected function form()
     {
-        $form = new Form(new DummyModel);
+        $form = new Form(new DummyModel());
 
 DummyForm
 
