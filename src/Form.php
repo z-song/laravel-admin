@@ -569,18 +569,23 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
-            $column = \Illuminate\Support\Str::camel($column);
-            if (!method_exists($this->model, $column)) {
-                continue;
-            }
+			if (method_exists($this->model, $column)) {
+				$relation = call_user_func([$this->model, $column]);
 
-            $relation = call_user_func([$this->model, $column]);
+				if ($relation instanceof Relations\Relation) {
+					$relations[$column] = $value;
+				}
+			} elseif (method_exists($this->model, \Illuminate\Support\Str::camel($column))) {
+				$column = \Illuminate\Support\Str::camel($column);
+				$relation = call_user_func([$this->model, $column]);
 
-            if ($relation instanceof Relations\Relation) {
-                $relations[$column] = $value;
-            }
+				if ($relation instanceof Relations\Relation) {
+					$relations[$column] = $value;
+				}
+			}
+
         }
-
+        
         return $relations;
     }
 
