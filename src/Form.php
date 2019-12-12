@@ -570,8 +570,7 @@ class Form implements Renderable
 
         foreach ($inputs as $column => $value) {
             if (method_exists($this->model, $column) ||
-                method_exists($this->model, $column = Str::camel($column)))
-            {
+                method_exists($this->model, $column = Str::camel($column))) {
                 $relation = call_user_func([$this->model, $column]);
 
                 if ($relation instanceof Relations\Relation) {
@@ -579,7 +578,7 @@ class Form implements Renderable
                 }
             }
         }
-        
+
         return $relations;
     }
 
