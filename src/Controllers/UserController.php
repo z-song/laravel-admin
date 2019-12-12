@@ -33,6 +33,17 @@ class UserController extends AdminController
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
         $grid->column('created_at', trans('admin.created_at'));
         $grid->column('updated_at', trans('admin.updated_at'));
+        
+        $grid->filter(function (Grid\Filter $filter) {
+            $roleModel = config('admin.database.roles_model');
+            $filter->like('username', trans('admin.username'));
+            $filter->like('name', trans('admin.name'));
+            $filter->where(function ($query) {
+                $query->whereHas('roles', function ($query) {
+                    $query->where('id', $this->input);
+                });
+            }, trans('admin.roles'))->select($roleModel::all()->pluck('name', 'id'));
+        });
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
