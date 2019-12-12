@@ -35,6 +35,17 @@ class RoleController extends AdminController
 
         $grid->column('created_at', trans('admin.created_at'));
         $grid->column('updated_at', trans('admin.updated_at'));
+        
+        $grid->filter(function (Grid\Filter $filter) {
+            $permissionModel = config('admin.database.permissions_model');
+            $filter->like('slug', __('admin.slug'));
+            $filter->like('name', __('admin.name'));
+            $filter->where(function ($query) {
+                $query->whereHas('permissions', function($query) {
+                    $query->where('id', $this->input);
+                });
+            }, __('admin.permissions'))->select($permissionModel::all()->pluck('name', 'id'));
+        });
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->row->slug == 'administrator') {
