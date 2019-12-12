@@ -38,13 +38,13 @@ class RoleController extends AdminController
         
         $grid->filter(function (Grid\Filter $filter) {
             $permissionModel = config('admin.database.permissions_model');
-            $filter->like('slug', __('admin.slug'));
-            $filter->like('name', __('admin.name'));
+            $filter->like('slug', trans('admin.slug'));
+            $filter->like('name', trans('admin.name'));
             $filter->where(function ($query) {
-                $query->whereHas('permissions', function($query) {
+                $query->whereHas('permissions', function ($query) {
                     $query->where('id', $this->input);
                 });
-            }, __('admin.permissions'))->select($permissionModel::all()->pluck('name', 'id'));
+            }, trans('admin.permissions'))->select($permissionModel::all()->pluck('name', 'id'));
         });
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
