@@ -54,6 +54,12 @@ class PermissionController extends AdminController
                 return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
             })->implode('');
         });
+        
+        $grid->filter(function (Grid\Filter $filter) {
+            $filter->like('slug', trans('admin.slug'));
+            $filter->like('name', trans('admin.name'));
+            $filter->like('http_path', trans('admin.route'));
+        });
 
         $grid->column('created_at', trans('admin.created_at'));
         $grid->column('updated_at', trans('admin.updated_at'));
