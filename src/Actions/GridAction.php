@@ -3,6 +3,7 @@
 namespace Encore\Admin\Actions;
 
 use Encore\Admin\Grid;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
 /**
@@ -60,5 +61,16 @@ abstract class GridAction extends Action
     public function parameters()
     {
         return ['_model' => $this->getModelClass()];
+    }
+
+    /**
+     * Indicates if model uses soft-deletes.
+     *
+     * @param $modelClass
+     * @return bool
+     */
+    protected function modelUseSoftDeletes($modelClass)
+    {
+        return in_array(SoftDeletes::class, class_uses_deep($modelClass));
     }
 }
