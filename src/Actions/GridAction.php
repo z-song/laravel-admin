@@ -67,6 +67,7 @@ abstract class GridAction extends Action
      * Indicates if model uses soft-deletes.
      *
      * @param $modelClass
+     *
      * @return bool
      */
     protected function modelUseSoftDeletes($modelClass)
