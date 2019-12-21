@@ -569,15 +569,13 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
-            $column = \Illuminate\Support\Str::camel($column);
-            if (!method_exists($this->model, $column)) {
-                continue;
-            }
+            if (method_exists($this->model, $column) ||
+                method_exists($this->model, $column = Str::camel($column))) {
+                $relation = call_user_func([$this->model, $column]);
 
-            $relation = call_user_func([$this->model, $column]);
-
-            if ($relation instanceof Relations\Relation) {
-                $relations[$column] = $value;
+                if ($relation instanceof Relations\Relation) {
+                    $relations[$column] = $value;
+                }
             }
         }
 
@@ -1384,7 +1382,7 @@ class Form implements Renderable
      */
     public function isCreating(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), '.create');
+        return Str::endsWith(\request()->route()->getName(), ['.create', '.store']);
     }
 
     /**
@@ -1394,7 +1392,7 @@ class Form implements Renderable
      */
     public function isEditing(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), '.edit');
+        return Str::endsWith(\request()->route()->getName(), '.edit', '.update');
     }
 
     /**

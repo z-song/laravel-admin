@@ -174,4 +174,25 @@ $('#totop').on('click', function (e) {
         return $('meta[name="csrf-token"]').attr('content');
     };
 
+    $.admin.loadedScripts = [];
+
+    $.admin.loadScripts = function(arr) {
+        var _arr = $.map(arr, function(src) {
+
+            if ($.inArray(src, $.admin.loadedScripts)) {
+                return;
+            }
+
+            $.admin.loadedScripts.push(src);
+
+            return $.getScript(src);
+        });
+
+        _arr.push($.Deferred(function(deferred){
+            $(deferred.resolve);
+        }));
+
+        return $.when.apply($, _arr);
+    }
+
 })(jQuery);

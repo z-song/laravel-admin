@@ -108,6 +108,7 @@ trait UploadField
         $defaults = [
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
+            'msgPlaceholder'       => trans('admin.choose_file'),
             'browseLabel'          => trans('admin.browse'),
             'cancelLabel'          => trans('admin.cancel'),
             'showRemove'           => false,
