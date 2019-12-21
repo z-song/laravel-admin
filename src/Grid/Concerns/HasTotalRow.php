@@ -27,7 +27,7 @@ trait HasTotalRow
     {
         $this->totalRowColumns[$column] = $callback;
 
-        if ( !isset($this->totalRowOperations[$column]) ) {
+        if (!isset($this->totalRowOperations[$column])) {
             $this->addTotalOperation($column, 'sum');
         }
 
@@ -35,14 +35,14 @@ trait HasTotalRow
     }
 
     /**
-     * @param string  $column
-     * @param string  $operation
+     * @param string $column
+     * @param string $operation
      *
      * @return $this
      */
     public function addTotalOperation($column, $operation, $callback = null)
     {
-        if ( !is_null($callback) ) {
+        if (!is_null($callback)) {
             $this->totalRowColumns[$column] = $callback;
         }
 
