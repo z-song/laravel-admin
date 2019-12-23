@@ -29,6 +29,13 @@ class Actions extends AbstractDisplayer
     protected $resource;
 
     /**
+     * Disable all actions.
+     *
+     * @var bool
+     */
+    protected $disableAll = false;
+
+    /**
      * Append a action.
      *
      * @param $action
@@ -115,6 +122,18 @@ class Actions extends AbstractDisplayer
     }
 
     /**
+     * Disable all actions.
+     *
+     * @return $this
+     */
+    public function disableAll()
+    {
+        $this->disableAll = true;
+
+        return $this;
+    }
+
+    /**
      * Set resource of current resource.
      *
      * @param $resource
@@ -145,6 +164,10 @@ class Actions extends AbstractDisplayer
     {
         if ($callback instanceof \Closure) {
             $callback->call($this, $this);
+        }
+
+        if ($this->disableAll) {
+            return '';
         }
 
         $actions = $this->prepends;
