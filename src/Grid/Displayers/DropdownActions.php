@@ -155,7 +155,7 @@ SCRIPT;
     /**
      * @param null|\Closure $callback
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
     public function display($callback = null)
     {
@@ -163,6 +163,10 @@ SCRIPT;
 
         if ($callback instanceof \Closure) {
             $callback->call($this, $this);
+        }
+
+        if ($this->disableAll) {
+            return '';
         }
 
         $this->prependDefaultActions();
