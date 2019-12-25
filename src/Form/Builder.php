@@ -442,7 +442,7 @@ class Builder
     public function hasFile(): bool
     {
         foreach ($this->fields() as $field) {
-            if ($field instanceof Field\File) {
+            if ($field instanceof Field\File || $field instanceof Field\MultipleFile) {
                 return true;
             }
         }
