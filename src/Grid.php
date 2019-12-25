@@ -387,7 +387,7 @@ class Grid
             return $this;
         }
 
-        $name = ($this->shouldSnakeAttributes() ? Str::snake($relation) : $relation) .'.'.$column;
+        $name = ($this->shouldSnakeAttributes() ? Str::snake($relation) : $relation).'.'.$column;
 
         $this->model()->with($relation);
 
