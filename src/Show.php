@@ -6,6 +6,7 @@ use Encore\Admin\Show\Divider;
 use Encore\Admin\Show\Field;
 use Encore\Admin\Show\Panel;
 use Encore\Admin\Show\Relation;
+use Encore\Admin\Traits\ShouldSnakeAttributes;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,8 @@ use Illuminate\Support\Str;
 
 class Show implements Renderable
 {
+    use ShouldSnakeAttributes;
+
     /**
      * The Eloquent model to show.
      *
@@ -444,7 +447,9 @@ class Show implements Renderable
                 return $this->addRelation($method, $arguments[1], $arguments[0]);
             }
 
-            return $this->addField($method, Arr::get($arguments, 0))->setRelation(Str::snake($method));
+            return $this->addField($method, Arr::get($arguments, 0))->setRelation(
+                $this->shouldSnakeAttributes() ? Str::snake($method) : $method
+            );
         }
 
         if ($relation    instanceof HasMany

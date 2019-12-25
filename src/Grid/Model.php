@@ -113,22 +113,6 @@ class Model
         $this->grid = $grid;
 
         $this->queries = collect();
-
-//        static::doNotSnakeAttributes($this->model);
-    }
-
-    /**
-     * Don't snake case attributes.
-     *
-     * @param EloquentModel $model
-     *
-     * @return void
-     */
-    protected static function doNotSnakeAttributes(EloquentModel $model)
-    {
-        $class = get_class($model);
-
-        $class::$snakeAttributes = false;
     }
 
     /**
