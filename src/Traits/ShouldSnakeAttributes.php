@@ -2,8 +2,17 @@
 
 namespace Encore\Admin\Traits;
 
+use Encore\Admin\Grid\Model as GridModel;
+
 trait ShouldSnakeAttributes
 {
+    /**
+     * Indicates whether attributes are snake cased on arrays.
+     *
+     * @var bool
+     */
+    protected static $snakeAttributes;
+
     /**
      * Indicates if model should snake attribute name.
      *
@@ -11,8 +20,15 @@ trait ShouldSnakeAttributes
      */
     public function shouldSnakeAttributes()
     {
-        $class = get_class($this->model);
+        if (is_bool(static::$snakeAttributes)) {
+            return static::$snakeAttributes;
+        }
 
-        return $class::$snakeAttributes;
+        $model = ($this->model instanceof GridModel) ?
+            $this->model->eloquent() : $this->model;
+
+        $class = get_class($model);
+
+        return static::$snakeAttributes = $class::$snakeAttributes;
     }
 }
