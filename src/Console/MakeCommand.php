@@ -95,7 +95,7 @@ class MakeCommand extends GeneratorCommand
         $model = $this->option('model');
 
         if (empty($model)) {
-            return true;
+            return false;
         }
 
         return class_exists($model) && is_subclass_of($model, Model::class);
