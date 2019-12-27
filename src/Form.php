@@ -1291,7 +1291,21 @@ class Form implements Renderable
 
         return $this;
     }
-
+    /**
+     * unset input data.
+     *
+     * @param string $key
+     * @param null   $value
+     *
+     * @return array|mixed
+     */
+    public function unsetInput($key)
+    {
+        if (Arr::has($this->inputs, [$key])) {
+            Arr::forget($this->inputs, [$key]);
+        }
+        return true;
+    }
     /**
      * Set view for form.
      *
