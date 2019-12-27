@@ -102,6 +102,11 @@ Set width for label and field
 ```php
 $form->setWidth(10, 2);
 ```
+Manually delete a submitted field
+
+```php
+$form->unsetInput('key');
+```
 
 Set form action
 

@@ -104,6 +104,12 @@ $form->ignore(['column1', 'column2', 'column3']);
 $form->setWidth(10, 2);
 ```
 
+手动删除某个提交的字段 不在保存
+
+```php
+$form->unsetInput('key');
+```
+
 设置表单提交的action
 
 ```php
