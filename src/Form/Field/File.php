@@ -145,6 +145,18 @@ class File extends Field
     }
 
     /**
+     * Hides the file preview.
+     *
+     * @return $this
+     */
+    public function hidePreview()
+    {
+        return $this->options([
+            'showPreview' => false
+        ]);
+    }
+
+    /**
      * Initialize the caption.
      *
      * @param string $caption

@@ -46,7 +46,13 @@ class MultipleSelect extends Select
      */
     public function fill($data)
     {
-        $relations = Arr::get($data, $this->form->shouldSnakeAttributes() ? Str::snake($this->column) : $this->column);
+        if ($this->form && $this->form->shouldSnakeAttributes()) {
+            $key = Str::snake($this->column);
+        } else {
+            $key = $this->column;
+        }
+
+        $relations = Arr::get($data, $key);
 
         if (is_string($relations)) {
             $this->value = explode(',', $relations);
