@@ -56,7 +56,7 @@ class TotalRow extends AbstractTool
      */
     protected function total($column, $display = null, $operation = 'sum')
     {
-        if (!is_callable($display) && !is_null($display)) {
+        if (! is_callable($display) && ! is_null($display)) {
             return $display;
         }
 

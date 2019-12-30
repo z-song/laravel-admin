@@ -506,7 +506,7 @@ class Column
      */
     public function bindSearchQuery(Model $model)
     {
-        if (!$this->searchable || !request()->has($this->getName())) {
+        if (! $this->searchable || ! request()->has($this->getName())) {
             return;
         }
 
@@ -832,7 +832,7 @@ class Column
      */
     public function action($action)
     {
-        if (!is_subclass_of($action, RowAction::class)) {
+        if (! is_subclass_of($action, RowAction::class)) {
             throw new \InvalidArgumentException("Action class [$action] must be sub-class of [Encore\Admin\Actions\GridAction]");
         }
 
@@ -878,7 +878,7 @@ class Column
      */
     protected function hasDisplayCallbacks()
     {
-        return !empty($this->displayCallbacks);
+        return ! empty($this->displayCallbacks);
     }
 
     /**
@@ -980,7 +980,7 @@ class Column
             return;
         }
 
-        if (!class_exists($class) || !is_subclass_of($class, AbstractDisplayer::class)) {
+        if (! class_exists($class) || ! is_subclass_of($class, AbstractDisplayer::class)) {
             throw new \Exception("Invalid column definition [$class]");
         }
 
@@ -1098,7 +1098,7 @@ class Column
      */
     public function __call($method, $arguments)
     {
-        if ($this->isRelation() && !$this->relationColumn) {
+        if ($this->isRelation() && ! $this->relationColumn) {
             $this->name = "{$this->relation}.$method";
             $this->label = $this->formatLabel($arguments[0] ?? null);
 

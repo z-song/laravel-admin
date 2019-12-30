@@ -58,10 +58,10 @@ class InstallCommand extends Command
     }
 
     /**
-    * Import Helpers Extension.
-    *
-    * @return void
-    */
+     * Import Helpers Extension.
+     *
+     * @return void
+     */
     public function initHelpers()
     {
         $this->call('admin:import helpers');
@@ -87,7 +87,7 @@ class InstallCommand extends Command
 
         $this->makeDir('Controllers');
         $this->makeDir('Models');
-        
+
         $this->createHomeController();
         $this->createAuthController();
         $this->createExampleController();
