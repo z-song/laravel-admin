@@ -103,7 +103,7 @@ class Column
     protected static $originalGridModels;
 
     /**
-     * @var array|\Closure
+     * @var []Closure
      */
     protected $displayCallbacks = [];
 
@@ -506,7 +506,7 @@ class Column
      */
     public function bindSearchQuery(Model $model)
     {
-        if (! $this->searchable || ! request()->has($this->getName())) {
+        if (!$this->searchable || !request()->has($this->getName())) {
             return;
         }
 
@@ -553,7 +553,7 @@ class Column
      * Display column using array value map.
      *
      * @param array $values
-     * @param $default
+     * @param null  $default
      *
      * @return $this
      */
@@ -617,13 +617,83 @@ class Column
     /**
      * Add column to total-row.
      *
-     * @param $display
+     * @param null $display
      *
      * @return $this
      */
     public function totalRow($display = null)
     {
         $this->grid->addTotalRow($this->name, $display);
+
+        return $this;
+    }
+
+    /**
+     * For total-row column used aggregation operation SUM.
+     *
+     * @param null $display
+     *
+     * @return $this
+     */
+    public function totalSum($display = null)
+    {
+        $this->grid->addTotalOperation($this->name, 'sum', $display);
+
+        return $this;
+    }
+
+    /**
+     * For total-row column used aggregation operation COUNT.
+     *
+     * @param null $display
+     *
+     * @return $this
+     */
+    public function totalCount($display = null)
+    {
+        $this->grid->addTotalOperation($this->name, 'count', $display);
+
+        return $this;
+    }
+
+    /**
+     * For total-row column used aggregation operation AVG.
+     *
+     * @param null $display
+     *
+     * @return $this
+     */
+    public function totalAvg($display = null)
+    {
+        $this->grid->addTotalOperation($this->name, 'avg', $display);
+
+        return $this;
+    }
+
+    /**
+     * For total-row column used aggregation operation MIN.
+     *
+     * @param null $display
+     *
+     * @return $this
+     */
+    public function totalMin($display = null)
+    {
+        $this->grid->addTotalOperation($this->name, 'min', $display);
+
+        return $this;
+    }
+
+    /**
+     * For total-row column used aggregation operation MAX.
+     *
+     * @param null $display
+     *
+     * @return $this
+     */
+    public function totalMax($display = null)
+    {
+        $this->grid->addTotalOperation($this->name, 'max', $display);
 
         return $this;
     }
@@ -707,7 +777,7 @@ class Column
     /**
      * Return a human readable format time.
      *
-     * @param $locale
+     * @param null $locale
      *
      * @return $this
      */
@@ -762,7 +832,7 @@ class Column
      */
     public function action($action)
     {
-        if (! is_subclass_of($action, RowAction::class)) {
+        if (!is_subclass_of($action, RowAction::class)) {
             throw new \InvalidArgumentException("Action class [$action] must be sub-class of [Encore\Admin\Actions\GridAction]");
         }
 
@@ -808,7 +878,7 @@ class Column
      */
     protected function hasDisplayCallbacks()
     {
-        return ! empty($this->displayCallbacks);
+        return !empty($this->displayCallbacks);
     }
 
     /**
@@ -910,7 +980,7 @@ class Column
             return;
         }
 
-        if (! class_exists($class) || ! is_subclass_of($class, AbstractDisplayer::class)) {
+        if (!class_exists($class) || !is_subclass_of($class, AbstractDisplayer::class)) {
             throw new \Exception("Invalid column definition [$class]");
         }
 
@@ -1028,7 +1098,7 @@ class Column
      */
     public function __call($method, $arguments)
     {
-        if ($this->isRelation() && ! $this->relationColumn) {
+        if ($this->isRelation() && !$this->relationColumn) {
             $this->name = "{$this->relation}.$method";
             $this->label = $this->formatLabel($arguments[0] ?? null);
 

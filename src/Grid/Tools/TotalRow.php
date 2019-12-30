@@ -20,6 +20,11 @@ class TotalRow extends AbstractTool
     protected $columns;
 
     /**
+     * @var array
+     */
+    protected $operations;
+
+    /**
      * @var Collection
      */
     protected $visibleColumns;
@@ -29,12 +34,15 @@ class TotalRow extends AbstractTool
      *
      * @param Builder $query
      * @param array   $columns
+     * @param array   $operations
      */
-    public function __construct($query, array $columns)
+    public function __construct($query, array $columns, array $operations)
     {
         $this->query = $query;
 
         $this->columns = $columns;
+
+        $this->operations = $operations;
     }
 
     /**
@@ -42,16 +50,17 @@ class TotalRow extends AbstractTool
      *
      * @param string $column
      * @param mixed  $display
+     * @param string $operation
      *
      * @return mixed
      */
-    protected function total($column, $display = null)
+    protected function total($column, $display = null, $operation = 'sum')
     {
-        if (! is_callable($display) && ! is_null($display)) {
+        if (!is_callable($display) && !is_null($display)) {
             return $display;
         }
 
-        $sum = $this->query->sum($column);
+        $sum = $this->query->$operation($operation == 'count' ? '*' : $column);
 
         if (is_callable($display)) {
             return call_user_func($display, $sum);
@@ -93,7 +102,7 @@ class TotalRow extends AbstractTool
             $total = '';
 
             if (Arr::has($this->columns, $name)) {
-                $total = $this->total($name, Arr::get($this->columns, $name));
+                $total = $this->total($name, Arr::get($this->columns, $name), Arr::get($this->operations, $name));
             }
 
             return [

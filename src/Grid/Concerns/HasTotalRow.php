@@ -13,6 +13,11 @@ trait HasTotalRow
     protected $totalRowColumns = [];
 
     /**
+     * @var array
+     */
+    protected $totalRowOperations = [];
+
+    /**
      * @param string  $column
      * @param Closure $callback
      *
@@ -21,6 +26,27 @@ trait HasTotalRow
     public function addTotalRow($column, $callback)
     {
         $this->totalRowColumns[$column] = $callback;
+
+        if (!isset($this->totalRowOperations[$column])) {
+            $this->addTotalOperation($column, 'sum');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $column
+     * @param string $operation
+     *
+     * @return $this
+     */
+    public function addTotalOperation($column, $operation, $callback = null)
+    {
+        if (!is_null($callback)) {
+            $this->totalRowColumns[$column] = $callback;
+        }
+
+        $this->totalRowOperations[$column] = $operation;
 
         return $this;
     }
@@ -36,7 +62,7 @@ trait HasTotalRow
 
         $query = $this->model()->getQueryBuilder();
 
-        $totalRow = new TotalRow($query, $this->totalRowColumns);
+        $totalRow = new TotalRow($query, $this->totalRowColumns, $this->totalRowOperations);
 
         $totalRow->setGrid($this);
 
