@@ -152,7 +152,7 @@ class File extends Field
     public function hidePreview()
     {
         return $this->options([
-            'showPreview' => false
+            'showPreview' => false,
         ]);
     }
 
