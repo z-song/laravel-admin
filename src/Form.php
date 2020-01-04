@@ -193,7 +193,7 @@ class Form implements Renderable
      * @var array
      */
     protected $ignored = [];
-    
+
     /**
      * Ignored saving Display fields.
      *
@@ -561,7 +561,7 @@ class Form implements Renderable
     protected function removeIgnoredFields($input): array
     {
         Arr::forget($input, $this->ignored);
-        
+
         if ($this->ignoreDispayFields) {
             $this->builder->fields()->filter(function ($field) {
                 return is_a($field, self::$availableFields['display']);
@@ -1084,7 +1084,7 @@ class Form implements Renderable
 
         return $this;
     }
-    
+
     /**
      * Ignore Display fields to save.
      *
