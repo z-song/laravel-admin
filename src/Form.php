@@ -563,11 +563,11 @@ class Form implements Renderable
         Arr::forget($input, $this->ignored);
         
         if ($this->ignoreDispayFields) {
-            foreach ($this->builder->fields() as $field) {
-                if (is_a($field, self::$availableFields['display']) && isset($input[$field->column()])) {
-                    Arr::forget($input, $field->column());
-                }
-            }
+            $this->builder->fields()->filter(function ($field) {
+                return is_a($field, self::$availableFields['display']);
+            })->each(function ($field) use (&$input) {
+                unset($input[$field->column()]);
+            });
         }
 
         return $input;
