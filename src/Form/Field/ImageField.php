@@ -25,6 +25,12 @@ trait ImageField
     protected $thumbnails = [];
 
     /**
+     * webp image quality
+     * @var int
+     */
+    protected $webpQuality = 0;
+
+    /**
      * Default directory for file to upload.
      *
      * @return mixed
@@ -135,13 +141,25 @@ trait ImageField
             $ext = pathinfo($this->original, PATHINFO_EXTENSION);
 
             // We remove extension from file name so we can append thumbnail type
-            $path = Str::replaceLast('.'.$ext, '', $this->original);
+            $fileName = Str::replaceLast('.'.$ext, '', $this->original);
 
             // We merge original name + thumbnail name + extension
-            $path = $path.'-'.$name.'.'.$ext;
+            $path = $fileName.'-'.$name.'.'.$ext;
+            $webpPath = $fileName.'.webp';
+            $webpThumbPath = $fileName.'-'.$name.'.webp';
 
             if ($this->storage->exists($path)) {
                 $this->storage->delete($path);
+            }
+
+            if ($this->webpQuality) {
+                if ($this->storage->exists($webpPath)) {
+                    $this->storage->delete($webpPath);
+                }
+
+                if ($this->storage->exists($webpThumbPath)) {
+                    $this->storage->delete($webpThumbPath);
+                }
             }
         }
     }
@@ -160,13 +178,19 @@ trait ImageField
             $ext = pathinfo($this->name, PATHINFO_EXTENSION);
 
             // We remove extension from file name so we can append thumbnail type
-            $path = Str::replaceLast('.'.$ext, '', $this->name);
+            $fileName = Str::replaceLast('.'.$ext, '', $this->name);
 
             // We merge original name + thumbnail name + extension
-            $path = $path.'-'.$name.'.'.$ext;
+            $path = $fileName.'-'.$name.'.'.$ext;
 
             /** @var \Intervention\Image\Image $image */
             $image = InterventionImage::make($file);
+
+            if ($this->webpQuality) {
+                // generate webp via origin image
+                $webpPath = $fileName.'.webp';
+                $this->storage->put("{$this->getDirectory()}/{$webpPath}", $image->encode('webp', $this->webpQuality), $this->storagePermission ?? null);
+            }
 
             $action = $size[2] ?? 'resize';
             // Resize image with aspect ratio
@@ -174,15 +198,28 @@ trait ImageField
                 $constraint->aspectRatio();
             })->resizeCanvas($size[0], $size[1], 'center', false, '#ffffff');
 
-            if (!is_null($this->storagePermission)) {
-                $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode(), $this->storagePermission);
-            } else {
-                $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode());
+            $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode($ext), $this->storagePermission ?? null);
+
+            if ($this->webpQuality) {
+                // generate webp via thumbnail image
+                $webpThumbPath = $fileName.'-'.$name.'.webp';
+                $this->storage->put("{$this->getDirectory()}/{$webpThumbPath}", $image->encode('webp', $this->webpQuality), $this->storagePermission ?? null);
             }
         }
 
         $this->destroyThumbnail();
 
+        return $this;
+    }
+
+    /**
+     * auto generate webp
+     * @param int $webpQuality
+     * @return $this
+     */
+    public function webp(int $webpQuality=70)
+    {
+        $this->webpQuality = $webpQuality;
         return $this;
     }
 }
