@@ -26,8 +26,6 @@ trait ImageField
 
     /**
      * @var array
-     * quality: the webp image's quality, 0 means no webp will generate
-     * thumb: whether thumbnail webp will be generated or not
      */
     protected $webp = [
         'quality' => 0,
@@ -71,11 +69,11 @@ trait ImageField
      * Call intervention methods.
      *
      * @param string $method
-     * @param array  $arguments
-     *
-     * @throws \Exception
+     * @param array $arguments
      *
      * @return $this
+     * @throws \Exception
+     *
      */
     public function __call($method, $arguments)
     {
@@ -88,7 +86,7 @@ trait ImageField
         }
 
         $this->interventionCalls[] = [
-            'method'    => $method,
+            'method' => $method,
             'arguments' => $arguments,
         ];
 
@@ -109,8 +107,8 @@ trait ImageField
 
     /**
      * @param string|array $name
-     * @param int          $width
-     * @param int          $height
+     * @param int $width
+     * @param int $height
      *
      * @return $this
      */
@@ -146,17 +144,17 @@ trait ImageField
             $ext = pathinfo($this->original, PATHINFO_EXTENSION);
 
             // We remove extension from file name so we can append thumbnail type
-            $fileName = Str::replaceLast('.'.$ext, '', $this->original);
+            $fileName = Str::replaceLast('.' . $ext, '', $this->original);
 
             // We merge original name + thumbnail name + extension
-            $path = $fileName.'-'.$name.'.'.$ext;
+            $path = $fileName . '-' . $name . '.' . $ext;
 
             if ($this->storage->exists($path)) {
                 $this->storage->delete($path);
             }
 
             if ($webp['quality'] && $webp['thumb']) {
-                $webpThumbPath = $fileName.'-'.$name.'.webp';
+                $webpThumbPath = $fileName . '-' . $name . '.webp';
                 if ($this->storage->exists($webpThumbPath)) {
                     $this->storage->delete($webpThumbPath);
                 }
@@ -179,10 +177,10 @@ trait ImageField
             $ext = pathinfo($this->name, PATHINFO_EXTENSION);
 
             // We remove extension from file name so we can append thumbnail type
-            $fileName = Str::replaceLast('.'.$ext, '', $this->name);
+            $fileName = Str::replaceLast('.' . $ext, '', $this->name);
 
             // We merge original name + thumbnail name + extension
-            $path = $fileName.'-'.$name.'.'.$ext;
+            $path = $fileName . '-' . $name . '.' . $ext;
 
             /** @var \Intervention\Image\Image $image */
             $image = InterventionImage::make($file);
@@ -197,7 +195,7 @@ trait ImageField
 
             if ($webp['quality'] && $webp['thumb']) {
                 // generate webp via thumbnail image
-                $webpThumbPath = $fileName.'-'.$name.'.webp';
+                $webpThumbPath = $fileName . '-' . $name . '.webp';
                 $this->storage->put("{$this->getDirectory()}/{$webpThumbPath}", $image->encode('webp', $webp['quality']), $this->storagePermission ?? null);
             }
         }
@@ -209,7 +207,9 @@ trait ImageField
 
     /**
      * generate webp and delete original webp
+     *
      * @param UploadedFile $file
+     *
      * @return $this
      */
     protected function generateWebpAndDeleteOriginal(UploadedFile $file)
@@ -218,7 +218,7 @@ trait ImageField
 
         if ($webp['quality']) {
             $ext = pathinfo($this->name, PATHINFO_EXTENSION);
-            $path = Str::replaceLast('.'.$ext, '', $this->name).'.webp';
+            $path = Str::replaceLast('.' . $ext, '', $this->name) . '.webp';
             $image = InterventionImage::make($file);
 
             $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode(), $this->storagePermission ?? null);
@@ -237,7 +237,7 @@ trait ImageField
         $ext = pathinfo($this->original, PATHINFO_EXTENSION);
 
         // We remove extension from file name so we can append thumbnail type
-        $path = Str::replaceLast('.'.$ext, '', $this->original).'.webp';
+        $path = Str::replaceLast('.' . $ext, '', $this->original) . '.webp';
 
         if ($this->storage->exists($path)) {
             $this->storage->delete($path);
@@ -247,9 +247,10 @@ trait ImageField
     /**
      * @param int $quality
      * @param bool $thumb
+     *
      * @return $this
      */
-    public function webp(int $quality=70, bool $thumb=true)
+    public function webp(int $quality = 70, bool $thumb = true)
     {
         $this->webp = [
             'quality' => $quality,
