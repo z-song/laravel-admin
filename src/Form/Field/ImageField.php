@@ -25,10 +25,14 @@ trait ImageField
     protected $thumbnails = [];
 
     /**
-     * webp image quality
-     * @var int
+     * @var array
+     * quality: the webp image's quality, 0 means no webp will generate
+     * thumb: whether thumbnail webp will be generated or not
      */
-    protected $webpQuality = 0;
+    protected $webp = [
+        'quality' => 0,
+        'thumb' => true,
+    ];
 
     /**
      * Default directory for file to upload.
@@ -136,6 +140,7 @@ trait ImageField
             return;
         }
 
+        $webp = $this->webp;
         foreach ($this->thumbnails as $name => $_) {
             // We need to get extension type ( .jpeg , .png ...)
             $ext = pathinfo($this->original, PATHINFO_EXTENSION);
@@ -145,18 +150,13 @@ trait ImageField
 
             // We merge original name + thumbnail name + extension
             $path = $fileName.'-'.$name.'.'.$ext;
-            $webpPath = $fileName.'.webp';
-            $webpThumbPath = $fileName.'-'.$name.'.webp';
 
             if ($this->storage->exists($path)) {
                 $this->storage->delete($path);
             }
 
-            if ($this->webpQuality) {
-                if ($this->storage->exists($webpPath)) {
-                    $this->storage->delete($webpPath);
-                }
-
+            if ($webp['quality'] && $webp['thumb']) {
+                $webpThumbPath = $fileName.'-'.$name.'.webp';
                 if ($this->storage->exists($webpThumbPath)) {
                     $this->storage->delete($webpThumbPath);
                 }
@@ -173,6 +173,7 @@ trait ImageField
      */
     protected function uploadAndDeleteOriginalThumbnail(UploadedFile $file)
     {
+        $webp = $this->webp;
         foreach ($this->thumbnails as $name => $size) {
             // We need to get extension type ( .jpeg , .png ...)
             $ext = pathinfo($this->name, PATHINFO_EXTENSION);
@@ -186,24 +187,18 @@ trait ImageField
             /** @var \Intervention\Image\Image $image */
             $image = InterventionImage::make($file);
 
-            if ($this->webpQuality) {
-                // generate webp via origin image
-                $webpPath = $fileName.'.webp';
-                $this->storage->put("{$this->getDirectory()}/{$webpPath}", $image->encode('webp', $this->webpQuality), $this->storagePermission ?? null);
-            }
-
             $action = $size[2] ?? 'resize';
             // Resize image with aspect ratio
             $image->$action($size[0], $size[1], function (Constraint $constraint) {
                 $constraint->aspectRatio();
             })->resizeCanvas($size[0], $size[1], 'center', false, '#ffffff');
 
-            $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode($ext), $this->storagePermission ?? null);
+            $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode(), $this->storagePermission ?? null);
 
-            if ($this->webpQuality) {
+            if ($webp['quality'] && $webp['thumb']) {
                 // generate webp via thumbnail image
                 $webpThumbPath = $fileName.'-'.$name.'.webp';
-                $this->storage->put("{$this->getDirectory()}/{$webpThumbPath}", $image->encode('webp', $this->webpQuality), $this->storagePermission ?? null);
+                $this->storage->put("{$this->getDirectory()}/{$webpThumbPath}", $image->encode('webp', $webp['quality']), $this->storagePermission ?? null);
             }
         }
 
@@ -213,13 +208,53 @@ trait ImageField
     }
 
     /**
-     * auto generate webp
-     * @param int $webpQuality
+     * generate webp and delete original webp
+     * @param UploadedFile $file
      * @return $this
      */
-    public function webp(int $webpQuality=70)
+    protected function generateWebpAndDeleteOriginal(UploadedFile $file)
     {
-        $this->webpQuality = $webpQuality;
+        $webp = $this->webp;
+
+        if ($webp['quality']) {
+            $ext = pathinfo($this->name, PATHINFO_EXTENSION);
+            $path = Str::replaceLast('.'.$ext, '', $this->name).'.webp';
+            $image = InterventionImage::make($file);
+
+            $this->storage->put("{$this->getDirectory()}/{$path}", $image->encode(), $this->storagePermission ?? null);
+            $this->destoryWebp();
+        }
+
+        return $this;
+    }
+
+    protected function destoryWebp()
+    {
+        if ($this->retainable) {
+            return;
+        }
+
+        $ext = pathinfo($this->original, PATHINFO_EXTENSION);
+
+        // We remove extension from file name so we can append thumbnail type
+        $path = Str::replaceLast('.'.$ext, '', $this->original).'.webp';
+
+        if ($this->storage->exists($path)) {
+            $this->storage->delete($path);
+        }
+    }
+
+    /**
+     * @param int $quality
+     * @param bool $thumb
+     * @return $this
+     */
+    public function webp(int $quality=70, bool $thumb=true)
+    {
+        $this->webp = [
+            'quality' => $quality,
+            'thumb' => $thumb
+        ];
         return $this;
     }
 }

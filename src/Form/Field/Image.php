@@ -39,6 +39,8 @@ class Image extends File
 
         $this->uploadAndDeleteOriginalThumbnail($image);
 
+        $this->generateWebpAndDeleteOriginal($image);
+
         return $path;
     }
 }
