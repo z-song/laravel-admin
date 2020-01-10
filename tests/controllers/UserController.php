@@ -84,6 +84,7 @@ class UserController extends Controller
             $grid->column('profile.color');
             $grid->profile()->start_at('开始时间');
             $grid->profile()->end_at('结束时间');
+            $grid->column('data->json->field', 'Json Field');
 
             $grid->column('column1_not_in_table')->display(function () {
                 return 'full name:'.$this->full_name;

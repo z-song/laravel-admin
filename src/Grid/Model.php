@@ -525,22 +525,36 @@ class Model
             return;
         }
 
-        if (empty($this->sort['column']) || empty($this->sort['type'])) {
+        $columnName = $this->sort['column'] ?? null;
+        if ($columnName === null || empty($this->sort['type'])) {
             return;
         }
 
-        if (Str::contains($this->sort['column'], '.')) {
-            $this->setRelationSort($this->sort['column']);
+        $columnNameContainsDots = Str::contains($columnName, '.');
+        $isRelation = $this->queries->contains(function ($query) use ($columnName) {
+            return $query['method'] === 'with' && in_array($columnName, $query['arguments'], true);
+        });
+        if ($columnNameContainsDots === true && $isRelation) {
+            $this->setRelationSort($columnName);
         } else {
             $this->resetOrderBy();
 
+            if ($columnNameContainsDots === true) {
+                //json
+                $this->resetOrderBy();
+                $explodedCols = explode('.', $this->sort['column']);
+                $col = array_shift($explodedCols);
+                $parts = implode('.', $explodedCols);
+                $columnName = "{$col}->>'$.{$parts}'";
+            }
+
             // get column. if contains "cast", set set column as cast
             if (!empty($this->sort['cast'])) {
-                $column = "CAST({$this->sort['column']} AS {$this->sort['cast']}) {$this->sort['type']}";
+                $column = "CAST({$columnName} AS {$this->sort['cast']}) {$this->sort['type']}";
                 $method = 'orderByRaw';
                 $arguments = [$column];
             } else {
-                $column = $this->sort['column'];
+                $column = $columnName;
                 $method = 'orderBy';
                 $arguments = [$column, $this->sort['type']];
             }
