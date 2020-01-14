@@ -632,6 +632,10 @@ EOT;
      */
     public function render()
     {
+        if (!$this->shouldRender()) {
+            return '';
+        }
+
         if ($this->viewMode == 'table') {
             return $this->renderTable();
         }
