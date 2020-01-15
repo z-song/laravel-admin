@@ -187,7 +187,6 @@ SCRIPT;
             $controller = str_replace('\\', '_', get_class($controller));
         }
 
-
         return <<<PROMISE
         var process = $.admin.swal({
             {$settings},
