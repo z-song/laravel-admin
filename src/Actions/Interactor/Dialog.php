@@ -179,6 +179,15 @@ SCRIPT;
             return $this->buildUploadFileActionPromise($settings, $calledClass, $route);
         }
 
+        $controller = '';
+        if (request()->route()) {
+            $controller = request()->route()->getController();
+        }
+        if ($controller) {
+            $controller =  str_replace('\\', '_', get_class($controller));
+        }
+
+
         return <<<PROMISE
         var process = $.admin.swal({
             {$settings},
@@ -187,6 +196,7 @@ SCRIPT;
                     Object.assign(data, {
                         _token: $.admin.token,
                         _action: '$calledClass',
+                        _controller: '$controller',
                         _input: input,
                     });
 
@@ -207,7 +217,7 @@ SCRIPT;
             if (typeof result.dismiss !== 'undefined') {
                 return Promise.reject();
             }
-            
+
             if (typeof result.status === "boolean") {
                 var response = result;
             } else {

@@ -29,7 +29,20 @@ class Delete extends RowAction
         ];
 
         try {
-            $model->delete();
+            $controller = $request->input('_controller');
+            $destroy = false;
+            if ($controller) {
+                $controller = str_replace('_', '\\', $controller);
+                if (class_exists($controller) && method_exists($controller, 'destroy')) {
+                    $controller_obj = app($controller);
+                    $controller_obj->destroy($model->getKey());
+                    $destroy = true;
+                }
+            }
+
+            if (!$destroy) {
+                $model->delete();
+            }
         } catch (\Exception $exception) {
             return $this->response()->error("{$trans['failed']} : {$exception->getMessage()}");
         }
