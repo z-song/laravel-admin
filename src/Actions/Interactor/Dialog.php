@@ -184,7 +184,7 @@ SCRIPT;
             $controller = request()->route()->getController();
         }
         if ($controller) {
-            $controller =  str_replace('\\', '_', get_class($controller));
+            $controller = str_replace('\\', '_', get_class($controller));
         }
 
 
