@@ -119,6 +119,7 @@ trait HasAssets
             $css = collect($css)->map(function ($css) use ($in_pjax) {
                 return new Asset($css, $in_pjax);
             });
+
             return self::$css = array_merge(self::$css, $css->toArray());
         }
 
@@ -170,6 +171,7 @@ trait HasAssets
             $js = collect($js)->map(function ($js) use ($in_pjax) {
                 return new Asset($js, $in_pjax);
             });
+
             return self::$js = array_merge(self::$js, $js->toArray());
         }
 

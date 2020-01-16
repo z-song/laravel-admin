@@ -138,7 +138,7 @@ class Pjax
             abort(422);
         }
 
-        return $this->decodeUtf8HtmlEntities($css->implode(PHP_EOL) . $content->html() . $js->implode(PHP_EOL));
+        return $this->decodeUtf8HtmlEntities($css->implode(PHP_EOL).$content->html().$js->implode(PHP_EOL));
     }
 
     /**

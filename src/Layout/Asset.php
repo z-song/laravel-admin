@@ -13,12 +13,12 @@ class Asset
      */
     public function __construct(string $src, bool $in_pjax = false)
     {
-        $this->src = $src;      
-        $this->in_pjax = $in_pjax;  
+        $this->src = $src;
+        $this->in_pjax = $in_pjax;
     }
 
     /**
-     * Is in pjax
+     * Is in pjax.
      *
      * @return bool
      */
@@ -28,7 +28,7 @@ class Asset
     }
 
     /**
-     * To string
+     * To string.
      *
      * @return string
      */
