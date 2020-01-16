@@ -34,13 +34,14 @@ SCRIPT;
     top:50%;
     width:24%;
     height:24%;
-    background:url($logo) no-repeat;
+    background:url(__LOGO__) no-repeat;
     background-size:100% auto;
     margin:-12% 0 0 -12%;
     border-radius:10px;
     border:3px solid #fff;
 }
 STYLE;
+            $css = str_replace('__LOGO__', $logo, $css);
         } else {
             $css = <<<'STYLE'
 .qr-code-wrapper {
