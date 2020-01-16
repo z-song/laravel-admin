@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Traits;
 
+use Encore\Admin\Layout\Asset;
+
 trait HasAssets
 {
     /**
@@ -104,15 +106,20 @@ trait HasAssets
      *
      * @param null $css
      * @param bool $minify
+     * @param bool $in_pjax
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function css($css = null, $minify = true)
+    public static function css($css = null, $minify = true, $in_pjax = false)
     {
         static::ignoreMinify($css, $minify);
 
         if (!is_null($css)) {
-            return self::$css = array_merge(self::$css, (array) $css);
+            $css = (array) $css;
+            $css = collect($css)->map(function ($css) use ($in_pjax) {
+                return new Asset($css, $in_pjax);
+            });
+            return self::$css = array_merge(self::$css, $css->toArray());
         }
 
         if (!$css = static::getMinifiedCss()) {
@@ -150,15 +157,20 @@ trait HasAssets
      *
      * @param null $js
      * @param bool $minify
+     * @param bool $in_pjax
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function js($js = null, $minify = true)
+    public static function js($js = null, $minify = true, $in_pjax = false)
     {
         static::ignoreMinify($js, $minify);
 
         if (!is_null($js)) {
-            return self::$js = array_merge(self::$js, (array) $js);
+            $js = (array) $js;
+            $js = collect($js)->map(function ($js) use ($in_pjax) {
+                return new Asset($js, $in_pjax);
+            });
+            return self::$js = array_merge(self::$js, $js->toArray());
         }
 
         if (!$js = static::getMinifiedJs()) {
