@@ -9,7 +9,7 @@ use Encore\Admin\Facades\Admin;
  */
 class QRCode extends AbstractDisplayer
 {
-    protected function addScript()
+    protected function addScript($logo='')
     {
         $script = <<<'SCRIPT'
 $('.grid-column-qrcode').popover({
@@ -19,11 +19,43 @@ $('.grid-column-qrcode').popover({
 SCRIPT;
 
         Admin::script($script);
+
+        if(!empty($logo)) {
+            $css = <<<STYLE
+.qr-code-wrapper {
+    position:relative;
+    margin:0;
+    padding:0;
+}
+.qr-code-wrapper:after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:24%;
+    height:24%;
+    background:url($logo) no-repeat;
+    background-size:100% auto;
+    margin:-12% 0 0 -12%;
+    border-radius:10px;
+    border:3px solid #fff;
+}
+STYLE;
+        } else {
+            $css = <<<STYLE
+.qr-code-wrapper {
+    position:relative;
+    margin:0;
+    padding:0;
+}
+STYLE;
+        }
+        Admin::style($css);
     }
 
-    public function display($formatter = null, $width = 150, $height = 150)
+    public function display($formatter = null, $width = 150, $height = 150, $logo='')
     {
-        $this->addScript();
+        $this->addScript($logo);
 
         $content = $this->getColumn()->getOriginal();
 
@@ -32,7 +64,7 @@ SCRIPT;
         }
 
         $img = sprintf(
-            "<img src='https://api.qrserver.com/v1/create-qr-code/?size=%sx%s&data=%s' style='height:%spx;width:%spx;'/>",
+            "<p class='qr-code-wrapper'><img src='https://api.qrserver.com/v1/create-qr-code/?size=%sx%s&data=%s' style='height:%spx;width:%spx;'/></p>",
             $width, $height, $content, $height, $width
         );
 
