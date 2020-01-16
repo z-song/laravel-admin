@@ -128,10 +128,16 @@ class Pjax
         $styles = $crawler->filter('.admin-css');
 
         $scripts->each(function (Crawler $script) use ($js) {
-            $js->push($script->outerHtml());
+            $node = $script->getNode(0);
+            $owner = $node->ownerDocument;
+
+            $js->push($owner->saveHTML($node));
         });
         $styles->each(function (Crawler $style) use ($css) {
-            $css->push($style->outerHtml());
+            $node = $style->getNode(0);
+            $owner = $node->ownerDocument;
+
+            $css->push($owner->saveHTML($node));
         });
 
         if (!$content->count()) {
