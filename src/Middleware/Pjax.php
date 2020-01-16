@@ -121,13 +121,24 @@ class Pjax
      */
     protected function fetchContents($crawler, $container)
     {
+        $js = collect([]);
+        $css = collect([]);
         $content = $crawler->filter($container);
+        $scripts = $crawler->filter('.admin-js');
+        $styles = $crawler->filter('.admin-css');
+
+        $scripts->each(function (Crawler $script) use ($js) {
+            $js->push($script->outerHtml());
+        });
+        $styles->each(function (Crawler $style) use ($css) {
+            $css->push($style->outerHtml());
+        });
 
         if (!$content->count()) {
             abort(422);
         }
 
-        return $this->decodeUtf8HtmlEntities($content->html());
+        return $this->decodeUtf8HtmlEntities($css->implode(PHP_EOL) . $content->html() . $js->implode(PHP_EOL));
     }
 
     /**
