@@ -50,7 +50,7 @@ class TestCase extends BaseTestCase
             $this->app['config']->set($key, $value);
         }
 
-        $this->artisan('vendor:publish', ['--provider' => 'Encore\Admin\AdminServiceProvider']);
+        // $this->artisan('vendor:publish', ['--provider' => 'Encore\Admin\AdminServiceProvider']);
 
         Schema::defaultStringLength(191);
 
