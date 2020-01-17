@@ -1,13 +1,17 @@
 <?php
+
 namespace Encore\Admin\Grid\Filter;
+
 use Encore\Admin\Admin;
 use Illuminate\Support\Arr;
+
 class Between extends AbstractFilter
 {
     /**
      * {@inheritdoc}
      */
     protected $view = 'admin::filter.between';
+
     /**
      * Format id.
      *
@@ -18,8 +22,10 @@ class Between extends AbstractFilter
     public function formatId($column)
     {
         $id = str_replace('.', '_', $column);
+
         return ['start' => "{$id}_start", 'end' => "{$id}_end"];
     }
+
     /**
      * Format two field names of this filter.
      *
@@ -38,8 +44,10 @@ class Between extends AbstractFilter
                 $name .= "[$column]";
             }
         }
+
         return ['start' => "{$name}[start]", 'end' => "{$name}[end]"];
     }
+
     /**
      * Get condition of this filter.
      *
@@ -52,7 +60,7 @@ class Between extends AbstractFilter
         if ($this->ignore) {
             return;
         }
-        if (!Arr::has($inputs, $this->column)) {
+        if (! Arr::has($inputs, $this->column)) {
             return;
         }
         $this->value = Arr::get($inputs, $this->column);
@@ -62,15 +70,17 @@ class Between extends AbstractFilter
         if (empty($value)) {
             return;
         }
-        if (!isset($value['start'])) {
+        if (! isset($value['start'])) {
             return $this->buildCondition($this->column, '<=', $value['end']);
         }
-        if (!isset($value['end'])) {
+        if (! isset($value['end'])) {
             return $this->buildCondition($this->column, '>=', $value['start']);
         }
         $this->query = 'whereBetween';
+
         return $this->buildCondition($this->column, $this->value);
     }
+
     /**
      * @param array $options
      *
@@ -80,8 +90,10 @@ class Between extends AbstractFilter
     {
         $this->view = 'admin::filter.betweenDatetime';
         $this->setupDatetime($options);
+
         return $this;
     }
+
     /**
      * @param array $options
      */
