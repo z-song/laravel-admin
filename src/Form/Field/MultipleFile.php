@@ -331,7 +331,7 @@ EOT;
      *
      * @param string $key
      *
-     * @return array.
+     * @return array
      */
     public function destroy($key)
     {

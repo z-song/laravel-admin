@@ -31,9 +31,9 @@ trait ContainsForms
             $form = app()->make($class);
 
             if ($name == $active) {
-                $this->add($form->title, $form->unbox(), true);
+                $this->add($form->title(), $form->unbox(), true);
             } else {
-                $this->addLink($form->title, $this->getTabUrl($name));
+                $this->addLink($form->title(), $this->getTabUrl($name));
             }
         }
 
