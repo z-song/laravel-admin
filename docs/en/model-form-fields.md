@@ -543,7 +543,8 @@ $form->icon('icon');
 ## HasMany
 
 One-to-many built-in tables for dealing with one-to-many relationships. Here is a simple example:
-
+`Hint`
+`You Must Use Camel case format when using Nested Form `
 There are two tables are one-to-many relationship:
 
 ```sql
