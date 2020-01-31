@@ -29,6 +29,7 @@ class Delete extends RowAction
         ];
 
         try {
+            $request = request();
             $controller = $request->input('_controller');
             $destroy = false;
             if ($controller) {
