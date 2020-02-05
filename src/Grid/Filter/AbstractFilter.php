@@ -472,7 +472,7 @@ abstract class AbstractFilter
     {
         $args = func_get_args();
 
-        $relation = substr($this->column, 0, strrpos($this->column, "."));
+        $relation = substr($this->column, 0, strrpos($this->column, '.'));
         $args[0] = last(explode('.', $this->column));
 
         return ['whereHas' => [$relation, function ($relation) use ($args) {
