@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Grid\Displayers;
 
-
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Admin;
 use Encore\Admin\Grid\Actions\Delete;
