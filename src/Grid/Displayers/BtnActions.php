@@ -165,5 +165,4 @@ SCRIPT;
 
         return $actions;
     }
-
 }
