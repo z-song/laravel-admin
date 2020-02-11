@@ -158,8 +158,8 @@ SCRIPT;
         foreach ($this->default as $action) {
             $actions .= $action->render();
         }
-        if(!empty($this->custom)) {
-            foreach($this->custom as $action) {
+        if (!empty($this->custom)) {
+            foreach ($this->custom as $action) {
                 $actions .= $action->render();
             }
         }
