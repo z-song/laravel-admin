@@ -162,6 +162,7 @@ SCRIPT;
                 $actions .= $action->render();
             }
         }
+
         return $actions;
     }
 }
