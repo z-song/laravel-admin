@@ -11,7 +11,7 @@ class Text extends Field
     /**
      * @var string
      */
-    protected $icon = 'fa-pencil';
+    protected $icon = 'fa-pencil-alt';
 
     /**
      * Set custom fa-icon.
@@ -36,7 +36,7 @@ class Text extends Field
     {
         $this->initPlainInput();
 
-        $this->prepend('<i class="fa '.$this->icon.' fa-fw"></i>')
+        $this->prepend('<i class="fas '.$this->icon.'"></i>')
             ->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))

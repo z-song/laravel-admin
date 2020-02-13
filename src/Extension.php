@@ -92,7 +92,7 @@ abstract class Extension
     {
         $class = get_called_class();
 
-        if (!isset(self::$instance[$class]) || !self::$instance[$class] instanceof $class) {
+        if (! isset(self::$instance[$class]) || ! self::$instance[$class] instanceof $class) {
             self::$instance[$class] = new static();
         }
 
@@ -112,11 +112,11 @@ abstract class Extension
             return false;
         }
 
-        if (!empty($css = $extension->css())) {
+        if (! empty($css = $extension->css())) {
             Admin::css($css);
         }
 
-        if (!empty($js = $extension->js())) {
+        if (! empty($js = $extension->js())) {
             Admin::js($js);
         }
 
@@ -206,7 +206,7 @@ abstract class Extension
      */
     public function disabled()
     {
-        return !$this->enabled();
+        return ! $this->enabled();
     }
 
     /**
@@ -309,7 +309,7 @@ abstract class Extension
      */
     public function validatePermission(array $permission)
     {
-        if (!empty($permission['method'])) {
+        if (! empty($permission['method'])) {
             $permission['method'] = array_map('strtoupper', $permission['method']);
         }
 
@@ -355,7 +355,7 @@ abstract class Extension
      *
      * @return Model
      */
-    protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0, array $children = [])
+    protected static function createMenu($title, $uri, $icon = 'fas fa-bars', $parentId = 0, array $children = [])
     {
         $menuModel = config('admin.database.menu_model');
 
@@ -370,7 +370,7 @@ abstract class Extension
             'icon'      => $icon,
             'uri'       => $uri,
         ]);
-        if (!empty($children)) {
+        if (! empty($children)) {
             $extension = static::getInstance();
             foreach ($children as $child) {
                 if ($extension->validateMenu($child)) {
