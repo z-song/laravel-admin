@@ -38,6 +38,7 @@ After install,you can find directory`app/Admin`,and then most of our develop wor
 ```
 app/Admin
 ├── Controllers
+│   ├── AuthController.php
 │   ├── ExampleController.php
 │   └── HomeController.php
 ├── bootstrap.php
@@ -51,6 +52,7 @@ app/Admin
 The `app/Admin/Controllers` directory is used to store all the controllers.
 The `HomeController.php` file under this directory is used to handle home request of admin.
 The `ExampleController.php` file is a controller example.
+The `AuthController.php` file is a controller for customizing admin page authentication.
 
 ### Static assets
 

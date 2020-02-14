@@ -37,6 +37,7 @@ php artisan admin:install
 ```
 app/Admin
 ├── Controllers
+│   ├── AuthController.php
 │   ├── ExampleController.php
 │   └── HomeController.php
 ├── bootstrap.php
@@ -47,7 +48,8 @@ app/Admin
 
 `app/Admin/bootstrap.php` 是`laravel-admin`的启动文件, 使用方法请参考文件里面的注释.
 
-`app/Admin/Controllers`目录用来存放后台控制器文件，该目录下的`HomeController.php`文件是后台首页的显示控制器，`ExampleController.php`为实例文件。
+`app/Admin/Controllers`目录用来存放后台控制器文件，该目录下的`HomeController.php`文件是后台首页的显示控制器，`ExampleController.php`为实例文件，`AuthController.php`文件是用于自定义管理页面身份验证的控制器
+。
 
 ### 静态文件
 
