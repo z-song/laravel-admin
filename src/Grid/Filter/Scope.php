@@ -77,6 +77,20 @@ class Scope implements Renderable
     }
 
     /**
+     * Set this scope as default.
+     *
+     * @return self
+     */
+    public function asDefault()
+    {
+        if (!request()->input('_scope_')) {
+            request()->merge(['_scope_' => $this->key]);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string $method
      * @param array  $arguments
      *
