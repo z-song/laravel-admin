@@ -22,10 +22,10 @@ class AdminController extends Controller
      * @var array
      */
     protected $description = [
-//        'index'  => 'Index',
-//        'show'   => 'Show',
-//        'edit'   => 'Edit',
-//        'create' => 'Create',
+        //        'index'  => 'Index',
+        //        'show'   => 'Show',
+        //        'edit'   => 'Edit',
+        //        'create' => 'Create',
     ];
 
     /**
