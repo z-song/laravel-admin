@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tree extends Model
 {
-    use AdminBuilder, ModelTree;
-
+    use AdminBuilder;
+    use ModelTree;
     /**
      * Create a new Eloquent model instance.
      *
