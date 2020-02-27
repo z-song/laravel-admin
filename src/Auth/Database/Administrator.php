@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Storage;
  */
 class Administrator extends Model implements AuthenticatableContract
 {
-    use Authenticatable, AdminBuilder, HasPermissions;
-
+    use Authenticatable;
+    use AdminBuilder;
+    use HasPermissions;
     protected $fillable = ['username', 'password', 'name', 'avatar'];
 
     /**

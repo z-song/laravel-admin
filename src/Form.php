@@ -75,8 +75,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Form implements Renderable
 {
-    use HasHooks, ShouldSnakeAttributes;
-
+    use HasHooks;
+    use ShouldSnakeAttributes;
     /**
      * Remove flag in `has many` form.
      */
