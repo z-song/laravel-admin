@@ -77,14 +77,14 @@ class MenuController extends Controller
             $tree->branch(function ($branch) {
                 $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
 
-                if (!isset($branch['children'])) {
+                if (! isset($branch['children'])) {
                     if (url()->isValidUrl($branch['uri'])) {
                         $uri = $branch['uri'];
                     } else {
                         $uri = admin_url($branch['uri']);
                     }
 
-                    $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">".$branch['uri']."</a>";
+                    $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$uri\" class=\"dd-nodrag\">".$branch['uri'].'</a>';
                 }
 
                 return $payload;
