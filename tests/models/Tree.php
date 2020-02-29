@@ -10,6 +10,7 @@ class Tree extends Model
 {
     use AdminBuilder;
     use ModelTree;
+
     /**
      * Create a new Eloquent model instance.
      *
