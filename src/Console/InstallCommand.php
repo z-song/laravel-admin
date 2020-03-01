@@ -64,7 +64,7 @@ class InstallCommand extends Command
      */
     public function initHelpers()
     {
-        $this->call('admin:import', ['helpers']);
+        $this->call('admin:import', ['extension' => 'helpers']);
     }
 
     /**
