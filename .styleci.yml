@@ -1,1 +1,4 @@
-preset: laravel
+php:
+  preset: laravel
+  disabled:
+    - unused_use
