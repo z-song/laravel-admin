@@ -294,10 +294,8 @@ trait ModelTree
     /**
      * {@inheritdoc}
      */
-    protected static function boot()
+    protected static function bootModelTree()
     {
-        parent::boot();
-
         static::saving(function (Model $branch) {
             $parentColumn = $branch->getParentColumn();
 
