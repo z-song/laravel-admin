@@ -88,7 +88,7 @@ class InstallCommand extends Command
         $this->makeDir('Controllers');
         $this->makeDir('Models');
         $this->makeDir('Extensions');
-        $this->makeDir('Extensions/Nav');  
+        $this->makeDir('Extensions/Nav');
 
         $this->createHomeController();
         $this->createAuthController();
