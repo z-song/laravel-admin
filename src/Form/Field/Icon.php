@@ -4,7 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 class Icon extends Text
 {
-    protected $default = 'fas fa-pencil-alt';
+    protected $default = 'fa-pencil';
 
     protected static $css = [
         '/vendor/laravel-admin/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css',
@@ -22,7 +22,7 @@ $('{$this->getElementClassSelector()}').iconpicker({placement:'bottomLeft'});
 
 EOT;
 
-        $this->prepend('<i class="fas fa-pencil-alt"></i>')
+        $this->prepend('<i class="fa fa-pencil fa-fw"></i>')
             ->defaultAttribute('style', 'width: 140px');
 
         return parent::render();

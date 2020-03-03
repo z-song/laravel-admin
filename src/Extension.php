@@ -355,7 +355,7 @@ abstract class Extension
      *
      * @return Model
      */
-    protected static function createMenu($title, $uri, $icon = 'fas fa-bars', $parentId = 0, array $children = [])
+    protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0, array $children = [])
     {
         $menuModel = config('admin.database.menu_model');
 
