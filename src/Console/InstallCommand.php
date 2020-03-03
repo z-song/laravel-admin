@@ -87,12 +87,16 @@ class InstallCommand extends Command
 
         $this->makeDir('Controllers');
         $this->makeDir('Models');
+        $this->makeDir('Extensions');
+        $this->makeDir('Extensions/Nav');  
 
         $this->createHomeController();
         $this->createAuthController();
         $this->createExampleController();
 
         $this->createBootstrapFile();
+        $this->createLinkFile();
+        $this->createShortcutFile();
         $this->createRoutesFile();
     }
 
@@ -148,7 +152,7 @@ class InstallCommand extends Command
     }
 
     /**
-     * Create routes file.
+     * Create bootstrap file.
      *
      * @return void
      */
@@ -159,6 +163,34 @@ class InstallCommand extends Command
         $contents = $this->getStub('bootstrap');
         $this->laravel['files']->put($file, $contents);
         $this->line('<info>Bootstrap file was created:</info> '.str_replace(base_path(), '', $file));
+    }
+
+    /**
+     * Create link file.
+     *
+     * @return void
+     */
+    protected function createLinkFile()
+    {
+        $file = $this->directory.'Extensions/Nav/Link.php';
+
+        $contents = $this->getStub('link');
+        $this->laravel['files']->put($file, $contents);
+        $this->line('<info>Link file was created:</info> '.str_replace(base_path(), '', $file));
+    }
+
+    /**
+     * Create shortcut file.
+     *
+     * @return void
+     */
+    protected function createShortcutFile()
+    {
+        $file = $this->directory.'Extensions/Nav/Shortcut.php';
+
+        $contents = $this->getStub('shortcut');
+        $this->laravel['files']->put($file, $contents);
+        $this->line('<info>Shortcut file was created:</info> '.str_replace(base_path(), '', $file));
     }
 
     /**

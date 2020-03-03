@@ -18,8 +18,25 @@
  *
  */
 
-use Encore\Admin\Form;
 use Encore\Admin\Facades\Admin;
+// use App\Admin\Extensions\Nav; for add link and dropdown menu in navbar
 
 Admin::favicon('favicon.ico');
-Form::forget(['map', 'editor']);
+Encore\Admin\Form::forget(['map', 'editor']);
+
+// Example add menu and dropdown in top navbar
+
+// Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {
+//     $navbar->left(Nav\Link::make('Settings', 'forms/settings'));
+//     $navbar->right(Nav\Link::make('Register', 'forms/register', 'fa-user'));
+
+//     $navbar->add(Nav\Shortcut::make([
+//         'Posts' => 'posts/create',
+//         'Users' => 'users/create',
+//         'Images' => 'images/create',
+//         'Videos' => 'videos/create',
+//         'Articles' => 'articles/create',
+//         'Tags' => 'tags/create',
+//         'Categories' => 'categories/create',
+//     ], 'fa-plus')->title('Create'));
+// });
