@@ -172,7 +172,7 @@ class InstallCommand extends Command
      */
     protected function createLinkFile()
     {
-        $file = $this->directory.'Extensions/Nav/Link.php';
+        $file = $this->directory.'/Extensions/Nav/Link.php';
 
         $contents = $this->getStub('link');
         $this->laravel['files']->put($file, $contents);
@@ -186,7 +186,7 @@ class InstallCommand extends Command
      */
     protected function createShortcutFile()
     {
-        $file = $this->directory.'Extensions/Nav/Shortcut.php';
+        $file = $this->directory.'/Extensions/Nav/Shortcut.php';
 
         $contents = $this->getStub('shortcut');
         $this->laravel['files']->put($file, $contents);
