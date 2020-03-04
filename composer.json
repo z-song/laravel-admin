@@ -17,8 +17,8 @@
         "symfony/dom-crawler": "~3.1|~4.0|~5.0",
         "laravel/framework": ">=5.5",
         "doctrine/dbal": "2.*",
-        "staudenmeir/belongs-to-through": "2.7",
-        "staudenmeir/eloquent-has-many-deep": "1.11"
+        "staudenmeir/belongs-to-through": "dev-master",
+        "staudenmeir/eloquent-has-many-deep": "dev-master"
     },
     "autoload": {
         "psr-4": {
