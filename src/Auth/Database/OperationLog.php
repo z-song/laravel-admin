@@ -42,7 +42,7 @@ class OperationLog extends Model
      *
      * @return BelongsTo
      */
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(Administrator::class);
     }

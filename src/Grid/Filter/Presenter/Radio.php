@@ -40,7 +40,7 @@ class Radio extends Presenter
      *
      * @return $this
      */
-    public function stacked() : self
+    public function stacked(): self
     {
         $this->inline = false;
 
@@ -57,7 +57,7 @@ class Radio extends Presenter
     /**
      * @return array
      */
-    public function variables() : array
+    public function variables(): array
     {
         $this->prepare();
 
