@@ -7,7 +7,7 @@ use Tests\Models\MultipleImage;
 
 class ImageUploadTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -23,7 +23,7 @@ class ImageUploadTest extends TestCase
     public function testImageUploadPage()
     {
         $this->visit('admin/images/create')
-            ->see('Upload image')
+            ->see('Images')
             ->seeInElement('h3[class=box-title]', 'Create')
             ->seeElement('input[name=image1]')
             ->seeElement('input[name=image2]')
@@ -177,7 +177,7 @@ class ImageUploadTest extends TestCase
         $path = __DIR__.'/assets/test.jpg';
 
         $file = new \Illuminate\Http\UploadedFile(
-            $path, 'test.jpg', 'image/jpeg', filesize($path), null, true
+            $path, 'test.jpg', 'image/jpeg', null, true
         );
 
         $size = rand(10, 20);
@@ -213,7 +213,7 @@ class ImageUploadTest extends TestCase
         $path = __DIR__.'/assets/test.jpg';
 
         $file = new \Illuminate\Http\UploadedFile(
-            $path, 'test.jpg', 'image/jpeg', filesize($path), null, true
+            $path, 'test.jpg', 'image/jpeg', null, true
         );
 
         $size = rand(10, 20);
