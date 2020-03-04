@@ -37,7 +37,6 @@ class MultipleImageController extends AdminController
      */
     protected function form()
     {
-
         $form = new Form(new MultipleImage());
 
         $form->display('id', 'ID');

@@ -2,13 +2,9 @@
 
 namespace Tests\Controllers;
 
-use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Controllers\ModelForm;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
 use Tests\Models\Tag;
 use Tests\Models\User;
 
