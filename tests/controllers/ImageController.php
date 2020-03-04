@@ -18,7 +18,6 @@ class ImageController extends AdminController
      */
     protected function grid()
     {
-
         $grid = new Grid(new Image());
 
         $grid->id('ID')->sortable();
