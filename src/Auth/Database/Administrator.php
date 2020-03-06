@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Auth\Database;
 
-use Encore\Admin\Traits\AdminBuilder;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +16,6 @@ use Illuminate\Support\Facades\Storage;
 class Administrator extends Model implements AuthenticatableContract
 {
     use Authenticatable;
-    use AdminBuilder;
     use HasPermissions;
 
     protected $fillable = ['username', 'password', 'name', 'avatar'];

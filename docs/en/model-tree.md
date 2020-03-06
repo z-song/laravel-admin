@@ -25,13 +25,12 @@ The corresponding model is `app/Models/Category.php`:
 
 namespace App\Models\Demo;
 
-use Encore\Admin\Traits\AdminBuilder;
 use Encore\Admin\Traits\ModelTree;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    use ModelTree, AdminBuilder;
+    use ModelTree;
 
     protected $table = 'demo_categories';
 }
@@ -44,13 +43,12 @@ Table structure in the three fields `parent_id`,` order`, `title` field name can
 
 namespace App\Models\Demo;
 
-use Encore\Admin\Traits\AdminBuilder;
 use Encore\Admin\Traits\ModelTree;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    use ModelTree, AdminBuilder;
+    use ModelTree;
 
     protected $table = 'demo_categories';
 
