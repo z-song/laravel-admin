@@ -168,6 +168,10 @@ class Tags extends Field
      */
     public function render()
     {
+        if (!$this->shouldRender()) {
+            return '';
+        }
+
         $this->setupScript();
 
         if ($this->keyAsValue) {

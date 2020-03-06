@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Auth\Database;
 
-use Encore\Admin\Traits\AdminBuilder;
+use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Storage;
 class Administrator extends Model implements AuthenticatableContract
 {
     use Authenticatable;
-    use AdminBuilder;
     use HasPermissions;
+    use DefaultDatetimeFormat;
+
     protected $fillable = ['username', 'password', 'name', 'avatar'];
 
     /**

@@ -121,7 +121,7 @@ class Form implements Renderable
      *
      * @return mixed
      */
-    protected function title()
+    public function title()
     {
         return $this->title;
     }
@@ -454,6 +454,9 @@ class Form implements Renderable
         return $fieldset;
     }
 
+    /**
+     * @return $this
+     */
     public function unbox()
     {
         $this->inbox = false;
