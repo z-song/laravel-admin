@@ -19,6 +19,7 @@ class Administrator extends Model implements AuthenticatableContract
     use Authenticatable;
     use AdminBuilder;
     use HasPermissions;
+
     protected $fillable = ['username', 'password', 'name', 'avatar'];
 
     /**

@@ -163,6 +163,7 @@ class Tags extends Field
         return $this;
     }
 
+
     /**
      * {@inheritdoc}
      */
