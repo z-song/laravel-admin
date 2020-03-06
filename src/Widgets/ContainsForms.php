@@ -11,7 +11,8 @@ trait ContainsForms
 
     /**
      * @param array $forms
-     * @param null $active
+     * @param null  $active
+     *
      * @return mixed
      */
     public static function forms($forms, $active = null)
@@ -23,7 +24,8 @@ trait ContainsForms
 
     /**
      * @param array $forms
-     * @param null $active
+     * @param null  $active
+     *
      * @return $this
      */
     protected function buildTabbedForms($forms, $active = null)
@@ -55,6 +57,7 @@ trait ContainsForms
 
     /**
      * @param string $name
+     *
      * @return string
      */
     protected function getTabUrl($name)
