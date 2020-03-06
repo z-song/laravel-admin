@@ -71,7 +71,7 @@ class MenuController extends Controller
     {
         $menuModel = config('admin.database.menu_model');
 
-        $tree = new Tree(new $menuModel);
+        $tree = new Tree(new $menuModel());
 
         $tree->disableCreate();
 
