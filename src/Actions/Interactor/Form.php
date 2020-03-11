@@ -50,7 +50,7 @@ class Form extends Interactor
 
     /**
      * @param $column
-     * @param string $label
+     * @param string   $label
      * @param \Closure $builder
      *
      * @return Field\Table
