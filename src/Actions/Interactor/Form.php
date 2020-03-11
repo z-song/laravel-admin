@@ -49,6 +49,22 @@ class Form extends Interactor
     }
 
     /**
+     * @param $column
+     * @param string $label
+     * @param \Closure $builder
+     *
+     * @return Field\Table
+     */
+    public function table($column, $label = '', $builder = null)
+    {
+        $field = new Field\Table($column, [$label, $builder]);
+
+        $this->addField($field);
+
+        return $field;
+    }
+
+    /**
      * @param string $column
      * @param string $label
      *
