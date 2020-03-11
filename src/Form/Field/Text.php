@@ -94,7 +94,7 @@ class Text extends Field
 
     /**
      * show no icon in font of input.
-     * 
+     *
      * @return $this
      */
     public function withoutIcon()
