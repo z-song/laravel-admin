@@ -1,0 +1,8 @@
+body header.main-header a.sidebar-toggle:before {
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+}
+body ul.sidebar-menu li>a>.fa-angle-left {
+    width: 14px;
+    height: 14px;
+}

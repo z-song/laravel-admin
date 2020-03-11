@@ -10,9 +10,32 @@ class Icon extends Text
         '/vendor/laravel-admin/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css',
     ];
 
+    protected static $css_fa5 = [
+        '/vendor/laravel-admin/font-awesome-5/iconpicker/dist/css/fontawesome-iconpicker.min.css',
+    ];
+
     protected static $js = [
         '/vendor/laravel-admin/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js',
     ];
+
+    protected static $js_fa5 = [
+        '/vendor/laravel-admin/font-awesome-5/iconpicker/dist/js/fontawesome-iconpicker.min.js',
+    ];
+
+    public static function getAssets()
+    {
+        if (config('admin.fontawesome') === 5) {
+            return [
+                'css' => static::$css_fa5,
+                'js'  => static::$js_fa5,
+            ];
+        } else {
+            return [
+                'css' => static::$css,
+                'js'  => static::$js,
+            ];
+        }
+    }
 
     public function render()
     {

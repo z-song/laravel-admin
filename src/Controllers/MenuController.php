@@ -39,7 +39,12 @@ class MenuController extends Controller
 
                     $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
                     $form->text('title', trans('admin.title'))->rules('required');
-                    $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+                    if (config('admin.fontawesome') === 5) {
+                        $default_icon = 'fas fa-bars';
+                    } else {
+                        $default_icon = 'fa-bars';
+                    }
+                    $form->icon('icon', trans('admin.icon'))->default($default_icon)->rules('required')->help($this->iconHelp());
                     $form->text('uri', trans('admin.uri'));
                     $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
                     if ((new $menuModel())->withPermission()) {

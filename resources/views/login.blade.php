@@ -14,7 +14,12 @@
   <!-- Bootstrap 3.3.5 -->
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css") }}">
   <!-- Font Awesome -->
+  @if(config('admin.fontawesome') === 5)
+  <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/font-awesome-5/css/all.min.css") }}">
+  <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/font-awesome-5/css/v4-shims.min.css") }}">
+  @else
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/font-awesome/css/font-awesome.min.css") }}">
+  @endif
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
   <!-- iCheck -->

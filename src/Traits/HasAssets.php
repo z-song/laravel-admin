@@ -58,6 +58,11 @@ trait HasAssets
     ];
 
     /**
+     * @var string
+     */
+    public static $fa4Css = 'vendor/laravel-admin/font-awesome/css/font-awesome.min.css';
+
+    /**
      * @var array
      */
     public static $baseCss = [
@@ -76,6 +81,15 @@ trait HasAssets
     /**
      * @var array
      */
+    public static $fa5Css = [
+        'vendor/laravel-admin/font-awesome-5/css/all.min.css',
+        'vendor/laravel-admin/font-awesome-5/css/v4-shims.min.css',
+        'vendor/laravel-admin/laravel-admin/font-awesome-5.css',
+    ];
+
+    /**
+     * @var array
+     */
     public static $baseJs = [
         'vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js',
         'vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',
@@ -87,6 +101,14 @@ trait HasAssets
         'vendor/laravel-admin/bootstrap3-editable/js/bootstrap-editable.min.js',
         'vendor/laravel-admin/sweetalert2/dist/sweetalert2.min.js',
         'vendor/laravel-admin/laravel-admin/laravel-admin.js',
+    ];
+
+    /**
+     * @var array
+     */
+    public static $fa5Js = [
+        'vendor/laravel-admin/font-awesome-5/js/all.min.js',
+        'vendor/laravel-admin/font-awesome-5/js/v4-shims.min.js',
     ];
 
     /**
@@ -141,6 +163,13 @@ trait HasAssets
         $skin = config('admin.skin', 'skin-blue-light');
 
         array_unshift(static::$baseCss, "vendor/laravel-admin/AdminLTE/dist/css/skins/{$skin}.min.css");
+
+        if (config('admin.fontawesome') === 5) {
+            $index = array_search(static::$fa4Css, static::$baseCss);
+            if ($index !== false) {
+                array_splice(static::$baseCss, $index, 1, static::$fa5Css);
+            }
+        }
 
         return static::$baseCss;
     }
@@ -198,6 +227,10 @@ trait HasAssets
 
         if (!is_null($js)) {
             return static::$baseJs = $js;
+        }
+
+        if (config('admin.fontawesome') === 5) {
+            static::$baseJs = array_unique(array_merge(static::$baseJs, static::$fa5Js));
         }
 
         return static::$baseJs;
