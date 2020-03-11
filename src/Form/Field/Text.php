@@ -12,7 +12,7 @@ class Text extends Field
      * @var string
      */
     protected $icon = 'fa-pencil';
-    
+
     protected $withoutIcon = false;
 
     /**
@@ -93,14 +93,14 @@ class Text extends Field
     }
 
     /**
-     * show no icon in font of input
+     * show no icon in font of input.
      * 
      * @return $this
      */
     public function withoutIcon()
     {
         $this->withoutIcon = true;
-        
+
         return $this;
     }
 }
