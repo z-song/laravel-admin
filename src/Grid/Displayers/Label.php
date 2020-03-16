@@ -23,6 +23,6 @@ class Label extends AbstractDisplayer
             }
 
             return "<span class='label label-{$style}'>$item</span>";
-        })->implode('&nbsp;');
+        })->implode(' ');
     }
 }
