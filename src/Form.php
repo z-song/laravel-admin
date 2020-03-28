@@ -75,8 +75,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Form implements Renderable
 {
-    use HasHooks, ShouldSnakeAttributes;
-
+    use HasHooks;
+    use ShouldSnakeAttributes;
     /**
      * Remove flag in `has many` form.
      */
@@ -1375,7 +1375,7 @@ class Form implements Renderable
      */
     public function isEditing(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), '.edit', '.update');
+        return Str::endsWith(\request()->route()->getName(), ['.edit', '.update']);
     }
 
     /**

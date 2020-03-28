@@ -2,11 +2,14 @@
 
 namespace Encore\Admin\Auth\Database;
 
+use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OperationLog extends Model
 {
+    use DefaultDatetimeFormat;
+
     protected $fillable = ['user_id', 'path', 'method', 'ip', 'input'];
 
     public static $methodColors = [
@@ -42,7 +45,7 @@ class OperationLog extends Model
      *
      * @return BelongsTo
      */
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(Administrator::class);
     }

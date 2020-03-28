@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Traits;
 
+use Encore\Admin\Tree;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -310,7 +311,7 @@ trait ModelTree
 
                 Request::offsetUnset('_order');
 
-                static::tree()->saveOrder($order);
+                (new Tree(new static()))->saveOrder($order);
 
                 return false;
             }

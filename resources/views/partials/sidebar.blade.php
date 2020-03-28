@@ -37,7 +37,7 @@
         @endif
 
         <!-- Sidebar Menu -->
-        <ul class="sidebar-menu" style="overflow-y: auto;height: calc(100vh - 170px);">
+        <ul class="sidebar-menu">
             <li class="header">{{ trans('admin.menu') }}</li>
 
             @each('admin::partials.menu', Admin::menu(), 'item')
