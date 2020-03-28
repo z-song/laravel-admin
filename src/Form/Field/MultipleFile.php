@@ -64,7 +64,7 @@ class MultipleFile extends Field
 
         if (
             request()->has(static::FILE_SORT_FLAG) &&
-            array_filter(request()->input(static::FILE_SORT_FLAG))
+            !array_filter(request()->input(static::FILE_SORT_FLAG))
         ) {
             return false;
         }
