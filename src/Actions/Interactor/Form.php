@@ -456,6 +456,7 @@ class Form extends Interactor
         $('#'+modalId+' form').off('submit').on('submit', function (e) {
             e.preventDefault();
             var form = this;
+            form.find(':submit').attr('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Processing');
             {$this->buildActionPromise()}
             {$this->action->handleActionPromise()}
         });
