@@ -589,8 +589,8 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
 });
 
 $('#has-many-{$this->column}').on('click', '.remove', function () {
-    var first_input_name = $(this).closest('.has-many-{$this->column}-form').find('input:first').attr('name');
-    if (first_input_name.match('{$this->column}\\\[new_')) {
+    var hidden_input_name = $(this).closest('.has-many-{$this->column}-form').find('input[type=hidden]').attr('name');
+    if (hidden_input_name && hidden_input_name.match('{$this->column}\\\[new_')) {
         $(this).closest('.has-many-{$this->column}-form').remove();
     } else {
         $(this).closest('.has-many-{$this->column}-form').hide();
