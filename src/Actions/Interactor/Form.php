@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Actions\Interactor;
 
+use Encore\Admin\Actions\Action;
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
@@ -237,6 +238,21 @@ class Form extends Interactor
      * @param string $column
      * @param string $label
      *
+     * @return Field\MultipleFile
+     */
+    public function multipleFile($column, $label = '')
+    {
+        $field = new Field\MultipleFile($column, $this->formatLabel($label));
+
+        $this->addField($field);
+
+        return $field;
+    }
+
+    /**
+     * @param string $column
+     * @param string $label
+     *
      * @return Field\Image
      */
     public function image($column, $label = '')
@@ -244,6 +260,21 @@ class Form extends Interactor
         $field = new Field\Image($column, $this->formatLabel($label));
 
         $this->addField($field)->setView('admin::actions.form.file');
+
+        return $field;
+    }
+
+    /**
+     * @param string $column
+     * @param string $label
+     *
+     * @return Field\MultipleImage
+     */
+    public function multipleImage($column, $label = '')
+    {
+        $field = new Field\MultipleImage($column, $this->formatLabel($label));
+
+        $this->addField($field)->setView('admin::actions.form.muitplefile');
 
         return $field;
     }
@@ -488,12 +519,12 @@ SCRIPT;
                     _token: $.admin.token,
                     _action: '{$this->action->getCalledClass()}',
                 });
-                
+
                 var formData = new FormData(form);
                 for (var key in data) {
                     formData.append(key, data[key]);
                 }
-                
+
                 $.ajax({
                     method: '{$this->action->getMethod()}',
                     url: '{$this->action->getHandleRoute()}',
