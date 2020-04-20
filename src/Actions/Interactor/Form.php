@@ -25,6 +25,11 @@ class Form extends Interactor
     protected $modalId;
 
     /**
+     * @var string
+     */
+    protected $confirm = '';
+
+    /**
      * @param string $label
      *
      * @return array
@@ -332,6 +337,17 @@ class Form extends Interactor
     }
 
     /**
+     * @param $message
+     * @return $this
+     */
+    public function confirm($message)
+    {
+        $this->confirm = $message;
+
+        return $this;
+    }
+
+    /**
      * @param string $content
      * @param string $selector
      *
@@ -499,6 +515,90 @@ SCRIPT;
     }
 
     /**
+     * @return string
+     */
+    protected function buildConfirmActionPromise()
+    {
+        $trans = [
+            'cancel' => trans('admin.cancel'),
+            'submit' => trans('admin.submit'),
+        ];
+
+        $settings = [
+            'type'                => 'question',
+            'showCancelButton'    => true,
+            'showLoaderOnConfirm' => true,
+            'confirmButtonText'   => $trans['submit'],
+            'cancelButtonText'    => $trans['cancel'],
+            'title'               => $this->confirm,
+            'text'                => '',
+        ];
+
+        $settings = trim(substr(json_encode($settings, JSON_PRETTY_PRINT), 1, -1));
+
+        return <<<PROMISE
+        var process = $.admin.swal({
+            {$settings},
+            preConfirm: function() {
+                {$this->buildGeneralActionPromise()}
+
+                return process;
+            }
+        }).then(function(result) {
+
+            if (typeof result.dismiss !== 'undefined') {
+                return Promise.reject();
+            }
+
+            var result = result.value[0];
+
+            if (typeof result.status === "boolean") {
+                var response = result;
+            } else {
+                var response = result.value;
+            }
+
+            return [response, target];
+        });
+PROMISE;
+    }
+
+    protected function buildGeneralActionPromise()
+    {
+        return <<<SCRIPT
+        var process = new Promise(function (resolve,reject) {
+            Object.assign(data, {
+                _token: $.admin.token,
+                _action: '{$this->action->getCalledClass()}',
+            });
+
+            var formData = new FormData(form);
+            for (var key in data) {
+                formData.append(key, data[key]);
+            }
+
+            $.ajax({
+                method: '{$this->action->getMethod()}',
+                url: '{$this->action->getHandleRoute()}',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    resolve([data, target]);
+                    if (data.status === true) {
+                        $('#'+modalId).modal('hide');
+                    }
+                },
+                error:function(request){
+                    reject(request);
+                }
+            });
+        });
+SCRIPT;
+    }
+
+    /**
      * @throws \Exception
      *
      * @return string
@@ -513,36 +613,10 @@ SCRIPT;
 
         $this->addModalHtml();
 
-        return <<<SCRIPT
-            var process = new Promise(function (resolve,reject) {
-                Object.assign(data, {
-                    _token: $.admin.token,
-                    _action: '{$this->action->getCalledClass()}',
-                });
+        if (!empty($this->confirm)) {
+            return $this->buildConfirmActionPromise();
+        }
 
-                var formData = new FormData(form);
-                for (var key in data) {
-                    formData.append(key, data[key]);
-                }
-
-                $.ajax({
-                    method: '{$this->action->getMethod()}',
-                    url: '{$this->action->getHandleRoute()}',
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-                        resolve([data, target]);
-                        if (data.status === true) {
-                            $('#'+modalId).modal('hide');
-                        }
-                    },
-                    error:function(request){
-                        reject(request);
-                    }
-                });
-            });
-SCRIPT;
+        return $this->buildGeneralActionPromise();
     }
 }
