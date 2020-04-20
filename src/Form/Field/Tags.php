@@ -34,6 +34,11 @@ class Tags extends Field
      * @var \Closure
      */
     protected $saveAction = null;
+    
+    /**
+     * @var array
+     */
+    protected $separators = [',', ';', '，', '；', ' '];
 
     /**
      * @var array
@@ -109,6 +114,23 @@ class Tags extends Field
         }
 
         $this->options = $options + $this->options;
+
+        return $this;
+    }
+    
+    /**
+     * Set Tag Separators.
+     * @param array $separators
+     * @return $this
+     */
+    public function separators($separators = [])
+    {
+        if ($separators instanceof Collection or $separators instanceof Arrayable) {
+            $separators = $separators->toArray();
+        }
+        if (!empty($separators)) {
+            $this->separators = $separators;
+        }
 
         return $this;
     }
@@ -188,13 +210,15 @@ class Tags extends Field
 
     protected function setupScript()
     {
+        $separators = json_encode($this->separators);
+        $separatorsStr = implode('', $this->separators);
         $this->script = <<<JS
 $("{$this->getElementClassSelector()}").select2({
     tags: true,
-    tokenSeparators: [',', ';', '，', '；', ' '],
+    tokenSeparators: $separators,
     createTag: function(params) {
-        if (/[,;，； ]/.test(params.term)) {
-            var str = params.term.trim().replace(/[,;，；]*$/, '');
+        if (/[$separatorsStr]/.test(params.term)) {
+            var str = params.term.trim().replace(/[$separatorsStr]*$/, '');
             return { id: str, text: str }
         } else {
             return null;
