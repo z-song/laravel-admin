@@ -926,7 +926,7 @@ class Form implements Renderable
 
                         $instance = $relation->findOrNew(Arr::get($related, $keyName));
 
-                        if ($related[static::REMOVE_FLAG_NAME] == 1) {
+                        if (Arr::get($related, static::REMOVE_FLAG_NAME) == 1) {
                             $instance->delete();
 
                             continue;
