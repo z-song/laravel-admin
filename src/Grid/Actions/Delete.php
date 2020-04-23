@@ -29,7 +29,9 @@ class Delete extends RowAction
         ];
 
         try {
-            $model->delete();
+            DB::transaction(function () use ($model) {
+                $model->delete();
+            });
         } catch (\Exception $exception) {
             return $this->response()->error("{$trans['failed']} : {$exception->getMessage()}");
         }
