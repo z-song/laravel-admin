@@ -49,7 +49,7 @@ abstract class AbstractExporter implements ExporterInterface
      */
     public function getTable()
     {
-        return $this->grid->model()->eloquent()->getTable();
+        return $this->grid->model()->getOriginalModel()->getTable();
     }
 
     /**
@@ -72,6 +72,8 @@ abstract class AbstractExporter implements ExporterInterface
      */
     public function chunk(callable $callback, $count = 100)
     {
+        $this->grid->applyQuery();
+
         return $this->grid->getFilter()->chunk($callback, $count);
     }
 

@@ -34,6 +34,11 @@ class Exporter
     public static $queryName = '_export_';
 
     /**
+     * @var Grid\Exporters\AbstractExporter
+     */
+    protected static $exporter;
+
+    /**
      * Create a new Exporter instance.
      *
      * @param Grid $grid
@@ -91,11 +96,15 @@ class Exporter
      */
     protected function getExporter($driver)
     {
-        if (!array_key_exists($driver, static::$drivers)) {
-            return $this->getDefaultExporter();
+        if (static::$exporter) {
+            return static::$exporter;
         }
 
-        return new static::$drivers[$driver]($this->grid);
+        if (!array_key_exists($driver, static::$drivers)) {
+            return static::$exporter = $this->getDefaultExporter();
+        }
+
+        return static::$exporter = new static::$drivers[$driver]($this->grid);
     }
 
     /**

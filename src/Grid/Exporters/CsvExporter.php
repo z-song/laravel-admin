@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Grid\Exporters;
 
+use Encore\Admin\Grid;
+use Encore\Admin\Grid\Column;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -10,68 +12,226 @@ use Illuminate\Support\Str;
 class CsvExporter extends AbstractExporter
 {
     /**
+     * @var string
+     */
+    protected $filename;
+
+    /**
+     * @var \Closure
+     */
+    protected $callback;
+
+    /**
+     * @var array
+     */
+    protected $exceptColumns;
+
+    /**
+     * @var array
+     */
+    protected $onlyColumns;
+
+    /**
+     * @var []\Closure
+     */
+    protected $columnCallbacks;
+
+    /**
+     * @var array
+     */
+    protected $visibleColumns;
+
+    /**
+     * @var array
+     */
+    protected $columnUseOriginalValue;
+
+    /**
+     * @param string $filename
+     * @return $this
+     */
+    public function filename(string $filename = ''): self
+    {
+        $this->filename = $filename;
+
+        return $this;
+    }
+
+    /**
+     * @param \Closure $closure
+     */
+    public function setCallback(\Closure $closure): self
+    {
+        $this->callback = $closure;
+
+        return $this;
+    }
+
+    /**
+     * @param array $columns
+     * @return $this
+     */
+    public function except(array $columns = []): self
+    {
+        $this->exceptColumns = $columns;
+
+        return $this;
+    }
+
+    /**
+     * @param array $columns
+     * @return $this
+     */
+    public function only(array $columns = []): self
+    {
+        $this->onlyColumns = $columns;
+
+        return $this;
+    }
+
+    /**
+     * @param array $columns
+     * @return $this
+     */
+    public function originalValue($columns = []): self
+    {
+        $this->columnUseOriginalValue = $columns;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param \Closure $callback
+     * @return $this
+     */
+    public function column(string $name, \Closure $callback): self
+    {
+        $this->columnCallbacks[$name] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Get download response headers.
+     *
+     * @return array
+     */
+    protected function getHeaders()
+    {
+        if (!$this->filename) {
+            $this->filename = $this->getTable();
+        }
+
+        return [
+            'Content-Encoding'    => 'UTF-8',
+            'Content-Type'        => 'text/csv;charset=UTF-8',
+            'Content-Disposition' => "attachment;filename=\"{$this->filename}.csv\"",
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function export()
     {
-        $filename = $this->getTable().'.csv';
+        if ($this->callback) {
+            call_user_func($this->callback, $this);
+        }
 
-        $headers = [
-            'Content-Encoding'    => 'UTF-8',
-            'Content-Type'        => 'text/csv;charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"$filename\"",
-        ];
-
-        response()->stream(function () {
+        $response = function () {
             $handle = fopen('php://output', 'w');
-
             $titles = [];
 
-            $this->chunk(function ($records) use ($handle, &$titles) {
-                if (empty($titles)) {
-                    $titles = $this->getHeaderRowFromRecords($records);
+            $this->chunk(function ($collection) use ($handle, &$titles) {
 
-                    // Add CSV headers
-                    fputcsv($handle, $titles);
+                Column::setOriginalGridModels($collection);
+
+                $original = $current = $collection->toArray();
+
+                $this->grid->getColumns()->map(function (Column $column) use (&$current) {
+                    $current                   = $column->fill($current);
+                    $this->grid->columnNames[] = $column->getName();
+                });
+
+                // Write title
+                if (empty($titles)) {
+                    fputcsv($handle, $titles = $this->getVisiableTitles());
                 }
 
-                foreach ($records as $record) {
-                    fputcsv($handle, $this->getFormattedRecord($record));
+                // Write rows
+                foreach ($current as $index => $record) {
+                    fputcsv($handle, $this->getVisiableFields($record, $original[$index]));
                 }
             });
-
-            // Close the output stream
             fclose($handle);
-        }, 200, $headers)->send();
+        };
+
+        response()->stream($response, 200, $this->getHeaders())->send();
 
         exit;
     }
 
     /**
-     * @param Collection $records
-     *
      * @return array
      */
-    public function getHeaderRowFromRecords(Collection $records): array
+    protected function getVisiableTitles()
     {
-        $titles = collect(Arr::dot($records->first()->toArray()))->keys()->map(
-            function ($key) {
-                $key = str_replace('.', ' ', $key);
+        $titles = $this->grid->visibleColumns()
+            ->mapWithKeys(function (Column $column) {
+                return [$column->getName() => $column->getLabel()];
+            });
 
-                return Str::ucfirst($key);
-            }
-        );
+        if ($this->onlyColumns) {
+            $titles = $titles->only($this->onlyColumns);
+        }
 
-        return $titles->toArray();
+        if ($this->exceptColumns) {
+            $titles = $titles->except($this->exceptColumns);
+        }
+
+        $this->visibleColumns = $titles->keys();
+
+        return $titles->values()->toArray();
     }
 
     /**
-     * @param Model $record
-     *
+     * @param array $value
+     * @param array $original
      * @return array
      */
-    public function getFormattedRecord(Model $record)
+    public function getVisiableFields(array $value, array $original): array
     {
-        return Arr::dot($record->getAttributes());
+        $fields = [];
+
+        foreach ($this->visibleColumns as $column) {
+            $fields[] = $this->getColumnValue(
+                $column,
+                data_get($value, $column),
+                data_get($original, $column)
+            );
+        }
+
+        return $fields;
+    }
+
+    /**
+     * @param string $column
+     * @param mixed $value
+     * @param mixed $original
+     * @return mixed
+     */
+    protected function getColumnValue(string $column, $value, $original)
+    {
+        if (!empty($this->columnUseOriginalValue)
+            && in_array($column, $this->columnUseOriginalValue)) {
+            return $original;
+        }
+
+        if (isset($this->columnCallbacks[$column])) {
+            return $this->columnCallbacks[$column]($value, $original);
+        }
+
+        return $value;
     }
 }
