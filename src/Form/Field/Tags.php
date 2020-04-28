@@ -34,7 +34,7 @@ class Tags extends Field
      * @var \Closure
      */
     protected $saveAction = null;
-    
+
     /**
      * @var array
      */
@@ -117,10 +117,12 @@ class Tags extends Field
 
         return $this;
     }
-    
+
     /**
      * Set Tag Separators.
+     *
      * @param array $separators
+     *
      * @return $this
      */
     public function separators($separators = [])

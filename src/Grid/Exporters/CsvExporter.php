@@ -2,12 +2,7 @@
 
 namespace Encore\Admin\Grid\Exporters;
 
-use Encore\Admin\Grid;
 use Encore\Admin\Grid\Column;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class CsvExporter extends AbstractExporter
 {
@@ -48,6 +43,7 @@ class CsvExporter extends AbstractExporter
 
     /**
      * @param string $filename
+     *
      * @return $this
      */
     public function filename(string $filename = ''): self
@@ -69,6 +65,7 @@ class CsvExporter extends AbstractExporter
 
     /**
      * @param array $columns
+     *
      * @return $this
      */
     public function except(array $columns = []): self
@@ -80,6 +77,7 @@ class CsvExporter extends AbstractExporter
 
     /**
      * @param array $columns
+     *
      * @return $this
      */
     public function only(array $columns = []): self
@@ -91,6 +89,7 @@ class CsvExporter extends AbstractExporter
 
     /**
      * @param array $columns
+     *
      * @return $this
      */
     public function originalValue($columns = []): self
@@ -101,8 +100,9 @@ class CsvExporter extends AbstractExporter
     }
 
     /**
-     * @param string $name
+     * @param string   $name
      * @param \Closure $callback
+     *
      * @return $this
      */
     public function column(string $name, \Closure $callback): self
@@ -144,13 +144,12 @@ class CsvExporter extends AbstractExporter
             $titles = [];
 
             $this->chunk(function ($collection) use ($handle, &$titles) {
-
                 Column::setOriginalGridModels($collection);
 
                 $original = $current = $collection->toArray();
 
                 $this->grid->getColumns()->map(function (Column $column) use (&$current) {
-                    $current                   = $column->fill($current);
+                    $current = $column->fill($current);
                     $this->grid->columnNames[] = $column->getName();
                 });
 
@@ -198,6 +197,7 @@ class CsvExporter extends AbstractExporter
     /**
      * @param array $value
      * @param array $original
+     *
      * @return array
      */
     public function getVisiableFields(array $value, array $original): array
@@ -217,8 +217,9 @@ class CsvExporter extends AbstractExporter
 
     /**
      * @param string $column
-     * @param mixed $value
-     * @param mixed $original
+     * @param mixed  $value
+     * @param mixed  $original
+     *
      * @return mixed
      */
     protected function getColumnValue(string $column, $value, $original)
