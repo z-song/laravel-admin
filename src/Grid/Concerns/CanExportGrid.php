@@ -3,7 +3,6 @@
 namespace Encore\Admin\Grid\Concerns;
 
 use Encore\Admin\Grid;
-use Encore\Admin\Grid\Column;
 use Encore\Admin\Grid\Exporter;
 use Encore\Admin\Grid\Exporters\AbstractExporter;
 
@@ -66,7 +65,7 @@ trait CanExportGrid
     /**
      * Get the export url.
      *
-     * @param int $scope
+     * @param int  $scope
      * @param null $args
      *
      * @return string
@@ -79,7 +78,7 @@ trait CanExportGrid
             $input = array_merge($input, $constraints);
         }
 
-        return $this->resource() . '?' . http_build_query($input);
+        return $this->resource().'?'.http_build_query($input);
     }
 
     /**

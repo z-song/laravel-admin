@@ -138,7 +138,6 @@ class MultipleFile extends Field
     public function prepare($files)
     {
         if (request()->has(static::FILE_DELETE_FLAG)) {
-
             if ($this->pathColumn) {
                 return $this->destroyFromHasMany(request(static::FILE_DELETE_FLAG));
             }
@@ -230,7 +229,6 @@ class MultipleFile extends Field
         $config = [];
 
         foreach ($files as $index => $file) {
-
             if (is_array($file) && $this->pathColumn) {
                 $index = Arr::get($file, $this->getRelatedKeyName(), $index);
                 $file = Arr::get($file, $this->pathColumn);
@@ -384,7 +382,8 @@ EOT;
     /**
      * Destroy original files from hasmany related model.
      *
-     * @param integer $key
+     * @param int $key
+     *
      * @return array
      */
     public function destroyFromHasMany($key)

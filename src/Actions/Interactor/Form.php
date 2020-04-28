@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Actions\Interactor;
 
-use Encore\Admin\Actions\Action;
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
@@ -343,6 +342,7 @@ class Form extends Interactor
 
     /**
      * @param $message
+     *
      * @return $this
      */
     public function confirm($message)

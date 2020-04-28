@@ -382,6 +382,7 @@ trait UploadField
      * Set path column in has-many related model.
      *
      * @param string $column
+     *
      * @return $this
      */
     public function pathColumn($column = 'path')
