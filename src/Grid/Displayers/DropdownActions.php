@@ -39,7 +39,7 @@ $(function() {
       m = $(e.target).find('.dropdown-menu'),
       tb = t.offset().top + t.height(),
       mb = m.offset().top + m.outerHeight(true),
-      d = 20; // Space for shadow + scrollbar.   
+      d = 20; // Space for shadow + scrollbar.
     if (t[0].scrollWidth > t.innerWidth()) {
       if (mb + d > tb) {
         t.css('padding-bottom', ((mb + d) - tb));
@@ -175,6 +175,10 @@ SCRIPT;
             'default' => $this->default,
             'custom'  => $this->custom,
         ];
+
+        if (empty($actions['default']) && empty($actions['custom'])) {
+            return;
+        }
 
         return view('admin::grid.dropdown-actions', $actions);
     }
