@@ -289,7 +289,7 @@ $(document).on('change', ".{$this->getClass($column)}", function () {
         });
         
         $(target).val(null).trigger('change');
-    });
+    }, 'json');
 });
 EOT;
 
