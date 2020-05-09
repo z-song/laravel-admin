@@ -103,7 +103,7 @@ abstract class AbstractExporter implements ExporterInterface
                 ->select([$keyName])
                 ->setEagerLoads([])
                 ->forPage($this->page, $perPage)->get();
-			// If $querybuilder is a Model, it must be reassigned, unless it is a eloquent/query builder.
+            // If $querybuilder is a Model, it must be reassigned, unless it is a eloquent/query builder.
             $queryBuilder = $queryBuilder->whereIn($keyName, $scope->pluck($keyName));
         }
 
