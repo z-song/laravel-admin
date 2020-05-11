@@ -257,7 +257,6 @@ class Tree implements Renderable
                             },
                             success: function (data) {
                                 $.pjax.reload('#pjax-container');
-                                toastr.success('{$trans['delete_succeeded']}');
                                 resolve(data);
                             }
                         });
