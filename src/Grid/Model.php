@@ -385,7 +385,11 @@ class Model
         $this->setPaginate();
 
         $this->queries->unique()->each(function ($query) {
-            $this->model = call_user_func_array([$this->model, $query['method']], $query['arguments']);
+            if ($query['method'] == 'with') {
+                $this->model = $this->model->with($query['arguments']);
+            } else {
+                $this->model = call_user_func_array([$this->model, $query['method']], $query['arguments']);
+            }
         });
 
         if ($this->model instanceof Collection) {
@@ -680,10 +684,6 @@ class Model
     public function with($relations)
     {
         if (is_array($relations)) {
-            if (Arr::isAssoc($relations)) {
-                $relations = array_keys($relations);
-            }
-
             $this->eagerLoads = array_merge($this->eagerLoads, $relations);
         }
 
