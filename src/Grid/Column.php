@@ -39,6 +39,7 @@ use Illuminate\Support\Str;
  * @method $this prefix($prefix, $delimiter = '&nbsp;')
  * @method $this suffix($suffix, $delimiter = '&nbsp;')
  * @method $this secret($dotCount = 6)
+ * @method $this limit($limit = 100, $end = '...')
  */
 class Column
 {
@@ -137,6 +138,7 @@ class Column
         'prefix'      => Displayers\Prefix::class,
         'suffix'      => Displayers\Suffix::class,
         'secret'      => Displayers\Secret::class,
+        'limit'       => Displayers\Limit::class,
     ];
 
     /**
