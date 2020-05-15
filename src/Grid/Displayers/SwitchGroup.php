@@ -64,7 +64,7 @@ $('.$class').bootstrapSwitch({
         var pk = $(this).data('key');
         var value = $(this).val();
         $.ajax({
-            url: "{$this->grid->resource()}/" + pk,
+            url: "{$this->getResource()}/" + pk,
             type: "POST",
             data: {
                 "$key": value,

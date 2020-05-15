@@ -22,7 +22,7 @@ $('.$class .dropdown-menu li a').click(function () {
     var key = target.parents('.$class').attr('key');
 
     $.ajax({
-        url: "{$this->grid->resource()}/" + key,
+        url: "{$this->getResource()}/" + key,
         type: "POST",
         data: {
             $name: value,
@@ -76,7 +76,7 @@ STYLE;
 
         foreach ($options as $option => $text) {
             $invisible = $option == $this->value ? '' : 'invisible';
-            $optionsHtml .= "<li><a href='javascript:void(0);' data-value='{$option}'><i class=\"fa fa-check $invisible\"></i>{$text}</a></li>";
+            $optionsHtml .= "<li><a href='javascript:void(0);' data-value='{$option}'><i class=\"fa fa-check text-green $invisible\"></i>{$text}</a></li>";
         }
 
         return <<<HTML

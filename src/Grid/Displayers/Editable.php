@@ -205,7 +205,7 @@ STR;
             'class'      => "$class",
             'data-type'  => $this->type,
             'data-pk'    => "{$this->getKey()}",
-            'data-url'   => "{$this->grid->resource()}/{$this->getKey()}",
+            'data-url'   => "{$this->getResource()}/{$this->getKey()}",
             'data-value' => "{$this->value}",
         ];
 
