@@ -1482,6 +1482,11 @@ class Field implements Renderable
         return view($this->getView(), $this->variables());
     }
 
+    protected function fieldRender()
+    {
+        return self::render();
+    }
+
     /**
      * @return string
      */

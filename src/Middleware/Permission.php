@@ -84,9 +84,12 @@ class Permission
      */
     protected function shouldPassThrough($request)
     {
-        $excepts = config('admin.auth.excepts', [
+        $excepts = array_merge(config('admin.auth.excepts', []), [
             'auth/login',
             'auth/logout',
+            '_handle_action_',
+            '_handle_form_',
+            '_handle_selectable_',
         ]);
 
         return collect($excepts)

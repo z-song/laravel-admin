@@ -114,31 +114,33 @@ class Column
      * @var array
      */
     public static $displayers = [
-        'editable'    => Displayers\Editable::class,
-        'switch'      => Displayers\SwitchDisplay::class,
-        'switchGroup' => Displayers\SwitchGroup::class,
-        'select'      => Displayers\Select::class,
-        'image'       => Displayers\Image::class,
-        'label'       => Displayers\Label::class,
-        'button'      => Displayers\Button::class,
-        'link'        => Displayers\Link::class,
-        'badge'       => Displayers\Badge::class,
-        'progressBar' => Displayers\ProgressBar::class,
-        'progress'    => Displayers\ProgressBar::class,
-        'radio'       => Displayers\Radio::class,
-        'checkbox'    => Displayers\Checkbox::class,
-        'orderable'   => Displayers\Orderable::class,
-        'table'       => Displayers\Table::class,
-        'expand'      => Displayers\Expand::class,
-        'modal'       => Displayers\Modal::class,
-        'carousel'    => Displayers\Carousel::class,
-        'downloadable'=> Displayers\Downloadable::class,
-        'copyable'    => Displayers\Copyable::class,
-        'qrcode'      => Displayers\QRCode::class,
-        'prefix'      => Displayers\Prefix::class,
-        'suffix'      => Displayers\Suffix::class,
-        'secret'      => Displayers\Secret::class,
-        'limit'       => Displayers\Limit::class,
+        'editable'      => Displayers\Editable::class,
+        'switch'        => Displayers\SwitchDisplay::class,
+        'switchGroup'   => Displayers\SwitchGroup::class,
+        'select'        => Displayers\Select::class,
+        'image'         => Displayers\Image::class,
+        'label'         => Displayers\Label::class,
+        'button'        => Displayers\Button::class,
+        'link'          => Displayers\Link::class,
+        'badge'         => Displayers\Badge::class,
+        'progressBar'   => Displayers\ProgressBar::class,
+        'progress'      => Displayers\ProgressBar::class,
+        'radio'         => Displayers\Radio::class,
+        'checkbox'      => Displayers\Checkbox::class,
+        'orderable'     => Displayers\Orderable::class,
+        'table'         => Displayers\Table::class,
+        'expand'        => Displayers\Expand::class,
+        'modal'         => Displayers\Modal::class,
+        'carousel'      => Displayers\Carousel::class,
+        'downloadable'  => Displayers\Downloadable::class,
+        'copyable'      => Displayers\Copyable::class,
+        'qrcode'        => Displayers\QRCode::class,
+        'prefix'        => Displayers\Prefix::class,
+        'suffix'        => Displayers\Suffix::class,
+        'secret'        => Displayers\Secret::class,
+        'limit'         => Displayers\Limit::class,
+        'belongsTo'     => Displayers\BelongsTo::class,
+        'belongsToMany' => Displayers\BelongsToMany::class,
     ];
 
     /**
@@ -801,6 +803,32 @@ class Column
 
             return "<span class=\"label-{$style}\" style='width: 8px;height: 8px;padding: 0;border-radius: 50%;display: inline-block;'></span>";
         }, '&nbsp;&nbsp;');
+    }
+
+    /**
+     * @param string $selectable
+     * @return $this
+     */
+    public function belongsTo($selectable)
+    {
+        if (method_exists($selectable, 'display')) {
+            $this->display($selectable::display());
+        }
+
+        return $this->displayUsing(Grid\Displayers\BelongsTo::class, [$selectable]);
+    }
+
+    /**
+     * @param string $selectable
+     * @return $this
+     */
+    public function belongsToMany($selectable)
+    {
+        if (method_exists($selectable, 'display')) {
+            $this->display($selectable::display());
+        }
+
+        return $this->displayUsing(Grid\Displayers\BelongsToMany::class, [$selectable]);
     }
 
     /**

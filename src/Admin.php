@@ -325,6 +325,7 @@ class Admin
 
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
                 $router->post('_handle_action_', 'HandleController@handleAction')->name('admin.handle-action');
+                $router->get('_handle_selectable_', 'HandleController@handleSelectable')->name('admin.handle-selectable');
             });
 
             $authController = config('admin.auth.controller', AuthController::class);

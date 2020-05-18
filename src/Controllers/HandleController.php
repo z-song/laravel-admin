@@ -7,6 +7,7 @@ use Encore\Admin\Actions\GridAction;
 use Encore\Admin\Actions\Response;
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Widgets\Form;
+use Encore\Admin\Widgets\Selectable\Selectable;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -142,5 +143,22 @@ class HandleController extends Controller
         }
 
         return $args;
+    }
+
+    public function handleSelectable(Request $request)
+    {
+        $class = $request->get('selectable');
+        $multiple = $request->get('multiple', 0);
+
+        $class = str_replace('_', '\\', $class);
+
+        if (class_exists($class)) {
+            /** @var Selectable $selectable */
+            $selectable = new $class;
+
+            return $selectable->render($multiple);
+        }
+
+        return $class;
     }
 }
