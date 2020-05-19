@@ -13,11 +13,11 @@ class MakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'admin:make {name} 
-        {--model=} 
-        {--title=} 
-        {--stub= : Path to the custom stub file. } 
-        {--namespace=} 
+    protected $signature = 'admin:make {name}
+        {--model=}
+        {--title=}
+        {--stub= : Path to the custom stub file. }
+        {--namespace=}
         {--O|output}';
 
     /**
@@ -33,12 +33,25 @@ class MakeCommand extends GeneratorCommand
     protected $generator;
 
     /**
+     * @var string
+     */
+    protected $controllerName;
+
+    /**
+     * @var string
+     */
+    protected $modelName;
+
+    /**
      * Execute the console command.
      *
      * @return void
      */
     public function handle()
     {
+        $this->modelName      = $this->getModelName();
+        $this->controllerName = $this->getControllerName();
+
         if (!$this->modelExists()) {
             $this->error('Model does not exists !');
 
@@ -53,24 +66,50 @@ class MakeCommand extends GeneratorCommand
             return false;
         }
 
-        $modelName = $this->option('model');
-
-        $this->generator = new ResourceGenerator($modelName);
+        $this->generator = new ResourceGenerator($this->modelName);
 
         if ($this->option('output')) {
-            return $this->output($modelName);
+            return $this->output($this->modelName);
         }
 
         if (parent::handle() !== false) {
-            $name = $this->argument('name');
-            $path = Str::plural(Str::kebab(class_basename($this->option('model'))));
+            $path = Str::plural(Str::kebab(class_basename($this->modelName)));
 
             $this->line('');
             $this->comment('Add the following route to app/Admin/routes.php:');
             $this->line('');
-            $this->info("    \$router->resource('{$path}', {$name}::class);");
+            $this->info("    \$router->resource('{$path}', {$this->controllerName}::class);");
             $this->line('');
         }
+    }
+
+    /**
+     * @return array|string|null
+     */
+    protected function getControllerName()
+    {
+        return $this->argument('name');
+    }
+
+    /**
+     * @return array|string|null
+     */
+    protected function getModelName()
+    {
+        return $this->option('model');
+    }
+
+    /**
+     * @return array|bool|string|null
+     * @throws \ReflectionException
+     */
+    protected function getTitle()
+    {
+        if ($title = $this->option('title')) {
+            return $title;
+        }
+
+        return __((new \ReflectionClass($this->modelName))->getShortName());
     }
 
     /**
@@ -92,13 +131,11 @@ class MakeCommand extends GeneratorCommand
      */
     protected function modelExists()
     {
-        $model = $this->option('model');
-
-        if (empty($model)) {
+        if (empty($this->modelName)) {
             return true;
         }
 
-        return class_exists($model) && is_subclass_of($model, Model::class);
+        return class_exists($this->modelName) && is_subclass_of($this->modelName, Model::class);
     }
 
     /**
@@ -123,9 +160,9 @@ class MakeCommand extends GeneratorCommand
                 'DummyForm',
             ],
             [
-                $this->option('model'),
-                $this->option('title') ?: $this->option('model'),
-                class_basename($this->option('model')),
+                $this->modelName,
+                $this->getTitle(),
+                class_basename($this->modelName),
                 $this->indentCodes($this->generator->generateGrid()),
                 $this->indentCodes($this->generator->generateShow()),
                 $this->indentCodes($this->generator->generateForm()),
@@ -157,7 +194,7 @@ class MakeCommand extends GeneratorCommand
             return $stub;
         }
 
-        if ($this->option('model')) {
+        if ($this->modelName) {
             return __DIR__.'/stubs/controller.stub';
         }
 
@@ -187,10 +224,8 @@ class MakeCommand extends GeneratorCommand
      */
     protected function getNameInput()
     {
-        $name = trim($this->argument('name'));
+        $this->type = $this->qualifyClass($this->controllerName);
 
-        $this->type = $this->qualifyClass($name);
-
-        return $name;
+        return $this->controllerName;
     }
 }
