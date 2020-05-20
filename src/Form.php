@@ -1219,6 +1219,19 @@ class Form implements Renderable
     }
 
     /**
+     * Set a submit confirm.
+     *
+     * @param string $message
+     * @return $this
+     */
+    public function confirm(string $message)
+    {
+        $this->builder()->confirm($message);
+
+        return $this;
+    }
+
+    /**
      * Add a row in form.
      *
      * @param Closure $callback

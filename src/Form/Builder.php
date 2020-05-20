@@ -98,6 +98,11 @@ class Builder
     protected $title;
 
     /**
+     * @var string
+     */
+    protected $formClass;
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -118,6 +123,8 @@ class Builder
     {
         $this->tools = new Tools($this);
         $this->footer = new Footer($this);
+
+        $this->formClass = 'model-form-' . uniqid();
     }
 
     /**
@@ -487,9 +494,8 @@ class Builder
 
         $attributes['action'] = $this->getAction();
         $attributes['method'] = Arr::get($options, 'method', 'post');
+        $attributes['class'] = implode(' ', ['form-horizontal', $this->formClass]);
         $attributes['accept-charset'] = 'UTF-8';
-
-        $attributes['class'] = Arr::get($options, 'class');
 
         if ($this->hasFile()) {
             $attributes['enctype'] = 'multipart/form-data';
@@ -514,6 +520,38 @@ class Builder
         $this->fields = null;
 
         return '</form>';
+    }
+
+    /**
+     * @param string $message
+     */
+    public function confirm(string $message)
+    {
+        $trans = [
+            'confirm' => trans('admin.confirm'),
+            'cancel'  => trans('admin.cancel'),
+        ];
+
+        $script = <<<SCRIPT
+$('form.{$this->formClass} button[type=submit]').click(function (e) {
+    e.preventDefault();
+    var form = $(this).parents('form');
+    swal({
+        title: "$message",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "{$trans['confirm']}",
+        cancelButtonText: "{$trans['cancel']}",
+    }).then(function (result) {
+        if (result.value) {
+          form.submit();
+        }
+    });
+});
+SCRIPT;
+
+        Admin::script($script);
     }
 
     /**
