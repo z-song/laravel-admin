@@ -94,11 +94,6 @@ class Model
     protected $relation;
 
     /**
-     * @var array
-     */
-    protected $eagerLoads = [];
-
-    /**
      * Create a new grid model instance.
      *
      * @param EloquentModel $model
@@ -668,42 +663,6 @@ class Model
         ]);
 
         return $this;
-    }
-
-    /**
-     * Set the relationships that should be eager loaded.
-     *
-     * @param mixed $relations
-     *
-     * @return $this|Model
-     */
-    public function with($relations)
-    {
-        if (is_array($relations)) {
-            if (Arr::isAssoc($relations)) {
-                $relations = array_keys($relations);
-            }
-
-            $this->eagerLoads = array_merge($this->eagerLoads, $relations);
-        }
-
-        if (is_string($relations)) {
-            if (Str::contains($relations, '.')) {
-                $relations = explode('.', $relations)[0];
-            }
-
-            if (Str::contains($relations, ':')) {
-                $relations = explode(':', $relations)[0];
-            }
-
-            if (in_array($relations, $this->eagerLoads)) {
-                return $this;
-            }
-
-            $this->eagerLoads[] = $relations;
-        }
-
-        return $this->__call('with', (array) $relations);
     }
 
     /**
