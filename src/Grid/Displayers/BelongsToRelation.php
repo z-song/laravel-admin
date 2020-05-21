@@ -24,6 +24,7 @@ trait BelongsToRelation
 
     /**
      * @param int $multiple
+     *
      * @return string
      */
     protected function getLoadUrl($multiple = 0)
@@ -94,6 +95,7 @@ STYLE;
     /**
      * @param string $selectable
      * @param string $column
+     *
      * @return string
      */
     public function display($selectable = null, $column = '')
@@ -106,7 +108,7 @@ STYLE;
 
         $this->columnName = $column ?: $this->getName();
         $this->selectable = $selectable;
-        $this->modalID    = sprintf('modal-grid-selector-%s', $this->getClassName());
+        $this->modalID = sprintf('modal-grid-selector-%s', $this->getClassName());
 
         $this->addHtml()->addScript()->addStyle();
 

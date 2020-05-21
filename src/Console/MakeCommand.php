@@ -49,7 +49,7 @@ class MakeCommand extends GeneratorCommand
      */
     public function handle()
     {
-        $this->modelName      = $this->getModelName();
+        $this->modelName = $this->getModelName();
         $this->controllerName = $this->getControllerName();
 
         if (!$this->modelExists()) {
@@ -100,8 +100,9 @@ class MakeCommand extends GeneratorCommand
     }
 
     /**
-     * @return array|bool|string|null
      * @throws \ReflectionException
+     *
+     * @return array|bool|string|null
      */
     protected function getTitle()
     {

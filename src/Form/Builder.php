@@ -124,7 +124,7 @@ class Builder
         $this->tools = new Tools($this);
         $this->footer = new Footer($this);
 
-        $this->formClass = 'model-form-' . uniqid();
+        $this->formClass = 'model-form-'.uniqid();
     }
 
     /**

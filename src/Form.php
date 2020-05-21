@@ -6,8 +6,8 @@ use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Concerns\HasFields;
-use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Concerns\HasHooks;
+use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Layout\Layout;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
@@ -31,9 +31,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Form implements Renderable
 {
-    use HasHooks,
-        HasFields,
-        ShouldSnakeAttributes;
+    use HasHooks;
+    use HasFields;
+    use ShouldSnakeAttributes;
     /**
      * Remove flag in `has many` form.
      */
@@ -190,9 +190,9 @@ class Form implements Renderable
     /**
      * Use tab to split form.
      *
-     * @param string $title
+     * @param string  $title
      * @param Closure $content
-     * @param bool $active
+     * @param bool    $active
      *
      * @return $this
      */
@@ -283,7 +283,7 @@ class Form implements Renderable
      * Remove files in record.
      *
      * @param Model $model
-     * @param bool $forceDelete
+     * @param bool  $forceDelete
      */
     protected function deleteFiles(Model $model, $forceDelete = false)
     {
@@ -378,7 +378,7 @@ class Form implements Renderable
             return response()->json([
                 'status'    => true,
                 'message'   => $message,
-                'display'  => $this->applayFieldDisplay()
+                'display'   => $this->applayFieldDisplay(),
             ]);
         }
 
@@ -394,7 +394,7 @@ class Form implements Renderable
 
         /** @var Field $field */
         foreach ($this->builder()->fields() as $field) {
-            if (! \request()->has($field->column())) {
+            if (!\request()->has($field->column())) {
                 continue;
             }
 
@@ -484,7 +484,7 @@ class Form implements Renderable
     /**
      * Handle update.
      *
-     * @param int $id
+     * @param int  $id
      * @param null $data
      *
      * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed|null|Response
@@ -1195,6 +1195,7 @@ class Form implements Renderable
      *
      * @param string $message
      * @param string $on
+     *
      * @return $this
      */
     public function confirm(string $message, $on = null)

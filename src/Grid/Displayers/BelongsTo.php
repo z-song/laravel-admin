@@ -3,7 +3,6 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Grid\Selectable;
 
 class BelongsTo extends AbstractDisplayer
 {

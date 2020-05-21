@@ -2,10 +2,6 @@
 
 namespace Encore\Admin\Console;
 
-use Illuminate\Console\GeneratorCommand;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-
 class ControllerCommand extends MakeCommand
 {
     /**
@@ -35,13 +31,14 @@ class ControllerCommand extends MakeCommand
     }
 
     /**
-     * @return string
      * @throws \ReflectionException
+     *
+     * @return string
      */
     protected function getControllerName()
     {
         $name = (new \ReflectionClass($this->modelName))->getShortName();
 
-        return $name . 'Controller';
+        return $name.'Controller';
     }
 }
