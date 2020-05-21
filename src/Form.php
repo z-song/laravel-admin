@@ -1194,10 +1194,23 @@ class Form implements Renderable
      * Set a submit confirm.
      *
      * @param string $message
+     * @param string $on
      * @return $this
      */
-    public function confirm(string $message)
+    public function confirm(string $message, $on = null)
     {
+        if ($on && !in_array($on, ['create', 'edit'])) {
+            throw new \InvalidArgumentException("The second paramater `\$on` must be one of ['create', 'edit']");
+        }
+
+        if ($on == 'create' && !$this->isCreating()) {
+            return;
+        }
+
+        if ($on == 'edit' && !$this->isEditing()) {
+            return;
+        }
+
         $this->builder()->confirm($message);
 
         return $this;
