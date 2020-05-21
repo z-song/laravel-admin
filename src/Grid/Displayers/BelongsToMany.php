@@ -3,7 +3,6 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Grid\Selectable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as Relation;
 use Illuminate\Support\Arr;
 
@@ -140,8 +139,9 @@ SCRIPT;
     }
 
     /**
-     * @return false|string|void
      * @throws \Exception
+     *
+     * @return false|string|void
      */
     protected function getOriginalData()
     {
@@ -160,7 +160,7 @@ SCRIPT;
         if (is_null($first)) {
             $data = null;
 
-            // MultipleSelect value store as an ont-to-many relationship.
+        // MultipleSelect value store as an ont-to-many relationship.
         } elseif (is_array($first)) {
             foreach ($relations as $relation) {
                 $data[] = Arr::get($relation, "pivot.{$this->getOtherKey()}");

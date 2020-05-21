@@ -807,6 +807,7 @@ class Column
 
     /**
      * @param string $selectable
+     *
      * @return $this
      */
     public function belongsTo($selectable)
@@ -820,6 +821,7 @@ class Column
 
     /**
      * @param string $selectable
+     *
      * @return $this
      */
     public function belongsToMany($selectable)

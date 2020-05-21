@@ -90,6 +90,6 @@ STYLE;
   </ul>
 </div>
 HTML;
-EOT;
+        EOT;
     }
 }

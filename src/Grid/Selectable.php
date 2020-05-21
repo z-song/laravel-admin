@@ -40,6 +40,7 @@ abstract class Selectable
 
     /**
      * @param bool $multiple
+     *
      * @return string
      */
     public function render($multiple = false)
@@ -79,8 +80,7 @@ abstract class Selectable
             ->disableBatchActions()
             ->disableCreateButton()
             ->disableColumnSelector()
-            ->disablePerPageSelector()
-        ;
+            ->disablePerPageSelector();
 
         if (!$multiple) {
             $this->disablePagination();
@@ -114,9 +114,9 @@ BTN;
         }
 
         /** @var Model $model */
-        $model = new $this->model;
+        $model = new $this->model();
 
-        $this->grid = new Grid(new $model);
+        $this->grid = new Grid(new $model());
 
         if (!$this->key) {
             $this->key = $model->getKeyName();
@@ -125,7 +125,8 @@ BTN;
 
     /**
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return mixed
      */
     public function __call(string $method, array $arguments = [])

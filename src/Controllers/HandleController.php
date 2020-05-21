@@ -154,7 +154,7 @@ class HandleController extends Controller
 
         if (class_exists($class)) {
             /** @var Selectable $selectable */
-            $selectable = new $class;
+            $selectable = new $class();
 
             return $selectable->render($multiple);
         }

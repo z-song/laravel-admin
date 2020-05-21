@@ -461,6 +461,7 @@ class Grid
 
     /**
      * @param bool $disable
+     *
      * @return $this
      */
     public function disablePerPageSelector(bool $disable = true)

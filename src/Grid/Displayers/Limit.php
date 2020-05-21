@@ -9,7 +9,7 @@ class Limit extends AbstractDisplayer
 {
     protected function addScript()
     {
-        $script = <<<JS
+        $script = <<<'JS'
 $('.limit-more').click(function () {
     $(this).parent('.limit-text').toggleClass('hide').siblings().toggleClass('hide');
 });
@@ -40,6 +40,5 @@ JS;
     &nbsp;<a href="javascript:void(0);" class="limit-more">&nbsp;<i class="fa fa-angle-double-up"></i></a>
 </div>
 HTML;
-
     }
 }

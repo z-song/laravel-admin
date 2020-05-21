@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Encore\Admin\Grid\Selectable;
 
 use Illuminate\Contracts\Support\Renderable;

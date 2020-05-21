@@ -511,6 +511,7 @@ HTML;
     /**
      * @param Model  $model
      * @param string $name
+     *
      * @return mixed
      */
     protected function getRelationValue($model, $name)

@@ -80,6 +80,7 @@ abstract class AbstractDisplayer
 
     /**
      * @param mixed $key
+     *
      * @return mixed
      */
     public function getAttribute($key)
