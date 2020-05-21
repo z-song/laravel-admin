@@ -22,7 +22,7 @@
                     <td>
                         <div class="form-group {{ $errors->has($keysErrorKey) ? 'has-error' : '' }}">
                             <div class="col-sm-12">
-                                <input name="{{ $column }}[keys][]" value="{{ old("{$column}.keys.{$k}", $k) }}" class="form-control" required/>
+                                <input name="{{ $name }}[keys][]" value="{{ old("{$column}.keys.{$k}", $k) }}" class="form-control" required/>
 
                                 @if($errors->has($keysErrorKey))
                                     @foreach($errors->get($keysErrorKey) as $message)
@@ -35,7 +35,7 @@
                     <td>
                         <div class="form-group {{ $errors->has($valsErrorKey) ? 'has-error' : '' }}">
                             <div class="col-sm-12">
-                                <input name="{{ $column }}[values][]" value="{{ old("{$column}.values.{$k}", $v) }}" class="form-control" />
+                                <input name="{{ $name }}[values][]" value="{{ old("{$column}.values.{$k}", $v) }}" class="form-control" />
                                 @if($errors->has($valsErrorKey))
                                     @foreach($errors->get($valsErrorKey) as $message)
                                         <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
@@ -75,14 +75,14 @@
         <td>
             <div class="form-group  ">
                 <div class="col-sm-12">
-                    <input name="{{ $column }}[keys][]" class="form-control" required/>
+                    <input name="{{ $name }}[keys][]" class="form-control" required/>
                 </div>
             </div>
         </td>
         <td>
             <div class="form-group  ">
                 <div class="col-sm-12">
-                    <input name="{{ $column }}[values][]" class="form-control" />
+                    <input name="{{ $name }}[values][]" class="form-control" />
                 </div>
             </div>
         </td>
