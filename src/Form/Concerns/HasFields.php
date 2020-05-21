@@ -32,7 +32,6 @@ use Illuminate\Support\Arr;
  * @method Field\TimeRange      timeRange($start, $end, $label = '')
  * @method Field\Number         number($column, $label = '')
  * @method Field\Currency       currency($column, $label = '')
- * @method Field\HasMany        hasMany($relationName, $label = '', $callback)
  * @method Field\SwitchField    switch($column, $label = '')
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
@@ -51,9 +50,10 @@ use Illuminate\Support\Arr;
  * @method Field\Timezone       timezone($column, $label = '')
  * @method Field\KeyValue       keyValue($column, $label = '')
  * @method Field\ListField      list($column, $label = '')
+ * @method Field\HasMany        hasMany($relationName, $label = '', $callback)
+ * @method Field\HasMany        morphMany($relationName, $label = '', $callback)
  * @method Field\BelongsTo      belongsTo($column, $selectable, $label = '')
  * @method Field\BelongsToMany  belongsToMany($column, $selectable, $label = '')
- * @method Field\FileSelect     fileSelect($column, $selectable, $label = '')
  */
 trait HasFields
 {
@@ -78,7 +78,6 @@ trait HasFields
         'embeds'         => Field\Embeds::class,
         'email'          => Field\Email::class,
         'file'           => Field\File::class,
-        'hasMany'        => Field\HasMany::class,
         'hidden'         => Field\Hidden::class,
         'id'             => Field\Id::class,
         'image'          => Field\Image::class,
@@ -110,9 +109,10 @@ trait HasFields
         'timezone'       => Field\Timezone::class,
         'keyValue'       => Field\KeyValue::class,
         'list'           => Field\ListField::class,
+        'hasMany'        => Field\HasMany::class,
+        'morphMany'      => Field\HasMany::class,
         'belongsTo'      => Field\BelongsTo::class,
         'belongsToMany'  => Field\BelongsToMany::class,
-        'fileSelect'     => Field\FileSelect::class,
     ];
 
     /**

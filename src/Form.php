@@ -761,82 +761,54 @@ class Form implements Renderable
                     }
                     break;
                 case $relation instanceof Relations\HasOne:
-
-                    $related = $this->model->$name;
-
-                    // if related is empty
-                    if (is_null($related)) {
-                        $related = $relation->getRelated();
-                        $qualifiedParentKeyName = $relation->getQualifiedParentKeyName();
-                        $localKey = Arr::last(explode('.', $qualifiedParentKeyName));
-                        $related->{$relation->getForeignKeyName()} = $this->model->{$localKey};
-                    }
+                case $relation instanceof Relations\MorphOne:
+                    $related = $this->model->getRelationValue($name) ?: $relation->getRelated();
 
                     foreach ($prepared[$name] as $column => $value) {
                         $related->setAttribute($column, $value);
                     }
 
-                    $related->save();
+                    // save child
+                    $relation->save($related);
                     break;
                 case $relation instanceof Relations\BelongsTo:
                 case $relation instanceof Relations\MorphTo:
+                    $related = $this->model->getRelationValue($name) ?: $relation->getRelated();
 
-                    $parent = $this->model->$name;
-
-                    // if related is empty
-                    if (is_null($parent)) {
-                        $parent = $relation->getRelated();
-                    }
-
-                    foreach ($prepared[$name] as $column => $value) {
-                        $parent->setAttribute($column, $value);
-                    }
-
-                    $parent->save();
-
-                    // When in creating, associate two models
-                    $foreignKeyMethod = version_compare(app()->version(), '5.8.0', '<') ? 'getForeignKey' : 'getForeignKeyName';
-                    if (!$this->model->{$relation->{$foreignKeyMethod}()}) {
-                        $this->model->{$relation->{$foreignKeyMethod}()} = $parent->getKey();
-
-                        $this->model->save();
-                    }
-
-                    break;
-                case $relation instanceof Relations\MorphOne:
-                    $related = $this->model->$name;
-                    if ($related === null) {
-                        $related = $relation->make();
-                    }
                     foreach ($prepared[$name] as $column => $value) {
                         $related->setAttribute($column, $value);
                     }
+
+                    // save parent
                     $related->save();
+
+                    // save child (self)
+                    $relation->associate($related)->save();
                     break;
                 case $relation instanceof Relations\HasMany:
                 case $relation instanceof Relations\MorphMany:
-
                     foreach ($prepared[$name] as $related) {
-                        /** @var Relations\Relation $relation */
-                        $relation = $this->model()->$name();
+                        /** @var Relations\HasOneOrMany $relation */
+                        $relation = $this->model->$name();
 
                         $keyName = $relation->getRelated()->getKeyName();
 
-                        $instance = $relation->findOrNew(Arr::get($related, $keyName));
+                        /** @var Model $child */
+                        $child = $relation->findOrNew(Arr::get($related, $keyName));
 
                         if (Arr::get($related, static::REMOVE_FLAG_NAME) == 1) {
-                            $instance->delete();
-
+                            $child->delete();
                             continue;
                         }
 
                         Arr::forget($related, static::REMOVE_FLAG_NAME);
 
-                        $instance->fill($related);
+                        foreach ($related as $colum => $value) {
+                            $child->setAttribute($colum, $value);
+                        }
 
-                        $instance->save();
+                        $child->save();
                     }
-
                     break;
             }
         }
