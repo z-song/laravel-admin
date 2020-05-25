@@ -251,6 +251,11 @@ class Field implements Renderable
     public $isJsonType = false;
 
     /**
+     * @var Field|null
+     */
+    protected $dependency;
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -453,9 +458,27 @@ class Field implements Renderable
      */
     public function setForm(Form $form = null)
     {
+        if ($dependency = $form->getDependency()) {
+            $this->dependency = $dependency;
+        }
+
         $this->form = $form;
 
         return $this;
+    }
+
+    public function getDependency()
+    {
+        return $this->dependency;
+    }
+
+    public function isDependsOn(Field $field)
+    {
+        if (!$this->dependency) {
+            return false;
+        }
+
+        return $this->dependency['field'] == $field->column();
     }
 
     /**

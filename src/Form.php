@@ -5,6 +5,7 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
+use Encore\Admin\Form\Concerns\HandleCascadeFields;
 use Encore\Admin\Form\Concerns\HasFields;
 use Encore\Admin\Form\Concerns\HasHooks;
 use Encore\Admin\Form\Field;
@@ -33,6 +34,7 @@ class Form implements Renderable
 {
     use HasHooks;
     use HasFields;
+    use HandleCascadeFields;
     use ShouldSnakeAttributes;
     /**
      * Remove flag in `has many` form.
@@ -1030,7 +1032,7 @@ class Form implements Renderable
 
         $data = $this->model->toArray();
 
-        $this->builder->fields()->each(function (Field $field) use ($data) {
+        $this->fields()->each(function (Field $field) use ($data) {
             if (!in_array($field->column(), $this->ignored, true)) {
                 $field->fill($data);
             }

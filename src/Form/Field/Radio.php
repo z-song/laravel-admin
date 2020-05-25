@@ -7,6 +7,8 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Radio extends Field
 {
+    use CanCascadeFields;
+
     protected $inline = true;
 
     protected static $css = [
@@ -16,6 +18,11 @@ class Radio extends Field
     protected static $js = [
         '/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',
     ];
+
+    /**
+     * @var string
+     */
+    protected $cascadeEvent = 'ifChecked';
 
     /**
      * Set options.
@@ -96,6 +103,8 @@ class Radio extends Field
     public function render()
     {
         $this->script = "$('{$this->getElementClassSelector()}').iCheck({radioClass:'iradio_minimal-blue'});";
+
+        $this->addCascadeScript();
 
         $this->addVariables(['options' => $this->options, 'checked' => $this->checked, 'inline' => $this->inline]);
 

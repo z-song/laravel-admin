@@ -19,6 +19,11 @@ class Checkbox extends MultipleSelect
     ];
 
     /**
+     * @var string
+     */
+    protected $cascadeEvent = 'ifChanged';
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options

@@ -59,6 +59,7 @@ class MultipleSelect extends Select
         }
 
         if (!is_array($relations)) {
+            $this->applyCascadeConditions();
             return;
         }
 
@@ -77,6 +78,8 @@ class MultipleSelect extends Select
         } else {
             $this->value = $relations;
         }
+
+        $this->applyCascadeConditions();
     }
 
     /**

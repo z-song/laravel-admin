@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 
 class Select extends Field
 {
+    use CanCascadeFields;
+
     /**
      * @var array
      */
@@ -34,6 +36,11 @@ class Select extends Field
      * @var array
      */
     protected $config = [];
+
+    /**
+     * @var string
+     */
+    protected $cascadeEvent = 'change';
 
     /**
      * Set options.
@@ -177,7 +184,7 @@ var refreshOptions = function(url, target) {
         target.find("option").remove();
         $(target).select2({
             placeholder: $placeholder,
-            allowClear: $strAllowClear,        
+            allowClear: $strAllowClear,
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
@@ -431,6 +438,8 @@ EOT;
             'options' => $this->options,
             'groups'  => $this->groups,
         ]);
+
+        $this->addCascadeScript();
 
         $this->attribute('data-value', implode(',', (array) $this->value()));
 

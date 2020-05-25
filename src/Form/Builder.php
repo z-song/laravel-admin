@@ -599,18 +599,11 @@ SCRIPT;
     }
 
     /**
-     * Render form.
-     *
-     * @return string
+     * Add script for tab form.
      */
-    public function render(): string
+    protected function addTabformScript()
     {
-        $this->removeReservedFields();
-
-        $tabObj = $this->form->setTab();
-
-        if (!$tabObj->isEmpty()) {
-            $script = <<<'SCRIPT'
+        $script = <<<'SCRIPT'
 
 var hash = document.location.hash;
 if (hash) {
@@ -633,8 +626,39 @@ if ($('.has-error').length) {
 }
 
 SCRIPT;
-            Admin::script($script);
+        Admin::script($script);
+    }
+
+    protected function addCascadeScript()
+    {
+        $script = <<<SCRIPT
+(function () {
+    $('form.{$this->formClass}').submit(function (e) {
+        e.preventDefault();
+        $(this).find('div.form-group.cascade.hide :input').attr('disabled', true);
+    });
+})();
+SCRIPT;
+
+        Admin::script($script);
+    }
+
+    /**
+     * Render form.
+     *
+     * @return string
+     */
+    public function render(): string
+    {
+        $this->removeReservedFields();
+
+        $tabObj = $this->form->setTab();
+
+        if (!$tabObj->isEmpty()) {
+            $this->addTabformScript();;
         }
+
+        $this->addCascadeScript();
 
         $data = [
             'form'   => $this,

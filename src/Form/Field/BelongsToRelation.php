@@ -159,6 +159,8 @@ STYLE;
             'options' => $this->getOptions(),
         ]);
 
+        $this->addCascadeScript();
+
         return parent::fieldRender();
     }
 }
