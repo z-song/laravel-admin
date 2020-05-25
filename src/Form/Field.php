@@ -1096,6 +1096,18 @@ class Field implements Renderable
     }
 
     /**
+     * Add a divider after this field.
+     *
+     * @return $this
+     */
+    public function divider()
+    {
+        $this->form->divider();
+
+        return $this;
+    }
+
+    /**
      * Prepare for a field value before update or insert.
      *
      * @param $value
