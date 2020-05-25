@@ -8,7 +8,11 @@ use Illuminate\Support\Arr;
 /**
  * @method Field\Text           text($column, $label = '')
  * @method Field\Checkbox       checkbox($column, $label = '')
+ * @method Field\CheckboxButton checkboxButton($column, $label = '')
+ * @method Field\CheckboxCard   checkboxCard($column, $label = '')
  * @method Field\Radio          radio($column, $label = '')
+ * @method Field\RadioButton    radioButton($column, $label = '')
+ * @method Field\RadioCard      radioCard($column, $label = '')
  * @method Field\Select         select($column, $label = '')
  * @method Field\MultipleSelect multipleSelect($column, $label = '')
  * @method Field\Textarea       textarea($column, $label = '')
@@ -65,6 +69,8 @@ trait HasFields
     public static $availableFields = [
         'button'         => Field\Button::class,
         'checkbox'       => Field\Checkbox::class,
+        'checkboxButton' => Field\CheckboxButton::class,
+        'checkboxCard'   => Field\CheckboxCard::class,
         'color'          => Field\Color::class,
         'currency'       => Field\Currency::class,
         'date'           => Field\Date::class,
@@ -88,6 +94,8 @@ trait HasFields
         'number'         => Field\Number::class,
         'password'       => Field\Password::class,
         'radio'          => Field\Radio::class,
+        'radioButton'    => Field\RadioButton::class,
+        'radioCard'      => Field\RadioCard::class,
         'rate'           => Field\Rate::class,
         'select'         => Field\Select::class,
         'slider'         => Field\Slider::class,
