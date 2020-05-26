@@ -81,7 +81,6 @@ class BelongsTo extends Select
         e.preventDefault();
     }).on('submit', '.box-header form', function (e) {
         load($(this).attr('action')+'&'+$(this).serialize());
-        e.preventDefault();
         return false;
     }).on('ifChecked', 'input.select', function (e) {
         row = $(e.target).parents('tr');

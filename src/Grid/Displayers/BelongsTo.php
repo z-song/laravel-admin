@@ -63,7 +63,7 @@ class BelongsTo extends AbstractDisplayer
         e.preventDefault();
     }).on('submit', '.box-header form', function (e) {
         load($(this).attr('action')+'&'+$(this).serialize());
-        e.preventDefault();
+        return false;
     }).on('ifChecked', 'input.select', function (e) {
         selected.id = $(this).val();
     }).find('.modal-footer .submit').click(function () {
