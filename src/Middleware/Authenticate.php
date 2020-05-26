@@ -41,6 +41,7 @@ class Authenticate
             '_handle_action_',
             '_handle_form_',
             '_handle_selectable_',
+            '_handle_renderable_',
         ]);
 
         return collect($excepts)
