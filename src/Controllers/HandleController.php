@@ -148,6 +148,7 @@ class HandleController extends Controller
 
     /**
      * @param Request $request
+     *
      * @return mixed|string|string[]
      */
     public function handleSelectable(Request $request)
@@ -169,12 +170,13 @@ class HandleController extends Controller
 
     /**
      * @param Request $request
+     *
      * @return mixed|string|string[]
      */
     public function handleRenderable(Request $request)
     {
         $class = $request->get('renderable');
-        $key   = $request->get('key');
+        $key = $request->get('key');
 
         $class = str_replace('_', '\\', $class);
 

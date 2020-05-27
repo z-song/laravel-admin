@@ -28,6 +28,7 @@ class CascadeGroup extends Field
 
     /**
      * @param Field $field
+     *
      * @return bool
      */
     public function dependsOn(Field $field)
@@ -36,7 +37,7 @@ class CascadeGroup extends Field
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function index()
     {

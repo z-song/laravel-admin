@@ -463,6 +463,7 @@ class Field implements Renderable
      * Set Widget/Form as field parent.
      *
      * @param WidgetForm $form
+     *
      * @return $this
      */
     public function setWidgetForm(WidgetForm $form)

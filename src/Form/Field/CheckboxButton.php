@@ -13,7 +13,7 @@ class CheckboxButton extends Checkbox
 
     protected function addScript()
     {
-        $script = <<<SCRIPT
+        $script = <<<'SCRIPT'
 $('.checkbox-group-toggle label').click(function(e) {
     e.stopPropagation();
     e.preventDefault();

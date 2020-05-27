@@ -658,7 +658,7 @@ SCRIPT;
         $tabObj = $this->form->setTab();
 
         if (!$tabObj->isEmpty()) {
-            $this->addTabformScript();;
+            $this->addTabformScript();
         }
 
         $this->addCascadeScript();

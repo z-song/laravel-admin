@@ -12,7 +12,7 @@ class Expand extends AbstractDisplayer
     public function display($callback = null, $isExpand = false)
     {
         if (is_subclass_of($callback, Renderable::class)) {
-            $html = <<<HTML
+            $html = <<<'HTML'
 <div class="loading text-center" style="padding: 20px 0px;">
     <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
 </div>
