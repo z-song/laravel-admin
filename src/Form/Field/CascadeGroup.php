@@ -52,7 +52,7 @@ class CascadeGroup extends Field
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @return string
      */
     public function render()
     {
