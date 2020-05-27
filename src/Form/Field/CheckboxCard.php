@@ -15,6 +15,10 @@ class CheckboxCard extends CheckboxButton
     font-weight: 400;
 }
 
+.card-group .panel {
+    margin-bottom: 0px;
+}
+
 .card-group .panel-body {
     padding: 10px 15px;
 }
