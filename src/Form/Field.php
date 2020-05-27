@@ -5,6 +5,7 @@ namespace Encore\Admin\Form;
 use Closure;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
+use Encore\Admin\Widgets\Form as WidgetForm;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
@@ -251,11 +252,6 @@ class Field implements Renderable
     public $isJsonType = false;
 
     /**
-     * @var Field|null
-     */
-    protected $dependency;
-
-    /**
      * Field constructor.
      *
      * @param       $column
@@ -458,27 +454,22 @@ class Field implements Renderable
      */
     public function setForm(Form $form = null)
     {
-        if ($dependency = $form->getDependency()) {
-            $this->dependency = $dependency;
-        }
-
         $this->form = $form;
 
         return $this;
     }
 
-    public function getDependency()
+    /**
+     * Set Widget/Form as field parent.
+     *
+     * @param WidgetForm $form
+     * @return $this
+     */
+    public function setWidgetForm(WidgetForm $form)
     {
-        return $this->dependency;
-    }
+        $this->form = $form;
 
-    public function isDependsOn(Field $field)
-    {
-        if (!$this->dependency) {
-            return false;
-        }
-
-        return $this->dependency['field'] == $field->column();
+        return $this;
     }
 
     /**

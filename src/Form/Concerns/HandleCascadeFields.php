@@ -7,28 +7,15 @@ use Encore\Admin\Form\Field;
 trait HandleCascadeFields
 {
     /**
-     * @var array
-     */
-    protected $dependency;
-
-    /**
-     * @return array
-     */
-    public function getDependency()
-    {
-        return $this->dependency;
-    }
-
-    /**
      * @param array $dependency
      * @param \Closure $closure
      */
-    public function callWithDependency(array $dependency, \Closure $closure)
+    public function cascadeGroup(\Closure $closure, array $dependency)
     {
-        $this->dependency = $dependency;
+        $this->pushField($group = new Field\CascadeGroup($dependency));
 
         call_user_func($closure, $this);
 
-        $this->dependency = null;
+        $group->end();
     }
 }

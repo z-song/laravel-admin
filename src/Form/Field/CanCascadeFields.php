@@ -5,6 +5,7 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Support\Arr;
+use function MongoDB\BSON\toJSON;
 
 /**
  * @property Form $form
@@ -39,7 +40,7 @@ trait CanCascadeFields
 
     /**
      * @param string $operator
-     * @param mixed  $value
+     * @param mixed $value
      */
     protected function formatValues(string $operator, &$value)
     {
@@ -63,12 +64,11 @@ trait CanCascadeFields
     {
         $this->conditions[] = compact('operator', 'value', 'closure');
 
-        $dependency = [
-            'field' => $this->column(),
-            'group' => count($this->conditions) - 1,
-        ];
-
-        $this->form->callWithDependency($dependency, $closure);
+        $this->form->cascadeGroup($closure, [
+            'column' => $this->column(),
+            'index'  => count($this->conditions) - 1,
+            'class'  => $this->getCascadeClass($value)
+        ]);
     }
 
     /**
@@ -79,39 +79,6 @@ trait CanCascadeFields
         parent::fill($data);
 
         $this->applyCascadeConditions();
-    }
-
-    /**
-     * Apply conditions to dependents fields.
-     *
-     * @return void
-     */
-    protected function applyCascadeConditions()
-    {
-        $this->form->fields()->filter(function (Form\Field $field) {
-            return $field->isDependsOn($this);
-        })->each(function (Form\Field $field) {
-            $group = Arr::get($field->getDependency(), 'group');
-            $field->setGroupClass(
-                $this->getDependentsElementClass($group)
-            );
-        });
-    }
-
-    /**
-     * @param int $group
-     * @return array
-     * @throws \Exception
-     */
-    protected function getDependentsElementClass(int $group)
-    {
-        $condition = $this->conditions[$group];
-
-        return [
-            'cascade',
-            $this->hitsCondition($condition) ? '' : 'hide',
-            $this->getCascadeClass($condition['value'])
-        ];
     }
 
     /**
@@ -128,13 +95,29 @@ trait CanCascadeFields
     }
 
     /**
-     * @param $operator
-     * @param $value
+     * Apply conditions to dependents fields.
+     *
+     * @return void
+     */
+    protected function applyCascadeConditions()
+    {
+        $this->form->fields()
+            ->filter(function (Form\Field $field) {
+                return $field instanceof CascadeGroup
+                    && $field->dependsOn($this)
+                    && $this->hitsCondition($field);
+            })->each->visiable();
+    }
+
+    /**
+     * @param CascadeGroup $group
      * @return bool
      * @throws \Exception
      */
-    protected function hitsCondition($condition)
+    protected function hitsCondition(CascadeGroup $group)
     {
+        $condition = $this->conditions[$group->index()];
+
         extract($condition);
 
         $old = old($this->column(), $this->value());
@@ -174,17 +157,13 @@ trait CanCascadeFields
             return;
         }
 
-        $group = [];
-
-        foreach ($this->conditions as $item) {
-            $group[] = [
-                'class'    => $this->getCascadeClass($item['value']),
-                'operator' => $item['operator'],
-                'value'    => $item['value']
-            ];
-        }
-
-        $cascadeGroups = json_encode($group);
+        $cascadeGroups = collect($this->conditions)->map(function ($condition) {
+             return [
+                 'class'    => $this->getCascadeClass($condition['value']),
+                 'operator' => $condition['operator'],
+                 'value'    => $condition['value']
+             ];
+        })->toJson();
 
         $script = <<<SCRIPT
 (function () {
@@ -217,7 +196,7 @@ trait CanCascadeFields
         {$this->getFormFrontValue()}
 
         cascade_groups.forEach(function (event) {
-            var group = $('div.form-group.'+event.class);
+            var group = $('div.cascade-group.'+event.class);
             if( operator_table[event.operator](checked, event.value) ) {
                 group.removeClass('hide');
             } else {

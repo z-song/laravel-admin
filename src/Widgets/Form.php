@@ -6,6 +6,7 @@ use Closure;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form as BaseForm;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Layout\Content;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -19,7 +20,11 @@ use Illuminate\Validation\Validator;
  * @method Field\Text           text($name, $label = '')
  * @method Field\Password       password($name, $label = '')
  * @method Field\Checkbox       checkbox($name, $label = '')
+ * @method Field\CheckboxButton checkboxButton($name, $label = '')
+ * @method Field\CheckboxCard   checkboxCard($name, $label = '')
  * @method Field\Radio          radio($name, $label = '')
+ * @method Field\RadioButton    radioButton($name, $label = '')
+ * @method Field\RadioCard      radioCard($name, $label = '')
  * @method Field\Select         select($name, $label = '')
  * @method Field\MultipleSelect multipleSelect($name, $label = '')
  * @method Field\Textarea       textarea($name, $label = '')
@@ -61,12 +66,21 @@ use Illuminate\Validation\Validator;
  */
 class Form implements Renderable
 {
+    use BaseForm\Concerns\HandleCascadeFields;
+
     /**
      * The title of form.
      *
      * @var string
      */
     public $title;
+
+    /**
+     * The description of form.
+     *
+     * @var string
+     */
+    public $description;
 
     /**
      * @var Field[]
@@ -111,6 +125,11 @@ class Form implements Renderable
     public $confirm = '';
 
     /**
+     * @var Form
+     */
+    protected $form;
+
+    /**
      * Form constructor.
      *
      * @param array $data
@@ -130,6 +149,16 @@ class Form implements Renderable
     public function title()
     {
         return $this->title;
+    }
+
+    /**
+     * Get form description.
+     *
+     * @return mixed
+     */
+    public function description()
+    {
+        return $this->description ?: ' ';
     }
 
     /**
@@ -350,8 +379,10 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function pushField(Field &$field)
+    public function pushField(Field $field)
     {
+        $field->setWidgetForm($this);
+
         array_push($this->fields, $field);
 
         return $this;
@@ -364,7 +395,7 @@ class Form implements Renderable
      */
     public function fields()
     {
-        return $this->fields;
+        return collect($this->fields);
     }
 
     /**
@@ -374,7 +405,7 @@ class Form implements Renderable
      */
     protected function getVariables()
     {
-        collect($this->fields())->each->fill($this->data());
+        $this->fields()->each->fill($this->data());
 
         return [
             'fields'     => $this->fields,
@@ -518,6 +549,22 @@ SCRIPT;
         Admin::script($script);
     }
 
+    protected function addCascadeScript()
+    {
+        $id = $this->attributes['id'];
+
+        $script = <<<SCRIPT
+(function () {
+    $('form#{$id}').submit(function (e) {
+        e.preventDefault();
+        $(this).find('div.cascade-group.hide :input').attr('disabled', true);
+    });
+})();
+SCRIPT;
+
+        Admin::script($script);
+    }
+
     protected function prepareForm()
     {
         if (method_exists($this, 'form')) {
@@ -527,6 +574,8 @@ SCRIPT;
         if (!empty($this->confirm)) {
             $this->addConfirmScript();
         }
+
+        $this->addCascadeScript();
     }
 
     protected function prepareHandle()
@@ -579,5 +628,16 @@ SCRIPT;
         return tap($field, function ($field) {
             $this->pushField($field);
         });
+    }
+
+    /**
+     * @param Content $content
+     * @return Content
+     */
+    public function __invoke(Content $content)
+    {
+        return $content->title($this->title())
+            ->description($this->description())
+            ->body($this);
     }
 }
