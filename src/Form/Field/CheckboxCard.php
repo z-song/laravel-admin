@@ -8,7 +8,7 @@ class CheckboxCard extends CheckboxButton
 {
     protected function addStyle()
     {
-        $style = <<<STYLE
+        $style = <<<'STYLE'
 .card-group label {
     cursor: pointer;
     margin-right: 8px;

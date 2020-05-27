@@ -78,7 +78,7 @@ HTML;
      */
     public function addStyle()
     {
-        $style = <<<STYLE
+        $style = <<<'STYLE'
 .belongsto.modal tr {
     cursor: pointer;
 }

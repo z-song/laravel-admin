@@ -51,7 +51,7 @@ SCRIPT;
         }
 
         if (is_subclass_of($callback, Renderable::class)) {
-            $html = <<<HTML
+            $html = <<<'HTML'
 <div class="loading text-center">
     <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
 </div>

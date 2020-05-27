@@ -632,6 +632,7 @@ SCRIPT;
 
     /**
      * @param Content $content
+     *
      * @return Content
      */
     public function __invoke(Content $content)

@@ -5,7 +5,6 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Support\Arr;
-use function MongoDB\BSON\toJSON;
 
 /**
  * @property Form $form
@@ -21,13 +20,14 @@ trait CanCascadeFields
      * @param $operator
      * @param $value
      * @param $closure
+     *
      * @return $this
      */
     public function when($operator, $value, $closure = null)
     {
         if (func_num_args() == 2) {
-            $closure  = $value;
-            $value    = $operator;
+            $closure = $value;
+            $value = $operator;
             $operator = '=';
         }
 
@@ -40,7 +40,7 @@ trait CanCascadeFields
 
     /**
      * @param string $operator
-     * @param mixed $value
+     * @param mixed  $value
      */
     protected function formatValues(string $operator, &$value)
     {
@@ -56,8 +56,8 @@ trait CanCascadeFields
     }
 
     /**
-     * @param string $operator
-     * @param mixed $value
+     * @param string   $operator
+     * @param mixed    $value
      * @param \Closure $closure
      */
     protected function addDependents(string $operator, $value, \Closure $closure)
@@ -67,12 +67,12 @@ trait CanCascadeFields
         $this->form->cascadeGroup($closure, [
             'column' => $this->column(),
             'index'  => count($this->conditions) - 1,
-            'class'  => $this->getCascadeClass($value)
+            'class'  => $this->getCascadeClass($value),
         ]);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function fill($data)
     {
@@ -83,6 +83,7 @@ trait CanCascadeFields
 
     /**
      * @param mixed $value
+     *
      * @return string
      */
     protected function getCascadeClass($value)
@@ -111,8 +112,10 @@ trait CanCascadeFields
 
     /**
      * @param CascadeGroup $group
-     * @return bool
+     *
      * @throws \Exception
+     *
+     * @return bool
      */
     protected function hitsCondition(CascadeGroup $group)
     {
@@ -123,23 +126,23 @@ trait CanCascadeFields
         $old = old($this->column(), $this->value());
 
         switch ($operator) {
-            case '=' :
+            case '=':
                 return $old == $value;
-            case '>' :
+            case '>':
                 return $old > $value;
-            case '<' :
+            case '<':
                 return $old < $value;
-            case '>=' :
+            case '>=':
                 return $old >= $value;
-            case '<=' :
+            case '<=':
                 return $old <= $value;
-            case '!=' :
+            case '!=':
                 return $old != $value;
-            case 'in' :
+            case 'in':
                 return in_array($old, $value);
-            case 'notIn' :
+            case 'notIn':
                 return !in_array($old, $value);
-            case 'has' :
+            case 'has':
                 return in_array($value, $old);
             default:
                 throw new \Exception("Operator [$operator] not support.");
@@ -158,11 +161,11 @@ trait CanCascadeFields
         }
 
         $cascadeGroups = collect($this->conditions)->map(function ($condition) {
-             return [
-                 'class'    => $this->getCascadeClass($condition['value']),
-                 'operator' => $condition['operator'],
-                 'value'    => $condition['value']
-             ];
+            return [
+                'class'    => $this->getCascadeClass($condition['value']),
+                'operator' => $condition['operator'],
+                'value'    => $condition['value'],
+            ];
         })->toJson();
 
         $script = <<<SCRIPT
@@ -223,7 +226,7 @@ SCRIPT;
             case BelongsTo::class:
             case BelongsToMany::class:
             case MultipleSelect::class:
-                return "var checked = $(this).val();";
+                return 'var checked = $(this).val();';
             case Checkbox::class:
             case CheckboxButton::class:
             case CheckboxCard::class:
