@@ -566,10 +566,13 @@ SCRIPT;
         }
 
         $reservedColumns = [
-            $this->form->model()->getKeyName(),
             $this->form->model()->getCreatedAtColumn(),
             $this->form->model()->getUpdatedAtColumn(),
         ];
+
+        if ($this->form->model()->incrementing) {
+            $reservedColumns[] = $this->form->model()->getKeyName();
+        }
 
         $this->form->getLayout()->removeReservedFields($reservedColumns);
 
