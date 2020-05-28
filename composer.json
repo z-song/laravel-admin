@@ -5,7 +5,7 @@
     "keywords": ["laravel", "admin", "grid", "form"],
     "homepage": "https://github.com/z-song/laravel-admin",
     "license": "MIT",
-    "version": "v1.8.0",
+    "version": "v1.8.1",
     "authors": [
         {
             "name": "zsong",
@@ -56,7 +56,6 @@
             "aliases": {
                 "Admin": "Encore\\Admin\\Facades\\Admin"
             }
-
         }
     }
 }
