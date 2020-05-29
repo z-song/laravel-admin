@@ -29,6 +29,7 @@ class AdminServiceProvider extends ServiceProvider
         Console\PermissionCommand::class,
         Console\ActionCommand::class,
         Console\GenerateMenuCommand::class,
+        Console\ConfigCommand::class,
     ];
 
     /**
