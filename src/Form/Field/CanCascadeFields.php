@@ -102,12 +102,14 @@ trait CanCascadeFields
      */
     protected function applyCascadeConditions()
     {
-        $this->form->fields()
-            ->filter(function (Form\Field $field) {
-                return $field instanceof CascadeGroup
-                    && $field->dependsOn($this)
-                    && $this->hitsCondition($field);
-            })->each->visiable();
+        if( $this->form ) {
+            $this->form->fields()
+                ->filter(function (Form\Field $field) {
+                    return $field instanceof CascadeGroup
+                        && $field->dependsOn($this)
+                        && $this->hitsCondition($field);
+                })->each->visiable();
+        }
     }
 
     /**
