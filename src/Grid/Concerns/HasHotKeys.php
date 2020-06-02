@@ -36,7 +36,9 @@ $(document).off('keydown').keydown(function(e) {
             \$box.find('#{$filterID}').toggleClass('hide');
             break;
         case 67: // `c` go to create page 
-            \$box.find('.grid-create-btn>a').trigger('click');
+            if (!e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
+                \$box.find('.grid-create-btn>a').trigger('click');
+            }
             break; 
         case 37: // `left` for go to prev page
             \$current_page.prev().find('a').trigger('click');
