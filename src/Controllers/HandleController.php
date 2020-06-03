@@ -154,15 +154,15 @@ class HandleController extends Controller
     public function handleSelectable(Request $request)
     {
         $class = $request->get('selectable');
-        $multiple = $request->get('multiple', 0);
+        $args  = $request->get('args', []);
 
         $class = str_replace('_', '\\', $class);
 
         if (class_exists($class)) {
-            /** @var Selectable $selectable */
-            $selectable = new $class();
+            /** @var \Encore\Admin\Grid\Selectable $selectable */
+            $selectable = new $class(...array_values($args));
 
-            return $selectable->render($multiple);
+            return $selectable->render();
         }
 
         return $class;

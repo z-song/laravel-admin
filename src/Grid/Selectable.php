@@ -29,9 +29,27 @@ abstract class Selectable
     protected $key = '';
 
     /**
+     * @var bool
+     */
+    protected $multiple = false;
+
+    /**
      * @var int
      */
     protected $perPage = 10;
+
+    /**
+     * Selectable constructor.
+     * @param $key
+     * @param $multiple
+     */
+    public function __construct($multiple = false, $key = '')
+    {
+        $this->key      = $key;
+        $this->multiple = $multiple;
+
+        $this->initGrid();
+    }
 
     /**
      * @return Grid
@@ -43,11 +61,9 @@ abstract class Selectable
      *
      * @return string
      */
-    public function render($multiple = false)
+    public function render()
     {
         $this->make();
-
-        $this->appendRemoveBtn();
 
         $this->paginate($this->perPage)
             ->expandFilter()
@@ -58,7 +74,7 @@ abstract class Selectable
             ->disableColumnSelector()
             ->disablePerPageSelector();
 
-        $displayer = $multiple ? Checkbox::class : Radio::class;
+        $displayer = $this->multiple ? Checkbox::class : Radio::class;
 
         $this->prependColumn('__modal_selector__', ' ')
             ->displayUsing($displayer, [$this->key]);
@@ -66,7 +82,7 @@ abstract class Selectable
         return $this->grid->render();
     }
 
-    public function renderFormGrid($values, $multiple = false)
+    public function renderFormGrid($values)
     {
         $this->make();
 
@@ -82,7 +98,7 @@ abstract class Selectable
             ->disableColumnSelector()
             ->disablePerPageSelector();
 
-        if (!$multiple) {
+        if (!$this->multiple) {
             $this->disablePagination();
         }
 
@@ -131,10 +147,6 @@ BTN;
      */
     public function __call(string $method, array $arguments = [])
     {
-        if (is_null($this->grid)) {
-            $this->initGrid();
-        }
-
         return $this->grid->{$method}(...$arguments);
     }
 }
