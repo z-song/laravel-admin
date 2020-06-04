@@ -610,6 +610,15 @@ class Grid
     }
 
     /**
+     * Set create url query
+     *
+     * @param array $params
+     */
+    public function setCreateUrlQuery(array $params){
+        $this->variables['create'] = $params;
+    }
+
+    /**
      * Get create url.
      *
      * @return string
@@ -617,9 +626,18 @@ class Grid
     public function getCreateUrl()
     {
         $queryString = '';
+        $queryData = [];
 
         if ($constraints = $this->model()->getConstraints()) {
-            $queryString = http_build_query($constraints);
+            $queryData += $constraints;
+        }
+
+        if (isset($this->variables['create'])) {
+            $queryData += $this->variables['create'];
+        }
+
+        if(!empty($queryData)) {
+            $queryString = http_build_query($queryData);
         }
 
         return sprintf(
