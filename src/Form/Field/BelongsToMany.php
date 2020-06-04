@@ -11,7 +11,7 @@ class BelongsToMany extends MultipleSelect
     protected function addScript()
     {
         $script = <<<SCRIPT
-(function () {
+;(function () {
 
     var grid = $('.belongstomany-{$this->column()}');
     var modal = $('#{$this->modalID}');
@@ -20,7 +20,7 @@ class BelongsToMany extends MultipleSelect
     var rows = {};
 
     table.find('tbody').children().each(function (index, tr) {
-        if ($(tr).find('.grid-row-remove')) {
+        if ($(tr).find('.grid-row-remove').length > 0) {
             rows[$(tr).find('.grid-row-remove').data('key')] = $(tr);
         }
     });
@@ -38,6 +38,7 @@ class BelongsToMany extends MultipleSelect
         var index = selected.indexOf(val);
         if (index !== -1) {
            selected.splice(index, 1);
+           delete rows[val];
         }
 
         $(this).parents('tr').remove();

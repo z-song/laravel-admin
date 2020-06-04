@@ -65,6 +65,8 @@ abstract class Selectable
     {
         $this->make();
 
+        $this->appendRemoveBtn(false);
+
         $this->paginate($this->perPage)
             ->expandFilter()
             ->disableExport()

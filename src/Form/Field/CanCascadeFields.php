@@ -171,7 +171,7 @@ trait CanCascadeFields
         })->toJson();
 
         $script = <<<SCRIPT
-(function () {
+;(function () {
     var operator_table = {
         '=': function(a, b) {
             if ($.isArray(a) && $.isArray(b)) {

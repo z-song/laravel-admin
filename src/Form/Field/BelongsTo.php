@@ -11,7 +11,7 @@ class BelongsTo extends Select
     protected function addScript()
     {
         $script = <<<SCRIPT
-(function () {
+;(function () {
 
     var grid = $('.belongsto-{$this->column()}');
     var modal = $('#{$this->modalID}');
