@@ -635,7 +635,7 @@ SCRIPT;
     protected function addCascadeScript()
     {
         $script = <<<SCRIPT
-(function () {
+;(function () {
     $('form.{$this->formClass}').submit(function (e) {
         e.preventDefault();
         $(this).find('div.cascade-group.hide :input').attr('disabled', true);
