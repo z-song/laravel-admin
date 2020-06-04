@@ -153,6 +153,18 @@ class Response
     }
 
     /**
+     * Send a open new window response.
+     *
+     * @param string $url
+     */
+    public function open(string $url)
+    {
+        $this->then = ['action' => 'open', 'value' => $url];
+
+        return $this;
+    }
+
+    /**
      * Send a location redirect response.
      *
      * @param string $location

@@ -357,6 +357,10 @@ var actionResolver = function (data) {
                 if (then.action == 'location') {
                     window.location = then.value;
                 }
+
+                if (then.action == 'oepn') {
+                    window.open(this.value, '_blank');
+                }
             };
 
             if (typeof response.html === 'string') {
