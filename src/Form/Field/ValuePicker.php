@@ -136,7 +136,7 @@ STYLE);
     {
         if ($this->multiple) {
             $script = <<<SCRIPT
-(function () {
+;(function () {
     var separator = '{$this->separator}';
     var modal = $('#{$this->modal}');
     var value = $("{$this->field->getElementClassSelector()}").val().split(separator);
@@ -189,7 +189,7 @@ SCRIPT;
 
         } else {
             $script = <<<SCRIPT
-(function () {
+;(function () {
 
     var modal = $('#{$this->modal}');
     var value = $("{$this->field->getElementClassSelector()}").val();
@@ -294,7 +294,7 @@ HTML);
         $this->addPickBtn();
     }
 
-    public function preview()
+    public function preview($field)
     {
         $value = $this->field->value();
 
@@ -302,6 +302,18 @@ HTML);
             $value = explode($this->separator, $value);
         }
 
-        return Arr::wrap($value);
+        $previews = [];
+
+        foreach (Arr::wrap($value) as $item) {
+
+            $content = $field == File::class ? '<i class="glyphicon glyphicon-file"></i>' : "<img src=\"{$item}\"/>";
+
+            $previews[] = [
+                'content' => $content,
+                'caption' => $item,
+            ];
+        }
+
+        return $previews;
     }
 }

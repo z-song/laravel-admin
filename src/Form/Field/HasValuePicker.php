@@ -81,7 +81,7 @@ trait HasValuePicker
             ->attribute('placeholder', $this->getPlaceholder());
 
         $this->addVariables([
-            'preview' => $this->picker->preview(),
+            'preview' => $this->picker->preview(get_called_class()),
             'btn'     => $this->btn
         ]);
 
