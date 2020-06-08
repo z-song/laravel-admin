@@ -241,7 +241,7 @@ trait ModelTree
      */
     public static function selectOptions(\Closure $closure = null, $rootText = 'ROOT',array $nodes = [], $parentId = 0, $prefix = '', $space = '&nbsp;')
     {
-        $options = (new static())->withQuery($closure)->buildSelectOptions();
+        $options = (new static())->withQuery($closure)->buildSelectOptions($nodes,$parentId,$prefix,$space);
 
         return collect($options)->prepend($rootText, 0)->all();
     }
