@@ -34,7 +34,7 @@ trait HasValuePicker
      * @param string $column
      * @param string $delimiter
      */
-    public function pickMultiple($picker, $column = '', $delimiter = ',')
+    public function pickMultiple($picker, $column = '', $delimiter = ';')
     {
         $this->picker = new ValuePicker($picker, $column, true, $delimiter);
 

@@ -6,16 +6,16 @@
 
         @include('admin::form.error')
 
-        <div class="picker-file-preview">
+        <div class="picker-file-preview {{ empty($preview) ? 'hide' : '' }}">
             @foreach($preview as $item)
-            <div class="file-preview-frame">
+            <div class="file-preview-frame" data-val="{!! $item['value'] !!}">
                 <div class="file-content">
                     {!! $item['content'] !!}
                 </div>
-                <div class="file-caption-info">{!! $item['caption'] !!}</div>
+{{--                <div class="file-caption-info">{!! $item['caption'] !!}</div>--}}
                 <div class="file-actions">
-                    <a class="btn btn-default btn-sm"><i class="fa fa-trash"></i></a>
-                    <a class="btn btn-default btn-sm"><i class="fa fa-download"></i></a>
+                    <a class="btn btn-default btn-sm remove"><i class="fa fa-trash"></i></a>`
+                    <a class="btn btn-default btn-sm download"><i class="fa fa-download"></i></a>
                 </div>
             </div>
             @endforeach
