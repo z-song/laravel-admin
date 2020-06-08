@@ -233,10 +233,13 @@ trait ModelTree
      *
      * @param \Closure|null $closure
      * @param string        $rootText
-     *
+     * @param array         $nodes
+     * @param int           $parentId
+     * @param string        $prefix
+     * @param string        $space
      * @return array
      */
-    public static function selectOptions(\Closure $closure = null, $rootText = 'ROOT')
+    public static function selectOptions(\Closure $closure = null, $rootText = 'ROOT',array $nodes = [], $parentId = 0, $prefix = '', $space = '&nbsp;')
     {
         $options = (new static())->withQuery($closure)->buildSelectOptions();
 
