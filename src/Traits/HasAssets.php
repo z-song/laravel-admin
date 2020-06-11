@@ -337,18 +337,30 @@ trait HasAssets
             static::script(';(function () {' . $script->nodeValue . '})();');
         }
 
-        $htmls = '';
+        if ($element = $dom->getElementsByTagName('template')[0]) {
 
-        if (!$element = $dom->getElementsByTagName('template')[0]) {
-            return;
+            $html = '';
+
+            foreach ($element->childNodes as $child) {
+                $html .= $element->ownerDocument->saveHTML($child);
+            }
+
+            if ($html) {
+                static::html($html);
+            }
         }
 
-        foreach ($element->childNodes as $child) {
-            $htmls .= $element->ownerDocument->saveHTML($child);
-        }
+        if ($element = $dom->getElementsByTagName('render')[0]) {
 
-        if ($htmls) {
-            static::html($htmls);
+            $render = '';
+
+            foreach ($element->childNodes as $child) {
+                $render .= $element->ownerDocument->saveHTML($child);
+            }
+
+            if ($render) {
+                return $render;
+            }
         }
     }
 }

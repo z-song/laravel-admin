@@ -95,6 +95,8 @@ HTML);
             'separator' => $this->separator,
             'multiple'  => $this->multiple,
             'is_file'   => $this->field instanceof File,
+            'is_image'  => $this->field instanceof Image,
+            'url_tpl'   => $this->field instanceof File ? $this->field->objectUrl('__URL__') : '',
         ]);
     }
 
@@ -110,18 +112,12 @@ HTML);
             $value = explode($this->separator, $value);
         }
 
-        $previews = [];
-
-        foreach (Arr::wrap($value) as $item) {
-
-            $content = $field == File::class ? '<i class="glyphicon glyphicon-file"></i>' : "<img src=\"{$item}\"/>";
-
-            $previews[] = [
+        return collect(Arr::wrap($value))->map(function ($item) use ($field) {
+            return [
+                'url'     => $this->field->objectUrl($item),
                 'value'   => $item,
-                'content' => $content,
+                'is_file' => $field == File::class,
             ];
-        }
-
-        return $previews;
+        });
     }
 }

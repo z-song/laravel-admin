@@ -1509,6 +1509,9 @@ class Field implements Renderable
         return view($this->getView(), $this->variables());
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     */
     protected function fieldRender()
     {
         return self::render();

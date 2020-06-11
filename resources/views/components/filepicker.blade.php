@@ -1,6 +1,6 @@
 
 <template>
-    <div class="modal fade file-picker" id="{{ $modal }}" tabindex="-1" role="dialog">
+    <div class="modal fade picker" id="{{ $modal }}" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="border-radius: 5px;">
                 <div class="modal-header">
@@ -28,6 +28,8 @@
 var pickInput = $("{{ $selector }}");
 var separator = '{{ $separator }}';
 var modal = $('#{{ $modal }}');
+var value;
+var refresh = function () {};
 
 modal.on('show.bs.modal', function (e) {
     load("{!! $url !!}");
@@ -44,9 +46,11 @@ modal.on('show.bs.modal', function (e) {
 
 @if($multiple)
 
-    var value = pickInput.val().split(separator).filter(function (val) {
-        return val != '';
-    });
+    var updateValue = function () {
+        value = pickInput.val().split(separator).filter(function (val) {
+            return val != '';
+        });
+    };
 
     var load = function (url) {
         $.get(url, function (data) {
@@ -82,11 +86,15 @@ modal.on('show.bs.modal', function (e) {
     }).find('.modal-footer .submit').click(function () {
         pickInput.val(value.join(separator));
         modal.modal('toggle');
+
+        refresh();
     });
 
 @else
 
-    var value = pickInput.val();
+    var updateValue = function () {
+        value = pickInput.val();
+    };
 
     var load = function (url) {
         $.get(url, function (data) {
@@ -110,9 +118,13 @@ modal.on('show.bs.modal', function (e) {
     }).find('.modal-footer .submit').click(function () {
         pickInput.val(value);
         modal.modal('toggle');
+
+        refresh();
     });
 
 @endif
+
+updateValue();
 
 $('.picker-file-preview').on('click', 'a.remove', function () {
     var preview = $(this).parents('.file-preview-frame');
@@ -122,26 +134,59 @@ $('.picker-file-preview').on('click', 'a.remove', function () {
 
     var input = pickInput.val().split(separator);
 
-    var index = input.indexOf(current);
+    var index = input.indexOf(current);value
     if (index !== -1) {
         input.splice(index, 1);
     }
 
     pickInput.val(input.join(separator));
 
+    updateValue();
+
     if (input.length === 0) {
         $(this).parents('.picker-file-preview').addClass('hide');
     }
 });
 
+@if($is_file)
+refresh = function () {
+
+    var values = (typeof value == 'string') ? [value] : value;
+    var preview = pickInput.parent().siblings('.picker-file-preview');
+    var url_tpl = '{{ $url_tpl }}';
+
+    @if($is_image)
+    var template = $('template#image-preview')
+    @else
+    var template = $('template#file-preview')
+    @endif
+
+    preview.empty();
+
+    values.forEach(function (item) {
+        var url = url_tpl.replace('__URL__', item);
+        preview.append(
+            template.html()
+                .replace(/_url_/g, url)
+                .replace(/_val_/g, item)
+                .replace(/_name_/g, url.split('/').pop())
+        );
+    });
+
+    if (values.length > 0) {
+        preview.removeClass('hide');
+    }
+};
+@endif
+
 </script>
 
 <style>
-    .file-picker.modal tr {
+    .picker.modal tr {
         cursor: pointer;
     }
 
-    .file-picker.modal .box {
+    .picker.modal .box {
         border-top: none;
         margin-bottom: 0;
         box-shadow: none;
@@ -177,13 +222,20 @@ $('.picker-file-preview').on('click', 'a.remove', function () {
         overflow: hidden;
         text-overflow: ellipsis;
         width: 160px;
-        height: 15px;
+        height: 20px;
         margin: auto;
+        font-size: 11px;
+        color: #777;
     }
 
     .picker-file-preview .file-actions {
         text-align: right;
         margin-top: 20px;
+    }
+
+    .picker-file-preview img {
+        max-width: 160px;
+        max-height: 160px;
     }
     @endif
 </style>

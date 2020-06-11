@@ -39,6 +39,11 @@ abstract class Selectable
     protected $perPage = 10;
 
     /**
+     * @var bool
+     */
+    protected $imageLayout = false;
+
+    /**
      * Selectable constructor.
      * @param $key
      * @param $multiple
@@ -56,6 +61,11 @@ abstract class Selectable
      */
     abstract public function make();
 
+    protected function imageLayout()
+    {
+        $this->imageLayout = true;
+    }
+
     /**
      * @param bool $multiple
      *
@@ -65,23 +75,32 @@ abstract class Selectable
     {
         $this->make();
 
-        $this->appendRemoveBtn(false);
+        if ($this->imageLayout) {
+            $this->setView('admin::grid.image', ['key' => $this->key]);
+        } else {
+            $this->appendRemoveBtn(true);
+        }
 
-        $this->paginate($this->perPage)
-            ->expandFilter()
-            ->disableExport()
+        $this->paginate($this->perPage)->expandFilter()->disableFeatures();
+
+        $displayer = $this->multiple ? Checkbox::class : Radio::class;
+
+        $this->prependColumn('__modal_selector__', ' ')->displayUsing($displayer, [$this->key]);
+
+        return $this->grid->render();
+    }
+
+    /**
+     * @return $this
+     */
+    protected function disableFeatures()
+    {
+        return $this->disableExport()
             ->disableActions()
             ->disableBatchActions()
             ->disableCreateButton()
             ->disableColumnSelector()
             ->disablePerPageSelector();
-
-        $displayer = $this->multiple ? Checkbox::class : Radio::class;
-
-        $this->prependColumn('__modal_selector__', ' ')
-            ->displayUsing($displayer, [$this->key]);
-
-        return $this->grid->render();
     }
 
     public function renderFormGrid($values)
@@ -92,13 +111,7 @@ abstract class Selectable
 
         $this->model()->whereKey(Arr::wrap($values));
 
-        $this->disableFilter()
-            ->disableExport()
-            ->disableActions()
-            ->disableBatchActions()
-            ->disableCreateButton()
-            ->disableColumnSelector()
-            ->disablePerPageSelector();
+        $this->disableFilter()->disableFeatures();
 
         if (!$this->multiple) {
             $this->disablePagination();

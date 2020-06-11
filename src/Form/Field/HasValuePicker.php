@@ -85,7 +85,7 @@ trait HasValuePicker
             'btn'     => $this->btn
         ]);
 
-        return parent::render();
+        return Admin::component('admin::form.filepicker', $this->variables());
     }
 
     /**
