@@ -1344,7 +1344,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    protected function addVariables(array $variables = []): self
+    public function addVariables(array $variables = []): self
     {
         $this->variables = array_merge($this->variables, $variables);
 

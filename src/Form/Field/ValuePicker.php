@@ -14,7 +14,7 @@ class ValuePicker
     protected $modal;
 
     /**
-     * @var Text
+     * @var Text|File
      */
     protected $field;
 
@@ -40,12 +40,13 @@ class ValuePicker
 
     /**
      * ValuePicker constructor.
+     *
      * @param string $selecteable
      * @param string $column
      * @param bool $multiple
      * @param string $separator
      */
-    public function __construct($selecteable, $column = '', $multiple = false, $separator = ',')
+    public function __construct($selecteable, $column = '', $multiple = false, $separator = ';')
     {
         $this->selecteable = $selecteable;
         $this->column      = $column;
@@ -68,25 +69,15 @@ class ValuePicker
     }
 
     /**
-     * @return $this
+     * @param Field $field
+     * @param \Closure|null $callback
      */
-    protected function addPickBtn()
-    {
-        $text = admin_trans('admin.browse');
-
-        $this->field->addPickBtn(<<<HTML
-<a class="btn btn-primary" data-toggle="modal" data-target="#{$this->modal}">
-    <i class="fa fa-folder-open"></i>  {$text}
-</a>
-HTML);
-    }
-
-    public function mount(Field $field)
+    public function mount(Field $field, \Closure $callback = null)
     {
         $this->field = $field;
         $this->modal = sprintf('picker-modal-%s', $field->getElementClassString());
 
-        $this->addPickBtn();
+        $this->addPickBtn($callback);
 
         Admin::component('admin::components.filepicker', [
             'url'       => $this->getLoadUrl(),
@@ -100,11 +91,33 @@ HTML);
         ]);
     }
 
-    public function preview($field)
+    /**
+     * @param \Closure|null $callback
+     */
+    protected function addPickBtn(\Closure $callback = null)
     {
-        $value = $this->field->value();
+        $text = admin_trans('admin.browse');
 
-        if (empty($value)) {
+        $btn = <<<HTML
+<a class="btn btn-primary" data-toggle="modal" data-target="#{$this->modal}">
+    <i class="fa fa-folder-open"></i>  {$text}
+</a>
+HTML;
+
+        if ($callback) {
+            $callback($btn);
+        } else {
+            $this->field->addVariables(compact('btn'));
+        }
+    }
+
+    /**
+     * @param string $field
+     * @return array|\Illuminate\Support\Collection
+     */
+    public function getPreview(string $field)
+    {
+        if (empty($value = $this->field->value())) {
             return [];
         }
 

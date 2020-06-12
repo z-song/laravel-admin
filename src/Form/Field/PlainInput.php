@@ -15,7 +15,8 @@ trait PlainInput
     protected $append;
 
     /**
-     * @param $string
+     * @param mixed $string
+     *
      * @return $this
      */
     public function prepend($string)
@@ -28,7 +29,7 @@ trait PlainInput
     }
 
     /**
-     * @param $string
+     * @param mixed $string
      * @return $this
      */
     public function append($string)
@@ -40,6 +41,9 @@ trait PlainInput
         return $this;
     }
 
+    /**
+     * @return void
+     */
     protected function initPlainInput()
     {
         if (empty($this->view)) {
@@ -47,6 +51,11 @@ trait PlainInput
         }
     }
 
+    /**
+     * @param string $attribute
+     * @param string $value
+     * @return $this
+     */
     protected function defaultAttribute($attribute, $value)
     {
         if (!array_key_exists($attribute, $this->attributes)) {

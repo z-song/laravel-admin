@@ -49,14 +49,12 @@ class Text extends Field
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
             ->defaultAttribute('value', old($this->elementName ?: $this->column, $this->value()))
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
-            ->defaultAttribute('placeholder', $this->getPlaceholder());
-
-        $this->mountPicker();
-
-        $this->addVariables([
-            'prepend' => $this->prepend,
-            'append'  => $this->append,
-        ]);
+            ->defaultAttribute('placeholder', $this->getPlaceholder())
+            ->mountPicker()
+            ->addVariables([
+                'prepend' => $this->prepend,
+                'append'  => $this->append,
+            ]);
 
         return parent::render();
     }

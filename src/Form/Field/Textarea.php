@@ -48,7 +48,9 @@ class Textarea extends Field
             $this->value = json_encode($this->value, JSON_PRETTY_PRINT);
         }
 
-        $this->mountPicker($this);
+        $this->mountPicker(function ($btn) {
+            $this->addPickBtn($btn);
+        });
 
         return parent::render()->with([
             'append' => $this->append,
@@ -59,7 +61,7 @@ class Textarea extends Field
     /**
      * @param string $wrap
      */
-    public function addPickBtn($btn)
+    protected function addPickBtn($btn)
     {
         $style = <<<STYLE
 .textarea-picker {
