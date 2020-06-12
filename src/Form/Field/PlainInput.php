@@ -4,10 +4,20 @@ namespace Encore\Admin\Form\Field;
 
 trait PlainInput
 {
+    /**
+     * @var string
+     */
     protected $prepend;
 
+    /**
+     * @var string
+     */
     protected $append;
 
+    /**
+     * @param $string
+     * @return $this
+     */
     public function prepend($string)
     {
         if (is_null($this->prepend)) {
@@ -17,6 +27,10 @@ trait PlainInput
         return $this;
     }
 
+    /**
+     * @param $string
+     * @return $this
+     */
     public function append($string)
     {
         if (is_null($this->append)) {

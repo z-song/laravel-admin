@@ -29,44 +29,81 @@ abstract class Selectable
     protected $key = '';
 
     /**
+     * @var bool
+     */
+    protected $multiple = false;
+
+    /**
      * @var int
      */
     protected $perPage = 10;
+
+    /**
+     * @var bool
+     */
+    protected $imageLayout = false;
+
+    /**
+     * Selectable constructor.
+     * @param $key
+     * @param $multiple
+     */
+    public function __construct($multiple = false, $key = '')
+    {
+        $this->key      = $key;
+        $this->multiple = $multiple;
+
+        $this->initGrid();
+    }
 
     /**
      * @return Grid
      */
     abstract public function make();
 
+    protected function imageLayout()
+    {
+        $this->imageLayout = true;
+    }
+
     /**
      * @param bool $multiple
      *
      * @return string
      */
-    public function render($multiple = false)
+    public function render()
     {
         $this->make();
 
-        $this->appendRemoveBtn();
+        if ($this->imageLayout) {
+            $this->setView('admin::grid.image', ['key' => $this->key]);
+        } else {
+            $this->appendRemoveBtn(true);
+        }
 
-        $this->paginate($this->perPage)
-            ->expandFilter()
-            ->disableExport()
+        $this->paginate($this->perPage)->expandFilter()->disableFeatures();
+
+        $displayer = $this->multiple ? Checkbox::class : Radio::class;
+
+        $this->prependColumn('__modal_selector__', ' ')->displayUsing($displayer, [$this->key]);
+
+        return $this->grid->render();
+    }
+
+    /**
+     * @return $this
+     */
+    protected function disableFeatures()
+    {
+        return $this->disableExport()
             ->disableActions()
             ->disableBatchActions()
             ->disableCreateButton()
             ->disableColumnSelector()
             ->disablePerPageSelector();
-
-        $displayer = $multiple ? Checkbox::class : Radio::class;
-
-        $this->prependColumn('__modal_selector__', ' ')
-            ->displayUsing($displayer, [$this->key]);
-
-        return $this->grid->render();
     }
 
-    public function renderFormGrid($values, $multiple = false)
+    public function renderFormGrid($values)
     {
         $this->make();
 
@@ -74,15 +111,9 @@ abstract class Selectable
 
         $this->model()->whereKey(Arr::wrap($values));
 
-        $this->disableFilter()
-            ->disableExport()
-            ->disableActions()
-            ->disableBatchActions()
-            ->disableCreateButton()
-            ->disableColumnSelector()
-            ->disablePerPageSelector();
+        $this->disableFilter()->disableFeatures();
 
-        if (!$multiple) {
+        if (!$this->multiple) {
             $this->disablePagination();
         }
 
@@ -131,10 +162,6 @@ BTN;
      */
     public function __call(string $method, array $arguments = [])
     {
-        if (is_null($this->grid)) {
-            $this->initGrid();
-        }
-
         return $this->grid->{$method}(...$arguments);
     }
 }

@@ -102,12 +102,14 @@ trait CanCascadeFields
      */
     protected function applyCascadeConditions()
     {
-        $this->form->fields()
-            ->filter(function (Form\Field $field) {
-                return $field instanceof CascadeGroup
-                    && $field->dependsOn($this)
-                    && $this->hitsCondition($field);
-            })->each->visiable();
+        if( $this->form ) {
+            $this->form->fields()
+                ->filter(function (Form\Field $field) {
+                    return $field instanceof CascadeGroup
+                        && $field->dependsOn($this)
+                        && $this->hitsCondition($field);
+                })->each->visiable();
+        }
     }
 
     /**
@@ -169,7 +171,7 @@ trait CanCascadeFields
         })->toJson();
 
         $script = <<<SCRIPT
-(function () {
+;(function () {
     var operator_table = {
         '=': function(a, b) {
             if ($.isArray(a) && $.isArray(b)) {

@@ -813,9 +813,7 @@ class Form implements Renderable
 
                         Arr::forget($related, static::REMOVE_FLAG_NAME);
 
-                        foreach ($related as $colum => $value) {
-                            $child->setAttribute($colum, $value);
-                        }
+                        $child->fill($related);
 
                         $child->save();
                     }

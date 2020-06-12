@@ -6,13 +6,16 @@ use Encore\Admin\Form\Field;
 
 class Text extends Field
 {
-    use PlainInput;
+    use PlainInput, HasValuePicker;
 
     /**
      * @var string
      */
     protected $icon = 'fa-pencil';
 
+    /**
+     * @var bool
+     */
     protected $withoutIcon = false;
 
     /**
@@ -47,6 +50,8 @@ class Text extends Field
             ->defaultAttribute('value', old($this->elementName ?: $this->column, $this->value()))
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder());
+
+        $this->mountPicker();
 
         $this->addVariables([
             'prepend' => $this->prepend,
