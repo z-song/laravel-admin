@@ -93,16 +93,16 @@ class Field implements Renderable
      * @var array
      */
     protected $fileTypes = [
-        'image' => 'png|jpg|jpeg|tmp|gif',
-        'word' => 'doc|docx',
-        'excel' => 'xls|xlsx|csv',
+        'image'      => 'png|jpg|jpeg|tmp|gif',
+        'word'       => 'doc|docx',
+        'excel'      => 'xls|xlsx|csv',
         'powerpoint' => 'ppt|pptx',
-        'pdf' => 'pdf',
-        'code' => 'php|js|java|python|ruby|go|c|cpp|sql|m|h|json|html|aspx',
-        'archive' => 'zip|tar\.gz|rar|rpm',
-        'txt' => 'txt|pac|log|md',
-        'audio' => 'mp3|wav|flac|3pg|aa|aac|ape|au|m4a|mpc|ogg',
-        'video' => 'mkv|rmvb|flv|mp4|avi|wmv|rm|asf|mpeg',
+        'pdf'        => 'pdf',
+        'code'       => 'php|js|java|python|ruby|go|c|cpp|sql|m|h|json|html|aspx',
+        'archive'    => 'zip|tar\.gz|rar|rpm',
+        'txt'        => 'txt|pac|log|md',
+        'audio'      => 'mp3|wav|flac|3pg|aa|aac|ape|au|m4a|mpc|ogg',
+        'video'      => 'mkv|rmvb|flv|mp4|avi|wmv|rm|asf|mpeg',
     ];
 
     /**
@@ -186,7 +186,7 @@ class Field implements Renderable
      * Display field using array value map.
      *
      * @param array $values
-     * @param null $default
+     * @param null  $default
      *
      * @return $this
      */
@@ -205,8 +205,8 @@ class Field implements Renderable
      * Show field as a image.
      *
      * @param string $server
-     * @param int $width
-     * @param int $height
+     * @param int    $width
+     * @param int    $height
      *
      * @return $this
      */
@@ -221,7 +221,7 @@ class Field implements Renderable
                 if (url()->isValidUrl($path)) {
                     $src = $path;
                 } elseif ($server) {
-                    $src = $server . $path;
+                    $src = $server.$path;
                 } else {
                     $disk = config('admin.upload.disk');
 
@@ -241,8 +241,8 @@ class Field implements Renderable
      * Show field as multi image.
      *
      * @param string $server
-     * @param int $width
-     * @param int $height
+     * @param int    $width
+     * @param int    $height
      *
      * @return $this
      */
@@ -255,7 +255,6 @@ class Field implements Renderable
                 }
 
                 $arr = is_array($path) ?: explode(',', $path);
-
                 $str = '';
                 foreach ($arr as $key => $value) {
                     if (url()->isValidUrl($value)) {
@@ -281,8 +280,8 @@ class Field implements Renderable
     /**
      * Show field as a carousel.
      *
-     * @param int $width
-     * @param int $height
+     * @param int    $width
+     * @param int    $height
      * @param string $server
      *
      * @return Field
@@ -298,7 +297,7 @@ class Field implements Renderable
                 if (url()->isValidUrl($path)) {
                     $image = $path;
                 } elseif ($server) {
-                    $image = $server . $path;
+                    $image = $server.$path;
                 } else {
                     $disk = config('admin.upload.disk');
 
@@ -322,7 +321,7 @@ class Field implements Renderable
      * Show field as a file.
      *
      * @param string $server
-     * @param bool $download
+     * @param bool   $download
      *
      * @return Field
      */
@@ -340,12 +339,12 @@ class Field implements Renderable
             if (url()->isValidUrl($path)) {
                 $url = $path;
             } elseif ($server) {
-                $url = $server . $path;
+                $url = $server.$path;
             } else {
                 $storage = Storage::disk(config('admin.upload.disk'));
                 if ($storage->exists($path)) {
                     $url = $storage->url($path);
-                    $size = ($storage->size($path) / 1000) . 'KB';
+                    $size = ($storage->size($path) / 1000).'KB';
                 }
             }
 
@@ -405,7 +404,7 @@ HTML;
                 $value = $value->toArray();
             }
 
-            return collect((array)$value)->map(function ($name) use ($style) {
+            return collect((array) $value)->map(function ($name) use ($style) {
                 return "<span class='label label-{$style}'>$name</span>";
             })->implode('&nbsp;');
         });
@@ -425,7 +424,7 @@ HTML;
                 $value = $value->toArray();
             }
 
-            return collect((array)$value)->map(function ($name) use ($style) {
+            return collect((array) $value)->map(function ($name) use ($style) {
                 return "<span class='badge bg-{$style}'>$name</span>";
             })->implode('&nbsp;');
         });
@@ -446,7 +445,7 @@ HTML;
             if (json_last_error() == 0) {
                 $field->border = false;
 
-                return '<pre><code>' . json_encode($content, JSON_PRETTY_PRINT) . '</code></pre>';
+                return '<pre><code>'.json_encode($content, JSON_PRETTY_PRINT).'</code></pre>';
             }
 
             return $value;
@@ -550,7 +549,7 @@ HTML;
     }
 
     /**
-     * @param Model $model
+     * @param Model  $model
      * @param string $name
      *
      * @return mixed
@@ -586,7 +585,7 @@ HTML;
      * Call extended field.
      *
      * @param string|AbstractField|\Closure $abstract
-     * @param array $arguments
+     * @param array                         $arguments
      *
      * @return Field
      */
@@ -631,7 +630,7 @@ HTML;
 
     /**
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return $this
      */
@@ -661,11 +660,11 @@ HTML;
     protected function variables()
     {
         return [
-            'content' => $this->value,
-            'escape' => $this->escape,
-            'label' => $this->getLabel(),
-            'wrapped' => $this->border,
-            'width' => $this->width,
+            'content'   => $this->value,
+            'escape'    => $this->escape,
+            'label'     => $this->getLabel(),
+            'wrapped'   => $this->border,
+            'width'     => $this->width,
         ];
     }
 
