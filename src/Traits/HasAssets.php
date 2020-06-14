@@ -350,11 +350,15 @@ trait HasAssets
             }
         }
 
-        if ($element = $dom->getElementsByTagName('render')[0]) {
+        if ($element = $dom->getElementsByTagName('body')[0]) {
 
             $render = '';
 
             foreach ($element->childNodes as $child) {
+                if ($child instanceof \DOMElement && in_array($child->tagName, ['template', 'style', 'script'])) {
+                    continue;
+                }
+
                 $render .= $element->ownerDocument->saveHTML($child);
             }
 
