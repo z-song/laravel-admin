@@ -756,6 +756,19 @@ class Column
     }
 
     /**
+     * Display column as a default value if empty.
+     *
+     * @param string $default
+     * @return $this
+     */
+    public function default($default = '-')
+    {
+        return $this->display(function ($value) use ($default) {
+            return $value ?: $default;
+        });
+    }
+
+    /**
      * Display column using a grid row action.
      *
      * @param string $action
