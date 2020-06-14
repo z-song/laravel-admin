@@ -14,7 +14,7 @@ class ContextMenuActions extends DropdownActions
         parent::addScript();
 
         $script = <<<SCRIPT
-(function () {
+;(function () {
     $("body").on("contextmenu", "table#{$this->grid->tableID} tr", function(e) {
         $('#grid-context-menu .dropdown-menu').hide();
     

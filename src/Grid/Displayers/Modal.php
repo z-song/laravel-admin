@@ -27,7 +27,7 @@ class Modal extends AbstractDisplayer
     protected function addRenderableModalScript()
     {
         $script = <<<SCRIPT
-(function () {
+;(function () {
     var modal = $('.grid-modal');
 
     modal.on('show.bs.modal', function (e) {

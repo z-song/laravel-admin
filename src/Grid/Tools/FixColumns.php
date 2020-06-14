@@ -103,7 +103,7 @@ class FixColumns
 
         $script = <<<SCRIPT
 
-(function () {
+;(function () {
     var theadHeight = $('.table-main thead tr').outerHeight();
     $('.table-fixed thead tr').outerHeight(theadHeight);
     

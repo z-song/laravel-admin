@@ -23,7 +23,7 @@ class BelongsToMany extends AbstractDisplayer
     public function addScript()
     {
         $script = <<<SCRIPT
-(function () {
+;(function () {
     var modal = $('#{$this->modalID}');
     var related = null;
     var selected = [];
