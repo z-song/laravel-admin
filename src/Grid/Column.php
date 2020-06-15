@@ -589,6 +589,30 @@ class Column
     }
 
     /**
+     * @param string|Closure $input
+     * @param string $seperator
+     *
+     * @return $this
+     */
+    public function repeat($input, $seperator = '')
+    {
+        if (is_string($input)) {
+            $input = function () use ($input) {
+                return $input;
+            };
+        }
+
+        if ($input instanceof Closure) {
+            return $this->display(function ($value) use ($input, $seperator) {
+                $callable = $input->bindTo($this);
+                return join($seperator, array_fill(0, (int) $value, $callable($value)));
+            });
+        }
+
+        return $this;
+    }
+
+    /**
      * Render this column with the given view.
      *
      * @param string $view

@@ -25,57 +25,11 @@ class Modal extends AbstractDisplayer
         return route('admin.handle-renderable', compact('renderable'));
     }
 
-    protected function addRenderableModalScript()
-    {
-        $script = <<<SCRIPT
-;(function () {
-    var modal = $('.grid-modal');
-    var modalBody = modal.find('.modal-body');
-    
-    
-    var load = function (url) {
-    
-        modalBody.html("<div class='loading text-center' style='height:200px;'>\
-                <i class='fa fa-spinner fa-pulse fa-3x fa-fw' style='margin-top: 80px;'></i>\
-            </div>");
-    
-        $.get(url, function (data) {
-            modalBody.html(data);
-        });
-    };
-
-    modal.on('show.bs.modal', function (e) {
-        var key = $(e.relatedTarget).data('key');        
-        load('{$this->getLoadUrl()}'+'&key='+key);
-    }).on('click', '.page-item a, .filter-box a', function (e) {
-        load($(this).attr('href'));
-        e.preventDefault();
-    }).on('submit', '.box-header form', function (e) {  
-        load($(this).attr('action')+'&'+$(this).serialize());
-        return false;
-    });
-})();
-SCRIPT;
-
-        Admin::script($script);
-    }
-
-    protected function addGridStyle()
-    {
-        $style = <<<STYLE
-.box.grid-box {
-    box-shadow: none;
-    border-top: none;
-}
-
-.grid-box .box-header:first-child {
-    display: none;
-}
-STYLE;
-
-        Admin::style($style);
-    }
-
+    /**
+     * @param \Closure|string $callback
+     *
+     * @return mixed|string
+     */
     public function display($callback = null)
     {
         if (func_num_args() == 2) {
@@ -84,41 +38,23 @@ STYLE;
             $title = $this->trans('title');
         }
 
-        if (is_subclass_of($callback, Renderable::class)) {
-            $html = '';
+        $html  = '';
+
+        if ($async = is_subclass_of($callback, Renderable::class)) {
             $this->renderable = $callback;
-            $this->addRenderableModalScript();
-
-            if (is_subclass_of($callback, Simple::class)) {
-                $this->addGridStyle();
-            }
-
         } else {
-            $callback = $callback->bindTo($this->row);
-            $html = call_user_func_array($callback, [$this->row]);
+            $html = call_user_func_array($callback->bindTo($this->row), [$this->row]);
         }
 
-        $key = $this->getKey().'-'.str_replace('.', '_', $this->getColumn()->getName());
-
-        return <<<EOT
-<span data-toggle="modal" data-target="#grid-modal-{$key}" data-key="{$this->getKey()}">
-   <a href="javascript:void(0)"><i class="fa fa-clone"></i>&nbsp;&nbsp;{$this->value}</a>
-</span>
-
-<div class="modal grid-modal fade" id="grid-modal-{$key}" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" style="border-radius: 5px;">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{$title}</h4>
-      </div>
-      <div class="modal-body">
-        {$html}
-      </div>
-    </div>
-  </div>
-</div>
-
-EOT;
+        return Admin::component('admin::components.column-modal', [
+            'url'     => $this->getLoadUrl(),
+            'async'   => $async,
+            'grid'    => is_subclass_of($callback, Simple::class),
+            'title'   => $title,
+            'html'    => $html,
+            'key'     => $this->getKey(),
+            'value'   => $this->value,
+            'name'    => $this->getKey() . '-' . str_replace('.', '_', $this->getColumn()->getName()),
+        ]);
     }
 }
