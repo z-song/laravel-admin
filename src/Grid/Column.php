@@ -139,8 +139,6 @@ class Column
         'suffix'        => Displayers\Suffix::class,
         'secret'        => Displayers\Secret::class,
         'limit'         => Displayers\Limit::class,
-        'belongsTo'     => Displayers\BelongsTo::class,
-        'belongsToMany' => Displayers\BelongsToMany::class,
     ];
 
     /**
@@ -865,6 +863,26 @@ class Column
         }
 
         return $this->displayUsing(Grid\Displayers\BelongsToMany::class, [$selectable]);
+    }
+
+    /**
+     * Upload file.
+     *
+     * @return $this
+     */
+    public function upload()
+    {
+        return $this->displayUsing(Grid\Displayers\Upload::class);
+    }
+
+    /**
+     * Upload many files.
+     *
+     * @return $this
+     */
+    public function uplaodMany()
+    {
+        return $this->displayUsing(Grid\Displayers\Upload::class, [true]);
     }
 
     /**

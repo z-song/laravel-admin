@@ -33,7 +33,7 @@ class DropdownActions extends Actions
     protected function addScript()
     {
         $script = <<<'SCRIPT'
-$(function() {
+;$(function() {
   $('.table-responsive').on('shown.bs.dropdown', function(e) {
     var t = $(this),
       m = $(e.target).find('.dropdown-menu'),
