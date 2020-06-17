@@ -15,7 +15,7 @@ class ContextMenuActions extends DropdownActions
 
         $script = <<<SCRIPT
 ;(function () {
-    $("body").on("contextmenu", "table#{$this->grid->tableID} tr", function(e) {
+    $("body").on("contextmenu", "table#{$this->grid->tableID}>tbody>tr", function(e) {
         $('#grid-context-menu .dropdown-menu').hide();
 
         var menu = $(this).find('td.column-__actions__ .dropdown-menu');
