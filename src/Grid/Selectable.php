@@ -109,7 +109,7 @@ abstract class Selectable
 
         $this->appendRemoveBtn(false);
 
-        $this->model()->whereKey(Arr::wrap($values));
+        $this->model()->whereIn($this->key, Arr::wrap($values));
 
         $this->disableFeatures()->disableFilter();
 
