@@ -526,7 +526,8 @@ class Model
 
         $columnNameContainsDots = Str::contains($columnName, '.');
         $isRelation = $this->queries->contains(function ($query) use ($columnName) {
-            return $query['method'] === 'with' && in_array($columnName, $query['arguments'], true);
+            list($relationName, $relationColumn) = explode('.', $columnName);
+            return $query['method'] === 'with' && in_array($relationName, $query['arguments'], true);
         });
         if ($columnNameContainsDots === true && $isRelation) {
             $this->setRelationSort($columnName);
@@ -626,13 +627,11 @@ class Model
         $relatedTable = $relation->getRelated()->getTable();
 
         if ($relation instanceof BelongsTo) {
-            $foreignKeyMethod = version_compare(app()->version(), '5.8.0', '<') ? 'getForeignKey' : 'getForeignKeyName';
-
             return [
                 $relatedTable,
-                $relation->{$foreignKeyMethod}(),
+                $relation->getQualifiedForeignKeyName(),
                 '=',
-                $relatedTable.'.'.$relation->getRelated()->getKeyName(),
+                $relation->getQualifiedOwnerKeyName(),
             ];
         }
 
