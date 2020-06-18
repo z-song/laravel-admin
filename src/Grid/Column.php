@@ -746,20 +746,6 @@ class Column
     }
 
     /**
-     * Returns a string formatted according to the given format string.
-     *
-     * @param string $format
-     *
-     * @return $this
-     */
-//    public function date($format)
-//    {
-//        return $this->display(function ($value) use ($format) {
-//            return date($format, strtotime($value));
-//        });
-//    }
-
-    /**
      * Display column as boolean , `✓` for true, and `✗` for false.
      *
      * @param array $map

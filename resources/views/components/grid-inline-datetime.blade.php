@@ -65,8 +65,6 @@ $('.grid-column-datetime').popover({
 $(document).on('click', '.dp-submit', function () {
     var key = $(this).data('key');
 
-    console.log(key);
-
     $.ajax({
         url: "{{ $resource }}/" + key,
         type: "POST",
