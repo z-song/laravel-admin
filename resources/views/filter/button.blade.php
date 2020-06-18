@@ -6,7 +6,7 @@
     @if($scopes->isNotEmpty())
     <button type="button" class="btn btn-sm btn-dropbox dropdown-toggle" data-toggle="dropdown">
 
-        <span>{{ $current_label }}</span>
+        <span>{{ $label }}</span>
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
     </button>
@@ -15,7 +15,20 @@
             {!! $scope->render() !!}
         @endforeach
         <li role="separator" class="divider"></li>
-        <li><a href="{{ $url_no_scopes }}">{{ trans('admin.cancel') }}</a></li>
+        <li><a href="{{ $cancel }}">{{ trans('admin.cancel') }}</a></li>
     </ul>
     @endif
 </div>
+
+<script>
+var $btn = $('.{{ $btn_class }}');
+var $filter = $('#{{ $filter_id }}');
+
+$btn.unbind('click').click(function (e) {
+    if ($filter.is(':visible')) {
+        $filter.addClass('hide');
+    } else {
+        $filter.removeClass('hide');
+    }
+});
+</script>

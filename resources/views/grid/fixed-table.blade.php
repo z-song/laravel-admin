@@ -28,7 +28,7 @@
     <div class="box-body table-responsive no-padding">
         <div class="tables-container">
             <div class="table-wrap table-main">
-                <table class="table " id="{{ $grid->tableID }}">
+                <table class="table grid-table" id="{{ $grid->tableID }}">
                     <thead>
                         <tr>
                             @foreach($grid->visibleColumns() as $column)
@@ -57,7 +57,7 @@
 
             @if($grid->leftVisibleColumns()->isNotEmpty())
             <div class="table-wrap table-fixed table-fixed-left">
-                <table class="table ">
+                <table class="table grid-table">
                     <thead>
                     <tr>
                         @foreach($grid->leftVisibleColumns() as $column)
@@ -89,7 +89,7 @@
 
             @if($grid->rightVisibleColumns()->isNotEmpty())
             <div class="table-wrap table-fixed table-fixed-right">
-                <table class="table ">
+                <table class="table grid-table">
                     <thead>
                     <tr>
                         @foreach($grid->rightVisibleColumns() as $column)
