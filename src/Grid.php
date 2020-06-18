@@ -31,6 +31,7 @@ class Grid
         Concerns\HasActions,
         Concerns\HasSelector,
         Concerns\CanHidesColumns,
+        Concerns\CanFixHeader,
         Concerns\CanFixColumns,
         Concerns\CanExportGrid,
         Concerns\CanDoubleClick,
