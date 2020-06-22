@@ -4,22 +4,20 @@ namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
 
-class Datetime extends AbstractDisplayer
+class Input extends AbstractDisplayer
 {
-    public function display($format = '')
+    public function display($mask = '')
     {
         $name = $this->column->getName();
 
-        return Admin::component('admin::grid.inline-edit.datetime', [
+        return Admin::component('admin::grid.inline-edit.input', [
             'key'      => $this->getKey(),
             'value'    => $this->getValue(),
             'name'     => $name,
             'resource' => $this->getResource(),
             'trigger'  => "ie-trigger-{$name}",
             'target'   => "ie-content-{$name}-{$this->getKey()}",
-
-            'format'   => $format,
-            'locale'   => config('app.locale'),
+            'mask'     => $mask,
         ]);
     }
 }

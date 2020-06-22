@@ -43,7 +43,8 @@ use Illuminate\Support\Str;
  */
 class Column
 {
-    use Column\HasHeader;
+    use Column\HasHeader,
+        Column\InlineEditing;
 
     const SELECT_COLUMN_NAME = '__row_selector__';
 
@@ -821,90 +822,6 @@ class Column
 
             return "<span class=\"label-{$style}\" style='width: 8px;height: 8px;padding: 0;border-radius: 50%;display: inline-block;'></span>";
         }, '&nbsp;&nbsp;');
-    }
-
-    /**
-     * @param string $selectable
-     *
-     * @return $this
-     */
-    public function belongsTo($selectable)
-    {
-        if (method_exists($selectable, 'display')) {
-            $this->display($selectable::display());
-        }
-
-        return $this->displayUsing(Grid\Displayers\BelongsTo::class, [$selectable]);
-    }
-
-    /**
-     * @param string $selectable
-     *
-     * @return $this
-     */
-    public function belongsToMany($selectable)
-    {
-        if (method_exists($selectable, 'display')) {
-            $this->display($selectable::display());
-        }
-
-        return $this->displayUsing(Grid\Displayers\BelongsToMany::class, [$selectable]);
-    }
-
-    /**
-     * Upload file.
-     *
-     * @return $this
-     */
-    public function upload()
-    {
-        return $this->displayUsing(Grid\Displayers\Upload::class);
-    }
-
-    /**
-     * Upload many files.
-     *
-     * @return $this
-     */
-    public function uplaodMany()
-    {
-        return $this->displayUsing(Grid\Displayers\Upload::class, [true]);
-    }
-
-    /**
-     * Grid inline datetime picker.
-     *
-     * @param string $format
-     *
-     * @return $this
-     */
-    public function datetime($format = 'YYYY-MM-DD HH:mm:ss')
-    {
-        return $this->displayUsing(Grid\Displayers\Datetime::class, [$format]);
-    }
-
-    /**
-     * Grid inline date picker.
-     *
-     * @param string $format
-     *
-     * @return $this
-     */
-    public function date()
-    {
-        return $this->datetime('YYYY-MM-DD');
-    }
-
-    /**
-     * Grid inline time picker.
-     *
-     * @param string $format
-     *
-     * @return $this
-     */
-    public function time()
-    {
-        return $this->datetime('HH:mm:ss');
     }
 
     /**
