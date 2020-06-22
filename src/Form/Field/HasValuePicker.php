@@ -54,7 +54,7 @@ trait HasValuePicker
     /**
      * @return string
      */
-    protected function getRules()
+    public function getRules()
     {
         $rules = parent::getRules();
 
