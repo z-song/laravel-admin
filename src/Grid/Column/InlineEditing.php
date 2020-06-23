@@ -120,4 +120,9 @@ trait InlineEditing
     {
         return $this->input(['alias' => 'email']);
     }
+
+    public function textarea($rows = 5)
+    {
+        return $this->displayUsing(Displayers\Textarea::class, [$rows]);
+    }
 }

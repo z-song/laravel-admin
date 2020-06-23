@@ -16,7 +16,7 @@
     </a>
 
     @component('admin::grid.inline-edit.partials.template', compact('name', 'target', 'key'))
-        <input class="form-control ie-input" value="{__VAL__}"/>
+        <textarea class="form-control ie-input" rows="{{ $rows }}">{__VAL__}</textarea>
     @endcomponent
 </span>
 
@@ -38,9 +38,6 @@
 
         @slot('popover')
             $popover.find('.ie-input').focus();
-            @if($mask)
-            $popover.find('.ie-input').inputmask(@json($mask));
-            @endif
         @endslot
     @endcomponent
 </script>

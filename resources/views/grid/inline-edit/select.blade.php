@@ -16,7 +16,11 @@
     </a>
 
     @component('admin::grid.inline-edit.partials.template', compact('name', 'target', 'key'))
-        <input class="form-control ie-input" value="{__VAL__}"/>
+        <select name='radio-{{ $name }}' class="form-control ie-input" style="z-index: 1070;">
+        @foreach($options as $option => $label)
+            <option name='radio-{{ $name }}' value="{{ $option }}" data-label="{{ $label }}">&nbsp;{{$label}}&nbsp;&nbsp;</option>
+        @endforeach
+        </select>
     @endcomponent
 </span>
 
@@ -28,28 +32,27 @@
 
 <script>
     @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
-        @slot('content')
-        $(this)
-            .parents('.ie-wrap')
-            .find('template')
-            .html()
-            .replace('{__VAL__}', $(this).data('value'));
-        @endslot
-
         @slot('popover')
-            $popover.find('.ie-input').focus();
-            @if($mask)
-            $popover.find('.ie-input').inputmask(@json($mask));
-            @endif
+        $popover.find('select>option').each(function (index, option) {
+            if ($(option).attr('value') == $trigger.data('value')) {
+                $(option).prop('selected', true);
+            }
+        });
+        $popover.find('.ie-input').select2();
         @endslot
     @endcomponent
 </script>
 
-{{--after submit--}}
 <script>
 @component('admin::grid.inline-edit.partials.submit', compact('resource', 'name'))
-    $popover.data('display').html(val);
+
+    @slot('val')
+        var val = $popover.find('.ie-input').val();
+        var label = $popover.find('.ie-input:selected').data('label');
+    @endslot
+
+    $popover.data('display').html(label);
+
 @endcomponent
 </script>
-
 

@@ -63,6 +63,18 @@ STYLE;
 
     public function display($options = [])
     {
+        $name = $this->column->getName();
+
+        return Admin::component('admin::grid.inline-edit.select', [
+            'key'      => $this->getKey(),
+            'value'    => $this->getValue(),
+            'name'     => $name,
+            'resource' => $this->getResource(),
+            'trigger'  => "ie-trigger-{$name}",
+            'target'   => "ie-content-{$name}-{$this->getKey()}",
+            'options'  => $options,
+        ]);
+
         $this->addScript();
         $this->addStyle();
 
