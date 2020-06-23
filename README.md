@@ -112,7 +112,7 @@ The file `config/admin.php` contains an array of configurations, you can find th
 | [cropper](https://github.com/laravel-admin-extensions/cropper) | A simple jQuery image cropping plugin.          |~1.6 |
 | [composer-viewer](https://github.com/laravel-admin-extensions/composer-viewer) | A web interface of composer packages in laravel.          |~1.6 |
 | [data-table](https://github.com/laravel-admin-extensions/data-table) | Advanced table widget for laravel-admin |~1.6 |
-
+| [watermark](https://github.com/laravel-admin-extensions/watermark) | Text watermark for laravel-admin |~1.6 |
 
 ## Contributors
  This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
