@@ -8,15 +8,14 @@ class Textarea extends AbstractDisplayer
 {
     public function display($rows = 5)
     {
-        $name = $this->column->getName();
-
         return Admin::component('admin::grid.inline-edit.textarea', [
             'key'      => $this->getKey(),
             'value'    => $this->getValue(),
-            'name'     => $name,
+            'display'  => $this->getValue(),
+            'name'     => $this->getPayloadName(),
             'resource' => $this->getResource(),
-            'trigger'  => "ie-trigger-{$name}",
-            'target'   => "ie-content-{$name}-{$this->getKey()}",
+            'trigger'  => "ie-trigger-{$this->getClassName()}",
+            'target'   => "ie-content-{$this->getClassName()}-{$this->getKey()}",
             'rows'     => $rows,
         ]);
     }

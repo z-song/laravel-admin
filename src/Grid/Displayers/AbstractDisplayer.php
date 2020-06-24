@@ -115,6 +115,20 @@ abstract class AbstractDisplayer
     }
 
     /**
+     * `foo.bar.baz` => `foo[bar][baz]`
+     *
+     * @return string
+     */
+    protected function getPayloadName($name = '')
+    {
+        $keys = collect(explode('.', $name ?: $this->getName()));
+
+        return $keys->shift() . $keys->reduce(function ($carry, $val) {
+                return $carry . "[$val]";
+            });
+    }
+
+    /**
      * Get translation.
      *
      * @param string $text

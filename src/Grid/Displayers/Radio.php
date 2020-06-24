@@ -3,21 +3,20 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
 
 class Radio extends AbstractDisplayer
 {
     public function display($options = [])
     {
-        $name = $this->column->getName();
-
         return Admin::component('admin::grid.inline-edit.radio', [
             'key'      => $this->getKey(),
+            'name'     => $this->getPayloadName(),
             'value'    => $this->getValue(),
-            'name'     => $name,
             'resource' => $this->getResource(),
-            'trigger'  => "ie-trigger-{$name}",
-            'target'   => "ie-content-{$name}-{$this->getKey()}",
-            
+            'trigger'  => "ie-trigger-{$this->getClassName()}",
+            'target'   => "ie-content-{$this->getClassName()}-{$this->getKey()}",
+            'display'  => Arr::get($options, $this->getValue(), ''),
             'options'  => $options,
         ]);
     }

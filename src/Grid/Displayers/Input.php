@@ -8,15 +8,14 @@ class Input extends AbstractDisplayer
 {
     public function display($mask = '')
     {
-        $name = $this->column->getName();
-
         return Admin::component('admin::grid.inline-edit.input', [
             'key'      => $this->getKey(),
             'value'    => $this->getValue(),
-            'name'     => $name,
+            'display'  => $this->getValue(),
+            'name'     => $this->getPayloadName(),
             'resource' => $this->getResource(),
-            'trigger'  => "ie-trigger-{$name}",
-            'target'   => "ie-content-{$name}-{$this->getKey()}",
+            'trigger'  => "ie-trigger-{$this->getClassName()}",
+            'target'   => "ie-content-{$this->getClassName()}-{$this->getKey()}",
             'mask'     => $mask,
         ]);
     }

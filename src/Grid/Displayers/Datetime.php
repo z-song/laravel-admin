@@ -8,15 +8,14 @@ class Datetime extends AbstractDisplayer
 {
     public function display($format = '')
     {
-        $name = $this->column->getName();
-
         return Admin::component('admin::grid.inline-edit.datetime', [
             'key'      => $this->getKey(),
             'value'    => $this->getValue(),
-            'name'     => $name,
+            'display'  => $this->getValue(),
+            'name'     => $this->getPayloadName(),
             'resource' => $this->getResource(),
-            'trigger'  => "ie-trigger-{$name}",
-            'target'   => "ie-content-{$name}-{$this->getKey()}",
+            'trigger'  => "ie-trigger-{$this->getClassName()}",
+            'target'   => "ie-content-{$this->getClassName()}-{$this->getKey()}",
 
             'format'   => $format,
             'locale'   => config('app.locale'),

@@ -16,7 +16,8 @@ $(document).on('click', '.ie-content-{{ $name }} .ie-submit', function () {
 
     var data = {
         _token: LA.token,
-        _method: 'PUT'
+        _method: 'PUT',
+        _edit_inline: true,
     };
     data[$(this).parent().data('name')] = val;
 
@@ -31,8 +32,17 @@ $(document).on('click', '.ie-content-{{ $name }} .ie-submit', function () {
 
             $popover.data('trigger').data('value', val)
                 .data('original', val);
+
+            $('[data-toggle="popover"]').popover('hide');
+        },
+        statusCode: {
+            422: function(xhr) {
+                $popover.find('.error').empty();
+                var errors = xhr.responseJSON.errors;
+                for (var key in errors) {
+                    $popover.find('.error').append('<div><i class="fa fa-times-circle-o"></i> '+errors[key]+'</div>')
+                }
+            }
         }
     });
-
-    $('[data-toggle="popover"]').popover('hide');
 });
