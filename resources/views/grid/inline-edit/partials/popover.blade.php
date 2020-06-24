@@ -13,6 +13,10 @@ $('.{{ $trigger }}').popover({
             return "bottom";
         }
 
+        if ($(window).height() - $(source).offset().top < 370) {
+            return 'top';
+        }
+
         return "bottom";
     },
     content: function () {
