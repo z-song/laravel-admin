@@ -1,6 +1,50 @@
 {{--inline edit popover--}}
 
+<span class="ie-wrap">
+    <a
+        href="javascript:void(0);"
+        class="{{ $trigger }}"
+        data-toggle="popover"
+        data-target="{{ $target }}"
+        data-value="{{ $value }}"
+        data-original="{{ $value }}"
+    >
+        <span class="ie-display">{{ $display }}</span>
+
+        <i class="fa fa-edit" style="visibility: hidden;"></i>
+    </a>
+
+    <template>
+        <div class="ie-content ie-content-{{ $name }}" id="{{ $target }}">
+            <div class="ie-container">
+                @yield('field')
+                <div class="error"></div>
+            </div>
+            <div data-key="{{ $key }}" data-name="{{ $name }}" class="ie-action">
+                <button class="btn btn-primary btn-sm ie-submit">{{ __('admin.submit') }}</button>
+                <button class="btn btn-default btn-sm ie-cancel">{{ __('admin.cancel') }}</button>
+            </div>
+        </div>
+    </template>
+</span>
+
 <style>
+    .ie-wrap>a {
+        padding: 3px;
+        border-radius: 3px;
+        color:#777;
+    }
+
+    .ie-wrap>a:hover {
+        text-decoration: none;
+        background-color: #ddd;
+        color:#777;
+    }
+
+    .ie-wrap>a:hover i {
+        visibility: visible !important;
+    }
+
     .ie-action button {
         margin: 10px 0 10px 10px;
         float: right;
@@ -9,6 +53,11 @@
     .ie-container  {
         width: 250px;
         position: relative;
+    }
+
+    .ie-container .error {
+        color: #dd4b39;
+        font-weight: 700;
     }
 </style>
 
@@ -25,3 +74,5 @@
         }
     });
 </script>
+
+@yield('assert')

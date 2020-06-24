@@ -3,20 +3,21 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 
-class Select extends AbstractDisplayer
+class MultipleSelect extends AbstractDisplayer
 {
     public function display($options = [])
     {
-        return Admin::component('admin::grid.inline-edit.select', [
+        return Admin::component('admin::grid.inline-edit.multiple-select', [
             'key'      => $this->getKey(),
-            'value'    => $this->getValue(),
-            'display'  => Arr::get($options, $this->getValue(), ''),
             'name'     => $this->getPayloadName(),
+            'value'    => json_encode($this->getValue()),
             'resource' => $this->getResource(),
             'trigger'  => "ie-trigger-{$this->getClassName()}",
             'target'   => "ie-content-{$this->getClassName()}-{$this->getKey()}",
+            'display'  => implode(';', Arr::only($options, $this->getValue())),
             'options'  => $options,
         ]);
     }

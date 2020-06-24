@@ -622,7 +622,7 @@ class Form implements Renderable
      */
     protected function isEditable(array $input = []): bool
     {
-        return array_key_exists('_editable', $input);
+        return array_key_exists('_editable', $input) || array_key_exists('_edit_inline', $input);
     }
 
     /**

@@ -2,9 +2,9 @@
 
 @section('field')
     @foreach($options as $option => $label)
-        <div class="radio icheck">
+        <div class="checkbox icheck">
             <label>
-                <input type="radio" name='radio-{{ $name }}' class="minimal ie-input" value="{{ $option }}" data-label="{{ $label }}"/>&nbsp;{{$label}}&nbsp;&nbsp;
+                <input type="checkbox" name='radio-{{ $name }}[]' class="minimal ie-input" value="{{ $option }}" data-label="{{ $label }}"/>&nbsp;{{$label}}&nbsp;&nbsp;
             </label>
         </div>
     @endforeach
@@ -12,7 +12,7 @@
 
 @section('assert')
     <style>
-        .icheck.radio {
+        .icheck.checkbox {
             margin: 5px 0 5px 20px;
         }
 
@@ -25,9 +25,9 @@
     <script>
         @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
             @slot('popover')
-            $popover.find('input[type=radio]').each(function (index, radio) {
-                if ($(radio).attr('value') == $trigger.data('value')) {
-                    $(radio).prop('checked', true);
+            $popover.find('input[type=checkbox]').each(function (index, checkbox) {
+                if($.inArray($(checkbox).attr('value'), $trigger.data('value')) >= 0) {
+                    $(checkbox).prop('checked', true);
                 }
             });
             @endslot
@@ -38,11 +38,16 @@
     @component('admin::grid.inline-edit.partials.submit', compact('resource', 'name'))
 
         @slot('val')
-            var val = $popover.find('.ie-input:checked').val();
-            var label = $popover.find('.ie-input:checked').data('label');
+            var val = [];
+            var label = [];
+            $popover.find('.ie-input:checked').each(function(){
+                val.push($(this).val());
+                label.push($(this).data('label'));
+            });
+            console.log(val, label)
         @endslot
 
-        $popover.data('display').html(label);
+        $popover.data('display').html(label.join(';'));
 
     @endcomponent
     </script>
