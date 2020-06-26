@@ -198,7 +198,7 @@ class CsvExporter extends AbstractExporter
             ->mapWithKeys(function (Column $column) {
                 $columnName = $column->getName();
                 $columnTitle = $column->getLabel();
-                if(isset($this->titleCallbacks[$columnName])) {
+                if (isset($this->titleCallbacks[$columnName])) {
                     $columnTitle = $this->titleCallbacks[$columnName]($columnTitle);
                 }
 
