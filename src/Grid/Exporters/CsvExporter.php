@@ -32,6 +32,11 @@ class CsvExporter extends AbstractExporter
     protected $columnCallbacks;
 
     /**
+     * @var []\Closure
+     */
+    protected $titleCallbacks;
+
+    /**
      * @var array
      */
     protected $visibleColumns;
@@ -113,6 +118,19 @@ class CsvExporter extends AbstractExporter
     }
 
     /**
+     * @param string   $name
+     * @param \Closure $callback
+     *
+     * @return $this
+     */
+    public function title(string $name, \Closure $callback): self
+    {
+        $this->titleCallbacks[$name] = $callback;
+
+        return $this;
+    }
+
+    /**
      * Get download response headers.
      *
      * @return array
@@ -178,7 +196,13 @@ class CsvExporter extends AbstractExporter
     {
         $titles = $this->grid->visibleColumns()
             ->mapWithKeys(function (Column $column) {
-                return [$column->getName() => $column->getLabel()];
+                $columnName = $column->getName();
+                $columnTitle = $column->getLabel();
+                if (isset($this->titleCallbacks[$columnName])) {
+                    $columnTitle = $this->titleCallbacks[$columnName]($columnTitle);
+                }
+
+                return [$columnName => $columnTitle];
             });
 
         if ($this->onlyColumns) {
