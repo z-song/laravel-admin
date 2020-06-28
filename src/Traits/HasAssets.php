@@ -230,7 +230,16 @@ trait HasAssets
             return self::$script = array_merge(self::$script, (array) $script);
         }
 
-        $script = array_unique(array_merge(static::$script, static::$deferredScript));
+        $script = collect(static::$script)
+            ->merge(static::$deferredScript)
+            ->unique()
+            ->map(function ($line) {
+                //@see https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
+                $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
+                $line = preg_replace($pattern, '', $line);
+
+                return preg_replace('/\s+/', ' ', $line);
+            });
 
         return view('admin::partials.script', compact('script'));
     }
@@ -246,7 +255,13 @@ trait HasAssets
             return self::$style = array_merge(self::$style, (array) $style);
         }
 
-        return view('admin::partials.style', ['style' => array_unique(self::$style)]);
+        $style = collect(static::$style)
+            ->unique()
+            ->map(function ($line) {
+                return preg_replace('/\s+/', ' ', $line);
+            });
+
+        return view('admin::partials.style', compact('style'));
     }
 
     /**
