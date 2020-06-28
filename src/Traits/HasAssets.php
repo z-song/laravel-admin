@@ -356,7 +356,7 @@ trait HasAssets
                 }
 
                 if ($child->tagName == 'script') {
-                    static::script($child->nodeValue);
+                    static::script(';(function () {'.$child->nodeValue.'})();');
                     continue;
                 }
 
