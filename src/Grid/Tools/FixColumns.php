@@ -201,7 +201,7 @@ SCRIPT;
 }
 
 .table-wrap table tr .active {
-    background': #f5f5f5;
+    background: #f5f5f5;
 }
 
 .table-main {

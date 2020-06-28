@@ -10,6 +10,8 @@ use Encore\Admin\Grid\Actions\Show;
 
 class DropdownActions extends Actions
 {
+    protected $view = 'admin::grid.actions.dropdown';
+
     /**
      * @var array
      */
@@ -24,40 +26,6 @@ class DropdownActions extends Actions
      * @var array
      */
     protected $defaultClass = [Edit::class, Show::class, Delete::class];
-
-    /**
-     * Add JS script into pages.
-     *
-     * @return void.
-     */
-    protected function addScript()
-    {
-        $script = <<<'SCRIPT'
-;$(function() {
-  $('.table-responsive').on('shown.bs.dropdown', function(e) {
-    var t = $(this),
-      m = $(e.target).find('.dropdown-menu'),
-      tb = t.offset().top + t.height(),
-      mb = m.offset().top + m.outerHeight(true),
-      d = 20; // Space for shadow + scrollbar.
-    if (t[0].scrollWidth > t.innerWidth()) {
-      if (mb + d > tb) {
-        t.css('padding-bottom', ((mb + d) - tb));
-      }
-    } else {
-      t.css('overflow', 'visible');
-    }
-  }).on('hidden.bs.dropdown', function() {
-    $(this).css({
-      'padding-bottom': '',
-      'overflow': ''
-    });
-  });
-});
-SCRIPT;
-
-        Admin::script($script);
-    }
 
     /**
      * @param RowAction $action
@@ -159,8 +127,6 @@ SCRIPT;
      */
     public function display($callback = null)
     {
-        $this->addScript();
-
         if ($callback instanceof \Closure) {
             $callback->call($this, $this);
         }
@@ -171,15 +137,15 @@ SCRIPT;
 
         $this->prependDefaultActions();
 
-        $actions = [
+        $variables = [
             'default' => $this->default,
             'custom'  => $this->custom,
         ];
 
-        if (empty($actions['default']) && empty($actions['custom'])) {
+        if (empty($variables['default']) && empty($variables['custom'])) {
             return;
         }
 
-        return view('admin::grid.dropdown-actions', $actions);
+        return Admin::component($this->view, $variables);
     }
 }
