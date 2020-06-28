@@ -334,54 +334,45 @@ trait HasAssets
      */
     public static function component($component, $data = [])
     {
-        $str = view($component, $data)->render();
+        $string = view($component, $data)->render();
 
         $dom = new \DOMDocument();
 
         libxml_use_internal_errors(true);
-
-        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $str);
-
+        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $string);
         libxml_use_internal_errors(false);
 
-        if ($dom->getElementsByTagName('body')->length <= 0) {
+        if(! $body = $dom->getElementsByTagName('body')->item(0)) {
             return;
         }
-
-        $body = $dom->getElementsByTagName('body')[0];
 
         $render = '';
 
         foreach ($body->childNodes as $child) {
-
-            if ($child instanceof \DOMElement && $child->tagName == 'style') {
-                static::style($child->nodeValue);
-                continue;
-            }
-
-            if ($child instanceof \DOMElement && $child->tagName == 'script') {
-                static::script(';(function () {' . $child->nodeValue . '})();');
-                continue;
-            }
-
-            if ($child instanceof \DOMElement && $child->tagName == 'template') {
-
-                $html = '';
-
-                foreach ($child->childNodes as $childNode) {
-                    $html .= $child->ownerDocument->saveHTML($childNode);
+            if ($child instanceof \DOMElement) {
+                if ($child->tagName == 'style') {
+                    static::style($child->nodeValue);
+                    continue;
                 }
 
-                if ($html) {
-                    static::html($html);
+                if ($child->tagName == 'script') {
+                    static::script($child->nodeValue);
+                    continue;
                 }
 
-                continue;
+                if ($child->tagName == 'template') {
+                    $html = '';
+                    foreach ($child->childNodes as $childNode) {
+                        $html .= $child->ownerDocument->saveHTML($childNode);
+                    }
+                    $html && static::html($html);
+                    continue;
+                }
             }
 
             $render .= $body->ownerDocument->saveHTML($child);
         }
 
-        return $render;
+        return trim($render);
     }
 }
