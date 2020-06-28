@@ -565,13 +565,15 @@ SCRIPT;
             return;
         }
 
+        $model = $this->form->model();
+
         $reservedColumns = [
-            $this->form->model()->getCreatedAtColumn(),
-            $this->form->model()->getUpdatedAtColumn(),
+            $model->getCreatedAtColumn(),
+            $model->getUpdatedAtColumn(),
         ];
 
-        if ($this->form->model()->incrementing) {
-            $reservedColumns[] = $this->form->model()->getKeyName();
+        if ($model->getIncrementing()) {
+            $reservedColumns[] = $model->getKeyName();
         }
 
         $this->form->getLayout()->removeReservedFields($reservedColumns);
