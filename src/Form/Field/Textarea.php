@@ -52,7 +52,7 @@ class Textarea extends Field
             $this->addPickBtn($btn);
         });
 
-        return parent::render()->with([
+        return parent::fieldRender([
             'append' => $this->append,
             'rows'   => $this->rows
         ]);

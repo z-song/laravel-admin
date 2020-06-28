@@ -204,7 +204,7 @@ class Tags extends Field
             $options = array_unique(array_merge($this->value, $this->options));
         }
 
-        return parent::render()->with([
+        return parent::fieldRender([
             'options'    => $options,
             'keyAsValue' => $this->keyAsValue,
         ]);

@@ -1506,14 +1506,18 @@ class Field implements Renderable
 
         Admin::script($this->script);
 
-        return view($this->getView(), $this->variables());
+        return Admin::component($this->getView(), $this->variables());
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
-    protected function fieldRender()
+    protected function fieldRender(array $variables = [])
     {
+        if (!empty($variables)) {
+            $this->addVariables($variables);
+        }
+
         return self::render();
     }
 
