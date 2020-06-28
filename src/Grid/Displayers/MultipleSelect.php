@@ -16,7 +16,7 @@ class MultipleSelect extends AbstractDisplayer
             'value'    => json_encode($this->getValue()),
             'resource' => $this->getResource(),
             'trigger'  => "ie-trigger-{$this->getClassName()}",
-            'target'   => "ie-content-{$this->getClassName()}-{$this->getKey()}",
+            'target'   => "ie-template-{$this->getClassName()}",
             'display'  => implode(';', Arr::only($options, $this->getValue())),
             'options'  => $options,
         ]);

@@ -1,7 +1,7 @@
 @extends('admin::grid.inline-edit.comm')
 
 @section('field')
-    <input class="form-control ie-input" value="{__VAL__}"/>
+    <input class="form-control ie-input"/>
 @endsection
 
 @section('assert')
@@ -16,29 +16,22 @@
     </style>
 
     <script>
-        @component('admin::grid.inline-edit.partials..popover', compact('trigger'))
-            // open popover
-            @slot('popover')
-                var $input  = $popover.find('.ie-input');
-
-                $popover.find('.ie-container').datetimepicker({
-                    inline: true,
-                    format: '{{ $format }}',
-                    date: $input.val(),
-                    locale: '{{ $locale }}'
-                }).on('dp.change', function (event) {
-                    var date = event.date.format('{{ $format }}');
-                    $input.val(date);
-                });
-            @endslot
-
-            // popover content
+        @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
             @slot('content')
-                $(this)
-                    .parents('.ie-wrap')
-                    .find('template')
-                    .html()
-                    .replace('{__VAL__}', $(this).data('value'));
+            $template.find('input').attr('value', $trigger.data('value'));
+            @endslot
+            @slot('shown')
+            var $input  = $popover.find('.ie-input');
+
+            $popover.find('.ie-container').datetimepicker({
+                inline: true,
+                format: '{{ $format }}',
+                date: $input.val(),
+                locale: '{{ $locale }}'
+            }).on('dp.change', function (event) {
+                var date = event.date.format('{{ $format }}');
+                $input.val(date);
+            });
             @endslot
         @endcomponent
     </script>

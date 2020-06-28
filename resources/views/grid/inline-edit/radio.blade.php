@@ -24,12 +24,12 @@
 
     <script>
         @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
-            @slot('popover')
-            $popover.find('input[type=radio]').each(function (index, radio) {
-                if ($(radio).attr('value') == $trigger.data('value')) {
-                    $(radio).prop('checked', true);
-                }
-            });
+            @slot('content')
+                $template.find('input[type=radio]').each(function (index, radio) {
+                    if ($(radio).attr('value') == $trigger.data('value')) {
+                        $(radio).attr('checked', true);
+                    }
+                });
             @endslot
         @endcomponent
     </script>

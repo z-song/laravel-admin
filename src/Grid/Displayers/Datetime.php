@@ -15,7 +15,7 @@ class Datetime extends AbstractDisplayer
             'name'     => $this->getPayloadName(),
             'resource' => $this->getResource(),
             'trigger'  => "ie-trigger-{$this->getClassName()}",
-            'target'   => "ie-content-{$this->getClassName()}-{$this->getKey()}",
+            'target'   => "ie-template-{$this->getClassName()}",
 
             'format'   => $format,
             'locale'   => config('app.locale'),

@@ -16,7 +16,7 @@ class Select extends AbstractDisplayer
             'name'     => $this->getPayloadName(),
             'resource' => $this->getResource(),
             'trigger'  => "ie-trigger-{$this->getClassName()}",
-            'target'   => "ie-content-{$this->getClassName()}-{$this->getKey()}",
+            'target'   => "ie-template-{$this->getClassName()}",
             'options'  => $options,
         ]);
     }

@@ -11,10 +11,10 @@
 @section('assert')
     <script>
         @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
-            @slot('popover')
-            $popover.find('select>option').each(function (index, option) {
+            @slot('content')
+            $template.find('select>option').each(function (index, option) {
                 if ($(option).attr('value') == $trigger.data('value')) {
-                    $(option).prop('selected', true);
+                    $(option).attr('selected', true);
                 }
             });
             @endslot

@@ -11,10 +11,10 @@
 @section('assert')
     <script>
         @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
-            @slot('popover')
-            $popover.find('select>option').each(function (index, option) {
+            @slot('content')
+            $template.find('select>option').each(function (index, option) {
                 if($.inArray($(option).attr('value'), $trigger.data('value')) >= 0) {
-                    $(option).prop('selected', true);
+                    $(option).attr('selected', true);
                 }
             });
             @endslot
@@ -31,7 +31,6 @@
                 val.push($(this).val());
                 label.push($(this).data('label'));
             });
-            console.log(val, label)
         @endslot
 
         $popover.data('display').html(label.join(';'));

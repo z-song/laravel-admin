@@ -8,25 +8,29 @@
         data-target="{{ $target }}"
         data-value="{{ $value }}"
         data-original="{{ $value }}"
+        data-key="{{ $key }}"
+        data-name="{{ $name }}"
     >
         <span class="ie-display">{{ $display }}</span>
 
         <i class="fa fa-edit" style="visibility: hidden;"></i>
     </a>
+</span>
 
-    <template>
-        <div class="ie-content ie-content-{{ $name }}" id="{{ $target }}">
+<template>
+    <template id="{{ $target }}">
+        <div class="ie-content ie-content-{{ $name }}">
             <div class="ie-container">
                 @yield('field')
                 <div class="error"></div>
             </div>
-            <div data-key="{{ $key }}" data-name="{{ $name }}" class="ie-action">
+            <div class="ie-action">
                 <button class="btn btn-primary btn-sm ie-submit">{{ __('admin.submit') }}</button>
                 <button class="btn btn-default btn-sm ie-cancel">{{ __('admin.cancel') }}</button>
             </div>
         </div>
     </template>
-</span>
+</template>
 
 <style>
     .ie-wrap>a {

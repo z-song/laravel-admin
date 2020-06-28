@@ -1,21 +1,16 @@
 @extends('admin::grid.inline-edit.comm')
 
 @section('field')
-    <textarea class="form-control ie-input" rows="{{ $rows }}">{__VAL__}</textarea>
+    <textarea class="form-control ie-input" rows="{{ $rows }}"></textarea>
 @endsection
 
 @section('assert')
     <script>
         @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
             @slot('content')
-            $(this)
-                .parents('.ie-wrap')
-                .find('template')
-                .html()
-                .replace('{__VAL__}', $(this).data('value'));
+                $template.find('textarea').text($trigger.data('value'));
             @endslot
-
-            @slot('popover')
+            @slot('shown')
                 $popover.find('.ie-input').focus();
             @endslot
         @endcomponent

@@ -24,10 +24,10 @@
 
     <script>
         @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
-            @slot('popover')
-            $popover.find('input[type=checkbox]').each(function (index, checkbox) {
+            @slot('content')
+            $template.find('input[type=checkbox]').each(function (index, checkbox) {
                 if($.inArray($(checkbox).attr('value'), $trigger.data('value')) >= 0) {
-                    $(checkbox).prop('checked', true);
+                    $(checkbox).attr('checked', true);
                 }
             });
             @endslot
@@ -44,7 +44,6 @@
                 val.push($(this).val());
                 label.push($(this).data('label'));
             });
-            console.log(val, label)
         @endslot
 
         $popover.data('display').html(label.join(';'));

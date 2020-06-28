@@ -1,21 +1,16 @@
 @extends('admin::grid.inline-edit.comm')
 
 @section('field')
-    <input class="form-control ie-input" value="{__VAL__}"/>
+    <input class="form-control ie-input"/>
 @endsection
 
 @section('assert')
     <script>
         @component('admin::grid.inline-edit.partials.popover', compact('trigger'))
             @slot('content')
-            $(this)
-                .parents('.ie-wrap')
-                .find('template')
-                .html()
-                .replace('{__VAL__}', $(this).data('value'));
+            $template.find('input').attr('value', $trigger.data('value'));
             @endslot
-
-            @slot('popover')
+            @slot('shown')
                 $popover.find('.ie-input').focus();
                 @if($mask)
                 $popover.find('.ie-input').inputmask(@json($mask));
@@ -26,7 +21,7 @@
 
     {{--after submit--}}
     <script>
-    @component('admin::grid.inline-edit.partials.submit', compact('resource', 'name', 'target'))
+    @component('admin::grid.inline-edit.partials.submit', compact('resource', 'name'))
         $popover.data('display').html(val);
     @endcomponent
     </script>
