@@ -402,6 +402,11 @@ abstract class AbstractFilter
         return $this;
     }
 
+    public function getFilterBoxId()
+    {
+        return $this->parent ? $this->parent->getFilterID() : '';
+    }
+
     /**
      * Get element id.
      *
