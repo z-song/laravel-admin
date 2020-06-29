@@ -233,7 +233,7 @@ trait HasAssets
         $script = collect(static::$script)
             ->merge(static::$deferredScript)
             ->unique()
-            ->map(function ($line) {
+            ->map(function ($line) {return $line;
                 //@see https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
                 $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
                 $line = preg_replace($pattern, '', $line);
@@ -342,35 +342,58 @@ trait HasAssets
         $dom->loadHTML('<?xml encoding="utf-8" ?>' . $string);
         libxml_use_internal_errors(false);
 
-        if(! $body = $dom->getElementsByTagName('body')->item(0)) {
-            return;
+        if ($head = $dom->getElementsByTagName('head')->item(0)) {
+            foreach ($head->childNodes as $child) {
+                if ($child instanceof \DOMElement) {
+                    if ($child->tagName == 'style' && !empty($child->nodeValue)) {
+                        static::style($child->nodeValue);
+                        continue;
+                    }
+
+                    if ($child->tagName == 'link' && $child->hasAttribute('href')) {
+                        static::css($child->getAttribute('href'));
+                    }
+
+                    if ($child->tagName == 'script') {
+                        if ($child->hasAttribute('src')) {
+                            static::js($child->getAttribute('src'));
+                        } else {
+                            static::script(';(function () {'.$child->nodeValue.'})();');
+                        }
+
+                        continue;
+                    }
+                }
+            }
         }
 
         $render = '';
 
-        foreach ($body->childNodes as $child) {
-            if ($child instanceof \DOMElement) {
-                if ($child->tagName == 'style') {
-                    static::style($child->nodeValue);
-                    continue;
-                }
-
-                if ($child->tagName == 'script') {
-                    static::script(';(function () {'.$child->nodeValue.'})();');
-                    continue;
-                }
-
-                if ($child->tagName == 'template') {
-                    $html = '';
-                    foreach ($child->childNodes as $childNode) {
-                        $html .= $child->ownerDocument->saveHTML($childNode);
+        if($body = $dom->getElementsByTagName('body')->item(0)) {
+            foreach ($body->childNodes as $child) {
+                if ($child instanceof \DOMElement) {
+                    if ($child->tagName == 'style' && !empty($child->nodeValue)) {
+                        static::style($child->nodeValue);
+                        continue;
                     }
-                    $html && static::html($html);
-                    continue;
-                }
-            }
 
-            $render .= $body->ownerDocument->saveHTML($child);
+                    if ($child->tagName == 'script' && !empty($child->nodeValue)) {
+                        static::script(';(function () {' . $child->nodeValue . '})();');
+                        continue;
+                    }
+
+                    if ($child->tagName == 'template') {
+                        $html = '';
+                        foreach ($child->childNodes as $childNode) {
+                            $html .= $child->ownerDocument->saveHTML($childNode);
+                        }
+                        $html && static::html($html);
+                        continue;
+                    }
+                }
+
+                $render .= $body->ownerDocument->saveHTML($child);
+            }
         }
 
         return trim($render);

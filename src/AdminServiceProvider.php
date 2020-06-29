@@ -2,6 +2,8 @@
 
 namespace Encore\Admin;
 
+use Encore\Admin\Layout\Content;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -80,6 +82,14 @@ class AdminServiceProvider extends ServiceProvider
         $this->registerPublishing();
 
         $this->compatibleBlade();
+
+        Blade::directive('box', function ($title) {
+            return "<?php \$box = new \Encore\Admin\Widgets\Box({$title}, '";
+        });
+
+        Blade::directive('endbox', function ($expression) {
+            return "'); echo \$box->render(); ?>";
+        });
     }
 
     /**
@@ -125,6 +135,30 @@ class AdminServiceProvider extends ServiceProvider
     }
 
     /**
+     * Extends laravel router.
+     */
+    protected function macroRouter()
+    {
+        Router::macro('content', function ($uri, $content, $options = []) {
+            return $this->match(['GET', 'HEAD'], $uri, function (Content $layout) use ($content, $options) {
+                return $layout
+                    ->title(Arr::get($options, 'title', ' '))
+                    ->description(Arr::get($options, 'desc', ' '))
+                    ->body($content);
+            });
+        });
+
+        Router::macro('component', function ($uri, $component, $data = [], $options = []) {
+            return $this->match(['GET', 'HEAD'], $uri, function (Content $layout) use ($component, $data, $options) {
+                return $layout
+                    ->title(Arr::get($options, 'title', ' '))
+                    ->description(Arr::get($options, 'desc', ' '))
+                    ->component($component, $data);
+            });
+        });
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
@@ -136,6 +170,8 @@ class AdminServiceProvider extends ServiceProvider
         $this->registerRouteMiddleware();
 
         $this->commands($this->commands);
+
+        $this->macroRouter();
     }
 
     /**
