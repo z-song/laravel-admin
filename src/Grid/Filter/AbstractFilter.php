@@ -403,7 +403,7 @@ abstract class AbstractFilter
 
     public function getFilterBoxId()
     {
-        return $this->parent ? $this->parent->getFilterID() : '';
+        return $this->parent ? $this->parent->getFilterID() : 'filter-box';
     }
 
     /**
