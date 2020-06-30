@@ -10,7 +10,7 @@ class MultipleSelect extends AbstractDisplayer
 {
     public function display($options = [])
     {
-        return Admin::component('admin::grid.inline-edit.multiple-select', [
+        return Admin::view('admin::grid.inline-edit.multiple-select', [
             'key'      => $this->getKey(),
             'name'     => $this->getPayloadName(),
             'value'    => json_encode($this->getValue()),

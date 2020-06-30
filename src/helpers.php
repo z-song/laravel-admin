@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Arr;
+use Encore\Admin\Admin;
 
 if (!function_exists('admin_path')) {
 
@@ -149,6 +151,27 @@ if (!function_exists('admin_asset')) {
     function admin_asset($path)
     {
         return (config('admin.https') || config('admin.secure')) ? secure_asset($path) : asset($path);
+    }
+}
+
+if (!function_exists('admin_require')) {
+
+    /**
+     * @param $path
+     *
+     * @return string
+     */
+    function admin_require($name)
+    {
+        if ($require = Arr::get(Admin::$requires, $name)) {
+            if (isset($require['css'])) {
+                Admin::css($require['css']);
+            }
+
+            if (isset($require['js'])) {
+                Admin::js($require['js']);
+            }
+        }
     }
 }
 

@@ -10,14 +10,6 @@ class Checkbox extends MultipleSelect
 
     protected $canCheckAll = false;
 
-    protected static $css = [
-        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.css',
-    ];
-
-    protected static $js = [
-        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',
-    ];
-
     /**
      * @var string
      */

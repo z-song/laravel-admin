@@ -9,7 +9,7 @@ class Select extends AbstractDisplayer
 {
     public function display($options = [])
     {
-        return Admin::component('admin::grid.inline-edit.select', [
+        return Admin::view('admin::grid.inline-edit.select', [
             'key'      => $this->getKey(),
             'value'    => $this->getValue(),
             'display'  => Arr::get($options, $this->getValue(), ''),

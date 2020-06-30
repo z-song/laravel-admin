@@ -90,6 +90,10 @@ class AdminServiceProvider extends ServiceProvider
         Blade::directive('endbox', function ($expression) {
             return "'); echo \$box->render(); ?>";
         });
+
+        Blade::directive('admin_require', function ($require) {
+            return "<?php echo \Encore\Admin\Admin::renderRequire({$require}); ?>";
+        });
     }
 
     /**
@@ -148,7 +152,7 @@ class AdminServiceProvider extends ServiceProvider
             });
         });
 
-        Router::macro('component', function ($uri, $component, $data = [], $options = []) {
+        Router::macro('adminView', function ($uri, $component, $data = [], $options = []) {
             return $this->match(['GET', 'HEAD'], $uri, function (Content $layout) use ($component, $data, $options) {
                 return $layout
                     ->title(Arr::get($options, 'title', ' '))

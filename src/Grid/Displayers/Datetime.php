@@ -8,7 +8,7 @@ class Datetime extends AbstractDisplayer
 {
     public function display($format = '')
     {
-        return Admin::component('admin::grid.inline-edit.datetime', [
+        return Admin::view('admin::grid.inline-edit.datetime', [
             'key'      => $this->getKey(),
             'value'    => $this->getValue(),
             'display'  => $this->getValue(),

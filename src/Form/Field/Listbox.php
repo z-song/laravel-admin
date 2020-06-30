@@ -11,14 +11,6 @@ class Listbox extends MultipleSelect
 {
     protected $settings = [];
 
-    protected static $css = [
-        '/vendor/laravel-admin/bootstrap-duallistbox/dist/bootstrap-duallistbox.min.css',
-    ];
-
-    protected static $js = [
-        '/vendor/laravel-admin/bootstrap-duallistbox/dist/jquery.bootstrap-duallistbox.min.js',
-    ];
-
     public function settings(array $settings)
     {
         $this->settings = $settings;
@@ -48,22 +40,22 @@ class Listbox extends MultipleSelect
         ], $options));
 
         $this->script = <<<EOT
-        
+
 $.ajax($ajaxOptions).done(function(data) {
 
   var listbox = $("{$this->getElementClassSelector()}");
 
     var value = listbox.data('value') + '';
-    
+
     if (value) {
       value = value.split(',');
     }
-    
+
     for (var key in data) {
         var selected =  ($.inArray(key, value) >= 0) ? 'selected' : '';
         listbox.append('<option value="'+key+'" '+selected+'>'+data[key]+'</option>');
     }
-    
+
     listbox.bootstrapDualListbox('refresh', true);
 });
 EOT;
@@ -91,6 +83,8 @@ $("{$this->getElementClassSelector()}").bootstrapDualListbox($settings);
 SCRIPT;
 
         $this->attribute('data-value', implode(',', (array) $this->value()));
+
+        admin_require('duallistbox');
 
         return parent::render();
     }

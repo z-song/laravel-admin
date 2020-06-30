@@ -1,3 +1,5 @@
+@admin_require('bootstrapSwitch')
+
 <input type="checkbox" class="{{ $class }}" {{ $checked }} data-key="{{ $key }}" />
 
 <script>

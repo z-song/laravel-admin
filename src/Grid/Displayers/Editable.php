@@ -8,11 +8,6 @@ use Illuminate\Support\Arr;
 class Editable extends AbstractDisplayer
 {
     /**
-     * @var array
-     */
-    protected $arguments = [];
-
-    /**
      * Type of editable.
      *
      * @var string
@@ -25,7 +20,7 @@ class Editable extends AbstractDisplayer
      * @var array
      */
     protected $options = [
-        'emptytext'  => '<i class="fa fa-pencil"></i>',
+        'emptytext' => '<i class="fa fa-pencil"></i>',
     ];
 
     /**
@@ -78,7 +73,7 @@ class Editable extends AbstractDisplayer
 
         if ($options instanceof \Closure) {
             $useClosure = true;
-            $options = $options->call($this, $this->row);
+            $options    = $options->call($this, $this->row);
         }
 
         $source = [];
@@ -176,49 +171,23 @@ class Editable extends AbstractDisplayer
      */
     public function display()
     {
-        $this->options['name'] = $column = $this->getName();
-
-        $class = 'grid-editable-'.str_replace(['.', '#', '[', ']'], '-', $column);
+        $this->options['name'] = $this->getName();
 
         $this->buildEditableOptions(func_get_args());
 
-        $options = json_encode($this->options);
+        $attributes = collect($this->attributes)
+            ->map(function ($attribute, $name) {
+                return "$name=\"$attribute\"";
+            })->implode(' ');
 
-        $options = substr($options, 0, -1).<<<'STR'
-    ,
-    "success":function(response, newValue){
-        if (response.status){
-            $.admin.toastr.success(response.message, '', {positionClass:"toast-top-center"});
-        } else {
-            $.admin.toastr.error(response.message, '', {positionClass:"toast-top-center"});
-        }
-    }
-}
-STR;
-
-        Admin::script("$('.$class').editable($options);");
-
-        $this->value = htmlentities($this->value);
-
-        $attributes = [
-            'href'       => '#',
-            'class'      => "$class",
-            'data-type'  => $this->type,
-            'data-pk'    => "{$this->getKey()}",
-            'data-url'   => "{$this->getResource()}/{$this->getKey()}",
-            'data-value' => "{$this->value}",
-        ];
-
-        if (!empty($this->attributes)) {
-            $attributes = array_merge($attributes, $this->attributes);
-        }
-
-        $attributes = collect($attributes)->map(function ($attribute, $name) {
-            return "$name='$attribute'";
-        })->implode(' ');
-
-        $html = $this->type === 'select' ? '' : $this->value;
-
-        return "<a $attributes>{$html}</a>";
+        return Admin::view('admin::grid.displayer.editable', [
+            'attributes' => $attributes,
+            'class'      => 'grid-editable-' . $this->getClassName(),
+            'options'    => $this->options,
+            'value'      => htmlentities($this->value),
+            'type'       => $this->type,
+            'key'        => $this->getKey(),
+            'url'        => "{$this->getResource()}/{$this->getKey()}",
+        ]);
     }
 }

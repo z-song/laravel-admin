@@ -179,7 +179,7 @@ class Content implements Renderable
      */
     public function component($view, $data = [])
     {
-        return $this->body(Admin::component($view, $data));
+        return $this->body(Admin::view($view, $data));
     }
 
     /**

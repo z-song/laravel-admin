@@ -4,10 +4,6 @@ namespace Encore\Admin\Form\Field;
 
 class Number extends Text
 {
-    protected static $js = [
-        '/vendor/laravel-admin/number-input/bootstrap-number-input.js',
-    ];
-
     public function render()
     {
         $this->default($this->default);
@@ -25,6 +21,8 @@ $('{$this->getElementClassSelector()}:not(.initialized)')
 EOT;
 
         $this->prepend('')->defaultAttribute('style', 'width: 100px');
+
+        admin_require('bootstrapNumber');
 
         return parent::render();
     }

@@ -18,7 +18,7 @@ class FilterButton extends AbstractTool
             $label = "&nbsp;{$scope->getLabel()}&nbsp;";
         }
 
-        return Admin::component('admin::filter.button', [
+        return Admin::view('admin::filter.button', [
             'scopes'    => $filter->getScopes(),
             'label'     => $label,
             'cancel'    => $filter->urlWithoutScopes(),

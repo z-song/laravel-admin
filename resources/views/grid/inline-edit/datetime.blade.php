@@ -1,3 +1,5 @@
+@admin_require('datetimepicker')
+
 @extends('admin::grid.inline-edit.comm')
 
 @section('field')

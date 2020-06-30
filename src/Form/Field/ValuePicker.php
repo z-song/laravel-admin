@@ -79,7 +79,7 @@ class ValuePicker
 
         $this->addPickBtn($callback);
 
-        Admin::component('admin::components.filepicker', [
+        Admin::view('admin::components.filepicker', [
             'url'       => $this->getLoadUrl(),
             'modal'     => $this->modal,
             'selector'  => $this->field->getElementClassSelector(),

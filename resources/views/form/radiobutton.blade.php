@@ -18,3 +18,10 @@
 
     </div>
 </div>
+
+<script>
+    $('.radio-group-toggle label').click(function() {
+        $(this).parent().children().removeClass('active');
+        $(this).addClass('active');
+    });
+</script>

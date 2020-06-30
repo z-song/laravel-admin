@@ -1,3 +1,5 @@
+@admin_require('fileinput')
+
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>

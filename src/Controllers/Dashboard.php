@@ -110,6 +110,6 @@ class Dashboard
 
         $dependencies = json_decode($json, true)['require'];
 
-        return Admin::component('admin::dashboard.dependencies', compact('dependencies'));
+        return Admin::view('admin::dashboard.dependencies', compact('dependencies'));
     }
 }

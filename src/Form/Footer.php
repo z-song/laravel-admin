@@ -203,6 +203,8 @@ EOT;
             'default_check'    => $this->defaultCheck,
         ];
 
+        admin_require('icheck');
+
         return view($this->view, $data)->render();
     }
 }

@@ -146,6 +146,6 @@ class DropdownActions extends Actions
             return;
         }
 
-        return Admin::component($this->view, $variables);
+        return Admin::view($this->view, $variables);
     }
 }

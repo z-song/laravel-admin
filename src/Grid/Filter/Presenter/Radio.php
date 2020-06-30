@@ -32,6 +32,8 @@ class Radio extends Presenter
 
         $this->options = (array) $options;
 
+        admin_require('icheck');
+
         return $this;
     }
 

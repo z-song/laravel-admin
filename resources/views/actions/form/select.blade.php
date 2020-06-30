@@ -1,3 +1,5 @@
+@admin_require('select2')
+
 <div class="form-group">
     <label>{{ $label }}</label>
 

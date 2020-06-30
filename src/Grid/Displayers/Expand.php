@@ -24,7 +24,7 @@ class Expand extends AbstractDisplayer
             $html = call_user_func_array($callback->bindTo($this->row), [$this->row]);
         }
 
-        return Admin::component('admin::components.column-expand', [
+        return Admin::view('admin::components.column-expand', [
             'key'           => $this->getKey(),
             'url'           => $this->getLoadUrl(),
             'name'          => $this->getName() . '-' . $this->getKey(),

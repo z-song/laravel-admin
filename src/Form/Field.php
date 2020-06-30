@@ -1506,7 +1506,7 @@ class Field implements Renderable
 
         Admin::script($this->script);
 
-        return Admin::component($this->getView(), $this->variables());
+        return Admin::view($this->getView(), $this->variables());
     }
 
     /**

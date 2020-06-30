@@ -9,7 +9,7 @@ class Radio extends AbstractDisplayer
 {
     public function display($options = [])
     {
-        return Admin::component('admin::grid.inline-edit.radio', [
+        return Admin::view('admin::grid.inline-edit.radio', [
             'key'      => $this->getKey(),
             'name'     => $this->getPayloadName(),
             'value'    => $this->getValue(),

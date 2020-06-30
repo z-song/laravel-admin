@@ -8,7 +8,7 @@ class Textarea extends AbstractDisplayer
 {
     public function display($rows = 5)
     {
-        return Admin::component('admin::grid.inline-edit.textarea', [
+        return Admin::view('admin::grid.inline-edit.textarea', [
             'key'      => $this->getKey(),
             'value'    => $this->getValue(),
             'display'  => $this->getValue(),

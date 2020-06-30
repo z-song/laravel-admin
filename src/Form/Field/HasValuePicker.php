@@ -80,6 +80,6 @@ trait HasValuePicker
                 'preview' => $this->picker->getPreview(get_called_class()),
             ]);
 
-        return Admin::component('admin::form.filepicker', $this->variables());
+        return Admin::view('admin::form.filepicker', $this->variables());
     }
 }

@@ -30,7 +30,7 @@ class SwitchDisplay extends AbstractDisplayer
     {
         $this->overrideStates($states);
 
-        return Admin::component('admin::grid.inline-edit.switch', [
+        return Admin::view('admin::grid.inline-edit.switch', [
             'class'    => 'grid-switch-' . str_replace('.', '-', $this->getName()),
             'key'      => $this->getKey(),
             'resource' => $this->getResource(),

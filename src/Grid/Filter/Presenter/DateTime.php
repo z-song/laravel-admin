@@ -25,6 +25,8 @@ class DateTime extends Presenter
     public function __construct($options = [])
     {
         $this->options = $this->getOptions($options);
+
+        admin_require('datetimepicker');
     }
 
     /**

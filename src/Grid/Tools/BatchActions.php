@@ -124,7 +124,7 @@ class BatchActions extends AbstractTool
 
         $this->addActionScripts();
 
-        return Admin::component('admin::grid.batch-actions', [
+        return Admin::view('admin::grid.batch-actions', [
             'all'     => $this->grid->getSelectAllName(),
             'row'     => $this->grid->getGridRowName(),
             'actions' => $this->actions,

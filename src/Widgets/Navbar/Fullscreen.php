@@ -14,6 +14,6 @@ class Fullscreen implements Renderable
 {
     public function render()
     {
-        return Admin::component('admin::components.fullscreen');
+        return Admin::view('admin::components.fullscreen');
     }
 }

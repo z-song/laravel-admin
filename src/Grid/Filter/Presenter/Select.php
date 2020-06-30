@@ -34,6 +34,8 @@ class Select extends Presenter
     public function __construct($options)
     {
         $this->options = $options;
+
+        admin_require('select2');
     }
 
     /**
@@ -180,7 +182,7 @@ $.ajax($ajaxOptions).done(function(data) {
     data: data,
     $configs
   }).val($values).trigger("change");
-  
+
 });
 
 EOT;
@@ -287,7 +289,7 @@ $(document).on('change', ".{$this->getClass($column)}", function () {
                 text : item.$textField
             }));
         });
-        
+
         $(target).val(null).trigger('change');
     }, 'json');
 });

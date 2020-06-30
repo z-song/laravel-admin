@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Grid\Filter;
 
+use Encore\Admin\Admin;
 use Encore\Admin\Grid\Filter;
 use Encore\Admin\Grid\Filter\Presenter\Checkbox;
 use Encore\Admin\Grid\Filter\Presenter\DateTime;
@@ -504,7 +505,7 @@ abstract class AbstractFilter
      */
     public function render()
     {
-        return view($this->view, $this->variables());
+        return Admin::view($this->view, $this->variables());
     }
 
     /**

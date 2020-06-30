@@ -1,3 +1,5 @@
+@admin_require('select2')
+
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
 <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>

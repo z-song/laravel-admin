@@ -10,7 +10,7 @@ class Checkbox extends AbstractDisplayer
 {
     public function display($options = [])
     {
-        return Admin::component('admin::grid.inline-edit.checkbox', [
+        return Admin::view('admin::grid.inline-edit.checkbox', [
             'key'      => $this->getKey(),
             'name'     => $this->getPayloadName(),
             'resource' => $this->getResource(),

@@ -42,7 +42,7 @@ class BelongsTo extends AbstractDisplayer
             );
         }
 
-        return Admin::component('admin::grid.inline-edit.belongsto', [
+        return Admin::view('admin::grid.inline-edit.belongsto', [
             'modal'     => sprintf('modal-grid-selector-%s', $this->getClassName()),
             'key'       => $this->getKey(),
             'original'  => $this->getOriginalData(),

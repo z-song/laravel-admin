@@ -9,6 +9,6 @@ class RefreshButton implements Renderable
 {
     public function render()
     {
-        return Admin::component('admin::components.refresh-btn');
+        return Admin::view('admin::components.refresh-btn');
     }
 }
