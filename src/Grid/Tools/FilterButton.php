@@ -22,7 +22,7 @@ class FilterButton extends AbstractTool
             'scopes'    => $filter->getScopes(),
             'label'     => $label,
             'cancel'    => $filter->urlWithoutScopes(),
-            'btn_class' => uniqid() . '-filter-btn',
+            'btn_class' => uniqid('filter-btn-'),
             'expand'    => $filter->expand,
             'filter_id' => $filter->getFilterID(),
         ]);

@@ -42,6 +42,6 @@ class Table extends AbstractDisplayer
             'data'   => $data,
         ];
 
-        return view('admin::grid.displayer.table', $variables)->render();
+        return view('admin::grid.display.table', $variables)->render();
     }
 }

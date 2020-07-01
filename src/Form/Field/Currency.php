@@ -60,8 +60,6 @@ class Currency extends Text
      */
     public function render()
     {
-        admin_require('inputmask');
-
         $this->inputmask($this->options);
 
         $this->prepend($this->symbol)

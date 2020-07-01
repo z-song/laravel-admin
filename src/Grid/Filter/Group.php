@@ -282,7 +282,7 @@ class Group extends AbstractFilter
     /**
      * Inject script to current page.
      */
-    protected function injectScript()
+    protected function addScript()
     {
         $script = <<<SCRIPT
 $(".{$this->name} li a").click(function(){
@@ -314,7 +314,7 @@ SCRIPT;
      */
     public function render()
     {
-        $this->injectScript();
+        $this->addScript();
 
         if ($this->builder && $this->group->isEmpty()) {
             call_user_func($this->builder, $this);

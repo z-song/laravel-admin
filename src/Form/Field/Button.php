@@ -17,12 +17,12 @@ class Button extends Field
 
     public function on($event, $callback)
     {
-        $this->script = <<<EOT
+        $this->script = <<<SCRIPT
 
         $('{$this->getElementClassSelector()}').on('$event', function() {
             $callback
         });
 
-EOT;
+SCRIPT;
     }
 }

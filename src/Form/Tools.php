@@ -178,11 +178,11 @@ class Tools implements Renderable
     {
         $text = trans('admin.list');
 
-        return <<<EOT
+        return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
     <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="$text"><i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
 </div>
-EOT;
+HTML;
     }
 
     /**

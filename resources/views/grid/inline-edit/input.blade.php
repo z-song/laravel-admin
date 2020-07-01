@@ -26,5 +26,3 @@
     @endcomponent
     </script>
 @endsection
-
-

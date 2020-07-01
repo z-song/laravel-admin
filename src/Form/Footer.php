@@ -167,44 +167,22 @@ class Footer implements Renderable
     }
 
     /**
-     * Setup scripts.
-     */
-    protected function setupScript()
-    {
-        $script = <<<'EOT'
-$('.after-submit').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChecked', function () {
-    $('.after-submit').not(this).iCheck('uncheck');
-});
-EOT;
-
-        Admin::script($script);
-    }
-
-    /**
      * Render footer.
      *
      * @return string
      */
     public function render()
     {
-        $this->setupScript();
-
-        $submitRedirects = [
-            1 => 'continue_editing',
-            2 => 'continue_creating',
-            3 => 'view',
-        ];
-
-        $data = [
+        return Admin::view($this->view, [
             'width'            => $this->builder->getWidth(),
             'buttons'          => $this->buttons,
             'checkboxes'       => $this->checkboxes,
-            'submit_redirects' => $submitRedirects,
             'default_check'    => $this->defaultCheck,
-        ];
-
-        admin_require('icheck');
-
-        return view($this->view, $data)->render();
+            'submit_redirects' => [
+                1 => 'continue_editing',
+                2 => 'continue_creating',
+                3 => 'view',
+            ],
+        ]);
     }
 }

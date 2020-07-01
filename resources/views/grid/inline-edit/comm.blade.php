@@ -1,5 +1,3 @@
-{{--inline edit popover--}}
-
 <span class="ie-wrap">
     <a
         href="javascript:void(0);"

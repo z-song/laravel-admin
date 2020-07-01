@@ -8,7 +8,7 @@ class Number extends Text
     {
         $this->default($this->default);
 
-        $this->script = <<<EOT
+        $this->script = <<<SCRIPT
 
 $('{$this->getElementClassSelector()}:not(.initialized)')
     .addClass('initialized')
@@ -18,7 +18,7 @@ $('{$this->getElementClassSelector()}:not(.initialized)')
         center: true
     });
 
-EOT;
+SCRIPT;
 
         $this->prepend('')->defaultAttribute('style', 'width: 100px');
 

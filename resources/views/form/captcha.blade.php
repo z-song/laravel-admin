@@ -18,3 +18,9 @@
 
     </div>
 </div>
+
+<script>
+    $('#{{$column}}-captcha').click(function () {
+        $(this).attr('src', $(this).attr('src')+'?'+Math.random());
+    });
+</script>

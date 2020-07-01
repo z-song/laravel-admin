@@ -23,22 +23,8 @@ class Captcha extends Text
     public function setForm(Form $form = null)
     {
         $this->form = $form;
-
         $this->form->ignore($this->column);
 
         return $this;
-    }
-
-    public function render()
-    {
-        $this->script = <<<EOT
-
-$('#{$this->column}-captcha').click(function () {
-    $(this).attr('src', $(this).attr('src')+'?'+Math.random());
-});
-
-EOT;
-
-        return parent::render();
     }
 }

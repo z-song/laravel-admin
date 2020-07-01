@@ -53,6 +53,14 @@ abstract class AbstractDisplayer
     }
 
     /**
+     * @return mixed
+     */
+    public function getOriginalValue()
+    {
+        return $this->getColumn()->getOriginal();
+    }
+
+    /**
      * @return Grid
      */
     public function getGrid()

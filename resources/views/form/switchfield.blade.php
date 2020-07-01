@@ -15,3 +15,16 @@
 
     </div>
 </div>
+
+<script>
+    $('{{ $selector }}.la_checkbox').bootstrapSwitch({
+        size:'{{ $size }}',
+        onText: '{{ $states['on']['text'] }}',
+        offText: '{{ $states['off']['text'] }}',
+        onColor: '{{ $states['on']['color'] }}',
+        offColor: '{{ $states['off']['color'] }}',
+        onSwitchChange: function(event, state) {
+            $(event.target).closest('.bootstrap-switch').next().val(state ? 'on' : 'off').change();
+        }
+    });
+</script>

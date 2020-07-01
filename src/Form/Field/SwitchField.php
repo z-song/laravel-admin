@@ -52,20 +52,10 @@ class SwitchField extends Field
             }
         }
 
-        $this->script = <<<EOT
-
-$('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
-    size:'{$this->size}',
-    onText: '{$this->states['on']['text']}',
-    offText: '{$this->states['off']['text']}',
-    onColor: '{$this->states['on']['color']}',
-    offColor: '{$this->states['off']['color']}',
-    onSwitchChange: function(event, state) {
-        $(event.target).closest('.bootstrap-switch').next().val(state ? 'on' : 'off').change();
-    }
-});
-
-EOT;
+        $this->addVariables([
+            'states' => $this->states,
+            'size'   => $this->size,
+        ]);
 
         return parent::render();
     }

@@ -162,7 +162,6 @@
         });
     });
 @endif
-
     $modal.on('click', '.page-item a, .filter-box a', function (e) {
         load($(this).attr('href'));
         e.preventDefault();

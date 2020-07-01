@@ -17,3 +17,40 @@
 
     </div>
 </div>
+
+<script>
+    var $input = $("input{{ $selector }}");
+    $input.fileinput(@json($options));
+
+    @if($settings['showRemove'])
+    $input.on('filebeforedelete', function() {
+        return new Promise(function(resolve, reject) {
+            var remove = resolve;
+            swal({
+                title: "{{ trans('admin.delete_confirm') }}",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "{{ trans('admin.confirm') }}",
+                showLoaderOnConfirm: true,
+                cancelButtonText: "{{ trans('admin.cancel') }}",
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        resolve(remove());
+                    });
+                }
+            });
+        });
+    });
+    @endif
+
+    @if($settings['showDrag'])
+    $input.on('filesorted', function(event, params) {
+        var order = [];
+        params.stack.forEach(function (item) {
+            order.push(item.key);
+        });
+        $("input{{ $selector }}_sort").val(order);
+    });
+    @endif
+</script>

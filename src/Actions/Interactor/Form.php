@@ -518,7 +518,7 @@ class Form extends Interactor
 
         $script = <<<SCRIPT
 
-(function ($) {
+;(function () {
     $('{$this->action->selector($this->action->selectorPrefix)}').off('{$this->action->event}').on('{$this->action->event}', function() {
         var data = $(this).data();
         var target = $(this);
@@ -533,7 +533,7 @@ class Form extends Interactor
             {$this->action->handleActionPromise()}
         });
     });
-})(jQuery);
+})();
 
 SCRIPT;
 

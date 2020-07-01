@@ -20,7 +20,7 @@ class BatchDelete extends BatchAction
             'cancel'         => trans('admin.cancel'),
         ];
 
-        return <<<EOT
+        return <<<SCRIPT
 
 $('{$this->getElementClass()}').on('click', function() {
 
@@ -61,6 +61,6 @@ $('{$this->getElementClass()}').on('click', function() {
     });
 });
 
-EOT;
+SCRIPT;
     }
 }

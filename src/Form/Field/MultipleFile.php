@@ -252,69 +252,6 @@ class MultipleFile extends Field
     }
 
     /**
-     * @param string $options
-     */
-    protected function setupScripts($options)
-    {
-        $this->script = <<<EOT
-$("input{$this->getElementClassSelector()}").fileinput({$options});
-EOT;
-
-        if ($this->fileActionSettings['showRemove']) {
-            $text = [
-                'title'   => trans('admin.delete_confirm'),
-                'confirm' => trans('admin.confirm'),
-                'cancel'  => trans('admin.cancel'),
-            ];
-
-            $this->script .= <<<EOT
-$("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
-
-    return new Promise(function(resolve, reject) {
-
-        var remove = resolve;
-
-        swal({
-            title: "{$text['title']}",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "{$text['confirm']}",
-            showLoaderOnConfirm: true,
-            cancelButtonText: "{$text['cancel']}",
-            preConfirm: function() {
-                return new Promise(function(resolve) {
-                    resolve(remove());
-                });
-            }
-        });
-    });
-});
-EOT;
-        }
-
-        if ($this->fileActionSettings['showDrag']) {
-            $this->addVariables([
-                'sortable'  => true,
-                'sort_flag' => static::FILE_SORT_FLAG,
-            ]);
-
-            $this->script .= <<<EOT
-$("input{$this->getElementClassSelector()}").on('filesorted', function(event, params) {
-
-    var order = [];
-
-    params.stack.forEach(function (item) {
-        order.push(item.key);
-    });
-
-    $("input{$this->getElementClassSelector()}_sort").val(order);
-});
-EOT;
-        }
-    }
-
-    /**
      * Render file upload field.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -330,9 +267,17 @@ EOT;
             $this->setupPreviewOptions();
         }
 
-        $options = json_encode($this->options);
+        $this->addVariables([
+            'options'   => $this->options,
+            'settings'  => $this->fileActionSettings,
+        ]);
 
-        $this->setupScripts($options);
+        if ($this->fileActionSettings['showDrag']) {
+            $this->addVariables([
+                'sortable'  => true,
+                'sort_flag' => static::FILE_SORT_FLAG,
+            ]);
+        }
 
         return parent::render();
     }

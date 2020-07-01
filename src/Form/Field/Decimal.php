@@ -16,8 +16,6 @@ class Decimal extends Text
 
     public function render()
     {
-        admin_require('inputmask');
-
         $this->inputmask($this->options);
 
         $this->prepend('<i class="fa fa-terminal fa-fw"></i>')

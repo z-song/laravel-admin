@@ -95,23 +95,23 @@ trait HasAssets
      * @var array
      */
     public static $requires = [
-        'nsetable' => [
+        'nsetable'       => [
             'css' => ['/vendor/laravel-admin/nestable/nestable.css'],
             'js'  => ['/vendor/laravel-admin/nestable/jquery.nestable.js'],
         ],
-        'iconpicker' => [
+        'iconpicker'     => [
             'css' => ['/vendor/laravel-admin/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css',],
             'js'  => ['/vendor/laravel-admin/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js',],
         ],
-        'colorpicker' => [
+        'colorpicker'    => [
             'css' => ['/vendor/laravel-admin/nestable/nestable.css'],
             'js'  => ['/vendor/laravel-admin/nestable/jquery.nestable.js'],
         ],
-        'icheck' => [
+        'icheck'         => [
             'css' => ['/vendor/laravel-admin/AdminLTE/plugins/iCheck/minimal/_all.css'],
             'js'  => ['/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',],
         ],
-        'fileinput' => [
+        'fileinput'      => [
             'css' => ['/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.5.2',],
             'js'  => [
                 '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js',
@@ -126,7 +126,7 @@ trait HasAssets
                 '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
             ],
         ],
-        'select2' => [
+        'select2'        => [
             'css' => ['/vendor/laravel-admin/AdminLTE/plugins/select2/select2.min.css',],
             'js'  => ['/vendor/laravel-admin/AdminLTE/plugins/select2/select2.full.min.js',],
         ],
@@ -139,18 +139,18 @@ trait HasAssets
             'css' => ['/vendor/laravel-admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',],
             'js'  => ['/vendor/laravel-admin/bootstrap-switch/dist/js/bootstrap-switch.min.js',]
         ],
-        'inputmask' => [
+        'inputmask'       => [
             'js' => ['/vendor/laravel-admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',]
         ],
-        'ckeditor' => [
+        'ckeditor'        => [
             'js' => ['//cdn.ckeditor.com/4.5.10/standard/ckeditor.js',]
         ],
-        'duallistbox' => [
+        'duallistbox'     => [
             'css' => ['/vendor/laravel-admin/bootstrap-duallistbox/dist/bootstrap-duallistbox.min.css',],
-            'js' => ['/vendor/laravel-admin/bootstrap-duallistbox/dist/jquery.bootstrap-duallistbox.min.js',]
+            'js'  => ['/vendor/laravel-admin/bootstrap-duallistbox/dist/jquery.bootstrap-duallistbox.min.js',]
         ],
-        'rangeSlider' => [
-            'js' => [
+        'rangeSlider'     => [
+            'js'  => [
                 '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js',
             ],
             'css' => [
@@ -158,12 +158,12 @@ trait HasAssets
                 '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css',
             ],
         ],
-        'editable' =>  [
-            'js' => ['/vendor/laravel-admin/bootstrap3-editable/js/bootstrap-editable.min.js'],
+        'editable'        => [
+            'js'  => ['/vendor/laravel-admin/bootstrap3-editable/js/bootstrap-editable.min.js'],
             'css' => ['/vendor/laravel-admin/bootstrap3-editable/css/bootstrap-editable.css'],
         ],
-        'slimscroll' => [
-            'js' => ['vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',]
+        'slimscroll'      => [
+            'js' => ['/vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',]
         ]
     ];
 
@@ -324,10 +324,9 @@ trait HasAssets
             ->unique()
             ->map(function ($line) {
                 //@see https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
-                $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
-                $line = preg_replace($pattern, '', $line);
+                $line = preg_replace('/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/', '', $line);
 
-                return preg_replace('/\s+/', ' ', $line);
+                return preg_replace(['/\s*([,;\[\]\{\}\=\+\-])\s*/', '/\s+/'], ['\1', ' '], $line);
             });
 
         $pjaxJs = array_unique(self::$pjaxJs);

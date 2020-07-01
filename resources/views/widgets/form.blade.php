@@ -1,6 +1,5 @@
 <form {!! $attributes !!}>
     <div class="box-body fields-group">
-
         @foreach($fields as $field)
             {!! $field->render() !!}
         @endforeach
@@ -10,7 +9,7 @@
     @if ($method != 'GET')
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
     @endif
-    
+
     <!-- /.box-body -->
     @if(count($buttons) > 0)
     <div class="box-footer">
@@ -32,3 +31,31 @@
     </div>
     @endif
 </form>
+
+<script>
+    var $form = $('form#{{ $id }}');
+    $form.submit(function (e) {
+        e.preventDefault();
+        $(this).find('div.cascade-group.hide :input').attr('disabled', true);
+    });
+
+    @if($confirm)
+    $form.off('submit').on('submit', function (e) {
+        e.preventDefault();
+        var form = this;
+        $.admin.swal({
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonText: '{{ trans('admin.submit') }}',
+            cancelButtonText: '{{ trans('admin.cancel') }}',
+            title: '{{ $confirm }}',
+            text: ''
+        }).then(function (result) {
+            if (result.value == true) {
+                form.submit();
+            }
+        });
+        return false;
+    });
+    @endif
+</script>

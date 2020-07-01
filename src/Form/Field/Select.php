@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class Select extends Field
 {
     use CanCascadeFields;
-    
+
     /**
      * @var array
      */
@@ -115,7 +115,7 @@ class Select extends Field
 
         $strAllowClear = var_export($allowClear, true);
 
-        $script = <<<EOT
+        $script = <<<SCRIPT
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
     var target = $(this).closest('.fields-group').find(".$class");
@@ -136,7 +136,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
         $(target).trigger('change');
     });
 });
-EOT;
+SCRIPT;
 
         Admin::script($script);
 
@@ -165,7 +165,7 @@ EOT;
 
         $strAllowClear = var_export($allowClear, true);
 
-        $script = <<<EOT
+        $script = <<<SCRIPT
 var fields = '$fieldsStr'.split('.');
 var urls = '$urlsStr'.split('^');
 
@@ -194,7 +194,7 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
         promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
     });
 });
-EOT;
+SCRIPT;
 
         Admin::script($script);
 
@@ -268,7 +268,7 @@ EOT;
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
 
-        $this->script = <<<EOT
+        $this->script = <<<SCRIPT
 
 $.ajax($ajaxOptions).done(function(data) {
 
@@ -284,8 +284,7 @@ $.ajax($ajaxOptions).done(function(data) {
       }
   });
 });
-
-EOT;
+SCRIPT;
 
         return $this;
     }
@@ -310,7 +309,7 @@ EOT;
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
-        $this->script = <<<EOT
+        $this->script = <<<SCRIPT
 
 $("{$this->getElementClassSelector()}").select2({
   ajax: {
@@ -344,8 +343,7 @@ $("{$this->getElementClassSelector()}").select2({
       return markup;
   }
 });
-
-EOT;
+SCRIPT;
 
         return $this;
     }
@@ -374,7 +372,7 @@ EOT;
     {
         //移除特定字段名称,增加MultipleSelect的修订
         //没有特定字段名可以使多个readonly的JS代码片段被Admin::script的array_unique精简代码
-        $script = <<<'EOT'
+        $script = <<<'SCRIPT'
 $("form select").on("select2:opening", function (e) {
     if($(this).attr('readonly') || $(this).is(':hidden')){
     e.preventDefault();
@@ -389,7 +387,7 @@ $(document).ready(function(){
         }
     });
 });
-EOT;
+SCRIPT;
         Admin::script($script);
 
         return parent::readOnly();

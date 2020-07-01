@@ -25,16 +25,16 @@ trait RenderView
                 continue;
             }
 
-            $rendered .= $head->ownerDocument->saveHTML($child);
+            $rendered .= trim($head->ownerDocument->saveHTML($child));
         }
 
         foreach ($body->childNodes as $child) {
-            if ($child instanceof \DOMElement && in_array($child->tagName, ['style', 'script', 'template'])) {
+            if ($child instanceof \DOMElement && in_array($child->tagName, ['style', 'script', 'template', 'link'])) {
                 static::resolve($child);
                 continue;
             }
 
-            $rendered .= $body->ownerDocument->saveHTML($child);
+            $rendered .= trim($body->ownerDocument->saveHTML($child));
         }
 
         return $rendered;

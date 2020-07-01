@@ -1387,6 +1387,7 @@ class Field implements Renderable
             'label'       => $this->label,
             'viewClass'   => $this->getViewElementClasses(),
             'column'      => $this->column,
+            'selector'    => $this->getElementClassSelector(),
             'errorKey'    => $this->getErrorKey(),
             'attributes'  => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),

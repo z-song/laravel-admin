@@ -25,7 +25,7 @@ class BelongsTo extends AbstractDisplayer
      */
     protected function getOriginalData()
     {
-        return $this->getColumn()->getOriginal();
+        return $this->getOriginalValue();
     }
 
     /**

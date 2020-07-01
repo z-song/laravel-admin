@@ -189,11 +189,11 @@ class Actions extends AbstractDisplayer
      */
     protected function renderView()
     {
-        return <<<EOT
+        return <<<HTML
 <a href="{$this->getResource()}/{$this->getRouteKey()}" class="{$this->grid->getGridRowName()}-view">
     <i class="fa fa-eye"></i>
 </a>
-EOT;
+HTML;
     }
 
     /**
@@ -203,11 +203,11 @@ EOT;
      */
     protected function renderEdit()
     {
-        return <<<EOT
+        return <<<HTML
 <a href="{$this->getResource()}/{$this->getRouteKey()}/edit" class="{$this->grid->getGridRowName()}-edit">
     <i class="fa fa-edit"></i>
 </a>
-EOT;
+HTML;
     }
 
     /**
@@ -219,11 +219,11 @@ EOT;
     {
         $this->setupDeleteScript();
 
-        return <<<EOT
+        return <<<HTML
 <a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
     <i class="fa fa-trash"></i>
 </a>
-EOT;
+HTML;
     }
 
     protected function setupDeleteScript()

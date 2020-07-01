@@ -160,6 +160,8 @@ class Text extends Presenter
      */
     public function inputmask($options = [], $icon = 'pencil'): self
     {
+        admin_require('inputmask');
+
         $options = json_encode($options);
 
         Admin::script("$('#filter-box input.{$this->filter->getId()}').inputmask($options);");

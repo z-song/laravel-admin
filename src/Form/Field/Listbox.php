@@ -39,7 +39,7 @@ class Listbox extends MultipleSelect
             'url' => $url.'?'.http_build_query($parameters),
         ], $options));
 
-        $this->script = <<<EOT
+        $this->script = <<<SCRIPT
 
 $.ajax($ajaxOptions).done(function(data) {
 
@@ -58,7 +58,7 @@ $.ajax($ajaxOptions).done(function(data) {
 
     listbox.bootstrapDualListbox('refresh', true);
 });
-EOT;
+SCRIPT;
 
         return $this;
     }

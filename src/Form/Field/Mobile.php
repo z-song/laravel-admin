@@ -20,8 +20,6 @@ class Mobile extends Text
         $this->prepend('<i class="fa fa-phone fa-fw"></i>')
             ->defaultAttribute('style', 'width: 150px');
 
-        admin_require('inputmask');
-
         return parent::render();
     }
 }

@@ -14,3 +14,30 @@
 
     </div>
 </div>
+
+<script>
+    var $input = $("input{{ $selector }}");
+    $input.fileinput({!! $options !!});
+
+    @if($this->fileActionSettings['showRemove'])
+    $input.on('filebeforedelete', function() {
+        return new Promise(function(resolve, reject) {
+            var remove = resolve;
+            swal({
+                title: "{{ trans('admin.delete_confirm') }}",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "{{ trans('admin.confirm') }}",
+                showLoaderOnConfirm: true,
+                cancelButtonText: "{{ trans('admin.cancel') }}",
+                preConfirm: function() {
+                    return new Promise(function(resolve) {
+                        resolve(remove());
+                    });
+                }
+            });
+        });
+    });
+    @endif
+</script>

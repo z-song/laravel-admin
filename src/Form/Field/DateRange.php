@@ -66,7 +66,7 @@ class DateRange extends Field
 
         $class = $this->getElementClassSelector();
 
-        $this->script = <<<EOT
+        $this->script = <<<SCRIPT
             $('{$class['start']}').datetimepicker($startOptions);
             $('{$class['end']}').datetimepicker($endOptions);
             $("{$class['start']}").on("dp.change", function (e) {
@@ -75,7 +75,7 @@ class DateRange extends Field
             $("{$class['end']}").on("dp.change", function (e) {
                 $('{$class['start']}').data("DateTimePicker").maxDate(e.date);
             });
-EOT;
+SCRIPT;
 
         return parent::render();
     }

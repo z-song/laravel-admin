@@ -166,49 +166,6 @@ class File extends Field
     }
 
     /**
-     * @param string $options
-     */
-    protected function setupScripts($options)
-    {
-        $this->script = <<<EOT
-$("input{$this->getElementClassSelector()}").fileinput({$options});
-EOT;
-
-        if ($this->fileActionSettings['showRemove']) {
-            $text = [
-                'title'   => trans('admin.delete_confirm'),
-                'confirm' => trans('admin.confirm'),
-                'cancel'  => trans('admin.cancel'),
-            ];
-
-            $this->script .= <<<EOT
-$("input{$this->getElementClassSelector()}").on('filebeforedelete', function() {
-
-    return new Promise(function(resolve, reject) {
-
-        var remove = resolve;
-
-        swal({
-            title: "{$text['title']}",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "{$text['confirm']}",
-            showLoaderOnConfirm: true,
-            cancelButtonText: "{$text['cancel']}",
-            preConfirm: function() {
-                return new Promise(function(resolve) {
-                    resolve(remove());
-                });
-            }
-        });
-    });
-});
-EOT;
-        }
-    }
-
-    /**
      * Render file upload field.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -219,7 +176,10 @@ EOT;
             return $this->renderFilePicker();
         }
 
-        $this->options(['overwriteInitial' => true, 'msgPlaceholder' => trans('admin.choose_file')]);
+        $this->options([
+            'overwriteInitial' => true,
+            'msgPlaceholder' => trans('admin.choose_file')
+        ]);
 
         $this->setupDefaultOptions();
 
@@ -235,9 +195,10 @@ EOT;
             unset($this->attributes['required']);
         }
 
-        $options = json_encode_options($this->options);
-
-        $this->setupScripts($options);
+        $this->addVariables([
+            'options'  => json_encode_options($this->options),
+            'settings' => $this->fileActionSettings,
+        ]);
 
         return parent::render();
     }

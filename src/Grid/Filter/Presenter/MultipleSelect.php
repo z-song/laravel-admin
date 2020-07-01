@@ -20,7 +20,7 @@ class MultipleSelect extends Select
     {
         $column = $this->filter->getColumn();
 
-        $script = <<<EOT
+        $script = <<<SCRIPT
 
 $(document).on('change', ".{$this->getClass($column)}", function () {
     var target = $(this).closest('form').find(".{$this->getClass($target)}");
@@ -35,11 +35,11 @@ $(document).on('change', ".{$this->getClass($column)}", function () {
                 text : item.$textField
             }));
         });
-        
+
         $(target).trigger('change');
     });
 });
-EOT;
+SCRIPT;
 
         Admin::script($script);
 

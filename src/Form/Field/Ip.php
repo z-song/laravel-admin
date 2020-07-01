@@ -22,8 +22,6 @@ class Ip extends Text
         $this->prepend('<i class="fa fa-laptop fa-fw"></i>')
             ->defaultAttribute('style', 'width: 130px');
 
-        admin_require('inputmask');
-
         return parent::render();
     }
 }

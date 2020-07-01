@@ -272,8 +272,7 @@ abstract class Action implements Renderable
         $parameters = json_encode($this->parameters());
 
         $script = <<<SCRIPT
-
-(function ($) {
+;(function () {
     $('{$this->selector($this->selectorPrefix)}').off('{$this->event}').on('{$this->event}', function() {
         var data = $(this).data();
         var target = $(this);
@@ -282,7 +281,7 @@ abstract class Action implements Renderable
         {$this->buildActionPromise()}
         {$this->handleActionPromise()}
     });
-})(jQuery);
+})();
 
 SCRIPT;
 

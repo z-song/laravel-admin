@@ -180,7 +180,7 @@ class Editable extends AbstractDisplayer
                 return "$name=\"$attribute\"";
             })->implode(' ');
 
-        return Admin::view('admin::grid.displayer.editable', [
+        return Admin::view('admin::grid.display.editable', [
             'attributes' => $attributes,
             'class'      => 'grid-editable-' . $this->getClassName(),
             'options'    => $this->options,

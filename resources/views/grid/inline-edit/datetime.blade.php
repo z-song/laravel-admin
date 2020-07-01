@@ -46,5 +46,3 @@
     </script>
 
 @endsection
-
-

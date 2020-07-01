@@ -10,11 +10,6 @@ use Illuminate\Support\Arr;
 class Filter implements Renderable
 {
     /**
-     * @var string|array
-     */
-    protected $class;
-
-    /**
      * @var Column
      */
     protected $parent;
@@ -66,16 +61,6 @@ class Filter implements Renderable
         return count($request->query()) > 0
             ? $request->url().$question.http_build_query($query)
             : $request->fullUrl();
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return array|null|string
-     */
-    protected function trans($key)
-    {
-        return __("admin.{$key}");
     }
 
     /**

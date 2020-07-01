@@ -408,11 +408,13 @@ class Form implements Renderable
         $this->fields()->each->fill($this->data());
 
         return [
+            'id'         => $this->attributes['id'],
             'fields'     => $this->fields,
             'attributes' => $this->formatAttribute(),
             'method'     => $this->attributes['method'],
             'buttons'    => $this->buttons,
             'width'      => $this->width,
+            'confirm'    => $this->confirm,
         ];
     }
 
@@ -512,70 +514,11 @@ class Form implements Renderable
         return $this;
     }
 
-    protected function addConfirmScript()
-    {
-        $id = $this->attributes['id'];
-
-        $trans = [
-            'cancel' => trans('admin.cancel'),
-            'submit' => trans('admin.submit'),
-        ];
-
-        $settings = [
-            'type'                => 'question',
-            'showCancelButton'    => true,
-            'confirmButtonText'   => $trans['submit'],
-            'cancelButtonText'    => $trans['cancel'],
-            'title'               => $this->confirm,
-            'text'                => '',
-        ];
-
-        $settings = trim(json_encode($settings, JSON_PRETTY_PRINT));
-
-        $script = <<<SCRIPT
-
-$('form#{$id}').off('submit').on('submit', function (e) {
-    e.preventDefault();
-    var form = this;
-    $.admin.swal($settings).then(function (result) {
-        if (result.value == true) {
-            form.submit();
-        }
-    });
-    return false;
-});
-SCRIPT;
-
-        Admin::script($script);
-    }
-
-    protected function addCascadeScript()
-    {
-        $id = $this->attributes['id'];
-
-        $script = <<<SCRIPT
-;(function () {
-    $('form#{$id}').submit(function (e) {
-        e.preventDefault();
-        $(this).find('div.cascade-group.hide :input').attr('disabled', true);
-    });
-})();
-SCRIPT;
-
-        Admin::script($script);
-    }
-
     protected function prepareForm()
     {
         if (method_exists($this, 'form')) {
             $this->form();
         }
-
-        if (!empty($this->confirm)) {
-            $this->addConfirmScript();
-        }
-
-        $this->addCascadeScript();
     }
 
     protected function prepareHandle()
@@ -598,7 +541,7 @@ SCRIPT;
 
         $this->prepareHandle();
 
-        $form = view('admin::widgets.form', $this->getVariables())->render();
+        $form = Admin::view('admin::widgets.form', $this->getVariables());
 
         if (!($title = $this->title()) || !$this->inbox) {
             return $form;

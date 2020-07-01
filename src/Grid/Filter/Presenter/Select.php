@@ -88,12 +88,12 @@ class Select extends Presenter
             $configs = substr($configs, 1, strlen($configs) - 2);
 
             $this->script = <<<SCRIPT
-(function ($){
+;(function (){
     $(".{$this->getElementClass()}").select2({
       placeholder: $placeholder,
       $configs
     });
-})(jQuery);
+})();
 
 SCRIPT;
         }
@@ -175,7 +175,7 @@ SCRIPT;
         $values = array_filter($values);
         $values = json_encode($values);
 
-        $this->script = <<<EOT
+        $this->script = <<<SCRIPT
 
 $.ajax($ajaxOptions).done(function(data) {
   $(".{$this->getElementClass()}").select2({
@@ -184,8 +184,7 @@ $.ajax($ajaxOptions).done(function(data) {
   }).val($values).trigger("change");
 
 });
-
-EOT;
+SCRIPT;
     }
 
     /**
@@ -206,7 +205,7 @@ EOT;
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
-        $this->script = <<<EOT
+        $this->script = <<<SCRIPT
 
 $(".{$this->getElementClass()}").select2({
   ajax: {
@@ -241,7 +240,7 @@ $(".{$this->getElementClass()}").select2({
   }
 });
 
-EOT;
+SCRIPT;
     }
 
     /**
@@ -277,7 +276,7 @@ EOT;
     {
         $column = $this->filter->getColumn();
 
-        $script = <<<EOT
+        $script = <<<SCRIPT
 $(document).off('change', ".{$this->getClass($column)}");
 $(document).on('change', ".{$this->getClass($column)}", function () {
     var target = $(this).closest('form').find(".{$this->getClass($target)}");
@@ -293,7 +292,7 @@ $(document).on('change', ".{$this->getClass($column)}", function () {
         $(target).val(null).trigger('change');
     }, 'json');
 });
-EOT;
+SCRIPT;
 
         Admin::script($script);
 

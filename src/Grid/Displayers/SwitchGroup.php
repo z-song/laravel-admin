@@ -9,6 +9,8 @@ class SwitchGroup extends SwitchDisplay
 {
     public function display($columns = [], $states = [])
     {
+        admin_require('bootstrapSwitch');
+
         $this->overrideStates($states);
 
         if (!Arr::isAssoc($columns)) {

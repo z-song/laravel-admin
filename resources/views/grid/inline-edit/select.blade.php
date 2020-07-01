@@ -34,4 +34,3 @@
     @endcomponent
     </script>
 @endsection
-

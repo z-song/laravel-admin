@@ -482,7 +482,7 @@ class HasMany extends Field
          *
          * {count} is increment number of current sub form count.
          */
-        $script = <<<EOT
+        $script = <<<SCRIPT
 var index = 0;
 $('#has-many-{$this->column}').off('click', '.add').on('click', '.add', function () {
 
@@ -502,8 +502,7 @@ $('#has-many-{$this->column}').off('click', '.remove').on('click', '.remove', fu
     $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
     return false;
 });
-
-EOT;
+SCRIPT;
 
         Admin::script($script);
     }
@@ -520,7 +519,7 @@ EOT;
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
-        $script = <<<EOT
+        $script = <<<SCRIPT
 
 $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
     var \$navTab = $(this).siblings('a');
@@ -558,7 +557,7 @@ if ($('.has-error').length) {
     var first = $('.has-error:first').parent().attr('id');
     $('li a[href="#'+first+'"]').tab('show');
 }
-EOT;
+SCRIPT;
 
         Admin::script($script);
     }
@@ -582,7 +581,7 @@ EOT;
          *
          * {count} is increment number of current sub form count.
          */
-        $script = <<<EOT
+        $script = <<<SCRIPT
 var index = 0;
 $('#has-many-{$this->column}').on('click', '.add', function () {
 
@@ -608,7 +607,7 @@ $('#has-many-{$this->column}').on('click', '.remove', function () {
     return false;
 });
 
-EOT;
+SCRIPT;
 
         Admin::script($script);
     }

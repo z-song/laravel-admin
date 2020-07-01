@@ -38,4 +38,3 @@
     @endcomponent
     </script>
 @endsection
-

@@ -15,7 +15,7 @@ class Badge extends AbstractDisplayer
 
         return collect((array) $this->value)->map(function ($name) use ($style) {
             if (is_array($style)) {
-                $style = Arr::get($style, $this->getColumn()->getOriginal(), 'red');
+                $style = Arr::get($style, $this->getOriginalValue(), 'red');
             }
 
             return "<span class='badge bg-{$style}'>$name</span>";

@@ -1,20 +1,3 @@
-$.fn.editable.defaults.params = function (params) {
-    params._token = LA.token;
-    params._editable = 1;
-    params._method = 'PUT';
-    return params;
-};
-
-$.fn.editable.defaults.error = function (data) {
-    var msg = '';
-    if (data.responseJSON.errors) {
-        $.each(data.responseJSON.errors, function (k, v) {
-            msg += v + "\n";
-        });
-    }
-    return msg
-};
-
 toastr.options = {
     closeButton: true,
     progressBar: true,
@@ -194,5 +177,16 @@ $('#totop').on('click', function (e) {
 
         return $.when.apply($, _arr);
     }
+
+    $.admin.loadCss = function (css) {
+        var existingCss = $('link[rel=stylesheet]');
+        var matchedCss = existingCss.filter(function () {
+            return this.getAttribute("href") === css
+        });
+
+        if (matchedCss.length === 0) {
+            $("<link/>", {rel: "stylesheet", type: "text/css", href: css,}).appendTo("head");
+        }
+    };
 
 })(jQuery);

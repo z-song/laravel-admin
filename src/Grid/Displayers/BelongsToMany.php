@@ -50,7 +50,7 @@ class BelongsToMany extends BelongsTo
      */
     protected function getOriginalData()
     {
-        $relations = $this->getColumn()->getOriginal();
+        $relations = $this->getOriginalValue();
 
         if (is_string($relations)) {
             $data = explode(',', $relations);
