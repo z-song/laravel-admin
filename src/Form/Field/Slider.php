@@ -18,7 +18,7 @@ class Slider extends Field
 
         $this->script = "$('{$this->getElementClassSelector()}').ionRangeSlider($option)";
 
-        admin_require('rangeSlider');
+        admin_assets('rangeSlider');
 
         return parent::render();
     }

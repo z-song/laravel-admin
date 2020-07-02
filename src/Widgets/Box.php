@@ -131,7 +131,7 @@ class Box extends Widget implements Renderable
      */
     public function scrollable($options = [], $nodeSelector = '')
     {
-        admin_require('slimscroll');
+        admin_assets('slimscroll');
 
         $this->id = uniqid('box-slim-scroll-');
         $scrollOptions = json_encode($options);

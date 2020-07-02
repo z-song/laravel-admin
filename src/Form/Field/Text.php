@@ -68,7 +68,7 @@ class Text extends Field
      */
     public function inputmask($options)
     {
-        admin_require('inputmask');
+        admin_assets('inputmask');
 
         $options = json_encode_options($options);
 

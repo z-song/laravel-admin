@@ -161,13 +161,10 @@ $('#totop').on('click', function (e) {
 
     $.admin.loadScripts = function(arr) {
         var _arr = $.map(arr, function(src) {
-
             if ($.inArray(src, $.admin.loadedScripts)) {
                 return;
             }
-
             $.admin.loadedScripts.push(src);
-
             return $.getScript(src);
         });
 
@@ -180,13 +177,15 @@ $('#totop').on('click', function (e) {
 
     $.admin.loadCss = function (css) {
         var existingCss = $('link[rel=stylesheet]');
-        var matchedCss = existingCss.filter(function () {
-            return this.getAttribute("href") === css
-        });
+        $.map(css, function (href) {
+            var matchedCss = existingCss.filter(function () {
+                return this.getAttribute("href") === href
+            });
 
-        if (matchedCss.length === 0) {
-            $("<link/>", {rel: "stylesheet", type: "text/css", href: css,}).appendTo("head");
-        }
+            if (matchedCss.length === 0) {
+                $("<link/>", {rel: "stylesheet", type: "text/css", href: href,}).appendTo("head");
+            }
+        });
     };
 
 })(jQuery);

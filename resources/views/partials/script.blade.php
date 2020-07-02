@@ -1,9 +1,22 @@
-@if(!empty($pjaxJs))
-    @foreach($pjaxJs as $js)
-    <script src="{{ $js }}"></script>
-    @endforeach
-@endif
+<script data-exec-on-popstate>
+$(function () {
+    $.when($.admin.loadJs(@json($js)), $.admin.loadCss(@json($css))).done(function () {
+        @foreach($script as $s) {!! $s !!} @endforeach
+    });
 
-@if(!empty($script))
-<script data-exec-on-popstate type="text/javascript">$(function () {@foreach($script as $s) {!! $s !!} @endforeach});</script>
-@endif
+    {{--$.admin.loadJs(@json($js)).then(function () {--}}
+    {{--    console.log(123);--}}
+    {{--    --}}{{--$.admin.loadCss(@json($css));--}}
+    {{--}).done(function () {--}}
+    {{--    @foreach($script as $s) {!! $s !!} @endforeach--}}
+    {{--});--}}
+
+    {{--$.admin.loadJs(@json($js))--}}
+    {{--    .then(function () {--}}
+    {{--        $.admin.loadCss(@json($css))--}}
+    {{--    }).then(function(){--}}
+    {{--        @foreach($script as $s) {!! $s !!} @endforeach--}}
+    {{--    });--}}
+});
+</script>
+

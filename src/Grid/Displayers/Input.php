@@ -9,7 +9,7 @@ class Input extends AbstractDisplayer
     public function display($mask = '')
     {
         if ($mask) {
-            admin_require('inputmask');
+            admin_assets('inputmask');
         }
 
         return Admin::view('admin::grid.inline-edit.input', [

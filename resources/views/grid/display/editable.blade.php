@@ -1,4 +1,3 @@
-@admin_require('editable')
 <a
     href="javascript:void(0);"
     class="{{ $class }}"
@@ -10,7 +9,7 @@
     {{ $type === 'select' ? '' : $value }}
 </a>
 
-<script>
+<script require="editable">
     $.fn.editable.defaults.params = function (params) {
         params._token = LA.token;
         params._editable = 1;

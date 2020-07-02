@@ -15,7 +15,7 @@ SCRIPT;
         $this->prepend('<i class="fa fa-pencil fa-fw"></i>')
             ->defaultAttribute('style', 'width: 140px');
 
-        admin_require('iconpicker');
+        admin_assets('iconpicker');
 
         return parent::render();
     }

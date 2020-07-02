@@ -1,4 +1,4 @@
-@admin_require('fileinput')
+@admin_assets('fileinput')
 
 <div class="form-group">
     <label>{{ $label }}</label>

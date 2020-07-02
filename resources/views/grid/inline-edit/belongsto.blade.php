@@ -172,6 +172,6 @@
         load($(this).attr('action')+'&'+$(this).serialize());
         e.preventDefault();
         return false;
-    })
+    });
 
 </script>

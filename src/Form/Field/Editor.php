@@ -8,7 +8,7 @@ class Editor extends Field
 {
     public function render()
     {
-        admin_require('ckeditor');
+        admin_assets('ckeditor');
 
         $this->script = "CKEDITOR.replace('{$this->id}');";
 

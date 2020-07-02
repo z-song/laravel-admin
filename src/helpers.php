@@ -154,22 +154,22 @@ if (!function_exists('admin_asset')) {
     }
 }
 
-if (!function_exists('admin_require')) {
+if (!function_exists('admin_assets')) {
 
     /**
      * @param $path
      *
      * @return string
      */
-    function admin_require($name)
+    function admin_assets($assets)
     {
-        if ($require = Arr::get(Admin::$requires, $name)) {
-            if (isset($require['css'])) {
-                Admin::css($require['css']);
+        foreach (Arr::wrap($assets) as $asset) {
+            if ($css = Arr::get(Admin::$assets, "{$asset}.css")) {
+                Admin::css($css);
             }
 
-            if (isset($require['js'])) {
-                Admin::js($require['js']);
+            if ($js = Arr::get(Admin::$assets, "{$asset}.js")) {
+                Admin::js($js);
             }
         }
     }

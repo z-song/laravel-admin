@@ -1,5 +1,3 @@
-@admin_require('nsetable')
-
 <div class="box">
 
     <div class="box-header">
@@ -48,7 +46,7 @@
 </div>
 
 
-<script>
+<script require="nsetable">
     $('#{{ $id }}').nestable(@json($options));
 
     $('.tree_branch_delete').click(function() {

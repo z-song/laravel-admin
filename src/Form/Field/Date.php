@@ -33,6 +33,8 @@ class Date extends Text
         $this->prepend('<i class="fa fa-calendar fa-fw"></i>')
             ->defaultAttribute('style', 'width: 110px');
 
+        admin_assets('datetimepicker');
+
         return parent::render();
     }
 }

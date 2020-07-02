@@ -22,3 +22,23 @@
 
     </div>
 </div>
+
+<style>
+    .card-group label {
+        cursor: pointer;
+        margin-right: 8px;
+        font-weight: 400;
+    }
+
+    .card-group .panel {
+        margin-bottom: 0px;
+    }
+
+    .card-group .panel-body {
+        padding: 10px 15px;
+    }
+
+    .card-group .active {
+        border: 2px solid #367fa9;
+    }
+</style>

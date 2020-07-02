@@ -58,9 +58,11 @@ trait RenderView
 
         libxml_use_internal_errors(false);
 
+        $null = new DOMElement('null');
+
         return [
-            $dom->getElementsByTagName('head')->item(0) ?: new DOMElement('null'),
-            $dom->getElementsByTagName('body')->item(0) ?: new DOMElement('null'),
+            $dom->getElementsByTagName('head')->item(0) ?: $null,
+            $dom->getElementsByTagName('body')->item(0) ?: $null,
         ];
     }
 
@@ -82,8 +84,12 @@ trait RenderView
     protected static function resolveScript(DOMElement $element)
     {
         if ($element->hasAttribute('src')) {
-            static::js($element->getAttribute('src'));
+            static::js(admin_asset($element->getAttribute('src')));
         } elseif (!empty(trim($element->nodeValue))) {
+            if ($require = $element->getAttribute('require')) {
+                admin_assets(explode(',', $require));
+            }
+
             static::script(';(function () {' . $element->nodeValue . '})();');
         }
     }
@@ -106,11 +112,7 @@ trait RenderView
     protected static function resolveLink(DOMElement $element)
     {
         if ($element->getAttribute('rel') == 'stylesheet' && $href = $element->getAttribute('href')) {
-            if (request()->pjax()) {
-                static::script("$.admin.loadCss('{$href}');");
-            } else {
-                static::css($href);
-            }
+            static::css(admin_asset($href));
         }
     }
 

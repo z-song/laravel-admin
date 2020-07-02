@@ -1,4 +1,4 @@
-@admin_require('select2')
+@admin_assets('select2')
 
 <div class="form-group">
     <label>{{ $label }}</label>

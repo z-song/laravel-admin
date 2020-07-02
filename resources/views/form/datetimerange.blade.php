@@ -1,4 +1,4 @@
-@admin_require('datetimepicker')
+@admin_assets('datetimepicker')
 
 <div class="{{$viewClass['form-group']}} {!! ($errors->has($errorKey['start'].'start') || $errors->has($errorKey['end'].'end')) ? 'has-error' : ''  !!}">
 

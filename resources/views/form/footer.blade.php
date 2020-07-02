@@ -30,9 +30,7 @@
     </div>
 </div>
 
-@admin_require('icheck')
-
-<script>
+<script require="icheck">
     $('.after-submit').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChecked', function () {
         $('.after-submit').not(this).iCheck('uncheck');
     });

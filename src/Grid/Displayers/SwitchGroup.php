@@ -9,7 +9,7 @@ class SwitchGroup extends SwitchDisplay
 {
     public function display($columns = [], $states = [])
     {
-        admin_require('bootstrapSwitch');
+        admin_assets('bootstrapSwitch');
 
         $this->overrideStates($states);
 

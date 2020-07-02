@@ -22,7 +22,7 @@ SCRIPT;
 
         $this->prepend('')->defaultAttribute('style', 'width: 100px');
 
-        admin_require('bootstrapNumber');
+        admin_assets('bootstrapNumber');
 
         return parent::render();
     }

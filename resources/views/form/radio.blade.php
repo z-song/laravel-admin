@@ -1,4 +1,4 @@
-@admin_require('icheck')
+@admin_assets('icheck')
 
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 

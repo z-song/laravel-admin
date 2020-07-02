@@ -1,7 +1,7 @@
 <a
     href="javascript:void(0);"
     class="grid-column-qrcode text-muted"
-    data-content="{{ $img }}"
+    data-content="{!! $img !!}"
     data-toggle='popover'
     tabindex='0'
 >

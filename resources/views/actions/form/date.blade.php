@@ -1,4 +1,4 @@
-@admin_require('datetimepicker')
+@admin_assets('datetimepicker')
 
 <div class="form-group">
     <label>{{ $label }}</label>

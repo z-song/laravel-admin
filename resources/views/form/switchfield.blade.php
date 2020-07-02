@@ -1,5 +1,3 @@
-@admin_require('bootstrapSwitch')
-
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
@@ -16,7 +14,7 @@
     </div>
 </div>
 
-<script>
+<script require="bootstrapSwitch">
     $('{{ $selector }}.la_checkbox').bootstrapSwitch({
         size:'{{ $size }}',
         onText: '{{ $states['on']['text'] }}',

@@ -48,7 +48,7 @@ class Color extends Text
         $this->prepend('<i></i>')
             ->defaultAttribute('style', 'width: 140px');
 
-        admin_require('colorpicker');
+        admin_assets('colorpicker');
 
         return parent::render();
     }

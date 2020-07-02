@@ -182,7 +182,7 @@ class Tags extends Field
             return '';
         }
 
-        admin_require('select2');
+        admin_assets('select2');
 
         if ($this->keyAsValue) {
             $options = $this->value + $this->options;

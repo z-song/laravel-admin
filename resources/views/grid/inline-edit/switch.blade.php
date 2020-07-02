@@ -1,8 +1,6 @@
-@admin_require('bootstrapSwitch')
-
 <input type="checkbox" class="{{ $class }}" {{ $checked }} data-key="{{ $key }}" />
 
-<script>
+<script require="bootstrapSwitch">
     $('.{{ $class }}').bootstrapSwitch({
         size:'mini',
         onText: '{{ $states['on']['text'] }}',

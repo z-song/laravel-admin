@@ -1,4 +1,4 @@
-@admin_require('select2')
+@admin_assets('select2')
 
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 

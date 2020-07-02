@@ -84,7 +84,7 @@ SCRIPT;
 
         $this->attribute('data-value', implode(',', (array) $this->value()));
 
-        admin_require('duallistbox');
+        admin_assets('duallistbox');
 
         return parent::render();
     }

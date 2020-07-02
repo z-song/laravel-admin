@@ -27,8 +27,7 @@
 </script>
 
 @if($dp)
-@admin_require('datetimepicker')
-<script>
+<script require="datetimepicker">
     $('.{{ $class['start'] }},.{{ $class['end'] }}').datetimepicker(@json($dp));
 </script>
 @endif

@@ -36,6 +36,11 @@ trait HasAssets
      */
     public static $pjaxJs = [];
 
+    protected static $deferredAssets = [
+        'js' => [],
+        'css' => [],
+    ];
+
     /**
      * @var array
      */
@@ -94,7 +99,7 @@ trait HasAssets
     /**
      * @var array
      */
-    public static $requires = [
+    public static $assets = [
         'nsetable'       => [
             'css' => ['/vendor/laravel-admin/nestable/nestable.css'],
             'js'  => ['/vendor/laravel-admin/nestable/jquery.nestable.js'],
@@ -104,8 +109,8 @@ trait HasAssets
             'js'  => ['/vendor/laravel-admin/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js',],
         ],
         'colorpicker'    => [
-            'css' => ['/vendor/laravel-admin/nestable/nestable.css'],
-            'js'  => ['/vendor/laravel-admin/nestable/jquery.nestable.js'],
+            'css' => ['/vendor/laravel-admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css',],
+            'js'  => ['/vendor/laravel-admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js',],
         ],
         'icheck'         => [
             'css' => ['/vendor/laravel-admin/AdminLTE/plugins/iCheck/minimal/_all.css'],
@@ -190,11 +195,8 @@ trait HasAssets
         static::ignoreMinify($css, $minify);
 
         if (!is_null($css)) {
-            if (request()->pjax() && static::$booted) {
-                foreach ((array)$css as $href) {
-                    static::script("$.admin.loadCss('{$href}');");
-                }
-                return;
+            if (static::$booted) {
+                return self::$deferredAssets['css'] = array_merge(self::$deferredAssets['css'], (array) $css);
             }
 
             return self::$css = array_merge(self::$css, (array) $css);
@@ -243,8 +245,8 @@ trait HasAssets
         static::ignoreMinify($js, $minify);
 
         if (!is_null($js)) {
-            if (request()->pjax() && static::$booted) {
-                return self::$pjaxJs = array_merge(self::$pjaxJs, (array) $js);
+            if (static::$booted) {
+                return self::$deferredAssets['js'] = array_merge(self::$deferredAssets['js'], (array) $js);
             }
 
             return self::$js = array_merge(self::$js, (array) $js);
@@ -322,16 +324,17 @@ trait HasAssets
         $script = collect(static::$script)
             ->merge(static::$deferredScript)
             ->unique()
-            ->map(function ($line) {
+            ->map(function ($line) {return $line;
                 //@see https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
                 $line = preg_replace('/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/', '', $line);
 
                 return preg_replace(['/\s*([,;\[\]\{\}\=\+\-])\s*/', '/\s+/'], ['\1', ' '], $line);
             });
 
-        $pjaxJs = array_unique(self::$pjaxJs);
+        $js = collect(static::$deferredAssets['js'])->map('admin_asset')->unique()->values();
+        $css = collect(static::$deferredAssets['css'])->map('admin_asset')->unique()->values();
 
-        return view('admin::partials.script', compact('script', 'pjaxJs'));
+        return view('admin::partials.script', compact('script', 'js', 'css'));
     }
 
     /**
@@ -415,21 +418,18 @@ trait HasAssets
      * @param $name
      * @return string
      */
-    public static function renderRequire($name)
+    public static function renderAssets($name)
     {
-        $require = Arr::get(static::$requires, $name);
-
         $html = '';
-        if (isset($require['js'])) {
-            foreach ($require['js'] as $j) {
-                $html .= "<script src=\"{$j}\"></script>";
-            }
+
+        foreach (Arr::get(static::$assets, "{$name}.js", []) as $js) {
+            $js = admin_asset($js);
+            $html .= "<script src=\"{$js}\"></script>";
         }
 
-        if (isset($require['css'])) {
-            foreach ($require['css'] as $css) {
-                $html .= "<link rel=\"stylesheet\" href=\"{$css}\">";
-            }
+        foreach (Arr::get(static::$assets, "{$name}.css", []) as $css) {
+            $css = admin_asset($css);
+            $html .= "<link rel=\"stylesheet\" href=\"{$css}\">";
         }
 
         return $html;
@@ -441,5 +441,15 @@ trait HasAssets
     public function jQuery()
     {
         return admin_asset(static::$jQuery);
+    }
+
+    /**
+     * @param string $name
+     * @param array $assets
+     * @return void
+     */
+    public static function assets(string $name, array $assets)
+    {
+        static::$assets[$name] = $assets;
     }
 }

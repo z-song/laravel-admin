@@ -96,28 +96,12 @@ class Checkbox extends MultipleSelect
      */
     public function render()
     {
-        $this->script = "$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
-
         $this->addVariables([
-            'checked'     => $this->checked,
-            'inline'      => $this->inline,
-            'canCheckAll' => $this->canCheckAll,
+            'checked'       => $this->checked,
+            'inline'        => $this->inline,
+            'canCheckAll'   => $this->canCheckAll,
+            'checkAllClass' => uniqid('check-all-'),
         ]);
-
-        if ($this->canCheckAll) {
-            $checkAllClass = uniqid('check-all-');
-
-            $this->script .= <<<SCRIPT
-$('.{$checkAllClass}').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
-    if (this.checked) {
-        $('{$this->getElementClassSelector()}').iCheck('check');
-    } else {
-        $('{$this->getElementClassSelector()}').iCheck('uncheck');
-    }
-})
-SCRIPT;
-            $this->addVariables(['checkAllClass' => $checkAllClass]);
-        }
 
         return parent::render();
     }

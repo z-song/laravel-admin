@@ -91,8 +91,8 @@ class AdminServiceProvider extends ServiceProvider
             return "'); echo \$box->render(); ?>";
         });
 
-        Blade::directive('admin_require', function ($require) {
-            return "<?php echo \Encore\Admin\Admin::renderRequire({$require}); ?>";
+        Blade::directive('admin_assets', function ($name) {
+            return "<?php echo \Encore\Admin\Admin::renderAssets({$name}); ?>";
         });
     }
 

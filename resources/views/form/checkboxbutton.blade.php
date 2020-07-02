@@ -20,3 +20,20 @@
 
     </div>
 </div>
+
+<script>
+    $('.checkbox-group-toggle label').click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            $(this).find('input').prop('checked', false);
+        } else {
+            $(this).addClass('active');
+            $(this).find('input').prop('checked', true);
+        }
+
+        $(this).find('input').trigger('change');
+    });
+</script>

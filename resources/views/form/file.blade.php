@@ -1,5 +1,3 @@
-@admin_require('fileinput')
-
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
@@ -15,11 +13,11 @@
     </div>
 </div>
 
-<script>
+<script require="fileinput">
     var $input = $("input{{ $selector }}");
     $input.fileinput({!! $options !!});
 
-    @if($this->fileActionSettings['showRemove'])
+    @if($settings['showRemove'])
     $input.on('filebeforedelete', function() {
         return new Promise(function(resolve, reject) {
             var remove = resolve;

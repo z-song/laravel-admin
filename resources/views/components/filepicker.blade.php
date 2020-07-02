@@ -42,7 +42,7 @@ modal.on('show.bs.modal', function (e) {
 }).on('submit', '.box-header form', function (e) {
     load($(this).attr('action')+'&'+$(this).serialize());
     return false;
-})
+});
 
 @if($multiple)
 
@@ -134,7 +134,7 @@ $('.picker-file-preview').on('click', 'a.remove', function () {
 
     var input = pickInput.val().split(separator);
 
-    var index = input.indexOf(current);value
+    var index = input.indexOf(current);
     if (index !== -1) {
         input.splice(index, 1);
     }
@@ -153,12 +153,12 @@ refresh = function () {
 
     var values = (typeof value == 'string') ? [value] : value;
     var preview = pickInput.parent().siblings('.picker-file-preview');
-    var url_tpl = '{{ $url_tpl }}';
+    var url_tpl = "{{ $url_tpl }}";
 
     @if($is_image)
-    var template = $('template#image-preview')
+    var template = $('template#image-preview');
     @else
-    var template = $('template#file-preview')
+    var template = $('template#file-preview');
     @endif
 
     preview.empty();

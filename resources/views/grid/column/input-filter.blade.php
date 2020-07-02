@@ -23,8 +23,7 @@
 </script>
 
 @if($dp)
-@admin_require('datetimepicker')
-<script>
+<script require="datetimepicker">
     $('.{{ $class }}').datetimepicker(@json($dp));
 </script>
 @endif
