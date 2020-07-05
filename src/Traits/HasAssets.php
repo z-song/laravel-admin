@@ -113,7 +113,7 @@ trait HasAssets
             'js'  => ['/vendor/laravel-admin/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js',],
         ],
         'icheck'         => [
-            'css' => ['/vendor/laravel-admin/AdminLTE/plugins/iCheck/minimal/_all.css'],
+            'css' => ['/vendor/laravel-admin/AdminLTE/plugins/iCheck/minimal/blue.css'],
             'js'  => ['/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',],
         ],
         'fileinput'      => [
