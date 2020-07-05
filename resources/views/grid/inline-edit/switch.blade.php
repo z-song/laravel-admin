@@ -33,6 +33,11 @@
                 complete:function(xhr,status) {
                     if (status == 'success')
                         _status = xhr.responseJSON.status;
+                },
+                statusCode: {
+                    500: function(xhr) {
+                        $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-top-bottom"});
+                    }
                 }
             });
 

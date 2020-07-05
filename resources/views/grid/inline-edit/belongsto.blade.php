@@ -60,6 +60,11 @@
             },
             success: function (data) {
                 callback(data);
+            },
+            statusCode: {
+                500: function(xhr) {
+                    $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-top-bottom"});
+                }
             }
         });
     };

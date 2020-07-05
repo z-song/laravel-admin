@@ -12,7 +12,7 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
     var original = $trigger.data('original');
 
     if (val == original) {
-        $('[data-toggle="popover"]').popover('hide');
+        $('[data-editinline="popover"]').popover('hide');
         return;
     }
 
@@ -35,7 +35,7 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
             $trigger.data('value', val)
                 .data('original', val);
 
-            $('[data-toggle="popover"]').popover('hide');
+            $('[data-editinline="popover"]').popover('hide');
         },
         statusCode: {
             422: function(xhr) {
@@ -44,6 +44,9 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
                 for (var key in errors) {
                     $popover.find('.error').append('<div><i class="fa fa-times-circle-o"></i> '+errors[key]+'</div>')
                 }
+            },
+            500: function(xhr) {
+                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-top-bottom"});
             }
         }
     });

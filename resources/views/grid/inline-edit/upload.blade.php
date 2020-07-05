@@ -34,6 +34,11 @@ $('input.inline-upload').on('change', function () {
         success: function (data) {
             toastr.success(data.message);
             $.admin.reload();
+        },
+        statusCode: {
+            500: function(xhr) {
+                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-top-bottom"});
+            }
         }
     });
 });

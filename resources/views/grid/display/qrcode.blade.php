@@ -2,7 +2,6 @@
     href="javascript:void(0);"
     class="grid-column-qrcode text-muted"
     data-content="{!! $img !!}"
-    data-toggle='popover'
     tabindex='0'
 >
     <i class="fa fa-qrcode"></i>

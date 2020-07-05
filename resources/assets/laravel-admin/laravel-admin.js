@@ -161,10 +161,12 @@ $('#totop').on('click', function (e) {
 
     $.admin.loadScripts = function(arr) {
         var _arr = $.map(arr, function(src) {
-            if ($.inArray(src, $.admin.loadedScripts)) {
+            if ($.inArray(src, $.admin.loadedScripts) >= 0) {
                 return;
             }
+
             $.admin.loadedScripts.push(src);
+
             return $.getScript(src);
         });
 
@@ -173,7 +175,7 @@ $('#totop').on('click', function (e) {
         }));
 
         return $.when.apply($, _arr);
-    }
+    };
 
     $.admin.loadCss = function (css) {
         var existingCss = $('link[rel=stylesheet]');
@@ -183,8 +185,19 @@ $('#totop').on('click', function (e) {
             });
 
             if (matchedCss.length === 0) {
-                $("<link/>", {rel: "stylesheet", type: "text/css", href: href,}).appendTo("head");
+                $("<link/>", {
+                    rel: "stylesheet",
+                    type: "text/css",
+                    href: href,
+                }).appendTo("head");
             }
+        });
+    };
+
+    $.admin.loadAssets = function (js, css) {
+        var admin = this;
+        return admin.loadScripts(js).then(function () {
+            admin.loadCss(css);
         });
     };
 

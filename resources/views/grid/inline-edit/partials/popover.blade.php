@@ -29,6 +29,6 @@ $('.{{ $trigger }}').popover({
     {{ $shown ?? '' }}
 
 }).click(function () {
-    $('[data-toggle="popover"]').popover('hide');
+    $('[data-editinline="popover"]').popover('hide');
     $(this).popover('toggle');
 });
