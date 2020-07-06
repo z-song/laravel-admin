@@ -41,10 +41,14 @@
     Inspired by <a href="https://github.com/sleeping-owl/admin" target="_blank">SleepingOwlAdmin</a> and <a href="https://github.com/zofe/rapyd-laravel" target="_blank">rapyd-laravel</a>.
 </p>
 
-Screenshots
+Sponsor
 ------------
+[laravel-admin] is being sponsored by the following tool; please help to support us by taking a look and signing up to a free trial
 
-![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625297/3b3deb64-9947-11e6-807c-cffa999004be.jpg)
+<a href="https://tracking.gitads.io/?repo=laravel-admin">
+ <img src ="https://images.gitads.io/laravel-admin" alt="GitAds" />
+</a>
+
 
 Requirements
 ------------
