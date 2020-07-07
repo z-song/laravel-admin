@@ -275,7 +275,7 @@ abstract class Action implements Renderable
 ;(function () {
     $('{$this->selector($this->selectorPrefix)}').off('{$this->event}').on('{$this->event}', function() {
         var data = $(this).data();
-        var target = $(this);
+        var \$target = $(this);
         Object.assign(data, {$parameters});
         {$this->actionScript()}
         {$this->buildActionPromise()}
@@ -314,7 +314,7 @@ SCRIPT;
                 url: '{$this->getHandleRoute()}',
                 data: data,
                 success: function (data) {
-                    resolve([data, target]);
+                    resolve([data, \$target]);
                 },
                 error:function(request){
                     reject(request);
@@ -333,57 +333,57 @@ SCRIPT;
         $resolve = <<<'SCRIPT'
 var actionResolver = function (data) {
 
-            var response = data[0];
-            var target   = data[1];
+    var response = data[0];
+    var $target   = data[1];
 
-            if (typeof response !== 'object') {
-                return $.admin.swal({type: 'error', title: 'Oops!'});
-            }
+    if (typeof response !== 'object') {
+        return $.admin.swal({type: 'error', title: 'Oops!'});
+    }
 
-            var then = function (then) {
-                if (then.action == 'refresh') {
-                    $.admin.reload();
-                }
+    var then = function (then) {
+        if (then.action == 'refresh') {
+            $.admin.reload();
+        }
 
-                if (then.action == 'download') {
-                    window.open(then.value, '_blank');
-                }
+        if (then.action == 'download') {
+            window.open(then.value, '_blank');
+        }
 
-                if (then.action == 'redirect') {
-                    $.admin.redirect(then.value);
-                }
+        if (then.action == 'redirect') {
+            $.admin.redirect(then.value);
+        }
 
-                if (then.action == 'location') {
-                    window.location = then.value;
-                }
+        if (then.action == 'location') {
+            window.location = then.value;
+        }
 
-                if (then.action == 'oepn') {
-                    window.open(this.value, '_blank');
-                }
-            };
+        if (then.action == 'oepn') {
+            window.open(this.value, '_blank');
+        }
+    };
 
-            if (typeof response.html === 'string') {
-                target.html(response.html);
-            }
+    if (typeof response.html === 'string') {
+        $target.html(response.html);
+    }
 
-            if (typeof response.swal === 'object') {
-                $.admin.swal(response.swal);
-            }
+    if (typeof response.swal === 'object') {
+        $.admin.swal(response.swal);
+    }
 
-            if (typeof response.toastr === 'object' && response.toastr.type) {
-                $.admin.toastr[response.toastr.type](response.toastr.content, '', response.toastr.options);
-            }
+    if (typeof response.toastr === 'object' && response.toastr.type) {
+        $.admin.toastr[response.toastr.type](response.toastr.content, '', response.toastr.options);
+    }
 
-            if (response.then) {
-              then(response.then);
-            }
-        };
+    if (response.then) {
+      then(response.then);
+    }
+};
 
-        var actionCatcher = function (request) {
-            if (request && typeof request.responseJSON === 'object') {
-                $.admin.toastr.error(request.responseJSON.message, '', {positionClass:"toast-bottom-center", timeOut: 10000}).css("width","500px")
-            }
-        };
+var actionCatcher = function (request) {
+    if (request && typeof request.responseJSON === 'object') {
+        $.admin.toastr.error(request.responseJSON.message, '', {positionClass:"toast-bottom-center", timeOut: 10000}).css("width","500px")
+    }
+};
 SCRIPT;
 
         Admin::script($resolve);

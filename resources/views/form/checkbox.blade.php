@@ -26,7 +26,7 @@
     var $checkbox = $('{{ $selector }}');
     $checkbox.iCheck({checkboxClass:'icheckbox_minimal-blue'});
 
-    @if(canCheckAll)
+    @if($canCheckAll)
     $('.{{ $checkAllClass }}').iCheck({
         checkboxClass:'icheckbox_minimal-blue'
     }).on('ifChanged', function () {

@@ -475,23 +475,6 @@ class Form extends Interactor
     }
 
     /**
-     * @return void
-     */
-    public function addModalHtml()
-    {
-        $data = [
-            'fields'     => $this->fields,
-            'title'      => $this->action->name(),
-            'modal_id'   => $this->getModalId(),
-            'modal_size' => $this->modalSize,
-        ];
-
-        $modal = view('admin::actions.form.modal', $data)->render();
-
-        Admin::html($modal);
-    }
-
-    /**
      * @return string
      */
     public function getModalId()
@@ -514,135 +497,24 @@ class Form extends Interactor
     {
         $this->action->attribute('modal', $this->getModalId());
 
-        $parameters = json_encode($this->action->parameters());
+        call_user_func([$this->action, 'form'],
+            ($this->action instanceof RowAction) ? $this->action->getRow() : null
+        );
 
-        $script = <<<SCRIPT
-
-;(function () {
-    $('{$this->action->selector($this->action->selectorPrefix)}').off('{$this->action->event}').on('{$this->action->event}', function() {
-        var data = $(this).data();
-        var target = $(this);
-        var modalId = $(this).attr('modal');
-        Object.assign(data, {$parameters});
-        {$this->action->actionScript()}
-        $('#'+modalId).modal('show');
-        $('#'+modalId+' form').off('submit').on('submit', function (e) {
-            e.preventDefault();
-            var form = this;
-            {$this->buildActionPromise()}
-            {$this->action->handleActionPromise()}
-        });
-    });
-})();
-
-SCRIPT;
-
-        Admin::script($script);
-    }
-
-    /**
-     * @return string
-     */
-    protected function buildConfirmActionPromise()
-    {
-        $trans = [
-            'cancel' => trans('admin.cancel'),
-            'submit' => trans('admin.submit'),
-        ];
-
-        $settings = [
-            'type'                => 'question',
-            'showCancelButton'    => true,
-            'showLoaderOnConfirm' => true,
-            'confirmButtonText'   => $trans['submit'],
-            'cancelButtonText'    => $trans['cancel'],
-            'title'               => $this->confirm,
-            'text'                => '',
-        ];
-
-        $settings = trim(substr(json_encode($settings, JSON_PRETTY_PRINT), 1, -1));
-
-        return <<<PROMISE
-        var process = $.admin.swal({
-            {$settings},
-            preConfirm: function() {
-                {$this->buildGeneralActionPromise()}
-
-                return process;
-            }
-        }).then(function(result) {
-
-            if (typeof result.dismiss !== 'undefined') {
-                return Promise.reject();
-            }
-
-            var result = result.value[0];
-
-            if (typeof result.status === "boolean") {
-                var response = result;
-            } else {
-                var response = result.value;
-            }
-
-            return [response, target];
-        });
-PROMISE;
-    }
-
-    protected function buildGeneralActionPromise()
-    {
-        return <<<SCRIPT
-        var process = new Promise(function (resolve,reject) {
-            Object.assign(data, {
-                _token: $.admin.token,
-                _action: '{$this->action->getCalledClass()}',
-            });
-
-            var formData = new FormData(form);
-            for (var key in data) {
-                formData.append(key, data[key]);
-            }
-
-            $.ajax({
-                method: '{$this->action->getMethod()}',
-                url: '{$this->action->getHandleRoute()}',
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                    resolve([data, target]);
-                    if (data.status === true) {
-                        $('#'+modalId).modal('hide');
-                    }
-                },
-                error:function(request){
-                    reject(request);
-                }
-            });
-        });
-SCRIPT;
-    }
-
-    /**
-     * @throws \Exception
-     *
-     * @return string
-     */
-    protected function buildActionPromise()
-    {
-        if ($this->action instanceof RowAction) {
-            call_user_func([$this->action, 'form'], $this->action->getRow());
-        } else {
-            call_user_func([$this->action, 'form']);
-        }
-
-        $this->addModalHtml();
-
-        if (!empty($this->confirm)) {
-            return $this->buildConfirmActionPromise();
-        }
-
-        return $this->buildGeneralActionPromise();
+        return Admin::view('admin::actions.form', [
+            'selector'      => $this->action->selector($this->action->selectorPrefix),
+            'event'         => $this->action->event,
+            'action_script' => $this->action->actionScript(),
+            'promise'       => $this->action->handleActionPromise(),
+            'parameters'    => $this->action->parameters(),
+            'title'         => $this->action->name(),
+            'class'         => $this->action->getCalledClass(),
+            'method'        => $this->action->getMethod(),
+            'url'           => $this->action->getHandleRoute(),
+            'fields'        => $this->fields,
+            'modal_id'      => $this->getModalId(),
+            'modal_size'    => $this->modalSize,
+            'confirm'       => $this->confirm,
+        ]);
     }
 }

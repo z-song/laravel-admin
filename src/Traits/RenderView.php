@@ -20,7 +20,7 @@ trait RenderView
         $rendered = '';
 
         foreach ($head->childNodes as $child) {
-            if ($child instanceof DOMElement && in_array($child->tagName, ['style', 'script', 'link'])) {
+            if ($child instanceof DOMElement && in_array($child->tagName, ['style', 'script', 'link', 'template'])) {
                 static::resolve($child);
                 continue;
             }

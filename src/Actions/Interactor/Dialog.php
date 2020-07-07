@@ -151,7 +151,7 @@ class Dialog extends Interactor
 ;(function () {
     $('{$this->action->selector($this->action->selectorPrefix)}').off('{$this->action->event}').on('{$this->action->event}', function() {
         var data = $(this).data();
-        var target = $(this);
+        var \$target = $(this);
         Object.assign(data, {$parameters});
         {$this->action->actionScript()}
         {$this->buildActionPromise()}
@@ -214,7 +214,7 @@ SCRIPT;
                 var response = result.value;
             }
 
-            return [response, target];
+            return [response, \$target];
         });
 PROMISE;
     }
@@ -234,7 +234,6 @@ var process = $.admin.swal({
 }).then(function (file) {
     return new Promise(function (resolve) {
         var data = {
-            _token: $.admin.token,
             _action: '$calledClass',
         };
 
@@ -253,7 +252,7 @@ var process = $.admin.swal({
             contentType: false,
             enctype: 'multipart/form-data',
             success: function (data) {
-                resolve([response, target]);
+                resolve([response, \$target]);
             },
             error:function(request){
                 reject(request);
