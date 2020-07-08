@@ -1,5 +1,4 @@
 <script>
-
 $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
     var data = $(this).data();
     var $target = $(this);
@@ -8,15 +7,12 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
     Object.assign(data, @json($parameters));
 
     {!! $action_script !!}
+
     $modal.modal('show');
     $modal.find('form').off('submit').on('submit', function (e) {
         e.preventDefault();
         var form = this;
         var _promise = new Promise(function (resolve,reject) {
-            Object.assign(data, {
-                _action: '{{ $class }}',
-            });
-
             var formData = new FormData(form);
             for (var key in data) {
                 formData.append(key, data[key]);
@@ -42,7 +38,7 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
         });
 
         @if (!empty($confirm))
-        var process = $.admin.swal({
+        $.admin.swal({
             type: 'question',
             showCancelButton: true,
             showLoaderOnConfirm: true,
@@ -58,19 +54,13 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
                 return Promise.reject();
             }
             var result = result.value[0];
-
-            if (typeof result.status === "boolean") {
-                var response = result;
-            } else {
-                var response = result.value;
-            }
+            var response = (typeof result.status === "boolean") ? result : result.value;
 
             return [response, $target];
-        });
+        }).then($.admin.action.then).catch($.admin.action.catch);
         @else
-        var process = _promise;
+        _promise.then($.admin.action.then).catch($.admin.action.catch);
         @endif
-        {!! $promise !!}
     });
 });
 

@@ -51,11 +51,9 @@
 
 </div>
 
-<button id="totop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up"></i></button>
-
 <script>
     function LA() {}
-    LA.token = "{{ csrf_token() }}";
+    LA.token = $('meta[name=csrf-token]').attr('content');
     LA.user = @json($_user_);
 </script>
 

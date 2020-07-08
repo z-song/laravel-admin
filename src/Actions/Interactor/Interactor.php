@@ -31,9 +31,10 @@ abstract class Interactor
     {
         $this->action = $action;
     }
-
+    
     /**
+     * @param array $data
      * @return mixed
      */
-    abstract public function addScript();
+    abstract public function addScript(array $data = []);
 }

@@ -53,9 +53,7 @@ class Form extends Interactor
     {
         $field = new Field\Text($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -69,9 +67,7 @@ class Form extends Interactor
     {
         $field = new Field\Table($column, [$label, $builder]);
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -84,9 +80,7 @@ class Form extends Interactor
     {
         $field = new Field\Email($column, $this->formatLabel($label));
 
-        $this->addField($field)->setView('admin::actions.form.text');
-
-        return $field->inputmask(['alias' => 'email']);
+        return $this->addField($field)->setView('admin::actions.form.text');
     }
 
     /**
@@ -163,9 +157,7 @@ class Form extends Interactor
     {
         $field = new Field\Textarea($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -178,9 +170,7 @@ class Form extends Interactor
     {
         $field = new Field\Select($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -193,9 +183,7 @@ class Form extends Interactor
     {
         $field = new Field\MultipleSelect($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -208,9 +196,7 @@ class Form extends Interactor
     {
         $field = new Field\Checkbox($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -223,9 +209,7 @@ class Form extends Interactor
     {
         $field = new Field\Radio($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -238,9 +222,7 @@ class Form extends Interactor
     {
         $field = new Field\File($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -253,9 +235,7 @@ class Form extends Interactor
     {
         $field = new Field\MultipleFile($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -268,9 +248,7 @@ class Form extends Interactor
     {
         $field = new Field\Image($column, $this->formatLabel($label));
 
-        $this->addField($field)->setView('admin::actions.form.file');
-
-        return $field;
+        return $this->addField($field)->setView('admin::actions.form.file');
     }
 
     /**
@@ -283,9 +261,7 @@ class Form extends Interactor
     {
         $field = new Field\MultipleImage($column, $this->formatLabel($label));
 
-        $this->addField($field)->setView('admin::actions.form.muitplefile');
-
-        return $field;
+        return $this->addField($field)->setView('admin::actions.form.muitplefile');
     }
 
     /**
@@ -298,9 +274,7 @@ class Form extends Interactor
     {
         $field = new Field\Date($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -335,9 +309,7 @@ class Form extends Interactor
     {
         $field = new Field\Hidden($column, $this->formatLabel($label));
 
-        $this->addField($field);
-
-        return $field;
+        return $this->addField($field);
     }
 
     /**
@@ -491,9 +463,11 @@ class Form extends Interactor
     }
 
     /**
-     * @return void
+     * @param array $data
+     * @return mixed|string
+     * @throws \Throwable
      */
-    public function addScript()
+    public function addScript($data = [])
     {
         $this->action->attribute('modal', $this->getModalId());
 
@@ -501,20 +475,13 @@ class Form extends Interactor
             ($this->action instanceof RowAction) ? $this->action->getRow() : null
         );
 
-        return Admin::view('admin::actions.form', [
-            'selector'      => $this->action->selector($this->action->selectorPrefix),
-            'event'         => $this->action->event,
-            'action_script' => $this->action->actionScript(),
-            'promise'       => $this->action->handleActionPromise(),
-            'parameters'    => $this->action->parameters(),
-            'title'         => $this->action->name(),
-            'class'         => $this->action->getCalledClass(),
-            'method'        => $this->action->getMethod(),
-            'url'           => $this->action->getHandleRoute(),
+        $data = array_merge($data, [
             'fields'        => $this->fields,
             'modal_id'      => $this->getModalId(),
             'modal_size'    => $this->modalSize,
             'confirm'       => $this->confirm,
         ]);
+
+        return Admin::view('admin::actions.form', $data);
     }
 }
