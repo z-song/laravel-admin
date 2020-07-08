@@ -393,6 +393,21 @@ SCRIPT;
         return parent::readOnly();
     }
 
+    protected function getOptions()
+    {
+        if ($this->options instanceof \Closure) {
+            if ($this->form) {
+                $this->options = $this->options->bindTo($this->form->model());
+            }
+
+            $this->options(call_user_func($this->options, $this->value, $this));
+        }
+
+        $this->options = array_filter($this->options, 'strlen');
+
+        return $this->options;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -411,19 +426,9 @@ SCRIPT;
         if (empty($this->script)) {
             $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
         }
-
-        if ($this->options instanceof \Closure) {
-            if ($this->form) {
-                $this->options = $this->options->bindTo($this->form->model());
-            }
-
-            $this->options(call_user_func($this->options, $this->value, $this));
-        }
-
-        $this->options = array_filter($this->options, 'strlen');
-
+        
         $this->addVariables([
-            'options' => $this->options,
+            'options' => $this->getOptions(),
             'groups'  => $this->groups,
         ]);
 

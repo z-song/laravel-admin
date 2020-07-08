@@ -101,8 +101,11 @@ class Checkbox extends MultipleSelect
             'inline'        => $this->inline,
             'canCheckAll'   => $this->canCheckAll,
             'checkAllClass' => uniqid('check-all-'),
+            'options'       => $this->getOptions(),
         ]);
 
-        return parent::render();
+        $this->addCascadeScript();
+
+        return parent::fieldRender();
     }
 }
