@@ -13,7 +13,7 @@
         var key = $(this).data('id');
         var direction = $(this).data('direction');
 
-        $.post('{!! $resource !!}/' + key, {_method: 'PUT', _token: LA.token, _orderable: direction}, function (data) {
+        $.post('{!! $resource !!}/' + key, {_method: 'PUT', _orderable: direction}, function (data) {
             if (data.status) {
                 $.pjax.reload('#pjax-container');
                 toastr.success(data.message);

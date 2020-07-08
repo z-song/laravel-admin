@@ -62,11 +62,10 @@
             preConfirm: function() {
                 return new Promise(function(resolve) {
                     $.ajax({
-                        method: 'post',
+                        method: 'POST',
                         url: '{{ $url }}/' + id,
                         data: {
                             _method:'delete',
-                            _token:LA.token,
                         },
                         success: function (data) {
                             $.pjax.reload('#pjax-container');
@@ -92,7 +91,6 @@
         var serialize = $('#{{ $id }}').nestable('serialize');
 
         $.post('{{ $url }}', {
-                _token: LA.token,
                 _order: JSON.stringify(serialize)
             },
             function(data){

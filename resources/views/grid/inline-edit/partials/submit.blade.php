@@ -17,7 +17,6 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
     }
 
     var data = {
-        _token: LA.token,
         _method: 'PUT',
         _edit_inline: true,
     };
@@ -46,7 +45,7 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
                 }
             },
             500: function(xhr) {
-                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-top-bottom"});
+                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
             }
         }
     });

@@ -23,7 +23,6 @@
                 type: "POST",
                 data: {
                     "{{ $name }}": value,
-                    _token: LA.token,
                     _method: 'PUT'
                 },
                 success: function (data) {
@@ -38,7 +37,7 @@
                 },
                 statusCode: {
                     500: function(xhr) {
-                        $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-top-bottom"});
+                        $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
                     }
                 }
             });

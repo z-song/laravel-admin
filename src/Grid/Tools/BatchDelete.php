@@ -35,12 +35,9 @@ $('{$this->getElementClass()}').on('click', function() {
         preConfirm: function() {
             return new Promise(function(resolve) {
                 $.ajax({
-                    method: 'post',
+                    method: 'POST',
                     url: '{$this->resource}/' + $.admin.grid.selected().join(),
-                    data: {
-                        _method:'delete',
-                        _token:'{$this->getToken()}'
-                    },
+                    data: {_method:'delete'},
                     success: function (data) {
                         $.pjax.reload('#pjax-container');
 

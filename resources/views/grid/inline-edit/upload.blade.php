@@ -21,7 +21,6 @@ $('input.inline-upload').on('change', function () {
     @else
     formData.append("{{ $name }}", event.target.files[0]);
     @endif
-    formData.append('_token', LA.token);
     formData.append('_method', 'PUT');
 
     $.ajax({
@@ -37,7 +36,7 @@ $('input.inline-upload').on('change', function () {
         },
         statusCode: {
             500: function(xhr) {
-                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-top-bottom"});
+                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
             }
         }
     });

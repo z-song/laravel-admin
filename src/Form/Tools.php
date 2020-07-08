@@ -234,11 +234,10 @@ $('.{$class}-delete').unbind('click').click(function() {
         preConfirm: function() {
             return new Promise(function(resolve) {
                 $.ajax({
-                    method: 'post',
+                    type: 'POST',
                     url: '{$this->getDeletePath()}',
                     data: {
                         _method:'delete',
-                        _token:LA.token,
                     },
                     success: function (data) {
                         $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });

@@ -36,6 +36,9 @@ trait HasAssets
      */
     public static $pjaxJs = [];
 
+    /**
+     * @var array
+     */
     protected static $deferredAssets = [
         'js' => [],
         'css' => [],

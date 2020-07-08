@@ -251,12 +251,9 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
         preConfirm: function() {
             return new Promise(function(resolve) {
                 $.ajax({
-                    method: 'post',
+                    method: 'POST',
                     url: '{$this->getResource()}/' + id,
-                    data: {
-                        _method:'delete',
-                        _token:LA.token,
-                    },
+                    data: {_method:'delete'},
                     success: function (data) {
                         $.pjax.reload('#pjax-container');
 
