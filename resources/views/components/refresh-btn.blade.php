@@ -1,11 +1,11 @@
 <li>
-    <a href="javascript:void(0);" class="container-refresh">
+    <a href="javascript:void(0);" class="{{ $__id }}">
         <i class="fa fa-refresh"></i>
     </a>
 </li>
 <script>
-    $('.container-refresh').off('click').on('click', function() {
+    $('.{{ $__id }}').off('click').on('click', function() {
         $.admin.reload();
-        $.admin.toastr.success('{{ __('admin.refresh_succeeded') }}', '', {positionClass:"toast-top-center"});
+        $.admin.toastr.success('{{ admin_trans('refresh_succeeded') }}', '', {positionClass:"toast-top-center"});
     });
 </script>
