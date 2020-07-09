@@ -6,6 +6,6 @@
 <script>
     $('.{{ $__id }}').off('click').on('click', function() {
         $.admin.reload();
-        $.admin.toastr.success('{{ admin_trans('refresh_succeeded') }}', '', {positionClass:"toast-top-center"});
+        $.admin.toastr.success('{{ admin_trans('admin.refresh_succeeded') }}', '', {positionClass:"toast-top-center"});
     });
 </script>

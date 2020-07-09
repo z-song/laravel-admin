@@ -52,13 +52,13 @@
     $('.tree_branch_delete').click(function() {
         var id = $(this).data('id');
         swal({
-            title: "{{ admin_trans('delete_confirm') }}",
+            title: "{{ admin_trans('admin.delete_confirm') }}",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "{{ admin_trans('confirm') }}",
+            confirmButtonText: "{{ admin_trans('admin.confirm') }}",
             showLoaderOnConfirm: true,
-            cancelButtonText: "{{ admin_trans('cancel') }}",
+            cancelButtonText: "{{ admin_trans('admin.cancel') }}",
             preConfirm: function() {
                 return new Promise(function(resolve) {
                     $.ajax({
@@ -69,7 +69,7 @@
                         },
                         success: function (data) {
                             $.pjax.reload('#pjax-container');
-                            toastr.success('{{ admin_trans('delete_succeeded') }}');
+                            toastr.success('{{ admin_trans('admin.delete_succeeded') }}');
                             resolve(data);
                         }
                     });
@@ -95,13 +95,13 @@
             },
             function(data){
                 $.pjax.reload('#pjax-container');
-                toastr.success('{{ admin_trans('save_succeeded') }}');
+                toastr.success('{{ admin_trans('admin.save_succeeded') }}');
             });
     });
 
     $('.{{ $id }}-refresh').click(function () {
         $.pjax.reload('#pjax-container');
-        toastr.success('{{ admin_trans('refresh_succeeded') }}');
+        toastr.success('{{ admin_trans('admin.refresh_succeeded') }}');
     });
 
     $('.{{ $id }}-tree-tools').on('click', function(e){
