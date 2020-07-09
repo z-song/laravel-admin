@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Widgets;
 
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Renderable;
 
 class Box extends Widget implements Renderable
@@ -81,6 +83,12 @@ class Box extends Widget implements Renderable
     {
         if ($content instanceof Renderable) {
             $this->content = $content->render();
+        } elseif ($content instanceof Htmlable) {
+            $this->content = $content->toHtml();
+        } elseif ($content instanceof Jsonable) {
+            $this->content = '<pre>'.$content->toJson(JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE).'</pre>';
+        } elseif (is_array($content)) {
+            $this->content = '<pre>'.json_encode($content, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE).'</pre>';
         } else {
             $this->content = (string) $content;
         }
