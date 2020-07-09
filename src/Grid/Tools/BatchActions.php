@@ -3,6 +3,8 @@
 namespace Encore\Admin\Grid\Tools;
 
 use Encore\Admin\Admin;
+use Encore\Admin\Actions\BatchAction;
+use Encore\Admin\Grid\Actions\BatchDelete;
 use Illuminate\Support\Collection;
 
 class BatchActions extends AbstractTool
@@ -29,17 +31,7 @@ class BatchActions extends AbstractTool
     {
         $this->actions = new Collection();
 
-        $this->appendDefaultAction();
-    }
-
-    /**
-     * Append default action(batch delete action).
-     *
-     * return void
-     */
-    protected function appendDefaultAction()
-    {
-        $this->add(new BatchDelete(trans('admin.batch_delete')));
+        $this->add(new BatchDelete());
     }
 
     /**
@@ -76,39 +68,11 @@ class BatchActions extends AbstractTool
      *
      * @return $this
      */
-    public function add($title, BatchAction $action = null)
+    public function add(BatchAction $action)
     {
-        $id = $this->actions->count();
-
-        if (func_num_args() == 1) {
-            $action = $title;
-        } elseif (func_num_args() == 2) {
-            $action->setTitle($title);
-        }
-
-        if (method_exists($action, 'setId')) {
-            $action->setId($id);
-        }
-
         $this->actions->push($action);
 
         return $this;
-    }
-
-    /**
-     * Setup scripts of batch actions.
-     *
-     * @return void
-     */
-    protected function addActionScripts()
-    {
-        $this->actions->each(function ($action) {
-            $action->setGrid($this->grid);
-
-            if (method_exists($action, 'script')) {
-                Admin::script($action->script());
-            }
-        });
     }
 
     /**
@@ -122,7 +86,9 @@ class BatchActions extends AbstractTool
             $this->actions->shift();
         }
 
-        $this->addActionScripts();
+        $this->actions->each(function ($action) {
+            $action->setGrid($this->grid);
+        });
 
         return Admin::view('admin::grid.batch-actions', [
             'all'     => $this->grid->getSelectAllName(),
