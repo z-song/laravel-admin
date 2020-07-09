@@ -200,6 +200,14 @@ class Builder
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->form->model();
+    }
+
+    /**
      * Set resource Id.
      *
      * @param $id
