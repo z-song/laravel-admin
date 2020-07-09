@@ -8,6 +8,8 @@ use Encore\Admin\Form as BaseForm;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Layout\Content;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -531,6 +533,27 @@ class Form implements Renderable
     }
 
     /**
+     * @param mixed $value
+     * @return string
+     */
+    protected function renderResult($value)
+    {
+        $result = $this->result($value);
+
+        if ($result instanceof Htmlable) {
+            $result = $result->toHtml();
+        } elseif ($result instanceof Renderable) {
+            $result = $result->render();
+        } elseif ($result instanceof Jsonable) {
+            $result = $result->toJson();
+        } elseif (is_array($result)) {
+            $result = var_export($result, true);
+        }
+
+        return (string) $result;
+    }
+
+    /**
      * Render the form.
      *
      * @return string
@@ -547,7 +570,13 @@ class Form implements Renderable
             return $form;
         }
 
-        return (new Box($title, $form))->render();
+        $result = '';
+
+        if ($value = session()->get('__result')) {
+            $result = $this->renderResult($value);
+        }
+
+        return (new Box($title, $form))->render() . $result;
     }
 
     /**

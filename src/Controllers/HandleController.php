@@ -30,7 +30,13 @@ class HandleController extends Controller
             return back()->withInput()->withErrors($errors);
         }
 
-        return $form->sanitize()->handle($request);
+        $result = $form->sanitize()->handle($request);
+
+        if (method_exists($form, 'result')) {
+            return back()->withInput()->with('__result', $result);
+        }
+
+        return $result;
     }
 
     /**

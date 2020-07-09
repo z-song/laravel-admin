@@ -60,6 +60,17 @@ class Box extends Widget implements Renderable
     }
 
     /**
+     * @param string $title
+     * @param string $content
+     * @param string $footer
+     * @return static
+     */
+    public static function create($title = '', $content = '', $footer = '')
+    {
+        return new static(...func_get_args());
+    }
+
+    /**
      * Set box content.
      *
      * @param string $content
