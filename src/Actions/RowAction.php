@@ -28,6 +28,11 @@ abstract class RowAction extends GridAction
     protected $asColumn = false;
 
     /**
+     * @var bool
+     */
+    public $dblclick = false;
+
+    /**
      * Get primary key value of current row.
      *
      * @return mixed
@@ -104,6 +109,18 @@ abstract class RowAction extends GridAction
     }
 
     /**
+     * Double-click table row to activate this action.
+     *
+     * @return $this
+     */
+    public function dblclick()
+    {
+        $this->dblclick = true;
+
+        return $this;
+    }
+
+    /**
      * @param Request $request
      *
      * @return mixed
@@ -135,7 +152,7 @@ abstract class RowAction extends GridAction
     public function render()
     {
         if ($href = $this->href()) {
-            return "<a href='{$href}'>{$this->name()}</a>";
+            return "<a href='{$href}' class='{$this->getElementClass()}'>{$this->name()}</a>";
         }
 
         $this->addScript();

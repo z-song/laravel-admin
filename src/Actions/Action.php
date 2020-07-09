@@ -183,7 +183,7 @@ abstract class Action implements Renderable
     /**
      * @return string
      */
-    protected function getElementClass()
+    public function getElementClass()
     {
         return ltrim($this->selector($this->selectorPrefix), '.');
     }

@@ -43,4 +43,12 @@
     });
 </script>
 
+@if($dblclick)
+<script>
+    $('body').on('dblclick', 'table#{{ $table }}>tbody>tr', function(e) {
+        $(this).find('.{{ $dblclick }}').trigger('click');
+    });
+</script>
+@endif
+
 @yield('child')

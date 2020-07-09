@@ -89,7 +89,7 @@ class DropdownActions extends Actions
      *
      * @param bool $disable
      *
-     * @return $this.
+     * @return $this
      */
     public function disableDelete(bool $disable = true)
     {
@@ -137,9 +137,19 @@ class DropdownActions extends Actions
 
         $this->prependDefaultActions();
 
+        $dblclick = '';
+
+        foreach (array_merge($this->default, $this->custom) as $action) {
+            if ($action->dblclick) {
+                $dblclick = $action->getElementClass();
+            }
+        }
+
         $variables = [
-            'default' => $this->default,
-            'custom'  => $this->custom,
+            'default'  => $this->default,
+            'custom'   => $this->custom,
+            'dblclick' => $dblclick,
+            'table'    => $this->grid->tableID
         ];
 
         if (empty($variables['default']) && empty($variables['custom'])) {
