@@ -923,6 +923,8 @@ class Grid
      */
     public function render()
     {
+        view()->share('__table', "$('#{$this->tableID}')");
+
         $this->handleExportRequest(true);
 
         try {

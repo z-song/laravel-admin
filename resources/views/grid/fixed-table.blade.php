@@ -172,6 +172,7 @@
 </style>
 
 <script>
+    var $table = {!!  $__table  !!};
     var theadHeight = $('.table-main thead tr').outerHeight();
     $('.table-fixed thead tr').outerHeight(theadHeight);
 
@@ -211,12 +212,12 @@
         var index = $(this).closest('tr').index();
 
         if (this.checked) {
-        $.admin.grid.select(id);
+            $table.select(id);
             $('.table-main tbody tr').eq(index).css('background-color', '#ffffd5');
             $('.table-fixed-left tbody tr').eq(index).css('background-color', '#ffffd5');
             $('.table-fixed-right tbody tr').eq(index).css('background-color', '#ffffd5');
         } else {
-        $.admin.grid.unselect(id);
+            $table.unselect(id);
             $('.table-main tbody tr').eq(index).css('background-color', '');
             $('.table-fixed-left tbody tr').eq(index).css('background-color', '');
             $('.table-fixed-right tbody tr').eq(index).css('background-color', '');
@@ -226,12 +227,12 @@
         var id = $(this).data('id');
 
         if (this.checked) {
-            $.admin.grid.unselect(id);
+            $table.unselect(id);
         } else {
-            $.admin.grid.select(id);
+            $table.select(id);
         }
 
-        var selected = $.admin.grid.selected().length;
+        var selected = $table.selected().length;
 
         if (selected > 0) {
             $('.{{ $allName }}-btn').show();

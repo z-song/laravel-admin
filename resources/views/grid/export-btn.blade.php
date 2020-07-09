@@ -14,13 +14,14 @@
 </div>
 
 <script>
-$('.{{ $name }}').click(function (e) {
-    e.preventDefault();
-    var rows = $.admin.grid.selected().join();
-    if (!rows) {
-        return false;
-    }
-    var href = $(this).attr('href').replace('__rows__', rows);
-    location.href = href;
-});
+    var $table = {!!  $__table  !!};
+    $('.{{ $name }}').click(function (e) {
+        e.preventDefault();
+        var rows = $table.selected().join();
+        if (!rows) {
+            return false;
+        }
+        var href = $(this).attr('href').replace('__rows__', rows);
+        location.href = href;
+    });
 </script>
