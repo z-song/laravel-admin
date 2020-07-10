@@ -244,21 +244,55 @@
         Object.assign($table.init.prototype, {
             selects: {},
             select: function (id) {
+                if (id in this.selects) {
+                    return;
+                }
                 this.selects[id] = id;
+                this.row(id).css('background-color', '#ffffd5');
             },
             unselect: function (id) {
+                if (!(id in this.selects)) {
+                    return;
+                }
                 delete this.selects[id];
+                this.row(id).css('background-color', '');
+            },
+            toggle: function (id) {
+                if (id in this.selects) {
+                    this.unselect(id);
+                } else {
+                    this.select(id);
+                }
+                this.trigger('select');
+            },
+            toggleAll: function (all) {
+                if (all) {
+                    this.find('input.grid-row-checkbox').iCheck('check');
+                } else {
+                    this.find('input.grid-row-checkbox').iCheck('uncheck');
+                    this.selects = {};
+                }
+                this.trigger('select');
             },
             selected: function () {
-                var rows = [];
-                $.each(this.selects, function (key, val) {
-                    rows.push(key);
-                });
-                return rows;
+                return Object.keys(this.selects);
             },
-            clearSelected: function () {
-                this.selects = {};
+            row: function(id) {
+                return this.find('tr[data-key='+id+']');
             },
+        });
+
+        $table.on('select', function () {
+            var selected = $table.selected().length;
+            var $btn = $table.closest('.box').find('.grid-select-all-btn');
+            var $select = $btn.find('.selected');
+
+            if (selected > 0) {
+                $btn.show();
+                $select.html($select.data('tpl').replace('{n}', selected));
+            } else {
+                $btn.hide();
+            }
         });
     };
 

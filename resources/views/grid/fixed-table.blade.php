@@ -212,34 +212,15 @@
         var index = $(this).closest('tr').index();
 
         if (this.checked) {
-            $table.select(id);
             $('.table-main tbody tr').eq(index).css('background-color', '#ffffd5');
             $('.table-fixed-left tbody tr').eq(index).css('background-color', '#ffffd5');
             $('.table-fixed-right tbody tr').eq(index).css('background-color', '#ffffd5');
         } else {
-            $table.unselect(id);
             $('.table-main tbody tr').eq(index).css('background-color', '');
             $('.table-fixed-left tbody tr').eq(index).css('background-color', '');
             $('.table-fixed-right tbody tr').eq(index).css('background-color', '');
         }
-    }).on('ifClicked', function () {
 
-        var id = $(this).data('id');
-
-        if (this.checked) {
-            $table.unselect(id);
-        } else {
-            $table.select(id);
-        }
-
-        var selected = $table.selected().length;
-
-        if (selected > 0) {
-            $('.{{ $allName }}-btn').show();
-        } else {
-            $('.{{ $allName }}-btn').hide();
-        }
-
-        $('.{{ $allName }}-btn .selected').html("{{ trans('admin.grid_items_selected') }}".replace('{n}', selected));
+        $table.toggle($(this).data('id'));
     });
 </script>

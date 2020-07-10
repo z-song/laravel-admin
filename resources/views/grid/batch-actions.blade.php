@@ -1,6 +1,6 @@
 @if(!$holdAll)
-<div class="btn-group {{ $all }}-btn" style="display:none;margin-right: 5px;">
-    <a class="btn btn-sm btn-default hidden-xs"><span class="selected"></span></a>
+<div class="btn-group grid-select-all-btn" style="display:none;margin-right: 5px;">
+    <a class="btn btn-sm btn-default hidden-xs"><span class="selected" data-tpl="{{ trans('admin.grid_items_selected') }}"></span></a>
     <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
@@ -20,34 +20,8 @@
 @endif
 
 <script>
-    var $table = {!!  $__table  !!};
-    $('.{{ $all }}').iCheck({checkboxClass:'icheckbox_minimal-blue'});
-
-    $('.{{ $all }}').on('ifChanged', function(event) {
-        if (this.checked) {
-            $('.{{ $row }}-checkbox').iCheck('check');
-        } else {
-            $('.{{ $row }}-checkbox').iCheck('uncheck');
-        }
-    }).on('ifClicked', function () {
-        if (this.checked) {
-            $table.clearSelected();
-        } else {
-            $('.{{ $row }}-checkbox').each(function () {
-                var id = $(this).data('id');
-                $table.select(id);
-            });
-        }
-
-        var selected = $table.selected().length;
-
-        if (selected > 0) {
-            $('.{{ $all }}-btn').show();
-        } else {
-            $('.{{ $all }}-btn').hide();
-        }
-
-        $('.{{ $all }}-btn .selected')
-            .html("{{ trans('admin.grid_items_selected') }}".replace('{n}', selected));
-    });
+    $('.{{ $all }}').iCheck({checkboxClass:'icheckbox_minimal-blue'})
+        .on('ifChanged', function(event) {
+            {!!  $__table  !!}.toggleAll(this.checked);
+        });
 </script>

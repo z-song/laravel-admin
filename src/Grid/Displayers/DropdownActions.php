@@ -6,7 +6,8 @@ use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Admin;
 use Encore\Admin\Grid\Actions\Delete;
 use Encore\Admin\Grid\Actions\Edit;
-use Encore\Admin\Grid\Actions\Show;
+use Encore\Admin\Grid\Actions\View;
+use Illuminate\Support\Arr;
 
 class DropdownActions extends Actions
 {
@@ -25,7 +26,12 @@ class DropdownActions extends Actions
     /**
      * @var array
      */
-    protected $defaultClass = [Edit::class, Show::class, Delete::class];
+    protected $defaultClass = [Edit::class, View::class, Delete::class];
+
+    /**
+     * @var string
+     */
+    protected $dblclick;
 
     /**
      * @param RowAction $action
@@ -76,9 +82,9 @@ class DropdownActions extends Actions
     public function disableView(bool $disable = true)
     {
         if ($disable) {
-            array_delete($this->defaultClass, Show::class);
-        } elseif (!in_array(Show::class, $this->defaultClass)) {
-            array_push($this->defaultClass, Show::class);
+            array_delete($this->defaultClass, View::class);
+        } elseif (!in_array(View::class, $this->defaultClass)) {
+            array_push($this->defaultClass, View::class);
         }
 
         return $this;
@@ -121,6 +127,21 @@ class DropdownActions extends Actions
     }
 
     /**
+     * @param string $action
+     * @return $this
+     */
+    public function dblclick(string $action)
+    {
+        $this->dblclick = Arr::get([
+            'edit'      => Edit::class,
+            'view'      => View::class,
+            'delete'    => Delete::class,
+        ], $action);
+
+        return $this;
+    }
+
+    /**
      * @param null|\Closure $callback
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
@@ -140,6 +161,13 @@ class DropdownActions extends Actions
         $dblclick = '';
 
         foreach (array_merge($this->default, $this->custom) as $action) {
+
+            // activate defalut action dblclick
+            if ($this->dblclick && $action instanceof $this->dblclick) {
+                $dblclick = $action->getElementClass();
+                break;
+            }
+
             if ($action->dblclick) {
                 $dblclick = $action->getElementClass();
             }
