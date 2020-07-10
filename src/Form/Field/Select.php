@@ -150,6 +150,9 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
         $(target).trigger('change');
     });
 });
+
+$('{$this->getElementClassSelector()}').trigger('change');
+
 EOT;
 
         Admin::script($script);
