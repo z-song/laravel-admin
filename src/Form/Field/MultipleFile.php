@@ -5,6 +5,9 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Arr;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\Str;
+use Illuminate\Support\ViewErrorBag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MultipleFile extends Field
@@ -39,11 +42,7 @@ class MultipleFile extends Field
      */
     public function getValidator(array $input)
     {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
-            return false;
-        }
-
-        if (request()->has(static::FILE_SORT_FLAG)) {
+        if (!request()->hasFile($this->column)) {
             return false;
         }
 
@@ -80,8 +79,8 @@ class MultipleFile extends Field
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
-            $rules[$this->column.$key] = $this->getRules();
-            $input[$this->column.$key] = $file;
+            $rules[$this->column.'@'.$key] = $this->getRules();
+            $input[$this->column.'@'.$key] = $file;
         }
 
         return [$rules, $input];
@@ -252,6 +251,30 @@ class MultipleFile extends Field
     }
 
     /**
+     * Fort validation error message.
+     *
+     * @return void
+     */
+    protected function formatValidationMessage()
+    {
+        if (!($errors = session()->get('errors')) || !($errors instanceof ViewErrorBag)) {
+            return;
+        }
+
+        $messages = [];
+
+        foreach ($errors->keys() as $key) {
+            if (Str::startsWith($key, $this->column.'@')) {
+                array_push($messages, ...$errors->get($key));
+            }
+        }
+
+        if (!empty($messages)) {
+            $errors->getBag('default')->merge([$this->column => $messages]);
+        }
+    }
+
+    /**
      * Render file upload field.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -278,6 +301,8 @@ class MultipleFile extends Field
                 'sort_flag' => static::FILE_SORT_FLAG,
             ]);
         }
+
+        $this->formatValidationMessage();
 
         return parent::render();
     }
