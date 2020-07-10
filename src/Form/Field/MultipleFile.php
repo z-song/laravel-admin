@@ -63,10 +63,6 @@ class MultipleFile extends Field
             return false;
         }
 
-        if (request()->has(static::FILE_SORT_FLAG)) {
-            return false;
-        }
-
         if ($this->validator) {
             return $this->validator->call($this, $input);
         }
