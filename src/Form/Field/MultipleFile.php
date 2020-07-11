@@ -59,7 +59,7 @@ class MultipleFile extends Field
      */
     public function getValidator(array $input)
     {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
+        if (!request()->hasFile($this->column)) {
             return false;
         }
 
