@@ -43,6 +43,11 @@ class Tools implements Renderable
     protected $prepends;
 
     /**
+     * Redirect Path After Delete
+     */
+    protected $redirectDeletePath;
+
+    /**
      * Tools constructor.
      *
      * @param Panel $panel
@@ -143,6 +148,29 @@ class Tools implements Renderable
         }
 
         return $this;
+    }
+
+    /**
+     * Set Redirect After delete path
+     * 
+     */
+    public function setRedirectDeletePath($path)
+    {
+        $this->redirectDeletePath = $path;
+    }
+
+    /**
+     * Get redirect delete after path, 
+     * but when is not set it return form resource path
+     */
+    protected function getRedirectDeletePath()
+    {
+        if($this->redirectDeletePath === "")
+        {
+            return ltrim($this->getResource(), '/');
+        }else{
+            return $this->redirectDeletePath;
+        }
     }
 
     /**
@@ -253,7 +281,7 @@ $('.{$class}-delete').unbind('click').click(function() {
                         _token:LA.token,
                     },
                     success: function (data) {
-                        $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });
+                        $.pjax({container:'#pjax-container', url: '{$this->getRedirectDeletePath()}' });
 
                         resolve(data);
                     }
