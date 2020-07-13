@@ -35,13 +35,13 @@ class Listbox extends MultipleSelect
      */
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
-        $ajaxOptions = json_encode(array_merge([
+        $options = json_encode(array_merge([
             'url' => $url.'?'.http_build_query($parameters),
         ], $options));
 
         $this->script = <<<SCRIPT
 
-$.ajax($ajaxOptions).done(function(data) {
+$.ajax($options).done(function(data) {
 
   var listbox = $("{$this->getElementClassSelector()}");
 

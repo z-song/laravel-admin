@@ -66,12 +66,11 @@
                         url: '{{ $url }}/' + id,
                         data: {
                             _method:'delete',
-                        },
-                        success: function (data) {
-                            $.pjax.reload('#pjax-container');
-                            toastr.success('{{ admin_trans('admin.delete_succeeded') }}');
-                            resolve(data);
                         }
+                    }).done(function (data) {
+                        $.pjax.reload('#pjax-container');
+                        toastr.success('{{ admin_trans('admin.delete_succeeded') }}');
+                        resolve(data);
                     });
                 });
             }

@@ -10,13 +10,11 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
         $.ajax({
             method: '{{ $method }}',
             url: '{{ $url }}',
-            data: data,
-            success: function (data) {
-                resolve([data, $target]);
-            },
-            error:function(request){
-                reject(request);
-            }
+            data: data
+        }).done(function (data) {
+            resolve([data, $target]);
+        }).fail(function(request){
+            reject(request);
         });
     }).then($.admin.action.then).catch($.admin.action.catch);
 });

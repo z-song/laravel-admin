@@ -26,7 +26,7 @@
         return msg
     };
 
-    $.fn.editable.defaults.success = function(response, newValue){
+    $.fn.editable.defaults.success = function(response){
         if (response.status){
             $.admin.toastr.success(response.message, '', {positionClass:"toast-top-center"});
         } else {

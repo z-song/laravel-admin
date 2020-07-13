@@ -37,26 +37,15 @@
             url: '{{ request()->url() }}',
             type: 'POST',
             data: $(this).serialize(),
-            success: function (data, textStatus, jqXHR) {
-                console.info(data);
+        }).done(function (data, textStatus, jqXHR) {
+            if (data.status == true) {
+                $.admin.toastr.success(data.message, '', {positionClass: "toast-top-center"});
+                $.admin.reload();
+                return;
+            }
 
-                if (data.status == true) {
-                    $.admin.toastr.success(data.message, '', {positionClass: "toast-top-center"});
-                    $.admin.reload();
-                    return;
-                }
-
-                if (typeof data.validation !== 'undefined') {
-                    $.admin.toastr.warning(data.message, '', {positionClass: "toast-top-center"})
-                }
-            },
-            error: function (XMLHttpRequest, textStatus) {
-                if (typeof XMLHttpRequest.responseJSON === 'object') {
-                    $.admin.toastr.error(XMLHttpRequest.responseJSON.message, '', {
-                        positionClass: "toast-top-center",
-                        timeOut: 10000
-                    });
-                }
+            if (typeof data.validation !== 'undefined') {
+                $.admin.toastr.warning(data.message, '', {positionClass: "toast-top-center"})
             }
         });
         return false;

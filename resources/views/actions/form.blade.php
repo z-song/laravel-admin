@@ -25,15 +25,13 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
                 cache: false,
                 contentType: false,
                 processData: false,
-                success: function (data) {
-                    resolve([data, $target]);
-                    if (data.status === true) {
+            }).done(function (data) {
+                resolve([data, $target]);
+                if (data.status === true) {
                     $modal.modal('hide');
-                    }
-                },
-                error:function(request){
-                    reject(request);
                 }
+            }).fail(function(request){
+                reject(request);
             });
         });
 

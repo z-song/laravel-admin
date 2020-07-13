@@ -254,11 +254,10 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
                     method: 'POST',
                     url: '{$this->getResource()}/' + id,
                     data: {_method:'delete'},
-                    success: function (data) {
-                        $.pjax.reload('#pjax-container');
+                }).done(function (data) {
+                    $.pjax.reload('#pjax-container');
 
-                        resolve(data);
-                    }
+                    resolve(data);
                 });
             });
         }
@@ -273,7 +272,6 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
         }
     });
 });
-
 SCRIPT;
 
         Admin::script($script);

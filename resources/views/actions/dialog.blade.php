@@ -23,13 +23,11 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
             $.ajax({
                 method: '{{ $method }}',
                 url: '{{ $url }}',
-                data: data,
-                success: function (data) {
-                    resolve(data);
-                },
-                error:function(request){
-                    reject(request);
-                }
+                data: data
+            }).done(function (data) {
+                resolve(data);
+            }).fail(function(request){
+                reject(request);
             });
         });
     };

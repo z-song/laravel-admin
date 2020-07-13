@@ -25,20 +25,15 @@
                     "{{ $name }}": value,
                     _method: 'PUT'
                 },
-                success: function (data) {
-                    if (data.status)
-                        toastr.success(data.message);
-                    else
-                        toastr.warning(data.message);
-                },
-                complete:function(xhr,status) {
-                    if (status == 'success')
-                        _status = xhr.responseJSON.status;
-                },
-                statusCode: {
-                    500: function(xhr) {
-                        $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
-                    }
+            }).done(function (data) {
+                if (data.status) {
+                    toastr.success(data.message);
+                } else {
+                    toastr.warning(data.message);
+                }
+            }).always(function(xhr,status) {
+                if (status == 'success') {
+                    _status = xhr.responseJSON.status;
                 }
             });
 

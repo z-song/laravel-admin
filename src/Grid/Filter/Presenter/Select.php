@@ -169,7 +169,7 @@ SCRIPT;
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
-        $ajaxOptions = json_encode(array_merge($ajaxOptions, $options), JSON_UNESCAPED_UNICODE);
+        $options = json_encode(array_merge($ajaxOptions, $options), JSON_UNESCAPED_UNICODE);
 
         $values = (array) $this->filter->getValue();
         $values = array_filter($values);
@@ -177,7 +177,7 @@ SCRIPT;
 
         $this->script = <<<SCRIPT
 
-$.ajax($ajaxOptions).done(function(data) {
+$.ajax($options).done(function(data) {
   $(".{$this->getElementClass()}").select2({
     data: data,
     $configs
@@ -223,10 +223,10 @@ $(".{$this->getElementClass()}").select2({
 
       return {
         results: $.map(data.data, function (d) {
-                   d.id = d.$idField;
-                   d.text = d.$textField;
-                   return d;
-                }),
+           d.id = d.$idField;
+           d.text = d.$textField;
+           return d;
+        }),
         pagination: {
           more: data.next_page_url
         }

@@ -57,14 +57,8 @@
                 '{{ $name }}': selected,
                 _method: 'PUT'
             },
-            success: function (data) {
-                callback(data);
-            },
-            statusCode: {
-                500: function(xhr) {
-                    $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
-                }
-            }
+        }).done(function (data) {
+            callback(data);
         });
     };
 

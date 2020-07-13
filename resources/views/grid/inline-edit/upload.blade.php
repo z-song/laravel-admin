@@ -30,15 +30,9 @@ $('input.inline-upload').on('change', function () {
         contentType: false,
         enctype: 'multipart/form-data',
         data: formData,
-        success: function (data) {
-            toastr.success(data.message);
-            $.admin.reload();
-        },
-        statusCode: {
-            500: function(xhr) {
-                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
-            }
-        }
+    }).done(function (data) {
+        toastr.success(data.message);
+        $.admin.reload();
     });
 });
 </script>

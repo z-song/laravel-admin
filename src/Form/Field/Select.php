@@ -266,11 +266,11 @@ SCRIPT;
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
-        $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
+        $options = json_encode(array_merge($ajaxOptions, $options));
 
         $this->script = <<<SCRIPT
 
-$.ajax($ajaxOptions).done(function(data) {
+$.ajax($options).done(function(data) {
 
   $("{$this->getElementClassSelector()}").each(function(index, element) {
       $(element).select2({
@@ -426,7 +426,7 @@ SCRIPT;
         if (empty($this->script)) {
             $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
         }
-        
+
         $this->addVariables([
             'options' => $this->getOptions(),
             'groups'  => $this->groups,

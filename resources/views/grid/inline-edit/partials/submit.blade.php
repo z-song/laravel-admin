@@ -17,25 +17,13 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
     }
 
     var data = {
-        _method: 'PUT',
         _edit_inline: true,
     };
     data[$trigger.data('name')] = val;
 
-    $.ajax({
+    $.put({
         url: "{{ $resource }}/" + $trigger.data('key'),
-        type: "POST",
         data: data,
-        success: function (data) {
-            toastr.success(data.message);
-
-            {{ $slot }}
-
-            $trigger.data('value', val)
-                .data('original', val);
-
-            $('[data-editinline="popover"]').popover('hide');
-        },
         statusCode: {
             422: function(xhr) {
                 $popover.find('.error').empty();
@@ -43,10 +31,16 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
                 for (var key in errors) {
                     $popover.find('.error').append('<div><i class="fa fa-times-circle-o"></i> '+errors[key]+'</div>')
                 }
-            },
-            500: function(xhr) {
-                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
             }
         }
+    }).done(function (data) {
+        toastr.success(data.message);
+
+        {{ $slot }}
+
+        $trigger.data('value', val)
+        .data('original', val);
+
+        $('[data-editinline="popover"]').popover('hide');
     });
 });
