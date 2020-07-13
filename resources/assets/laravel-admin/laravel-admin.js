@@ -1,5 +1,6 @@
 (function ($) {
 
+    // toastr init
     toastr.options = {
         closeButton: true,
         progressBar: true,
@@ -7,20 +8,22 @@
         timeOut: 4000
     };
 
+    // NProgress init
+    NProgress.configure({parent: '#app'});
+
+    // pjax init
     $.pjax.defaults.timeout = 5000;
     $.pjax.defaults.maxCacheLength = 0;
     $(document).pjax('a:not(a[target="_blank"])', {
         container: '#pjax-container'
     });
 
-    NProgress.configure({parent: '#app'});
+    $(document).on('submit', 'form[pjax-container]', function (event) {
+        $.pjax.submit(event, '#pjax-container')
+    });
 
     $(document).on('pjax:timeout', function (event) {
         event.preventDefault();
-    });
-
-    $(document).on('submit', 'form[pjax-container]', function (event) {
-        $.pjax.submit(event, '#pjax-container')
     });
 
     $(document).on("pjax:popstate", function () {
@@ -101,50 +104,164 @@
         });
     })();
 
-    var $top = $('<button/>', {
-        id: 'totop',
-        title: 'Go to top',
-        style: 'display: none;',
-        html: '<i class="fa fa-chevron-up"></i>'
-    }).on('click', function (e) {
-        e.preventDefault();
-        $('html,body').animate({scrollTop: 0}, 500);
-    }).appendTo('body');
-
-    $(window).scroll(function() {
-        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-            $top.fadeIn(500);
-        } else {
-            $top.fadeOut(500);
+    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+        if (originalOptions.type === 'POST' || options.type === 'POST') {
+            if (originalOptions.data instanceof FormData) {
+                originalOptions.data.append('_token', $.admin.getToken());
+                options.data = originalOptions.data;
+            } else {
+                options.data = $.param($.extend(originalOptions.data, { _token : $.admin.getToken()}));
+            }
         }
     });
 
-    $.fn.admin = LA;
-    $.admin = LA;
-    $.admin.swal = swal;
-    $.admin.toastr = toastr;
+    $.ajaxSetup({
+        statusCode: {
+            500: function(xhr) {
+                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
+            }
+        }
+    });
 
-    $.admin.reload = function () {
+    $.delete = function (options) {
+        options.type = 'POST';
+        Object.assign(options.data, {_method: 'DELETE'});
+
+        return $.ajax(options);
+    };
+
+    $.put = function (options) {
+        options.type = 'POST';
+        Object.assign(options.data, {_method: 'PUT'});
+
+        return $.ajax(options);
+    };
+
+    function Table ($el) {
+        this.$el = $el;
+        this.selects = {};
+        this.rows = $el.find('>tbody>tr');
+    }
+
+    Table.prototype.box = function () {
+        return this.$el.closest('.box');
+    };
+
+    Table.prototype.select = function (id) {
+        if (id in this.selects) {
+            return;
+        }
+        this.selects[id] = id;
+        this.findRow(id).css('background-color', '#ffffd5');
+    };
+
+    Table.prototype.unselect = function (id) {
+        if (!(id in this.selects)) {
+            return;
+        }
+        delete this.selects[id];
+        this.findRow(id).css('background-color', '');
+    };
+
+    Table.prototype.toggle = function (id) {
+        if (id in this.selects) {
+            this.unselect(id);
+        } else {
+            this.select(id);
+        }
+        this.toggleBatchAction();
+    };
+
+    Table.prototype.toggleAll = function (all) {
+        if (all) {
+            this.$el.find('input.grid-row-checkbox').iCheck('check');
+        } else {
+            this.$el.find('input.grid-row-checkbox').iCheck('uncheck');
+            this.selects = {};
+        }
+        this.toggleBatchAction();
+    };
+
+    Table.prototype.selected = function () {
+        return Object.keys(this.selects);
+    };
+
+    Table.prototype.findRow  = function (id) {
+        return this.$el.find('tr[data-key=' + id + ']');
+    };
+
+    Table.prototype.toggleBatchAction = function () {
+        var selected = this.selected().length;
+        var $btn = this.box().find('.grid-select-all-btn');
+        var $select = $btn.find('.selected');
+        var $export = this.box().find('a.export-selected').parent();
+
+        if (selected > 0) {
+            $btn.show();
+            $export.show();
+            $select.html($select.data('tpl').replace('{n}', selected));
+        } else {
+            $btn.hide();
+            $export.hide();
+        }
+    };
+
+    function Admin () {
+        this.token = $('meta[name=csrf-token]').attr('content');
+        this.user = __user;
+
+        this.swal = swal;
+        this.toastr = toastr;
+
+        this.totop = null;
+        this.table = null;
+        this.loadedScripts = [];
+
+        this.enableTotop();
+    }
+
+    Admin.prototype.enableTotop = function () {
+        var $totop = $('<button/>', {
+            id: 'totop',
+            title: 'Go to top',
+            style: 'display: none;',
+            html: '<i class="fa fa-chevron-up"></i>'
+        }).on('click', function (e) {
+            e.preventDefault();
+            $('html,body').animate({scrollTop: 0}, 500);
+        }).appendTo('body');
+
+        $(window).scroll(function () {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                $totop.fadeIn(500);
+            } else {
+                $totop.fadeOut(500);
+            }
+        });
+
+        this.totop = $totop;
+    };
+
+    Admin.prototype.reload = function () {
         $.pjax.reload('#pjax-container');
     };
 
-    $.admin.redirect = function (url) {
+    Admin.prototype.redirect = function (url) {
         $.pjax({container:'#pjax-container', url: url });
     };
 
-    $.admin.getToken = function () {
+    Admin.prototype.getToken = function () {
         return $('meta[name="csrf-token"]').attr('content');
     };
 
-    $.admin.loadedScripts = [];
-
-    $.admin.loadScripts = function(arr) {
+    Admin.prototype.loadScripts = function(arr) {
+        var loaded = this.loadedScripts;
         var _arr = $.map(arr, function(src) {
-            if ($.inArray(src, $.admin.loadedScripts) >= 0) {
+            if ($.inArray(src, loaded) >= 0) {
                 return;
             }
 
-            $.admin.loadedScripts.push(src);
+            loaded.push(src);
 
             return $.getScript(src);
         });
@@ -156,7 +273,7 @@
         return $.when.apply($, _arr);
     };
 
-    $.admin.loadCss = function (css) {
+    Admin.prototype.loadCss = function (css) {
         var existingCss = $('link[rel=stylesheet]');
         $.map(css, function (href) {
             var matchedCss = existingCss.filter(function () {
@@ -164,34 +281,20 @@
             });
 
             if (matchedCss.length === 0) {
-                $("<link/>", {
-                    rel: "stylesheet",
-                    type: "text/css",
-                    href: href,
-                }).appendTo("head");
+                $("<link/>", {rel: "stylesheet", type: "text/css", href: href,})
+                    .appendTo("head");
             }
         });
     };
 
-    $.admin.loadAssets = function (js, css) {
+    Admin.prototype.loadAssets = function (js, css) {
         var admin = this;
         return admin.loadScripts(js).then(function () {
             admin.loadCss(css);
         });
     };
 
-    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-        if (originalOptions.type === 'POST' || options.type === 'POST') {
-            if (originalOptions.data instanceof FormData) {
-                originalOptions.data.append('_token', LA.token);
-                options.data = originalOptions.data;
-            } else {
-                options.data = $.param($.extend(originalOptions.data, { _token : LA.token}));
-            }
-        }
-    });
-
-    $.admin.action = {
+    Admin.prototype.action = {
         then: function (data) {
             var response = data[0];
             var $target = data[1];
@@ -240,60 +343,10 @@
         }
     };
 
-    $.admin.initTable = function ($table) {
-        Object.assign($table.init.prototype, {
-            selects: {},
-            select: function (id) {
-                if (id in this.selects) {
-                    return;
-                }
-                this.selects[id] = id;
-                this.row(id).css('background-color', '#ffffd5');
-            },
-            unselect: function (id) {
-                if (!(id in this.selects)) {
-                    return;
-                }
-                delete this.selects[id];
-                this.row(id).css('background-color', '');
-            },
-            toggle: function (id) {
-                if (id in this.selects) {
-                    this.unselect(id);
-                } else {
-                    this.select(id);
-                }
-                this.trigger('select');
-            },
-            toggleAll: function (all) {
-                if (all) {
-                    this.find('input.grid-row-checkbox').iCheck('check');
-                } else {
-                    this.find('input.grid-row-checkbox').iCheck('uncheck');
-                    this.selects = {};
-                }
-                this.trigger('select');
-            },
-            selected: function () {
-                return Object.keys(this.selects);
-            },
-            row: function(id) {
-                return this.find('tr[data-key='+id+']');
-            },
-        });
-
-        $table.on('select', function () {
-            var selected = $table.selected().length;
-            var $btn = $table.closest('.box').find('.grid-select-all-btn');
-            var $select = $btn.find('.selected');
-
-            if (selected > 0) {
-                $btn.show();
-                $select.html($select.data('tpl').replace('{n}', selected));
-            } else {
-                $btn.hide();
-            }
-        });
+    Admin.prototype.initTable = function ($table) {
+        this.table = new Table($table);
     };
+
+    $.fn.admin = $.admin = new Admin();
 
 })(jQuery);

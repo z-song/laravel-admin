@@ -172,7 +172,10 @@
 </style>
 
 <script>
-    var $table = {!!  $__table  !!};
+    $.admin.initTable({!!  $__table  !!});
+</script>
+
+<script>
     var theadHeight = $('.table-main thead tr').outerHeight();
     $('.table-fixed thead tr').outerHeight(theadHeight);
 
@@ -221,6 +224,6 @@
             $('.table-fixed-right tbody tr').eq(index).css('background-color', '');
         }
 
-        $table.toggle($(this).data('id'));
+        $.admin.table.toggle($(this).data('id'));
     });
 </script>

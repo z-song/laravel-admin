@@ -1,3 +1,7 @@
+<script>
+    $.admin.initTable({!!  $__table  !!});
+</script>
+
 <div class="box grid-box">
     @if(isset($title))
     <div class="box-header with-border">

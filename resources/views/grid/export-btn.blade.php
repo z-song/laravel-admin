@@ -9,15 +9,14 @@
     <ul class="dropdown-menu" role="menu">
         <li><a href="{{ $all }}" target="_blank">{{ trans('admin.all') }}</a></li>
         <li><a href="{{ $page }}" target="_blank">{{ trans('admin.current_page') }}</a></li>
-        <li><a href="{{ $selected }}" target="_blank" class='{{ $name }}'>{{ trans('admin.selected_rows') }}</a></li>
+        <li style="display: none;"><a href="{{ $selected }}" target="_blank" class='{{ $name }}'>{{ trans('admin.selected_rows') }}</a></li>
     </ul>
 </div>
 
 <script>
-    var $table = {!!  $__table  !!};
     $('.{{ $name }}').click(function (e) {
         e.preventDefault();
-        var rows = $table.selected().join();
+        var rows = $.admin.table.selected().join();
         if (!rows) {
             return false;
         }

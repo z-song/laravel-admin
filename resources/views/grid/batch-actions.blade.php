@@ -22,6 +22,6 @@
 <script>
     $('.{{ $all }}').iCheck({checkboxClass:'icheckbox_minimal-blue'})
         .on('ifChanged', function(event) {
-            {!!  $__table  !!}.toggleAll(this.checked);
+            $.admin.table.toggleAll(this.checked);
         });
 </script>

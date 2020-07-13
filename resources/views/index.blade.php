@@ -52,9 +52,7 @@
 </div>
 
 <script>
-    function LA() {}
-    LA.token = $('meta[name=csrf-token]').attr('content');
-    LA.user = @json($_user_);
+    var __user = @json($__user);
 </script>
 
 <!-- REQUIRED JS SCRIPTS -->

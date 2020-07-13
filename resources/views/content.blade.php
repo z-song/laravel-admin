@@ -59,10 +59,10 @@
         @include('admin::partials.exception')
         @include('admin::partials.toastr')
 
-        @if($_view_)
-            @include($_view_['view'], $_view_['data'])
+        @if($__view)
+            @include($__view['view'], $__view['data'])
         @else
-            {!! $_content_ !!}
+            {!! $__content !!}
         @endif
 
     </section>

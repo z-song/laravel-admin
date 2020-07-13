@@ -922,8 +922,6 @@ class Grid
      */
     public function render()
     {
-        view()->share('__table', "$('#{$this->tableID}')");
-
         $this->handleExportRequest(true);
 
         try {
@@ -933,6 +931,8 @@ class Grid
         }
 
         $this->callRenderingCallback();
+
+        $this->with(['__table' => "$('#{$this->tableID}')"]);
 
         return Admin::view($this->view, $this->variables());
     }

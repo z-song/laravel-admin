@@ -19,8 +19,7 @@ abstract class BatchAction extends GridAction
         $warning = __('No data selected!');
 
         return <<<SCRIPT
-        var \$table = $('#{$this->parent->tableID}');
-        var key = \$table.selected();
+        var key = \$.admin.table.selected();
 
         if (key.length === 0) {
             $.admin.toastr.warning('{$warning}', '', {positionClass: 'toast-top-center'});
