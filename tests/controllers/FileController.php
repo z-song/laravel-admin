@@ -2,7 +2,7 @@
 
 namespace Tests\Controllers;
 
-use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Http\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Tests\Models\File;

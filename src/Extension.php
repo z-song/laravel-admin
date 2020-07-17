@@ -2,7 +2,7 @@
 
 namespace Encore\Admin;
 
-use Encore\Admin\Auth\Database\Permission;
+use Encore\Admin\Models\Permission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Middleware;
+namespace Encore\Admin\Http\Middleware;
 
 use Encore\Admin\Auth\Permission as Checker;
 use Encore\Admin\Facades\Admin;

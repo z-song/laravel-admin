@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Middleware;
+namespace Encore\Admin\Http\Middleware;
 
 use Closure;
 use Encore\Admin\Facades\Admin;

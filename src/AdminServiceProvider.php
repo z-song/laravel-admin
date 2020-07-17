@@ -2,6 +2,7 @@
 
 namespace Encore\Admin;
 
+use Encore\Admin\Http\Middleware;
 use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;

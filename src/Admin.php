@@ -3,8 +3,8 @@
 namespace Encore\Admin;
 
 use Closure;
-use Encore\Admin\Auth\Database\Menu;
-use Encore\Admin\Controllers\AuthController;
+use Encore\Admin\Models\Menu;
+use Encore\Admin\Http\Controllers\AuthController;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Traits\BuiltinRoutes;
 use Encore\Admin\Traits\HasAssets;

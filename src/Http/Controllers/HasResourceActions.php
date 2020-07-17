@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Controllers;
+namespace Encore\Admin\Http\Controllers;
 
 trait HasResourceActions
 {

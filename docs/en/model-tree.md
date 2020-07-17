@@ -77,7 +77,7 @@ use App\Models\Category;
 use Encore\Admin\Form;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Controllers\ModelForm;
+use Encore\Admin\Http\Controllers\ModelForm;
 use Encore\Admin\Tree;
 
 class CategoryController extends Controller

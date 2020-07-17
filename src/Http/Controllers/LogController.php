@@ -1,8 +1,8 @@
 <?php
 
-namespace Encore\Admin\Controllers;
+namespace Encore\Admin\Http\Controllers;
 
-use Encore\Admin\Auth\Database\OperationLog;
+use Encore\Admin\Models\OperationLog;
 use Encore\Admin\Grid;
 use Illuminate\Support\Arr;
 
