@@ -14,11 +14,7 @@ class Slider extends Field
 
     public function render()
     {
-        $option = json_encode($this->options);
-
-        $this->script = "$('{$this->getElementClassSelector()}').ionRangeSlider($option)";
-
-        admin_assets('rangeSlider');
+        $this->addVariables(['options' => $this->options]);
 
         return parent::render();
     }

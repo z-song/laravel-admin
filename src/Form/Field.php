@@ -330,7 +330,7 @@ class Field implements Renderable
      *
      * @return array|mixed|string
      */
-    protected function formatName($column)
+    protected function formatName($column, $prefix = '')
     {
         if (is_string($column)) {
             if (Str::contains($column, '->')) {
@@ -340,7 +340,7 @@ class Field implements Renderable
             }
 
             if (count($name) === 1) {
-                return $name[0];
+                return $prefix.$name[0];
             }
 
             $html = array_shift($name);
@@ -348,7 +348,7 @@ class Field implements Renderable
                 $html .= "[$piece]";
             }
 
-            return $html;
+            return $prefix.$html;
         }
 
         if (is_array($this->column)) {
@@ -360,7 +360,7 @@ class Field implements Renderable
             return $names;
         }
 
-        return '';
+        return $prefix.'';
     }
 
     /**
@@ -1198,7 +1198,7 @@ class Field implements Renderable
     public function getElementClass(): array
     {
         if (!$this->elementClass) {
-            $name = $this->elementName ?: $this->formatName($this->column);
+            $name = $this->elementName ?: $this->formatName($this->column, 'field-');
 
             $this->elementClass = (array) str_replace(['[', ']'], '_', $name);
         }

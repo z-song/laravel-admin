@@ -162,8 +162,7 @@ trait HasAssets
                 '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.js',
             ],
             'css' => [
-                '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.css',
-                '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.skinNice.css',
+                '/vendor/laravel-admin/AdminLTE/plugins/ionslider/ion.rangeSlider.min.css',
             ],
         ],
         'editable'        => [
