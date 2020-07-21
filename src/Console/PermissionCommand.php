@@ -139,19 +139,13 @@ class PermissionCommand extends Command
         $resource = Str::kebab(Str::camel($table));
         switch ($permission) {
             case 'create':
-                $http_path = '/'.$resource;
+            case 'list':
+                $http_path = '/' . $resource;
                 break;
             case 'edit':
-                $http_path = '/'.$resource.'/*';
-                break;
             case 'delete':
-                $http_path = '/'.$resource.'/*';
-                break;
-            case 'index':
-                $http_path = '/'.$resource;
-                break;
             case 'view':
-                $http_path = '/'.$resource.'/*';
+                $http_path = '/' . $resource . '/*';
                 break;
             default:
                 $http_path = '';
