@@ -37,13 +37,7 @@
         color:#777;
     }
 
-    .ie-wrap>a:hover {
-        text-decoration: none;
-        background-color: #ddd;
-        color:#777;
-    }
-
-    .ie-wrap>a:hover i {
+    .grid-table tr:hover .ie-wrap>a>i {
         visibility: visible !important;
     }
 

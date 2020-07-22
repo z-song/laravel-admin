@@ -52,7 +52,7 @@ trait HasActions
             return $class;
         }
 
-        return Grid\Displayers\Actions::class;
+        return Grid\Displayers\DropdownActions::class;
     }
 
     /**
@@ -120,5 +120,13 @@ trait HasActions
 
         $this->addColumn(Grid\Column::ACTION_COLUMN_NAME, trans('admin.action'))
             ->displayUsing($this->getActionClass(), [$this->actionsCallback]);
+    }
+
+    /**
+     * @return $this
+     */
+    public function contextmenu()
+    {
+        return $this->setActionClass(Grid\Displayers\ContextMenuActions::class);
     }
 }
