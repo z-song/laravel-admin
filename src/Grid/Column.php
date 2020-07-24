@@ -517,7 +517,8 @@ class Column
 
             $callback = $this->bindOriginalRowModel($callback, $key);
             $value = call_user_func_array($callback, [$value, $this]);
-
+            $this->original = $value;
+            
             if (($value instanceof static) &&
                 ($last = array_pop($this->displayCallbacks))
             ) {
