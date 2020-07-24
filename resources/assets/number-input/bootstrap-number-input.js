@@ -35,6 +35,10 @@
 
             var min = self.attr('min');
             var max = self.attr('max');
+            var gap = parseInt(self.attr('gap'));
+            if( gap == 0 ) {
+	            gap = 1;
+            }
 
             function setText(n) {
                 n = isNaN(n) ? 0 : n;
@@ -48,11 +52,11 @@
 
             var group = $("<div class='input-group'></div>");
             var down = $("<button type='button'>-</button>").attr('class', 'btn btn-' + settings.downClass).click(function() {
-                setText(parseInt(clone.val(), 10) - 1);
+                setText(parseInt(clone.val(), 10) - gap);
                 clone.focus().trigger('change');
             });
             var up = $("<button type='button'>+</button>").attr('class', 'btn btn-' + settings.upClass).click(function() {
-                setText(parseInt(clone.val(), 10) + 1);
+                setText(parseInt(clone.val(), 10) + gap);
                 clone.focus().trigger('change');
             });
             $("<span class='input-group-btn'></span>").append(down).appendTo(group);

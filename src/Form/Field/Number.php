@@ -56,4 +56,18 @@ EOT;
 
         return $this;
     }
+
+    /**
+     * Set gap value of number field.
+     *
+     * @param int $value
+     *
+     * @return $this
+     */
+    public function gap($value)
+    {
+        $this->attribute('gap', $value);
+
+        return $this;
+    }
 }
