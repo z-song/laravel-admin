@@ -125,20 +125,32 @@ trait CanCascadeFields
 
         extract($condition);
 
-        $old = old($this->column(), $this->value());
+        $old = array_filter(old($this->column(), $this->value()), function($value) { return !is_null($value) && $value !== ''; });
 
         switch ($operator) {
             case '=':
+                if (is_string($old))  $old = [$old];
+                if (is_string($value))  $value = [$value];
                 return $old == $value;
             case '>':
+                if (is_array($old)) $old = intval($old[0]);
+                if (is_array($value)) $value = intval($value[0]);
                 return $old > $value;
             case '<':
+                if (is_array($old)) $old = intval($old[0]);
+                if (is_array($value)) $value = intval($value[0]);
                 return $old < $value;
             case '>=':
+                if (is_array($old)) $old = intval($old[0]);
+                if (is_array($value)) $value = intval($value[0]);
                 return $old >= $value;
             case '<=':
+                if (is_array($old)) $old = intval($old[0]);
+                if (is_array($value)) $value = intval($value[0]);
                 return $old <= $value;
             case '!=':
+                if (is_string($old))  $old = [$old];
+                if (is_string($value))  $value = [$value];
                 return $old != $value;
             case 'in':
                 return in_array($old, $value);
