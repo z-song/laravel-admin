@@ -5,6 +5,7 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
 
 /**
  * @property Form $form
@@ -34,6 +35,12 @@ trait CanCascadeFields
         $this->formatValues($operator, $value);
 
         $this->addDependents($operator, $value, $closure);
+
+        $oldInput = Session::get('_old_input');
+        if (!is_null($oldInput)) {
+            $data = $oldInput[$this->id];
+            $this->fill($oldInput[$this->id]);
+        }
 
         return $this;
     }
