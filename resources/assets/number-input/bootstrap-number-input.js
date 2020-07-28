@@ -36,8 +36,8 @@
             var min = self.attr('min');
             var max = self.attr('max');
             var gap = parseInt(self.attr('gap'));
-            if( gap == 0 ) {
-	            gap = 1;
+            if( isNaN(gap) || gap < 1 ) {
+                gap = 1;
             }
 
             function setText(n) {
