@@ -180,6 +180,7 @@ SCRIPT;
         }
 
         return <<<PROMISE
+        var ALLOWED_AJAX_PROPS = [ '_action', '_input', '_key', '_model', '_token', ];
         var process = $.admin.swal({
             {$settings},
             preConfirm: function(input) {
@@ -189,6 +190,13 @@ SCRIPT;
                         _action: '$calledClass',
                         _input: input,
                     });
+
+                    var _i;
+                    for (_i in data) {
+                        if (ALLOWED_AJAX_PROPS.indexOf(_i) === -1) {
+                            delete data[_i];
+                        }
+                    }
 
                     $.ajax({
                         method: '{$this->action->getMethod()}',
