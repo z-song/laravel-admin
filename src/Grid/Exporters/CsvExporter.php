@@ -162,6 +162,9 @@ class CsvExporter extends AbstractExporter
             $titles = [];
 
             $this->chunk(function ($collection) use ($handle, &$titles) {
+                //导出中文乱码问题解决
+                print(chr(0xEF).chr(0xBB).chr(0xBF));
+
                 Column::setOriginalGridModels($collection);
 
                 $original = $current = $collection->toArray();
