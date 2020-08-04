@@ -381,7 +381,7 @@ class Form implements Renderable
      */
     protected function ajaxResponse($message)
     {
-        $request = Request::capture();
+        $request = \request();
 
         // ajax but not pjax
         if ($request->ajax() && !$request->pjax()) {
