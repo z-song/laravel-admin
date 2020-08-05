@@ -172,7 +172,7 @@ class ImageUploadTest extends TestCase
         File::cleanDirectory(public_path('uploads/images'));
 
         $this->visit('admin/multiple-images/create')
-            ->seeElement('input[type=file][name="pictures[]"][multiple=1]');
+            ->seeElement('input[type=file][name="pictures[]"][multiple]');
 
         $path = __DIR__.'/assets/test.jpg';
 
