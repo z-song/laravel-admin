@@ -319,8 +319,8 @@ if (!function_exists('json_encode_options')) {
     }
 }
 
-if (!function_exists('admin_route')) {
-    function admin_route(string $name): string {
+if (!function_exists('admin_get_route')) {
+    function admin_get_route(string $name): string {
         return config('admin.route.prefix') . '.' . $name;
     }
 }
