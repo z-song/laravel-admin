@@ -133,7 +133,7 @@ class ImageUploadTest extends TestCase
             ->dontSeeInDatabase('test_images', ['id' => 1]);
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileDoesNotExist(public_path('uploads/' . $images['image' . $index]));
+            $this->assertFileDoesNotExist(public_path('uploads/'.$images['image'.$index]));
         }
 
         $this->visit('admin/images')
