@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\MessageBag;
+use Encore\Admin\Admin;
 
 if (!function_exists('admin_path')) {
 
@@ -148,7 +149,8 @@ if (!function_exists('admin_asset')) {
      */
     function admin_asset($path)
     {
-        return (config('admin.https') || config('admin.secure')) ? secure_asset($path) : asset($path);
+        $v=Admin::VERSION;
+        return (config('admin.https') || config('admin.secure')) ? secure_asset($path).'?v='.$v : asset($path).'?v='.$v;
     }
 }
 
