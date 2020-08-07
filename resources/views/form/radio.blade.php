@@ -1,5 +1,3 @@
-@admin_assets('icheck')
-
 <div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
@@ -24,3 +22,7 @@
 
     </div>
 </div>
+
+<script require="icheck">
+    $('{{ $selector }}').iCheck({radioClass:'iradio_minimal-blue'});
+</script>

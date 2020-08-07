@@ -7,9 +7,13 @@ use Illuminate\Support\Arr;
 
 class SwitchField extends Field
 {
+    use CanCascadeFields;
+
+    protected  $cascadeEvent = 'switchChange.bootstrapSwitch';
+
     protected $states = [
-        'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
-        'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
+        1  => ['text' => 'ON', 'color' => 'primary'],
+        0 => ['text' => 'OFF', 'color' => 'default'],
     ];
 
     protected $size = 'small';
@@ -30,15 +34,6 @@ class SwitchField extends Field
         return $this;
     }
 
-    public function prepare($value)
-    {
-        if (isset($this->states[$value])) {
-            return $this->states[$value]['value'];
-        }
-
-        return $value;
-    }
-
     public function render()
     {
         if (!$this->shouldRender()) {
@@ -51,6 +46,8 @@ class SwitchField extends Field
                 break;
             }
         }
+
+        $this->addCascadeScript();
 
         $this->addVariables([
             'states' => $this->states,

@@ -21,12 +21,6 @@
     </ul>
 </div>
 
-<style>
-    .grid-dropdown-actions {
-        box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    }
-</style>
-
 <script>
     $('.table-responsive').on('shown.bs.dropdown', function(e) {
         var t = $(this),

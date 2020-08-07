@@ -84,6 +84,11 @@ class AdminServiceProvider extends ServiceProvider
 
         $this->compatibleBlade();
 
+        $this->registerBladeDirective();
+    }
+
+    protected function registerBladeDirective()
+    {
         Blade::directive('box', function ($title) {
             return "<?php \$box = new \Encore\Admin\Widgets\Box({$title}, '";
         });
@@ -94,6 +99,19 @@ class AdminServiceProvider extends ServiceProvider
 
         Blade::directive('admin_assets', function ($name) {
             return "<?php echo \Encore\Admin\Admin::renderAssets({$name}); ?>";
+        });
+
+        Blade::directive('el', function ($name) {
+            return <<<PHP
+<?php
+if (!isset(\$__id)) {
+    \$__id = uniqid();
+    echo "class='{\$__id}'";
+} else {
+    echo "$('.{\$__id}')";
+}
+?>
+PHP;
         });
     }
 

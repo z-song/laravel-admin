@@ -48,7 +48,6 @@ trait RenderView
      */
     protected static function getDOMDocument(string $view, $data = [])
     {
-        $data['__id'] = uniqid();
         $content = view($view, $data)->render();
 
         $dom = new DOMDocument();
