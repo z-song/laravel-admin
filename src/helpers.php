@@ -318,3 +318,10 @@ if (!function_exists('json_encode_options')) {
         return str_replace($data['toReplace'], $data['original'], $json);
     }
 }
+
+if (!function_exists('admin_get_route')) {
+    function admin_get_route(string $name): string {
+        return config('admin.route.prefix') . '.' . $name;
+    }
+}
+
