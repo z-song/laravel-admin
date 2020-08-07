@@ -37,7 +37,7 @@ class TestCase extends BaseTestCase
 
         $adminConfig = require __DIR__.'/config/admin.php';
 
-        $this->app['config']->set('database.default', 'mysql');
+        $this->app['config']->set('database.default', env('DB_CONNECTION', 'mysql'));
         $this->app['config']->set('database.connections.mysql.host', env('MYSQL_HOST', 'localhost'));
         $this->app['config']->set('database.connections.mysql.database', env('MYSQL_DATABASE', 'laravel_admin_test'));
         $this->app['config']->set('database.connections.mysql.username', env('MYSQL_USER', 'root'));

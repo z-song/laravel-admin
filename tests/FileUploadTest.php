@@ -126,7 +126,7 @@ class FileUploadTest extends TestCase
             ->dontSeeInDatabase('test_files', ['id' => 1]);
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileNotExists(public_path('uploads/'.$files['file'.$index]));
+            $this->assertFileDoesNotExist(public_path('uploads/'.$files['file'.$index]));
         }
 
         $this->visit('admin/files')
