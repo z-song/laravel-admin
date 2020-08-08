@@ -324,40 +324,74 @@ EOT;
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
+        $selector = $this->getElementClassSelector();
+
+        $key = preg_replace('/\W/', '', $selector);
+
         $this->script = <<<EOT
+    var init{$key} = function()
+    {
+        $("{$selector}").select2({
+        ajax: {
+            url: "$url",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+            return {
+                q: params.term,
+                page: params.page
+            };
+            },
+            processResults: function (data, params) {
+            params.page = params.page || 1;
 
-$("{$this->getElementClassSelector()}").select2({
-  ajax: {
-    url: "$url",
-    dataType: 'json',
-    delay: 250,
-    data: function (params) {
-      return {
-        q: params.term,
-        page: params.page
-      };
-    },
-    processResults: function (data, params) {
-      params.page = params.page || 1;
-
-      return {
-        results: $.map(data.data, function (d) {
-                   d.id = d.$idField;
-                   d.text = d.$textField;
-                   return d;
-                }),
-        pagination: {
-          more: data.next_page_url
+            return {
+                results: $.map(data.data, function (d) {
+                        d.id = d.$idField;
+                        d.text = d.$textField;
+                        return d;
+                        }),
+                pagination: {
+                more: data.next_page_url
+                }
+            };
+            },
+            cache: true
+        },
+        $configs,
+        escapeMarkup: function (markup) {
+            return markup;
         }
-      };
-    },
-    cache: true
-  },
-  $configs,
-  escapeMarkup: function (markup) {
-      return markup;
-  }
-});
+        });
+    }
+
+    var selected = $("{$selector}").data('value');
+    if(selected)
+    {
+        $.ajax({
+            url: "$url",
+            data: {selected : selected},
+            dataType: 'json',
+            success: function (data) {
+                var list = data.data || [];
+                var d = null;
+                for(var i in list)
+                {
+                    d = list[i];
+                    $("{$selector}").append('<option selected value="' + d.$idField + '">' + d.$textField + '</option>');
+                }
+                init{$key}();
+            },
+            error:function(){
+                $("{$selector}").data('value','');
+                init{$key}();
+            }
+        });
+    }
+    else
+    {
+        init{$key}();
+    }
 
 EOT;
 
