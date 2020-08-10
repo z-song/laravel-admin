@@ -491,7 +491,7 @@ class Grid
             return;
         }
 
-        $checkAllBox = "<input type=\"checkbox\" class=\"{$this->getSelectAllName()}\" />&nbsp;";
+        $checkAllBox = "<div class='icheck-primary d-inline'><input type=\"checkbox\" class=\"{$this->getSelectAllName()}\" id='select-all'/><label for='select-all'></label></div>";
 
         $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
             ->displayUsing(Displayers\RowSelector::class)

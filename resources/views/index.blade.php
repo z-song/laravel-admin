@@ -17,14 +17,9 @@
 
     <script src="{{ Admin::jQuery() }}"></script>
     {!! Admin::headerJs() !!}
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 </head>
 
-<body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
+<body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}} text-sm">
 
 @if($alert = config('admin.top_alert'))
     <div style="text-align: center;padding: 5px;font-size: 12px;background-color: #ffffd5;color: #ff0000;">
@@ -40,9 +35,7 @@
 
     <div class="content-wrapper" id="pjax-container">
         {!! Admin::style() !!}
-        <div id="app">
         @yield('content')
-        </div>
         {!! Admin::html() !!}
         {!! Admin::script() !!}
     </div>

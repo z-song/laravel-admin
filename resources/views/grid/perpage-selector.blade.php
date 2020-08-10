@@ -1,15 +1,14 @@
-<label class="pull-right perpage-selector">
+<label class="float-right perpage-selector d-inline-block">
     {{ trans('admin.show') }}
     <span class="dropup">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
             {{ $perpage }}
-            <i class="fa fa-caret-down"></i>
         </a>
-        <ul class="dropdown-menu">
+        <div class="dropdown-menu">
         @foreach($options as $option)
-        <li><a href="{!! request()->fullUrlWithQuery([$name => $option]) !!}" class="{{ $perpage == $option ? 'active' : '' }}">{{ $option }}</a></li>
+        <a href="{!! request()->fullUrlWithQuery([$name => $option]) !!}" class="{{ $perpage == $option ? 'active' : '' }} dropdown-item">{{ $option }}</a>
         @endforeach
-        </ul>
+        </div>
     </span>
     &nbsp;{{ trans('admin.entries') }}
 </label>

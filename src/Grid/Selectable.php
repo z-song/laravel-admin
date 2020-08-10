@@ -126,7 +126,7 @@ abstract class Selectable
 
     protected function appendRemoveBtn($hide = true)
     {
-        $hide = $hide ? 'hide' : '';
+        $hide = $hide ? 'd-none' : '';
         $key = $this->key;
 
         $this->column('__remove__', ' ')->display(function () use ($hide, $key) {

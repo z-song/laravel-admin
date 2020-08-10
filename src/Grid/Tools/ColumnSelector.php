@@ -61,7 +61,7 @@ class ColumnSelector extends AbstractTool
             return '';
         }
 
-        return Admin::view('admin::components.grid-column-selector', [
+        return Admin::view('admin::grid.column-selector', [
             'columns'  => $this->getGridColumns(),
             'visible'  => $this->grid->visibleColumnNames(),
             'defaults' => $this->grid->getDefaultVisibleColumnNames(),

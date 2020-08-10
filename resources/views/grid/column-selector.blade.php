@@ -1,31 +1,25 @@
-<div class="dropdown pull-right column-selector">
-    <button type="button" class="btn btn-sm btn-instagram dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-table"></i>
-        &nbsp;
-        <span class="caret"></span>
+<div class="btn-group dropdown column-selector float-right">
+    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+        <i class="fas fa-table"></i>
     </button>
     <ul class="dropdown-menu" role="menu">
-        <li>
-            <ul>
-                @foreach($columns as $key => $label)
-                @php
-                if (empty($visible)) {
-                    $checked = 'checked';
-                } else {
-                    $checked = in_array($key, $visible) ? 'checked' : '';
-                }
-                @endphp
+        @foreach($columns as $key => $label)
+        @php
+        if (empty($visible)) {
+            $checked = 'checked';
+        } else {
+            $checked = in_array($key, $visible) ? 'checked' : '';
+        }
+        @endphp
 
-                <li class="checkbox icheck">
-                    <label>
-                        <input type="checkbox" class="column-select-item" value="{{ $key }}" {{ $checked }}/>&nbsp;&nbsp;&nbsp;{{ $label }}
-                    </label>
-                </li>
-                @endforeach
-            </ul>
+        <li class="dropdown-item">
+                <input type="checkbox" class="column-select-item" value="{{ $key }}" {{ $checked }}/>&nbsp;&nbsp;&nbsp;
+            <label>{{ $label }}
+            </label>
         </li>
-        <li class="divider"></li>
-        <li class="text-right">
+        @endforeach
+        <div class="dropdown-divider"></div>
+        <li class="dropdown-item text-right">
             <button class="btn btn-sm btn-default column-select-all">{{ __('admin.all') }}</button>&nbsp;&nbsp;
             <button class="btn btn-sm btn-primary column-select-submit">{{ __('admin.submit') }}</button>
         </li>

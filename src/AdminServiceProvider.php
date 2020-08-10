@@ -106,7 +106,7 @@ class AdminServiceProvider extends ServiceProvider
 <?php
 if (!isset(\$__id)) {
     \$__id = uniqid();
-    echo "class='{\$__id}'";
+    echo "class='{\$__id} {$name}'";
 } else {
     echo "$('.{\$__id}')";
 }

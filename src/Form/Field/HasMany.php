@@ -551,7 +551,7 @@ $('#has-many-{$this->column} > .header').off('click', '.add').on('click', '.add'
 if ($('.has-error').length) {
     $('.has-error').parent('.tab-pane').each(function () {
         var tabId = '#'+$(this).attr('id');
-        $('li a[href="'+tabId+'"] i').removeClass('hide');
+        $('li a[href="'+tabId+'"] i').removeClass('d-none');
     });
 
     var first = $('.has-error:first').parent().attr('id');

@@ -1,4 +1,4 @@
-<div class="box">
+<div class="card">
     @if(isset($title))
     <div class="box-header with-border">
         <h3 class="box-title"> {{ $title }}</h3>
@@ -7,13 +7,13 @@
 
     @if ( $grid->showTools() || $grid->showExportBtn() || $grid->showCreateBtn() )
     <div class="box-header with-border">
-        <div class="pull-right">
+        <div class="float-right">
             {!! $grid->renderColumnSelector() !!}
             {!! $grid->renderExportButton() !!}
             {!! $grid->renderCreateButton() !!}
         </div>
         @if ( $grid->showTools() )
-        <div class="pull-left">
+        <div class="float-left">
             {!! $grid->renderHeaderTools() !!}
         </div>
         @endif

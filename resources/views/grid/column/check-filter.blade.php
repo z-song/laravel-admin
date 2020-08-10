@@ -30,7 +30,7 @@
         </li>
         <li class="divider"></li>
         <li class="text-right">
-            <button class="btn btn-sm btn-flat btn-primary pull-left" data-loading-text="{{ __('admin.search') }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __('admin.search') }}</button>
+            <button class="btn btn-sm btn-flat btn-primary float-left" data-loading-text="{{ __('admin.search') }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __('admin.search') }}</button>
             <button class="btn btn-sm btn-flat btn-default" type="reset" data-loading-text="..."><i class="fa fa-undo"></i></button>
         </li>
     </ul>

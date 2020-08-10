@@ -14,6 +14,11 @@ class Edit extends RowAction
         return __('admin.edit');
     }
 
+    public function getElementClass()
+    {
+        return parent::getElementClass() . ' dropdown-item';
+    }
+
     /**
      * @return string
      */

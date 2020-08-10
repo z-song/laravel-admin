@@ -74,12 +74,12 @@ class BelongsToMany extends MultipleSelect
             .val(selected)
             .trigger('change')
             .next()
-            .addClass('hide');
+            .addClass('d-none');
 
         table.find('tbody').empty();
 
         Object.values(rows).forEach(function (row) {
-            row.find('td:last a').removeClass('hide');
+            row.find('td:last a').removeClass('d-none');
             row.find('td.column-__modal_selector__').remove();
             table.find('tbody').append(row);
         });

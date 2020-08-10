@@ -1,7 +1,7 @@
 <div class="{{$viewClass['form-group']}}">
     <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
-        <div class="box box-solid box-default no-margin">
+        <div class="card card-solid card-default no-margin">
             <!-- /.box-header -->
             <div class="box-body">
                 {!! $value !!}&nbsp;

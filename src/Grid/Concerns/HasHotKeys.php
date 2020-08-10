@@ -33,7 +33,7 @@ $(document).off('keydown').keydown(function(e) {
             \$box.find('input.grid-quick-search').trigger('focus');
             break; 
         case 70: // `f` for open filter
-            \$box.find('#{$filterID}').toggleClass('hide');
+            \$box.find('#{$filterID}').toggleClass('d-none');
             break;
         case 67: // `c` go to create page 
             if (!e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {

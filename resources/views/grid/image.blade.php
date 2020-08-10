@@ -1,9 +1,9 @@
-<div class="box">
-    <div class="box-header"></div>
+<div class="card">
+    <div class="card-header"></div>
 
     {!! $grid->renderFilter() !!}
 
-    <div class="box-body table-responsive no-padding">
+    <div class="card-body table-responsive no-padding">
         <ul class="image clearfix">
             @foreach($grid->rows() as $row)
             <li>
@@ -16,10 +16,10 @@
         </ul>
     </div>
 
-    <div class="box-footer clearfix">
+    <div class="card-footer clearfix">
         {!! $grid->paginator() !!}
     </div>
-    <!-- /.box-body -->
+    <!-- /.card-body -->
 </div>
 
 <style>

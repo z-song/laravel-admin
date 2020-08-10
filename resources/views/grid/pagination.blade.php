@@ -1,4 +1,5 @@
-<ul class="pagination pagination-sm no-margin pull-right">
+<div class="d-inline-block float-right">
+<ul class="pagination pagination-sm m-0 float-right">
     <!-- Previous Page Link -->
     @if ($paginator->onFirstPage())
     <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
@@ -32,3 +33,4 @@
     <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
     @endif
 </ul>
+</div>

@@ -1,24 +1,24 @@
 <div class="grid-dropdown-actions dropdown">
-    <a href="#" style="padding: 0 10px;" class="dropdown-toggle" data-toggle="dropdown">
+    <a href="javascript:void(0);" style="padding: 0 10px;" data-toggle="dropdown">
         <i class="fa fa-ellipsis-v"></i>
     </a>
-    <ul class="dropdown-menu" style="min-width: 70px !important;box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);left: -65px;top: 5px;">
+    <div class="dropdown-menu" style="min-width: 70px !important;box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);left: -65px;top: 5px;">
 
         @foreach($default as $action)
-            <li>{!! $action->render() !!}</li>
+            {!! $action->render() !!}
         @endforeach
 
         @if(!empty($custom))
 
             @if(!empty($default))
-                <li class="divider"></li>
+                <div class="divider"></div>
             @endif
 
             @foreach($custom as $action)
-                <li>{!! $action->render() !!}</li>
+               {!! $action->render() !!}
             @endforeach
         @endif
-    </ul>
+    </div>
 </div>
 
 <script>

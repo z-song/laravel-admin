@@ -5,7 +5,7 @@
 </style>
 
 <div class="row">
-    <div class="{{$viewClass['label']}}"><h4 class="pull-right">{{ $label }}</h4></div>
+    <div class="{{$viewClass['label']}}"><h4 class="float-right">{{ $label }}</h4></div>
     <div class="{{$viewClass['field']}}">
         <div id="has-many-{{$column}}" style="margin-top: 15px;">
             <table class="table table-has-many has-many-{{$column}}">
@@ -43,7 +43,7 @@
                         @if($options['allowDelete'])
                             <td class="form-group">
                                 <div>
-                                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
+                                    <div class="remove btn btn-warning btn-sm float-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
                                 </div>
                             </td>
                         @endif
@@ -59,7 +59,7 @@
 
                     <td class="form-group">
                         <div>
-                            <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
+                            <div class="remove btn btn-warning btn-sm float-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
                         </div>
                     </td>
                 </tr>

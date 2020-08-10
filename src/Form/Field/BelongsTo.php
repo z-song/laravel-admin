@@ -60,10 +60,10 @@ class BelongsTo extends Select
             .val(selected)
             .trigger('change')
             .next()
-            .addClass('hide');
+            .addClass('d-none');
 
         if (row) {
-            row.find('td:last a').removeClass('hide');
+            row.find('td:last a').removeClass('d-none');
             row.find('td:first').remove();
             table.find('tbody').empty().append(row);
         }

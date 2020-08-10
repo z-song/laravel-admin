@@ -1,19 +1,19 @@
 <div {!! $attributes !!}>
     @if($title || $tools)
-        <div class="box-header with-border">
-            <h3 class="box-title">{{ $title }}</h3>
-            <div class="box-tools pull-right">
+        <div class="card-header with-border">
+            <h3 class="card-title">{{ $title }}</h3>
+            <div class="card-tools float-right">
                 @foreach($tools as $tool)
                     {!! $tool !!}
                 @endforeach
-            </div><!-- /.box-tools -->
+            </div><!-- /.card-tools -->
         </div><!-- /.box-header -->
     @endif
-    <div class="box-body" style="display: block;">
+    <div class="card-body" style="display: block;">
         {!! $content !!}
     </div><!-- /.box-body -->
     @if($footer)
-        <div class="box-footer">
+        <div class="card-footer">
             {!! $footer !!}
         </div><!-- /.box-footer-->
     @endif

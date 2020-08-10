@@ -57,7 +57,7 @@ class Delete extends Action
         $text = trans('admin.delete');
 
         return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
+<div class="btn-group float-right" style="margin-right: 5px">
     <a href="javascript:void(0);" class="btn btn-sm btn-danger delete-record" title="{$text}">
         <i class="fa fa-trash"></i><span class="hidden-xs">  {$text}</span>
     </a>

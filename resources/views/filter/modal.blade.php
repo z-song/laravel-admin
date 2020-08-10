@@ -1,4 +1,4 @@
-<div class="btn-group pull-right" style="margin-right: 10px">
+<div class="btn-group float-right" style="margin-right: 10px">
     <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#{{ $modalID }}"><i class="fa fa-filter"></i>&nbsp;&nbsp;{{ trans('admin.filter') }}</a>
     <a href="{!! $action !!}" class="btn btn-sm btn-facebook"><i class="fa fa-undo"></i>&nbsp;&nbsp;{{ trans('admin.reset') }}</a>
 </div>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary submit">{{ trans('admin.submit') }}</button>
-                    <button type="reset" class="btn btn-warning pull-left">{{ trans('admin.reset') }}</button>
+                    <button type="reset" class="btn btn-warning float-left">{{ trans('admin.reset') }}</button>
                 </div>
             </form>
         </div>

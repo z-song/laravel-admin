@@ -1,15 +1,15 @@
-<div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="{{ $all }}" target="_blank" class="btn btn-sm btn-twitter" title="{{ trans('admin.export') }}">
+<div class="btn-group float-right" style="margin-right: 10px">
+    <a href="{{ $all }}" target="_blank" class="btn btn-sm btn-default" title="{{ trans('admin.export') }}">
         <i class="fa fa-download"></i>
         <span class="hidden-xs"> {{ trans('admin.export') }}</span>
     </a>
-    <button type="button" class="btn btn-sm btn-twitter dropdown-toggle" data-toggle="dropdown">
+    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="{{ $all }}" target="_blank">{{ trans('admin.all') }}</a></li>
-        <li><a href="{{ $page }}" target="_blank">{{ trans('admin.current_page') }}</a></li>
-        <li style="display: none;"><a href="{{ $selected }}" target="_blank" class='{{ $name }}'>{{ trans('admin.selected_rows') }}</a></li>
+        <a href="{{ $all }}" target="_blank" class="dropdown-item">{{ trans('admin.all') }}</a>
+        <a href="{{ $page }}" target="_blank" class="dropdown-item">{{ trans('admin.current_page') }}</a>
+        <a href="{{ $selected }}" target="_blank" class='{{ $name }} dropdown-item d-none'>{{ trans('admin.selected_rows') }}</a>
     </ul>
 </div>
 

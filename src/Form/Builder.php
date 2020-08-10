@@ -629,7 +629,7 @@ $('.nav-tabs a').on('shown.bs.tab', function (e) {
 if ($('.has-error').length) {
     $('.has-error').each(function () {
         var tabId = '#'+$(this).closest('.tab-pane').attr('id');
-        $('li a[href="'+tabId+'"] i').removeClass('hide');
+        $('li a[href="'+tabId+'"] i').removeClass('d-none');
     });
 
     var first = $('.has-error:first').closest('.tab-pane').attr('id');
@@ -646,7 +646,7 @@ SCRIPT;
 ;(function () {
     $('form.{$this->formClass}').submit(function (e) {
         e.preventDefault();
-        $(this).find('div.cascade-group.hide :input').attr('disabled', true);
+        $(this).find('div.cascade-group.d-none :input').attr('disabled', true);
     });
 })();
 SCRIPT;

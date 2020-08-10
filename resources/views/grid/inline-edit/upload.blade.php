@@ -1,7 +1,7 @@
 <a href='javascript:void(0);' class='text-muted inline-upload-trigger' data-target="{{ $target }}">
     <i class="fa fa-upload"></i>&nbsp;{!! $value !!}
 </a>
-<div class="hide">
+<div class="d-none">
   <input type="file" class="inline-upload" id="{{ $target }}" data-key="{{ $key }}" {{ $multiple ? 'multiple' : '' }}/>
 </div>
 

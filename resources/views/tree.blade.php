@@ -1,6 +1,6 @@
-<div class="box">
+<div class="card card-outline">
 
-    <div class="box-header">
+    <div class="card-header">
 
         <div class="btn-group">
             <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ trans('admin.expand') }}">
@@ -28,21 +28,21 @@
         </div>
 
         @if($useCreate)
-        <div class="btn-group pull-right">
+        <div class="btn-group float-right">
             <a class="btn btn-success btn-sm" href="{{ url($path) }}/create"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.new') }}</span></a>
         </div>
         @endif
 
     </div>
-    <!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
+    <!-- /.card-header -->
+    <div class="card-body table-responsive no-padding">
         <div class="dd" id="{{ $id }}">
             <ol class="dd-list">
                 @each($branchView, $items, 'branch')
             </ol>
         </div>
     </div>
-    <!-- /.box-body -->
+    <!-- /.card-body -->
 </div>
 
 

@@ -1,21 +1,27 @@
-<aside class="main-sidebar">
+<aside class="main-sidebar elevation-4 sidebar-light-warning">
+
+    <a href="{{ admin_url('/') }}" class="brand-link navbar-warning">
+        <img src="/vendor/laravel-admin-v2/AdminLTE/img/AdminLTELogo.png"
+             alt="AdminLTE Logo"
+             class="brand-image img-circle elevation-3"
+             style="opacity: .8">
+        <span class="brand-text font-weight-light">{!! config('admin.logo', config('admin.name')) !!}</span>
+    </a>
 
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+    <div class="sidebar">
 
         <!-- Sidebar user panel (optional) -->
-        <div class="user-panel">
-            <div class="pull-left image">
-                <img src="{{ Admin::user()->avatar }}" class="img-circle" alt="User Image">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{{ Admin::user()->avatar }}" class="img-circle elevation-2" alt="User Image">
             </div>
-            <div class="pull-left info">
-                <p>{{ Admin::user()->name }}</p>
-                <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> {{ trans('admin.online') }}</a>
+            <div class="info">
+                <a href="#" class="d-block">{{ Admin::user()->name }}</a>
             </div>
         </div>
 
-        @if(config('admin.enable_menu_search'))
+        @if(0 && config('admin.enable_menu_search'))
         <!-- search form (Optional) -->
         <form class="sidebar-form" style="overflow: initial;" onsubmit="return false;">
             <div class="input-group">
@@ -37,13 +43,12 @@
         @endif
 
         <!-- Sidebar Menu -->
-        <ul class="sidebar-menu">
-            <li class="header">{{ trans('admin.menu') }}</li>
-
-            @each('admin::partials.menu', Admin::menu(), 'item')
-
-        </ul>
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                @each('admin::partials.menu', Admin::menu(), 'item')
+            </ul>
+        </nav>
         <!-- /.sidebar-menu -->
-    </section>
+    </div>
     <!-- /.sidebar -->
 </aside>
