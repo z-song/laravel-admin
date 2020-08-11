@@ -5,7 +5,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">{{ $title }}</h4>
             </div>
-            <form>
+            <form class="fields-group">
             <div class="modal-body">
                 @foreach($fields as $field)
                     {!! $field->render() !!}
