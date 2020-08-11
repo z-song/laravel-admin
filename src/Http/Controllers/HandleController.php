@@ -3,7 +3,7 @@
 namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Actions\Action;
-use Encore\Admin\Actions\GridAction;
+use Encore\Admin\Actions\TableAction;
 use Encore\Admin\Actions\Response;
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Widgets\Form;
@@ -80,7 +80,7 @@ class HandleController extends Controller
         $model = null;
         $arguments = [];
 
-        if ($action instanceof GridAction) {
+        if ($action instanceof TableAction) {
             $model = $action->retrieveModel($request);
             $arguments[] = $model;
         }
@@ -125,7 +125,7 @@ class HandleController extends Controller
             throw new Exception("Form [{$actionClass}] does not exist.");
         }
 
-        /** @var GridAction $form */
+        /** @var TableAction $form */
         $action = app($actionClass);
 
         if (!method_exists($action, 'handle')) {
@@ -165,7 +165,7 @@ class HandleController extends Controller
         $class = str_replace('_', '\\', $class);
 
         if (class_exists($class)) {
-            /** @var \Encore\Admin\Grid\Selectable $selectable */
+            /** @var \Encore\Admin\Table\Selectable $selectable */
             $selectable = new $class(...array_values($args));
 
             return $selectable->render();

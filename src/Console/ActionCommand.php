@@ -13,8 +13,8 @@ class ActionCommand extends GeneratorCommand
      * @var string
      */
     protected $signature = 'admin:action {name}
-        {--grid-batch}
-        {--grid-row}
+        {--table-batch}
+        {--table-row}
         {--form}
         {--dialog}
         {--name=}
@@ -88,12 +88,12 @@ CODE;
      */
     public function getStub()
     {
-        if ($this->option('grid-batch')) {
-            return __DIR__.'/stubs/grid-batch-action.stub';
+        if ($this->option('table-batch')) {
+            return __DIR__.'/stubs/table-batch-action.stub';
         }
 
-        if ($this->option('grid-row')) {
-            return __DIR__.'/stubs/grid-row-action.stub';
+        if ($this->option('table-row')) {
+            return __DIR__.'/stubs/table-row-action.stub';
         }
 
         return __DIR__.'/stubs/action.stub';

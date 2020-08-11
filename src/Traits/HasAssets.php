@@ -148,7 +148,6 @@ trait HasAssets
         ],
 
         'bootstrapSwitch' => [
-//            'css' => ['/vendor/laravel-admin-v2/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',],
             'js'  => ['vendor/laravel-admin-v2/bootstrap-switch/js/bootstrap-switch.min.js',]
         ],
         'inputmask'       => [

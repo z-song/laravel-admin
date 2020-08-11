@@ -4,12 +4,12 @@ namespace Encore\Admin\Actions;
 
 use Illuminate\Http\Request;
 
-abstract class BatchAction extends GridAction
+abstract class BatchAction extends TableAction
 {
     /**
      * @var string
      */
-    public $selectorPrefix = '.grid-batch-action-';
+    public $selectorPrefix = '.table-batch-action-';
 
     /**
      * {@inheritdoc}

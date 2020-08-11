@@ -83,13 +83,13 @@ class Admin
      * @param $model
      * @param Closure $callable
      *
-     * @return \Encore\Admin\Grid
+     * @return \Encore\Admin\Table
      *
      * @deprecated since v1.6.1
      */
-    public function grid($model, Closure $callable)
+    public function table($model, Closure $callable)
     {
-        return new Grid($this->getModel($model), $callable);
+        return new Table($this->getModel($model), $callable);
     }
 
     /**

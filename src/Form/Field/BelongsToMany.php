@@ -13,26 +13,26 @@ class BelongsToMany extends MultipleSelect
         $script = <<<SCRIPT
 ;(function () {
 
-    var grid = $('.belongstomany-{$this->column()}');
+    var table = $('.belongstomany-{$this->column()}');
     var modal = $('#{$this->modalID}');
-    var table = grid.find('.grid-table');
+    var table = table.find('.table-table');
     var selected = $("{$this->getElementClassSelector()}").val() || [];
     var rows = {};
 
     table.find('tbody').children().each(function (index, tr) {
-        if ($(tr).find('.grid-row-remove').length > 0) {
-            rows[$(tr).find('.grid-row-remove').data('key')] = $(tr);
+        if ($(tr).find('.table-row-remove').length > 0) {
+            rows[$(tr).find('.table-row-remove').data('key')] = $(tr);
         }
     });
 
     // open modal
-    grid.find('.select-relation').click(function (e) {
+    table.find('.select-relation').click(function (e) {
         $('#{$this->modalID}').modal('show');
         e.preventDefault();
     });
 
     // remove row
-    grid.on('click', '.grid-row-remove', function () {
+    table.on('click', '.table-row-remove', function () {
         val = $(this).data('key').toString();
 
         var index = selected.indexOf(val);
@@ -88,7 +88,7 @@ class BelongsToMany extends MultipleSelect
             var empty = $('.belongstomany-{$this->column()}').find('template.empty').html();
             table.find('tbody').append(empty);
         } else {
-            table.find('.empty-grid').parent().remove();
+            table.find('.empty-table').parent().remove();
         }
 
         callback();

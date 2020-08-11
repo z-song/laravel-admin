@@ -1,12 +1,12 @@
 <div>
     <span class="{{ $elementClass }}" data-inserted="0" data-key="{{ $key }}" data-name="{{ $name }}"
-          data-toggle="collapse" data-target="#grid-collapse-{{ $name }}">
+          data-toggle="collapse" data-target="#table-collapse-{{ $name }}">
         <a href="javascript:void(0)"><i class="fa fa-angle-double-down"></i>&nbsp;&nbsp;{{ $value }}</a>
     </span>
-    <template class="grid-expand-{{ $name }}">
+    <template class="table-expand-{{ $name }}">
         <tr style='background-color: #ecf0f5;'>
             <td colspan='100%' style='padding:0 !important; border:0;'>
-                <div id="grid-collapse-{{ $name }}" class="collapse">
+                <div id="table-collapse-{{ $name }}" class="collapse">
                     <div style="padding: 10px 10px 0 10px;" class="html">
                         @if($html)
                             {{ $html }}
@@ -40,11 +40,11 @@
             var name = $(this).data('name');
             var row = $(this).closest('tr');
 
-            row.after($('template.grid-expand-'+name).html());
+            row.after($('template.table-expand-'+name).html());
 
             $(this).data('inserted', 1);
 
-            load('{{ $url }}'+'&key='+key, $('#grid-collapse-'+name));
+            load('{{ $url }}'+'&key='+key, $('#table-collapse-'+name));
         }
 
         $("i", this).toggleClass("fa-angle-double-down fa-angle-double-up");
@@ -69,7 +69,7 @@
             var name = $(this).data('name');
             var row = $(this).closest('tr');
 
-            row.after($('template.grid-expand-'+name).html());
+            row.after($('template.table-expand-'+name).html());
 
             $(this).data('inserted', 1);
         }
@@ -84,9 +84,9 @@
     @endif
 </script>
 
-@if($loadGrid)
+@if($loadTable)
 <style>
-    .collapse .grid-box .box-header:first-child {
+    .collapse .table-box .box-header:first-child {
         display: none;
     }
 </style>

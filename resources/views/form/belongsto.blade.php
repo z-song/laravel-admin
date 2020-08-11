@@ -16,9 +16,9 @@
         </select>
 
         <div class="belongsto-{{ $class }}">
-            {!! $grid->render() !!}
+            {!! $table->render() !!}
             <template class="empty">
-                @include('admin::grid.empty-grid')
+                @include('admin::table.empty-table')
             </template>
         </div>
 

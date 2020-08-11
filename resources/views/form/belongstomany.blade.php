@@ -14,9 +14,9 @@
         <input type="hidden" name="{{$name}}[]" />
 
         <div class="belongstomany-{{ $class }}">
-            {!! $grid->render() !!}
+            {!! $table->render() !!}
             <template class="empty">
-                @include('admin::grid.empty-grid')
+                @include('admin::table.empty-table')
             </template>
         </div>
 

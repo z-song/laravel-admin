@@ -120,7 +120,7 @@ class MakeCommand extends GeneratorCommand
     {
         $this->alert("laravel-admin controller code for model [{$modelName}]");
 
-        $this->info($this->generator->generateGrid());
+        $this->info($this->generator->generateTable());
         $this->info($this->generator->generateShow());
         $this->info($this->generator->generateForm());
     }
@@ -156,7 +156,7 @@ class MakeCommand extends GeneratorCommand
                 'DummyModelNamespace',
                 'DummyTitle',
                 'DummyModel',
-                'DummyGrid',
+                'DummyTable',
                 'DummyShow',
                 'DummyForm',
             ],
@@ -164,7 +164,7 @@ class MakeCommand extends GeneratorCommand
                 $this->modelName,
                 $this->getTitle(),
                 class_basename($this->modelName),
-                $this->indentCodes($this->generator->generateGrid()),
+                $this->indentCodes($this->generator->generateTable()),
                 $this->indentCodes($this->generator->generateShow()),
                 $this->indentCodes($this->generator->generateForm()),
             ],

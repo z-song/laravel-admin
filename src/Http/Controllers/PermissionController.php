@@ -3,7 +3,7 @@
 namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
+use Encore\Admin\Table;
 use Encore\Admin\Show;
 use Illuminate\Support\Str;
 
@@ -18,21 +18,21 @@ class PermissionController extends AdminController
     }
 
     /**
-     * Make a grid builder.
+     * Make a table builder.
      *
-     * @return Grid
+     * @return Table
      */
-    protected function grid()
+    protected function table()
     {
         $permissionModel = config('admin.database.permissions_model');
 
-        $grid = new Grid(new $permissionModel());
+        $table = new Table(new $permissionModel());
 
-        $grid->column('id', 'ID')->sortable();
-        $grid->column('slug', trans('admin.slug'));
-        $grid->column('name', trans('admin.name'));
+        $table->column('id', 'ID')->sortable();
+        $table->column('slug', trans('admin.slug'));
+        $table->column('name', trans('admin.name'));
 
-        $grid->column('http_path', trans('admin.route'))->display(function ($path) {
+        $table->column('http_path', trans('admin.route'))->display(function ($path) {
             return collect(explode("\n", $path))->map(function ($path) {
                 $method = $this->http_method ?: ['ANY'];
 
@@ -55,16 +55,16 @@ class PermissionController extends AdminController
             })->implode('');
         });
 
-        $grid->column('created_at', trans('admin.created_at'));
-        $grid->column('updated_at', trans('admin.updated_at'));
+        $table->column('created_at', trans('admin.created_at'));
+        $table->column('updated_at', trans('admin.updated_at'));
 
-        $grid->tools(function (Grid\Tools $tools) {
-            $tools->batch(function (Grid\Tools\BatchActions $actions) {
+        $table->tools(function (Table\Tools $tools) {
+            $tools->batch(function (Table\Tools\BatchActions $actions) {
                 $actions->disableDelete();
             });
         });
 
-        return $grid;
+        return $table;
     }
 
     /**

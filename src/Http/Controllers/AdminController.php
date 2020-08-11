@@ -50,7 +50,7 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
-            ->body($this->grid());
+            ->body($this->table());
     }
 
     /**

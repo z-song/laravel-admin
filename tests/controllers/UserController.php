@@ -4,7 +4,7 @@ namespace Tests\Controllers;
 
 use Encore\Admin\Http\Controllers\AdminController;
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
+use Encore\Admin\Table;
 use Tests\Models\Tag;
 use Tests\Models\User;
 
@@ -13,40 +13,40 @@ class UserController extends AdminController
     protected $title = 'Users';
 
     /**
-     * Make a grid builder.
+     * Make a table builder.
      *
-     * @return Grid
+     * @return Table
      */
-    protected function grid()
+    protected function table()
     {
-        $grid = new Grid(new User());
+        $table = new Table(new User());
 
-        $grid->id('ID')->sortable();
+        $table->id('ID')->sortable();
 
-        $grid->username();
-        $grid->email();
-        $grid->mobile();
-        $grid->full_name();
-        $grid->avatar()->display(function ($avatar) {
+        $table->username();
+        $table->email();
+        $table->mobile();
+        $table->full_name();
+        $table->avatar()->display(function ($avatar) {
             return "<img src='{$avatar}' />";
         });
-        $grid->profile()->postcode('Post code');
-        $grid->profile()->address();
-        $grid->position('Position');
-        $grid->column('profile.color');
-        $grid->profile()->start_at('开始时间');
-        $grid->profile()->end_at('结束时间');
-        $grid->column('data->json->field', 'Json Field');
+        $table->profile()->postcode('Post code');
+        $table->profile()->address();
+        $table->position('Position');
+        $table->column('profile.color');
+        $table->profile()->start_at('开始时间');
+        $table->profile()->end_at('结束时间');
+        $table->column('data->json->field', 'Json Field');
 
-        $grid->column('column1_not_in_table')->display(function () {
+        $table->column('column1_not_in_table')->display(function () {
             return 'full name:'.$this->full_name;
         });
 
-        $grid->column('column2_not_in_table')->display(function () {
+        $table->column('column2_not_in_table')->display(function () {
             return $this->email.'#'.$this->profile['color'];
         });
 
-        $grid->tags()->display(function ($tags) {
+        $table->tags()->display(function ($tags) {
             $tags = collect($tags)->map(function ($tag) {
                 return "<code>{$tag['name']}</code>";
             })->toArray();
@@ -54,10 +54,10 @@ class UserController extends AdminController
             return implode('', $tags);
         });
 
-        $grid->created_at();
-        $grid->updated_at();
+        $table->created_at();
+        $table->updated_at();
 
-        $grid->filter(function ($filter) {
+        $table->filter(function ($filter) {
             $filter->like('username');
             $filter->like('email');
             $filter->like('profile.postcode');
@@ -65,13 +65,13 @@ class UserController extends AdminController
             $filter->between('profile.end_at')->datetime();
         });
 
-        $grid->actions(function ($actions) {
+        $table->actions(function ($actions) {
             if ($actions->getKey() % 2 == 0) {
                 $actions->append('<a href="/" class="btn btn-xs btn-danger">detail</a>');
             }
         });
 
-        return $grid;
+        return $table;
     }
 
     /**

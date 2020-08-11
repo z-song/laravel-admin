@@ -3,7 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Admin;
-use Encore\Admin\Grid\Selectable;
+use Encore\Admin\Table\Selectable;
 
 trait BelongsToRelation
 {
@@ -37,7 +37,7 @@ trait BelongsToRelation
     {
         if (!class_exists($selectable) || !is_subclass_of($selectable, Selectable::class)) {
             throw new \InvalidArgumentException(
-                "[Class [{$selectable}] must be a sub class of Encore\Admin\Grid\Selectable"
+                "[Class [{$selectable}] must be a sub class of Encore\Admin\Table\Selectable"
             );
         }
 
@@ -123,16 +123,16 @@ HTML;
     margin: 50px;
 }
 
-.belongsto.modal .grid-table .empty-grid {
+.belongsto.modal .table-table .empty-table {
     padding: 20px !important;
 }
 
-.belongsto.modal .grid-table .empty-grid svg {
+.belongsto.modal .table-table .empty-table svg {
     width: 60px !important;
     height: 60px !important;
 }
 
-.belongsto.modal .grid-box .box-footer {
+.belongsto.modal .table-box .box-footer {
     border-top: none !important;
 }
 STYLE;
@@ -143,14 +143,14 @@ STYLE;
     }
 
     /**
-     * @return \Encore\Admin\Grid
+     * @return \Encore\Admin\Table
      */
-    protected function makeGrid()
+    protected function makeTable()
     {
         /** @var Selectable $selectable */
         $selectable = new $this->selectable();
 
-        return $selectable->renderFormGrid($this->value());
+        return $selectable->renderFormTable($this->value());
     }
 
     /**
@@ -163,7 +163,7 @@ STYLE;
         $this->addScript()->addHtml()->addStyle();
 
         $this->addVariables([
-            'grid'    => $this->makeGrid(),
+            'table'    => $this->makeTable(),
             'options' => $this->getOptions(),
         ]);
 

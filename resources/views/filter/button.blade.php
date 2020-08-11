@@ -19,7 +19,7 @@
 {{--    @endif--}}
 {{--</div>--}}
 
-<div class="btn-group">
+<div class="btn-group btn-group-sm">
     <button type="button" class="btn btn-default">
         <input type="checkbox" class="d-none"><i class="fa fa-filter"></i><span class="hidden-xs">&nbsp;&nbsp;{{ trans('admin.filter') }}</span>
     </button>
@@ -30,9 +30,10 @@
             <span>{{ $label }}</span>
         </button>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Dropdown link</a>
-            <a class="dropdown-item" href="#">Dropdown link</a>
-            <div class="divider"></div>
+            @foreach($scopes as $scope)
+                {!! $scope->render() !!}
+            @endforeach
+            <div class="dropdown-divider"></div>
             <a href="{{ $cancel }}" class="dropdown-item">{{ trans('admin.cancel') }}</a>
         </div>
     </div>

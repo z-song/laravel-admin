@@ -13,20 +13,20 @@ class BelongsTo extends Select
         $script = <<<SCRIPT
 ;(function () {
 
-    var grid = $('.belongsto-{$this->column()}');
+    var table = $('.belongsto-{$this->column()}');
     var modal = $('#{$this->modalID}');
-    var table = grid.find('.grid-table');
+    var table = table.find('.table-table');
     var selected = $("{$this->getElementClassSelector()}").val();
     var row = null;
 
     // open modal
-    grid.find('.select-relation').click(function (e) {
+    table.find('.select-relation').click(function (e) {
         $('#{$this->modalID}').modal('show');
         e.preventDefault();
     });
 
     // remove row
-    grid.on('click', '.grid-row-remove', function () {
+    table.on('click', '.table-row-remove', function () {
         selected = null;
         $(this).parents('tr').remove();
         $("{$this->getElementClassSelector()}").val(null);

@@ -1,8 +1,8 @@
-<span data-toggle="modal" data-target="#grid-modal-{{ $name }}" data-key="{{ $key }}">
+<span data-toggle="modal" data-target="#table-modal-{{ $name }}" data-key="{{ $key }}">
    <a href="javascript:void(0)"><i class="fa fa-clone"></i>&nbsp;&nbsp;{{ $value }}</a>
 </span>
 
-<div class="modal grid-modal fade" id="grid-modal-{{ $name }}" tabindex="-1" role="dialog">
+<div class="modal table-modal fade" id="table-modal-{{ $name }}" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="border-radius: 5px;">
             <div class="modal-header">
@@ -16,14 +16,14 @@
     </div>
 </div>
 
-@if($grid)
+@if($table)
 <style>
-    .box.grid-box {
+    .box.table-box {
         box-shadow: none;
         border-top: none;
     }
 
-    .grid-box .box-header:first-child {
+    .table-box .box-header:first-child {
         display: none;
     }
 </style>
@@ -31,7 +31,7 @@
 
 @if($async)
 <script>
-    var modal = $('.grid-modal');
+    var modal = $('.table-modal');
     var modalBody = modal.find('.modal-body');
 
     var load = function (url) {

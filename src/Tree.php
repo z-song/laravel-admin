@@ -233,7 +233,7 @@ class Tree implements Renderable
     }
 
     /**
-     * Setup grid tools.
+     * Setup table tools.
      *
      * @param Closure $callback
      *
@@ -271,7 +271,7 @@ class Tree implements Renderable
     }
 
     /**
-     * Get the string contents of the grid view.
+     * Get the string contents of the table view.
      *
      * @return string
      */

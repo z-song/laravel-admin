@@ -3,7 +3,7 @@
 namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
+use Encore\Admin\Table;
 use Encore\Admin\Show;
 
 class UserController extends AdminController
@@ -17,36 +17,36 @@ class UserController extends AdminController
     }
 
     /**
-     * Make a grid builder.
+     * Make a table builder.
      *
-     * @return Grid
+     * @return Table
      */
-    protected function grid()
+    protected function table()
     {
         $userModel = config('admin.database.users_model');
 
-        $grid = new Grid(new $userModel());
+        $table = new Table(new $userModel());
 
-        $grid->column('id', 'ID')->sortable();
-        $grid->column('username', trans('admin.username'));
-        $grid->column('name', trans('admin.name'));
-        $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
-        $grid->column('created_at', trans('admin.created_at'));
-        $grid->column('updated_at', trans('admin.updated_at'));
+        $table->column('id', 'ID')->sortable();
+        $table->column('username', trans('admin.username'));
+        $table->column('name', trans('admin.name'));
+        $table->column('roles', trans('admin.roles'))->pluck('name')->label();
+        $table->column('created_at', trans('admin.created_at'));
+        $table->column('updated_at', trans('admin.updated_at'));
 
-        $grid->actions(function (Grid\Displayers\Actions $actions) {
+        $table->actions(function (Table\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
                 $actions->disableDelete();
             }
         });
 
-        $grid->tools(function (Grid\Tools $tools) {
-            $tools->batch(function (Grid\Tools\BatchActions $actions) {
+        $table->tools(function (Table\Tools $tools) {
+            $tools->batch(function (Table\Tools\BatchActions $actions) {
                 $actions->disableDelete();
             });
         });
 
-        return $grid;
+        return $table;
     }
 
     /**

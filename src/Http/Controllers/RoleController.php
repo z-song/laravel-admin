@@ -3,7 +3,7 @@
 namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
+use Encore\Admin\Table;
 use Encore\Admin\Show;
 
 class RoleController extends AdminController
@@ -17,38 +17,38 @@ class RoleController extends AdminController
     }
 
     /**
-     * Make a grid builder.
+     * Make a table builder.
      *
-     * @return Grid
+     * @return Table
      */
-    protected function grid()
+    protected function table()
     {
         $roleModel = config('admin.database.roles_model');
 
-        $grid = new Grid(new $roleModel());
+        $table = new Table(new $roleModel());
 
-        $grid->column('id', 'ID')->sortable();
-        $grid->column('slug', trans('admin.slug'));
-        $grid->column('name', trans('admin.name'));
+        $table->column('id', 'ID')->sortable();
+        $table->column('slug', trans('admin.slug'));
+        $table->column('name', trans('admin.name'));
 
-        $grid->column('permissions', trans('admin.permission'))->pluck('name')->label();
+        $table->column('permissions', trans('admin.permission'))->pluck('name')->label();
 
-        $grid->column('created_at', trans('admin.created_at'));
-        $grid->column('updated_at', trans('admin.updated_at'));
+        $table->column('created_at', trans('admin.created_at'));
+        $table->column('updated_at', trans('admin.updated_at'));
 
-        $grid->actions(function (Grid\Displayers\Actions $actions) {
+        $table->actions(function (Table\Displayers\Actions $actions) {
             if ($actions->row->slug == 'administrator') {
                 $actions->disableDelete();
             }
         });
 
-        $grid->tools(function (Grid\Tools $tools) {
-            $tools->batch(function (Grid\Tools\BatchActions $actions) {
+        $table->tools(function (Table\Tools $tools) {
+            $tools->batch(function (Table\Tools\BatchActions $actions) {
                 $actions->disableDelete();
             });
         });
 
-        return $grid;
+        return $table;
     }
 
     /**

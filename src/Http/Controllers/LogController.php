@@ -3,7 +3,7 @@
 namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Models\OperationLog;
-use Encore\Admin\Grid;
+use Encore\Admin\Table;
 use Illuminate\Support\Arr;
 
 class LogController extends AdminController
@@ -17,43 +17,43 @@ class LogController extends AdminController
     }
 
     /**
-     * @return Grid
+     * @return Table
      */
-    protected function grid()
+    protected function table()
     {
-        $grid = new Grid(new OperationLog());
+        $table = new Table(new OperationLog());
 
-        $grid->model()->orderBy('id', 'DESC');
+        $table->model()->orderBy('id', 'DESC');
 
-        $grid->column('id', 'ID')->sortable();
-        $grid->column('user.name', 'User');
-        $grid->column('method')->display(function ($method) {
+        $table->column('id', 'ID')->sortable();
+        $table->column('user.name', 'User');
+        $table->column('method')->display(function ($method) {
             $color = Arr::get(OperationLog::$methodColors, $method, 'grey');
 
             return "<span class=\"badge bg-$color\">$method</span>";
         });
-        $grid->column('path')->label('info');
-        $grid->column('ip')->label('primary');
-        $grid->column('input')->display(function ($input) {
+        $table->column('path')->label('info');
+        $table->column('ip')->label('primary');
+        $table->column('input')->display(function ($input) {
             $input = json_decode($input, true);
             $input = Arr::except($input, ['_pjax', '_token', '_method', '_previous_']);
             if (empty($input)) {
                 return '<code>{}</code>';
             }
 
-            return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_HEX_TAG).'</pre>';
+            return '<pre><code>'.json_encode($input, JSON_PRETTY_PRINT | JSON_HEX_TAG).'</code></pre>';
         });
 
-        $grid->column('created_at', trans('admin.created_at'));
+        $table->column('created_at', trans('admin.created_at'));
 
-        $grid->actions(function (Grid\Displayers\Actions $actions) {
+        $table->actions(function (Table\Displayers\Actions $actions) {
             $actions->disableEdit();
             $actions->disableView();
         });
 
-        $grid->disableCreateButton();
+        $table->disableCreateButton();
 
-        $grid->filter(function (Grid\Filter $filter) {
+        $table->filter(function (Table\Filter $filter) {
             $userModel = config('admin.database.users_model');
 
             $filter->equal('user_id', 'User')->select($userModel::all()->pluck('name', 'id'));
@@ -62,7 +62,7 @@ class LogController extends AdminController
             $filter->equal('ip');
         });
 
-        return $grid;
+        return $table;
     }
 
     /**

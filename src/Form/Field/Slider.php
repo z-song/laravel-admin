@@ -9,7 +9,7 @@ class Slider extends Field
     protected $options = [
         'type'     => 'single',
         'prettify' => false,
-        'hasGrid'  => true,
+        'hasTable'  => true,
     ];
 
     public function render()

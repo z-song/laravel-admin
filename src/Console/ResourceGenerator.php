@@ -17,7 +17,7 @@ class ResourceGenerator
     protected $formats = [
         'form_field'  => "\$form->%s('%s', __('%s'))",
         'show_field'  => "\$show->field('%s', __('%s'))",
-        'grid_column' => "\$grid->column('%s', __('%s'))",
+        'table_column' => "\$table->column('%s', __('%s'))",
     ];
 
     /**
@@ -179,7 +179,7 @@ class ResourceGenerator
         return $output;
     }
 
-    public function generateGrid()
+    public function generateTable()
     {
         $output = '';
 
@@ -187,7 +187,7 @@ class ResourceGenerator
             $name = $column->getName();
             $label = $this->formatLabel($name);
 
-            $output .= sprintf($this->formats['grid_column'], $name, $label);
+            $output .= sprintf($this->formats['table_column'], $name, $label);
             $output .= ";\r\n";
         }
 
