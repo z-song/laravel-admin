@@ -18,7 +18,7 @@ If you want to control the user's permissions in the page, you can refer to the 
 
 For example, there is now a scene, here is a article module, we use create articles as an example
 
-At first open `http://localhost/admi/auth/permissions`, fill up slug field with text `create-post`, and `Create post` in name field, then assign this permission to some roles.
+At first open `http://localhost/admin/auth/permissions`, fill up slug field with text `create-post`, and `Create post` in name field, then assign this permission to some roles.
 
 In your controller action: 
 ```php
