@@ -83,7 +83,7 @@ trait CanCascadeFields
 
     /**
      * @param string $operator
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return string
      */
@@ -92,9 +92,9 @@ trait CanCascadeFields
         // took from addCascadeScript()
         $must_escape = ['=', '>', '<', '>=', '<=', '!='];
         if (($index = array_search($operator, $must_escape)) !== false) {
-          $operator_escaped = "op$index";
+            $operator_escaped = "op$index";
         } else {
-          $operator_escaped = $operator;
+            $operator_escaped = $operator;
         }
 
         if (is_array($value)) {
@@ -111,7 +111,7 @@ trait CanCascadeFields
      */
     protected function applyCascadeConditions()
     {
-        if( $this->form ) {
+        if ($this->form) {
             $this->form->fields()
                 ->filter(function (Form\Field $field) {
                     return $field instanceof CascadeGroup
