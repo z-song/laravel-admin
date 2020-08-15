@@ -95,4 +95,19 @@ class TestCase extends BaseTestCase
 
         (new CreateTestTables())->up();
     }
+
+    /**
+     * Asserts that a file does not exist.
+     */
+    public static function assertFileDoesNotExist(string $filename, string $message = ''): void
+    {
+        if (method_exists(parent::class, 'assertFileDoesNotExist')) {
+            // PHPUnit 9
+            parent::assertFileDoesNotExist($filename, $message);
+        } else {
+            // PHPUnit 8
+            parent::assertFileNotExists($filename, $message);
+        }
+    }
+
 }
