@@ -67,7 +67,7 @@ trait CanCascadeFields
         $this->form->cascadeGroup($closure, [
             'column' => $this->column(),
             'index'  => count($this->conditions) - 1,
-            'class'  => $this->getCascadeClass($value),
+            'class'  => $this->getCascadeClass($operator, $value),
         ]);
     }
 
@@ -82,17 +82,26 @@ trait CanCascadeFields
     }
 
     /**
+     * @param string $operator
      * @param mixed $value
      *
      * @return string
      */
-    protected function getCascadeClass($value)
+    protected function getCascadeClass($operator, $value)
     {
+        // took from addCascadeScript()
+        $must_escape = ['=', '>', '<', '>=', '<=', '!='];
+        if (($index = array_search($operator, $must_escape)) !== false) {
+          $operator_escaped = "op$index";
+        } else {
+          $operator_escaped = $operator;
+        }
+
         if (is_array($value)) {
             $value = implode('-', $value);
         }
 
-        return sprintf('cascade-%s-%s', $this->getElementClassString(), $value);
+        return sprintf('cascade-%s-%s-%s', $operator_escaped, $this->getElementClassString(), $value);
     }
 
     /**
@@ -168,7 +177,7 @@ trait CanCascadeFields
 
         $cascadeGroups = collect($this->conditions)->map(function ($condition) {
             return [
-                'class'    => $this->getCascadeClass($condition['value']),
+                'class'    => $this->getCascadeClass($condition['operator'], $condition['value']),
                 'operator' => $condition['operator'],
                 'value'    => $condition['value'],
             ];
