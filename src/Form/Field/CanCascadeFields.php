@@ -256,4 +256,11 @@ SCRIPT;
                 throw new \InvalidArgumentException('Invalid form field type');
         }
     }
+
+    /**
+     * Get element class string.
+     *
+     * @return mixed
+     */
+    abstract public function getElementClassString();
 }
