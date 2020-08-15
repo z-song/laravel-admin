@@ -223,7 +223,7 @@ trait CanCascadeFields
                 group.addClass('hide');
             }
         });
-    })
+    }).trigger('{$this->cascadeEvent}')
 })();
 SCRIPT;
 
