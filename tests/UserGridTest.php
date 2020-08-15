@@ -139,7 +139,10 @@ class UserGridTest extends TestCase
 
     public function testLikeFilter()
     {
-        $this->seedsTable(50);
+        $this->seedsTable(49);
+
+        $u = factory(\Tests\Models\User::class)->create(['username' => 'mi']);
+        $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
 
         $this->visit('admin/users')
             ->see('Users');
