@@ -109,5 +109,4 @@ class TestCase extends BaseTestCase
             parent::assertFileNotExists($filename, $message);
         }
     }
-
 }
