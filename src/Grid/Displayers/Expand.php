@@ -27,7 +27,7 @@ HTML;
             $this->addScript($isExpand);
         }
 
-        $key = $this->column->getName().'-'.$this->getKey();
+        $key = str_replace('.', '-', $this->column->getName()).'-'.$this->getKey();
 
         return <<<EOT
 <span class="{$this->getElementClass()}" data-inserted="0" data-pk="{$this->getKey()}" data-key="{$key}" data-toggle="collapse" data-target="#grid-collapse-{$key}">
