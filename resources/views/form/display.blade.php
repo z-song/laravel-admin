@@ -2,10 +2,10 @@
     <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
         <div class="card card-solid card-default no-margin">
-            <!-- /.box-header -->
-            <div class="box-body">
+            <!-- /.card-header -->
+            <div class="card-body p-2">
                 {!! $value !!}&nbsp;
-            </div><!-- /.box-body -->
+            </div><!-- /.card-body -->
         </div>
 
         @include('admin::form.help-block')

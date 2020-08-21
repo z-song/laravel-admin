@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form\Actions;
 
+use Encore\Admin\Admin;
 use Illuminate\Contracts\Support\Renderable;
 
 class View implements Renderable
@@ -15,14 +16,6 @@ class View implements Renderable
 
     public function render()
     {
-        $view = trans('admin.view');
-
-        return <<<HTML
-<div class="btn-group float-right" style="margin-right: 5px">
-    <a href="{$this->path}" class="btn btn-sm btn-primary" title="{$view}">
-        <i class="fa fa-eye"></i><span class="hidden-xs"> {$view}</span>
-    </a>
-</div>
-HTML;
+        return Admin::view('admin::form.actions.view', ['path' => $this->path]);
     }
 }

@@ -19,7 +19,7 @@ class Ip extends Text
     {
         $this->inputmask($this->options);
 
-        $this->prepend('<i class="fa fa-laptop fa-fw"></i>')
+        $this->prependText('<i class="fa fa-laptop fa-fw"></i>')
             ->defaultAttribute('style', 'width: 130px');
 
         return parent::render();

@@ -15,7 +15,7 @@
                 @foreach($dependencies as $dependency => $version)
                 <tr>
                     <td width="240px">{{ $dependency }}</td>
-                    <td><span class="label label-primary">{{ $version }}</span></td>
+                    <td><span class="label label-@theme">{{ $version }}</span></td>
                 </tr>
                 @endforeach
             </table>

@@ -171,7 +171,27 @@ if (!function_exists('admin_assets')) {
             if ($js = Arr::get(Admin::$assets, "{$asset}.js")) {
                 Admin::js($js);
             }
+
+            if ($js = Arr::get(Admin::$assets, "{$asset}.dep")) {
+                Admin::dep($js);
+            }
         }
+    }
+}
+
+if (!function_exists('admin_theme')) {
+
+    /**
+     * @param string $prefix
+     * @return string
+     */
+    function admin_theme($tpl = '')
+    {
+        if ($tpl) {
+            return str_replace('%s', config('admin.theme'), $tpl);
+        }
+
+        return config('admin.theme');
     }
 }
 

@@ -1,4 +1,4 @@
-<div class="btn-group float-right" style="margin-right: 10px">
+<div class="btn-group float-right mr-2">
     <a href="{{ $all }}" target="_blank" class="btn btn-sm btn-default" title="{{ trans('admin.export') }}">
         <i class="fa fa-download"></i>
         <span class="hidden-xs"> {{ trans('admin.export') }}</span>

@@ -491,7 +491,14 @@ class Table
             return;
         }
 
-        $checkAllBox = "<div class='icheck-primary d-inline'><input type=\"checkbox\" class=\"{$this->getSelectAllName()}\" id='select-all'/><label for='select-all'></label></div>";
+        admin_assets('icheck');
+
+        $checkAllBox = admin_theme(<<<HTML
+<div class='icheck-%s d-inline'>
+    <input type="checkbox" class="{$this->getSelectAllName()}" id='select-all'/>
+    <label for='select-all'></label>
+</div>
+HTML);
 
         $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
             ->displayUsing(Displayers\RowSelector::class)
@@ -628,18 +635,6 @@ class Table
             $this->resource(),
             $queryString ? ('?'.$queryString) : ''
         );
-    }
-
-    /**
-     * Alias for method `disableCreateButton`.
-     *
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function disableCreation()
-    {
-        return $this->disableCreateButton();
     }
 
     /**

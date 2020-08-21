@@ -17,11 +17,6 @@ class Delete extends RowAction
         return __('admin.delete');
     }
 
-    public function getElementClass()
-    {
-        return parent::getElementClass() . ' dropdown-item';
-    }
-
     /**
      * @param Model $model
      *

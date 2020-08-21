@@ -17,12 +17,12 @@ class Edit implements Renderable
     {
         $text = trans('admin.edit');
 
-        return <<<HTML
+        return admin_theme(<<<HTML
 <div class="btn-group float-right" style="margin-right: 5px">
-    <a href="{$this->path}" class="btn btn-sm btn-primary" title="{$text}">
+    <a href="{$this->path}" class="btn btn-sm btn-%s" title="{$text}">
         <i class="fa fa-edit"></i><span class="hidden-xs"> {$text}</span>
     </a>
 </div>
-HTML;
+HTML);
     }
 }

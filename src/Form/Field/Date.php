@@ -6,6 +6,10 @@ class Date extends Text
 {
     protected $format = 'YYYY-MM-DD';
 
+    protected $view = 'admin::form.date';
+
+    protected $icon = 'fa-calendar-alt';
+
     public function format($format)
     {
         $this->format = $format;
@@ -24,16 +28,16 @@ class Date extends Text
 
     public function render()
     {
-        $this->options['format'] = $this->format;
-        $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
-        $this->options['allowInputToggle'] = true;
+        $this->options = array_merge([
+            'format'           => $this->format,
+            'locale'           => $this->options['locale'] ?? config('app.locale'),
+            'allowInputToggle' => true,
+        ], $this->options);
 
-        $this->script = "$('{$this->getElementClassSelector()}').parent().datetimepicker(".json_encode($this->options).');';
-
-        $this->prepend('<i class="fa fa-calendar fa-fw"></i>')
-            ->defaultAttribute('style', 'width: 110px');
-
-        admin_assets('datetimepicker');
+        $this->addVariables([
+                'icon'    => $this->icon,
+                'options' => $this->options
+            ]);
 
         return parent::render();
     }

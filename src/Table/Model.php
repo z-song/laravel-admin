@@ -3,7 +3,7 @@
 namespace Encore\Admin\Table;
 
 use Encore\Admin\Table;
-use Encore\Admin\Middleware\Pjax;
+use Encore\Admin\Http\Middleware\Pjax;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

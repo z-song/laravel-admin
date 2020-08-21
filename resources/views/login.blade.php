@@ -70,7 +70,7 @@
                 </div>
                 <div class="row">
                     <div class="col-8">
-                        <div class="icheck-primary">
+                        <div class="icheck-@theme">
                             <input type="checkbox" id="remember" name="remember" value="1" {{ (!old('username') || old('remember')) ? 'checked' : '' }}>
                             <label for="remember">
                                 {{ trans('admin.remember_me') }}
@@ -80,7 +80,7 @@
                     <!-- /.col -->
                     <div class="col-4">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <button type="submit" class="btn btn-primary btn-block">
+                        <button type="submit" class="btn btn-@theme btn-block">
                             {{ trans('admin.login') }}
                         </button>
                     </div>

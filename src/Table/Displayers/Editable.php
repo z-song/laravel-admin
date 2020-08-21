@@ -20,7 +20,7 @@ class Editable extends AbstractDisplayer
      * @var array
      */
     protected $options = [
-        'emptytext' => '<i class="fa fa-pencil"></i>',
+        'emptytext' => '<i class="fas fa-pencil-alt"></i>',
     ];
 
     /**

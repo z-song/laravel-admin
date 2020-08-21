@@ -6,8 +6,8 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="border-radius: 5px;">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">{{ $title }}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 {{ $html }}
@@ -18,12 +18,12 @@
 
 @if($table)
 <style>
-    .box.table-box {
+    .card.table-box {
         box-shadow: none;
         border-top: none;
     }
 
-    .table-box .box-header:first-child {
+    .table-box .card-header:first-child {
         display: none;
     }
 </style>
@@ -51,7 +51,7 @@
     }).on('click', '.page-item a, .filter-box a', function (e) {
         load($(this).attr('href'));
         e.preventDefault();
-    }).on('submit', '.box-header form', function (e) {
+    }).on('submit', '.card-header form', function (e) {
         load($(this).attr('action')+'&'+$(this).serialize());
         return false;
     });

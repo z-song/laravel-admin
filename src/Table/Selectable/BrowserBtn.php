@@ -10,11 +10,11 @@ class BrowserBtn implements Renderable
     {
         $text = admin_trans('admin.choose');
 
-        return <<<HTML
-<a href="javascript:void(0)" class="btn btn-primary btn-sm float-left select-relation">
-    <i class="glyphicon glyphicon-folder-open"></i>
-    &nbsp;&nbsp;{$text}
+        return admin_theme(<<<HTML
+<a href="javascript:void(0)" class="btn btn-%s btn-sm float-left select-relation">
+    <i class="fas fa-folder-open"></i>
+    &nbsp;{$text}
 </a>
-HTML;
+HTML);
     }
 }

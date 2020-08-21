@@ -7,15 +7,15 @@
                     {!! $tool !!}
                 @endforeach
             </div><!-- /.card-tools -->
-        </div><!-- /.box-header -->
+        </div><!-- /.card-header -->
     @endif
     <div class="card-body" style="display: block;">
         {!! $content !!}
-    </div><!-- /.box-body -->
+    </div><!-- /.card-body -->
     @if($footer)
         <div class="card-footer">
             {!! $footer !!}
-        </div><!-- /.box-footer-->
+        </div><!-- /.card-footer-->
     @endif
 </div>
 {{-- 由于widget box 有可能会用于expand，加载完页面后还没有对应的html，导致script失败，故只能和html写在一起。 --}}

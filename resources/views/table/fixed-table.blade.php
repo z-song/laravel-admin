@@ -1,12 +1,12 @@
 <div class="card">
     @if(isset($title))
-    <div class="box-header with-border">
-        <h3 class="box-title"> {{ $title }}</h3>
+    <div class="card-header with-border">
+        <h3 class="card-title"> {{ $title }}</h3>
     </div>
     @endif
 
     @if ( $table->showTools() || $table->showExportBtn() || $table->showCreateBtn() )
-    <div class="box-header with-border">
+    <div class="card-header with-border">
         <div class="float-right">
             {!! $table->renderColumnSelector() !!}
             {!! $table->renderExportButton() !!}
@@ -24,8 +24,8 @@
 
     {!! $table->renderHeader() !!}
 
-    <!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
+    <!-- /.card-header -->
+    <div class="card-body table-responsive no-padding">
         <div class="tables-container">
             <div class="table-wrap table-main">
                 <table class="table table-table" id="{{ $table->tableID }}">
@@ -124,10 +124,10 @@
 
     {!! $table->renderFooter() !!}
 
-    <div class="box-footer clearfix">
+    <div class="card-footer clearfix">
         {!! $table->paginator() !!}
     </div>
-    <!-- /.box-body -->
+    <!-- /.card-body -->
 </div>
 
 
@@ -209,7 +209,7 @@
         $('.table-fixed-right tbody tr').eq(index).removeClass('active');
     });
 
-    $('.{{ $rowName }}-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
+    $('.{{ $rowName }}-checkbox').change(function () {
 
         var id = $(this).data('id');
         var index = $(this).closest('tr').index();

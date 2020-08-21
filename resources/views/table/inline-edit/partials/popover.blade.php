@@ -2,6 +2,7 @@ $('.{{ $trigger }}').popover({
     html: true,
     container: 'body',
     trigger: 'manual',
+    sanitize: false,
     placement: function (context, source) {
         var position = $(source).position();
         if (position.left < 100) return "right";
@@ -19,7 +20,7 @@ $('.{{ $trigger }}').popover({
     }
 }).on('shown.bs.popover', function (e) {
 
-    var $popover = $($(this).data('bs.popover').$tip[0]).find('.ie-content');
+    var $popover = $($(this).data('bs.popover').tip).find('.ie-content');
     var $display = $(this).parents('.ie-wrap').find('.ie-display');
     var $trigger = $(this);
 

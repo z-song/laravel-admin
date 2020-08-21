@@ -34,7 +34,7 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
             }
         }
     }).done(function (data) {
-        toastr.success(data.message);
+        $.admin.toastr.success(data.message);
 
         {{ $slot }}
 

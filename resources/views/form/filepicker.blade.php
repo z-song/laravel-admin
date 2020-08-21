@@ -6,7 +6,7 @@
 
         @include('admin::form.error')
 
-        <div class="picker-file-preview {{ empty($preview) ? 'hide' : '' }}">
+        <div class="picker-file-preview {{ empty($preview) ? 'd-none' : '' }}">
             @foreach($preview as $item)
             <div class="file-preview-frame" data-val="{!! $item['value'] !!}">
                 <div class="file-content">
@@ -31,8 +31,10 @@
 
         <div class="input-group">
             <input {!! $attributes !!} />
-            <span class="input-group-btn">
-              {!! $btn !!}
+            <span class="input-group-append">
+                <button type="button" class="btn btn-@theme text-white" data-toggle="modal" data-target="#{{ $picker->modal }}">
+                    <i class="fa fa-folder-open"></i>  {{ admin_trans('admin.browse') }}
+                </button>
             </span>
         </div>
 

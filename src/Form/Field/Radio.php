@@ -14,7 +14,7 @@ class Radio extends Field
     /**
      * @var string
      */
-    protected $cascadeEvent = 'ifChecked';
+    protected $cascadeEvent = 'change';
 
     /**
      * Set options.

@@ -384,7 +384,7 @@ class Form implements Renderable
         $request = Request::capture();
 
         // ajax but not pjax
-        if ($request->ajax() && !$request->pjax()) {
+        if (!$request->has('_form_save') && $request->ajax() && !$request->pjax()) {
             return response()->json([
                 'status'    => true,
                 'message'   => $message,
@@ -478,6 +478,11 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
+
+            if (in_array($column, ['_token', '_saved', '_method', '_form_save'])) {
+                continue;
+            }
+
             if (method_exists($this->model, $column) ||
                 method_exists($this->model, $column = Str::camel($column))) {
                 $relation = call_user_func([$this->model, $column]);
@@ -522,11 +527,12 @@ class Form implements Renderable
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-            if (!$isEditable) {
-                return back()->withInput()->withErrors($validationMessages);
-            }
-
-            return response()->json(['errors' => Arr::dot($validationMessages->getMessages())], 422);
+            return $this->responseValidationError($validationMessages);
+//            if (!$isEditable) {
+//                return back()->withInput()->withErrors($validationMessages);
+//            }
+//
+//            return response()->json(['errors' => Arr::dot($validationMessages->getMessages())], 422);
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -595,22 +601,25 @@ class Form implements Renderable
      */
     protected function redirectAfterSaving($resourcesPath, $key)
     {
-        if (request('after-save') == 1) {
+        $response = [
+            'status' => true,
+            'message' => trans('admin.save_succeeded'),
+        ];
+
+        if (request('_saved') == 1) {
             // continue editing
-            $url = rtrim($resourcesPath, '/')."/{$key}/edit";
-        } elseif (request('after-save') == 2) {
+            $response['refresh'] = true;
+        } elseif (request('_saved') == 2) {
             // continue creating
-            $url = rtrim($resourcesPath, '/').'/create';
-        } elseif (request('after-save') == 3) {
+            $response['redirect'] = rtrim($resourcesPath, '/').'/create';
+        } elseif (request('_saved') == 3) {
             // view resource
-            $url = rtrim($resourcesPath, '/')."/{$key}";
+            $response['redirect'] = rtrim($resourcesPath, '/')."/{$key}";
         } else {
-            $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
+            $response['redirect'] = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
         }
 
-        admin_toastr(trans('admin.save_succeeded'));
-
-        return redirect($url);
+        return \response()->json($response);
     }
 
     /**
@@ -1281,38 +1290,6 @@ class Form implements Renderable
     public function isEditing(): bool
     {
         return Str::endsWith(\request()->route()->getName(), ['.edit', '.update']);
-    }
-
-    /**
-     * Disable form submit.
-     *
-     * @param bool $disable
-     *
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function disableSubmit(bool $disable = true): self
-    {
-        $this->builder()->getFooter()->disableSubmit($disable);
-
-        return $this;
-    }
-
-    /**
-     * Disable form reset.
-     *
-     * @param bool $disable
-     *
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function disableReset(bool $disable = true): self
-    {
-        $this->builder()->getFooter()->disableReset($disable);
-
-        return $this;
     }
 
     /**

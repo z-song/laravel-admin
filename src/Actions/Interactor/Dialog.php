@@ -85,15 +85,15 @@ class Dialog extends Interactor
 
     /**
      * @param string $title
-     * @param string $type
+     * @param string $icon
      * @param string $text
      * @param array  $options
      *
      * @return $this
      */
-    protected function addOptions($title, $type, $text = '', $options = [])
+    protected function addOptions($title, $icon, $text = '', $options = [])
     {
-        $this->options = array_merge(compact('title', 'text', 'type'), $options);
+        $this->options = array_merge(compact('title', 'text', 'icon'), $options);
 
         return $this;
     }

@@ -8,104 +8,12 @@ class BelongsTo extends Select
 {
     use BelongsToRelation;
 
-    protected function addScript()
-    {
-        $script = <<<SCRIPT
-;(function () {
-
-    var table = $('.belongsto-{$this->column()}');
-    var modal = $('#{$this->modalID}');
-    var table = table.find('.table-table');
-    var selected = $("{$this->getElementClassSelector()}").val();
-    var row = null;
-
-    // open modal
-    table.find('.select-relation').click(function (e) {
-        $('#{$this->modalID}').modal('show');
-        e.preventDefault();
-    });
-
-    // remove row
-    table.on('click', '.table-row-remove', function () {
-        selected = null;
-        $(this).parents('tr').remove();
-        $("{$this->getElementClassSelector()}").val(null);
-
-        var empty = $('.belongsto-{$this->column()}').find('template.empty').html();
-
-        table.find('tbody').append(empty);
-    });
-
-    var load = function (url) {
-        $.get(url, function (data) {
-            modal.find('.modal-body').html(data);
-            modal.find('.select').iCheck({
-                radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
-            });
-            modal.find('.box-header:first').hide();
-
-            modal.find('input.select').each(function (index, el) {
-                if ($(el).val() == selected) {
-                    $(el).iCheck('toggle');
-                }
-            });
-        });
-    };
-
-    var update = function (callback) {
-
-        $("{$this->getElementClassSelector()}")
-            .select2({data: [selected]})
-            .val(selected)
-            .trigger('change')
-            .next()
-            .addClass('d-none');
-
-        if (row) {
-            row.find('td:last a').removeClass('d-none');
-            row.find('td:first').remove();
-            table.find('tbody').empty().append(row);
-        }
-
-        callback();
-    };
-
-    modal.on('show.bs.modal', function (e) {
-        load("{$this->getLoadUrl()}");
-    }).on('click', '.page-item a, .filter-box a', function (e) {
-        load($(this).attr('href'));
-        e.preventDefault();
-    }).on('click', 'tr', function (e) {
-        $(this).find('input.select').iCheck('toggle');
-        e.preventDefault();
-    }).on('submit', '.box-header form', function (e) {
-        load($(this).attr('action')+'&'+$(this).serialize());
-        return false;
-    }).on('ifChecked', 'input.select', function (e) {
-        row = $(e.target).parents('tr');
-        selected = $(this).val();
-    }).find('.modal-footer .submit').click(function () {
-        update(function () {
-            modal.modal('toggle');
-        });
-    });
-})();
-SCRIPT;
-
-        Admin::script($script);
-
-        return $this;
-    }
-
     protected function getOptions()
     {
-        $options = [];
-
         if ($value = $this->value()) {
-            $options = [$value => $value];
+            return [$value => $value];
         }
 
-        return $options;
+        return [];
     }
 }

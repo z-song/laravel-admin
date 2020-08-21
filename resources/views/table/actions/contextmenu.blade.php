@@ -22,6 +22,8 @@
             menu.css({left: e.pageX + 10, top: e.pageY - 10}).show();
         }
 
+        menu.removeClass('dropdown-menu-right');
+
         return false;
     });
 

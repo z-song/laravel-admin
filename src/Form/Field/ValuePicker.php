@@ -11,7 +11,7 @@ class ValuePicker
     /**
      * @var string
      */
-    protected $modal;
+    public $modal;
 
     /**
      * @var Text|File
@@ -70,14 +70,11 @@ class ValuePicker
 
     /**
      * @param Field $field
-     * @param \Closure|null $callback
      */
-    public function mount(Field $field, \Closure $callback = null)
+    public function mount(Field $field)
     {
         $this->field = $field;
         $this->modal = sprintf('picker-modal-%s', $field->getElementClassString());
-
-        $this->addPickBtn($callback);
 
         Admin::view('admin::components.filepicker', [
             'url'       => $this->getLoadUrl(),
@@ -89,26 +86,6 @@ class ValuePicker
             'is_image'  => $this->field instanceof Image,
             'url_tpl'   => $this->field instanceof File ? $this->field->objectUrl('__URL__') : '',
         ]);
-    }
-
-    /**
-     * @param \Closure|null $callback
-     */
-    protected function addPickBtn(\Closure $callback = null)
-    {
-        $text = admin_trans('admin.browse');
-
-        $btn = <<<HTML
-<a class="btn btn-primary" data-toggle="modal" data-target="#{$this->modal}">
-    <i class="fa fa-folder-open"></i>  {$text}
-</a>
-HTML;
-
-        if ($callback) {
-            $callback($btn);
-        } else {
-            $this->field->addVariables(compact('btn'));
-        }
     }
 
     /**

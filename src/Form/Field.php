@@ -1167,7 +1167,7 @@ class Field implements Renderable
     {
         if ($this->horizontal) {
             return [
-                'label'      => "col-sm-{$this->width['label']} {$this->getLabelClass()}",
+                'label'      => "col-sm-{$this->width['label']} {$this->getLabelClass()} text-right pr-3",
                 'field'      => "col-sm-{$this->width['field']}",
                 'form-group' => $this->getGroupClass(true),
             ];
@@ -1201,6 +1201,11 @@ class Field implements Renderable
             $name = $this->elementName ?: $this->formatName($this->column, 'field-');
 
             $this->elementClass = (array) str_replace(['[', ']'], '_', $name);
+
+//            $this->elementClass = array_map(function ($class) {
+//                return rtrim($class, '_');
+//            }, $this->elementClass);
+
         }
 
         return $this->elementClass;
@@ -1317,7 +1322,7 @@ class Field implements Renderable
      */
     protected function getGroupClass($default = false): string
     {
-        return ($default ? 'form-group ' : '').implode(' ', array_filter($this->groupClass));
+        return ($default ? 'form-group row' : '').implode(' ', array_filter($this->groupClass));
     }
 
     /**

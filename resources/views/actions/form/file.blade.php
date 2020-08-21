@@ -14,9 +14,9 @@
     $input.on('filebeforedelete', function() {
         return new Promise(function(resolve, reject) {
             var remove = resolve;
-            swal({
+            $.admin.swal.fire({
                 title: "{{ trans('admin.delete_confirm') }}",
-                type: "warning",
+                icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "{{ trans('admin.confirm') }}",

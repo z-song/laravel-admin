@@ -12,7 +12,7 @@
 
     <!-- /.card-body -->
     @if(count($buttons) > 0)
-    <div class="card-footer">
+    <div class="card-footer row">
         <div class="col-md-{{$width['label']}}"></div>
 
         <div class="col-md-{{$width['field']}}">
@@ -36,7 +36,7 @@
     var $form = $('form#{{ $id }}');
     $form.submit(function (e) {
         e.preventDefault();
-        $(this).find('div.cascade-group.hide :input').attr('disabled', true);
+        $(this).find('div.cascade-group.d-none :input').attr('disabled', true);
     });
 
     @if($confirm)
@@ -44,7 +44,7 @@
         e.preventDefault();
         var form = this;
         $.admin.swal({
-            type: 'question',
+            icon: 'question',
             showCancelButton: true,
             confirmButtonText: '{{ trans('admin.submit') }}',
             cancelButtonText: '{{ trans('admin.cancel') }}',

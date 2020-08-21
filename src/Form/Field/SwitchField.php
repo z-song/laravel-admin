@@ -5,31 +5,55 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Arr;
 
+/**
+ * Class SwitchField
+ *
+ * @author songzou<zosong@126.com>
+ *
+ * @see https://gitbrent.github.io/bootstrap4-toggle/
+ */
 class SwitchField extends Field
 {
     use CanCascadeFields;
 
-    protected  $cascadeEvent = 'switchChange.bootstrapSwitch';
+    protected $cascadeEvent = 'change';
 
-    protected $states = [
-        1  => ['text' => 'ON', 'color' => 'primary'],
-        0 => ['text' => 'OFF', 'color' => 'default'],
+    protected $size;
+
+    protected $state = [
+        'on'  => ['value'  => 1, 'text' => 'ON'],
+        'off' => ['value'  => 0, 'text' => 'OFF']
     ];
 
-    protected $size = 'small';
-
-    public function setSize($size)
+    public function on($value = 1, $text = '', $style = '')
     {
-        $this->size = $size;
+        $this->state['on'] = [
+            'value' => $value,
+            'text'  => $text ?: $this->state['on']['text'],
+            'style' => $style ?: admin_theme(),
+        ];
 
         return $this;
     }
 
-    public function states($states = [])
+    public function off($value = 0, $text = '', $style = '')
     {
-        foreach (Arr::dot($states) as $key => $state) {
-            Arr::set($this->states, $key, $state);
-        }
+        $this->state['off'] = [
+            'value' => $value,
+            'text'  => $text ?: $this->state['on']['text'],
+            'style' => $style ?: 'light',
+        ];
+
+        return $this;
+    }
+
+    /**
+     * @param string $size lg, sm, xs
+     * @return $this
+     */
+    public function size($size)
+    {
+        $this->size = $size;
 
         return $this;
     }
@@ -40,18 +64,20 @@ class SwitchField extends Field
             return '';
         }
 
-        foreach ($this->states as $state => $option) {
-            if ($this->value() == $option['value']) {
-                $this->value = $state;
-                break;
-            }
-        }
-
         $this->addCascadeScript();
 
         $this->addVariables([
-            'states' => $this->states,
-            'size'   => $this->size,
+            'state' => $this->state,
+            'size'  => $this->size,
+        ]);
+
+        $this->attribute([
+            'data-onstyle'  => $this->state['on']['style'],
+            'data-offstyle' => $this->state['off']['style'],
+            'data-on'       => $this->state['on']['text'],
+            'data-off'      => $this->state['off']['text'],
+            'data-size'     => $this->size,
+            'data-width'    => 80,
         ]);
 
         return parent::render();

@@ -10,18 +10,6 @@ trait BuiltinRoutes
      * Register the laravel-admin builtin routes.
      *
      * @return void
-     *
-     * @deprecated Use Admin::routes() instead();
-     */
-    public function registerAuthRoutes()
-    {
-        $this->routes();
-    }
-
-    /**
-     * Register the laravel-admin builtin routes.
-     *
-     * @return void
      */
     public function routes()
     {
@@ -40,12 +28,13 @@ trait BuiltinRoutes
                 $router->resource('auth/roles', 'RoleController')->names('admin.auth.roles');
                 $router->resource('auth/permissions', 'PermissionController')->names('admin.auth.permissions');
                 $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('admin.auth.menu');
-                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
 
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
                 $router->post('_handle_action_', 'HandleController@handleAction')->name('admin.handle-action');
                 $router->get('_handle_selectable_', 'HandleController@handleSelectable')->name('admin.handle-selectable');
                 $router->get('_handle_renderable_', 'HandleController@handleRenderable')->name('admin.handle-renderable');
+
+                $router->fallback('PagesController@error404');
             });
 
             $authController = config('admin.auth.controller', AuthController::class);

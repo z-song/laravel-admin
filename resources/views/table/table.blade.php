@@ -17,7 +17,7 @@
             {!! $table->renderCreateButton() !!}
         </div>
         @if ( $table->showTools() )
-        <div class="float-left">
+        <div class="float-left d-flex">
             {!! $table->renderHeaderTools() !!}
         </div>
         @endif
@@ -28,7 +28,7 @@
 
     {!! $table->renderHeader() !!}
 
-    <!-- /.box-header -->
+    <!-- /.card-header -->
     <div class="card-body table-responsive p-0">
         <table class="table table-hover table-table table-head-fixed" id="{{ $table->tableID }}">
             <thead>
@@ -71,5 +71,5 @@
     <div class="card-footer clearfix">
         {!! $table->paginator() !!}
     </div>
-    <!-- /.box-body -->
+    <!-- /.card-body -->
 </div>

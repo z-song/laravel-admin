@@ -28,9 +28,9 @@
 
     $.fn.editable.defaults.success = function(response){
         if (response.status){
-            $.admin.toastr.success(response.message, '', {positionClass:"toast-top-center"});
+            $.admin.toastr.success(response.message);
         } else {
-            $.admin.toastr.error(response.message, '', {positionClass:"toast-top-center"});
+            $.admin.toastr.error(response.message);
         }
     };
 </script>

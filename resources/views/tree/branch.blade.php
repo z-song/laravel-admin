@@ -1,3 +1,4 @@
+
 <li class="dd-item" data-id="{{ $branch[$keyName] }}">
     <div class="dd-handle">
         {!! $branchCallback($branch) !!}

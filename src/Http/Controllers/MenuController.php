@@ -38,8 +38,8 @@ class MenuController extends Controller
                     $roleModel = config('admin.database.roles_model');
 
                     $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
-                    $form->text('title', trans('admin.title'))->rules('required');
-                    $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+                    $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
+//                    $form->icon('icon', trans('admin.icon'))->rules('required');
                     $form->text('uri', trans('admin.uri'));
                     $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
                     if ((new $menuModel())->withPermission()) {
@@ -47,7 +47,7 @@ class MenuController extends Controller
                     }
                     $form->hidden('_token')->default(csrf_token());
 
-                    $column->append((new Box(trans('admin.new'), $form))->style('success'));
+                    $column->append((new Box(trans('admin.new'), $form))->style(admin_theme()));
                 });
             });
     }
@@ -126,8 +126,8 @@ class MenuController extends Controller
         $form->display('id', 'ID');
 
         $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
-        $form->text('title', trans('admin.title'))->rules('required');
-        $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required')->help($this->iconHelp());
+        $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
+//        $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required');
         $form->text('uri', trans('admin.uri'));
         $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
         if ($form->model()->withPermission()) {
@@ -138,15 +138,5 @@ class MenuController extends Controller
         $form->display('updated_at', trans('admin.updated_at'));
 
         return $form;
-    }
-
-    /**
-     * Help message for icon field.
-     *
-     * @return string
-     */
-    protected function iconHelp()
-    {
-        return 'For more icons please see <a href="http://fontawesome.io/icons/" target="_blank">http://fontawesome.io/icons/</a>';
     }
 }

@@ -193,39 +193,10 @@ return [
         'menu_model' => Encore\Admin\Models\Menu::class,
 
         // Pivot table for table above.
-        'operation_log_table'    => 'admin_operation_log',
         'user_permissions_table' => 'admin_user_permissions',
         'role_users_table'       => 'admin_role_users',
         'role_permissions_table' => 'admin_role_permissions',
         'role_menu_table'        => 'admin_role_menu',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | User operation log setting
-    |--------------------------------------------------------------------------
-    |
-    | By setting this option to open or close operation log in laravel-admin.
-    |
-    */
-    'operation_log' => [
-
-        'enable' => true,
-
-        /*
-         * Only logging allowed methods in the list
-         */
-        'allowed_methods' => ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH'],
-
-        /*
-         * Routes that will not log to database.
-         *
-         * All method to path like: admin/auth/logs
-         * or specific method to path like: get:admin/auth/logs.
-         */
-        'except' => [
-            'admin/auth/logs*',
-        ],
     ],
 
     /*

@@ -366,20 +366,6 @@ class Column
     }
 
     /**
-     * Set cast name for sortable.
-     *
-     * @return $this
-     *
-     * @deprecated Use `$column->sortable($cast)` instead.
-     */
-    public function cast($cast)
-    {
-        $this->cast = $cast;
-
-        return $this;
-    }
-
-    /**
      * Set help message for column.
      *
      * @param string $help

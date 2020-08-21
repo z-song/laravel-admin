@@ -55,7 +55,7 @@
         // load($(this).attr('href'), $(this).parent('.collapse'));
         e.preventDefault();
         return false;
-    }).on('pjax:submit', '.collapse .box-header form', function (e) {
+    }).on('pjax:submit', '.collapse .card-header form', function (e) {
         // load($(this).attr('action')+'&'+$(this).serialize(), $(this).parent('.collapse'));
         return false;
     });
@@ -86,7 +86,7 @@
 
 @if($loadTable)
 <style>
-    .collapse .table-box .box-header:first-child {
+    .collapse .table-box .card-header:first-child {
         display: none;
     }
 </style>

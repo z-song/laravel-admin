@@ -8,6 +8,10 @@ class DateRange extends Field
 {
     protected $format = 'YYYY-MM-DD';
 
+    protected $view = 'admin::form.daterange';
+
+    protected $icon = 'fa-calendar-alt';
+
     /**
      * Column name.
      *
@@ -18,13 +22,12 @@ class DateRange extends Field
     public function __construct($column, $arguments)
     {
         $this->column['start'] = $column;
-        $this->column['end'] = $arguments[0];
+        $this->column['end']   = $arguments[0];
 
         array_shift($arguments);
-        $this->label = $this->formatLabel($arguments);
-        $this->id = $this->formatId($this->column);
 
-        $this->options(['format' => $this->format]);
+        $this->label = $this->formatLabel($arguments);
+        $this->id    = $this->formatId($this->column);
     }
 
     /**
@@ -59,23 +62,16 @@ class DateRange extends Field
 
     public function render()
     {
-        $this->options['locale'] = config('app.locale');
+        $this->options = array_merge($this->options, [
+            'locale' => config('app.locale'),
+            'format' => $this->format,
+        ]);
 
-        $startOptions = json_encode($this->options);
-        $endOptions = json_encode($this->options + ['useCurrent' => false]);
-
-        $class = $this->getElementClassSelector();
-
-        $this->script = <<<SCRIPT
-            $('{$class['start']}').datetimepicker($startOptions);
-            $('{$class['end']}').datetimepicker($endOptions);
-            $("{$class['start']}").on("dp.change", function (e) {
-                $('{$class['end']}').data("DateTimePicker").minDate(e.date);
-            });
-            $("{$class['end']}").on("dp.change", function (e) {
-                $('{$class['start']}').data("DateTimePicker").maxDate(e.date);
-            });
-SCRIPT;
+        $this->addVariables([
+            'icon'   => $this->icon,
+            'start_options' => $this->options,
+            'end_options'   => array_merge($this->options, ['useCurrent' => false]),
+        ]);
 
         return parent::render();
     }

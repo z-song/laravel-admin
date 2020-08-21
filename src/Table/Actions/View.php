@@ -14,11 +14,6 @@ class View extends RowAction
         return __('admin.show');
     }
 
-    public function getElementClass()
-    {
-        return parent::getElementClass() . ' dropdown-item';
-    }
-
     /**
      * @return string
      */

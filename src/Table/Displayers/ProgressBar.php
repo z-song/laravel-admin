@@ -4,8 +4,10 @@ namespace Encore\Admin\Table\Displayers;
 
 class ProgressBar extends AbstractDisplayer
 {
-    public function display($style = 'primary', $size = 'sm', $max = 100)
+    public function display($style = '', $size = 'sm', $max = 100)
     {
+        $style = $style ?: admin_theme();
+
         $style = collect((array) $style)->map(function ($style) {
             return 'progress-bar-'.$style;
         })->implode(' ');

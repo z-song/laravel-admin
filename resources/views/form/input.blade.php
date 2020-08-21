@@ -9,20 +9,24 @@
         <div class="input-group">
 
             @if ($prepend)
-            <span class="input-group-addon">{!! $prepend !!}</span>
+                <div class="input-group-prepend">
+                {!! $prepend !!}
+                </div>
             @endif
 
             <input {!! $attributes !!} />
 
             @if ($append)
-                <span class="input-group-addon clearfix">{!! $append !!}</span>
+                <span class="input-group-append">{!! $append !!}</span>
             @endif
 
-            @isset($btn)
-                <span class="input-group-btn">
-                  {!! $btn !!}
+            @if($picker)
+                <span class="input-group-append">
+                    <button type="button" class="btn btn-@theme text-white" data-toggle="modal" data-target="#{{ $picker->modal }}">
+                        <i class="fa fa-folder-open"></i>  {{ admin_trans('admin.browse') }}
+                    </button>
                 </span>
-            @endisset
+            @endif
 
         </div>
 

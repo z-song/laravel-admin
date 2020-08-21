@@ -43,7 +43,6 @@ class AdminServiceProvider extends ServiceProvider
     protected $routeMiddleware = [
         'admin.auth'       => Middleware\Authenticate::class,
         'admin.pjax'       => Middleware\Pjax::class,
-        'admin.log'        => Middleware\LogOperation::class,
         'admin.permission' => Middleware\Permission::class,
         'admin.bootstrap'  => Middleware\Bootstrap::class,
         'admin.session'    => Middleware\Session::class,
@@ -58,10 +57,9 @@ class AdminServiceProvider extends ServiceProvider
         'admin' => [
             'admin.auth',
             'admin.pjax',
-            'admin.log',
             'admin.bootstrap',
             'admin.permission',
-            //            'admin.session',
+            //'admin.session',
         ],
     ];
 
@@ -89,14 +87,6 @@ class AdminServiceProvider extends ServiceProvider
 
     protected function registerBladeDirective()
     {
-        Blade::directive('box', function ($title) {
-            return "<?php \$box = new \Encore\Admin\Widgets\Box({$title}, '";
-        });
-
-        Blade::directive('endbox', function ($expression) {
-            return "'); echo \$box->render(); ?>";
-        });
-
         Blade::directive('admin_assets', function ($name) {
             return "<?php echo \Encore\Admin\Admin::renderAssets({$name}); ?>";
         });
@@ -113,6 +103,29 @@ if (!isset(\$__id)) {
 ?>
 PHP;
         });
+
+        Blade::directive('id', function () {
+            return <<<PHP
+<?php
+if (!isset(\$__uniqid)) {
+    \$__uniqid = uniqid();
+    echo \$__uniqid;
+} else {
+    echo \$__uniqid;
+    unset(\$__uniqid);
+}
+?>
+PHP;
+        });
+
+        Blade::directive('theme', function () {
+            $theme = config('admin.theme');
+            return <<<PHP
+<?php echo "{$theme}";?>
+PHP;
+        });
+
+        view()->share('__theme', config('admin.theme'));
     }
 
     /**

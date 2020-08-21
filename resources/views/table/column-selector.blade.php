@@ -1,8 +1,8 @@
-<div class="btn-group dropdown column-selector float-right">
+<div class="btn-group dropdown column-selector float-right mr-2">
     <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
         <i class="fas fa-table"></i>
     </button>
-    <ul class="dropdown-menu" role="menu">
+    <ul class="dropdown-menu dropdown-menu-right" role="menu">
         @foreach($columns as $key => $label)
         @php
         if (empty($visible)) {
@@ -12,25 +12,20 @@
         }
         @endphp
 
-        <li class="dropdown-item">
-                <input type="checkbox" class="column-select-item" value="{{ $key }}" {{ $checked }}/>&nbsp;&nbsp;&nbsp;
-            <label>{{ $label }}
-            </label>
+        <li class="dropdown-item icheck-@theme d-inline">
+            <input id="@id" type="checkbox" class="column-select-item" value="{{ $key }}" {{ $checked }}/>&nbsp;&nbsp;&nbsp;
+            <label for="@id">{{ $label }}</label>
         </li>
         @endforeach
         <div class="dropdown-divider"></div>
         <li class="dropdown-item text-right">
             <button class="btn btn-sm btn-default column-select-all">{{ __('admin.all') }}</button>&nbsp;&nbsp;
-            <button class="btn btn-sm btn-primary column-select-submit">{{ __('admin.submit') }}</button>
+            <button class="btn btn-sm btn-@theme column-select-submit">{{ __('admin.submit') }}</button>
         </li>
     </ul>
 </div>
 
 <style>
-.column-selector {
-    margin-right: 10px;
-}
-
 .column-selector .dropdown-menu {
     padding: 10px;
     height: auto;
@@ -78,11 +73,7 @@ $('.column-select-submit').on('click', function () {
 });
 
 $('.column-select-all').on('click', function () {
-    $('.column-select-item').iCheck('check');
+    $('.column-select-item').prop('checked', true);
     return false;
-});
-
-$('.column-select-item').iCheck({
-    checkboxClass:'icheckbox_minimal-blue'
 });
 </script>

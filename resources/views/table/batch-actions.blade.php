@@ -1,5 +1,5 @@
 @if(!$holdAll)
-<div class="btn-group table-select-all-btn" style="display:none;margin-right: 5px;">
+<div class="btn-group table-select-all-btn mr-2" style="display:none;">
     <a class="btn btn-sm btn-default hidden-xs"><span class="selected" data-tpl="{{ trans('admin.table_items_selected') }}"></span></a>
     <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
@@ -20,8 +20,7 @@
 @endif
 
 <script>
-    $('.{{ $all }}').iCheck({checkboxClass:'icheckbox_minimal-blue'})
-        .on('ifChanged', function(event) {
-            $.admin.table.toggleAll(this.checked);
-        });
+    $('.{{ $all }}').on('change', function(event) {
+        $.admin.table.toggleAll(this.checked);
+    });
 </script>

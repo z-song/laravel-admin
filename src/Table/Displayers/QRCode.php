@@ -18,15 +18,6 @@ class QRCode extends AbstractDisplayer
             $content = call_user_func($formatter, $content, $this->row);
         }
 
-        $img = sprintf(
-            "<img src='https://api.qrserver.com/v1/create-qr-code/?size=%sx%s&data=%s' style='height:%spx;width:%spx;'/>",
-            $width,
-            $height,
-            $content,
-            $height,
-            $width
-        );
-
-        return Admin::view('admin::table.display.qrcode', compact('img', 'value'));
+        return Admin::view('admin::table.display.qrcode', compact('value', 'width', 'height', 'content'));
     }
 }

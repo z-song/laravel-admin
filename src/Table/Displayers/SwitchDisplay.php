@@ -11,8 +11,8 @@ class SwitchDisplay extends AbstractDisplayer
      * @var array
      */
     protected $states = [
-        'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
-        'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
+        'on'  => ['value' => 1, 'text' => 'ON', 'style' => ''],
+        'off' => ['value' => 0, 'text' => 'OFF', 'style' => 'default'],
     ];
 
     protected function overrideStates($states)
@@ -24,12 +24,15 @@ class SwitchDisplay extends AbstractDisplayer
         foreach (Arr::dot($states) as $key => $state) {
             Arr::set($this->states, $key, $state);
         }
+
+        $this->states['on']['style'] = $this->states['on']['style'] ?: admin_theme();
     }
 
     public function display($states = [])
     {
         $this->overrideStates($states);
 
+        // @see vendor/encore/laravel-admin/resources/views/table/inline-edit/switch.blade.php
         return Admin::view('admin::table.inline-edit.switch', [
             'class'    => 'table-switch-' . str_replace('.', '-', $this->getName()),
             'key'      => $this->getKey(),

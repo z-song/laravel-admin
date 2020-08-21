@@ -197,7 +197,6 @@ trait CanCascadeFields
     };
     var cascade_groups = {$cascadeGroups};
     $('{$this->getElementClassSelector()}').on('{$this->cascadeEvent}', function (e, state) {
-
         {$this->getFormFrontValue()}
 
         cascade_groups.forEach(function (event) {
@@ -228,6 +227,7 @@ SCRIPT;
             case BelongsTo::class:
             case BelongsToMany::class:
             case MultipleSelect::class:
+            case SwitchField::class:
                 return 'var checked = $(this).val();';
             case Checkbox::class:
             case CheckboxButton::class:
@@ -237,8 +237,6 @@ var checked = $('{$this->getElementClassSelector()}:checked').map(function(){
   return $(this).val();
 }).get();
 SCRIPT;
-            case SwitchField::class:
-                return "var checked = state ? 'on' : 'off';";
             default:
                 throw new \InvalidArgumentException('Invalid form field type');
         }

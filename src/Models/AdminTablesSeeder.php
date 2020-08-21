@@ -113,13 +113,6 @@ class AdminTablesSeeder extends Seeder
                 'icon'      => 'fa-bars',
                 'uri'       => 'auth/menu',
             ],
-            [
-                'parent_id' => 2,
-                'order'     => 7,
-                'title'     => 'Operation log',
-                'icon'      => 'fa-history',
-                'uri'       => 'auth/logs',
-            ],
         ]);
 
         // add role to menu.

@@ -60,11 +60,6 @@ class Tree implements Renderable
     public $useSave = true;
 
     /**
-     * @var bool
-     */
-    public $useRefresh = true;
-
-    /**
      * @var array
      */
     protected $options = [];
@@ -183,16 +178,6 @@ class Tree implements Renderable
     }
 
     /**
-     * Disable refresh.
-     *
-     * @return void
-     */
-    public function disableRefresh()
-    {
-        $this->useRefresh = false;
-    }
-
-    /**
      * Save tree order from a input.
      *
      * @param string $serialize
@@ -264,7 +249,6 @@ class Tree implements Renderable
             'items'      => $this->getItems(),
             'useCreate'  => $this->useCreate,
             'useSave'    => $this->useSave,
-            'useRefresh' => $this->useRefresh,
             'url'        => url($this->path),
             'options'    => $this->options,
         ]);

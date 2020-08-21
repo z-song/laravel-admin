@@ -49,20 +49,11 @@ class Radio extends Presenter
         return $this;
     }
 
-    protected function prepare()
-    {
-        $script = "$('.{$this->filter->getId()}').iCheck({radioClass:'iradio_minimal-blue'});";
-
-        Admin::script($script);
-    }
-
     /**
      * @return array
      */
     public function variables(): array
     {
-        $this->prepare();
-
         return [
             'options' => $this->options,
             'inline'  => $this->inline,

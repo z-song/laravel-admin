@@ -6,7 +6,7 @@ use Encore\Admin\Form\Field;
 
 class Button extends Field
 {
-    protected $class = 'btn-primary';
+    protected $class = '';
 
     public function info()
     {
@@ -24,5 +24,14 @@ class Button extends Field
         });
 
 SCRIPT;
+    }
+
+    public function render()
+    {
+        if (empty($this->class)) {
+            $this->class = admin_theme('btn-');
+        }
+
+        return parent::render();
     }
 }

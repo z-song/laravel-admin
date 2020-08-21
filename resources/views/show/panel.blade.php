@@ -10,7 +10,7 @@
     <!-- form start -->
     <div class="form-horizontal">
 
-        <div class="box-body">
+        <div class="card-body">
 
             <div class="fields-group">
 
@@ -20,6 +20,6 @@
             </div>
 
         </div>
-        <!-- /.box-body -->
+        <!-- /.card-body -->
     </div>
 </div>

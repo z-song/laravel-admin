@@ -8,10 +8,9 @@
 
         @foreach($options as $option => $label)
 
-            {!! $inline ? '<span class="icheck">' : '<div class="radio icheck">'  !!}
-
-                <label @if($inline)class="radio-inline"@endif>
-                    <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
+            {!! $inline ? '<span class="icheck-@theme">' : '<div class="radio icheck-@theme">'  !!}
+                <input id="@id" type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />
+                <label for="@id">&nbsp;{{$label}}&nbsp;&nbsp;
                 </label>
 
             {!! $inline ? '</span>' :  '</div>' !!}
@@ -22,7 +21,3 @@
 
     </div>
 </div>
-
-<script require="icheck">
-    $('{{ $selector }}').iCheck({radioClass:'iradio_minimal-blue'});
-</script>

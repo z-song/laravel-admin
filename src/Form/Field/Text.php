@@ -11,7 +11,7 @@ class Text extends Field
     /**
      * @var string
      */
-    protected $icon = 'fa-pencil';
+    protected $icon = 'fa-pencil-alt';
 
     /**
      * @var bool
@@ -41,9 +41,14 @@ class Text extends Field
     {
         $this->initPlainInput();
 
-        if (!$this->withoutIcon) {
-            $this->prepend('<i class="fa '.$this->icon.' fa-fw"></i>');
+        if ($this->prepend instanceof Field) {
+            $this->prepend = $this->prepend->renderPrepend();
         }
+
+        if (!$this->withoutIcon) {
+            $this->prependText('<i class="fa '.$this->icon.' fa-fw"></i>');
+        }
+
         $this->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
@@ -54,6 +59,7 @@ class Text extends Field
             ->addVariables([
                 'prepend' => $this->prepend,
                 'append'  => $this->append,
+                'picker'  => $this->picker,
             ]);
 
         return parent::render();

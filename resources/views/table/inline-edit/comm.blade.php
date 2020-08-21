@@ -23,7 +23,7 @@
                 <div class="error"></div>
             </div>
             <div class="ie-action">
-                <button class="btn btn-primary btn-sm ie-submit">{{ __('admin.submit') }}</button>
+                <button class="btn btn-@theme btn-sm ie-submit">{{ __('admin.submit') }}</button>
                 <button class="btn btn-default btn-sm ie-cancel">{{ __('admin.cancel') }}</button>
             </div>
         </div>

@@ -18,7 +18,7 @@
 
         <div class="card-footer">
             <div class="row">
-                <div class="col-md-{{ $layout->columns()->first()->width() }}">
+                <div class="col-md-{{ $layout->columns()->first()->width() }} row">
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
                         <div class="btn-group float-left">

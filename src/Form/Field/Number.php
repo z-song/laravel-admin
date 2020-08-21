@@ -4,28 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 class Number extends Text
 {
-    public function render()
-    {
-        $this->default($this->default);
-
-        $this->script = <<<SCRIPT
-
-$('{$this->getElementClassSelector()}:not(.initialized)')
-    .addClass('initialized')
-    .bootstrapNumber({
-        upClass: 'success',
-        downClass: 'primary',
-        center: true
-    });
-
-SCRIPT;
-
-        $this->prepend('')->defaultAttribute('style', 'width: 100px');
-
-        admin_assets('bootstrapNumber');
-
-        return parent::render();
-    }
+    protected $view = 'admin::form.number';
 
     /**
      * Set min value of number field.
@@ -36,9 +15,7 @@ SCRIPT;
      */
     public function min($value)
     {
-        $this->attribute('min', $value);
-
-        return $this;
+        return $this->attribute('min', $value);
     }
 
     /**
@@ -50,8 +27,18 @@ SCRIPT;
      */
     public function max($value)
     {
-        $this->attribute('max', $value);
+        return $this->attribute('max', $value);
+    }
 
-        return $this;
+    /**
+     * Set step value of number field.
+     *
+     * @param int $step
+     *
+     * @return $this
+     */
+    public function step($step = 1)
+    {
+        return $this->attribute('step', $step);
     }
 }

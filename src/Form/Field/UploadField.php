@@ -112,6 +112,7 @@ trait UploadField
     protected function setupDefaultOptions()
     {
         $defaults = [
+            'theme'                => 'fas',
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
             'msgPlaceholder'       => trans('admin.choose_file'),

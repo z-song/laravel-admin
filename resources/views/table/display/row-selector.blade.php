@@ -1,9 +1,7 @@
-<div class="icheck-primary d-inline">
-    <input type="checkbox" class="{{ $row }}-checkbox" data-id="{{ $key }}" id="row-id-{{ $key }}">
-    <label for="row-id-{{ $key }}"></label>
+<div class="icheck-@theme d-inline">
+    <input type="checkbox" class="{{ $row }}-checkbox" data-id="{{ $key }}" id="@id-{{ $key }}">
+    <label for="@id-{{ $key }}"></label>
 </div>
-
-{{--<input type="checkbox" class="{{ $row }}-checkbox" data-id="{{ $key }}" />--}}
 
 <script require="icheck">
     $('.{{ $row }}-checkbox').on('change', function () {

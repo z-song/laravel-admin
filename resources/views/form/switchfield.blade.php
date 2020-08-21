@@ -6,25 +6,17 @@
 
         @include('admin::form.error')
 
-        <input type="checkbox" class="{{$class}} la_checkbox" {{ old($column, $value) == 'on' ? 'checked' : '' }} {!! $attributes !!} />
-        <input type="hidden" class="{{$class}}" name="{{$name}}" value="{{ old($column, $value) }}" />
+        <input type="checkbox" class="@id" {{ $value == $state['on']['value'] ? 'checked' : '' }} {!! $attributes !!} />
+
+        <input type="hidden" class="{{$class}}" name="{{$name}}" value="{{ $value }}" />
 
         @include('admin::form.help-block')
 
     </div>
 </div>
 
-<script require="bootstrapSwitch">
-    setTimeout(function () {
-        $('{{ $selector }}.la_checkbox').bootstrapSwitch({
-            size:'{{ $size }}',
-            onText: '{{ $states['on']['text'] }}',
-            offText: '{{ $states['off']['text'] }}',
-            onColor: '{{ $states['on']['color'] }}',
-            offColor: '{{ $states['off']['color'] }}',
-            onSwitchChange: function(event, state) {
-                $(event.target).closest('.bootstrap-switch').next().val(state ? 'on' : 'off').change();
-            }
-        });
-    }, 100);
+<script require="toggle">
+    $('.@id').bootstrapToggle().change(function () {
+        $('{{$selector}}').val(this.checked ? '{{ $state['on']['value'] }}':'{{$state['off']['value']}}').trigger('change');
+    });
 </script>

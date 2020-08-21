@@ -1,41 +1,31 @@
 <input type="checkbox" class="{{ $class }}" {{ $checked }} data-key="{{ $key }}" />
 
-<script require="bootstrapSwitch">
-    $('.{{ $class }}').bootstrapSwitch({
-        size:'mini',
-        onText: '{{ $states['on']['text'] }}',
-        offText: '{{ $states['off']['text'] }}',
-        onColor: '{{ $states['on']['color'] }}',
-        offColor: '{{ $states['off']['color'] }}',
-        onSwitchChange: function(event, state){
+<script require="toggle">
+    $('.{{ $class }}').bootstrapToggle({
+        size:'xs',
+        width: 60,
+        on: '{{ $states['on']['text'] }}',
+        off: '{{ $states['off']['text'] }}',
+        onstyle: '{{ $states['on']['style'] }}',
+        offstyle: '{{ $states['off']['style'] }}'
+    }).change(function() {
 
-            $(this).val(state ? 'on' : 'off');
+        var key = $(this).data('key');
+        var value = this.checked ? '{{ $states['on']['value'] }}' : '{{ $states['off']['value'] }}';
 
-            var key = $(this).data('key');
-            var value = $(this).val();
-            var _status = true;
-
-            $.ajax({
-                url: "{{ $resource }}/" + key,
-                type: "POST",
-                async:false,
-                data: {
-                    "{{ $name }}": value,
-                    _method: 'PUT'
-                },
-            }).done(function (data) {
-                if (data.status) {
-                    toastr.success(data.message);
-                } else {
-                    toastr.warning(data.message);
-                }
-            }).always(function(xhr,status) {
-                if (status == 'success') {
-                    _status = xhr.responseJSON.status;
-                }
-            });
-
-            return _status;
-        }
+        $.ajax({
+            url: "{{ $resource }}/" + key,
+            type: "POST",
+            data: {
+                "{{ $name }}": value,
+                _method: 'PUT'
+            },
+        }).done(function (data) {
+            if (data.status) {
+                $.admin.toastr.success(data.message);
+            } else {
+                $.admin.toastr.warning(data.message);
+            }
+        });
     });
 </script>

@@ -13,7 +13,7 @@
         </li>
         <li class="divider"></li>
         <li class="text-right">
-            <button class="btn btn-sm btn-primary btn-flat column-filter-submit float-left" data-loading-text="{{ __('admin.search') }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __('admin.search') }}</button>
+            <button class="btn btn-sm btn-@theme btn-flat column-filter-submit float-left" data-loading-text="{{ __('admin.search') }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __('admin.search') }}</button>
             <button class="btn btn-sm btn-default btn-flat column-filter-all" data-loading-text="..."><i class="fa fa-undo"></i></button>
         </li>
     </ul>

@@ -7,21 +7,24 @@
 
         <li>
             <ul style='padding: 0;'>
-            <li class="checkbox icheck" style="margin: 0;">
-                <label style="width: 100%;padding: 3px;">
-                    <input type="checkbox" class="{{ $class['all'] }}" {{ $allCheck }}/>&nbsp;&nbsp;&nbsp;{{ __('admin.all') }}
+            <li class="checkbox icheck-@theme" style="margin: 0;">
+
+                <input id="@id" type="checkbox" class="{{ $class['all'] }}" {{ $allCheck }}/>
+                <label style="width: 100%;padding: 3px;" for="@id">
+                    &nbsp;&nbsp;&nbsp;{{ __('admin.all') }}
                 </label>
             </li>
                 <li class="divider"></li>
                 @foreach($options as $key => $label)
-                <li class="checkbox icheck" style="margin: 0;">
-                    <label style="width: 100%;padding: 3px;">
-                        <input
-                            type="checkbox"
-                            class="{{ $class['item'] }}"
-                            name="{{ $name }}[]"
-                            value="{{ $key }}"
-                            {{ in_array($key, $value) ? 'checked' : '' }}/>
+                <li class="checkbox icheck-@theme" style="margin: 0;">
+                    <input
+                        id="@id"
+                        type="checkbox"
+                        class="{{ $class['item'] }}"
+                        name="{{ $name }}[]"
+                        value="{{ $key }}"
+                        {{ in_array($key, $value) ? 'checked' : '' }}/>
+                    <label style="width: 100%;padding: 3px;" for="@id">
                         &nbsp;&nbsp;&nbsp;{{ $label }}
                     </label>
                 </li>
@@ -30,7 +33,7 @@
         </li>
         <li class="divider"></li>
         <li class="text-right">
-            <button class="btn btn-sm btn-flat btn-primary float-left" data-loading-text="{{ __('admin.search') }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __('admin.search') }}</button>
+            <button class="btn btn-sm btn-flat btn-@theme float-left" data-loading-text="{{ __('admin.search') }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __('admin.search') }}</button>
             <button class="btn btn-sm btn-flat btn-default" type="reset" data-loading-text="..."><i class="fa fa-undo"></i></button>
         </li>
     </ul>
@@ -38,16 +41,8 @@
 </span>
 
 <script>
-    $('.{{ $class['all'] }}').on('ifChanged', function () {
-        if (this.checked) {
-            $('.{{ $class['item'] }}').iCheck('check');
-        } else {
-            $('.{{ $class['item'] }}').iCheck('uncheck');
-        }
+    $('.{{ $class['all'] }}').change(function () {
+        $('.{{ $class['item'] }}').prop('checked', this.checked);
         return false;
-    });
-
-    $('.{{ $class['item'] }},.{{ $class['all'] }}').iCheck({
-        checkboxClass:'icheckbox_minimal-blue'
     });
 </script>

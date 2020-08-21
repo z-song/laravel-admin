@@ -16,7 +16,7 @@
         $.post('{!! $resource !!}/' + key, {_method: 'PUT', _orderable: direction}, function (data) {
             if (data.status) {
                 $.pjax.reload('#pjax-container');
-                toastr.success(data.message);
+                $.admin.toastr.success(data.message);
             }
         });
     });

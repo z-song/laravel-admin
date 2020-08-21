@@ -99,18 +99,6 @@ class Tools implements Renderable
     }
 
     /**
-     * Disable refresh button.
-     *
-     * @return void
-     *
-     * @deprecated
-     */
-    public function disableRefreshButton(bool $disable = true)
-    {
-        //
-    }
-
-    /**
      * Disable batch actions.
      *
      * @return void

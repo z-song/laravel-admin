@@ -1,4 +1,4 @@
-<aside class="main-sidebar elevation-4 sidebar-light-warning">
+<aside class="main-sidebar elevation-4 sidebar-light-info">
 
     <a href="{{ admin_url('/') }}" class="brand-link navbar-warning">
         <img src="/vendor/laravel-admin-v2/AdminLTE/img/AdminLTELogo.png"

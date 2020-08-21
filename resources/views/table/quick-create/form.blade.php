@@ -12,7 +12,7 @@
                 &nbsp;{!! $field->render() !!}
             @endforeach
             &nbsp;
-            <button class="btn btn-primary btn-sm">{{ __('admin.submit') }}</button>&nbsp;
+            <button class="btn btn-@theme btn-sm">{{ __('admin.submit') }}</button>&nbsp;
             <a href="javascript:void(0);" class="cancel">{{ __('admin.cancel') }}</a>
             {{ csrf_field() }}
         </form>
@@ -39,13 +39,13 @@
             data: $(this).serialize(),
         }).done(function (data, textStatus, jqXHR) {
             if (data.status == true) {
-                $.admin.toastr.success(data.message, '', {positionClass: "toast-top-center"});
+                $.admin.toastr.success(data.message);
                 $.admin.reload();
                 return;
             }
 
             if (typeof data.validation !== 'undefined') {
-                $.admin.toastr.warning(data.message, '', {positionClass: "toast-top-center"})
+                $.admin.toastr.warning(data.message)
             }
         });
         return false;

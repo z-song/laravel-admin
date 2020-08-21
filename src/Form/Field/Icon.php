@@ -4,18 +4,24 @@ namespace Encore\Admin\Form\Field;
 
 class Icon extends Text
 {
-    protected $default = 'fa-pencil';
+    protected $default = 'far fa-circle';
+
+    protected $view = 'admin::form.iconpicker';
+
+    public $bePrepend = false;
+
+    public function renderPrepend()
+    {
+        $this->view = 'admin::form.iconpicker-prepend';
+
+        return parent::render();
+    }
 
     public function render()
     {
-//        $this->script = <<<SCRIPT
-////$('{$this->getElementClassSelector()}').iconpicker({placement:'bottomLeft'});
-//SCRIPT;
-
-        $this->prepend('<i class="fa fa-pencil fa-fw"></i>')
-            ->defaultAttribute('style', 'width: 140px');
-
-        admin_assets('iconpicker');
+        if ($this->bePrepend) {
+            return '';
+        }
 
         return parent::render();
     }

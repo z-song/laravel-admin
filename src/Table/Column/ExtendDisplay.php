@@ -234,7 +234,7 @@ trait ExtendDisplay
             $values = (array) $values;
 
             if (in_array($value, $values)) {
-                return '<i class="fa fa-refresh fa-spin text-primary"></i>';
+                return admin_theme('<i class="fa fa-refresh fa-spin text-%s"></i>');
             }
 
             return Arr::get($others, $value, $value);

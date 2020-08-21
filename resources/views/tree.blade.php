@@ -3,23 +3,17 @@
     <div class="card-header">
 
         <div class="btn-group">
-            <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ trans('admin.expand') }}">
+            <button class="btn btn-@theme btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ trans('admin.expand') }}">
                 <i class="fa fa-plus-square-o"></i>&nbsp;{{ trans('admin.expand') }}
-            </a>
-            <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ trans('admin.collapse') }}">
+            </button>
+            <button class="btn btn-@theme btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ trans('admin.collapse') }}">
                 <i class="fa fa-minus-square-o"></i>&nbsp;{{ trans('admin.collapse') }}
-            </a>
+            </button>
         </div>
 
         @if($useSave)
         <div class="btn-group">
-            <a class="btn btn-info btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></a>
-        </div>
-        @endif
-
-        @if($useRefresh)
-        <div class="btn-group">
-            <a class="btn btn-warning btn-sm {{ $id }}-refresh" title="{{ trans('admin.refresh') }}"><i class="fa fa-refresh"></i><span class="hidden-xs">&nbsp;{{ trans('admin.refresh') }}</span></a>
+            <button class="btn btn-info btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></button>
         </div>
         @endif
 
@@ -51,9 +45,9 @@
 
     $('.tree_branch_delete').click(function() {
         var id = $(this).data('id');
-        swal({
+        $.admin.swal.fire({
             title: "{{ admin_trans('admin.delete_confirm') }}",
-            type: "warning",
+            icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "{{ admin_trans('admin.confirm') }}",
@@ -69,7 +63,7 @@
                         }
                     }).done(function (data) {
                         $.pjax.reload('#pjax-container');
-                        toastr.success('{{ admin_trans('admin.delete_succeeded') }}');
+                        $.admin.toastr.success('{{ admin_trans('admin.delete_succeeded') }}');
                         resolve(data);
                     });
                 });
@@ -78,9 +72,9 @@
             var data = result.value;
             if (typeof data === 'object') {
                 if (data.status) {
-                    swal(data.message, '', 'success');
+                    $.admin.swal.fire(data.message, '', 'success');
                 } else {
-                    swal(data.message, '', 'error');
+                    $.admin.swal.fire(data.message, '', 'error');
                 }
             }
         });
@@ -94,13 +88,8 @@
             },
             function(data){
                 $.pjax.reload('#pjax-container');
-                toastr.success('{{ admin_trans('admin.save_succeeded') }}');
+                $.admin.toastr.success('{{ admin_trans('admin.save_succeeded') }}');
             });
-    });
-
-    $('.{{ $id }}-refresh').click(function () {
-        $.pjax.reload('#pjax-container');
-        toastr.success('{{ admin_trans('admin.refresh_succeeded') }}');
     });
 
     $('.{{ $id }}-tree-tools').on('click', function(e){

@@ -10,8 +10,13 @@ class Radio extends AbstractDisplayer
     {
         $value = $this->getAttribute($key);
 
-        return <<<HTML
-<input type="radio" name="item" class="select" value="{$value}"/>
-HTML;
+        $id = uniqid();
+
+        return admin_theme(<<<HTML
+<span class="icheck-%s">
+    <input id="selectable-{$id}" type="radio" name="item" class="select" value="{$value}"/>
+    <label for="selectable-{$id}"></label>
+</span>
+HTML);
     }
 }

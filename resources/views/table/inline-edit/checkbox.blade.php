@@ -2,9 +2,9 @@
 
 @section('field')
     @foreach($options as $option => $label)
-        <div class="checkbox icheck">
-            <label>
-                <input type="checkbox" name='radio-{{ $name }}[]' class="minimal ie-input" value="{{ $option }}" data-label="{{ $label }}"/>&nbsp;{{$label}}&nbsp;&nbsp;
+        <div class="checkbox icheck-@theme">
+            <input id="@id" type="checkbox" name='radio-{{ $name }}[]' class="minimal ie-input" value="{{ $option }}" data-label="{{ $label }}"/>
+            <label for="@id">&nbsp;{{$label}}&nbsp;&nbsp;
             </label>
         </div>
     @endforeach
@@ -12,7 +12,7 @@
 
 @section('assert')
     <style>
-        .icheck.checkbox {
+        .icheck-@theme.checkbox {
             margin: 5px 0 5px 20px;
         }
 
