@@ -1,11 +1,8 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+<div class="{{$viewClass['form-group']}}">
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-
-        @include('admin::form.error')
-
         @foreach($options as $option => $label)
 
             {!! $inline ? '<span class="icheck-@theme">' : '<div class="radio icheck-@theme">'  !!}

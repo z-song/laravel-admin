@@ -8,7 +8,7 @@
         margin-right: 10px;
     }
 </style>
-<div class="card card-default">
+<div class="card card-@theme card-outline">
     <div class="card-header with-border">
         <h3 class="card-title">Available extensions</h3>
 
@@ -24,7 +24,7 @@
             @foreach($extensions as $extension)
             <li class="item">
                 <div class="product-img">
-                    <i class="fa fa-{{$extension['icon']}} fa-2x ext-icon"></i>
+                    <i class="{{$extension['icon']}} fa-2x ext-icon"></i>
                 </div>
                 <div class="product-info">
                     <a href="{{ $extension['link'] }}" target="_blank" class="product-title">

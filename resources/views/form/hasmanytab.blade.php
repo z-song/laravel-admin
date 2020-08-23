@@ -14,7 +14,7 @@
 </style>
 <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}}">
     <div class="row header">
-        <div class="col-md-2 {{$viewClass['label']}}"><h4 class="float-right">{{ $label }}</h4></div>
+        <div class="col-md-2 {{$viewClass['label']}}"><label class="float-right">{{ $label }}</label></div>
         <div class="col-md-8 {{$viewClass['field']}}">
             <button type="button" class="btn btn-default btn-sm add"><i class="fa fa-plus-circle" style="font-size: large;"></i></button>
         </div>
@@ -33,7 +33,7 @@
         @endforeach
 
     </ul>
-    
+
     <div class="tab-content has-many-{{$column}}-forms">
 
         @foreach($forms as $pk => $form)

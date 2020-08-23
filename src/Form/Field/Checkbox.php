@@ -6,14 +6,15 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Checkbox extends MultipleSelect
 {
+    /**
+     * @var bool
+     */
     protected $inline = true;
 
-    protected $canCheckAll = false;
-
     /**
-     * @var string
+     * @var bool 
      */
-    protected $cascadeEvent = 'change';
+    protected $canCheckAll = false;
 
     /**
      * Set options.

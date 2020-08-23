@@ -6,7 +6,7 @@
     <div class="card-body table-responsive no-padding">
         <ul class="image clearfix">
             @foreach($table->rows() as $row)
-            <li>
+            <li class="d-inline-block">
                 <label>
                     {!! $row->column($key) !!}
                     {!! $row->column('__modal_selector__') !!}
@@ -42,7 +42,7 @@ ul.image {
     padding-right: 15px;
 }
 
-.image .iradio_minimal-blue,.image .icheckbox_minimal-blue {
+.image [class*=icheck-] {
     position: absolute;
     bottom: 5px;
     right: 1px;

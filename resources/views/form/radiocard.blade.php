@@ -1,11 +1,8 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+<div class="{{$viewClass['form-group']}}">
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-
-        @include('admin::form.error')
-
         <div class="card-group btn-group-toggle radio-card-group">
             @foreach($options as $option => $label)
                 <label class="card {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?admin_theme('bg-%s'):'' }}">

@@ -2,10 +2,12 @@
     td .form-group {
         margin-bottom: 0 !important;
     }
+
+    .has-many-table {}
 </style>
 
-<div class="row">
-    <div class="{{$viewClass['label']}}"><h4 class="float-right">{{ $label }}</h4></div>
+<div class="row has-many-table">
+    <div class="{{$viewClass['label']}}"><label class="float-right">{{ $label }}</label></div>
     <div class="{{$viewClass['field']}}">
         <div id="has-many-{{$column}}" style="margin-top: 15px;">
             <table class="table table-has-many has-many-{{$column}}">
@@ -15,7 +17,7 @@
                         <th>{{ $header }}</th>
                     @endforeach
 
-                    <th class="hidden"></th>
+                    <th class="d-none"></th>
 
                     @if($options['allowDelete'])
                         <th></th>
@@ -38,7 +40,7 @@
                             <td>{!! $field->setLabelClass(['hidden'])->setWidth(12, 0)->render() !!}</td>
                         @endforeach
 
-                        <td class="hidden">{!! $hidden !!}</td>
+                        <td class="d-none">{!! $hidden !!}</td>
 
                         @if($options['allowDelete'])
                             <td class="form-group">

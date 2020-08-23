@@ -1,4 +1,4 @@
-@extends('admin::table.inline-edit.comm')
+@extends('admin::table.inline-edit.comm', ['type' => 'radio'])
 
 @section('field')
     @foreach($options as $option => $label)
@@ -34,16 +34,5 @@
         @endcomponent
     </script>
 
-    <script>
-    @component('admin::table.inline-edit.partials.submit', compact('resource', 'name'))
-
-        @slot('val')
-            var val = $popover.find('.ie-input:checked').val();
-            var label = $popover.find('.ie-input:checked').data('label');
-        @endslot
-
-        $popover.data('display').html(label);
-
-    @endcomponent
-    </script>
+    @include('admin::table.inline-edit.partials.submit', compact('resource', 'name'))
 @endsection

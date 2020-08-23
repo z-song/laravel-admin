@@ -35,7 +35,7 @@
                         </div>
                     </td>
 
-                    <td style="width: 75px;">
+                    <td style="width: 90px;">
                         <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
                             <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
                         </div>
@@ -57,6 +57,7 @@
     </div>
 </div>
 
+<template>
 <template class="{{$column}}-tpl">
     <tr>
         <td>
@@ -67,10 +68,11 @@
             </div>
         </td>
 
-        <td style="width: 75px;">
+        <td style="width: 90px;">
             <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
                 <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
             </div>
         </td>
     </tr>
+</template>
 </template>

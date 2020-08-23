@@ -27,8 +27,40 @@
     <!-- /.card-header -->
     <div class="card-body table-responsive no-padding">
         <div class="tables-container">
+            @if($table->leftVisibleColumns()->isNotEmpty())
+                <div class="table-wrap table-fixed table-fixed-left">
+                    <table class="table table-table table-hover">
+                        <thead>
+                        <tr>
+                            @foreach($table->leftVisibleColumns() as $column)
+                                <th {!! $column->formatHtmlAttributes() !!}>{{$column->getLabel()}}{!! $column->renderHeader() !!}</th>
+                            @endforeach
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @foreach($table->rows() as $row)
+                            <tr {!! $row->getRowAttributes() !!}>
+                                @foreach($table->leftVisibleColumns() as $column)
+                                    @php
+                                        $name = $column->getName()
+                                    @endphp
+                                    <td {!! $row->getColumnAttributes($name) !!} class="column-{!! $name !!}">
+                                        {!! $row->column($name) !!}
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        </tbody>
+
+                        {!! $table->renderTotalRow($table->leftVisibleColumns()) !!}
+
+                    </table>
+                </div>
+            @endif
+
             <div class="table-wrap table-main">
-                <table class="table table-table" id="{{ $table->tableID }}">
+                <table class="table table-table table-hover" id="{{ $table->tableID }}">
                     <thead>
                         <tr>
                             @foreach($table->visibleColumns() as $column)
@@ -55,41 +87,9 @@
                 </table>
             </div>
 
-            @if($table->leftVisibleColumns()->isNotEmpty())
-            <div class="table-wrap table-fixed table-fixed-left">
-                <table class="table table-table">
-                    <thead>
-                    <tr>
-                        @foreach($table->leftVisibleColumns() as $column)
-                            <th {!! $column->formatHtmlAttributes() !!}>{{$column->getLabel()}}{!! $column->renderHeader() !!}</th>
-                        @endforeach
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    @foreach($table->rows() as $row)
-                        <tr {!! $row->getRowAttributes() !!}>
-                            @foreach($table->leftVisibleColumns() as $column)
-                                @php
-                                    $name = $column->getName()
-                                @endphp
-                                <td {!! $row->getColumnAttributes($name) !!} class="column-{!! $name !!}">
-                                    {!! $row->column($name) !!}
-                                </td>
-                            @endforeach
-                        </tr>
-                    @endforeach
-                    </tbody>
-
-                    {!! $table->renderTotalRow($table->leftVisibleColumns()) !!}
-
-                </table>
-            </div>
-            @endif
-
             @if($table->rightVisibleColumns()->isNotEmpty())
             <div class="table-wrap table-fixed table-fixed-right">
-                <table class="table table-table">
+                <table class="table table-table table-hover">
                     <thead>
                     <tr>
                         @foreach($table->rightVisibleColumns() as $column)
@@ -144,8 +144,9 @@
         white-space:nowrap;
     }
 
-    .table-wrap table tr .active {
-        background: #f5f5f5;
+    .table-wrap tbody>tr.active {
+        color: #212529;
+        background-color: rgba(0,0,0,.075);
     }
 
     .table-main {
@@ -193,35 +194,37 @@
         $('.table-fixed').hide();
     }
 
-    $('.table-wrap tbody tr').on('mouseover', function () {
+    $('.table-wrap tbody tr').mouseover(function () {
         var index = $(this).index();
 
-        $('.table-main tbody tr').eq(index).addClass('active');
-        $('.table-fixed-left tbody tr').eq(index).addClass('active');
-        $('.table-fixed-right tbody tr').eq(index).addClass('active');
+        $('.table-main tbody>tr').eq(index).addClass('active');
+        $('.table-fixed-left tbody>tr').eq(index).addClass('active');
+        $('.table-fixed-right tbody>tr').eq(index).addClass('active');
     });
 
-    $('.table-wrap tbody tr').on('mouseout', function () {
+    $('.table-wrap tbody tr').mouseout(function () {
         var index = $(this).index();
 
-        $('.table-main tbody tr').eq(index).removeClass('active');
-        $('.table-fixed-left tbody tr').eq(index).removeClass('active');
-        $('.table-fixed-right tbody tr').eq(index).removeClass('active');
+        $('.table-main tbody>tr').eq(index).removeClass('active');
+        $('.table-fixed-left tbody>tr').eq(index).removeClass('active');
+        $('.table-fixed-right tbody>tr').eq(index).removeClass('active');
     });
 
     $('.{{ $rowName }}-checkbox').change(function () {
 
-        var id = $(this).data('id');
         var index = $(this).closest('tr').index();
 
+        console.log(index, this.checked);
+
         if (this.checked) {
-            $('.table-main tbody tr').eq(index).css('background-color', '#ffffd5');
-            $('.table-fixed-left tbody tr').eq(index).css('background-color', '#ffffd5');
-            $('.table-fixed-right tbody tr').eq(index).css('background-color', '#ffffd5');
+
+            $('.table-main tbody>tr').eq(index).css('background-color', '#ffffd5');
+            $('.table-fixed-left tbody>tr').eq(index).css('background-color', '#ffffd5');
+            $('.table-fixed-right tbody>tr').eq(index).css('background-color', '#ffffd5');
         } else {
-            $('.table-main tbody tr').eq(index).css('background-color', '');
-            $('.table-fixed-left tbody tr').eq(index).css('background-color', '');
-            $('.table-fixed-right tbody tr').eq(index).css('background-color', '');
+            $('.table-main tbody>tr').eq(index).css('background-color', '');
+            $('.table-fixed-left tbody>tr').eq(index).css('background-color', '');
+            $('.table-fixed-right tbody>tr').eq(index).css('background-color', '');
         }
 
         $.admin.table.toggle($(this).data('id'));

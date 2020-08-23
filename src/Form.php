@@ -366,7 +366,7 @@ class Form implements Renderable
                 'status'     => false,
                 'validation' => $message,
                 'message'    => $message->first(),
-            ]);
+            ], 422);
         }
 
         return back()->withInput()->withErrors($message);
@@ -508,8 +508,6 @@ class Form implements Renderable
     {
         $data = ($data) ?: request()->all();
 
-        $isEditable = $this->isEditable($data);
-
         if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
             return $data;
         }
@@ -528,11 +526,6 @@ class Form implements Renderable
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
             return $this->responseValidationError($validationMessages);
-//            if (!$isEditable) {
-//                return back()->withInput()->withErrors($validationMessages);
-//            }
-//
-//            return response()->json(['errors' => Arr::dot($validationMessages->getMessages())], 422);
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -623,18 +616,6 @@ class Form implements Renderable
     }
 
     /**
-     * Check if request is from editable.
-     *
-     * @param array $input
-     *
-     * @return bool
-     */
-    protected function isEditable(array $input = []): bool
-    {
-        return array_key_exists('_editable', $input) || array_key_exists('_edit_inline', $input);
-    }
-
-    /**
      * Handle updates for single column.
      *
      * @param int   $id
@@ -644,8 +625,6 @@ class Form implements Renderable
      */
     protected function handleColumnUpdates($id, $data)
     {
-        $data = $this->handleEditable($data);
-
         $data = $this->handleFileDelete($data);
 
         $data = $this->handleFileSort($data);
@@ -658,26 +637,6 @@ class Form implements Renderable
         }
 
         return $data;
-    }
-
-    /**
-     * Handle editable update.
-     *
-     * @param array $input
-     *
-     * @return array
-     */
-    protected function handleEditable(array $input = []): array
-    {
-        if (array_key_exists('_editable', $input)) {
-            $name = $input['name'];
-            $value = $input['value'];
-
-            Arr::forget($input, ['pk', 'value', 'name']);
-            Arr::set($input, $name, $value);
-        }
-
-        return $input;
     }
 
     /**

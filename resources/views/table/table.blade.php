@@ -2,7 +2,7 @@
     $.admin.initTable({!!  $__table  !!});
 </script>
 
-<div class="card table-card">
+<div class="card table-card card-@theme card-outline">
     @if(isset($title))
     <div class="card-header">
         <h3 class="card-title"> {{ $title }}</h3>

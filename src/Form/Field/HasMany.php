@@ -689,7 +689,7 @@ SCRIPT;
                 $hidden[] = $field->render();
             } else {
                 /* Hide label and set field width 100% */
-                $field->setLabelClass(['hidden']);
+                $field->setLabelClass(['d-none']);
                 $field->setWidth(12, 0);
                 $fields[] = $field->render();
                 $headers[] = $field->label();
@@ -711,7 +711,7 @@ SCRIPT;
         }, '');
 
         /* Build cell with hidden elements */
-        $template .= '<td class="hidden">'.implode('', $hidden).'</td>';
+        $template .= '<td class="d-none">'.implode('', $hidden).'</td>';
 
         $this->setupScript(implode("\r\n", $scripts));
 

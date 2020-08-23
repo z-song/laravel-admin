@@ -1,4 +1,4 @@
-@extends('admin::table.inline-edit.comm')
+@extends('admin::table.inline-edit.comm', ['type' => 'checkbox'])
 
 @section('field')
     @foreach($options as $option => $label)
@@ -34,20 +34,5 @@
         @endcomponent
     </script>
 
-    <script>
-    @component('admin::table.inline-edit.partials.submit', compact('resource', 'name'))
-
-        @slot('val')
-            var val = [];
-            var label = [];
-            $popover.find('.ie-input:checked').each(function(){
-                val.push($(this).val());
-                label.push($(this).data('label'));
-            });
-        @endslot
-
-        $popover.data('display').html(label.join(';'));
-
-    @endcomponent
-    </script>
+    @include('admin::table.inline-edit.partials.submit', compact('resource', 'name'))
 @endsection

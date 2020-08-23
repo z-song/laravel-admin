@@ -6,7 +6,5 @@ class TimeRange extends DateRange
 {
     protected $format = 'HH:mm:ss';
 
-    protected $view = 'admin::form.daterange';
-
     protected $icon = 'fa-clock';
 }

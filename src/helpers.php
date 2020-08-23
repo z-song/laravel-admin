@@ -188,10 +188,10 @@ if (!function_exists('admin_theme')) {
     function admin_theme($tpl = '')
     {
         if ($tpl) {
-            return str_replace('%s', config('admin.theme'), $tpl);
+            return str_replace('%s', config('admin.theme.color'), $tpl);
         }
 
-        return config('admin.theme');
+        return config('admin.theme.color');
     }
 }
 

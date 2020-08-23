@@ -1,4 +1,4 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($column) ?: 'has-error' !!}">
+<div class="{{$viewClass['form-group']}}">
     <label for="@id" class="{{$viewClass['label']}} control-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}" id="@id">
         @if($canCheckAll)
@@ -10,7 +10,6 @@
             </span>
             <hr style="margin-top: 10px;margin-bottom: 0;">
         @endif
-        @include('admin::form.error')
         @foreach($options as $option => $label)
             {!! $inline ? '<span class="icheck-@theme">' : '<div class="icheck-@theme">' !!}
                 <input type="checkbox" id="@id" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />

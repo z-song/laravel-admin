@@ -6,7 +6,7 @@ use Encore\Admin\Form\Field;
 
 class Text extends Field
 {
-    use PlainInput, HasValuePicker;
+    use PlainInput, HasValuePicker, CanCascadeFields;
 
     /**
      * @var string
@@ -17,6 +17,11 @@ class Text extends Field
      * @var bool
      */
     protected $withoutIcon = false;
+
+    /**
+     * @var array
+     */
+    protected $inputmask;
 
     /**
      * Set custom fa-icon.
@@ -57,10 +62,13 @@ class Text extends Field
             ->defaultAttribute('placeholder', $this->getPlaceholder())
             ->mountPicker()
             ->addVariables([
-                'prepend' => $this->prepend,
-                'append'  => $this->append,
-                'picker'  => $this->picker,
+                'prepend'   => $this->prepend,
+                'append'    => $this->append,
+                'picker'    => $this->picker,
+                'inputmask' => $this->inputmask,
             ]);
+
+        $this->addCascadeScript();
 
         return parent::render();
     }
@@ -74,11 +82,7 @@ class Text extends Field
      */
     public function inputmask($options)
     {
-        admin_assets('inputmask');
-
-        $options = json_encode_options($options);
-
-        $this->script = "$('{$this->getElementClassSelector()}').inputmask($options);";
+        $this->inputmask = $options;
 
         return $this;
     }

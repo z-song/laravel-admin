@@ -1,7 +1,7 @@
 <span class="table-selector" data-toggle="modal" data-target="#{{ $modal }}" key="{{ $key }}" data-val="{{ $original }}">
    <a href="javascript:void(0)" class="text-muted">
        <i class="fa fa-check-square-o"></i>&nbsp;&nbsp;
-       <span class="text">{{ $value }}</span>
+       <span class="text">{!! $value !!}</span>
    </a>
 </span>
 

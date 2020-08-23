@@ -5,12 +5,18 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Support\Arr;
+use function GuzzleHttp\Promise\inspect;
 
 /**
  * @property Form $form
  */
 trait CanCascadeFields
 {
+    /**
+     * @var string
+     */
+    protected $cascadeEvent = 'change';
+
     /**
      * @var array
      */
@@ -219,24 +225,20 @@ SCRIPT;
      */
     protected function getFormFrontValue()
     {
-        switch (get_class($this)) {
-            case Radio::class:
-            case RadioButton::class:
-            case RadioCard::class:
-            case Select::class:
-            case BelongsTo::class:
-            case BelongsToMany::class:
-            case MultipleSelect::class:
-            case SwitchField::class:
-                return 'var checked = $(this).val();';
-            case Checkbox::class:
-            case CheckboxButton::class:
-            case CheckboxCard::class:
+        switch (true) {
+            case $this instanceof Checkbox:
                 return <<<SCRIPT
 var checked = $('{$this->getElementClassSelector()}:checked').map(function(){
   return $(this).val();
 }).get();
 SCRIPT;
+            case $this instanceof Radio:
+            case $this instanceof Select:
+            case $this instanceof MultipleSelect:
+            case $this instanceof SwitchField:
+            case $this instanceof Text:
+            case $this instanceof Textarea:
+                return 'var checked = $(this).val();';
             default:
                 throw new \InvalidArgumentException('Invalid form field type');
         }

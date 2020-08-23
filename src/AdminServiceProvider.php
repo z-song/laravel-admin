@@ -119,13 +119,13 @@ PHP;
         });
 
         Blade::directive('theme', function () {
-            $theme = config('admin.theme');
+            $theme = config('admin.theme.color');
             return <<<PHP
 <?php echo "{$theme}";?>
 PHP;
         });
 
-        view()->share('__theme', config('admin.theme'));
+        view()->share('__theme', config('admin.theme.color'));
     }
 
     /**

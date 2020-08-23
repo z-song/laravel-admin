@@ -1,4 +1,4 @@
-@extends('admin::table.inline-edit.comm')
+@extends('admin::table.inline-edit.comm', ['type' => 'textarea'])
 
 @section('field')
     <textarea class="form-control ie-input" rows="{{ $rows }}"></textarea>
@@ -17,9 +17,5 @@
     </script>
 
     {{--after submit--}}
-    <script>
-    @component('admin::table.inline-edit.partials.submit', compact('resource', 'name'))
-        $popover.data('display').html(val);
-    @endcomponent
-    </script>
+    @include('admin::table.inline-edit.partials.submit', compact('resource', 'name'))
 @endsection

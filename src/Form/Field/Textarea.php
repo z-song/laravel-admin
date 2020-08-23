@@ -7,7 +7,7 @@ use Encore\Admin\Form\Field;
 
 class Textarea extends Field
 {
-    use HasValuePicker;
+    use HasValuePicker, CanCascadeFields;
 
     /**
      * Default rows of textarea.
@@ -44,6 +44,8 @@ class Textarea extends Field
         }
 
         $this->mountPicker();
+
+        $this->addCascadeScript();
 
         return parent::fieldRender([
             'picker' => $this->picker,

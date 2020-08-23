@@ -8,7 +8,7 @@
             <tr>
                 <th>{{ __('Key') }}</th>
                 <th>{{ __('Value') }}</th>
-                <th style="width: 75px;"></th>
+                <th style="width: 90px;"></th>
             </tr>
             </thead>
             <tbody class="kv-{{$column}}-table">
@@ -46,11 +46,9 @@
                     </td>
 
                     <td class="form-group">
-                        <div>
-                            <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                                <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
-                            </div>
-                        </div>
+                        <span class="{{$column}}-remove btn btn-warning btn-sm float-right">
+                            <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                        </span>
                     </td>
                 </tr>
             @endforeach
@@ -70,6 +68,7 @@
     </div>
 </div>
 
+<template>
 <template class="{{$column}}-tpl">
     <tr>
         <td>
@@ -95,4 +94,5 @@
             </div>
         </td>
     </tr>
+</template>
 </template>

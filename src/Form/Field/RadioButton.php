@@ -7,11 +7,6 @@ use Encore\Admin\Admin;
 class RadioButton extends Radio
 {
     /**
-     * @var string
-     */
-    protected $cascadeEvent = 'change';
-
-    /**
      * {@inheritdoc}
      */
     public function render()

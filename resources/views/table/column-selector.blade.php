@@ -12,15 +12,15 @@
         }
         @endphp
 
-        <li class="dropdown-item icheck-@theme d-inline">
-            <input id="@id" type="checkbox" class="column-select-item" value="{{ $key }}" {{ $checked }}/>&nbsp;&nbsp;&nbsp;
+        <li class="dropdown-item icheck-@theme">
+            <input id="@id" type="checkbox" class="column-select-item" value="{{ $key }}" {{ $checked }}/>
             <label for="@id">{{ $label }}</label>
         </li>
         @endforeach
         <div class="dropdown-divider"></div>
-        <li class="dropdown-item text-right">
-            <button class="btn btn-sm btn-default column-select-all">{{ __('admin.all') }}</button>&nbsp;&nbsp;
-            <button class="btn btn-sm btn-@theme column-select-submit">{{ __('admin.submit') }}</button>
+        <li class="dropdown-item">
+            <button class="btn btn-sm btn-default column-select-all float-left">{{ __('admin.all') }}</button>&nbsp;&nbsp;
+            <button class="btn btn-sm btn-@theme column-select-submit  float-right">{{ __('admin.submit') }}</button>
         </li>
     </ul>
 </div>
@@ -43,11 +43,17 @@
 
 .column-selector .dropdown-menu label {
     width: 100%;
-    padding: 3px;
+}
+.column-selector  [class*=icheck-] {
+    margin: 0 !important;
 }
 </style>
 
 <script>
+    $(".column-selector .dropdown-menu").on("click", function(e) {
+        e.stopPropagation();
+    });
+
 $('.column-select-submit').on('click', function () {
 
     var defaults = @json($defaults);

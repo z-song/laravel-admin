@@ -1,4 +1,4 @@
-<div class="card card-default">
+<div class="card card-@theme card-outline">
     <div class="card-header with-border">
         <h3 class="card-title">{{ $form->title() }}</h3>
 
@@ -114,6 +114,24 @@
             contentType: false,
             cache: false,
             processData: false,
+            statusCode: {
+                422: function(xhr) {
+                    $form.find('.is-invalid').removeClass('is-invalid');
+                    $form.find('.validation-error').remove();
+
+                    for(var field in xhr.responseJSON.validation) {
+                        var name = 'field-'+field.replace(/\./, '_');
+                        var $el = $('.form-control.'+name);
+                        $el.addClass('is-invalid');
+
+                        xhr.responseJSON.validation[field].forEach(function (error, index) {
+                            $el.closest('.col-sm-8').prepend('<label class="col-form-label validation-error text-danger">' +
+                                '<i class="fas fa-bell"></i>' +
+                                error+'</label>');
+                        });
+                    }
+                }
+            },
             success: function (data) {
                 if (typeof data != 'object') {
                     $.admin.toastr.error('Oops something went wrong!');
@@ -131,24 +149,8 @@
                     if (data.redirect) {
                         $.admin.redirect(data.redirect);
                     }
-
-                    return;
-                }
-
-                $form.find('.is-invalid').removeClass('is-invalid');
-                $form.find('.validation-error').remove();
-                if (typeof data.validation == 'object') {
-                    for(var field in data.validation) {
-                        var name = 'field-'+field.replace(/\./, '_');
-                        var $el = $('.form-control.'+name);
-                        $el.addClass('is-invalid');
-
-                        data.validation[field].forEach(function (error, index) {
-                            $el.closest('.col-sm-8').prepend('<label class="col-form-label validation-error text-danger">' +
-                                '<i class="fas fa-bell"></i>' +
-                                error+'</label>');
-                        });
-                    }
+                } else {
+                    $.admin.toastr.error(data.message);
                 }
             }
         });

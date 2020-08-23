@@ -24,11 +24,6 @@ class Select extends Field
     protected $config = [];
 
     /**
-     * @var string
-     */
-    protected $cascadeEvent = 'change';
-
-    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -368,7 +363,7 @@ SCRIPT;
     /**
      * {@inheritdoc}
      */
-    public function readOnly()
+    public function readonly()
     {
         //移除特定字段名称,增加MultipleSelect的修订
         //没有特定字段名可以使多个readonly的JS代码片段被Admin::script的array_unique精简代码
@@ -390,7 +385,7 @@ $(document).ready(function(){
 SCRIPT;
         Admin::script($script);
 
-        return parent::readOnly();
+        return parent::readonly();
     }
 
     protected function getOptions()

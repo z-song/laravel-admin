@@ -17,7 +17,7 @@
 
 <template>
     <template id="{{ $target }}">
-        <div class="ie-content ie-content-{{ $name }}">
+        <div class="ie-content ie-content-{{ $name }}" data-type="{{ $type ?? '' }}">
             <div class="ie-container">
                 @yield('field')
                 <div class="error"></div>
@@ -65,7 +65,9 @@
     $('body').on('click', function (e) {
         if ($(e.target).data('toggle') !== 'popover'
             && $(e.target).parents('[data-editinline="popover"]').length === 0
-            && $(e.target).parents('.popover.in').length === 0) {
+            && $(e.target).parents('.popover.show').length === 0
+            && !$(e.target).is('.popover.show'))
+        {
             $('[data-editinline="popover"]').popover('hide');
         }
     });

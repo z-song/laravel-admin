@@ -1,4 +1,4 @@
-<div class="card card-outline">
+<div class="card card-@theme card-outline">
 
     <div class="card-header">
 
@@ -13,7 +13,7 @@
 
         @if($useSave)
         <div class="btn-group">
-            <button class="btn btn-info btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></button>
+            <button class="btn btn-@theme btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></button>
         </div>
         @endif
 

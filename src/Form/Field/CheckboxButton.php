@@ -7,11 +7,6 @@ use Encore\Admin\Admin;
 class CheckboxButton extends Checkbox
 {
     /**
-     * @var string
-     */
-    protected $cascadeEvent = 'change';
-
-    /**
      * {@inheritdoc}
      */
     public function render()

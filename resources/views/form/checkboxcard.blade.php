@@ -1,11 +1,6 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($column) ?: 'has-error' !!}">
-
+<div class="{{$viewClass['form-group']}}">
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
-
     <div class="{{$viewClass['field']}}" id="{{$id}}">
-
-        @include('admin::form.error')
-
         <div class="card-group checkbox-card-group">
         @foreach($options as $option => $label)
             <label class="card {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?admin_theme('bg-%s'):'' }}">
@@ -15,11 +10,8 @@
             </label>
         @endforeach
         </div>
-
         <input type="hidden" name="{{$name}}[]">
-
         @include('admin::form.help-block')
-
     </div>
 </div>
 

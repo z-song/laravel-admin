@@ -1,11 +1,8 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+<div class="{{$viewClass['form-group']}}">
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-
-        @include('admin::form.error')
-
         <div class="input-group">
 
             @if ($prepend)
@@ -34,3 +31,9 @@
 
     </div>
 </div>
+
+@if($inputmask)
+    <script require="inputmask">
+        $('{{ $selector }}').inputmask({!! json_encode_options($inputmask)  !!});
+    </script>
+@endif

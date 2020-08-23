@@ -16,8 +16,6 @@ class SwitchField extends Field
 {
     use CanCascadeFields;
 
-    protected $cascadeEvent = 'change';
-
     protected $size;
 
     protected $state = [

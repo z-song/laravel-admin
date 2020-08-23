@@ -1,6 +1,6 @@
 
 <div class="row">
-    <div class="{{$viewClass['label']}}"><h4 class="float-right">{{ $label }}</h4></div>
+    <div class="{{$viewClass['label']}}"><label class="float-right">{{ $label }}</label></div>
     <div class="{{$viewClass['field']}}"></div>
 </div>
 
@@ -31,7 +31,7 @@
 
         @endforeach
     </div>
-    
+
 
     <template class="{{$column}}-tpl">
         <div class="has-many-{{$column}}-form fields-group">

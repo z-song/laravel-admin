@@ -4,6 +4,9 @@ namespace Encore\Admin\Form\Field;
 
 class Number extends Text
 {
+    /**
+     * @var string
+     */
     protected $view = 'admin::form.number';
 
     /**
@@ -40,5 +43,45 @@ class Number extends Text
     public function step($step = 1)
     {
         return $this->attribute('step', $step);
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return $this
+     */
+    public function prefix($prefix)
+    {
+        return $this->attribute('prefix', $prefix);
+    }
+
+    /**
+     * @param string $suffix
+     *
+     * @return $this
+     */
+    public function suffix($suffix)
+    {
+        return $this->attribute('suffix', $suffix);
+    }
+
+    /**
+     * @param integer $decimals
+     *
+     * @return $this
+     */
+    public function decimals($decimals)
+    {
+        return $this->attribute('data-decimals', $decimals);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function render()
+    {
+        $this->attribute('type', 'number');
+
+        return parent::render();
     }
 }

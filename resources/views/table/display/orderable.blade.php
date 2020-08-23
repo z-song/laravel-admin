@@ -1,5 +1,5 @@
 <div class="btn-group">
-    <button type="button" class="btn btn-xs btn-info table-orderable" data-id="{{ $key }}" data-direction="1">
+    <button type="button" class="btn btn-xs btn-@theme table-orderable" data-id="{{ $key }}" data-direction="1">
         <i class="fa fa-caret-up fa-fw"></i>
     </button>
     <button type="button" class="btn btn-xs btn-default table-orderable" data-id="{{ $key }}" data-direction="0">

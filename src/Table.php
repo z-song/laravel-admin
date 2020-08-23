@@ -810,7 +810,7 @@ HTML);
      */
     public function with($variables = [])
     {
-        $this->variables = $variables;
+        $this->variables = array_merge($this->variables, $variables);
 
         return $this;
     }

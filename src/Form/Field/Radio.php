@@ -9,12 +9,10 @@ class Radio extends Field
 {
     use CanCascadeFields;
 
-    protected $inline = true;
-
     /**
-     * @var string
+     * @var bool 
      */
-    protected $cascadeEvent = 'change';
+    protected $inline = true;
 
     /**
      * Set options.
