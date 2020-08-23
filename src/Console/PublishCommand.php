@@ -18,7 +18,7 @@ class PublishCommand extends Command
      *
      * @var string
      */
-    protected $description = "re-publish laravel-admin's assets, configuration, language and migration files. If you want overwrite the existing files, you can add the `--force` option";
+    protected $description = "re-publish laravel-admin's assets, configuration, language, migration files and views. If you want overwrite the existing files, you can add the `--force` option";
 
     /**
      * Execute the console command.
