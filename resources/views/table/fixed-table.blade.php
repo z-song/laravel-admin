@@ -29,7 +29,7 @@
         <div class="tables-container">
             @if($table->leftVisibleColumns()->isNotEmpty())
                 <div class="table-wrap table-fixed table-fixed-left">
-                    <table class="table table-table table-hover">
+                    <table class="table table-table table-hover" id="{{ $table->tableID }}">
                         <thead>
                         <tr>
                             @foreach($table->leftVisibleColumns() as $column)
@@ -60,7 +60,7 @@
             @endif
 
             <div class="table-wrap table-main">
-                <table class="table table-table table-hover" id="{{ $table->tableID }}">
+                <table class="table table-table table-hover">
                     <thead>
                         <tr>
                             @foreach($table->visibleColumns() as $column)
@@ -177,17 +177,18 @@
 </script>
 
 <script>
-    var theadHeight = $('.table-main thead tr').outerHeight();
-    $('.table-fixed thead tr').outerHeight(theadHeight);
+    var $mtr = $('.table-main tbody>tr');
+    var $ltr = $('.table-fixed-left tbody>tr');
+    var $rtr = $('.table-fixed-right tbody>tr');
 
-    var tfootHeight = $('.table-main tfoot tr').outerHeight();
-    $('.table-fixed tfoot tr').outerHeight(tfootHeight);
+    $('.table-fixed thead tr').outerHeight($('.table-main thead tr').outerHeight());
+    $('.table-fixed tfoot tr').outerHeight($('.table-main tfoot tr').outerHeight());
 
-    $('.table-main tbody tr').each(function(i, obj) {
+    $mtr.each(function(i, obj) {
         var height = $(obj).outerHeight();
 
-        $('.table-fixed-left tbody tr').eq(i).outerHeight(height);
-        $('.table-fixed-right tbody tr').eq(i).outerHeight(height);
+        $ltr.eq(i).outerHeight(height);
+        $rtr.eq(i).outerHeight(height);
     });
 
     if ($('.table-main').width() >= $('.table-main').prop('scrollWidth')) {
@@ -196,37 +197,30 @@
 
     $('.table-wrap tbody tr').mouseover(function () {
         var index = $(this).index();
-
-        $('.table-main tbody>tr').eq(index).addClass('active');
-        $('.table-fixed-left tbody>tr').eq(index).addClass('active');
-        $('.table-fixed-right tbody>tr').eq(index).addClass('active');
-    });
-
-    $('.table-wrap tbody tr').mouseout(function () {
+        $mtr.eq(index).addClass('active');
+        $ltr.eq(index).addClass('active');
+        $rtr.eq(index).addClass('active');
+    }).mouseout(function () {
         var index = $(this).index();
-
-        $('.table-main tbody>tr').eq(index).removeClass('active');
-        $('.table-fixed-left tbody>tr').eq(index).removeClass('active');
-        $('.table-fixed-right tbody>tr').eq(index).removeClass('active');
+        $mtr.eq(index).removeClass('active');
+        $ltr.eq(index).removeClass('active');
+        $rtr.eq(index).removeClass('active');
     });
 
-    $('.{{ $rowName }}-checkbox').change(function () {
+    $('.table-row-checkbox').change(function () {
 
         var index = $(this).closest('tr').index();
 
-        console.log(index, this.checked);
-
         if (this.checked) {
-
-            $('.table-main tbody>tr').eq(index).css('background-color', '#ffffd5');
-            $('.table-fixed-left tbody>tr').eq(index).css('background-color', '#ffffd5');
-            $('.table-fixed-right tbody>tr').eq(index).css('background-color', '#ffffd5');
+            $mtr.eq(index).addClass('selected');
+            $ltr.eq(index).addClass('selected');
+            $rtr.eq(index).addClass('selected');
+            $.admin.table.select($(this).data('id'));
         } else {
-            $('.table-main tbody>tr').eq(index).css('background-color', '');
-            $('.table-fixed-left tbody>tr').eq(index).css('background-color', '');
-            $('.table-fixed-right tbody>tr').eq(index).css('background-color', '');
+            $mtr.eq(index).removeClass('selected');
+            $ltr.eq(index).removeClass('selected');
+            $rtr.eq(index).removeClass('selected');
+            $.admin.table.unselect($(this).data('id'));
         }
-
-        $.admin.table.toggle($(this).data('id'));
     });
 </script>

@@ -8,10 +8,6 @@ class RowSelector extends AbstractDisplayer
 {
     public function display()
     {
-        return Admin::view('admin::table.display.row-selector', [
-            'row' => $this->table->getTableRowName(),
-            'all' => $this->table->getSelectAllName(),
-            'key' => $this->getKey(),
-        ]);
+        return Admin::view('admin::table.display.row-selector', ['key' => $this->getKey()]);
     }
 }

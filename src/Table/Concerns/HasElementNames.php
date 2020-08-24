@@ -17,12 +17,12 @@ trait HasElementNames
      * @var array
      */
     protected $elementNames = [
-        'table_row'        => 'table-row',
-        'table_select_all' => 'table-select-all',
+//        'table_row'        => 'table-row',
+//        'table_select_all' => 'table-select-all',
         'table_per_page'   => 'table-per-pager',
         'table_batch'      => 'table-batch',
-        'export_selected' => 'export-selected',
-        'selected_rows'   => 'selectedRows',
+        'export_selected'  => 'export-selected',
+        'selected_rows'    => 'selectedRows',
     ];
 
     /**
@@ -56,18 +56,18 @@ trait HasElementNames
     /**
      * @return string
      */
-    public function getTableRowName()
-    {
-        return $this->elementNameWithPrefix('table_row');
-    }
+//    public function getTableRowName()
+//    {
+//        return $this->elementNameWithPrefix('table_row');
+//    }
 
     /**
      * @return string
      */
-    public function getSelectAllName()
-    {
-        return $this->elementNameWithPrefix('table_select_all');
-    }
+//    public function getSelectAllName()
+//    {
+//        return $this->elementNameWithPrefix('table_select_all');
+//    }
 
     /**
      * @return string

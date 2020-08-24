@@ -76,10 +76,7 @@ class FixColumns
      */
     public function apply()
     {
-        $this->table->setView($this->view, [
-            'allName' => $this->table->getSelectAllName(),
-            'rowName' => $this->table->getTableRowName(),
-        ]);
+        $this->table->setView($this->view);
 
         return function (Table $table) {
             if ($this->head > 0) {

@@ -1,10 +1,10 @@
 <div class="icheck-@theme d-inline">
-    <input type="checkbox" class="{{ $row }}-checkbox" data-id="{{ $key }}" id="@id-{{ $key }}">
+    <input type="checkbox" class="table-row-checkbox" data-id="{{ $key }}" id="@id-{{ $key }}">
     <label for="@id-{{ $key }}"></label>
 </div>
 
 <script require="icheck">
-    $('.{{ $row }}-checkbox').on('change', function () {
+    $('.table-row-checkbox').on('change', function () {
         $.admin.table.toggle($(this).data('id'));
     });
 </script>

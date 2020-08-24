@@ -495,7 +495,7 @@ class Table
 
         $checkAllBox = admin_theme(<<<HTML
 <div class='icheck-%s d-inline'>
-    <input type="checkbox" class="{$this->getSelectAllName()}" id='select-all'/>
+    <input type="checkbox" class="table-select-all" id='select-all'/>
     <label for='select-all'></label>
 </div>
 HTML);

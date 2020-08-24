@@ -32,8 +32,8 @@ class Expand extends AbstractDisplayer
             'value'         => $this->value,
             'async'         => $async,
             'expand'        => $isExpand,
-            'loadTable'      => $loadTable,
-            'elementClass'  => "table-expand-{$this->table->getTableRowName()}",
+            'loadTable'     => $loadTable,
+            'elementClass'  => "table-expand-table-row",
         ]);
     }
 

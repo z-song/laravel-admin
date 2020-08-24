@@ -20,7 +20,7 @@
 @endif
 
 <script>
-    $('.{{ $all }}').on('change', function(event) {
+    $('.table-select-all').on('change', function(event) {
         $.admin.table.toggleAll(this.checked);
     });
 </script>

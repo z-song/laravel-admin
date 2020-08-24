@@ -91,8 +91,6 @@ class BatchActions extends AbstractTool
         });
 
         return Admin::view('admin::table.batch-actions', [
-            'all'     => $this->table->getSelectAllName(),
-            'row'     => $this->table->getTableRowName(),
             'actions' => $this->actions,
             'holdAll' => $this->holdAll,
         ]);
