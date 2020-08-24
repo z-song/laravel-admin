@@ -1,7 +1,7 @@
 <aside class="main-sidebar elevation-4 sidebar-{{ config('admin.theme.sidebar') }}">
 
     <a href="{{ admin_url('/') }}" class="brand-link navbar-{{ config('admin.theme.navbar.bg') }} navbar-{{ config('admin.theme.navbar.color') }}">
-        <img src="/vendor/laravel-admin-v2/AdminLTE/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="/vendor/laravel-admin/AdminLTE/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight">{!! config('admin.logo', config('admin.name')) !!}</span>
     </a>
 
@@ -25,27 +25,6 @@
                 <a href="#" class="d-block">{{ Admin::user()->name }}</a>
             </div>
         </div>
-
-        @if(0 && config('admin.enable_menu_search'))
-        <!-- search form (Optional) -->
-        <form class="sidebar-form" style="overflow: initial;" onsubmit="return false;">
-            <div class="input-group">
-                <input type="text" autocomplete="off" class="form-control autocomplete" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-                <ul class="dropdown-menu" role="menu" style="min-width: 210px;max-height: 300px;overflow: auto;">
-                    @foreach(Admin::menuLinks() as $link)
-                    <li>
-                        <a href="{{ admin_url($link['uri']) }}"><i class="fa {{ $link['icon'] }}"></i>{{ admin_trans($link['title']) }}</a>
-                    </li>
-                    @endforeach
-                </ul>
-            </div>
-        </form>
-        <!-- /.search form -->
-        @endif
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">

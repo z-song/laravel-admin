@@ -124,8 +124,6 @@ PHP;
 <?php echo "{$theme}";?>
 PHP;
         });
-
-        view()->share('__theme', config('admin.theme.color'));
     }
 
     /**
@@ -135,7 +133,7 @@ PHP;
      */
     protected function ensureHttps()
     {
-        if (config('admin.https') || config('admin.secure')) {
+        if (config('admin.https')) {
             url()->forceScheme('https');
             $this->app['request']->server->set('HTTPS', true);
         }

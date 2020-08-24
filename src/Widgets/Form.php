@@ -132,6 +132,11 @@ class Form implements Renderable
     protected $form;
 
     /**
+     * @var bool
+     */
+    protected $ajax = false;
+
+    /**
      * Form constructor.
      *
      * @param array $data
@@ -177,6 +182,18 @@ class Form implements Renderable
     public function confirm($message)
     {
         $this->confirm = $message;
+
+        return $this;
+    }
+
+    /**
+     * Submit form throuth ajax.
+     *
+     * @return $this
+     */
+    public function ajax()
+    {
+        $this->ajax = true;
 
         return $this;
     }
@@ -417,6 +434,7 @@ class Form implements Renderable
             'buttons'    => $this->buttons,
             'width'      => $this->width,
             'confirm'    => $this->confirm,
+            'ajax'       => $this->ajax,
         ];
     }
 

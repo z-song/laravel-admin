@@ -58,7 +58,7 @@ trait HasAssets
     /**
      * @var string
      */
-    public static $manifest = 'vendor/laravel-admin-v2/minify-manifest.json';
+    public static $manifest = 'vendor/laravel-admin/minify-manifest.json';
 
     /**
      * @var array
@@ -69,37 +69,31 @@ trait HasAssets
      * @var array
      */
     public static $min = [
-        'js'  => 'vendor/laravel-admin-v2/laravel-admin.min.js',
-        'css' => 'vendor/laravel-admin-v2/laravel-admin.min.css',
+        'js'  => 'vendor/laravel-admin/laravel-admin.min.js',
+        'css' => 'vendor/laravel-admin/laravel-admin.min.css',
     ];
 
     /**
      * @var array
      */
     public static $baseCss = [
-        'vendor/laravel-admin-v2/fontawesome-free/css/all.min.css',
-        'vendor/laravel-admin-v2/laravel-admin/laravel-admin.css',
-        'vendor/laravel-admin-v2/nprogress/nprogress.css',
-        'vendor/laravel-admin-v2/sweetalert2/sweetalert2.min.css',
-//        'vendor/laravel-admin-v2/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css',
-        'vendor/laravel-admin-v2/toastr/toastr.min.css',
-//        'vendor/laravel-admin-v2/google-fonts/fonts.css',
-        'vendor/laravel-admin-v2/AdminLTE/css/adminlte.min.css',
+        'vendor/laravel-admin/fontawesome-free/css/all.min.css',
+        'vendor/laravel-admin/laravel-admin/laravel-admin.css',
+        'vendor/laravel-admin/nprogress/nprogress.css',
+        'vendor/laravel-admin/sweetalert2/sweetalert2.min.css',
+        'vendor/laravel-admin/AdminLTE/css/adminlte.min.css',
     ];
 
     /**
      * @var array
      */
     public static $baseJs = [
-//        'vendor/laravel-admin-v2/bootstrap/js/bootstrap.min.js',
-        'vendor/laravel-admin-v2/bootstrap/js/bootstrap.bundle.min.js',
-        'vendor/laravel-admin-v2/AdminLTE/js/adminlte.min.js',
-        'vendor/laravel-admin-v2/jquery-pjax/jquery.pjax.js',
-        'vendor/laravel-admin-v2/nprogress/nprogress.js',
-        'vendor/laravel-admin-v2/toastr/toastr.min.js',
-        'vendor/laravel-admin-v2/sweetalert2/sweetalert2.min.js',
-        'vendor/laravel-admin-v2/laravel-admin/laravel-admin.js',
-//        'vendor/laravel-admin-v2/moment/moment-with-locales.min.js',
+        'vendor/laravel-admin/bootstrap/js/bootstrap.bundle.min.js',
+        'vendor/laravel-admin/AdminLTE/js/adminlte.min.js',
+        'vendor/laravel-admin/jquery-pjax/jquery.pjax.js',
+        'vendor/laravel-admin/nprogress/nprogress.js',
+        'vendor/laravel-admin/sweetalert2/sweetalert2.min.js',
+        'vendor/laravel-admin/laravel-admin/laravel-admin.js',
     ];
 
     /**
@@ -107,105 +101,78 @@ trait HasAssets
      */
     public static $assets = [
         'nsetable'       => [
-            'css' => ['/vendor/laravel-admin-v2/nestable/nestable.css'],
-            'js'  => ['/vendor/laravel-admin-v2/nestable/jquery.nestable.js'],
+            'css' => ['/vendor/laravel-admin/nestable/nestable.css'],
+            'js'  => ['/vendor/laravel-admin/nestable/jquery.nestable.js'],
         ],
         'iconpicker'     => [
-            'css' => ['/vendor/laravel-admin-v2/bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min.css',],
+            'css' => ['/vendor/laravel-admin/bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min.css',],
             'js'  => [
-                'vendor/laravel-admin-v2/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.min.js',
-                'vendor/laravel-admin-v2/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.bundle.min.js'
+                'vendor/laravel-admin/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.min.js',
+                'vendor/laravel-admin/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.bundle.min.js'
             ],
         ],
         'colorpicker'    => [
-            'css' => ['vendor/laravel-admin-v2/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css',],
-            'js'  => ['vendor/laravel-admin-v2/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js',],
+            'css' => ['vendor/laravel-admin/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css',],
+            'js'  => ['vendor/laravel-admin/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js',],
         ],
         'icheck'         => [
-            'css' => ['vendor/laravel-admin-v2/icheck-bootstrap/icheck-bootstrap.min.css'],
+            'css' => ['vendor/laravel-admin/icheck-bootstrap/icheck-bootstrap.min.css'],
         ],
         'fileinput'      => [
             'css' => [
-                'vendor/laravel-admin-v2/bootstrap-fileinput/css/fileinput.min.css?v=5.1.3',
+                'vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=5.1.3',
             ],
             'js'  => [
-                'vendor/laravel-admin-v2/bootstrap-fileinput/js/fileinput.min.js?v=5.1.3',
-                'vendor/laravel-admin-v2/bootstrap-fileinput/js/plugins/piexif.min.js?v=5.1.3',
-                'vendor/laravel-admin-v2/bootstrap-fileinput/js/plugins/purify.min.js?v=5.1.3',
-                'vendor/laravel-admin-v2/bootstrap-fileinput/js/plugins/sortable.min.js?v=5.1.3',
-                'vendor/laravel-admin-v2/bootstrap-fileinput/themes/fas/theme.min.js',
+                'vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=5.1.3',
+                'vendor/laravel-admin/bootstrap-fileinput/js/plugins/piexif.min.js?v=5.1.3',
+                'vendor/laravel-admin/bootstrap-fileinput/js/plugins/purify.min.js?v=5.1.3',
+                'vendor/laravel-admin/bootstrap-fileinput/js/plugins/sortable.min.js?v=5.1.3',
+                'vendor/laravel-admin/bootstrap-fileinput/themes/fas/theme.min.js',
             ],
         ],
-//        'datetimepicker' => [
-//            'css' => ['vendor/laravel-admin-v2/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css',],
-//            'js'  => [
-//                'vendor/laravel-admin-v2/moment/moment-with-locales.min.js',
-//                'vendor/laravel-admin-v2/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js',
-//            ],
-//        ],
-
         'datetimepicker'=> [
-            'dep' => ['vendor/laravel-admin-v2/moment/moment-with-locales.min.js'],
-            'css' => ['vendor/laravel-admin-v2/bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css'],
+            'dep' => ['vendor/laravel-admin/moment/moment-with-locales.min.js'],
+            'css' => ['vendor/laravel-admin/bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css'],
             'js' => [
-                'vendor/laravel-admin-v2/bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+                'vendor/laravel-admin/bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
             ],
         ],
-
-        'daterangepicker' => [
-            'dep' => ['vendor/laravel-admin-v2/moment/moment-with-locales.min.js'],
-            'css' => ['vendor/laravel-admin-v2/daterangepicker/daterangepicker.css'],
-            'js' => ['vendor/laravel-admin-v2/daterangepicker/daterangepicker.js'],
-        ],
-
+//        'daterangepicker' => [
+//            'dep' => ['vendor/laravel-admin/moment/moment-with-locales.min.js'],
+//            'css' => ['vendor/laravel-admin/daterangepicker/daterangepicker.css'],
+//            'js' => ['vendor/laravel-admin/daterangepicker/daterangepicker.js'],
+//        ],
         'select2'        => [
             'css' => [
-                'vendor/laravel-admin-v2/select2/css/select2.min.css',
-                'vendor/laravel-admin-v2/select2-bootstrap4-theme/select2-bootstrap4.min.css'
+                'vendor/laravel-admin/select2/css/select2.min.css',
+                'vendor/laravel-admin/select2-bootstrap4-theme/select2-bootstrap4.min.css'
             ],
-            'js'  => ['vendor/laravel-admin-v2/select2/js/select2.full.min.js',],
+            'js'  => ['vendor/laravel-admin/select2/js/select2.full.min.js',],
         ],
-
         'bootstrap-input-spinner' => [
-            'js' => ['vendor/laravel-admin-v2/bootstrap-input-spinner/bootstrap-input-spinner.js',]
+            'js' => ['vendor/laravel-admin/bootstrap-input-spinner/bootstrap-input-spinner.js',]
         ],
-
         'toggle' => [
-            'css' => [
-                'https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css'
-            ],
-            'js' => [
-                'https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js'
-            ],
-        ],
-
-        'bootstrapSwitch' => [
-            'js'  => ['vendor/laravel-admin-v2/bootstrap-switch/js/bootstrap-switch.min.js',]
+            'css' => ['vendor/laravel-admin/bootstrap4-toggle/css/bootstrap4-toggle.min.css'],
+            'js' => ['vendor/laravel-admin/bootstrap4-toggle/js/bootstrap4-toggle.min.js'],
         ],
         'inputmask'       => [
-            'js' => ['vendor/laravel-admin-v2/inputmask/jquery.inputmask.bundle.js',]
-        ],
-        'ckeditor'        => [
-            'js' => ['//cdn.ckeditor.com/4.5.10/standard/ckeditor.js',]
+            'js' => ['vendor/laravel-admin/inputmask/min/jquery.inputmask.bundle.min.js',]
         ],
         'duallistbox'     => [
-            'css' => ['vendor/laravel-admin-v2/bootstrap4-duallistbox/bootstrap-duallistbox.min.css',],
-            'js'  => ['vendor/laravel-admin-v2/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js',]
+            'css' => ['vendor/laravel-admin/bootstrap4-duallistbox/bootstrap-duallistbox.min.css',],
+            'js'  => ['vendor/laravel-admin/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js',]
         ],
         'rangeSlider'     => [
-            'css' => [
-                'vendor/laravel-admin-v2/ion-rangeslider/css/ion.rangeSlider.min.css',
-            ],
-            'js'  => [
-                'vendor/laravel-admin-v2/ion-rangeslider/js/ion.rangeSlider.min.js',
-            ],
+            'css' => ['vendor/laravel-admin/ion-rangeslider/css/ion.rangeSlider.min.css',],
+            'js'  => ['vendor/laravel-admin/ion-rangeslider/js/ion.rangeSlider.min.js',],
         ],
     ];
 
     /**
      * @var string
      */
-    public static $jQuery = 'vendor/laravel-admin-v2/jquery/jquery.min.js';
+    public static $jQuery = 'vendor/laravel-admin/jquery/jquery.min.js';
 
     /**
      * @var array
@@ -254,10 +221,6 @@ trait HasAssets
         if (!is_null($css)) {
             return static::$baseCss = $css;
         }
-
-//        $skin = config('admin.skin', 'skin-blue-light');
-//
-//        array_unshift(static::$baseCss, "vendor/laravel-admin-v2/AdminLTE/dist/css/skins/{$skin}.min.css");
 
         return static::$baseCss;
     }

@@ -320,7 +320,7 @@ class Form implements Renderable
      */
     public function store()
     {
-        $data = \request()->all();
+        $data = request()->all();
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
@@ -361,7 +361,7 @@ class Form implements Renderable
      */
     protected function responseValidationError(MessageBag $message)
     {
-        if (\request()->ajax() && !\request()->pjax()) {
+        if (request()->ajax() && !request()->pjax()) {
             return response()->json([
                 'status'     => false,
                 'validation' => $message,
@@ -381,10 +381,8 @@ class Form implements Renderable
      */
     protected function ajaxResponse($message)
     {
-        $request = Request::capture();
-
         // ajax but not pjax
-        if (!$request->has('_form_save') && $request->ajax() && !$request->pjax()) {
+        if (!request()->has('_form_save') && request()->ajax() && !request()->pjax()) {
             return response()->json([
                 'status'    => true,
                 'message'   => $message,
@@ -404,7 +402,7 @@ class Form implements Renderable
 
         /** @var Field $field */
         foreach ($this->fields() as $field) {
-            if (!\request()->has($field->column())) {
+            if (!request()->has($field->column())) {
                 continue;
             }
 
@@ -1238,7 +1236,7 @@ class Form implements Renderable
      */
     public function isCreating(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), ['.create', '.store']);
+        return Str::endsWith(request()->route()->getName(), ['.create', '.store']);
     }
 
     /**
@@ -1248,7 +1246,7 @@ class Form implements Renderable
      */
     public function isEditing(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), ['.edit', '.update']);
+        return Str::endsWith(request()->route()->getName(), ['.edit', '.update']);
     }
 
     /**
@@ -1318,7 +1316,7 @@ class Form implements Renderable
      */
     public function resource($slice = -2): string
     {
-        $segments = explode('/', trim(\request()->getUri(), '/'));
+        $segments = explode('/', trim(request()->getUri(), '/'));
 
         if ($slice !== 0) {
             $segments = array_slice($segments, 0, $slice);

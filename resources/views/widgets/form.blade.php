@@ -6,7 +6,7 @@
 
     </div>
 
-    @if ($method != 'GET')
+    @if ($method != 'GET' && !$ajax)
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
     @endif
 
@@ -36,13 +36,10 @@
     var $form = $('form#{{ $id }}');
     $form.submit(function (e) {
         e.preventDefault();
+        var form = $(this);
         $(this).find('div.cascade-group.d-none :input').attr('disabled', true);
-    });
 
-    @if($confirm)
-    $form.off('submit').on('submit', function (e) {
-        e.preventDefault();
-        var form = this;
+        @if($confirm)
         $.admin.swal({
             icon: 'question',
             showCancelButton: true,
@@ -55,7 +52,41 @@
                 form.submit();
             }
         });
+        @endif
+
+        @if($ajax)
+        var data = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                console.log(data);
+                if (typeof data != 'object') {
+                    $.admin.toastr.error('Oops something went wrong!');
+                }
+
+                if (data.status === true) {
+                    if (data.message) {
+                        $.admin.toastr.success(data.message);
+                    }
+
+                    if (data.refresh === true) {
+                        $.admin.reload();
+                    }
+
+                    if (data.redirect) {
+                        $.admin.redirect(data.redirect);
+                    }
+                } else {
+                    $.admin.toastr.error(data.message);
+                }
+            }
+        });
         return false;
+        @endif
     });
-    @endif
 </script>

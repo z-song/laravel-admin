@@ -16,7 +16,7 @@ class Dialog extends Interactor
      * @param string $text
      * @param array  $options
      *
-     * @return Dialog
+     * @return $this
      */
     public function success($title, $text = '', $options = [])
     {
@@ -28,7 +28,7 @@ class Dialog extends Interactor
      * @param string $text
      * @param array  $options
      *
-     * @return Dialog
+     * @return $this
      */
     public function error($title, $text = '', $options = [])
     {
@@ -52,7 +52,7 @@ class Dialog extends Interactor
      * @param string $text
      * @param array  $options
      *
-     * @return Dialog
+     * @return $this
      */
     public function info($title, $text = '', $options = [])
     {
@@ -64,7 +64,7 @@ class Dialog extends Interactor
      * @param string $text
      * @param array  $options
      *
-     * @return Dialog
+     * @return $this
      */
     public function question($title, $text = '', $options = [])
     {
@@ -76,7 +76,7 @@ class Dialog extends Interactor
      * @param string $text
      * @param array  $options
      *
-     * @return Dialog
+     * @return $this
      */
     public function confirm($title, $text = '', $options = [])
     {

@@ -32,6 +32,7 @@ class MenuController extends Controller
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
                     $form->action(admin_url('auth/menu'));
+                    $form->ajax();
 
                     $menuModel = config('admin.database.menu_model');
                     $permissionModel = config('admin.database.permissions_model');
@@ -39,14 +40,13 @@ class MenuController extends Controller
 
                     $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
-//                    $form->icon('icon', trans('admin.icon'))->rules('required');
                     $form->text('uri', trans('admin.uri'));
                     $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
                     if ((new $menuModel())->withPermission()) {
                         $form->select('permission', trans('admin.permission'))->options($permissionModel::pluck('name', 'slug'));
                     }
-                    $form->hidden('_token')->default(csrf_token());
-
+                    $form->hidden('_saved')->default(1);
+                    $form->hidden('_form_save')->default(1);
                     $column->append((new Box(trans('admin.new'), $form))->style(admin_theme()));
                 });
             });
@@ -127,7 +127,6 @@ class MenuController extends Controller
 
         $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
         $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
-//        $form->icon('icon', trans('admin.icon'))->default('fa-bars')->rules('required');
         $form->text('uri', trans('admin.uri'));
         $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
         if ($form->model()->withPermission()) {

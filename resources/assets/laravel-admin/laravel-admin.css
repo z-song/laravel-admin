@@ -57,7 +57,7 @@ a.editable-empty {
     line-height: 1.2;
 }
 
-.table-has-many label.control-label[for=inputError]+br {
+.table-has-many label.control-label[for=inputError] + br {
     display: none;
 }
 
@@ -190,3 +190,14 @@ a.editable-empty {
     padding-right: 10px !important;
 }
 
+.swal2-popup {
+    font-size: 0.6rem !important;
+}
+
+.swal2-popup.swal2-toast {
+    padding: 1rem 1.5rem !important;
+}
+
+.table tbody>tr.selected {
+    background-color: #ffffd5 !important;
+}

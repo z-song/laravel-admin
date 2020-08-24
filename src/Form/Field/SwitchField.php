@@ -16,13 +16,25 @@ class SwitchField extends Field
 {
     use CanCascadeFields;
 
+    /**
+     * @var string
+     */
     protected $size;
 
+    /**
+     * @var array
+     */
     protected $state = [
         'on'  => ['value'  => 1, 'text' => 'ON'],
         'off' => ['value'  => 0, 'text' => 'OFF']
     ];
 
+    /**
+     * @param int $value
+     * @param string $text
+     * @param string $style
+     * @return $this
+     */
     public function on($value = 1, $text = '', $style = '')
     {
         $this->state['on'] = [
@@ -34,6 +46,12 @@ class SwitchField extends Field
         return $this;
     }
 
+    /**
+     * @param int $value
+     * @param string $text
+     * @param string $style
+     * @return $this
+     */
     public function off($value = 0, $text = '', $style = '')
     {
         $this->state['off'] = [
@@ -56,6 +74,9 @@ class SwitchField extends Field
         return $this;
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     */
     public function render()
     {
         if (!$this->shouldRender()) {

@@ -1,15 +1,9 @@
 (function ($) {
 
-    // toastr init
-    toastr.options = {
-        closeButton: true,
-        progressBar: true,
-        showMethod: 'slideDown',
-        timeOut: 4000
-    };
-
     // NProgress init
-    NProgress.configure({parent: '#app'});
+    NProgress.configure({parent: '#pjax-container'});
+
+    $('[data-toggle="tooltip"]').tooltip();
 
     // pjax init
     $.pjax.defaults.timeout = 5000;
@@ -59,53 +53,19 @@
     });
 
     (function () {
-        $('.sidebar-menu li:not(.treeview) > a').on('click', function () {
-            var $parent = $(this).parent().addClass('active');
-            $parent.siblings('.treeview.active').find('> a').trigger('click');
-            $parent.siblings().removeClass('active').find('li').removeClass('active');
+        var $active = $('.sidebar li.nav-item a[href$="' + (location.pathname + location.search + location.hash) + '"]');
+        $active.addClass('active').parents('.has-treeview').addClass('menu-open').children('a').addClass('active');
+
+        $('.sidebar li.nav-item:not(.has-treeview) a.nav-link').click(function () {
+            $('.sidebar a.nav-link').removeClass('active');
+            $(this).addClass('active').parents('.has-treeview').children('a').addClass('active');
         });
-        var menu = $('.sidebar-menu li > a[href$="' + (location.pathname + location.search + location.hash) + '"]').parent().addClass('active');
-        menu.parents('ul.treeview-menu').addClass('menu-open');
-        menu.parents('li.treeview').addClass('active');
 
         $('[data-toggle="popover"]').popover();
-
-        // Sidebar form autocomplete
-        $('.sidebar-form .autocomplete').on('keyup focus', function () {
-            var $menu = $('.sidebar-form .dropdown-menu');
-            var text = $(this).val();
-
-            if (text === '') {
-                $menu.hide();
-                return;
-            }
-
-            var regex = new RegExp(text, 'i');
-            var matched = false;
-
-            $menu.find('li').each(function () {
-                if (!regex.test($(this).find('a').text())) {
-                    $(this).hide();
-                } else {
-                    $(this).show();
-                    matched = true;
-                }
-            });
-
-            if (matched) {
-                $menu.show();
-            }
-        }).click(function(event){
-            event.stopPropagation();
-        });
-
-        $('.sidebar-form .dropdown-menu li a').click(function (){
-            $('.sidebar-form .autocomplete').val($(this).text());
-        });
     })();
 
     $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-        if (originalOptions.type === 'POST' || options.type === 'POST') {
+        if (options.type.toLowerCase() === 'post' || originalOptions.type.toLowerCase() === 'post') {
             if (originalOptions.data instanceof FormData) {
                 originalOptions.data.append('_token', $.admin.getToken());
                 options.data = originalOptions.data;
@@ -118,7 +78,7 @@
     $.ajaxSetup({
         statusCode: {
             500: function(xhr) {
-                $.admin.toastr.error(xhr.responseJSON.message, '', {positionClass:"toast-bottom-center"});
+                $.admin.toastr.error(xhr.responseJSON.message, {position:"bottom"});
             }
         }
     });
@@ -144,7 +104,7 @@
     }
 
     Table.prototype.box = function () {
-        return this.$el.closest('.box');
+        return this.$el.closest('.card');
     };
 
     Table.prototype.select = function (id) {
@@ -152,7 +112,7 @@
             return;
         }
         this.selects[id] = id;
-        this.findRow(id).css('background-color', '#ffffd5');
+        this.findRow(id).addClass('selected');
     };
 
     Table.prototype.unselect = function (id) {
@@ -160,7 +120,7 @@
             return;
         }
         delete this.selects[id];
-        this.findRow(id).css('background-color', '');
+        this.findRow(id).removeClass('selected');
     };
 
     Table.prototype.toggle = function (id) {
@@ -172,11 +132,11 @@
         this.toggleBatchAction();
     };
 
-    Table.prototype.toggleAll = function (all) {
-        if (all) {
-            this.$el.find('input.grid-row-checkbox').iCheck('check');
+    Table.prototype.toggleAll = function (checked) {
+        if (checked) {
+            this.$el.find('input.table-row-checkbox').prop('checked', true).trigger('change');
         } else {
-            this.$el.find('input.grid-row-checkbox').iCheck('uncheck');
+            this.$el.find('input.table-row-checkbox').prop('checked', false).trigger('change');
             this.selects = {};
         }
         this.toggleBatchAction();
@@ -192,26 +152,63 @@
 
     Table.prototype.toggleBatchAction = function () {
         var selected = this.selected().length;
-        var $btn = this.box().find('.grid-select-all-btn');
+        var $btn = this.box().find('.table-select-all-btn');
         var $select = $btn.find('.selected');
-        var $export = this.box().find('a.export-selected').parent();
+        var $export = this.box().find('a.export-selected');
 
         if (selected > 0) {
             $btn.show();
-            $export.show();
+            $export.removeClass('d-none');
             $select.html($select.data('tpl').replace('{n}', selected));
         } else {
             $btn.hide();
-            $export.hide();
+            $export.addClass('d-none');
         }
     };
+
+    function Toast() {
+        this.toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 400000,
+            timerProgressBar: true,
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
+            },
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+    }
+
+    Toast.prototype.show = function (icon, title, options) {
+        var settings = {
+            icon: icon,
+            title: title,
+        };
+
+        if (typeof options !== 'object') {
+            Object.assign(settings, options);
+        }
+
+        this.toast.fire(settings);
+    };
+
+    ['success', 'error', 'info', 'warning', 'question'].forEach((icon) => {
+        Toast.prototype[icon] = function (title, options) {
+            this.show(icon, title, options);
+        }
+    });
 
     function Admin () {
         this.token = $('meta[name=csrf-token]').attr('content');
         this.user = __user;
 
         this.swal = swal;
-        this.toastr = toastr;
+        this.toastr = new Toast();
 
         this.totop = null;
         this.table = null;
@@ -287,10 +284,13 @@
         });
     };
 
-    Admin.prototype.loadAssets = function (js, css) {
+    Admin.prototype.loadAssets = function (dep, js, css, callback) {
         var admin = this;
-        return admin.loadScripts(js).then(function () {
-            admin.loadCss(css);
+
+        return admin.loadScripts(dep).then(function () {
+            admin.loadScripts(js).then(function () {
+                admin.loadCss(css);
+            }).then(callback);
         });
     };
 
@@ -300,7 +300,7 @@
             var $target = data[1];
 
             if (typeof response !== 'object') {
-                return $.admin.swal({type: 'error', title: 'Oops!'});
+                return $.admin.swal.fire({type: 'error', title: 'Oops!'});
             }
 
             if (typeof response.html === 'string') {
@@ -308,11 +308,11 @@
             }
 
             if (typeof response.swal === 'object') {
-                $.admin.swal(response.swal);
+                $.admin.swal.fire(response.swal);
             }
 
             if (typeof response.toastr === 'object' && response.toastr.type) {
-                $.admin.toastr[response.toastr.type](response.toastr.content, '', response.toastr.options);
+                $.admin.toastr[response.toastr.type](response.toastr.content, response.toastr.options);
             }
 
             var then = function (then) {
@@ -324,7 +324,7 @@
                     $.admin.redirect(then.value);
                 } else if (then.action === 'location') {
                     window.location = then.value;
-                } else if (then.action === 'oepn') {
+                } else if (then.action === 'open') {
                     window.open(this.value, '_blank');
                 }
             };
@@ -335,9 +335,9 @@
         },
         catch: function (request) {
             if (request && typeof request.responseJSON === 'object') {
-                $.admin.toastr.error(request.responseJSON.message, '', {
-                    positionClass:"toast-bottom-center",
-                    timeOut: 10000
+                $.admin.toastr.error(request.responseJSON.message, {
+                    position:"bottom",
+                    timer: 10000
                 }).css("width","500px")
             }
         }

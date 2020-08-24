@@ -15,9 +15,9 @@
 {{--  <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css") }}">--}}
   <!-- Font Awesome -->
 
-    <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin-v2/fontawesome-free/css/all.min.css") }}">
-    <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin-v2/icheck-bootstrap/icheck-bootstrap.min.css") }}">
-    <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin-v2/AdminLTE/css/adminlte.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/fontawesome-free/css/all.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/icheck-bootstrap/icheck-bootstrap.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/AdminLTE/css/adminlte.min.css") }}">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -97,11 +97,11 @@
 <!-- /.login-box -->
 
 <!-- jQuery 2.1.4 -->
-<script src="{{ admin_asset("vendor/laravel-admin-v2/jquery/jquery.min.js")}} "></script>
+<script src="{{ admin_asset("vendor/laravel-admin/jquery/jquery.min.js")}} "></script>
 <!-- Bootstrap 3.3.5 -->
-<script src="{{ admin_asset('vendor/laravel-admin-v2/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{ admin_asset('vendor/laravel-admin/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- iCheck -->
-<script src="{{ admin_asset("vendor/laravel-admin-v2/AdminLTE/js/adminlte.min.js")}}"></script>
+<script src="{{ admin_asset("vendor/laravel-admin/AdminLTE/js/adminlte.min.js")}}"></script>
 
 </body>
 </html>

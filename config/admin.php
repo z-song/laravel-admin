@@ -46,6 +46,18 @@ return [
     */
     'bootstrap' => app_path('Admin/bootstrap.php'),
 
+    'theme' => [
+
+        'color' => 'info',
+
+        'navbar' => [
+            'bg' => 'light',
+            'color' => 'white'
+        ],
+
+        'sidebar' => 'light-info',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Laravel-admin route settings
@@ -129,7 +141,7 @@ return [
         ],
 
         // Add "remember me" to login form
-        'remember' => true,
+        ' ' => true,
 
         // Redirect to the specified URI when user is not authorized.
         'redirect_to' => 'auth/login',
@@ -138,7 +150,10 @@ return [
         'excepts' => [
             'auth/login',
             'auth/logout',
+            '_handle_form_',
             '_handle_action_',
+            '_handle_selectable_',
+            '_handle_renderable_',
         ],
     ],
 
@@ -225,43 +240,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Admin map field provider
-    |--------------------------------------------------------------------------
-    |
-    | Supported: "tencent", "google", "yandex".
-    |
-    */
-    'map_provider' => 'google',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Application Skin
-    |--------------------------------------------------------------------------
-    |
-    | This value is the skin of admin pages.
-    | @see https://adminlte.io/docs/2.4/layout
-    |
-    | Supported:
-    |    "skin-blue", "skin-blue-light", "skin-yellow", "skin-yellow-light",
-    |    "skin-green", "skin-green-light", "skin-purple", "skin-purple-light",
-    |    "skin-red", "skin-red-light", "skin-black", "skin-black-light".
-    |
-    */
-    'skin' => 'skin-blue-light',
-
-    /*
-    |--------------------------------------------------------------------------
     | Application layout
     |--------------------------------------------------------------------------
     |
     | This value is the layout of admin pages.
-    | @see https://adminlte.io/docs/2.4/layout
+    | @see https://adminlte.io/docs/3.0/layout.html
     |
-    | Supported: "fixed", "layout-boxed", "layout-top-nav", "sidebar-collapse",
-    | "sidebar-mini".
+    | Fixed Sidebar: use the class `.layout-fixed` to get a fixed sidebar.
+    | Fixed Navbar: use the class `.layout-navbar-fixed` to get a fixed navbar.
+    | Fixed Footer: use the class `.layout-footer-fixed` to get a fixed footer.
+    | Collapsed Sidebar: use the class `.sidebar-collapse` to have a collapsed sidebar upon loading.
+    | Boxed Layout: use the class `.layout-boxed` to get a boxed layout that stretches only to 1250px.
+    | Top Navigation: use the class `.layout-top-nav` to remove the sidebar and have your links at the top navbar.
     |
     */
-    'layout' => ['sidebar-mini', 'sidebar-collapse'],
+    'layout' => ['sidebar-mini', 'sidebar-collapse', 'text-sm'],
 
     /*
     |--------------------------------------------------------------------------
@@ -328,13 +321,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Enable/Disable sidebar menu search
-    |--------------------------------------------------------------------------
-    */
-    'enable_menu_search' => true,
-
-    /*
-    |--------------------------------------------------------------------------
     | Alert message that will displayed on top of the page.
     |--------------------------------------------------------------------------
     */
@@ -345,7 +331,7 @@ return [
     | The global Grid action display class.
     |--------------------------------------------------------------------------
     */
-    'grid_action_class' => \Encore\Admin\Grid\Displayers\DropdownActions::class,
+    'grid_action_class' => \Encore\Admin\Table\Displayers\DropdownActions::class,
 
     /*
     |--------------------------------------------------------------------------
