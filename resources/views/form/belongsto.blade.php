@@ -53,7 +53,7 @@
     .belongsto.modal tr {
         cursor: pointer;
     }
-    .belongsto.modal .box {
+    .belongsto.modal .card {
         border-top: none;
         margin-bottom: 0;
         box-shadow: none;

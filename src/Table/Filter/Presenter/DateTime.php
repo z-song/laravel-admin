@@ -38,6 +38,7 @@ class DateTime extends Presenter
     {
         $options['format'] = Arr::get($options, 'format', $this->format);
         $options['locale'] = Arr::get($options, 'locale', config('app.locale'));
+        Arr::set($options, 'icons.time', 'fas fa-clock');
 
         return $options;
     }

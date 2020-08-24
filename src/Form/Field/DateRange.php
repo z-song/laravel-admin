@@ -65,6 +65,9 @@ class DateRange extends Field
         $this->options = array_merge($this->options, [
             'locale' => config('app.locale'),
             'format' => $this->format,
+            'icons'  => [
+                'time' => 'fas fa-clock',
+            ]
         ]);
 
         $this->addVariables([

@@ -63,6 +63,9 @@ class RangeFilter extends Filter
             'format'           => $dpFormat[$this->type],
             'locale'           => config('app.locale'),
             'allowInputToggle' => true,
+            'icons'            => [
+                'time' => 'fas fa-clock'
+            ]
         ] : false;
 
         return Admin::view('admin::table.column.range-filter', [

@@ -82,7 +82,7 @@ abstract class AbstractFilter
     /**
      * @var string
      */
-    protected $view = 'admin::filter.where';
+    protected $view = 'admin::table.filter.where';
 
     /**
      * @var Collection

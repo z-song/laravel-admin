@@ -122,6 +122,7 @@ trait UploadField
             'showUpload'           => false,
             'showCancel'           => false,
             'dropZoneEnabled'      => false,
+            'browseClass'          => admin_theme('btn btn-%s'),
             'deleteExtraData'      => [
                 $this->formatName($this->column) => static::FILE_DELETE_FLAG,
                 static::FILE_DELETE_FLAG         => '',

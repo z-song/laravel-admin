@@ -19,7 +19,7 @@
     {!! Admin::headerJs() !!}
 </head>
 
-<body class="hold-transition {{join(' ', config('admin.layout'))}}">
+<body class="hold-transition {{join(' ', config('admin.theme.layout'))}} {{ config('admin.theme.accent') ? 'accent-'.config('admin.theme.accent') : '' }}">
 
 @if($alert = config('admin.top_alert'))
     <div style="text-align: center;padding: 5px;font-size: 12px;background-color: #ffffd5;color: #ff0000;">

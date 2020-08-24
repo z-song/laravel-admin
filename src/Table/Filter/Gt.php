@@ -9,7 +9,7 @@ class Gt extends AbstractFilter
     /**
      * {@inheritdoc}
      */
-    protected $view = 'admin::filter.gt';
+    protected $view = 'admin::table.filter.gt';
 
     /**
      * Get condition of this filter.

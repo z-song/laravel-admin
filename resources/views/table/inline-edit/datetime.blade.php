@@ -27,7 +27,10 @@
                 inline: true,
                 format: '{{ $format }}',
                 date: $input.val(),
-                locale: '{{ $locale }}'
+                locale: '{{ $locale }}',
+                icons: {
+                    time: 'fas fa-clock'
+                }
             }).on('dp.change', function (event) {
                 var date = event.date.format('{{ $format }}');
                 $input.val(date);

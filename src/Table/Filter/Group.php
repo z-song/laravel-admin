@@ -285,7 +285,7 @@ class Group extends AbstractFilter
     protected function addScript()
     {
         $script = <<<SCRIPT
-$(".{$this->name} li a").click(function(){
+$(".{$this->name} a").click(function(){
     $(".{$this->name}-label").text($(this).text());
     $(".{$this->name}-operation").val($(this).data('index'));
 });

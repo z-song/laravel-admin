@@ -10,7 +10,7 @@ class Between extends AbstractFilter
     /**
      * {@inheritdoc}
      */
-    protected $view = 'admin::filter.between';
+    protected $view = 'admin::table.filter.between';
 
     /**
      * Format id.
@@ -97,7 +97,7 @@ class Between extends AbstractFilter
      */
     public function datetime($options = [])
     {
-        $this->view = 'admin::filter.betweenDatetime';
+        $this->view = 'admin::table.filter.betweenDatetime';
 
         $this->setupDatetime($options);
 
@@ -113,6 +113,7 @@ class Between extends AbstractFilter
 
         $options['format'] = Arr::get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
         $options['locale'] = Arr::get($options, 'locale', config('app.locale'));
+        Arr::set($options, 'icons.time', 'fas fa-clock');
 
         $startOptions = json_encode($options);
         $endOptions = json_encode($options + ['useCurrent' => false]);

@@ -1,7 +1,8 @@
 <span class="table-selector" data-toggle="modal" data-target="#{{ $modal }}" key="{{ $key }}" data-val="{{ $original }}">
    <a href="javascript:void(0)" class="text-muted">
-       <i class="fa fa-check-square-o"></i>&nbsp;&nbsp;
+
        <span class="text">{!! $value !!}</span>
+       <i class="far fa-check-square" style="visibility: hidden;"></i>&nbsp;&nbsp;
    </a>
 </span>
 
@@ -10,7 +11,7 @@
         cursor: pointer;
     }
 
-    .belongsto.modal .box {
+    .belongsto.modal .card {
         border-top: none;
         margin-bottom: 0;
         box-shadow: none;
@@ -18,6 +19,11 @@
     .belongsto.modal .loading {
         margin: 50px;
     }
+
+    .table-table tr:hover .table-selector>a>i {
+        visibility: visible !important;
+    }
+
 </style>
 
 <template>

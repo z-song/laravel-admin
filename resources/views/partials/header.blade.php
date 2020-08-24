@@ -1,4 +1,4 @@
-<nav class="main-header navbar navbar-expand navbar-{{ config('admin.theme.navbar.color') }} navbar-{{ config('admin.theme.navbar.bg') }}">
+<nav class="main-header navbar navbar-expand {{ config('admin.theme.navbar') }}">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">

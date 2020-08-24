@@ -32,6 +32,9 @@ class Date extends Text
             'format'           => $this->format,
             'locale'           => $this->options['locale'] ?? config('app.locale'),
             'allowInputToggle' => true,
+            'icons'            => [
+                'time' => 'fas fa-clock'
+            ]
         ], $this->options);
 
         $this->addVariables([

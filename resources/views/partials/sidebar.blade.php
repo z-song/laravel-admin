@@ -1,6 +1,6 @@
 <aside class="main-sidebar elevation-4 sidebar-{{ config('admin.theme.sidebar') }}">
 
-    <a href="{{ admin_url('/') }}" class="brand-link navbar-{{ config('admin.theme.navbar.bg') }} navbar-{{ config('admin.theme.navbar.color') }}">
+    <a href="{{ admin_url('/') }}" class="brand-link">
         <img src="/vendor/laravel-admin/AdminLTE/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight">{!! config('admin.logo', config('admin.name')) !!}</span>
     </a>

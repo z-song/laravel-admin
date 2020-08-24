@@ -96,7 +96,7 @@ class Filter implements Renderable
     /**
      * @var string
      */
-    public $view = 'admin::filter.container';
+    public $view = 'admin::table.filter.container';
 
     /**
      * @var string
