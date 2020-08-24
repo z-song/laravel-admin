@@ -5,6 +5,11 @@ namespace Encore\Admin\Form\Field;
 class Decimal extends Text
 {
     /**
+     * @var string
+     */
+    protected $icon = 'fa-terminal';
+
+    /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *
      * @var array
@@ -18,7 +23,7 @@ class Decimal extends Text
     {
         $this->inputmask($this->options);
 
-        $this->prependText('<i class="fa fa-terminal fa-fw"></i>')
+        $this->prependText('<i class="fa '.$this->icon.' fa-fw"></i>')
             ->defaultAttribute('style', 'width: 130px');
 
         return parent::render();
