@@ -69,33 +69,8 @@ class KeyValue extends Field
         return validator($input, $rules, $this->getValidationMessages(), $attributes);
     }
 
-    protected function setupScript()
-    {
-        $this->script = <<<SCRIPT
-
-$('.{$this->column}-add').on('click', function () {
-    var tpl = $('template.{$this->column}-tpl').html();
-    $('tbody.kv-{$this->column}-table').append(tpl);
-});
-
-$('tbody').on('click', '.{$this->column}-remove', function () {
-    $(this).closest('tr').remove();
-});
-
-SCRIPT;
-    }
-
     public function prepare($value)
     {
         return array_combine($value['keys'], $value['values']);
-    }
-
-    public function render()
-    {
-        $this->setupScript();
-
-        Admin::style('td .form-group {margin-bottom: 0 !important;}');
-
-        return parent::render();
     }
 }

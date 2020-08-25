@@ -179,13 +179,13 @@ if (!function_exists('admin_assets')) {
     }
 }
 
-if (!function_exists('admin_theme')) {
+if (!function_exists('admin_color')) {
 
     /**
      * @param string $prefix
      * @return string
      */
-    function admin_theme($tpl = '')
+    function admin_color($tpl = '')
     {
         if ($tpl) {
             return str_replace('%s', config('admin.theme.color'), $tpl);

@@ -3,7 +3,7 @@
     <div class="{{$viewClass['field']}}" id="{{$id}}">
         <div class="card-group checkbox-card-group">
         @foreach($options as $option => $label)
-            <label class="card {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?admin_theme('bg-%s'):'' }}">
+            <label class="card {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?admin_color('bg-%s'):'' }}">
                 <div class="card-body">
                 <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="d-none {{$class}}" {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
                 </div>
@@ -17,7 +17,7 @@
 
 <script>
     $('.checkbox-card-group label').on('click', function () {
-        $(this).toggleClass('bg-@theme');
+        $(this).toggleClass('bg-@color');
         return false;
     });
 </script>

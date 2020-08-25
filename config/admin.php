@@ -4,10 +4,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Laravel-admin name
+    | The name of admin application
     |--------------------------------------------------------------------------
     |
-    | This value is the name of laravel-admin, This setting is displayed on the
+    | This value is the name of admin application, This setting is displayed on the
     | login page.
     |
     */
@@ -15,26 +15,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Laravel-admin logo
+    | Logo setting of admin application
     |--------------------------------------------------------------------------
     |
-    | The logo of all admin pages. You can also set it as an image by using a
-    | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
-    |
     */
-    'logo' => '<b>Laravel</b> admin',
+    'logo' => [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Laravel-admin mini logo
-    |--------------------------------------------------------------------------
-    |
-    | The logo of all admin pages when the sidebar menu is collapsed. You can
-    | also set it as an image by using a `img` tag, eg
-    | '<img src="http://logo-url" alt="Admin logo">'.
-    |
-    */
-    'logo_mini' => '<b>La</b>',
+        'image' => '/vendor/laravel-admin/AdminLTE/img/AdminLTELogo.png',
+
+        'text' => '<span class="font-weight-bolder">Laravel-admin</span>'
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -45,18 +35,6 @@ return [
     |
     */
     'bootstrap' => app_path('Admin/bootstrap.php'),
-
-    'theme' => [
-
-        'color' => 'info',
-
-        'navbar' => [
-            'bg' => 'light',
-            'color' => 'white'
-        ],
-
-        'sidebar' => 'light-info',
-    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +119,7 @@ return [
         ],
 
         // Add "remember me" to login form
-        ' ' => true,
+        'remember' => true,
 
         // Redirect to the specified URI when user is not authorized.
         'redirect_to' => 'auth/login',
@@ -240,21 +218,92 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application layout
+    | Application theme
     |--------------------------------------------------------------------------
     |
-    | This value is the layout of admin pages.
     | @see https://adminlte.io/docs/3.0/layout.html
     |
-    | Fixed Sidebar: use the class `.layout-fixed` to get a fixed sidebar.
-    | Fixed Navbar: use the class `.layout-navbar-fixed` to get a fixed navbar.
-    | Fixed Footer: use the class `.layout-footer-fixed` to get a fixed footer.
-    | Collapsed Sidebar: use the class `.sidebar-collapse` to have a collapsed sidebar upon loading.
-    | Boxed Layout: use the class `.layout-boxed` to get a boxed layout that stretches only to 1250px.
-    | Top Navigation: use the class `.layout-top-nav` to remove the sidebar and have your links at the top navbar.
-    |
     */
-    'layout' => ['sidebar-mini', 'sidebar-collapse', 'text-sm'],
+    'theme' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Available layout options.
+        |--------------------------------------------------------------------------
+        | Fixed Sidebar: use the class `.layout-fixed` to get a fixed sidebar.
+        | Fixed Navbar: use the class `.layout-navbar-fixed` to get a fixed navbar.
+        | Fixed Footer: use the class `.layout-footer-fixed` to get a fixed footer.
+        | Collapsed Sidebar: use the class `.sidebar-collapse` to have a collapsed sidebar upon loading.
+        | Boxed Layout: use the class `.layout-boxed` to get a boxed layout that stretches only to 1250px.
+        | Top Navigation: use the class `.layout-top-nav` to remove the sidebar and have your links at the top navbar.
+        |
+        */
+        'layout' => ['sidebar-mini', 'sidebar-collapse', 'text-sm'],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Default color for all links.
+        |--------------------------------------------------------------------------
+        |
+        | navbar-light or navbar-dark for content color
+        |
+        | navbar-$color for backgroud color
+        |
+        | Available $color options:
+        |    primary secondary secondary info warning danger black gray-dark  gray
+        |    light indigo  navy purple fuchsia pink maroon orange lime teal olive
+        |
+        */
+        'navbar' => 'navbar-light navbar-white',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Default color for all links.
+        |--------------------------------------------------------------------------
+        |
+        | Available options:
+        |    primary secondary secondary info warning danger black gray-dark  gray
+        |    light indigo  navy purple fuchsia pink maroon orange lime teal olive
+        |
+        */
+        'accent' => 'info',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Default color for card form and buttons.
+        |--------------------------------------------------------------------------
+        |
+        | light-$color or dark-$color
+        |
+        | Available $color options:
+        |    primary secondary secondary info warning danger black gray-dark  gray
+        |    light indigo  navy purple fuchsia pink maroon orange lime teal olive
+        |
+        */
+        'sidebar' => 'light-info',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Default color for card, form and buttons.
+        |--------------------------------------------------------------------------
+        |
+        | Available options:
+        |    primary secondary secondary info warning danger
+        */
+        'color' => 'info',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Logo backgroud color.
+        |--------------------------------------------------------------------------
+        |
+        | Available color options:
+        |    primary secondary secondary info warning danger black gray-dark  gray
+        |    light indigo  navy purple fuchsia pink maroon orange lime teal olive
+        |
+        */
+        'logo' => 'light',
+    ],
 
     /*
     |--------------------------------------------------------------------------

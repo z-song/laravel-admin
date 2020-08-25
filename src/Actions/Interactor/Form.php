@@ -105,6 +105,7 @@ class Form extends Interactor
     public function ip($column, $label = '')
     {
         return $this->text($column, $label)
+            ->icon('fa-laptop')
             ->width('200px')
             ->inputmask(['alias' => 'ip']);
     }
@@ -118,7 +119,8 @@ class Form extends Interactor
     public function url($column, $label = '')
     {
         return $this->text($column, $label)
-            ->inputmask(['alias' => 'url'])
+            ->prependText('<i class="fab fa-internet-explorer fa-fw"></i>')
+            ->attribute('type', 'url')
             ->width('200px');
     }
 
@@ -131,6 +133,7 @@ class Form extends Interactor
     public function password($column, $label = '')
     {
         return $this->text($column, $label)
+            ->icon('fa-eye-slash')
             ->attribute('type', 'password');
     }
 
@@ -143,6 +146,7 @@ class Form extends Interactor
     public function mobile($column, $label = '')
     {
         return $this->text($column, $label)
+            ->icon('fa-phone')
             ->inputmask(['mask' => '99999999999'])
             ->width('100px');
     }
@@ -261,7 +265,7 @@ class Form extends Interactor
     {
         $field = new Field\MultipleImage($column, $this->formatLabel($label));
 
-        return $this->addField($field)->setView('admin::actions.form.muitplefile');
+        return $this->addField($field)->setView('admin::actions.form.multiplefile');
     }
 
     /**

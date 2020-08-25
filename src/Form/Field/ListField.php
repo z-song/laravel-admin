@@ -115,39 +115,8 @@ class ListField extends Field
     /**
      * {@inheritdoc}
      */
-    protected function setupScript()
-    {
-        $this->script = <<<SCRIPT
-
-$('.{$this->column}-add').on('click', function () {
-    var tpl = $('template.{$this->column}-tpl').html();
-    $('tbody.list-{$this->column}-table').append(tpl);
-});
-
-$('tbody').on('click', '.{$this->column}-remove', function () {
-    $(this).closest('tr').remove();
-});
-
-SCRIPT;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function prepare($value)
     {
         return array_values($value['values']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function render()
-    {
-        $this->setupScript();
-
-        Admin::style('td .form-group {margin-bottom: 0 !important;}');
-
-        return parent::render();
     }
 }

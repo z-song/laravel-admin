@@ -1,4 +1,4 @@
-<div class="icheck-@theme d-inline">
+<div class="icheck-@color d-inline">
     <input type="checkbox" class="table-row-checkbox" data-id="{{ $key }}" id="@id-{{ $key }}">
     <label for="@id-{{ $key }}"></label>
 </div>

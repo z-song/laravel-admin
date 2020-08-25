@@ -1,5 +1,5 @@
 <div class="btn-group float-right" style="margin-right: 10px">
-    <a href="" class="btn btn-sm btn-@theme" data-toggle="modal" data-target="#{{ $modalID }}"><i class="fa fa-filter"></i>&nbsp;&nbsp;{{ trans('admin.filter') }}</a>
+    <a href="" class="btn btn-sm btn-@color" data-toggle="modal" data-target="#{{ $modalID }}"><i class="fa fa-filter"></i>&nbsp;&nbsp;{{ trans('admin.filter') }}</a>
     <a href="{!! $action !!}" class="btn btn-sm btn-facebook"><i class="fa fa-undo"></i>&nbsp;&nbsp;{{ trans('admin.reset') }}</a>
 </div>
 
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-@theme submit">{{ trans('admin.submit') }}</button>
+                    <button type="submit" class="btn btn-@color submit">{{ trans('admin.submit') }}</button>
                     <button type="reset" class="btn btn-warning float-left">{{ trans('admin.reset') }}</button>
                 </div>
             </form>

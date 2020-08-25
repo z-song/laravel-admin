@@ -16,7 +16,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{ admin_trans('admin.cancel') }}</button>
-                    <button type="button" class="btn btn-@theme submit">{{ admin_trans('admin.submit') }}</button>
+                    <button type="button" class="btn btn-@color submit">{{ admin_trans('admin.submit') }}</button>
                 </div>
             </div>
         </div>

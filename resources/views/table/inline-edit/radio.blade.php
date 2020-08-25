@@ -2,7 +2,7 @@
 
 @section('field')
     @foreach($options as $option => $label)
-        <div class="radio icheck-@theme">
+        <div class="radio icheck-@color">
             <input id="@id" type="radio" name='radio-{{ $name }}' class="minimal ie-input" value="{{ $option }}" data-label="{{ $label }}"/>
             <label for="@id">&nbsp;{{$label}}&nbsp;&nbsp;
             </label>
@@ -12,7 +12,7 @@
 
 @section('assert')
     <style>
-        .icheck-@theme.radio {
+        .icheck-@color.radio {
             margin: 5px 0 5px 20px;
         }
 

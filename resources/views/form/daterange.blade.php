@@ -28,16 +28,19 @@
 </div>
 
 <script require="datetimepicker">
-    var $start = $('.{{ $class['start'] }}');
-    var $end = $('.{{ $class['end'] }}');
 
-    $start.datetimepicker(@json($start_options))
-        .on('dp.change', function (e) {
-            $end.data('DateTimePicker').minDate(e.date);
-        });
+    $.admin.initialize('{{ $selector['start'] }}', function () {
+        var $end = $(this).parents('.form-group').find('{{ $selector['end']}}');
+        $(this).datetimepicker(@json($start_options))
+            .on('dp.change', function (e) {
+                $end.data('DateTimePicker').minDate(e.date);
+            });
 
-    $end.datetimepicker(@json($end_options))
-        .on('dp.change', function (e) {
-            $start.data('DateTimePicker').maxDate(e.date);
-        });
+        $end.datetimepicker(@json($end_options))
+            .on('dp.change', function (e) {
+                $(this).data('DateTimePicker').maxDate(e.date);
+            });
+
+        $(this).addClass('initialized');
+    });
 </script>

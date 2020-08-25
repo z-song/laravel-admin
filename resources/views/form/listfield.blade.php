@@ -58,21 +58,38 @@
 </div>
 
 <template>
-<template class="{{$column}}-tpl">
-    <tr>
-        <td>
-            <div class="form-group">
-                <div class="col-sm-12">
-                    <input name="{{ $column }}[values][]" class="form-control" />
+    <template class="{{$column}}-tpl">
+        <tr>
+            <td>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <input name="{{ $column }}[values][]" class="form-control" />
+                    </div>
                 </div>
-            </div>
-        </td>
+            </td>
 
-        <td style="width: 90px;">
-            <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
-                <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
-            </div>
-        </td>
-    </tr>
+            <td style="width: 90px;">
+                <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
+                    <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                </div>
+            </td>
+        </tr>
+    </template>
 </template>
-</template>
+
+<script>
+    $('.{{ $column }}-add').on('click', function () {
+        var tpl = $('template.{{ $column }}-tpl').html();
+        $('tbody.list-{{ $column }}-table').append(tpl);
+    });
+
+    $('tbody').on('click', '.{{ $column }}-remove', function () {
+        $(this).closest('tr').remove();
+    });
+</script>
+
+<style>
+    td .form-group {
+        margin-bottom: 0 !important;
+    }
+</style>

@@ -94,6 +94,8 @@ class HasMany extends Field
         if (count($arguments) == 2) {
             list($this->label, $this->builder) = $arguments;
         }
+
+        admin_assets('initialize');
     }
 
     /**
@@ -334,7 +336,6 @@ class HasMany extends Field
         call_user_func($builder, $form);
 
         $form->hidden($this->getKeyName());
-
         $form->hidden(NestedForm::REMOVE_FLAG_NAME)->default(0)->addElementClass(NestedForm::REMOVE_FLAG_CLASS);
 
         return $form;
@@ -456,21 +457,19 @@ class HasMany extends Field
      *
      * @return void
      */
-    protected function setupScript($script)
+    protected function setupScript()
     {
         $method = 'setupScriptFor'.ucfirst($this->viewMode).'View';
 
-        call_user_func([$this, $method], $script);
+        call_user_func([$this, $method]);
     }
 
     /**
      * Setup default template script.
      *
-     * @param string $templateScript
-     *
      * @return void
      */
-    protected function setupScriptForDefaultView($templateScript)
+    protected function setupScriptForDefaultView()
     {
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
@@ -492,7 +491,6 @@ $('#has-many-{$this->column}').off('click', '.add').on('click', '.add', function
 
     var template = tpl.html().replace(/{$defaultKey}/g, index);
     $('.has-many-{$this->column}-forms').append(template);
-    {$templateScript}
     return false;
 });
 
@@ -514,7 +512,7 @@ SCRIPT;
      *
      * @return void
      */
-    protected function setupScriptForTabView($templateScript)
+    protected function setupScriptForTabView()
     {
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
@@ -545,7 +543,6 @@ $('#has-many-{$this->column} > .header').off('click', '.add').on('click', '.add'
     $('#has-many-{$this->column} > .nav').append(navTabHtml);
     $('#has-many-{$this->column} > .tab-content').append(paneHtml);
     $('#has-many-{$this->column} > .nav > li:last-child a').tab('show');
-    {$templateScript}
 });
 
 if ($('.has-error').length) {
@@ -569,7 +566,7 @@ SCRIPT;
      *
      * @return void
      */
-    protected function setupScriptForTableView($templateScript)
+    protected function setupScriptForTableView()
     {
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
@@ -591,7 +588,6 @@ $('#has-many-{$this->column}').on('click', '.add', function () {
 
     var template = tpl.html().replace(/{$defaultKey}/g, index);
     $('.has-many-{$this->column}-forms').append(template);
-    {$templateScript}
     return false;
 });
 
@@ -656,10 +652,9 @@ SCRIPT;
         // specify a view to render.
         $this->view = $this->views[$this->viewMode];
 
-        list($template, $script) = $this->buildNestedForm($this->column, $this->builder)
-            ->getTemplateHtmlAndScript();
+        $template = $this->buildNestedForm($this->column, $this->builder)->getTemplate();
 
-        $this->setupScript($script);
+        $this->setupScript();
 
         return parent::fieldRender([
             'forms'        => $this->buildRelatedForms(),
@@ -681,7 +676,6 @@ SCRIPT;
         $headers = [];
         $fields = [];
         $hidden = [];
-        $scripts = [];
 
         /* @var Field $field */
         foreach ($this->buildNestedForm($this->column, $this->builder)->fields() as $field) {
@@ -693,13 +687,6 @@ SCRIPT;
                 $field->setWidth(12, 0);
                 $fields[] = $field->render();
                 $headers[] = $field->label();
-            }
-
-            /*
-             * Get and remove the last script of Admin::$script stack.
-             */
-            if ($field->getScript()) {
-                $scripts[] = array_pop(Admin::$script);
             }
         }
 
@@ -713,7 +700,7 @@ SCRIPT;
         /* Build cell with hidden elements */
         $template .= '<td class="d-none">'.implode('', $hidden).'</td>';
 
-        $this->setupScript(implode("\r\n", $scripts));
+        $this->setupScript();
 
         // specify a view to render.
         $this->view = $this->views[$this->viewMode];

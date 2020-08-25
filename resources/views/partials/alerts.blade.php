@@ -25,7 +25,7 @@
 @endif
 
 @if($info = session()->get('info'))
-    <div class="alert alert-@theme alert-dismissable">
+    <div class="alert alert-@color alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         <h5><i class="icon fa fa-info"></i>{{ \Illuminate\Support\Arr::get($info->get('title'), 0) }}</h5>
         <p>{!!  \Illuminate\Support\Arr::get($info->get('message'), 0) !!}</p>

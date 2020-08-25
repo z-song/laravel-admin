@@ -13,6 +13,6 @@
     </div>
 </div>
 
-<script require="colorpicker">
-    $('{{ $selector }}').parent().colorpicker(@json($options));
+<script require="colorpicker" @script>
+    $(this).parent().colorpicker(@json($options));
 </script>

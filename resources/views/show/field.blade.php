@@ -1,10 +1,10 @@
-<div class="form-group ">
-    <label class="col-sm-{{$width['label']}} control-label">{{ $label }}</label>
-    <div class="col-sm-{{$width['field']}}">
+<div class="form-group row mb-1">
+    <label class="col-{{$width['label']}} control-label text-right">{{ $label }}</label>
+    <div class="col-{{$width['field']}}">
         @if($wrapped)
         <div class="card card-solid no-margin card-show">
             <!-- /.card-header -->
-            <div class="card-body">
+            <div class="card-body p-2">
                 @if($escape)
                     {{ $content }}&nbsp;
                 @else
@@ -21,3 +21,5 @@
         @endif
     </div>
 </div>
+
+

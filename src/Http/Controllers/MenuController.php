@@ -47,7 +47,7 @@ class MenuController extends Controller
                     }
                     $form->hidden('_saved')->default(1);
                     $form->hidden('_form_save')->default(1);
-                    $column->append((new Box(trans('admin.new'), $form))->style(admin_theme()));
+                    $column->append((new Box(trans('admin.new'), $form))->style(admin_color()));
                 });
             });
     }

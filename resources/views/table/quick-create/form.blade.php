@@ -12,7 +12,7 @@
                 &nbsp;{!! $field->render() !!}
             @endforeach
             &nbsp;
-            <button class="btn btn-@theme btn-sm">{{ __('admin.submit') }}</button>&nbsp;
+            <button class="btn btn-@color btn-sm">{{ __('admin.submit') }}</button>&nbsp;
             <a href="javascript:void(0);" class="cancel">{{ __('admin.cancel') }}</a>
             {{ csrf_field() }}
         </form>

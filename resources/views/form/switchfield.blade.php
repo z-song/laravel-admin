@@ -3,17 +3,21 @@
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-        <input type="checkbox" class="@id" {{ $value == $state['on']['value'] ? 'checked' : '' }} {!! $attributes !!} />
+        <input type="checkbox" class="{{ $class }}" {{ $value == $state['on']['value'] ? 'checked' : '' }} {!! $attributes !!} />
 
-        <input type="hidden" class="{{$class}}" name="{{$name}}" value="{{ $value }}" />
+        <input type="hidden" name="{{$name}}" value="{{ $value }}" />
 
         @include('admin::form.help-block')
 
     </div>
 </div>
 
-<script require="toggle">
-    $('.@id').bootstrapToggle().change(function () {
-        $('{{$selector}}').val(this.checked ? '{{ $state['on']['value'] }}':'{{$state['off']['value']}}').trigger('change');
+<script require="toggle" @script>
+    $(this).bootstrapToggle().change(function () {
+        $(this)
+            .parent()
+            .find('input[type=hidden]')
+            .val(this.checked ? '{{ $state['on']['value'] }}':'{{$state['off']['value']}}')
+            .trigger('change');
     });
 </script>

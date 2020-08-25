@@ -1,4 +1,4 @@
-<div class="card card-@theme card-outline">
+<div class="card card-@color card-outline">
     <div class="card-header">
         <h3 class="card-title">Dependencies</h3>
 
@@ -15,7 +15,7 @@
                 @foreach($dependencies as $dependency => $version)
                 <tr>
                     <td width="240px">{{ $dependency }}</td>
-                    <td><span class="label label-@theme">{{ $version }}</span></td>
+                    <td><span class="label label-@color">{{ $version }}</span></td>
                 </tr>
                 @endforeach
             </table>

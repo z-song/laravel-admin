@@ -5,7 +5,7 @@
     <div class="{{$viewClass['field']}}">
         <div class="card-group btn-group-toggle radio-card-group">
             @foreach($options as $option => $label)
-                <label class="card {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?admin_theme('bg-%s'):'' }}">
+                <label class="card {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?admin_color('bg-%s'):'' }}">
                     <div class="card-body">
                     <input type="radio" name="{{$name}}" value="{{$option}}" class="{{$class}} d-none" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
                     </div>
@@ -20,7 +20,7 @@
 
 <script>
     $('.radio-card-group label').click(function () {
-        $(this).addClass('bg-@theme').siblings().removeClass('bg-@theme');
+        $(this).addClass('bg-@color').siblings().removeClass('bg-@color');
     });
 </script>
 

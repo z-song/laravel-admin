@@ -11,8 +11,6 @@
     </div>
 </div>
 
-<script require="bootstrap-input-spinner">
-    $('{{ $selector}}:not(.initialized)')
-        .addClass('initialized')
-        .inputSpinner();
+<script require="bootstrap-input-spinner" @script>
+    $(this).inputSpinner();
 </script>

@@ -9,7 +9,7 @@
         </li>
         <li class="dropdown-divider"></li>
         <li class="dropdown-item text-right">
-            <button class="btn btn-sm btn-@theme column-filter-submit float-left" data-loading-text="{{ __("admin.search") }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __("admin.search") }}</button>
+            <button class="btn btn-sm btn-@color column-filter-submit float-left" data-loading-text="{{ __("admin.search") }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __("admin.search") }}</button>
             <button class="btn btn-sm btn-default column-filter-all" data-loading-text="..."><i class="fa fa-undo"></i></button>
         </li>
     </ul>

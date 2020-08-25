@@ -118,10 +118,19 @@ if (!isset(\$__uniqid)) {
 PHP;
         });
 
-        Blade::directive('theme', function () {
-            $theme = config('admin.theme.color');
+        Blade::directive('color', function () {
+            $color = config('admin.theme.color');
             return <<<PHP
-<?php echo "{$theme}";?>
+<?php echo "{$color}";?>
+PHP;
+        });
+
+        Blade::directive('script', function () {
+            return <<<PHP
+<?php
+    \$vars = get_defined_vars();
+    echo "selector='{\$vars['selector']}' nested='{\$vars['nested']}'";
+?>
 PHP;
         });
     }

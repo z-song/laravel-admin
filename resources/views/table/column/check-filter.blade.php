@@ -5,7 +5,7 @@
     </a>
     <ul class="dropdown-menu" role="menu" style="padding: 10px;box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);left: -70px;border-radius: 0;">
 
-        <li class="dropdown-item checkbox icheck-@theme" style="margin: 0;">
+        <li class="dropdown-item checkbox icheck-@color" style="margin: 0;">
             <input id="@id" type="checkbox" class="{{ $class['all'] }}" {{ $allCheck }}/>
             <label style="width: 100%;padding: 3px;" for="@id">
                 &nbsp;&nbsp;&nbsp;{{ __('admin.all') }}
@@ -13,7 +13,7 @@
         </li>
         <li class="dropdown-divider"></li>
         @foreach($options as $key => $label)
-        <li class="dropdown-item checkbox icheck-@theme" style="margin: 0;">
+        <li class="dropdown-item checkbox icheck-@color" style="margin: 0;">
             <input
                 id="@id"
                 type="checkbox"
@@ -29,7 +29,7 @@
 
         <li class="dropdown-divider"></li>
         <li class="dropdown-item text-right">
-            <button class="btn btn-sm btn-@theme float-left" data-loading-text="{{ __('admin.search') }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __('admin.search') }}</button>
+            <button class="btn btn-sm btn-@color float-left" data-loading-text="{{ __('admin.search') }}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{{ __('admin.search') }}</button>
             <button class="btn btn-sm btn-default" type="reset" data-loading-text="..."><i class="fa fa-undo"></i></button>
         </li>
     </ul>

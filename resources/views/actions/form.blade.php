@@ -77,7 +77,7 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('admin.close') }}</button>
-                        <button type="submit" class="btn btn-@theme">{{ __('admin.submit') }}</button>
+                        <button type="submit" class="btn btn-@color">{{ __('admin.submit') }}</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->

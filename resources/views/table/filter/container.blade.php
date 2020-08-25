@@ -22,7 +22,7 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
                         <div class="btn-group float-left">
-                            <button class="btn btn-@theme submit btn-sm"><i
+                            <button class="btn btn-@color submit btn-sm"><i
                                         class="fa fa-search"></i>&nbsp;&nbsp;{{ trans('admin.search') }}</button>
                         </div>
                         <div class="btn-group float-left " style="margin-left: 10px;">

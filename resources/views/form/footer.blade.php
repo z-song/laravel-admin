@@ -9,7 +9,7 @@
 
         @if(in_array('submit', $buttons))
         <div class="btn-group float-right">
-            <button type="submit" class="btn btn-@theme">{{ trans('admin.submit') }}</button>
+            <button type="submit" class="btn btn-@color">{{ trans('admin.submit') }}</button>
         </div>
 
         @foreach($submit_redirects as $value => $redirect)

@@ -17,7 +17,7 @@ class Edit implements Renderable
     {
         $text = trans('admin.edit');
 
-        return admin_theme(<<<HTML
+        return admin_color(<<<HTML
 <div class="btn-group float-right" style="margin-right: 5px">
     <a href="{$this->path}" class="btn btn-sm btn-%s" title="{$text}">
         <i class="fa fa-edit"></i><span class="hidden-xs"> {$text}</span>

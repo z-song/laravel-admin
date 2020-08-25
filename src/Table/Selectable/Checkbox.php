@@ -12,7 +12,7 @@ class Checkbox extends AbstractDisplayer
 
         $id = uniqid();
 
-        return admin_theme(<<<HTML
+        return admin_color(<<<HTML
 <span class="icheck-%s">
     <input id="selectable-{$id}" type="checkbox" name="item" class="select" value="{$value}"/>
     <label for="selectable-{$id}"></label>

@@ -15,6 +15,6 @@
     </div>
 </div>
 
-<script require="datetimepicker">
-    $('{{ $selector }}').datetimepicker(@json($options));
+<script require="datetimepicker" @script>
+    $(this).datetimepicker(@json($options));
 </script>

@@ -1,19 +1,19 @@
-<div class="card card-@theme card-outline">
+<div class="card card-@color card-outline">
 
     <div class="card-header">
 
         <div class="btn-group">
-            <button class="btn btn-@theme btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ trans('admin.expand') }}">
+            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ trans('admin.expand') }}">
                 <i class="fa fa-plus-square-o"></i>&nbsp;{{ trans('admin.expand') }}
             </button>
-            <button class="btn btn-@theme btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ trans('admin.collapse') }}">
+            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ trans('admin.collapse') }}">
                 <i class="fa fa-minus-square-o"></i>&nbsp;{{ trans('admin.collapse') }}
             </button>
         </div>
 
         @if($useSave)
         <div class="btn-group">
-            <button class="btn btn-@theme btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></button>
+            <button class="btn btn-@color btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></button>
         </div>
         @endif
 

@@ -10,6 +10,6 @@
     </div>
 </div>
 
-<script require="rangeSlider">
-    $('{{ $selector }}').ionRangeSlider(@json($options));
+<script require="rangeSlider" @script>
+    $(this).ionRangeSlider(@json($options));
 </script>

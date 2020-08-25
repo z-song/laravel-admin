@@ -7,7 +7,7 @@
 
         @if($picker)
         <div class="text-right textarea-picker">
-            <button type="button" class="btn btn-@theme text-white" data-toggle="modal" data-target="#{{ $picker->modal }}">
+            <button type="button" class="btn btn-@color text-white" data-toggle="modal" data-target="#{{ $picker->modal }}">
                 <i class="fa fa-folder-open"></i>  {{ admin_trans('admin.browse') }}
             </button>
         </div>

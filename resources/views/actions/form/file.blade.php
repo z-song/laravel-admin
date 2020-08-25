@@ -1,17 +1,14 @@
-@admin_assets('fileinput')
-
 <div class="form-group">
     <label>{{ $label }}</label>
     <input type="file" class="{{$class}}" name="{{$name}}" {!! $attributes !!} />
     @include('admin::actions.form.help-block')
 </div>
 
-<script require="fileinput">
-    var $input = $("input{{ $selector }}");
-    $input.fileinput({!! $options !!});
+<script require="fileinput" selector="{{ $selector }}">
+    $(this).fileinput({!! $options !!});
 
     @if($settings['showRemove'])
-    $input.on('filebeforedelete', function() {
+    $(this).on('filebeforedelete', function() {
         return new Promise(function(resolve, reject) {
             var remove = resolve;
             $.admin.swal.fire({

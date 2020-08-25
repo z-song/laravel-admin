@@ -1,6 +1,6 @@
 <div {!! $attributes !!}>
     @foreach($items as $key => $item)
-    <div class="panel card card-@theme" style="margin-bottom: 0px">
+    <div class="panel card card-@color" style="margin-bottom: 0px">
         <div class="card-header with-border">
             <h4 class="card-title">
                 <a data-toggle="collapse" data-parent="#{{$id}}" href="#collapse{{ $key }}">

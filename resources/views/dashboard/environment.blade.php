@@ -1,4 +1,4 @@
-<div class="card card-@theme card-outline">
+<div class="card card-@color card-outline">
     <div class="card-header with-border">
         <h3 class="card-title">Environment</h3>
 

@@ -19,14 +19,14 @@ class SwitchField extends Field
     /**
      * @var string
      */
-    protected $size;
+    protected $size = 'sm';
 
     /**
      * @var array
      */
     protected $state = [
-        'on'  => ['value'  => 1, 'text' => 'ON'],
-        'off' => ['value'  => 0, 'text' => 'OFF']
+        'on'  => ['value' => 1, 'text' => 'ON', 'style' => ''],
+        'off' => ['value' => 0, 'text' => 'OFF', 'style' => 'default'],
     ];
 
     /**
@@ -40,7 +40,7 @@ class SwitchField extends Field
         $this->state['on'] = [
             'value' => $value,
             'text'  => $text ?: $this->state['on']['text'],
-            'style' => $style ?: admin_theme(),
+            'style' => $style ?: admin_color(),
         ];
 
         return $this;
@@ -89,6 +89,8 @@ class SwitchField extends Field
             'state' => $this->state,
             'size'  => $this->size,
         ]);
+
+        $this->state['on']['style'] = $this->state['on']['style'] ?: admin_color();
 
         $this->attribute([
             'data-onstyle'  => $this->state['on']['style'],

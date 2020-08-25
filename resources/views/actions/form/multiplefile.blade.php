@@ -1,16 +1,11 @@
-<div class="{{$viewClass['form-group']}}">
-
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
-
-    <div class="{{$viewClass['field']}}">
-        <input type="file" class="{{$class}}" name="{{$name}}" {!! $attributes !!} />
-        @include('admin::form.help-block')
-    </div>
+<div class="form-group">
+    <label>{{ $label }}</label>
+    <input type="file" class="{{$class}}" name="{{$name}}[]" {!! $attributes !!} multiple/>
+    @include('admin::actions.form.help-block')
 </div>
 
-<script require="fileinput" @script>
-
-    $(this).fileinput({!! $options !!});
+<script require="fileinput" selector="{{ $selector }}">
+    $(this).fileinput(@json($options));
 
     @if($settings['showRemove'])
     $(this).on('filebeforedelete', function() {
@@ -31,6 +26,16 @@
                 }
             });
         });
+    });
+    @endif
+
+    @if($settings['showDrag'])
+    $(this).on('filesorted', function(event, params) {
+        var order = [];
+        params.stack.forEach(function (item) {
+            order.push(item.key);
+        });
+        $("input{{ $selector }}_sort").val(order);
     });
     @endif
 </script>

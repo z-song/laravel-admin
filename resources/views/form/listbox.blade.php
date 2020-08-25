@@ -14,3 +14,20 @@
 
     </div>
 </div>
+
+<script require="duallistbox" @script>
+    $(this).bootstrapDualListbox(@json($settings));
+    @isset($remote)
+    $.ajax(@json($remote)).done(function(data) {
+        var value = $(this).data('value') + '';
+        if (value) {
+            value = value.split(',');
+        }
+        for (var key in data) {
+            var selected =  ($.inArray(key, value) >= 0) ? 'selected' : '';
+            $(this).append('<option value="'+key+'" '+selected+'>'+data[key]+'</option>');
+        }
+        $(this).bootstrapDualListbox('refresh', true);
+    });
+    @endisset
+</script>

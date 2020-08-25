@@ -4,6 +4,7 @@ namespace Encore\Admin\Traits;
 
 use DOMDocument;
 use DOMElement;
+use Encore\Admin\Form\NestedForm;
 
 trait RenderView
 {
@@ -88,6 +89,23 @@ trait RenderView
         } elseif (!empty(trim($element->nodeValue))) {
             if ($require = $element->getAttribute('require')) {
                 admin_assets(explode(',', $require));
+            }
+
+            if ($selector = $element->getAttribute('selector')) {
+                if ($element->getAttribute('nested')) {
+                    $script = <<<SCRIPT
+;$.admin.initialize('$selector', function () {
+    $(this).addClass('initialized');
+    {$element->nodeValue}
+});
+SCRIPT;
+                } else {
+                    $script = <<<SCRIPT
+;(function () {{$element->nodeValue}}).call($('{$selector}').get(0));
+SCRIPT;
+                }
+
+                return static::script($script);
             }
 
             static::script(';(function () {' . $element->nodeValue . '})();');

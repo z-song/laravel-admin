@@ -29,6 +29,8 @@ class Table extends HasMany
         if (count($arguments) == 2) {
             list($this->label, $this->builder) = $arguments;
         }
+
+        admin_assets('initialize');
     }
 
     /**

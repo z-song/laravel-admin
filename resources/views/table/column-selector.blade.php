@@ -12,7 +12,7 @@
         }
         @endphp
 
-        <li class="dropdown-item icheck-@theme">
+        <li class="dropdown-item icheck-@color">
             <input id="@id" type="checkbox" class="column-select-item" value="{{ $key }}" {{ $checked }}/>
             <label for="@id">{{ $label }}</label>
         </li>
@@ -20,7 +20,7 @@
         <div class="dropdown-divider"></div>
         <li class="dropdown-item">
             <button class="btn btn-sm btn-default column-select-all float-left">{{ __('admin.all') }}</button>&nbsp;&nbsp;
-            <button class="btn btn-sm btn-@theme column-select-submit  float-right">{{ __('admin.submit') }}</button>
+            <button class="btn btn-sm btn-@color column-select-submit  float-right">{{ __('admin.submit') }}</button>
         </li>
     </ul>
 </div>

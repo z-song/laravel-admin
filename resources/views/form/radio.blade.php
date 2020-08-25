@@ -5,7 +5,7 @@
     <div class="{{$viewClass['field']}}">
         @foreach($options as $option => $label)
 
-            {!! $inline ? '<span class="icheck-@theme">' : '<div class="radio icheck-@theme">'  !!}
+            {!! $inline ? '<span class="icheck-@color">' : '<div class="radio icheck-@color">'  !!}
                 <input id="@id" type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />
                 <label for="@id">&nbsp;{{$label}}&nbsp;&nbsp;
                 </label>

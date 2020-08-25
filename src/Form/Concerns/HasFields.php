@@ -58,6 +58,7 @@ use Illuminate\Support\Arr;
  * @method Field\HasMany        morphMany($relationName, $label = '', $callback)
  * @method Field\BelongsTo      belongsTo($column, $selectable, $label = '')
  * @method Field\BelongsToMany  belongsToMany($column, $selectable, $label = '')
+ * @method Field\WangEditor     wangEditor($column, $label = '')
  */
 trait HasFields
 {
@@ -102,6 +103,7 @@ trait HasFields
         'switch'         => Field\SwitchField::class,
         'text'           => Field\Text::class,
         'textarea'       => Field\Textarea::class,
+        'wangEditor'     => Field\WangEditor::class,
         'time'           => Field\Time::class,
         'timeRange'      => Field\TimeRange::class,
         'url'            => Field\Url::class,

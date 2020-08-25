@@ -1,9 +1,9 @@
-<button id="@id" class="icon btn btn-@theme {{ $class }}" data-icon="{{ $value ?: $default }}" name="{{ $name }}"></button>
+<button id="@id" class="icon btn btn-@color {{ $class }}" data-icon="{{ $value ?: $default }}" name="{{ $name }}"></button>
 
-<script require="iconpicker">
-    $('{{ $selector }}').iconpicker({
-        arrowClass: 'btn-@theme',
-        selectedClass: 'btn-@theme',
+<script require="iconpicker" @script>
+    $(this).iconpicker({
+        arrowClass: 'btn-@color',
+        selectedClass: 'btn-@color',
         unselectedClass: '',
         placement: 'right',
     });

@@ -100,6 +100,9 @@ trait HasAssets
      * @var array
      */
     public static $assets = [
+        'initialize' => [
+            'js' => ['/vendor/laravel-admin/jquery.initialize/jquery.initialize.js'],
+        ],
         'nsetable'       => [
             'css' => ['/vendor/laravel-admin/nestable/nestable.css'],
             'js'  => ['/vendor/laravel-admin/nestable/jquery.nestable.js'],
@@ -167,6 +170,9 @@ trait HasAssets
             'css' => ['vendor/laravel-admin/ion-rangeslider/css/ion.rangeSlider.min.css',],
             'js'  => ['vendor/laravel-admin/ion-rangeslider/js/ion.rangeSlider.min.js',],
         ],
+        'wangEditor' => [
+            'js' => '//unpkg.com/wangeditor/release/wangEditor.min.js',
+        ]
     ];
 
     /**

@@ -25,7 +25,7 @@ class SwitchDisplay extends AbstractDisplayer
             Arr::set($this->states, $key, $state);
         }
 
-        $this->states['on']['style'] = $this->states['on']['style'] ?: admin_theme();
+        $this->states['on']['style'] = $this->states['on']['style'] ?: admin_color();
     }
 
     public function display($states = [])

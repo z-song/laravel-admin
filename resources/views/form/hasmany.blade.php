@@ -19,7 +19,7 @@
                 @endforeach
 
                 @if($options['allowDelete'])
-                <div class="form-group">
+                <div class="form-group row">
                     <label class="{{$viewClass['label']}} control-label"></label>
                     <div class="{{$viewClass['field']}}">
                         <div class="remove btn btn-warning btn-sm float-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
@@ -38,7 +38,7 @@
 
             {!! $template !!}
 
-            <div class="form-group">
+            <div class="form-group row">
                 <label class="{{$viewClass['label']}} control-label"></label>
                 <div class="{{$viewClass['field']}}">
                     <div class="remove btn btn-warning btn-sm float-right"><i class="fa fa-trash"></i>&nbsp;{{ trans('admin.remove') }}</div>
@@ -49,7 +49,7 @@
     </template>
 
     @if($options['allowCreate'])
-    <div class="form-group">
+    <div class="form-group row">
         <label class="{{$viewClass['label']}} control-label"></label>
         <div class="{{$viewClass['field']}}">
             <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>

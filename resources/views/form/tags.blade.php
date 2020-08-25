@@ -17,8 +17,8 @@
     </div>
 </div>
 
-<script>
-    $("{{ $selector }}").select2({
+<script require="select2" @script>
+    $(this).select2({
         tags: true,
         tokenSeparators: @json($separators),
         createTag: function(params) {
@@ -30,7 +30,9 @@
             }
         }
     });
+</script>
 
+<script>
     $(document).off('keyup', '.select2-selection--multiple .select2-search__field').on('keyup', '.select2-selection--multiple .select2-search__field', function (event) {
         try {
             if (event.keyCode == 13) {

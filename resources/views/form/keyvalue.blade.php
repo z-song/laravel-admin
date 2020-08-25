@@ -96,3 +96,21 @@
     </tr>
 </template>
 </template>
+
+
+<script>
+    $('.{{ $column }}-add').on('click', function () {
+        var tpl = $('template.{{ $column }}-tpl').html();
+        $('tbody.kv-{{ $column }}-table').append(tpl);
+    });
+
+    $('tbody').on('click', '.{{ $column }}-remove', function () {
+        $(this).closest('tr').remove();
+    });
+</script>
+
+<style>
+    td .form-group {
+        margin-bottom: 0 !important;
+    }
+</style>

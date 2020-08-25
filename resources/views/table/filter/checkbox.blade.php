@@ -1,6 +1,6 @@
 <div class="input-group">
     @foreach($options as $option => $label)
-        {!! $inline ? admin_theme('<span class="icheck-%s">') : admin_theme('<div class="checkbox icheck-%s">') !!}
+        {!! $inline ? admin_color('<span class="icheck-%s">') : admin_color('<div class="checkbox icheck-%s">') !!}
         <input
             id="@id"
             type="checkbox"

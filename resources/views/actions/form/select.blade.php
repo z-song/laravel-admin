@@ -1,5 +1,3 @@
-@admin_assets('select2')
-
 <div class="form-group">
     <label>{{ $label }}</label>
 
@@ -13,3 +11,6 @@
     @include('admin::actions.form.help-block')
 </div>
 
+<script require="select2" selector="{{ $selector }}">
+    $(this).select2(@json($configs));
+</script>

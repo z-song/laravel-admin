@@ -13,12 +13,11 @@
     </div>
 </div>
 
-<script require="fileinput">
-    var $input = $("input{{ $selector }}");
-    $input.fileinput(@json($options));
+<script require="fileinput" @script>
+    $(this).fileinput(@json($options));
 
     @if($settings['showRemove'])
-    $input.on('filebeforedelete', function() {
+    $(this).on('filebeforedelete', function() {
         return new Promise(function(resolve, reject) {
             var remove = resolve;
             $.admin.swal.fire({
@@ -40,7 +39,7 @@
     @endif
 
     @if($settings['showDrag'])
-    $input.on('filesorted', function(event, params) {
+    $(this).on('filesorted', function(event, params) {
         var order = [];
         params.stack.forEach(function (item) {
             order.push(item.key);

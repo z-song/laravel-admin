@@ -29,7 +29,7 @@
         <div class="input-group">
             <input {!! $attributes !!} />
             <span class="input-group-append">
-                <button type="button" class="btn btn-@theme text-white" data-toggle="modal" data-target="#{{ $picker->modal }}">
+                <button type="button" class="btn btn-@color text-white" data-toggle="modal" data-target="#{{ $picker->modal }}">
                     <i class="fa fa-folder-open"></i>  {{ admin_trans('admin.browse') }}
                 </button>
             </span>

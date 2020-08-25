@@ -44,7 +44,7 @@ class PermissionController extends AdminController
                 $method = collect($method)->map(function ($name) {
                     return strtoupper($name);
                 })->map(function ($name) {
-                    return admin_theme("<span class='label label-%s'>{$name}</span>");
+                    return admin_color("<span class='label label-%s'>{$name}</span>");
                 })->implode('&nbsp;');
 
                 if (!empty(config('admin.route.prefix'))) {
@@ -96,7 +96,7 @@ class PermissionController extends AdminController
                 $method = collect($method)->map(function ($name) {
                     return strtoupper($name);
                 })->map(function ($name) {
-                    return admin_theme("<span class='label label-%s'>{$name}</span>");
+                    return admin_color("<span class='label label-%s'>{$name}</span>");
                 })->implode('&nbsp;');
 
                 if (!empty(config('admin.route.prefix'))) {

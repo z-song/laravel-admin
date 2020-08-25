@@ -252,6 +252,11 @@ class Field implements Renderable
     public $isJsonType = false;
 
     /**
+     * @var bool
+     */
+    protected $nested = false;
+
+    /**
      * Field constructor.
      *
      * @param       $column
@@ -1161,6 +1166,14 @@ class Field implements Renderable
     }
 
     /**
+     * Mark this field as in-nested form.
+     */
+    public function setNested()
+    {
+        $this->nested = true;
+    }
+
+    /**
      * @return array
      */
     public function getViewElementClasses(): array
@@ -1396,6 +1409,7 @@ class Field implements Renderable
             'errorKey'    => $this->getErrorKey(),
             'attributes'  => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),
+            'nested'      => (int) $this->nested,
         ]);
     }
 
@@ -1427,16 +1441,6 @@ class Field implements Renderable
         $this->view = $view;
 
         return $this;
-    }
-
-    /**
-     * Get script of current field.
-     *
-     * @return string
-     */
-    public function getScript(): string
-    {
-        return $this->script;
     }
 
     /**
@@ -1510,7 +1514,9 @@ class Field implements Renderable
             $this->value = $this->callback->call($this->form->model(), $this->value, $this);
         }
 
-        Admin::script($this->script);
+        if ($this->script) {
+            Admin::script($this->script);
+        }
 
         return Admin::view($this->getView(), $this->variables());
     }
