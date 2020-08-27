@@ -99,7 +99,7 @@
 
     $.delete = function (options) {
         options.type = 'POST';
-        Object.assign(options.data, {_method: 'DELETE'});
+        options.data = {_method: 'DELETE'};
 
         return $.ajax(options);
     };
@@ -553,7 +553,7 @@
         if (typeof $.initialize !== 'undefined') {
             $.initialize(selector+':not(.initialized)', callback);
         } else {
-           callback.call($(selector).get(0));
+            callback.call($(selector).get(0));
         }
     };
 
