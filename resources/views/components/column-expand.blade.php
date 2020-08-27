@@ -51,7 +51,6 @@
     });
 
     $(document).on('pjax:click', '.collapse a.pjax, .collapse a.pjax', function (e) {
-        console.log(11111);
         // load($(this).attr('href'), $(this).parent('.collapse'));
         e.preventDefault();
         return false;

@@ -20,7 +20,7 @@ class Captcha extends Text
         $this->label = trans('admin.captcha');
     }
 
-    public function setForm(Form $form = null)
+    public function setForm($form = null)
     {
         $this->form = $form;
         $this->form->ignore($this->column);

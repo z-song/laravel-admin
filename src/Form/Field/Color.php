@@ -46,6 +46,8 @@ class Color extends Text
      */
     public function render()
     {
+        $this->attribute('autocomplete', 'off');
+
         $this->addVariables(['options' => $this->options]);
 
         return parent::render();

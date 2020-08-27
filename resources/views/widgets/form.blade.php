@@ -7,7 +7,7 @@
     </div>
 
     @if ($method != 'GET' && !$ajax)
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        {{ csrf_field() }}
     @endif
 
     <!-- /.card-body -->
@@ -64,7 +64,6 @@
             cache: false,
             processData: false,
             success: function (data) {
-                console.log(data);
                 if (typeof data != 'object') {
                     $.admin.toastr.error('Oops something went wrong!');
                 }

@@ -25,7 +25,7 @@
     {!! $table->renderHeader() !!}
 
     <!-- /.card-header -->
-    <div class="card-body table-responsive no-padding">
+    <div class="card-body table-responsive p-0">
         <div class="tables-container">
             @if($table->leftVisibleColumns()->isNotEmpty())
                 <div class="table-wrap table-fixed table-fixed-left">

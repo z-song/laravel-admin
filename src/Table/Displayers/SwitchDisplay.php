@@ -40,6 +40,14 @@ class SwitchDisplay extends AbstractDisplayer
             'name'     => $this->getPayloadName(),
             'states'   => $this->states,
             'checked'  => $this->states['on']['value'] == $this->getValue() ? 'checked' : '',
+            'options'  => [
+                'size'     => 'xs',
+                'width'    => 60,
+                'on'       => $this->states['on']['text'],
+                'off'      => $this->states['off']['text'],
+                'onstyle'  => $this->states['on']['style'],
+                'offstyle' => $this->states['off']['style']
+            ]
         ]);
     }
 }

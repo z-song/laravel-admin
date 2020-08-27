@@ -100,8 +100,9 @@ trait RenderView
 });
 SCRIPT;
                 } else {
+                    $obj = $element->getAttribute('all') ? "$('{$selector}')" : "$('{$selector}').get(0)";
                     $script = <<<SCRIPT
-;(function () {{$element->nodeValue}}).call($('{$selector}').get(0));
+;(function () {{$element->nodeValue}}).call({$obj});
 SCRIPT;
                 }
 

@@ -281,12 +281,7 @@ class Form implements Renderable
             $attributes['enctype'] = 'multipart/form-data';
         }
 
-        $html = [];
-        foreach ($attributes as $key => $val) {
-            $html[] = "$key=\"$val\"";
-        }
-
-        return implode(' ', $html) ?: '';
+        return admin_attrs($attributes);
     }
 
     /**

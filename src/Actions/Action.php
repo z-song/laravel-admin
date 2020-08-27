@@ -171,13 +171,7 @@ abstract class Action implements Renderable
      */
     protected function formatAttributes()
     {
-        $html = [];
-
-        foreach ($this->attributes as $name => $value) {
-            $html[] = $name.'="'.e($value).'"';
-        }
-
-        return implode(' ', $html);
+        return admin_attrs($this->attributes);
     }
 
     /**

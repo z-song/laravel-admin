@@ -39,8 +39,7 @@
             data: $(this).serialize(),
         }).done(function (data, textStatus, jqXHR) {
             if (data.status == true) {
-                $.admin.toastr.success(data.message);
-                $.admin.reload();
+                $.admin.reload(data.message);
                 return;
             }
 

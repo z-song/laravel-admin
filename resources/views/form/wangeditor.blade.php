@@ -1,4 +1,4 @@
-<div class="{{$viewClass['form-group']}}">
+<div {!! admin_attrs($group_attrs) !!}>
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
@@ -16,6 +16,7 @@
             {!! $attributes !!} >
             {!! $value !!}
         </textarea>
+        @include('admin::form.error')
         @include('admin::form.help-block')
     </div>
 </div>

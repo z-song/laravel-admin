@@ -97,6 +97,8 @@ class SwitchField extends Field
             'data-offstyle' => $this->state['off']['style'],
             'data-on'       => $this->state['on']['text'],
             'data-off'      => $this->state['off']['text'],
+            'data-onval'    => $this->state['on']['value'],
+            'data-offval'   => $this->state['off']['value'],
             'data-size'     => $this->size,
             'data-width'    => 80,
         ]);

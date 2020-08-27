@@ -79,7 +79,7 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-4">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        {{ csrf_field() }}
                         <button type="submit" class="btn btn-@color btn-block">
                             {{ trans('admin.login') }}
                         </button>

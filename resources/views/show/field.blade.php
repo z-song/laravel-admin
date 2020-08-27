@@ -2,7 +2,7 @@
     <label class="col-{{$width['label']}} control-label text-right">{{ $label }}</label>
     <div class="col-{{$width['field']}}">
         @if($wrapped)
-        <div class="card card-solid no-margin card-show">
+        <div class="card card-solid m-0 card-show">
             <!-- /.card-header -->
             <div class="card-body p-2">
                 @if($escape)

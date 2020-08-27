@@ -361,3 +361,18 @@ if (!function_exists('json_encode_options')) {
         return str_replace($data['toReplace'], $data['original'], $json);
     }
 }
+
+
+if (!function_exists('admin_attrs')) {
+
+    function admin_attrs(array $attributes = [])
+    {
+        $str = [];
+
+        foreach ($attributes as $name => $value) {
+            $str[] = "$name=\"$value\"";
+        }
+
+        return implode(' ', $str);
+    }
+}

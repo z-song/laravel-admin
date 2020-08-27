@@ -1,4 +1,5 @@
-
+@php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))
+<div class="form-group" {!! admin_attrs($group_attrs) !!}>
 <div class="row">
     <div class="{{$viewClass['label']}}"><h4 class="float-right">{{ $label }}</h4></div>
     <div class="{{$viewClass['field']}}"></div>
@@ -21,3 +22,4 @@
 </div>
 
 <hr style="margin-top: 0px;">
+</div>

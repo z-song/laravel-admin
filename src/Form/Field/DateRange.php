@@ -76,6 +76,8 @@ class DateRange extends Field
             'end_options'   => array_merge($this->options, ['useCurrent' => false]),
         ]);
 
+        $this->attribute(['autocomplete' => 'off']);
+
         return parent::render();
     }
 }

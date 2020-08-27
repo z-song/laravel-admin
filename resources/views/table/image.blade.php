@@ -3,7 +3,7 @@
 
     {!! $table->renderFilter() !!}
 
-    <div class="card-body table-responsive no-padding">
+    <div class="card-body table-responsive p-0">
         <ul class="image clearfix">
             @foreach($table->rows() as $row)
             <li class="d-inline-block">

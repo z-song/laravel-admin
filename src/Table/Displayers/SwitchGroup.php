@@ -23,7 +23,7 @@ class SwitchGroup extends SwitchDisplay
             $html[] = $this->buildSwitch($column, $label);
         }
 
-        return '<table>'.implode('', $html).'</table>';
+        return '<table>' . implode('', $html) . '</table>';
     }
 
     protected function buildSwitch($name, $label = '')
@@ -37,6 +37,14 @@ class SwitchGroup extends SwitchDisplay
             'states'   => $this->states,
             'checked'  => $this->states['on']['value'] == $this->getAttribute($name) ? 'checked' : '',
             'label'    => $label,
+            'options'  => [
+                'size'     => 'xs',
+                'width'    => 60,
+                'on'       => $this->states['on']['text'],
+                'off'      => $this->states['off']['text'],
+                'onstyle'  => $this->states['on']['style'],
+                'offstyle' => $this->states['off']['style']
+            ]
         ]);
     }
 }

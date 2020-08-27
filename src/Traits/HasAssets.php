@@ -125,12 +125,14 @@ trait HasAssets
             'css' => [
                 'vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=5.1.3',
             ],
-            'js'  => [
+            'dep' => [
                 'vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=5.1.3',
+            ],
+            'js'  => [
+                'vendor/laravel-admin/bootstrap-fileinput/themes/fas/theme.min.js',
                 'vendor/laravel-admin/bootstrap-fileinput/js/plugins/piexif.min.js?v=5.1.3',
                 'vendor/laravel-admin/bootstrap-fileinput/js/plugins/purify.min.js?v=5.1.3',
                 'vendor/laravel-admin/bootstrap-fileinput/js/plugins/sortable.min.js?v=5.1.3',
-                'vendor/laravel-admin/bootstrap-fileinput/themes/fas/theme.min.js',
             ],
         ],
         'datetimepicker'=> [
@@ -171,7 +173,7 @@ trait HasAssets
             'js'  => ['vendor/laravel-admin/ion-rangeslider/js/ion.rangeSlider.min.js',],
         ],
         'wangEditor' => [
-            'js' => '//unpkg.com/wangeditor/release/wangEditor.min.js',
+            'js' => 'https://cdn.jsdelivr.net/npm/wangeditor@3.1.1/release/wangEditor.min.js',
         ]
     ];
 

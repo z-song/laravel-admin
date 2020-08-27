@@ -29,7 +29,7 @@
 
     </div>
     <!-- /.card-header -->
-    <div class="card-body table-responsive no-padding">
+    <div class="card-body p-0">
         <div class="dd" id="{{ $id }}">
             <ol class="dd-list">
                 @each($branchView, $items, 'branch')
@@ -55,15 +55,10 @@
             cancelButtonText: "{{ admin_trans('admin.cancel') }}",
             preConfirm: function() {
                 return new Promise(function(resolve) {
-                    $.ajax({
-                        method: 'POST',
+                    $.delete({
                         url: '{{ $url }}/' + id,
-                        data: {
-                            _method:'delete',
-                        }
                     }).done(function (data) {
-                        $.pjax.reload('#pjax-container');
-                        $.admin.toastr.success('{{ admin_trans('admin.delete_succeeded') }}');
+                        $.admin.reload('{{ admin_trans('admin.delete_succeeded') }}');
                         resolve(data);
                     });
                 });
@@ -71,11 +66,7 @@
         }).then(function(result) {
             var data = result.value;
             if (typeof data === 'object') {
-                if (data.status) {
-                    $.admin.swal.fire(data.message, '', 'success');
-                } else {
-                    $.admin.swal.fire(data.message, '', 'error');
-                }
+                $.admin.toastr.show(data);
             }
         });
     });
@@ -87,8 +78,7 @@
                 _order: JSON.stringify(serialize)
             },
             function(data){
-                $.pjax.reload('#pjax-container');
-                $.admin.toastr.success('{{ admin_trans('admin.save_succeeded') }}');
+                $.admin.reload('{{ admin_trans('admin.save_succeeded') }}');
             });
     });
 

@@ -516,12 +516,7 @@ class Builder
             $attributes['enctype'] = 'multipart/form-data';
         }
 
-        $html = [];
-        foreach ($attributes as $name => $value) {
-            $html[] = "$name=\"$value\"";
-        }
-
-        return '<form '.implode(' ', $html).' pjax-container>';
+        return '<form '.admin_attrs($attributes).'>';
     }
 
     /**
@@ -580,7 +575,7 @@ class Builder
      * @return string
      */
     public function renderTools(): string
-    { 
+    {
         return $this->tools->render();
     }
 
@@ -602,6 +597,8 @@ class Builder
     public function render(): string
     {
         $this->removeReservedFields();
+
+//        dd($this->fields());
 
         return Admin::view($this->view, [
             'form'   => $this,

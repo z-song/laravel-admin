@@ -26,8 +26,7 @@ $(document).off('keydown').keydown(function(e) {
 
     switch(e.which) {
         case 82: // `r` for reload
-            $.admin.reload();
-            $.admin.toastr.success('{$refreshMessage}');
+            $.admin.reload('{$refreshMessage}');
             break;
         case 83: // `s` for search
             \$box.find('input.table-quick-search').trigger('focus');

@@ -1,4 +1,4 @@
-<div class="{{$viewClass['form-group']}}">
+<div {!! admin_attrs($group_attrs) !!}>
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
         <div class="input-group" style="width: 300px;">
@@ -7,6 +7,7 @@
                 <span class="input-group-append">{!! $append !!}</span>
             @endif
         </div>
+        @include('admin::form.error')
         @include('admin::form.help-block')
     </div>
 </div>

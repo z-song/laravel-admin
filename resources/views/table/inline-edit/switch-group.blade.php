@@ -3,32 +3,16 @@
     <td class="p-1 border-0"><input type="checkbox" class="{{ $class }}" {{ $checked }} data-key="{{ $key }}" /></td>
 </tr>
 
-<script require="toggle">
-    $('.{{ $class }}').bootstrapToggle({
-        size:'xs',
-        width: 60,
-        on: '{{ $states['on']['text'] }}',
-        off: '{{ $states['off']['text'] }}',
-        onstyle: '{{ $states['on']['style'] }}',
-        offstyle: '{{ $states['off']['style'] }}'
-    }).change(function() {
-
+<script require="toggle" selector=".{{ $class }}" all="1">
+    $(this).bootstrapToggle(@json($options)).change(function() {
         var key = $(this).data('key');
         var value = this.checked ? '{{ $states['on']['value'] }}' : '{{ $states['off']['value'] }}';
 
-        $.ajax({
+        $.put({
             url: "{{ $resource }}/" + key,
-            type: "POST",
-            data: {
-                "{{ $name }}": value,
-                _method: 'PUT'
-            },
+            data: {"{{ $name }}": value,},
         }).done(function (data) {
-            if (data.status) {
-                $.admin.toastr.success(data.message);
-            } else {
-                $.admin.toastr.warning(data.message);
-            }
+            $.admin.toastr.show(data);
         });
     });
 </script>

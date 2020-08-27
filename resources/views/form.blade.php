@@ -23,11 +23,11 @@
                     @endforeach
                 @else
                     @foreach($layout->columns() as $column)
-                        <div class="col-md-{{ $column->width() }}">
+{{--                        <div class="col-md-{{ $column->width() }}">--}}
                             @foreach($column->fields() as $field)
                                 {!! $field->render() !!}
                             @endforeach
-                        </div>
+{{--                        </div>--}}
                     @endforeach
                 @endif
             </div>
@@ -38,6 +38,8 @@
 
     {!! $form->renderFooter() !!}
 
+    {{ csrf_field() }}
+
     @foreach($form->getHiddenFields() as $field)
         {!! $field->render() !!}
     @endforeach
@@ -45,13 +47,6 @@
 <!-- /.card-footer -->
     {!! $form->close() !!}
 </div>
-
-<script>
-    $('form.{{ $class }}').submit(function (e) {
-        e.preventDefault();
-        $(this).find('div.cascade-group.d-none :input').attr('disabled', true);
-    });
-</script>
 
 @if(!$tabObj->isEmpty())
 <script>
@@ -78,10 +73,10 @@
 @endif
 
 @if($confirm)
-<script>
-    $('form.{{ $class }} button[type=submit]').click(function (e) {
+<script selector="form.{{ $class }}">
+    var $form = $(this);
+    $form.find('button[type=submit]').click(function (e) {
         e.preventDefault();
-        var form = $(this).parents('form');
         $.admin.swal.fire({
             title: "{{ $confirm }}",
             icon: "warning",
@@ -91,71 +86,14 @@
             cancelButtonText: "{{ trans('admin.cancel') }}",
         }).then(function (result) {
             if (result.value) {
-                form.submit();
+                $form.submit();
             }
         });
     });
 </script>
 @endif
 
-<script>
-    $('form.{{ $class }}').on('submit', function (e) {
-        e.preventDefault();
-
-        $form = $(this);
-
-        var data = new FormData(this);
-        data.append('_form_save', true);
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: $(this).attr('method'),
-            data: data,
-            contentType: false,
-            cache: false,
-            processData: false,
-            statusCode: {
-                422: function(xhr) {
-                    $form.find('.is-invalid').removeClass('is-invalid');
-                    $form.find('.validation-error').remove();
-
-                    for(var field in xhr.responseJSON.validation) {
-                        var name = 'field-'+field.replace(/\./, '_');
-                        var $el = $('.form-control.'+name);
-                        $el.addClass('is-invalid');
-
-                        xhr.responseJSON.validation[field].forEach(function (error, index) {
-                            $el.closest('.col-sm-8').prepend('<label class="col-form-label validation-error text-danger">' +
-                                '<i class="fas fa-bell"></i>' +
-                                error+'</label>');
-                        });
-                    }
-                }
-            },
-            success: function (data) {
-                if (typeof data != 'object') {
-                    $.admin.toastr.error('Oops something went wrong!');
-                }
-
-                if (data.status === true) {
-                    if (data.message) {
-                        $.admin.toastr.success(data.message);
-                    }
-
-                    if (data.refresh === true) {
-                        $.admin.reload();
-                    }
-
-                    if (data.redirect) {
-                        $.admin.redirect(data.redirect);
-                    }
-                } else {
-                    $.admin.toastr.error(data.message);
-                }
-            }
-        });
-
-        return false;
-    });
+<script selector="form.{{ $class }}">
+    $.admin.initForm($(this));
 </script>
 

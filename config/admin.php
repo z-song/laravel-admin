@@ -377,10 +377,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | The global Grid action display class.
+    | The global Table action display class.
     |--------------------------------------------------------------------------
     */
-    'grid_action_class' => \Encore\Admin\Table\Displayers\DropdownActions::class,
+    'table_action_class' => \Encore\Admin\Table\Displayers\DropdownActions::class,
 
     /*
     |--------------------------------------------------------------------------

@@ -225,12 +225,7 @@ class Column
      */
     public function formatHtmlAttributes()
     {
-        $attrArr = [];
-        foreach (static::getAttributes($this->name) as $name => $val) {
-            $attrArr[] = "$name=\"$val\"";
-        }
-
-        return implode(' ', $attrArr);
+        return admin_attrs(static::getAttributes($this->name));
     }
 
     /**

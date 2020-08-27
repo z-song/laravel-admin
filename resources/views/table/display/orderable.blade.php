@@ -13,10 +13,14 @@
         var key = $(this).data('id');
         var direction = $(this).data('direction');
 
-        $.post('{!! $resource !!}/' + key, {_method: 'PUT', _orderable: direction}, function (data) {
+        $.put({
+            url:'{!! $resource !!}/' + key,
+            data: {_orderable: direction}
+        }).done(function (data) {
             if (data.status) {
-                $.pjax.reload('#pjax-container');
-                $.admin.toastr.success(data.message);
+                $.admin.reload(data.message);
+            } else {
+                $.admin.toastr.warning(data.message);
             }
         });
     });

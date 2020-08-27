@@ -70,7 +70,7 @@ class Row
      */
     public function getRowAttributes()
     {
-        return $this->formatHtmlAttribute($this->attributes);
+        return admin_attrs($this->attributes);
     }
 
     /**
@@ -83,27 +83,10 @@ class Row
     public function getColumnAttributes($column)
     {
         if ($attributes = Column::getAttributes($column, $this->getKey())) {
-            return $this->formatHtmlAttribute($attributes);
+            return admin_attrs($attributes);
         }
 
         return '';
-    }
-
-    /**
-     * Format attributes to html.
-     *
-     * @param array $attributes
-     *
-     * @return string
-     */
-    private function formatHtmlAttribute($attributes = [])
-    {
-        $attrArr = [];
-        foreach ($attributes as $name => $val) {
-            $attrArr[] = "$name=\"$val\"";
-        }
-
-        return implode(' ', $attrArr);
     }
 
     /**

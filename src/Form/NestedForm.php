@@ -53,6 +53,8 @@ use Illuminate\Support\Collection;
  */
 class NestedForm
 {
+    use Form\Concerns\HandleCascadeFields;
+
     const DEFAULT_KEY_NAME = '__LA_KEY__';
 
     const REMOVE_FLAG_NAME = '_remove_';
@@ -325,6 +327,8 @@ class NestedForm
      */
     public function pushField(Field $field)
     {
+        $field->setForm($this);
+
         $this->fields->push($field);
 
         return $this;
@@ -423,7 +427,7 @@ class NestedForm
             /* @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
-            $field->setForm($this->form)->setNested();
+            $field->setForm($this)->setNested();
 
             return tap($this->formatField($field), function ($field) {
                 $this->pushField($field);

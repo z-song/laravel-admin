@@ -57,20 +57,4 @@
     }
 </style>
 
-<script>
-    $(document).on('click', '.ie-action .ie-cancel', function () {
-        $('[data-editinline="popover"]').popover('hide');
-    });
-
-    $('body').on('click', function (e) {
-        if ($(e.target).data('toggle') !== 'popover'
-            && $(e.target).parents('[data-editinline="popover"]').length === 0
-            && $(e.target).parents('.popover.show').length === 0
-            && !$(e.target).is('.popover.show'))
-        {
-            $('[data-editinline="popover"]').popover('hide');
-        }
-    });
-</script>
-
 @yield('assert')

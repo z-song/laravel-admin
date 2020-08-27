@@ -1,4 +1,4 @@
-<div class="{{$viewClass['form-group']}}">
+<div {!! admin_attrs($group_attrs) !!}>
 
     <label for="{{$id['lat']}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 

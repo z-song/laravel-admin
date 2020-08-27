@@ -31,8 +31,7 @@ $('input.inline-upload').on('change', function () {
         enctype: 'multipart/form-data',
         data: formData,
     }).done(function (data) {
-        $.admin.toastr.success(data.message);
-        $.admin.reload();
+        $.admin.reload(data.message);
     });
 });
 </script>

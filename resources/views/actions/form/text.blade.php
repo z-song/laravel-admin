@@ -13,7 +13,6 @@
 
 @if($inputmask)
     <script require="inputmask" selector="{{ $selector }}">
-        console.log(this);
         $(this).inputmask({!! json_encode_options($inputmask)  !!});
     </script>
 @endif

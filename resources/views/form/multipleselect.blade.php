@@ -1,6 +1,4 @@
-@admin_assets('select2')
-
-<div class="{{$viewClass['form-group']}}">
+<div {!! admin_attrs($group_attrs) !!}>
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
@@ -12,6 +10,7 @@
         </select>
         <input type="hidden" name="{{$name}}[]" />
 
+        @include('admin::form.error')
         @include('admin::form.help-block')
 
     </div>

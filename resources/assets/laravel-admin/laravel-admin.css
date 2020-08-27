@@ -159,7 +159,7 @@ a.editable-empty {
 
 .select2-container--default .select2-selection--multiple {
     border: 1px solid #d2d6de !important;
-    border-radius: 0 !important;
+    border-radius: 0.25rem !important;
 }
 
 .select2-container--default .select2-selection--multiple:focus {

@@ -1,9 +1,10 @@
-<div class="{{$viewClass['form-group']}}">
+<div {!! admin_attrs($group_attrs) !!}>
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-        <input type="file" class="{{$class}}" name="{{$name}}" {!! $attributes !!} />
+        <input type="file" class="form-control {{$class}}" name="{{$name}}" {!! $attributes !!} />
+        @include('admin::form.error')
         @include('admin::form.help-block')
     </div>
 </div>

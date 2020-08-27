@@ -91,10 +91,10 @@ class Embeds extends Field
              */
             if (is_array($column)) {
                 foreach ($column as $key => $name) {
-                    $rules["{$this->column}.$name$key"] = $fieldRules;
+                    $rules["{$this->column}.$name"] = $fieldRules;
                 }
 
-                $this->resetInputKey($input, $column);
+//                $this->resetInputKey($input, $column);
             } else {
                 $rules["{$this->column}.$column"] = $fieldRules;
             }
@@ -175,27 +175,27 @@ class Embeds extends Field
      *
      * @return void.
      */
-    public function resetInputKey(array &$input, array $column)
-    {
-        $column = array_flip($column);
-
-        foreach ($input[$this->column] as $key => $value) {
-            if (!array_key_exists($key, $column)) {
-                continue;
-            }
-
-            $newKey = $key.$column[$key];
-
-            /*
-             * set new key
-             */
-            Arr::set($input, "{$this->column}.$newKey", $value);
-            /*
-             * forget the old key and value
-             */
-            Arr::forget($input, "{$this->column}.$key");
-        }
-    }
+//    public function resetInputKey(array &$input, array $column)
+//    {
+//        $column = array_flip($column);
+//
+//        foreach ($input[$this->column] as $key => $value) {
+//            if (!array_key_exists($key, $column)) {
+//                continue;
+//            }
+//
+//            $newKey = $key.$column[$key];
+//
+//            /*
+//             * set new key
+//             */
+//            Arr::set($input, "{$this->column}.$newKey", $value);
+//            /*
+//             * forget the old key and value
+//             */
+//            Arr::forget($input, "{$this->column}.$key");
+//        }
+//    }
 
     /**
      * Get data for Embedded form.

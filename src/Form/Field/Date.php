@@ -38,9 +38,11 @@ class Date extends Text
         ], $this->options);
 
         $this->addVariables([
-                'icon'    => $this->icon,
-                'options' => $this->options
-            ]);
+            'icon'    => $this->icon,
+            'options' => $this->options
+        ]);
+
+        $this->attribute(['autocomplete' => 'off']);
 
         return parent::render();
     }

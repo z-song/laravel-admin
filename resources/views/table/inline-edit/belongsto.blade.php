@@ -56,13 +56,9 @@
     var $related = null;
 
     var update = function (callback) {
-        $.ajax({
+        $.put({
             url: "{{ $resource }}/" + $related.attr('key'),
-            type: "POST",
-            data: {
-                '{{ $name }}': selected,
-                _method: 'PUT'
-            },
+            data: {'{{ $name }}': selected,},
         }).done(function (data) {
             callback(data);
         });
