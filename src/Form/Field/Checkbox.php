@@ -122,7 +122,7 @@ $('.{$checkAllClass}').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifCh
     } else {
         $('{$this->getElementClassSelector()}').iCheck('uncheck');
     }
-})
+});
 SCRIPT;
             $this->addVariables(['checkAllClass' => $checkAllClass]);
         }
