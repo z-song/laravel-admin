@@ -35,16 +35,10 @@ class MenuController extends Controller
                     $form->ajax();
 
                     $menuModel = config('admin.database.menu_model');
-                    $permissionModel = config('admin.database.permissions_model');
-                    $roleModel = config('admin.database.roles_model');
 
                     $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
                     $form->text('uri', trans('admin.uri'));
-                    $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
-                    if ((new $menuModel())->withPermission()) {
-                        $form->select('permission', trans('admin.permission'))->options($permissionModel::pluck('name', 'slug'));
-                    }
                     $form->hidden('_saved')->default(1);
                     $form->hidden('_form_save')->default(1);
                     $column->append((new Box(trans('admin.new'), $form))->style(admin_color()));
@@ -118,8 +112,6 @@ class MenuController extends Controller
     public function form()
     {
         $menuModel = config('admin.database.menu_model');
-        $permissionModel = config('admin.database.permissions_model');
-        $roleModel = config('admin.database.roles_model');
 
         $form = new Form(new $menuModel());
 
@@ -128,10 +120,6 @@ class MenuController extends Controller
         $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
         $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
         $form->text('uri', trans('admin.uri'));
-        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
-        if ($form->model()->withPermission()) {
-            $form->select('permission', trans('admin.permission'))->options($permissionModel::pluck('name', 'slug'));
-        }
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

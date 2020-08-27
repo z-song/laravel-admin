@@ -40,9 +40,7 @@ class UsersTest extends TestCase
         // assign role to user
         $this->visit('admin/auth/users/2/edit')
             ->see('Edit')
-            ->submitForm('Submit', ['roles' => [1]])
-            ->seePageIs('admin/auth/users')
-            ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 1]);
+            ->seePageIs('admin/auth/users');
 
         $this->visit('admin/auth/logout')
             ->dontSeeIsAuthenticated('admin')
@@ -55,9 +53,6 @@ class UsersTest extends TestCase
         $this->assertTrue($this->app['auth']->guard('admin')->getUser()->isAdministrator());
 
         $this->see('<span>Users</span>')
-            ->see('<span>Roles</span>')
-            ->see('<span>Permission</span>')
-            ->see('<span>Operation log</span>')
             ->see('<span>Menu</span>');
     }
 
@@ -65,7 +60,7 @@ class UsersTest extends TestCase
     {
         $this->visit('admin/auth/users/'.$this->user->id.'/edit')
             ->see('Create')
-            ->submitForm('Submit', ['name' => 'test', 'roles' => [1]])
+            ->submitForm('Submit', ['name' => 'test'])
             ->seePageIs('admin/auth/users')
             ->seeInDatabase(config('admin.database.users_table'), ['name' => 'test']);
     }
@@ -77,7 +72,6 @@ class UsersTest extends TestCase
         $data = [
             'password'              => $password,
             'password_confirmation' => $password,
-            'roles'                 => [1],
         ];
 
         $this->visit('admin/auth/users/'.$this->user->id.'/edit')

@@ -30,7 +30,6 @@ class UserController extends AdminController
         $table->column('id', 'ID')->sortable();
         $table->column('username', trans('admin.username'));
         $table->column('name', trans('admin.name'));
-        $table->column('roles', trans('admin.roles'))->pluck('name')->label();
         $table->column('created_at', trans('admin.created_at'));
         $table->column('updated_at', trans('admin.updated_at'));
 
@@ -65,12 +64,6 @@ class UserController extends AdminController
         $show->field('id', 'ID');
         $show->field('username', trans('admin.username'));
         $show->field('name', trans('admin.name'));
-        $show->field('roles', trans('admin.roles'))->as(function ($roles) {
-            return $roles->pluck('name');
-        })->label();
-        $show->field('permissions', trans('admin.permissions'))->as(function ($permission) {
-            return $permission->pluck('name');
-        })->label();
         $show->field('created_at', trans('admin.created_at'));
         $show->field('updated_at', trans('admin.updated_at'));
 
@@ -85,8 +78,6 @@ class UserController extends AdminController
     public function form()
     {
         $userModel = config('admin.database.users_model');
-        $permissionModel = config('admin.database.permissions_model');
-        $roleModel = config('admin.database.roles_model');
 
         $form = new Form(new $userModel());
 
@@ -107,9 +98,6 @@ class UserController extends AdminController
             });
 
         $form->ignore(['password_confirmation']);
-
-        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
-        $form->multipleSelect('permissions', trans('admin.permissions'))->options($permissionModel::all()->pluck('name', 'id'));
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

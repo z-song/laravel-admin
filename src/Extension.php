@@ -2,7 +2,6 @@
 
 namespace Encore\Admin;
 
-use Encore\Admin\Models\Permission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
@@ -49,11 +48,6 @@ abstract class Extension
     public $menu = [];
 
     /**
-     * @var array
-     */
-    public $permission = [];
-
-    /**
      * Extension instance.
      *
      * @var Extension
@@ -70,17 +64,6 @@ abstract class Extension
         'path'     => 'required',
         'icon'     => 'required',
         'children' => 'nullable|array',
-    ];
-
-    /**
-     * The permission validation rules.
-     *
-     * @var array
-     */
-    protected $permissionValidationRules = [
-        'name'  => 'required',
-        'slug'  => 'required',
-        'path'  => 'required',
     ];
 
     /**
@@ -182,14 +165,6 @@ abstract class Extension
     }
 
     /**
-     * @return array
-     */
-    public function permission()
-    {
-        return $this->permission;
-    }
-
-    /**
      * Whether the extension is enabled.
      *
      * @return bool
@@ -231,30 +206,18 @@ abstract class Extension
     }
 
     /**
-     * Import menu item and permission to laravel-admin.
+     * Import menu item to laravel-admin.
      */
     public static function import()
     {
         $extension = static::getInstance();
+
         DB::transaction(function () use ($extension) {
             if ($menu = $extension->menu()) {
                 if ($extension->validateMenu($menu)) {
                     extract($menu);
                     $children = Arr::get($menu, 'children', []);
                     static::createMenu($title, $path, $icon, 0, $children);
-                }
-            }
-            if ($permission = $extension->permission()) {
-                $name = Arr::get($permission, 'name', null);
-                if (null !== $name) {
-                    $permission = [$permission];
-                }
-                foreach ($permission as $item) {
-                    if ($extension->validatePermission($item)) {
-                        $method = [];
-                        extract($item);
-                        static::createPermission($name, $slug, implode("\r\n", $path), $method);
-                    }
                 }
             }
         });
@@ -295,50 +258,6 @@ abstract class Extension
             'path'     => ['required', Rule::unique(Config::get('admin.database.menu_table'), 'uri')],
             'icon'     => 'required',
             'children' => 'nullable|array',
-        ];
-    }
-
-    /**
-     * Validate permission fields.
-     *
-     * @param array $permission
-     *
-     * @throws \Exception
-     *
-     * @return bool
-     */
-    public function validatePermission(array $permission)
-    {
-        if (!empty($permission['method'])) {
-            $permission['method'] = array_map('strtoupper', $permission['method']);
-        }
-
-        /** @var \Illuminate\Validation\Validator $validator */
-        $validator = Validator::make($permission, $this->getPermissionValidationRules());
-
-        if ($validator->passes()) {
-            return true;
-        }
-
-        $message = "Invalid permission:\r\n".implode("\r\n", Arr::flatten($validator->errors()->messages()));
-
-        throw new \Exception($message);
-    }
-
-    /**
-     * Get permission validation rules.
-     *
-     * @return array
-     */
-    protected function getPermissionValidationRules()
-    {
-        return [
-            'name'     => 'required',
-            'slug'     => ['required', Rule::unique(Config::get('admin.database.permissions_table'), 'slug')],
-            'path'     => 'required|array',
-            'path.*'   => 'string',
-            'method'   => 'nullable|array',
-            'method.*' => ['string', Rule::in(Permission::$httpMethods)],
         ];
     }
 
@@ -384,26 +303,6 @@ abstract class Extension
         }
 
         return $menu;
-    }
-
-    /**
-     * Create a permission for this extension.
-     *
-     * @param       $name
-     * @param       $slug
-     * @param       $path
-     * @param array $methods
-     */
-    protected static function createPermission($name, $slug, $path, $methods = [])
-    {
-        $permissionModel = config('admin.database.permissions_model');
-
-        $permissionModel::create([
-            'name'        => $name,
-            'slug'        => $slug,
-            'http_path'   => '/'.trim($path, '/'),
-            'http_method' => $methods,
-        ]);
     }
 
     /**

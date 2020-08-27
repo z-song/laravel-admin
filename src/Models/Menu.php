@@ -27,7 +27,7 @@ class Menu extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'order', 'title', 'icon', 'uri', 'permission'];
+    protected $fillable = ['parent_id', 'order', 'title', 'icon', 'uri'];
 
     /**
      * Create a new Eloquent model instance.
@@ -46,20 +46,6 @@ class Menu extends Model
     }
 
     /**
-     * A Menu belongs to many roles.
-     *
-     * @return BelongsToMany
-     */
-    public function roles(): BelongsToMany
-    {
-        $pivotTable = config('admin.database.role_menu_table');
-
-        $relatedModel = config('admin.database.roles_model');
-
-        return $this->belongsToMany($relatedModel, $pivotTable, 'menu_id', 'role_id');
-    }
-
-    /**
      * @return array
      */
     public function allNodes(): array
@@ -71,21 +57,7 @@ class Menu extends Model
 
         $query = static::query();
 
-        if (config('admin.check_menu_roles') !== false) {
-            $query->with('roles');
-        }
-
         return $query->selectRaw('*, '.$orderColumn.' ROOT')->orderByRaw($byOrder)->get()->toArray();
-    }
-
-    /**
-     * determine if enable menu bind permission.
-     *
-     * @return bool
-     */
-    public function withPermission()
-    {
-        return (bool) config('admin.menu_bind_permission');
     }
 
     /**
@@ -96,9 +68,5 @@ class Menu extends Model
     protected static function boot()
     {
         static::treeBoot();
-
-        static::deleting(function ($model) {
-            $model->roles()->detach();
-        });
     }
 }

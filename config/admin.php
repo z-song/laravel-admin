@@ -173,38 +173,10 @@ return [
         'users_table' => 'admin_users',
         'users_model' => Encore\Admin\Models\Administrator::class,
 
-        // Role table and model.
-        'roles_table' => 'admin_roles',
-        'roles_model' => Encore\Admin\Models\Role::class,
-
-        // Permission table and model.
-        'permissions_table' => 'admin_permissions',
-        'permissions_model' => Encore\Admin\Models\Permission::class,
-
         // Menu table and model.
         'menu_table' => 'admin_menu',
         'menu_model' => Encore\Admin\Models\Menu::class,
-
-        // Pivot table for table above.
-        'user_permissions_table' => 'admin_user_permissions',
-        'role_users_table'       => 'admin_role_users',
-        'role_permissions_table' => 'admin_role_permissions',
-        'role_menu_table'        => 'admin_role_menu',
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Indicates whether to check route permission.
-    |--------------------------------------------------------------------------
-    */
-    'check_route_permission' => true,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Indicates whether to check menu roles.
-    |--------------------------------------------------------------------------
-    */
-    'check_menu_roles'       => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -335,15 +307,6 @@ return [
     |
     */
     'show_environment' => true,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Menu bind to permission
-    |--------------------------------------------------------------------------
-    |
-    | whether enable menu bind to a permission
-    */
-    'menu_bind_permission' => true,
 
     /*
     |--------------------------------------------------------------------------
