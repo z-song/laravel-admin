@@ -9,7 +9,7 @@
                 <div id="grid-collapse-{{ $name }}" class="collapse">
                     <div style="padding: 10px 10px 0 10px;" class="html">
                         @if($html)
-                            {{ $html }}
+                            {!! $html !!}
                         @else
                             <div class="loading text-center" style="padding: 20px 0px;">
                                 <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
