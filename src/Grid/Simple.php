@@ -22,11 +22,12 @@ class Simple implements Renderable
 
     /**
      * @param null $key
+     *
      * @return string
      */
     public function render($key = null)
     {
-        $this->grid = new Grid(new $this->model);
+        $this->grid = new Grid(new $this->model());
 
         $this->make($key);
 
@@ -39,13 +40,13 @@ class Simple implements Renderable
             ->disablePerPageSelector()
             ->paginate(10)
             ->expandFilter()
-            ->render()
-        ;
+            ->render();
     }
 
     /**
      * @param string $name
      * @param array  $arguments
+     *
      * @return mixed
      */
     public function __call($name, $arguments)

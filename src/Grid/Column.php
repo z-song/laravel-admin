@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Grid;
 
-use Carbon\Carbon;
 use Closure;
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Grid;
@@ -15,9 +14,9 @@ use Illuminate\Support\Str;
 
 class Column
 {
-    use Column\HasHeader,
-        Column\InlineEditing,
-        Column\ExtendDisplay;
+    use Column\HasHeader;
+    use Column\InlineEditing;
+    use Column\ExtendDisplay;
 
     const SELECT_COLUMN_NAME = '__row_selector__';
 

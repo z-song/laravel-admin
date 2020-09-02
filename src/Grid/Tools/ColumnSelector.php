@@ -47,7 +47,7 @@ class ColumnSelector extends AbstractTool
      */
     public static function ignore($name)
     {
-        static::$ignored = array_merge(static::$ignored, (array)$name);
+        static::$ignored = array_merge(static::$ignored, (array) $name);
     }
 
     /**

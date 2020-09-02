@@ -6,7 +6,8 @@ use Encore\Admin\Form\Field;
 
 class Text extends Field
 {
-    use PlainInput, HasValuePicker;
+    use PlainInput;
+    use HasValuePicker;
 
     /**
      * @var string

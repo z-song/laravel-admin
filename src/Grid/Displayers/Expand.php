@@ -27,7 +27,7 @@ class Expand extends AbstractDisplayer
         return Admin::component('admin::components.column-expand', [
             'key'           => $this->getKey(),
             'url'           => $this->getLoadUrl(),
-            'name'          => str_replace('.', '-', $this->getName()) . '-' . $this->getKey(),
+            'name'          => str_replace('.', '-', $this->getName()).'-'.$this->getKey(),
             'html'          => $html,
             'value'         => $this->value,
             'async'         => $async,

@@ -45,6 +45,7 @@ abstract class Selectable
 
     /**
      * Selectable constructor.
+     *
      * @param $key
      * @param $multiple
      */
