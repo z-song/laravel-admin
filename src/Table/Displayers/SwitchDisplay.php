@@ -34,7 +34,7 @@ class SwitchDisplay extends AbstractDisplayer
 
         // @see vendor/encore/laravel-admin/resources/views/table/inline-edit/switch.blade.php
         return Admin::view('admin::table.inline-edit.switch', [
-            'class'    => 'table-switch-' . str_replace('.', '-', $this->getName()),
+            'class'    => 'table-switch-'.str_replace('.', '-', $this->getName()),
             'key'      => $this->getKey(),
             'resource' => $this->getResource(),
             'name'     => $this->getPayloadName(),
@@ -46,8 +46,8 @@ class SwitchDisplay extends AbstractDisplayer
                 'on'       => $this->states['on']['text'],
                 'off'      => $this->states['off']['text'],
                 'onstyle'  => $this->states['on']['style'],
-                'offstyle' => $this->states['off']['style']
-            ]
+                'offstyle' => $this->states['off']['style'],
+            ],
         ]);
     }
 }

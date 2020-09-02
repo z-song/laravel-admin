@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Table\Filter\Presenter;
 
-use Encore\Admin\Facades\Admin;
 use Illuminate\Contracts\Support\Arrayable;
 
 class Radio extends Presenter

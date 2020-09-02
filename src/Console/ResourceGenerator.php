@@ -15,8 +15,8 @@ class ResourceGenerator
      * @var array
      */
     protected $formats = [
-        'form_field'  => "\$form->%s('%s', __('%s'))",
-        'show_field'  => "\$show->field('%s', __('%s'))",
+        'form_field'   => "\$form->%s('%s', __('%s'))",
+        'show_field'   => "\$show->field('%s', __('%s'))",
         'table_column' => "\$table->column('%s', __('%s'))",
     ];
 

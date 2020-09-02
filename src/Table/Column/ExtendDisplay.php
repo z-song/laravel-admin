@@ -9,7 +9,7 @@ use Encore\Admin\Table\Model;
 use Illuminate\Support\Arr;
 
 /**
- * Trait ExtendDisplay
+ * Trait ExtendDisplay.
  *
  * @method $this image($server = '', $width = 200, $height = 200)
  * @method $this label($style = 'success')
@@ -149,7 +149,7 @@ trait ExtendDisplay
 
     /**
      * @param string|Closure $input
-     * @param string $seperator
+     * @param string         $seperator
      *
      * @return $this
      */
@@ -301,6 +301,7 @@ trait ExtendDisplay
      * Display column as a default value if empty.
      *
      * @param string $default
+     *
      * @return $this
      */
     public function default($default = '-')

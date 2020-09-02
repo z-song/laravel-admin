@@ -23,7 +23,7 @@ return [
 
         'image' => '/vendor/laravel-admin/AdminLTE/img/AdminLTELogo.png',
 
-        'text' => '<span class="font-weight-bolder">Laravel-admin</span>'
+        'text' => '<span class="font-weight-bolder">Laravel-admin</span>',
     ],
 
     /*

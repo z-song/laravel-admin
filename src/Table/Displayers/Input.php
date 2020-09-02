@@ -11,7 +11,7 @@ class Input extends AbstractDisplayer
         if ($mask) {
             admin_assets('inputmask');
         }
-        
+
         return Admin::view('admin::table.inline-edit.input', [
             'key'      => $this->getKey(),
             'value'    => $this->getValue(),

@@ -17,8 +17,8 @@ trait HasElementNames
      * @var array
      */
     protected $elementNames = [
-//        'table_row'        => 'table-row',
-//        'table_select_all' => 'table-select-all',
+        //        'table_row'        => 'table-row',
+        //        'table_select_all' => 'table-select-all',
         'table_per_page'   => 'table-per-pager',
         'table_batch'      => 'table-batch',
         'export_selected'  => 'export-selected',

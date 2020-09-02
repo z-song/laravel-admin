@@ -197,7 +197,7 @@ class QuickCreate implements Renderable
 
     /**
      * @param string $column
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return Field\Hidden
      */

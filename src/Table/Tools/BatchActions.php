@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Table\Tools;
 
-use Encore\Admin\Admin;
 use Encore\Admin\Actions\BatchAction;
+use Encore\Admin\Admin;
 use Encore\Admin\Table\Actions\BatchDelete;
 use Illuminate\Support\Collection;
 

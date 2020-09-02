@@ -100,8 +100,10 @@ class Dialog extends Interactor
 
     /**
      * @param array $data
-     * @return mixed|string
+     *
      * @throws \Throwable
+     *
+     * @return mixed|string
      */
     public function addScript($data = [])
     {

@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Table;
 
-use Encore\Admin\Table;
 use Encore\Admin\Http\Middleware\Pjax;
+use Encore\Admin\Table;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -96,7 +96,7 @@ class Model
      * Create a new table model instance.
      *
      * @param EloquentModel $model
-     * @param Table          $table
+     * @param Table         $table
      */
     public function __construct(EloquentModel $model, Table $table = null)
     {

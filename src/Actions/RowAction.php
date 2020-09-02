@@ -146,7 +146,7 @@ abstract class RowAction extends TableAction
 
     public function getElementClass()
     {
-        return parent::getElementClass() . ' dropdown-item';
+        return parent::getElementClass().' dropdown-item';
     }
 
     /**

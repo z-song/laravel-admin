@@ -84,7 +84,7 @@ trait HasHooks
 
                 if ($response instanceof RedirectResponse) {
                     return \response([
-                        'status' => true,
+                        'status'   => true,
                         'redirect' => $response->getTargetUrl(),
                     ]);
                 }

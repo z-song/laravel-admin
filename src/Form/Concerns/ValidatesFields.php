@@ -10,6 +10,7 @@ trait ValidatesFields
 {
     /**
      * @param array $input
+     *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     protected function validateErrorResponse($input)

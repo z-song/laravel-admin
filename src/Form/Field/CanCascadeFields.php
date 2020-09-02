@@ -107,7 +107,7 @@ trait CanCascadeFields
      */
     protected function applyCascadeConditions()
     {
-        if($this->form) {
+        if ($this->form) {
             $this->form->fields()
                 ->filter(function (Form\Field $field) {
                     return $field instanceof CascadeGroup
@@ -241,7 +241,7 @@ var checked = $('{$this->getElementClassSelector()}:checked').map(function(){
 }).get();
 SCRIPT;
             case $this instanceof SwitchField:
-                return <<<SCRIPT
+                return <<<'SCRIPT'
 var checked = this.checked ? $(this).data('onval') : $(this).data('offval');
 SCRIPT;
             case $this instanceof Radio:

@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Actions\_List;
 use Encore\Admin\Form\Actions\Action;
 use Encore\Admin\Form\Actions\Delete;
@@ -19,7 +18,7 @@ class Tools implements Renderable
     protected $form;
 
     /**
-     * @var Collection 
+     * @var Collection
      */
     protected $default;
 

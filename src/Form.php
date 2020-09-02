@@ -25,12 +25,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Form implements Renderable
 {
-    use Concerns\HasHooks,
-        Concerns\HasFields,
-        Concerns\HasResponse,
-        Concerns\ValidatesFields,
-        Concerns\HandleCascadeFields,
-        ShouldSnakeAttributes;
+    use Concerns\HasHooks;
+    use Concerns\HasFields;
+    use Concerns\HasResponse;
+    use Concerns\ValidatesFields;
+    use Concerns\HandleCascadeFields;
+    use ShouldSnakeAttributes;
     /**
      * Remove flag in `has many` form.
      */
@@ -307,7 +307,6 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
-
             if (in_array($column, ['_token', '_saved', '_method'])) {
                 continue;
             }

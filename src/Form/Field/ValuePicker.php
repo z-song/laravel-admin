@@ -43,15 +43,15 @@ class ValuePicker
      *
      * @param string $selecteable
      * @param string $column
-     * @param bool $multiple
+     * @param bool   $multiple
      * @param string $separator
      */
     public function __construct($selecteable, $column = '', $multiple = false, $separator = ';')
     {
         $this->selecteable = $selecteable;
-        $this->column      = $column;
-        $this->multiple    = $multiple;
-        $this->separator   = $separator;
+        $this->column = $column;
+        $this->multiple = $multiple;
+        $this->separator = $separator;
     }
 
     /**
@@ -90,6 +90,7 @@ class ValuePicker
 
     /**
      * @param string $field
+     *
      * @return array|\Illuminate\Support\Collection
      */
     public function getPreview(string $field)

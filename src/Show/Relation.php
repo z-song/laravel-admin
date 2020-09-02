@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Show;
 
-use Encore\Admin\Table;
 use Encore\Admin\Show;
+use Encore\Admin\Table;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

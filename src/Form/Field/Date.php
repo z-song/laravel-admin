@@ -33,13 +33,13 @@ class Date extends Text
             'locale'           => $this->options['locale'] ?? config('app.locale'),
             'allowInputToggle' => true,
             'icons'            => [
-                'time' => 'fas fa-clock'
-            ]
+                'time' => 'fas fa-clock',
+            ],
         ], $this->options);
 
         $this->addVariables([
             'icon'    => $this->icon,
-            'options' => $this->options
+            'options' => $this->options,
         ]);
 
         $this->attribute(['autocomplete' => 'off']);

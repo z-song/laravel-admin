@@ -37,7 +37,7 @@ class ExportSeedCommand extends Command
         $contents = $this->getStub('AdminTablesSeeder');
 
         $replaces = [
-            'DummyClass' => $name,
+            'DummyClass'      => $name,
             'ClassMenu'       => config('admin.database.menu_model'),
             'ArrayMenu'       => $this->getTableDataArrayAsString(config('admin.database.menu_table'), $exceptFields),
         ];

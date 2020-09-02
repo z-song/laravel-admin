@@ -102,14 +102,14 @@ PHP;
         });
 
         Blade::directive('id', function () {
-            return <<<PHP
+            return <<<'PHP'
 <?php
-if (!isset(\$__uniqid)) {
-    \$__uniqid = uniqid();
-    echo \$__uniqid;
+if (!isset($__uniqid)) {
+    $__uniqid = uniqid();
+    echo $__uniqid;
 } else {
-    echo \$__uniqid;
-    unset(\$__uniqid);
+    echo $__uniqid;
+    unset($__uniqid);
 }
 ?>
 PHP;
@@ -117,16 +117,17 @@ PHP;
 
         Blade::directive('color', function () {
             $color = config('admin.theme.color');
+
             return <<<PHP
 <?php echo "{$color}";?>
 PHP;
         });
 
         Blade::directive('script', function () {
-            return <<<PHP
+            return <<<'PHP'
 <?php
-    \$vars = get_defined_vars();
-    echo "selector='{\$vars['selector']}' nested='{\$vars['nested']}'";
+    $vars = get_defined_vars();
+    echo "selector='{$vars['selector']}' nested='{$vars['nested']}'";
 ?>
 PHP;
         });

@@ -16,6 +16,7 @@ class Listbox extends MultipleSelect
 
     /**
      * @param array $settings
+     *
      * @return $this
      */
     public function settings(array $settings)
@@ -64,7 +65,7 @@ class Listbox extends MultipleSelect
         ], $this->settings);
 
         $this->addVariables([
-            'options' => $this->getOptions(),
+            'options'  => $this->getOptions(),
             'settings' => $settings,
         ])->attribute('data-value', implode(',', (array) $this->value()));
 

@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Table\Column;
 
-use Encore\Admin\Table\Column;
 use Encore\Admin\Table\Displayers;
 
 trait InlineEditing
