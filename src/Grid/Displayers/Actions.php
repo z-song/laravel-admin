@@ -36,7 +36,7 @@ class Actions extends AbstractDisplayer
     protected $disableAll = false;
 
     /**
-     * diy translate
+     * diy translate.
      *
      * @var array
      */
