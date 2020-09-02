@@ -58,7 +58,7 @@
     var update = function (callback) {
         $.put({
             url: "{{ $resource }}/" + $related.attr('key'),
-            data: {'{{ $name }}': selected,},
+            data: {'{{ $name }}': selected, __inline_edit: 1},
         }).done(function (data) {
             callback(data);
         });

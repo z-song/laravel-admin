@@ -1,91 +1,77 @@
-<form {!! $attributes !!}>
-    <div class="card-body fields-group">
-        @foreach($fields as $field)
-            {!! $field->render() !!}
-        @endforeach
+<div class="card card-outline card-@color">
 
-    </div>
-
-    @if ($method != 'GET' && !$ajax)
-        {{ csrf_field() }}
-    @endif
-
-    <!-- /.card-body -->
-    @if(count($buttons) > 0)
-    <div class="card-footer row">
-        <div class="col-md-{{$width['label']}}"></div>
-
-        <div class="col-md-{{$width['field']}}">
-            @if(in_array('reset', $buttons))
-            <div class="btn-group float-left">
-                <button type="reset" class="btn btn-warning float-right">{{ trans('admin.reset') }}</button>
-            </div>
-            @endif
-
-            @if(in_array('submit', $buttons))
-            <div class="btn-group float-right">
-                <button type="submit" class="btn btn-@color float-right">{{ trans('admin.submit') }}</button>
-            </div>
-            @endif
+    <div class="card-header">
+        <h3 class="card-title">{{ $title }}</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
         </div>
     </div>
-    @endif
-</form>
 
-<script>
-    var $form = $('form#{{ $id }}');
-    $form.submit(function (e) {
-        e.preventDefault();
-        var form = $(this);
-        $(this).find('div.cascade-group.d-none :input').attr('disabled', true);
+    <form {!! $attributes !!}>
+        <div class="card-body">
+            @foreach($fields as $field)
+                {!! $field->render() !!}
+            @endforeach
+        </div>
 
-        @if($confirm)
-        $.admin.swal({
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: '{{ trans('admin.submit') }}',
-            cancelButtonText: '{{ trans('admin.cancel') }}',
-            title: '{{ $confirm }}',
-            text: ''
-        }).then(function (result) {
-            if (result.value == true) {
-                form.submit();
-            }
-        });
+        <!-- /.card-body -->
+        @if(count($buttons) > 0)
+        <div class="card-footer row">
+            <div class="col-{{$width['label']}}"></div>
+
+            <div class="col-{{$width['field']}}">
+                @if(in_array('reset', $buttons))
+                <div class="btn-group float-left">
+                    <button type="reset" class="btn btn-warning float-right">{{ trans('admin.reset') }}</button>
+                </div>
+                @endif
+
+                @if(in_array('submit', $buttons))
+                <div class="btn-group float-right">
+                    <button type="submit" class="btn btn-@color float-right">{{ trans('admin.submit') }}</button>
+                </div>
+                @endif
+            </div>
+        </div>
         @endif
+    </form>
+</div>
 
-        @if($ajax)
-        var data = new FormData(this);
-        $.ajax({
-            type: 'POST',
-            url: form.attr('action'),
-            data: data,
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (data) {
-                if (typeof data != 'object') {
-                    $.admin.toastr.error('Oops something went wrong!');
+<div class="card card-outline card-@color d-none form-result">
+    <div class="card-header">
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+    <div class="card-body">
+    </div>
+</div>
+
+@if($confirm)
+    <script selector="form#{{ $id }}">
+        var $form = $(this);
+        $form.find('button[type=submit]').click(function (e) {
+            e.preventDefault();
+            $.admin.swal.fire({
+                title: "{{ $confirm }}",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "{{ trans('admin.confirm') }}",
+                cancelButtonText: "{{ trans('admin.cancel') }}",
+            }).then(function (result) {
+                if (result.value) {
+                    $form.submit();
                 }
-
-                if (data.status === true) {
-                    if (data.message) {
-                        $.admin.toastr.success(data.message);
-                    }
-
-                    if (data.refresh === true) {
-                        $.admin.reload();
-                    }
-
-                    if (data.redirect) {
-                        $.admin.redirect(data.redirect);
-                    }
-                } else {
-                    $.admin.toastr.error(data.message);
-                }
-            }
+            });
         });
-        return false;
-        @endif
-    });
+    </script>
+@endif
+
+<script selector="form#{{ $id }}">
+    $.admin.initForm($(this));
 </script>

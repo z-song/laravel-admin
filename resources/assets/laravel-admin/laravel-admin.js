@@ -197,7 +197,6 @@
             $form.find('.cascade-group.d-none :input').attr('disabled', true);
 
             var data = new FormData(this);
-            data.append('_form_save', true);
 
             $.ajax({
                 url: $form.attr('action'),
@@ -352,6 +351,10 @@
 
         if (data.refresh === true) {
             $.admin.reload();
+        }
+
+        if (data.result) {
+            $('.card.form-result').removeClass('d-none').find('.card-body').html(data.result);
         }
 
         if (data.redirect) {
@@ -553,7 +556,7 @@
         if (typeof $.initialize !== 'undefined') {
             $.initialize(selector+':not(.initialized)', callback);
         } else {
-            callback.call($(selector).get(0));
+           callback.call($(selector).get(0));
         }
     };
 

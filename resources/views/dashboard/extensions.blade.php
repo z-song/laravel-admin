@@ -9,7 +9,7 @@
     }
 </style>
 <div class="card card-@color card-outline">
-    <div class="card-header with-border">
+    <div class="card-header">
         <h3 class="card-title">Available extensions</h3>
 
         <div class="card-tools">

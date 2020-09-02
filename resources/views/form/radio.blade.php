@@ -12,7 +12,7 @@
                     name="{{$name}}"
                     value="{{$option}}"
                     class="minimal {{$class}}"
-                    {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }}
+                    {{ ($option == $value) || ($value === null && in_array($label, $checked)) ?'checked':'' }}
                     {!! $attributes !!}
                 />
                 <label for="@id">&nbsp;{{$label}}&nbsp;&nbsp;</label>

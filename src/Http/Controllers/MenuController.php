@@ -31,8 +31,8 @@ class MenuController extends Controller
 
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
+                    $form->title(trans('admin.new'));
                     $form->action(admin_url('auth/menu'));
-                    $form->ajax();
 
                     $menuModel = config('admin.database.menu_model');
 
@@ -40,8 +40,8 @@ class MenuController extends Controller
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
                     $form->text('uri', trans('admin.uri'));
                     $form->hidden('_saved')->default(1);
-                    $form->hidden('_form_save')->default(1);
-                    $column->append((new Box(trans('admin.new'), $form))->style(admin_color()));
+
+                    $column->append($form);
                 });
             });
     }

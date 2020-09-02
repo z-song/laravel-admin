@@ -75,11 +75,11 @@
         var serialize = $('#{{ $id }}').nestable('serialize');
 
         $.post('{{ $url }}', {
-                _order: JSON.stringify(serialize)
-            },
-            function(data){
-                $.admin.reload('{{ admin_trans('admin.save_succeeded') }}');
-            });
+            _order: JSON.stringify(serialize)
+        },
+        function(data){
+            $.admin.reload('{{ admin_trans('admin.save_succeeded') }}');
+        });
     });
 
     $('.{{ $id }}-tree-tools').on('click', function(e){

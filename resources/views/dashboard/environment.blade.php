@@ -1,5 +1,5 @@
 <div class="card card-@color card-outline">
-    <div class="card-header with-border">
+    <div class="card-header">
         <h3 class="card-title">Environment</h3>
 
         <div class="card-tools">

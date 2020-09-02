@@ -38,7 +38,7 @@
             type: 'POST',
             data: $(this).serialize(),
         }).done(function (data, textStatus, jqXHR) {
-            if (data.status == true) {
+            if (data.status) {
                 $.admin.reload(data.message);
                 return;
             }

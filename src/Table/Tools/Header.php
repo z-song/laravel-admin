@@ -58,7 +58,7 @@ class Header extends AbstractTool
         }
 
         return <<<HTML
-    <div class="box-header with-border clearfix">
+    <div class="card-header clearfix">
         {$content}
     </div>
 HTML;

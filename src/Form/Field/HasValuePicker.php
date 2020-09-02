@@ -72,7 +72,7 @@ trait HasValuePicker
             ->attribute('type', 'text')
             ->attribute('id', $this->id)
             ->attribute('name', $this->elementName ?: $this->formatName($this->column))
-            ->attribute('value', old($this->elementName ?: $this->column, $this->value()))
+            ->attribute('value', $this->value())
             ->attribute('class', 'form-control '.$this->getElementClassString())
             ->attribute('placeholder', $this->getPlaceholder())
             ->addVariables([

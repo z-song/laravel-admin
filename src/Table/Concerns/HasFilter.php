@@ -58,10 +58,6 @@ trait HasFilter
      */
     public function applyFilter($toArray = true)
     {
-        if ($this->builder) {
-            call_user_func($this->builder, $this);
-        }
-
         return $this->filter->execute($toArray);
     }
 

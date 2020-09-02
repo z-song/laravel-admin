@@ -38,27 +38,13 @@ class Table extends HasMany
      */
     protected function buildRelatedForms()
     {
-//        if (is_null($this->form)) {
-//            return [];
-//        }
-
         $forms = [];
 
-        if ($values = old($this->column)) {
-            foreach ($values as $key => $data) {
-                if ($data[NestedForm::REMOVE_FLAG_NAME] == 1) {
-                    continue;
-                }
-
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)->fill($data);
+        foreach ($this->value ?? [] as $key => $data) {
+            if (isset($data['pivot'])) {
+                $data = array_merge($data, $data['pivot']);
             }
-        } else {
-            foreach ($this->value ?? [] as $key => $data) {
-                if (isset($data['pivot'])) {
-                    $data = array_merge($data, $data['pivot']);
-                }
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)->fill($data);
-            }
+            $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key)->fill($data);
         }
 
         return $forms;

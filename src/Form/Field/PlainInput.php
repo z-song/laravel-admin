@@ -40,13 +40,13 @@ trait PlainInput
         return $this;
     }
 
+    /**
+     * @param string $text
+     * @return $this
+     */
     public function prependText($text)
     {
-        if (empty($this->prepend)) {
-            $this->prepend = "<span class=\"input-group-text\">{$text}</span>";
-        }
-
-        return $this;
+        return $this->prepend("<span class=\"input-group-text\">{$text}</span>");
     }
 
     /**
@@ -60,6 +60,16 @@ trait PlainInput
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return $this
+     */
+    public function appendText($text)
+    {
+        return $this->append("<span class=\"input-group-text\">{$text}</span>");
     }
 
     /**

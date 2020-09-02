@@ -208,10 +208,6 @@ class Embeds extends Field
      */
     protected function getEmbeddedData()
     {
-        if ($old = old($this->column)) {
-            return $old;
-        }
-
         if (empty($this->value)) {
             return [];
         }

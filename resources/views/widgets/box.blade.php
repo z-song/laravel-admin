@@ -1,6 +1,6 @@
 <div {!! $attributes !!}>
     @if($title || $tools)
-        <div class="card-header with-border">
+        <div class="card-header">
             <h3 class="card-title">{{ $title }}</h3>
             <div class="card-tools float-right">
                 @foreach($tools as $tool)

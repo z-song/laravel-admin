@@ -1,5 +1,5 @@
 <div class="card card-@color card-outline">
-    <div class="card-header with-border">
+    <div class="card-header">
         <h3 class="card-title">{{ $form->title() }}</h3>
 
         <div class="card-tools">
@@ -37,8 +37,6 @@
     <!-- /.card-body -->
 
     {!! $form->renderFooter() !!}
-
-    {{ csrf_field() }}
 
     @foreach($form->getHiddenFields() as $field)
         {!! $field->render() !!}

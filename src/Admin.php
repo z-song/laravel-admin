@@ -4,16 +4,11 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Models\Menu;
-use Encore\Admin\Http\Controllers\AuthController;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Traits\BuiltinRoutes;
 use Encore\Admin\Traits\HasAssets;
 use Encore\Admin\Traits\RenderView;
 use Encore\Admin\Widgets\Navbar;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use InvalidArgumentException;
 
 /**
  * Class Admin.
@@ -80,24 +75,6 @@ class Admin
     }
 
     /**
-     * @param $model
-     *
-     * @return mixed
-     */
-    public function getModel($model)
-    {
-        if ($model instanceof Model) {
-            return $model;
-        }
-
-        if (is_string($model) && class_exists($model)) {
-            return $this->getModel(new $model());
-        }
-
-        throw new InvalidArgumentException("$model is not a valid model");
-    }
-
-    /**
      * Left sider-bar menu.
      *
      * @return array
@@ -114,30 +91,6 @@ class Admin
         $menuModel = new $menuClass();
 
         return $this->menu = $menuModel->toTree();
-    }
-
-    /**
-     * @param array $menu
-     *
-     * @return array
-     */
-    public function menuLinks($menu = [])
-    {
-        if (empty($menu)) {
-            $menu = $this->menu();
-        }
-
-        $links = [];
-
-        foreach ($menu as $item) {
-            if (!empty($item['children'])) {
-                $links = array_merge($links, $this->menuLinks($item['children']));
-            } else {
-                $links[] = Arr::only($item, ['title', 'uri', 'icon']);
-            }
-        }
-
-        return $links;
     }
 
     /**
@@ -266,22 +219,9 @@ class Admin
 
         require config('admin.bootstrap', admin_path('bootstrap.php'));
 
-//        $this->addAdminAssets();
-
         $this->fireBootedCallbacks();
 
         static::$booted = true;
-    }
-
-    /**
-     * Add JS & CSS assets to pages.
-     */
-    protected function addAdminAssets()
-    {
-        $assets = Form::collectFieldAssets();
-
-        self::css($assets['css']);
-        self::js($assets['js']);
     }
 
     /**

@@ -3,7 +3,7 @@
     <div>
     @foreach($options as $option => $label)
         <span class="icheck-@color">
-            <input id="@id" type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ in_array($option, (array)old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />
+            <input id="@id" type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ in_array($option, (array)$value) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />
             <label for="@id">
                 &nbsp;{{$label}}&nbsp;&nbsp;
             </label>

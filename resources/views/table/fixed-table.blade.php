@@ -1,12 +1,12 @@
 <div class="card">
     @if(isset($title))
-    <div class="card-header with-border">
+    <div class="card-header">
         <h3 class="card-title"> {{ $title }}</h3>
     </div>
     @endif
 
     @if ( $table->showTools() || $table->showExportBtn() || $table->showCreateBtn() )
-    <div class="card-header with-border">
+    <div class="card-header">
         <div class="float-right">
             {!! $table->renderColumnSelector() !!}
             {!! $table->renderExportButton() !!}

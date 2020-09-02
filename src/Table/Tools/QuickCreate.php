@@ -192,9 +192,20 @@ class QuickCreate implements Renderable
     {
         $field = new Field\Date($column, $this->formatPlaceholder($placeholder));
 
-        $this->addField($field);
+        return $this->addField($field);
+    }
 
-        return $field;
+    /**
+     * @param string $column
+     * @param mixed $value
+     *
+     * @return Field\Hidden
+     */
+    public function hidden($column, $value)
+    {
+        $field = new Field\Hidden($column);
+
+        return $this->addField($field->default($value));
     }
 
     /**
@@ -239,6 +250,8 @@ class QuickCreate implements Renderable
         if ($this->fields->isEmpty()) {
             return '';
         }
+
+        $this->hidden('__quick_create', 1);
 
         return Admin::view('admin::table.quick-create.form', [
             'columnCount' => $columnCount,

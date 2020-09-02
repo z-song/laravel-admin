@@ -22,6 +22,7 @@ $('input.inline-upload').on('change', function () {
     formData.append("{{ $name }}", event.target.files[0]);
     @endif
     formData.append('_method', 'PUT');
+    formData.append('__inline_edit', 1);
 
     $.ajax({
         url: "{{ $resource }}/" + $(this).data('key'),

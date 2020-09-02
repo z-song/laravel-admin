@@ -8,7 +8,7 @@
 
         $.put({
             url: "{{ $resource }}/" + key,
-            data: {"{{ $name }}": value}
+            data: {"{{ $name }}": value, __inline_edit: 1}
         }).done(function (data) {
             $.admin.toastr.show(data);
         });

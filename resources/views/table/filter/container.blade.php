@@ -1,4 +1,4 @@
-<div class="card-header with-border {{ $expand?'':'d-none' }} filter-box" id="{{ $filterID }}">
+<div class="card-header {{ $expand?'':'d-none' }} filter-box" id="{{ $filterID }}">
     <form action="{!! $action !!}" class="form-horizontal" pjax-container method="get">
 
         <div class="row">

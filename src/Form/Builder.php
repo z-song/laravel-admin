@@ -461,13 +461,9 @@ class Builder
      */
     public function hasFile(): bool
     {
-        foreach ($this->fields() as $field) {
-            if ($field instanceof Field\File || $field instanceof Field\MultipleFile) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->fields()->contains(function ($field) {
+            return $field instanceof Field\File || $field instanceof Field\MultipleFile;
+        });
     }
 
     /**

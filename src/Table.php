@@ -75,13 +75,6 @@ class Table
     public $columnNames = [];
 
     /**
-     * Table builder.
-     *
-     * @var \Closure
-     */
-    protected $builder;
-
-    /**
      * Mark if the table is builded.
      *
      * @var bool
@@ -169,13 +162,11 @@ class Table
      * Create a new table instance.
      *
      * @param Eloquent $model
-     * @param Closure  $builder
      */
-    public function __construct(Eloquent $model, Closure $builder = null)
+    public function __construct(Eloquent $model)
     {
         $this->model = new Model($model, $this);
         $this->keyName = $model->getKeyName();
-        $this->builder = $builder;
 
         $this->initialize();
 
@@ -192,8 +183,7 @@ class Table
         $this->columns = Collection::make();
         $this->rows = Collection::make();
 
-        $this->initTools()
-            ->initFilter();
+        $this->initTools()->initFilter();
     }
 
     /**

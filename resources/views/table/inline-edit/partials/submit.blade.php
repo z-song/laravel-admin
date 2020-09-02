@@ -48,6 +48,7 @@ $(document).off('click', '.ie-content .ie-submit').on('click', '.ie-content .ie-
 
     var data = {};
     data[$trigger.data('name')] = val;
+    data['__inline_edit'] = 1;
 
     $.put({
         url: "{{ $resource }}/" + $trigger.data('key'),

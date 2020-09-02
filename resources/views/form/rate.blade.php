@@ -4,7 +4,7 @@
 
     <div class="{{$viewClass['field']}}">
         <div class="input-group" style="width: 150px">
-            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ old($column, $value) }}" class="form-control {{$class}}" placeholder="0" style="text-align:right;" {!! $attributes !!} />
+            <input type="text" id="{{$id}}" name="{{$name}}" value="{{ $value }}" class="form-control {{$class}}" placeholder="0" style="text-align:right;" {!! $attributes !!} />
             <span class="input-group-addon">%</span>
         </div>
         @include('admin::form.error')

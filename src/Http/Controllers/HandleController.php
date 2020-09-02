@@ -26,17 +26,13 @@ class HandleController extends Controller
     {
         $form = $this->resolveForm($request);
 
-        if ($errors = $form->validate($request)) {
-            return back()->withInput()->withErrors($errors);
+        if ($response = $form->validate($request)) {
+            return $response;
         }
 
-        $result = $form->sanitize()->handle($request);
+        $form->sanitize()->handle($request);
 
-        if (method_exists($form, 'result')) {
-            return back()->withInput()->with('__result', $result);
-        }
-
-        return $result;
+        return $form->getResponse();
     }
 
     /**
@@ -59,7 +55,7 @@ class HandleController extends Controller
         }
 
         /** @var Form $form */
-        $form = app($formClass);
+        $form = app()->make($formClass);
 
         if (!method_exists($form, 'handle')) {
             throw new Exception("Form method {$formClass}::handle() does not exist.");
