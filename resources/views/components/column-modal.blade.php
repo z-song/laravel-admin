@@ -10,7 +10,7 @@
                 <h4 class="modal-title">{{ $title }}</h4>
             </div>
             <div class="modal-body">
-                {{ $html }}
+                {!! $html !!}
             </div>
         </div>
     </div>
