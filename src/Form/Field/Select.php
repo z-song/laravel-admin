@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
@@ -120,8 +119,8 @@ class Select extends Field
      */
     public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text', bool $allowClear = true)
     {
-        $fieldsStr  = implode('.', $fields);
-        $urlsStr    = implode('^', $sourceUrls);
+        $fieldsStr = implode('.', $fields);
+        $urlsStr = implode('^', $sourceUrls);
         $strAllowClear = var_export($allowClear, true);
 
         return $this->addVariables(['loads' => compact('fieldsStr', 'urlsStr', 'strAllowClear', 'idField', 'textField')]);

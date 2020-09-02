@@ -27,13 +27,13 @@ class Expand extends AbstractDisplayer
         return Admin::view('admin::components.column-expand', [
             'key'           => $this->getKey(),
             'url'           => $this->getLoadUrl(),
-            'name'          => $this->getName() . '-' . $this->getKey(),
+            'name'          => $this->getName().'-'.$this->getKey(),
             'html'          => $html,
             'value'         => $this->value,
             'async'         => $async,
             'expand'        => $isExpand,
             'loadTable'     => $loadTable,
-            'elementClass'  => "table-expand-table-row",
+            'elementClass'  => 'table-expand-table-row',
         ]);
     }
 

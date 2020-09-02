@@ -2,11 +2,9 @@
 
 namespace Encore\Admin\Form\Concerns;
 
-use Encore\Admin\Form;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\MessageBag;
 
 trait HasResponse
 {
@@ -116,7 +114,7 @@ trait HasResponse
     protected function redirectAfterSaving($resourcesPath, $key)
     {
         $response = [
-            'status' => true,
+            'status'  => true,
             'message' => trans('admin.save_succeeded'),
         ];
 

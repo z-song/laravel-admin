@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\NestedForm;
@@ -431,13 +430,13 @@ class HasMany extends Field
 
         /* Build row elements */
         $template = array_reduce($fields, function ($all, $field) {
-            return $all . "<td>{$field}</td>";
+            return $all."<td>{$field}</td>";
         }, '');
 
         /* Build cell with hidden elements */
         $template .= '<td class="d-none">'.implode('', $hidden).'</td>';
 
-// specify a view to render.
+        // specify a view to render.
         $this->view = $this->views[$this->viewMode];
 
         return parent::fieldRender([

@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
 {
-    use UploadField, HasValuePicker;
+    use UploadField;
+    use HasValuePicker;
 
     /**
      * Create a new File instance.
@@ -178,7 +179,7 @@ class File extends Field
 
         $this->options([
             'overwriteInitial' => true,
-            'msgPlaceholder' => trans('admin.choose_file')
+            'msgPlaceholder'   => trans('admin.choose_file'),
         ]);
 
         $this->setupDefaultOptions();

@@ -3,11 +3,10 @@
 namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Actions\Action;
-use Encore\Admin\Actions\TableAction;
 use Encore\Admin\Actions\Response;
 use Encore\Admin\Actions\RowAction;
+use Encore\Admin\Actions\TableAction;
 use Encore\Admin\Widgets\Form;
-use Encore\Admin\Widgets\Selectable\Selectable;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
@@ -156,7 +155,7 @@ class HandleController extends Controller
     public function handleSelectable(Request $request)
     {
         $class = $request->get('selectable');
-        $args  = $request->get('args', []);
+        $args = $request->get('args', []);
 
         $class = str_replace('_', '\\', $class);
 

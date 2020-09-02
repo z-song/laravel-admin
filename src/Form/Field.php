@@ -17,7 +17,8 @@ use Illuminate\Support\Traits\Macroable;
  */
 class Field implements Renderable
 {
-    use Macroable, Form\Concerns\ValidatesField;
+    use Macroable;
+    use Form\Concerns\ValidatesField;
 
     const FILE_DELETE_FLAG = '_file_del_';
     const FILE_SORT_FLAG = '_file_sort_';
@@ -105,7 +106,6 @@ class Field implements Renderable
      * @var array
      */
     protected $checked = [];
-
 
     /**
      * Css required by this field.
@@ -516,8 +516,6 @@ class Field implements Renderable
 
         return $this;
     }
-
-
 
     /**
      * Set or get value of the field.
@@ -1058,7 +1056,7 @@ class Field implements Renderable
                 'class'      => $viewClass['form-group'],
                 'data-field' => is_array($this->column) ? join(',', $this->column) : $this->column,
                 'data-type'  => strtolower((new \ReflectionClass($this))->getShortName()),
-            ]
+            ],
         ]);
     }
 

@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Auth;
  */
 class Admin
 {
-    use HasAssets, RenderView, BuiltinRoutes;
+    use HasAssets;
+    use RenderView;
+    use BuiltinRoutes;
 
     /**
      * The Laravel admin version.

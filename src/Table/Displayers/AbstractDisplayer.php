@@ -32,7 +32,7 @@ abstract class AbstractDisplayer
      * Create a new displayer instance.
      *
      * @param mixed     $value
-     * @param Table      $table
+     * @param Table     $table
      * @param Column    $column
      * @param \stdClass $row
      */
@@ -123,7 +123,7 @@ abstract class AbstractDisplayer
     }
 
     /**
-     * `foo.bar.baz` => `foo[bar][baz]`
+     * `foo.bar.baz` => `foo[bar][baz]`.
      *
      * @return string
      */
@@ -131,9 +131,9 @@ abstract class AbstractDisplayer
     {
         $keys = collect(explode('.', $name ?: $this->getName()));
 
-        return $keys->shift() . $keys->reduce(function ($carry, $val) {
-                return $carry . "[$val]";
-            });
+        return $keys->shift().$keys->reduce(function ($carry, $val) {
+            return $carry."[$val]";
+        });
     }
 
     /**

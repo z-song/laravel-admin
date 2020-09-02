@@ -41,7 +41,7 @@ trait HasAssets
      */
     protected static $deferredAssets = [
         'dep' => [],
-        'js' => [],
+        'js'  => [],
         'css' => [],
     ];
 
@@ -108,15 +108,15 @@ trait HasAssets
             'js'  => ['/vendor/laravel-admin/nestable/jquery.nestable.js'],
         ],
         'iconpicker'     => [
-            'css' => ['/vendor/laravel-admin/bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min.css',],
+            'css' => ['/vendor/laravel-admin/bootstrap-iconpicker/dist/css/bootstrap-iconpicker.min.css'],
             'js'  => [
                 'vendor/laravel-admin/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.min.js',
-                'vendor/laravel-admin/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.bundle.min.js'
+                'vendor/laravel-admin/bootstrap-iconpicker/dist/js/bootstrap-iconpicker.bundle.min.js',
             ],
         ],
         'colorpicker'    => [
-            'css' => ['vendor/laravel-admin/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css',],
-            'js'  => ['vendor/laravel-admin/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js',],
+            'css' => ['vendor/laravel-admin/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css'],
+            'js'  => ['vendor/laravel-admin/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js'],
         ],
         'icheck'         => [
             'css' => ['vendor/laravel-admin/icheck-bootstrap/icheck-bootstrap.min.css'],
@@ -138,8 +138,8 @@ trait HasAssets
         'datetimepicker'=> [
             'dep' => ['vendor/laravel-admin/moment/moment-with-locales.min.js'],
             'css' => ['vendor/laravel-admin/bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.min.css'],
-            'js' => [
-                'vendor/laravel-admin/bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+            'js'  => [
+                'vendor/laravel-admin/bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
             ],
         ],
 //        'daterangepicker' => [
@@ -150,31 +150,31 @@ trait HasAssets
         'select2'        => [
             'css' => [
                 'vendor/laravel-admin/select2/css/select2.min.css',
-                'vendor/laravel-admin/select2-bootstrap4-theme/select2-bootstrap4.min.css'
+                'vendor/laravel-admin/select2-bootstrap4-theme/select2-bootstrap4.min.css',
             ],
-            'js'  => ['vendor/laravel-admin/select2/js/select2.full.min.js',],
+            'js'  => ['vendor/laravel-admin/select2/js/select2.full.min.js'],
         ],
         'bootstrap-input-spinner' => [
-            'js' => ['vendor/laravel-admin/bootstrap-input-spinner/bootstrap-input-spinner.js',]
+            'js' => ['vendor/laravel-admin/bootstrap-input-spinner/bootstrap-input-spinner.js'],
         ],
         'toggle' => [
             'css' => ['vendor/laravel-admin/bootstrap4-toggle/css/bootstrap4-toggle.min.css'],
-            'js' => ['vendor/laravel-admin/bootstrap4-toggle/js/bootstrap4-toggle.min.js'],
+            'js'  => ['vendor/laravel-admin/bootstrap4-toggle/js/bootstrap4-toggle.min.js'],
         ],
         'inputmask'       => [
-            'js' => ['vendor/laravel-admin/inputmask/min/jquery.inputmask.bundle.min.js',]
+            'js' => ['vendor/laravel-admin/inputmask/min/jquery.inputmask.bundle.min.js'],
         ],
         'duallistbox'     => [
-            'css' => ['vendor/laravel-admin/bootstrap4-duallistbox/bootstrap-duallistbox.min.css',],
-            'js'  => ['vendor/laravel-admin/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js',]
+            'css' => ['vendor/laravel-admin/bootstrap4-duallistbox/bootstrap-duallistbox.min.css'],
+            'js'  => ['vendor/laravel-admin/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js'],
         ],
         'rangeSlider'     => [
-            'css' => ['vendor/laravel-admin/ion-rangeslider/css/ion.rangeSlider.min.css',],
-            'js'  => ['vendor/laravel-admin/ion-rangeslider/js/ion.rangeSlider.min.js',],
+            'css' => ['vendor/laravel-admin/ion-rangeslider/css/ion.rangeSlider.min.css'],
+            'js'  => ['vendor/laravel-admin/ion-rangeslider/js/ion.rangeSlider.min.js'],
         ],
         'wangEditor' => [
             'js' => 'https://cdn.jsdelivr.net/npm/wangeditor@3.1.1/release/wangEditor.min.js',
-        ]
+        ],
     ];
 
     /**
@@ -264,6 +264,7 @@ trait HasAssets
 
     /**
      * @param $js
+     *
      * @return array
      */
     public static function dep($js)
@@ -336,7 +337,8 @@ trait HasAssets
         $script = collect(static::$script)
             ->merge(static::$deferredScript)
             ->unique()
-            ->map(function ($line) {return $line;
+            ->map(function ($line) {
+                return $line;
                 //@see https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
                 $line = preg_replace('/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/', '', $line);
 
@@ -429,6 +431,7 @@ trait HasAssets
 
     /**
      * @param $name
+     *
      * @return string
      */
     public static function renderAssets($name)
@@ -458,7 +461,8 @@ trait HasAssets
 
     /**
      * @param string $name
-     * @param array $assets
+     * @param array  $assets
+     *
      * @return void
      */
     public static function assets(string $name, array $assets)

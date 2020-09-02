@@ -128,6 +128,7 @@ class DropdownActions extends Actions
 
     /**
      * @param string $action
+     *
      * @return $this
      */
     public function dblclick(string $action)
@@ -177,7 +178,7 @@ class DropdownActions extends Actions
             'default'  => $this->default,
             'custom'   => $this->custom,
             'dblclick' => $dblclick,
-            'table'    => $this->table->tableID
+            'table'    => $this->table->tableID,
         ];
 
         if (empty($variables['default']) && empty($variables['custom'])) {

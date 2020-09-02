@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Admin;
-
 class RadioButton extends Radio
 {
     /**

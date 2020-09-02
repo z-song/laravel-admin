@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\Arr;
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
+use Illuminate\Support\MessageBag;
 
 if (!function_exists('admin_path')) {
 
@@ -183,6 +183,7 @@ if (!function_exists('admin_color')) {
 
     /**
      * @param string $prefix
+     *
      * @return string
      */
     function admin_color($tpl = '')
@@ -362,9 +363,7 @@ if (!function_exists('json_encode_options')) {
     }
 }
 
-
 if (!function_exists('admin_attrs')) {
-
     function admin_attrs(array $attributes = [])
     {
         $str = [];
@@ -376,7 +375,6 @@ if (!function_exists('admin_attrs')) {
         return implode(' ', $str);
     }
 }
-
 
 function admin_login_page_backgroud()
 {

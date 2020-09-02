@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Actions;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class Delete extends Action
@@ -20,9 +19,9 @@ class Delete extends Action
 
     public function handle(Request $request)
     {
-        $key   = $request->get('key');
+        $key = $request->get('key');
         $model = $request->get('model');
-        $path  = $request->get('path');
+        $path = $request->get('path');
 
         $trans = [
             'failed'    => trans('admin.delete_failed'),

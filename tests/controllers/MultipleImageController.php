@@ -2,8 +2,8 @@
 
 namespace Tests\Controllers;
 
-use Encore\Admin\Http\Controllers\AdminController;
 use Encore\Admin\Form;
+use Encore\Admin\Http\Controllers\AdminController;
 use Encore\Admin\Table;
 use Tests\Models\MultipleImage;
 

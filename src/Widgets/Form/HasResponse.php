@@ -20,7 +20,7 @@ trait HasResponse
     }
 
     /**
-     * Respond with a success message
+     * Respond with a success message.
      *
      * @param string $message
      *
@@ -35,7 +35,7 @@ trait HasResponse
     }
 
     /**
-     * Respond with a error message
+     * Respond with a error message.
      *
      * @param string $message
      *

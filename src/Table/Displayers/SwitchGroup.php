@@ -23,14 +23,14 @@ class SwitchGroup extends SwitchDisplay
             $html[] = $this->buildSwitch($column, $label);
         }
 
-        return '<table>' . implode('', $html) . '</table>';
+        return '<table>'.implode('', $html).'</table>';
     }
 
     protected function buildSwitch($name, $label = '')
     {
         // vendor/encore/laravel-admin/resources/views/table/inline-edit/switch-group.blade.php
         return Admin::view('admin::table.inline-edit.switch-group', [
-            'class'    => 'table-switch-' . str_replace('.', '-', $name),
+            'class'    => 'table-switch-'.str_replace('.', '-', $name),
             'key'      => $this->getKey(),
             'resource' => $this->getResource(),
             'name'     => $this->getPayloadName($name),
@@ -43,8 +43,8 @@ class SwitchGroup extends SwitchDisplay
                 'on'       => $this->states['on']['text'],
                 'off'      => $this->states['off']['text'],
                 'onstyle'  => $this->states['on']['style'],
-                'offstyle' => $this->states['off']['style']
-            ]
+                'offstyle' => $this->states['off']['style'],
+            ],
         ]);
     }
 }

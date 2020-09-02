@@ -59,7 +59,7 @@ SCRIPT;
      */
     public function getElementClass()
     {
-        return ltrim($this->selector($this->selectorPrefix), '.') . ' dropdown-item';
+        return ltrim($this->selector($this->selectorPrefix), '.').' dropdown-item';
     }
 
     /**

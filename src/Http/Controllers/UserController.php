@@ -3,8 +3,8 @@
 namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Form;
-use Encore\Admin\Table;
 use Encore\Admin\Show;
+use Encore\Admin\Table;
 
 class UserController extends AdminController
 {

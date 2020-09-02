@@ -483,7 +483,7 @@ class Table
 
         admin_assets('icheck');
 
-        $checkAllBox = admin_color(<<<HTML
+        $checkAllBox = admin_color(<<<'HTML'
 <div class='icheck-%s d-inline'>
     <input type="checkbox" class="table-select-all" id='select-all'/>
     <label for='select-all'></label>

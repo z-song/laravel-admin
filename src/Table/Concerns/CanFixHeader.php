@@ -8,7 +8,8 @@ trait CanFixHeader
 {
     public function fixHeader()
     {
-        Admin::style(<<<STYLE
+        Admin::style(
+            <<<'STYLE'
 .wrapper, .table-box .box-body {
     overflow: visible;
 }

@@ -66,7 +66,7 @@ class Number extends Text
     }
 
     /**
-     * @param integer $decimals
+     * @param int $decimals
      *
      * @return $this
      */

@@ -65,6 +65,7 @@ class Box extends Widget implements Renderable
      * @param string $title
      * @param string $content
      * @param string $footer
+     *
      * @return static
      */
     public static function create($title = '', $content = '', $footer = '')
@@ -86,9 +87,9 @@ class Box extends Widget implements Renderable
         } elseif ($content instanceof Htmlable) {
             $this->content = $content->toHtml();
         } elseif ($content instanceof Jsonable) {
-            $this->content = '<pre>'.$content->toJson(JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE).'</pre>';
+            $this->content = '<pre>'.$content->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).'</pre>';
         } elseif (is_array($content)) {
-            $this->content = '<pre>'.json_encode($content, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE).'</pre>';
+            $this->content = '<pre>'.json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).'</pre>';
         } else {
             $this->content = (string) $content;
         }

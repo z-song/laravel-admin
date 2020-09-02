@@ -12,7 +12,7 @@ class Checkbox extends MultipleSelect
     protected $inline = true;
 
     /**
-     * @var bool 
+     * @var bool
      */
     protected $canCheckAll = false;
 

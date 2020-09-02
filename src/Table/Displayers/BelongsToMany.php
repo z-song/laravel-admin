@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Table\Displayers;
 
-use Encore\Admin\Admin;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as Relation;
 use Illuminate\Support\Arr;
 

@@ -65,9 +65,9 @@ use Illuminate\Support\Arr;
  */
 class Form implements Renderable
 {
-    use BaseForm\Concerns\HandleCascadeFields,
-        BaseForm\Concerns\ValidatesFields,
-        Form\HasResponse;
+    use BaseForm\Concerns\HandleCascadeFields;
+    use BaseForm\Concerns\ValidatesFields;
+    use Form\HasResponse;
 
     /**
      * The title of form.

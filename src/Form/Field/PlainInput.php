@@ -5,7 +5,7 @@ namespace Encore\Admin\Form\Field;
 use Encore\Admin\Form\Field;
 
 /**
- * Trait PlainInput
+ * Trait PlainInput.
  *
  * @mixin Text
  */
@@ -42,6 +42,7 @@ trait PlainInput
 
     /**
      * @param string $text
+     *
      * @return $this
      */
     public function prependText($text)
@@ -51,6 +52,7 @@ trait PlainInput
 
     /**
      * @param mixed $string
+     *
      * @return $this
      */
     public function append($string)
@@ -85,6 +87,7 @@ trait PlainInput
     /**
      * @param string $attribute
      * @param string $value
+     *
      * @return $this
      */
     protected function defaultAttribute($attribute, $value)

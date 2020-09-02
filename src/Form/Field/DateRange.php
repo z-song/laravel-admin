@@ -22,12 +22,12 @@ class DateRange extends Field
     public function __construct($column, $arguments)
     {
         $this->column['start'] = $column;
-        $this->column['end']   = $arguments[0];
+        $this->column['end'] = $arguments[0];
 
         array_shift($arguments);
 
         $this->label = $this->formatLabel($arguments);
-        $this->id    = $this->formatId($this->column);
+        $this->id = $this->formatId($this->column);
     }
 
     /**
@@ -67,11 +67,11 @@ class DateRange extends Field
             'format' => $this->format,
             'icons'  => [
                 'time' => 'fas fa-clock',
-            ]
+            ],
         ]);
 
         $this->addVariables([
-            'icon'   => $this->icon,
+            'icon'          => $this->icon,
             'start_options' => $this->options,
             'end_options'   => array_merge($this->options, ['useCurrent' => false]),
         ]);

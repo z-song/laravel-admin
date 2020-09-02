@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Table\Tools;
 
-use Encore\Admin\Admin;
 use Encore\Admin\Table;
 use Illuminate\Support\Collection;
 
@@ -42,8 +41,8 @@ class FixColumns
      * FixColumns constructor.
      *
      * @param Table $table
-     * @param int  $head
-     * @param int  $tail
+     * @param int   $head
+     * @param int   $tail
      */
     public function __construct(Table $table, $head, $tail = -1)
     {

@@ -38,7 +38,7 @@ class Modal extends AbstractDisplayer
             $title = $this->trans('title');
         }
 
-        $html  = '';
+        $html = '';
 
         if ($async = is_subclass_of($callback, Renderable::class)) {
             $this->renderable = $callback;
@@ -47,14 +47,14 @@ class Modal extends AbstractDisplayer
         }
 
         return Admin::view('admin::components.column-modal', [
-            'url'     => $this->getLoadUrl(),
-            'async'   => $async,
+            'url'      => $this->getLoadUrl(),
+            'async'    => $async,
             'table'    => is_subclass_of($callback, Simple::class),
-            'title'   => $title,
-            'html'    => $html,
-            'key'     => $this->getKey(),
-            'value'   => $this->value,
-            'name'    => $this->getKey() . '-' . str_replace('.', '_', $this->getColumn()->getName()),
+            'title'    => $title,
+            'html'     => $html,
+            'key'      => $this->getKey(),
+            'value'    => $this->value,
+            'name'     => $this->getKey().'-'.str_replace('.', '_', $this->getColumn()->getName()),
         ]);
     }
 }

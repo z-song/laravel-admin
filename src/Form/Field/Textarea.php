@@ -2,12 +2,12 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
 
 class Textarea extends Field
 {
-    use HasValuePicker, CanCascadeFields;
+    use HasValuePicker;
+    use CanCascadeFields;
 
     /**
      * Default rows of textarea.
@@ -49,7 +49,7 @@ class Textarea extends Field
 
         return parent::fieldRender([
             'picker' => $this->picker,
-            'rows'   => $this->rows
+            'rows'   => $this->rows,
         ]);
     }
 }

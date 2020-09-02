@@ -3,7 +3,6 @@
 namespace Encore\Admin\Table\Displayers;
 
 use Encore\Admin\Admin;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 
 class Checkbox extends AbstractDisplayer

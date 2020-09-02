@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Show;
 
-use Encore\Admin\Admin;
 use Encore\Admin\Show;
 use Encore\Admin\Show\Actions\_List;
 use Encore\Admin\Show\Actions\Action;

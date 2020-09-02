@@ -468,14 +468,17 @@ class Form extends Interactor
 
     /**
      * @param array $data
-     * @return mixed|string
+     *
      * @throws \Throwable
+     *
+     * @return mixed|string
      */
     public function addScript($data = [])
     {
         $this->action->attribute('modal', $this->getModalId());
 
-        call_user_func([$this->action, 'form'],
+        call_user_func(
+            [$this->action, 'form'],
             ($this->action instanceof RowAction) ? $this->action->getRow() : null
         );
 

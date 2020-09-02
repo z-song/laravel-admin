@@ -3,10 +3,9 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Arr;
 
 /**
- * Class SwitchField
+ * Class SwitchField.
  *
  * @author songzou<zosong@126.com>
  *
@@ -30,9 +29,10 @@ class SwitchField extends Field
     ];
 
     /**
-     * @param int $value
+     * @param int    $value
      * @param string $text
      * @param string $style
+     *
      * @return $this
      */
     public function on($value = 1, $text = '', $style = '')
@@ -47,9 +47,10 @@ class SwitchField extends Field
     }
 
     /**
-     * @param int $value
+     * @param int    $value
      * @param string $text
      * @param string $style
+     *
      * @return $this
      */
     public function off($value = 0, $text = '', $style = '')
@@ -65,6 +66,7 @@ class SwitchField extends Field
 
     /**
      * @param string $size lg, sm, xs
+     *
      * @return $this
      */
     public function size($size)

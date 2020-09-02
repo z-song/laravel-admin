@@ -69,8 +69,8 @@ class InputFilter extends Filter
             'locale'           => config('app.locale'),
             'allowInputToggle' => true,
             'icons'            => [
-                'time' => 'fas fa-clock'
-            ]
+                'time' => 'fas fa-clock',
+            ],
         ] : false;
 
         return Admin::view('admin::table.column.input-filter', [
