@@ -4,7 +4,6 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Arr;
 
 /**
  * @mixin Field
@@ -19,6 +18,7 @@ trait HasValuePicker
     /**
      * @param string $picker
      * @param string $column
+     *
      * @return $this
      */
     public function pick($picker, $column = '')
@@ -42,6 +42,7 @@ trait HasValuePicker
 
     /**
      * @param \Closure|null $callback
+     *
      * @return $this
      */
     protected function mountPicker(\Closure $callback = null)

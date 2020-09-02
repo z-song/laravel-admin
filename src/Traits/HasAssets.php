@@ -233,7 +233,8 @@ trait HasAssets
         $script = collect(static::$script)
             ->merge(static::$deferredScript)
             ->unique()
-            ->map(function ($line) {return $line;
+            ->map(function ($line) {
+                return $line;
                 //@see https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
                 $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
                 $line = preg_replace($pattern, '', $line);
@@ -339,7 +340,7 @@ trait HasAssets
         $dom = new \DOMDocument();
 
         libxml_use_internal_errors(true);
-        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $string);
+        $dom->loadHTML('<?xml encoding="utf-8" ?>'.$string);
         libxml_use_internal_errors(false);
 
         if ($head = $dom->getElementsByTagName('head')->item(0)) {
@@ -369,7 +370,7 @@ trait HasAssets
 
         $render = '';
 
-        if($body = $dom->getElementsByTagName('body')->item(0)) {
+        if ($body = $dom->getElementsByTagName('body')->item(0)) {
             foreach ($body->childNodes as $child) {
                 if ($child instanceof \DOMElement) {
                     if ($child->tagName == 'style' && !empty($child->nodeValue)) {
@@ -378,7 +379,7 @@ trait HasAssets
                     }
 
                     if ($child->tagName == 'script' && !empty($child->nodeValue)) {
-                        static::script(';(function () {' . $child->nodeValue . '})();');
+                        static::script(';(function () {'.$child->nodeValue.'})();');
                         continue;
                     }
 

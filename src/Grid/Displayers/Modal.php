@@ -38,7 +38,7 @@ class Modal extends AbstractDisplayer
             $title = $this->trans('title');
         }
 
-        $html  = '';
+        $html = '';
 
         if ($async = is_subclass_of($callback, Renderable::class)) {
             $this->renderable = $callback;
@@ -54,7 +54,7 @@ class Modal extends AbstractDisplayer
             'html'    => $html,
             'key'     => $this->getKey(),
             'value'   => $this->value,
-            'name'    => $this->getKey() . '-' . str_replace('.', '_', $this->getColumn()->getName()),
+            'name'    => $this->getKey().'-'.str_replace('.', '_', $this->getColumn()->getName()),
         ]);
     }
 }

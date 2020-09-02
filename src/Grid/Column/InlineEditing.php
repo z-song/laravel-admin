@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Grid\Column;
 
-use Encore\Admin\Grid\Column;
 use Encore\Admin\Grid\Displayers;
 
 trait InlineEditing

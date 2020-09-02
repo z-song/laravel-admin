@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File extends Field
 {
-    use UploadField, HasValuePicker;
+    use UploadField;
+    use HasValuePicker;
 
     /**
      * Css.

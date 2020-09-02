@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Grid\Tools;
 
-use Encore\Admin\Admin;
 use Encore\Admin\Grid;
 use Illuminate\Support\Collection;
 

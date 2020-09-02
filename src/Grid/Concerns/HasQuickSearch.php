@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
  * @property Collection $columns
  * @property Tools      $tools
  *
- * @method  Model model()
+ * @method Model model()
  */
 trait HasQuickSearch
 {
@@ -72,7 +72,6 @@ trait HasQuickSearch
                     $this->addWhereLikeBinding($builder, $column, true, '%'.$query.'%');
                 }
             });
-
         } elseif (is_null($this->search)) {
             $this->model()->where(function (Builder $builder) use ($query) {
                 $this->addWhereBindings($builder, $query);
@@ -84,7 +83,7 @@ trait HasQuickSearch
      * Add where bindings.
      *
      * @param Builder $builder
-     * @param string $query
+     * @param string  $query
      */
     protected function addWhereBindings(Builder $builder, $query)
     {
@@ -165,9 +164,9 @@ trait HasQuickSearch
      * Add where like binding to model query.
      *
      * @param Builder $builder
-     * @param string $column
-     * @param bool $or
-     * @param string $pattern
+     * @param string  $column
+     * @param bool    $or
+     * @param string  $pattern
      */
     protected function addWhereLikeBinding(Builder $builder, string $column, bool $or, string $pattern)
     {
@@ -183,10 +182,10 @@ trait HasQuickSearch
      * Add where date time function binding to model query.
      *
      * @param Builder $builder
-     * @param string $column
-     * @param bool $or
-     * @param string $function
-     * @param string $value
+     * @param string  $column
+     * @param bool    $or
+     * @param string  $function
+     * @param string  $value
      */
     protected function addWhereDatetimeBinding(Builder $builder, string $column, bool $or, string $function, string $value)
     {
@@ -199,10 +198,10 @@ trait HasQuickSearch
      * Add where in binding to the model query.
      *
      * @param Builder $builder
-     * @param string $column
-     * @param bool $or
-     * @param bool $not
-     * @param string $values
+     * @param string  $column
+     * @param bool    $or
+     * @param bool    $not
+     * @param string  $values
      */
     protected function addWhereInBinding(Builder $builder, string $column, bool $or, bool $not, string $values)
     {
@@ -225,10 +224,10 @@ trait HasQuickSearch
      * Add where between binding to the model query.
      *
      * @param Builder $builder
-     * @param string $column
-     * @param bool $or
-     * @param string $start
-     * @param string $end
+     * @param string  $column
+     * @param bool    $or
+     * @param string  $start
+     * @param string  $end
      */
     protected function addWhereBetweenBinding(Builder $builder, string $column, bool $or, string $start, string $end)
     {
@@ -241,10 +240,10 @@ trait HasQuickSearch
      * Add where basic binding to the model query.
      *
      * @param Builder $builder
-     * @param string $column
-     * @param bool $or
-     * @param string $operator
-     * @param string $value
+     * @param string  $column
+     * @param bool    $or
+     * @param string  $operator
+     * @param string  $value
      */
     protected function addWhereBasicBinding(Builder $builder, string $column, bool $or, string $operator, string $value)
     {
