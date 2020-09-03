@@ -167,7 +167,7 @@ class NestedForm
      *
      * @return $this
      */
-    public function setForm(Form $form = null)
+    public function setForm($form = null)
     {
         $this->form = $form;
 

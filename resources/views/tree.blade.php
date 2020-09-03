@@ -40,7 +40,7 @@
 </div>
 
 
-<script require="nsetable">
+<script require="nestable">
     $('#{{ $id }}').nestable(@json($options));
 
     $('.tree_branch_delete').click(function() {

@@ -103,7 +103,7 @@ trait HasAssets
         'initialize' => [
             'js' => ['/vendor/laravel-admin/jquery.initialize/jquery.initialize.js'],
         ],
-        'nsetable'       => [
+        'nestable'       => [
             'css' => ['/vendor/laravel-admin/nestable/nestable.css'],
             'js'  => ['/vendor/laravel-admin/nestable/jquery.nestable.js'],
         ],

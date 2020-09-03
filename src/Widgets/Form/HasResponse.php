@@ -2,17 +2,19 @@
 
 namespace Encore\Admin\Widgets\Form;
 
+use Encore\Admin\Widgets\Table;
 use Illuminate\Contracts\Support;
+use Illuminate\Support\Fluent;
 
 trait HasResponse
 {
     /**
-     * @var Response
+     * @var Fluent
      */
     protected $response;
 
     /**
-     * @return Response
+     * @return Fluent
      */
     public function getResponse()
     {
@@ -82,18 +84,37 @@ trait HasResponse
     }
 
     /**
+     * @return $this
+     */
+    public function table()
+    {
+        // call  table method in form method.
+        if (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'] !== 'handle') {
+            return $this->__call('table', func_get_args());
+        }
+
+        if (func_num_args() == 1) {
+            $table = new Table([], func_get_args()[0]);
+        } else {
+            $table = new Table(...func_get_args());
+        }
+
+        return $this->result($table);
+    }
+
+    /**
      * @param mixed $result
      *
      * @return $this
      */
     public function result($result)
     {
-        if ($result instanceof Support\Arrayable) {
-            $result = $result->toArray();
-        } elseif ($result instanceof Support\Renderable) {
+        if ($result instanceof Support\Renderable) {
             $result = $result->render();
         } elseif ($result instanceof Support\Htmlable) {
             $result = $result->toHtml();
+        } elseif ($result instanceof Support\Arrayable) {
+            $result = $result->toArray();
         }
 
         if (is_array($result)) {

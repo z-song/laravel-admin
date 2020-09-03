@@ -7,11 +7,11 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form as BaseForm;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Widgets\Form\Response;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Fluent;
 
 /**
  * Class Form.
@@ -136,7 +136,7 @@ class Form implements Renderable
 
         $this->initFormAttributes();
 
-        $this->response = new Response();
+        $this->response = new Fluent();
     }
 
     /**
