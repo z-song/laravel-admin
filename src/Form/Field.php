@@ -560,7 +560,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function default($default): self
+    public function default($default)
     {
         $this->default = $default;
 
@@ -737,7 +737,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function disable(): self
+    public function disable()
     {
         return $this->attribute('disabled', true);
     }

@@ -4,19 +4,102 @@ namespace Encore\Admin\Form\Field;
 
 class Date extends Text
 {
-    protected $format = 'YYYY-MM-DD';
-
+    /**
+     * @var string
+     */
     protected $view = 'admin::form.date';
 
+    /**
+     * @var string
+     */
     protected $icon = 'fa-calendar-alt';
 
+    /**
+     * @var array
+     */
+    protected $options = [
+        'format'           => 'YYYY-MM-DD',
+        'allowInputToggle' => true,
+        'icons'            => [
+            'time' => 'fas fa-clock',
+        ],
+    ];
+
+    /**
+     * Set picker format.
+     *
+     * @param string $format
+     *
+     * @return $this
+     */
     public function format($format)
     {
-        $this->format = $format;
-
-        return $this;
+        return $this->options(compact('format'));
     }
 
+    /**
+     * Set max value.
+     *
+     * @param string $maxDate
+     *
+     * @return $this
+     */
+    public function max($maxDate)
+    {
+        return $this->options(compact('maxDate'));
+    }
+
+    /**
+     * Set min value.
+     *
+     * @param string $minDate
+     *
+     * @return $this
+     */
+    public function min($minDate)
+    {
+        return $this->options(compact('minDate'));
+    }
+
+    /**
+     * Set default value.
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function default($defaultDate)
+    {
+        return $this->options(compact('defaultDate'));
+    }
+
+    /**
+     * Set enabled values.
+     *
+     * @param array|string $value
+     *
+     * @return $this
+     */
+    public function enable($enabledDates)
+    {
+        return $this->options(compact('enabledDates'));
+    }
+
+    /**
+     * Set disabled values.
+     *
+     * @param $value
+     *
+     * @return $thiss
+     */
+    public function disable($disabledDates = null)
+    {
+        return $this->options(compact('disabledDates'));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function prepare($value)
     {
         if ($value === '') {
@@ -26,16 +109,12 @@ class Date extends Text
         return $value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function render()
     {
-        $this->options = array_merge([
-            'format'           => $this->format,
-            'locale'           => $this->options['locale'] ?? config('app.locale'),
-            'allowInputToggle' => true,
-            'icons'            => [
-                'time' => 'fas fa-clock',
-            ],
-        ], $this->options);
+        $this->options(['locale' => $this->options['locale'] ?? config('app.locale')]);
 
         $this->addVariables([
             'icon'    => $this->icon,
