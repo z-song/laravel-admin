@@ -68,31 +68,30 @@
             </tfoot>
         </table>
     </div>
+    <template class="{{$column}}-tpl">
+        <tr>
+            <td>
+                <div class="form-group  ">
+                    <div class="col-sm-12">
+                        <input name="{{ $name }}[keys][]" class="form-control" required/>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group  ">
+                    <div class="col-sm-12">
+                        <input name="{{ $name }}[values][]" class="form-control" />
+                    </div>
+                </div>
+            </td>
+
+            <td class="form-group">
+                <div>
+                    <div class="{{$column}}-remove btn btn-warning btn-sm pull-right">
+                        <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </template>
 </div>
-
-<template class="{{$column}}-tpl">
-    <tr>
-        <td>
-            <div class="form-group  ">
-                <div class="col-sm-12">
-                    <input name="{{ $name }}[keys][]" class="form-control" required/>
-                </div>
-            </div>
-        </td>
-        <td>
-            <div class="form-group  ">
-                <div class="col-sm-12">
-                    <input name="{{ $name }}[values][]" class="form-control" />
-                </div>
-            </div>
-        </td>
-
-        <td class="form-group">
-            <div>
-                <div class="{{$column}}-remove btn btn-warning btn-sm pull-right">
-                    <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
-                </div>
-            </div>
-        </td>
-    </tr>
-</template>
