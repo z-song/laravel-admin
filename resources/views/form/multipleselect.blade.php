@@ -26,7 +26,7 @@
         $.get("{{ $load['sourceUrl'] }}",{q : this.value}, function (data) {
             target.find("option").remove();
             $(target).select2({
-                placeholder: {id:'', text: '{{ trans('admin.choose') }}'},
+                placeholder: {id:'', text: '{{ admin_trans('admin.choose') }}'},
                 allowClear: {{ $strAllowClear }},
                 data: $.map(data, function (d) {
                     d.id = d.{{$idField}};
@@ -49,7 +49,7 @@
             $.get(url).then(function(data) {
                 target.find("option").remove();
                 $(target).select2({
-                    placeholder: {id:'', text: '{{ trans('admin.choose') }}'},
+                    placeholder: {id:'', text: '{{ admin_trans('admin.choose') }}'},
                     allowClear: {{$strAllowClear}},
                     data: $.map(data, function (d) {
                         d.id = d.{{$idField}};

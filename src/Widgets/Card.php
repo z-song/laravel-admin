@@ -6,12 +6,12 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Renderable;
 
-class Box extends Widget implements Renderable
+class Card extends Widget implements Renderable
 {
     /**
      * @var string
      */
-    protected $view = 'admin::widgets.box';
+    protected $view = 'admin::widgets.card';
 
     /**
      * @var string
@@ -21,7 +21,7 @@ class Box extends Widget implements Renderable
     /**
      * @var string
      */
-    protected $content = 'here is the box content.';
+    protected $content = 'here is the card content.';
 
     /**
      * @var string
@@ -137,7 +137,31 @@ class Box extends Widget implements Renderable
     public function collapsable()
     {
         $this->tools[] =
-            '<button class="btn btn-card-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
+            '<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>';
+
+        return $this;
+    }
+
+    public function maximizable()
+    {
+        $this->tools[] =
+            '<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
+                  </button>';
+
+        return $this;
+    }
+
+    /**
+     * Set box as removable.
+     *
+     * @return $this
+     */
+    public function removable()
+    {
+        $this->tools[] =
+            '<button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                  </button>';
 
         return $this;
     }
@@ -158,19 +182,6 @@ class Box extends Widget implements Renderable
         $this->script = <<<SCRIPT
 $("#{$this->id} {$nodeSelector}").slimScroll({$scrollOptions});
 SCRIPT;
-
-        return $this;
-    }
-
-    /**
-     * Set box as removable.
-     *
-     * @return $this
-     */
-    public function removable()
-    {
-        $this->tools[] =
-            '<button class="btn btn-card-tool" data-widget="remove"><i class="fa fa-times"></i></button>';
 
         return $this;
     }

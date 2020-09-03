@@ -21,7 +21,7 @@
                 <label class="{{$viewClass['label']}}"></label>
                 <div class="{{$viewClass['field']}}">
                     <div class="remove btn btn-warning btn-sm float-right">
-                        <i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}
+                        <i class="fa fa-trash">&nbsp;</i>{{ admin_trans('admin.remove') }}
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <label class="{{$viewClass['label']}} control-label"></label>
                 <div class="{{$viewClass['field']}}">
                     <div class="remove btn btn-warning btn-sm float-right">
-                        <i class="fa fa-trash"></i>&nbsp;{{ trans('admin.remove') }}
+                        <i class="fa fa-trash"></i>&nbsp;{{ admin_trans('admin.remove') }}
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
     <div class="form-group row">
         <label class="{{$viewClass['label']}} control-label"></label>
         <div class="{{$viewClass['field']}}">
-            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>
+            <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
         </div>
     </div>
     @endif

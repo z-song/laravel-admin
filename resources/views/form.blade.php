@@ -79,9 +79,10 @@
             title: "{{ $confirm }}",
             icon: "warning",
             showCancelButton: true,
+            showLoaderOnConfirm: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "{{ trans('admin.confirm') }}",
-            cancelButtonText: "{{ trans('admin.cancel') }}",
+            confirmButtonText: "{{ admin_trans('admin.confirm') }}",
+            cancelButtonText: "{{ admin_trans('admin.cancel') }}",
         }).then(function (result) {
             if (result.value) {
                 $form.submit();

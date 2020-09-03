@@ -3,17 +3,17 @@
     <div class="card-header">
 
         <div class="btn-group">
-            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ trans('admin.expand') }}">
-                <i class="fa fa-plus-square-o"></i>&nbsp;{{ trans('admin.expand') }}
+            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ admin_trans('admin.expand') }}">
+                <i class="fa fa-plus-square-o"></i>&nbsp;{{ admin_trans('admin.expand') }}
             </button>
-            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ trans('admin.collapse') }}">
-                <i class="fa fa-minus-square-o"></i>&nbsp;{{ trans('admin.collapse') }}
+            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ admin_trans('admin.collapse') }}">
+                <i class="fa fa-minus-square-o"></i>&nbsp;{{ admin_trans('admin.collapse') }}
             </button>
         </div>
 
         @if($useSave)
         <div class="btn-group">
-            <button class="btn btn-@color btn-sm {{ $id }}-save" title="{{ trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.save') }}</span></button>
+            <button class="btn btn-@color btn-sm {{ $id }}-save" title="{{ admin_trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ admin_trans('admin.save') }}</span></button>
         </div>
         @endif
 
@@ -23,7 +23,7 @@
 
         @if($useCreate)
         <div class="btn-group float-right">
-            <a class="btn btn-success btn-sm" href="{{ url($path) }}/create"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ trans('admin.new') }}</span></a>
+            <a class="btn btn-success btn-sm" href="{{ url($path) }}/create"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ admin_trans('admin.new') }}</span></a>
         </div>
         @endif
 
@@ -49,9 +49,9 @@
             title: "{{ admin_trans('admin.delete_confirm') }}",
             icon: "warning",
             showCancelButton: true,
+            showLoaderOnConfirm: true,
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "{{ admin_trans('admin.confirm') }}",
-            showLoaderOnConfirm: true,
             cancelButtonText: "{{ admin_trans('admin.cancel') }}",
             preConfirm: function() {
                 return new Promise(function(resolve) {

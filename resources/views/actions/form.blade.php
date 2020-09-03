@@ -37,13 +37,13 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
 
         @if (!empty($confirm))
         $.admin.swal.fire({
-            icon: 'question',
+            title: '{{ $confirm }}',
+            icon: "warning",
             showCancelButton: true,
             showLoaderOnConfirm: true,
-            confirmButtonText: '{{ trans('admin.submit') }}',
-            cancelButtonText: '{{ trans('admin.cancel') }}',
-            title: '{{ $confirm }}',
-            text: '',
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "{{ admin_trans('admin.confirm') }}",
+            cancelButtonText: "{{ admin_trans('admin.cancel') }}",
             preConfirm: function() {
                 return _promise;
             }

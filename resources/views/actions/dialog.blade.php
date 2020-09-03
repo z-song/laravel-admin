@@ -10,8 +10,8 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
         icon: 'question',
         showCancelButton: true,
         showLoaderOnConfirm: true,
-        confirmButtonText: '{{ trans('admin.submit') }}',
-        cancelButtonText: '{{ trans('admin.cancel') }}',
+        confirmButtonText: '{{ admin_trans('admin.submit') }}',
+        cancelButtonText: '{{ admin_trans('admin.cancel') }}',
     };
 
     Object.assign(options, @json($options));

@@ -23,11 +23,11 @@
                     <div class="col-md-8">
                         <div class="btn-group float-left">
                             <button class="btn btn-@color submit btn-sm"><i
-                                        class="fa fa-search"></i>&nbsp;&nbsp;{{ trans('admin.search') }}</button>
+                                        class="fa fa-search"></i>&nbsp;&nbsp;{{ admin_trans('admin.search') }}</button>
                         </div>
                         <div class="btn-group float-left " style="margin-left: 10px;">
                             <a href="{!! $action !!}" class="btn btn-default btn-sm"><i
-                                        class="fa fa-undo"></i>&nbsp;&nbsp;{{ trans('admin.reset') }}</a>
+                                        class="fa fa-undo"></i>&nbsp;&nbsp;{{ admin_trans('admin.reset') }}</a>
                         </div>
                     </div>
                 </div>

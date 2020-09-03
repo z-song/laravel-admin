@@ -1,6 +1,6 @@
 <div {!! $attributes !!} >
     @if(isset($title))
-    <h4>{{ $title }}</h4>
+    <h5>{{ $title }}</h5>
     @endif
     {!! $content !!}
 </div>

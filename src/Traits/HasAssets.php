@@ -142,11 +142,6 @@ trait HasAssets
                 'vendor/laravel-admin/bootstrap4-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
             ],
         ],
-//        'daterangepicker' => [
-//            'dep' => ['vendor/laravel-admin/moment/moment-with-locales.min.js'],
-//            'css' => ['vendor/laravel-admin/daterangepicker/daterangepicker.css'],
-//            'js' => ['vendor/laravel-admin/daterangepicker/daterangepicker.js'],
-//        ],
         'select2'        => [
             'css' => [
                 'vendor/laravel-admin/select2/css/select2.min.css',

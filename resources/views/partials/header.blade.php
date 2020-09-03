@@ -35,11 +35,11 @@
             </a>
             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                 <a href="{{ admin_url('auth/logout') }}" class="dropdown-item">
-                    <i class="fas fa-sign-out-alt mr-2"></i> {{ trans('admin.logout') }}
+                    <i class="fas fa-sign-out-alt mr-2"></i> {{ admin_trans('admin.logout') }}
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="{{ admin_url('auth/setting') }}" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> {{ trans('admin.setting') }}
+                    <i class="fas fa-file mr-2"></i> {{ admin_trans('admin.setting') }}
                 </a>
             </div>
         </li>

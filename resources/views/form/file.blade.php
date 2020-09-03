@@ -18,13 +18,13 @@
         return new Promise(function(resolve, reject) {
             var remove = resolve;
             $.admin.swal.fire({
-                title: "{{ trans('admin.delete_confirm') }}",
+                title: "{{ admin_trans('admin.delete_confirm') }}",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "{{ trans('admin.confirm') }}",
                 showLoaderOnConfirm: true,
-                cancelButtonText: "{{ trans('admin.cancel') }}",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "{{ admin_trans('admin.confirm') }}",
+                cancelButtonText: "{{ admin_trans('admin.cancel') }}",
                 preConfirm: function() {
                     return new Promise(function(resolve) {
                         resolve(remove());

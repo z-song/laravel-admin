@@ -59,7 +59,7 @@
             @if($options['allowCreate'])
                 <div>
                     <div class="{{$viewClass['field']}}">
-                        <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>
+                        <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
                     </div>
                 </div>
             @endif
