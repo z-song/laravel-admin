@@ -110,6 +110,7 @@ class Select extends Field
      * @param string $sourceUrl
      * @param string $idField
      * @param string $textField
+     * @param bool $allowClear
      *
      * @return $this
      */
@@ -164,6 +165,7 @@ EOT;
      * @param array  $sourceUrls
      * @param string $idField
      * @param string $textField
+     * @param bool $allowClear
      *
      * @return $this
      */
