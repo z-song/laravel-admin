@@ -142,7 +142,6 @@ class Table
         'show_row_selector'      => true,
         'show_create_btn'        => true,
         'show_column_selector'   => true,
-        'show_define_empty_page' => true,
         'show_perpage_selector'  => true,
     ];
 
@@ -650,26 +649,6 @@ HTML);
     public function disableCreateButton(bool $disable = true)
     {
         return $this->option('show_create_btn', !$disable);
-    }
-
-    /**
-     * Remove define empty page on table.
-     *
-     * @return $this
-     */
-    public function disableDefineEmptyPage(bool $disable = true)
-    {
-        return $this->option('show_define_empty_page', !$disable);
-    }
-
-    /**
-     * If table show define empty page on table.
-     *
-     * @return bool
-     */
-    public function showDefineEmptyPage()
-    {
-        return $this->option('show_define_empty_page');
     }
 
     /**

@@ -45,7 +45,7 @@
 
             <tbody>
 
-                @if($table->rows()->isEmpty() && $table->showDefineEmptyPage())
+                @if($table->rows()->isEmpty())
                     @include('admin::table.empty-table')
                 @endif
 
