@@ -41,10 +41,14 @@
     Inspired by <a href="https://github.com/sleeping-owl/admin" target="_blank">SleepingOwlAdmin</a> and <a href="https://github.com/zofe/rapyd-laravel" target="_blank">rapyd-laravel</a>.
 </p>
 
-Screenshots
+Sponsor
 ------------
+[laravel-admin] is being sponsored by the following tool; please help to support us by taking a look and signing up to a free trial
 
-![laravel-admin](https://cloud.githubusercontent.com/assets/1479100/19625297/3b3deb64-9947-11e6-807c-cffa999004be.jpg)
+<a href="https://tracking.gitads.io/?repo=laravel-admin">
+ <img src ="https://images.gitads.io/laravel-admin" alt="GitAds" />
+</a>
+
 
 Requirements
 ------------
@@ -112,7 +116,7 @@ The file `config/admin.php` contains an array of configurations, you can find th
 | [cropper](https://github.com/laravel-admin-extensions/cropper) | A simple jQuery image cropping plugin.          |~1.6 |
 | [composer-viewer](https://github.com/laravel-admin-extensions/composer-viewer) | A web interface of composer packages in laravel.          |~1.6 |
 | [data-table](https://github.com/laravel-admin-extensions/data-table) | Advanced table widget for laravel-admin |~1.6 |
-
+| [watermark](https://github.com/laravel-admin-extensions/watermark) | Text watermark for laravel-admin |~1.6 |
 
 ## Contributors
  This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].

@@ -5,6 +5,7 @@ namespace Encore\Admin\Grid\Actions;
 use Encore\Admin\Actions\Response;
 use Encore\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Delete extends RowAction
 {
@@ -29,7 +30,9 @@ class Delete extends RowAction
         ];
 
         try {
-            $model->delete();
+            DB::transaction(function () use ($model) {
+                $model->delete();
+            });
         } catch (\Exception $exception) {
             return $this->response()->error("{$trans['failed']} : {$exception->getMessage()}");
         }

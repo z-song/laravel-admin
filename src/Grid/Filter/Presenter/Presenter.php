@@ -26,7 +26,7 @@ abstract class Presenter
      *
      * @return string
      */
-    public function view() : string
+    public function view(): string
     {
         $reflect = new \ReflectionClass(get_called_class());
 
@@ -52,7 +52,7 @@ abstract class Presenter
      *
      * @return array
      */
-    public function variables() : array
+    public function variables(): array
     {
         return [];
     }

@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 
 class Select extends Field
 {
+    use CanCascadeFields;
+
     /**
      * @var array
      */
@@ -34,6 +36,11 @@ class Select extends Field
      * @var array
      */
     protected $config = [];
+
+    /**
+     * @var string
+     */
+    protected $cascadeEvent = 'change';
 
     /**
      * Set options.
@@ -120,6 +127,8 @@ class Select extends Field
             'text' => trans('admin.choose'),
         ]);
 
+        $strAllowClear = var_export($allowClear, true);
+
         $script = <<<EOT
 $(document).off('change', "{$this->getElementClassSelector()}");
 $(document).on('change', "{$this->getElementClassSelector()}", function () {
@@ -128,13 +137,17 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
         target.find("option").remove();
         $(target).select2({
             placeholder: $placeholder,
-            allowClear: $allowClear,
+            allowClear: $strAllowClear,
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
                 return d;
             })
-        }).trigger('change');
+        });
+        if (target.data('value')) {
+            $(target).val(target.data('value'));
+        }
+        $(target).trigger('change');
     });
 });
 EOT;
@@ -164,6 +177,8 @@ EOT;
             'text' => trans('admin.choose'),
         ]);
 
+        $strAllowClear = var_export($allowClear, true);
+
         $script = <<<EOT
 var fields = '$fieldsStr'.split('.');
 var urls = '$urlsStr'.split('^');
@@ -173,7 +188,7 @@ var refreshOptions = function(url, target) {
         target.find("option").remove();
         $(target).select2({
             placeholder: $placeholder,
-            allowClear: $allowClear,        
+            allowClear: $strAllowClear,
             data: $.map(data, function (d) {
                 d.id = d.$idField;
                 d.text = d.$textField;
@@ -211,8 +226,7 @@ EOT;
      */
     public function model($model, $idField = 'id', $textField = 'name')
     {
-        if (
-            !class_exists($model)
+        if (!class_exists($model)
             || !in_array(Model::class, class_parents($model))
         ) {
             throw new \InvalidArgumentException("[$model] must be a valid model class");
@@ -383,7 +397,7 @@ $("form select").on("select2:opening", function (e) {
 $(document).ready(function(){
     $('select').each(function(){
         if($(this).is('[readonly]')){
-            $(this).closest('.form-group').find('span.select2-selection__choice__remove').first().remove();
+            $(this).closest('.form-group').find('span.select2-selection__choice__remove').remove();
             $(this).closest('.form-group').find('li.select2-search').first().remove();
             $(this).closest('.form-group').find('span.select2-selection__clear').first().remove();
         }
@@ -428,6 +442,8 @@ EOT;
             'options' => $this->options,
             'groups'  => $this->groups,
         ]);
+
+        $this->addCascadeScript();
 
         $this->attribute('data-value', implode(',', (array) $this->value()));
 

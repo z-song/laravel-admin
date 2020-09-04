@@ -2,7 +2,8 @@
 <html lang="{{ config('app.locale') }}">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ Admin::title() }} @if($header) | {{ $header }}@endif</title>
     <!-- Tell the browser to be responsive to screen width -->
@@ -55,6 +56,7 @@
 <script>
     function LA() {}
     LA.token = "{{ csrf_token() }}";
+    LA.user = @json($_user_);
 </script>
 
 <!-- REQUIRED JS SCRIPTS -->

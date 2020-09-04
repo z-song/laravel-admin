@@ -19,6 +19,11 @@ class Checkbox extends MultipleSelect
     ];
 
     /**
+     * @var string
+     */
+    protected $cascadeEvent = 'ifChanged';
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -117,7 +122,7 @@ $('.{$checkAllClass}').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifCh
     } else {
         $('{$this->getElementClassSelector()}').iCheck('uncheck');
     }
-})
+});
 SCRIPT;
             $this->addVariables(['checkAllClass' => $checkAllClass]);
         }

@@ -4,7 +4,7 @@ use Tests\Models\Tree;
 
 class ModelTreeTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }

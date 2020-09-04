@@ -47,6 +47,10 @@ class Row
         $this->data = $data;
         $this->number = $number;
         $this->keyName = $keyName;
+
+        $this->attributes = [
+            'data-key' => $this->getKey(),
+        ];
     }
 
     /**
@@ -109,7 +113,7 @@ class Row
      */
     public function setAttributes(array $attributes)
     {
-        $this->attributes = $attributes;
+        $this->attributes = array_merge($this->attributes, $attributes);
     }
 
     /**

@@ -230,7 +230,17 @@ trait HasAssets
             return self::$script = array_merge(self::$script, (array) $script);
         }
 
-        $script = array_unique(array_merge(static::$script, static::$deferredScript));
+        $script = collect(static::$script)
+            ->merge(static::$deferredScript)
+            ->unique()
+            ->map(function ($line) {
+                return $line;
+                //@see https://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
+                $pattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\')\/\/.*))/';
+                $line = preg_replace($pattern, '', $line);
+
+                return preg_replace('/\s+/', ' ', $line);
+            });
 
         return view('admin::partials.script', compact('script'));
     }
@@ -246,7 +256,13 @@ trait HasAssets
             return self::$style = array_merge(self::$style, (array) $style);
         }
 
-        return view('admin::partials.style', ['style' => array_unique(self::$style)]);
+        $style = collect(static::$style)
+            ->unique()
+            ->map(function ($line) {
+                return preg_replace('/\s+/', ' ', $line);
+            });
+
+        return view('admin::partials.style', compact('style'));
     }
 
     /**
@@ -275,7 +291,8 @@ trait HasAssets
         }
 
         static::$manifestData = json_decode(
-            file_get_contents(public_path(static::$manifest)), true
+            file_get_contents(public_path(static::$manifest)),
+            true
         );
 
         return static::$manifestData[$key];
@@ -311,5 +328,75 @@ trait HasAssets
     public function jQuery()
     {
         return admin_asset(static::$jQuery);
+    }
+
+    /**
+     * @param $component
+     */
+    public static function component($component, $data = [])
+    {
+        $string = view($component, $data)->render();
+
+        $dom = new \DOMDocument();
+
+        libxml_use_internal_errors(true);
+        $dom->loadHTML('<?xml encoding="utf-8" ?>'.$string);
+        libxml_use_internal_errors(false);
+
+        if ($head = $dom->getElementsByTagName('head')->item(0)) {
+            foreach ($head->childNodes as $child) {
+                if ($child instanceof \DOMElement) {
+                    if ($child->tagName == 'style' && !empty($child->nodeValue)) {
+                        static::style($child->nodeValue);
+                        continue;
+                    }
+
+                    if ($child->tagName == 'link' && $child->hasAttribute('href')) {
+                        static::css($child->getAttribute('href'));
+                    }
+
+                    if ($child->tagName == 'script') {
+                        if ($child->hasAttribute('src')) {
+                            static::js($child->getAttribute('src'));
+                        } else {
+                            static::script(';(function () {'.$child->nodeValue.'})();');
+                        }
+
+                        continue;
+                    }
+                }
+            }
+        }
+
+        $render = '';
+
+        if ($body = $dom->getElementsByTagName('body')->item(0)) {
+            foreach ($body->childNodes as $child) {
+                if ($child instanceof \DOMElement) {
+                    if ($child->tagName == 'style' && !empty($child->nodeValue)) {
+                        static::style($child->nodeValue);
+                        continue;
+                    }
+
+                    if ($child->tagName == 'script' && !empty($child->nodeValue)) {
+                        static::script(';(function () {'.$child->nodeValue.'})();');
+                        continue;
+                    }
+
+                    if ($child->tagName == 'template') {
+                        $html = '';
+                        foreach ($child->childNodes as $childNode) {
+                            $html .= $child->ownerDocument->saveHTML($childNode);
+                        }
+                        $html && static::html($html);
+                        continue;
+                    }
+                }
+
+                $render .= $body->ownerDocument->saveHTML($child);
+            }
+        }
+
+        return trim($render);
     }
 }

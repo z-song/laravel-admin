@@ -7,7 +7,7 @@ use Tests\Models\MultipleImage;
 
 class ImageUploadTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -23,7 +23,7 @@ class ImageUploadTest extends TestCase
     public function testImageUploadPage()
     {
         $this->visit('admin/images/create')
-            ->see('Upload image')
+            ->see('Images')
             ->seeInElement('h3[class=box-title]', 'Create')
             ->seeElement('input[name=image1]')
             ->seeElement('input[name=image2]')
@@ -133,7 +133,7 @@ class ImageUploadTest extends TestCase
             ->dontSeeInDatabase('test_images', ['id' => 1]);
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileNotExists(public_path('uploads/'.$images['image'.$index]));
+            $this->assertFileDoesNotExist(public_path('uploads/'.$images['image'.$index]));
         }
 
         $this->visit('admin/images')
@@ -172,13 +172,11 @@ class ImageUploadTest extends TestCase
         File::cleanDirectory(public_path('uploads/images'));
 
         $this->visit('admin/multiple-images/create')
-            ->seeElement('input[type=file][name="pictures[]"][multiple=1]');
+            ->seeElement('input[type=file][name="pictures[]"][multiple]');
 
         $path = __DIR__.'/assets/test.jpg';
 
-        $file = new \Illuminate\Http\UploadedFile(
-            $path, 'test.jpg', 'image/jpeg', filesize($path), null, true
-        );
+        $file = new \Illuminate\Http\UploadedFile($path, 'test.jpg', 'image/jpeg', null, true);
 
         $size = rand(10, 20);
         $files = ['pictures' => array_pad([], $size, $file)];
@@ -212,9 +210,7 @@ class ImageUploadTest extends TestCase
         // upload files
         $path = __DIR__.'/assets/test.jpg';
 
-        $file = new \Illuminate\Http\UploadedFile(
-            $path, 'test.jpg', 'image/jpeg', filesize($path), null, true
-        );
+        $file = new \Illuminate\Http\UploadedFile($path, 'test.jpg', 'image/jpeg', null, true);
 
         $size = rand(10, 20);
         $files = ['pictures' => array_pad([], $size, $file)];

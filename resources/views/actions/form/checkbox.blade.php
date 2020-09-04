@@ -10,4 +10,5 @@
     @endforeach
     </div>
     <input type="hidden" name="{{$name}}[]">
+    @include('admin::actions.form.help-block')
 </div>

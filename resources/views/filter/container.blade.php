@@ -1,4 +1,4 @@
-<div class="box-header with-border {{ $expand?'':'hide' }}" id="{{ $filterID }}">
+<div class="box-header with-border {{ $expand?'':'hide' }} filter-box" id="{{ $filterID }}">
     <form action="{!! $action !!}" class="form-horizontal" pjax-container method="get">
 
         <div class="row">

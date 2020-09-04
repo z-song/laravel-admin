@@ -8,6 +8,8 @@
 
         <textarea name="{{$name}}" class="form-control {{$class}}" rows="{{ $rows }}" placeholder="{{ $placeholder }}" {!! $attributes !!} >{{ old($column, $value) }}</textarea>
 
+        {!! $append !!}
+
         @include('admin::form.help-block')
 
     </div>

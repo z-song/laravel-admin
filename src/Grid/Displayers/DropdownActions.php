@@ -10,6 +10,8 @@ use Encore\Admin\Grid\Actions\Show;
 
 class DropdownActions extends Actions
 {
+    protected $view = 'admin::grid.actions.dropdown';
+
     /**
      * @var array
      */
@@ -24,28 +26,6 @@ class DropdownActions extends Actions
      * @var array
      */
     protected $defaultClass = [Edit::class, Show::class, Delete::class];
-
-    /**
-     * Add JS script into pages.
-     *
-     * @return void.
-     */
-    protected function addScript()
-    {
-        $script = <<<'SCRIPT'
-(function ($) {
-    $('.table-responsive').on('show.bs.dropdown', function () {
-         $('.table-responsive').css("overflow", "inherit" );
-    });
-    
-    $('.table-responsive').on('hide.bs.dropdown', function () {
-         $('.table-responsive').css("overflow", "auto");
-    })
-})(jQuery);
-SCRIPT;
-
-        Admin::script($script);
-    }
 
     /**
      * @param RowAction $action
@@ -143,23 +123,29 @@ SCRIPT;
     /**
      * @param null|\Closure $callback
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
     public function display($callback = null)
     {
-        $this->addScript();
-
         if ($callback instanceof \Closure) {
             $callback->call($this, $this);
         }
 
+        if ($this->disableAll) {
+            return '';
+        }
+
         $this->prependDefaultActions();
 
-        $actions = [
+        $variables = [
             'default' => $this->default,
             'custom'  => $this->custom,
         ];
 
-        return view('admin::grid.dropdown-actions', $actions);
+        if (empty($variables['default']) && empty($variables['custom'])) {
+            return;
+        }
+
+        return Admin::component($this->view, $variables);
     }
 }

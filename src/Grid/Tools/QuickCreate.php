@@ -235,7 +235,7 @@ class QuickCreate implements Renderable
 
         $script = <<<SCRIPT
 
-(function () {
+;(function () {
 
     $('.quick-create .create').click(function () {
         $('.quick-create .create-form').show();

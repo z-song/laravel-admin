@@ -73,9 +73,7 @@ class Selector implements Renderable
             $label = __(Str::title($column));
         }
 
-        $this->selectors[$column] = compact(
-            'label', 'options', 'type', 'query'
-        );
+        $this->selectors[$column] = compact('label', 'options', 'type', 'query');
 
         return $this;
     }

@@ -6,7 +6,7 @@ use Tests\Models\File as FileModel;
 
 class FileUploadTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -16,7 +16,7 @@ class FileUploadTest extends TestCase
     public function testFileUploadPage()
     {
         $this->visit('admin/files/create')
-            ->see('Upload file')
+            ->see('Files')
             ->seeInElement('h3[class=box-title]', 'Create')
             ->seeElement('input[name=file1]')
             ->seeElement('input[name=file2]')
@@ -126,7 +126,7 @@ class FileUploadTest extends TestCase
             ->dontSeeInDatabase('test_files', ['id' => 1]);
 
         foreach (range(1, 6) as $index) {
-            $this->assertFileNotExists(public_path('uploads/'.$files['file'.$index]));
+            $this->assertFileDoesNotExist(public_path('uploads/'.$files['file'.$index]));
         }
 
         $this->visit('admin/files')

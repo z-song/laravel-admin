@@ -65,7 +65,7 @@ class Tab
     {
         call_user_func($content, $this->form);
 
-        $fields = clone $this->form->builder()->fields();
+        $fields = clone $this->form->fields();
 
         $all = $fields->toArray();
 

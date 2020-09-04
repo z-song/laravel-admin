@@ -110,8 +110,6 @@ class Dashboard
 
         $dependencies = json_decode($json, true)['require'];
 
-        Admin::script("$('.dependencies').slimscroll({height:'510px',size:'3px'});");
-
-        return view('admin::dashboard.dependencies', compact('dependencies'));
+        return Admin::component('admin::dashboard.dependencies', compact('dependencies'));
     }
 }

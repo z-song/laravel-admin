@@ -7,11 +7,17 @@ use Encore\Admin\Form\Field;
 class Text extends Field
 {
     use PlainInput;
+    use HasValuePicker;
 
     /**
      * @var string
      */
     protected $icon = 'fa-pencil';
+
+    /**
+     * @var bool
+     */
+    protected $withoutIcon = false;
 
     /**
      * Set custom fa-icon.
@@ -36,18 +42,20 @@ class Text extends Field
     {
         $this->initPlainInput();
 
-        $this->prepend('<i class="fa '.$this->icon.' fa-fw"></i>')
-            ->defaultAttribute('type', 'text')
+        if (!$this->withoutIcon) {
+            $this->prepend('<i class="fa '.$this->icon.' fa-fw"></i>');
+        }
+        $this->defaultAttribute('type', 'text')
             ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
             ->defaultAttribute('value', old($this->elementName ?: $this->column, $this->value()))
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
-            ->defaultAttribute('placeholder', $this->getPlaceholder());
-
-        $this->addVariables([
-            'prepend' => $this->prepend,
-            'append'  => $this->append,
-        ]);
+            ->defaultAttribute('placeholder', $this->getPlaceholder())
+            ->mountPicker()
+            ->addVariables([
+                'prepend' => $this->prepend,
+                'append'  => $this->append,
+            ]);
 
         return parent::render();
     }
@@ -86,5 +94,17 @@ class Text extends Field
         $datalist .= '</datalist>';
 
         return $this->append($datalist);
+    }
+
+    /**
+     * show no icon in font of input.
+     *
+     * @return $this
+     */
+    public function withoutIcon()
+    {
+        $this->withoutIcon = true;
+
+        return $this;
     }
 }

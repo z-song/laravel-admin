@@ -96,7 +96,7 @@ class Filter implements Renderable
     /**
      * @var string
      */
-    protected $view = 'admin::filter.container';
+    public $view = 'admin::filter.container';
 
     /**
      * @var string
@@ -420,6 +420,16 @@ class Filter implements Renderable
         return tap(new Scope($key, $label), function (Scope $scope) {
             return $this->scopes->push($scope);
         });
+    }
+
+    /**
+     * Add separator in filter scope.
+     *
+     * @return mixed
+     */
+    public function scopeSeparator()
+    {
+        return $this->scope(Scope::SEPARATOR);
     }
 
     /**

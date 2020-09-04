@@ -6,7 +6,7 @@ use Tests\Models\User as UserModel;
 
 class UserGridTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -16,7 +16,7 @@ class UserGridTest extends TestCase
     public function testIndexPage()
     {
         $this->visit('admin/users')
-            ->see('All users')
+            ->see('Users')
             ->seeInElement('tr th', 'Username')
             ->seeInElement('tr th', 'Email')
             ->seeInElement('tr th', 'Mobile')
@@ -56,6 +56,8 @@ class UserGridTest extends TestCase
             ->each(function ($u) {
                 $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
                 $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+                $u->data = ['json' => ['field' => random_int(0, 50)]];
+                $u->save();
             });
     }
 
@@ -64,7 +66,7 @@ class UserGridTest extends TestCase
         $this->seedsTable();
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(100, UserModel::all());
         $this->assertCount(100, ProfileModel::all());
@@ -75,7 +77,7 @@ class UserGridTest extends TestCase
         $this->seedsTable(65);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->visit('admin/users?page=2');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
@@ -90,12 +92,29 @@ class UserGridTest extends TestCase
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
     }
 
+    public function testOrderByJson()
+    {
+        $this->seedsTable(10);
+        $this->assertCount(10, UserModel::all());
+
+        $this->visit('admin/users?_sort[column]=data.json.field&_sort[type]=desc&_sort[cast]=unsigned');
+
+        $jsonTds = $this->crawler->filter('table.table tbody td.column-data-json-field');
+        $this->assertCount(10, $jsonTds);
+        $prevValue = PHP_INT_MAX;
+        foreach ($jsonTds as $jsonTd) {
+            $currentValue = (int) $jsonTd->nodeValue;
+            $this->assertTrue($currentValue <= $prevValue);
+            $prevValue = $currentValue;
+        }
+    }
+
     public function testEqualFilter()
     {
         $this->seedsTable(50);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(50, UserModel::all());
         $this->assertCount(50, ProfileModel::all());
@@ -123,7 +142,7 @@ class UserGridTest extends TestCase
         $this->seedsTable(50);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(50, UserModel::all());
         $this->assertCount(50, ProfileModel::all());

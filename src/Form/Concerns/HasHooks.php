@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Form;
+namespace Encore\Admin\Form\Concerns;
 
 use Closure;
 use Illuminate\Support\Arr;
@@ -14,6 +14,37 @@ trait HasHooks
      * @var array
      */
     protected $hooks = [];
+
+    /**
+     * Initialization closure array.
+     *
+     * @var []Closure
+     */
+    protected static $initCallbacks;
+
+    /**
+     * Initialize with user pre-defined default disables, etc.
+     *
+     * @param Closure $callback
+     */
+    public static function init(Closure $callback = null)
+    {
+        static::$initCallbacks[] = $callback;
+    }
+
+    /**
+     * Call the initialization closure array in sequence.
+     */
+    protected function callInitCallbacks()
+    {
+        if (empty(static::$initCallbacks)) {
+            return;
+        }
+
+        foreach (static::$initCallbacks as $callback) {
+            $callback($this);
+        }
+    }
 
     /**
      * Register a hook.

@@ -89,6 +89,11 @@ abstract class AbstractFilter
     public $group;
 
     /**
+     * @var bool
+     */
+    protected $ignore = false;
+
+    /**
      * AbstractFilter constructor.
      *
      * @param $column
@@ -225,6 +230,10 @@ abstract class AbstractFilter
      */
     public function condition($inputs)
     {
+        if ($this->ignore) {
+            return;
+        }
+
         $value = Arr::get($inputs, $this->column);
 
         if (!isset($value)) {
@@ -234,6 +243,18 @@ abstract class AbstractFilter
         $this->value = $value;
 
         return $this->buildCondition($this->column, $this->value);
+    }
+
+    /**
+     * Ignore this query filter.
+     *
+     * @return $this
+     */
+    public function ignore()
+    {
+        $this->ignore = true;
+
+        return $this;
     }
 
     /**
@@ -380,6 +401,11 @@ abstract class AbstractFilter
         return $this;
     }
 
+    public function getFilterBoxId()
+    {
+        return $this->parent ? $this->parent->getFilterID() : 'filter-box';
+    }
+
     /**
      * Get element id.
      *
@@ -451,7 +477,8 @@ abstract class AbstractFilter
     {
         $args = func_get_args();
 
-        list($relation, $args[0]) = explode('.', $this->column);
+        $relation = substr($this->column, 0, strrpos($this->column, '.'));
+        $args[0] = last(explode('.', $this->column));
 
         return ['whereHas' => [$relation, function ($relation) use ($args) {
             call_user_func_array([$relation, $this->query], $args);

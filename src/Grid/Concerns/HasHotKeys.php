@@ -17,7 +17,7 @@ trait HasHotKeys
 $(document).off('keydown').keydown(function(e) {
     var tag = e.target.tagName.toLowerCase();
     
-    if (tag == 'input' || tag == 'textarea') {
+    if (tag == 'input' || tag == 'textarea' || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) {
         return;
     }
 

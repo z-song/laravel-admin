@@ -34,7 +34,7 @@ class Carousel extends AbstractDisplayer
             return compact('image', 'caption');
         });
 
-        $id = sprintf('carousel-%s-%s', $this->column->getName(), $this->getKey());
+        $id = sprintf('carousel-%s-%s', $this->getName(), $this->getKey());
 
         return (new CarouselWidget($images))->width($width)->height($height)->id($id);
     }

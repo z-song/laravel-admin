@@ -42,6 +42,18 @@ class Column
     }
 
     /**
+     * Remove fields from column.
+     *
+     * @param $fields
+     */
+    public function removeFields($fields)
+    {
+        $this->fields = $this->fields->reject(function (Field $field) use ($fields) {
+            return in_array($field->column(), $fields);
+        });
+    }
+
+    /**
      * Get all filters in this column.
      *
      * @return Collection

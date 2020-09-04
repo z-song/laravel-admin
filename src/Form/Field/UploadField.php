@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -77,7 +78,7 @@ trait UploadField
      * @var array
      */
     protected $fileTypes = [
-        'image'  => '/^(gif|png|jpe?g|svg)$/i',
+        'image'  => '/^(gif|png|jpe?g|svg|webp)$/i',
         'html'   => '/^(htm|html)$/i',
         'office' => '/^(docx?|xlsx?|pptx?|pps|potx?)$/i',
         'gdocs'  => '/^(docx?|xlsx?|pptx?|pps|potx?|rtf|ods|odt|pages|ai|dxf|ttf|tiff?|wmf|e?ps)$/i',
@@ -87,6 +88,11 @@ trait UploadField
         'pdf'    => '/^(pdf)$/i',
         'flash'  => '/^(swf)$/i',
     ];
+
+    /**
+     * @var string
+     */
+    protected $pathColumn;
 
     /**
      * Initialize the storage instance.
@@ -108,6 +114,7 @@ trait UploadField
         $defaults = [
             'overwriteInitial'     => false,
             'initialPreviewAsData' => true,
+            'msgPlaceholder'       => trans('admin.choose_file'),
             'browseLabel'          => trans('admin.browse'),
             'cancelLabel'          => trans('admin.cancel'),
             'showRemove'           => false,
@@ -372,6 +379,20 @@ trait UploadField
     }
 
     /**
+     * Set path column in has-many related model.
+     *
+     * @param string $column
+     *
+     * @return $this
+     */
+    public function pathColumn($column = 'path')
+    {
+        $this->pathColumn = $column;
+
+        return $this;
+    }
+
+    /**
      * Upload file and delete original file.
      *
      * @param UploadedFile $file
@@ -412,6 +433,10 @@ trait UploadField
      */
     public function objectUrl($path)
     {
+        if ($this->pathColumn && is_array($path)) {
+            $path = Arr::get($path, $this->pathColumn);
+        }
+
         if (URL::isValidUrl($path)) {
             return $path;
         }

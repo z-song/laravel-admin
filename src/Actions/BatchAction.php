@@ -47,6 +47,10 @@ SCRIPT;
             $key = explode(',', $key);
         }
 
+        if ($this->modelUseSoftDeletes($modelClass)) {
+            return $modelClass::withTrashed()->findOrFail($key);
+        }
+
         return $modelClass::findOrFail($key);
     }
 

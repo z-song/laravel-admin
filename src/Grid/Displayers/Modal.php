@@ -2,8 +2,34 @@
 
 namespace Encore\Admin\Grid\Displayers;
 
+use Encore\Admin\Admin;
+use Encore\Admin\Grid\Simple;
+use Illuminate\Contracts\Support\Renderable;
+
 class Modal extends AbstractDisplayer
 {
+    /**
+     * @var string
+     */
+    protected $renderable;
+
+    /**
+     * @param int $multiple
+     *
+     * @return string
+     */
+    protected function getLoadUrl()
+    {
+        $renderable = str_replace('\\', '_', $this->renderable);
+
+        return route('admin.handle-renderable', compact('renderable'));
+    }
+
+    /**
+     * @param \Closure|string $callback
+     *
+     * @return mixed|string
+     */
     public function display($callback = null)
     {
         if (func_num_args() == 2) {
@@ -12,31 +38,23 @@ class Modal extends AbstractDisplayer
             $title = $this->trans('title');
         }
 
-        $callback = $callback->bindTo($this->row);
+        $html = '';
 
-        $html = call_user_func_array($callback, [$this->row]);
+        if ($async = is_subclass_of($callback, Renderable::class)) {
+            $this->renderable = $callback;
+        } else {
+            $html = call_user_func_array($callback->bindTo($this->row), [$this->row]);
+        }
 
-        $key = $this->getKey().'-'.str_replace('.', '_', $this->getColumn()->getName());
-
-        return <<<EOT
-<span class="grid-expand" data-toggle="modal" data-target="#grid-modal-{$key}">
-   <a href="javascript:void(0)"><i class="fa fa-clone"></i>&nbsp;&nbsp;{$this->value}</a>
-</span>
-
-<div class="modal" id="grid-modal-{$key}" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{$title}</h4>
-      </div>
-      <div class="modal-body">
-        {$html}
-      </div>
-    </div>
-  </div>
-</div>
-
-EOT;
+        return Admin::component('admin::components.column-modal', [
+            'url'     => $this->getLoadUrl(),
+            'async'   => $async,
+            'grid'    => is_subclass_of($callback, Simple::class),
+            'title'   => $title,
+            'html'    => $html,
+            'key'     => $this->getKey(),
+            'value'   => $this->value,
+            'name'    => $this->getKey().'-'.str_replace('.', '_', $this->getColumn()->getName()),
+        ]);
     }
 }

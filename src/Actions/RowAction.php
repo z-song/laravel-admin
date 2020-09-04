@@ -116,6 +116,10 @@ abstract class RowAction extends GridAction
 
         $modelClass = str_replace('_', '\\', $request->get('_model'));
 
+        if ($this->modelUseSoftDeletes($modelClass)) {
+            return $modelClass::withTrashed()->findOrFail($key);
+        }
+
         return $modelClass::findOrFail($key);
     }
 

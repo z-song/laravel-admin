@@ -320,7 +320,7 @@ SCRIPT;
     /**
      * Return all items of the tree.
      *
-     * @param array $items
+     * @return array
      */
     public function getItems()
     {
