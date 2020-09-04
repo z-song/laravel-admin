@@ -335,6 +335,10 @@
     };
 
     Form.prototype.success = function (data) {
+
+        $('.modal').modal('hide');
+        $('.modal-backdrop').remove();
+
         if (typeof data != 'object') {
             $.admin.toastr.error('Oops something went wrong!');
             return;

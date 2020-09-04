@@ -44,11 +44,11 @@ class FixColumns
      * @param int   $head
      * @param int   $tail
      */
-    public function __construct(Table $table, $head, $tail = -1)
+    public function __construct(Table $table, $head, $tail = 1)
     {
         $this->table = $table;
         $this->head = $head;
-        $this->tail = $tail;
+        $this->tail = abs($tail);
 
         $this->left = Collection::make();
         $this->right = Collection::make();
@@ -82,8 +82,8 @@ class FixColumns
                 $this->left = $table->visibleColumns()->slice(0, $this->head);
             }
 
-            if ($this->tail < 0) {
-                $this->right = $table->visibleColumns()->slice($this->tail);
+            if ($this->tail > 0) {
+                $this->right = $table->visibleColumns()->slice(-$this->tail);
             }
         };
     }
