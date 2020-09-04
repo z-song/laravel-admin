@@ -7,6 +7,7 @@ use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Concerns;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Form\Footer;
 use Encore\Admin\Form\Layout\Layout;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
@@ -913,6 +914,18 @@ class Form implements Renderable
     }
 
     /**
+     * Disable form tools.
+     *
+     * @return $this
+     */
+    public function disableTools()
+    {
+        $this->builder->getTools()->disable();
+
+        return $this;
+    }
+
+    /**
      * @param Closure|null $callback
      *
      * @return Form\Tools
@@ -984,6 +997,22 @@ class Form implements Renderable
     public function disableCreatingCheck(bool $disable = true): self
     {
         $this->builder()->getFooter()->disableCreatingCheck($disable);
+
+        return $this;
+    }
+
+    /**
+     * Disable all footer checkbox.
+     *
+     * @return $this
+     */
+    public function disableFooterCheck()
+    {
+        $this->footer(function (Footer $footer) {
+            $footer->disableViewCheck()
+                ->disableEditingCheck()
+                ->disableCreatingCheck();
+        });
 
         return $this;
     }

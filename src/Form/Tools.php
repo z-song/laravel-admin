@@ -37,6 +37,11 @@ class Tools implements Renderable
     protected $prepends;
 
     /**
+     * @var bool
+     */
+    protected $disable = false;
+
+    /**
      * Create a new Tools instance.
      *
      * @param Builder $builder
@@ -113,6 +118,18 @@ class Tools implements Renderable
         $action = new Delete($this->getListPath());
 
         $this->default->put('delete', $action->setModel($this->form->getModel()));
+
+        return $this;
+    }
+
+    /**
+     * Disable all tools.
+     *
+     * @return $this
+     */
+    public function disable()
+    {
+        $this->disable = true;
 
         return $this;
     }
@@ -249,6 +266,10 @@ class Tools implements Renderable
      */
     public function render()
     {
+        if ($this->disable) {
+            return '';
+        }
+
         $this->addView()
             ->addDelete()
             ->addList();

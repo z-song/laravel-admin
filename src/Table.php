@@ -159,6 +159,11 @@ class Table
     protected static $initCallbacks = [];
 
     /**
+     * @var bool
+     */
+    public $modalForm = false;
+
+    /**
      * Create a new table instance.
      *
      * @param Eloquent $model
@@ -237,6 +242,16 @@ class Table
     public function getKeyName()
     {
         return $this->keyName ?: 'id';
+    }
+
+    /**
+     * @return $this
+     */
+    public function modalForm()
+    {
+        $this->modalForm = true;
+
+        return $this;
     }
 
     /**
@@ -483,7 +498,7 @@ class Table
 
         admin_assets('icheck');
 
-        $checkAllBox = admin_color(<<<'HTML'
+        $check = admin_color(<<<'HTML'
 <div class='icheck-%s d-inline'>
     <input type="checkbox" class="table-select-all" id='select-all'/>
     <label for='select-all'></label>
@@ -492,7 +507,7 @@ HTML);
 
         $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
             ->displayUsing(Displayers\RowSelector::class)
-            ->addHeader($checkAllBox);
+            ->addHeader($check);
     }
 
     /**

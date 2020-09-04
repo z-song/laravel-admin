@@ -150,6 +150,14 @@ abstract class RowAction extends TableAction
     }
 
     /**
+     * @return string
+     */
+    public function getActiontElementClass()
+    {
+        return parent::getElementClass();
+    }
+
+    /**
      * Render row action.
      *
      * @return string

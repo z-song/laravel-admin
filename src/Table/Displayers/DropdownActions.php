@@ -6,6 +6,7 @@ use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Admin;
 use Encore\Admin\Table\Actions\Delete;
 use Encore\Admin\Table\Actions\Edit;
+use Encore\Admin\Table\Actions\EditModal;
 use Encore\Admin\Table\Actions\View;
 use Illuminate\Support\Arr;
 
@@ -53,6 +54,11 @@ class DropdownActions extends Actions
     protected function prependDefaultActions()
     {
         foreach ($this->defaultClass as $class) {
+
+            if ($this->table->modalForm && $class == Edit::class) {
+                $class = EditModal::class;
+            }
+
             /** @var RowAction $action */
             $action = new $class();
 
@@ -165,12 +171,12 @@ class DropdownActions extends Actions
 
             // activate defalut action dblclick
             if ($this->dblclick && $action instanceof $this->dblclick) {
-                $dblclick = $action->getElementClass();
+                $dblclick = $action->getActiontElementClass();
                 break;
             }
 
             if ($action->dblclick) {
-                $dblclick = $action->getElementClass();
+                $dblclick = $action->getActiontElementClass();
             }
         }
 
