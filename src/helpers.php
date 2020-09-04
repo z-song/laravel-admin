@@ -398,3 +398,18 @@ function admin_login_page_backgroud()
 
     return "style=\"background: url({$image}) no-repeat;background-size: cover;\"";
 }
+
+if (!function_exists('admin_view')) {
+
+    /**
+     * @param string $view
+     * @param array $data
+     * @return string
+     * @throws Throwable
+     */
+    function admin_view($view, $data = [])
+    {
+        return Admin::view($view, $data);
+    }
+
+}
