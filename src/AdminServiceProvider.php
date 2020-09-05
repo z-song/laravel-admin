@@ -194,7 +194,7 @@ PHP;
                 return $layout
                     ->title(Arr::get($options, 'title', ' '))
                     ->description(Arr::get($options, 'desc', ' '))
-                    ->component($component, $data);
+                    ->view($component, $data);
             });
         });
     }

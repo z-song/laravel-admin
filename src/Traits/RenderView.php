@@ -90,7 +90,11 @@ trait RenderView
     protected static function resolveScript(DOMElement $element)
     {
         if ($element->hasAttribute('src')) {
-            static::js(admin_asset($element->getAttribute('src')));
+            if ($element->hasAttribute('dep')) {
+                static::dep(admin_asset($element->getAttribute('src')));
+            } else {
+                static::js(admin_asset($element->getAttribute('src')));
+            }
         } elseif (!empty(trim($element->nodeValue))) {
             if ($require = $element->getAttribute('require')) {
                 admin_assets(explode(',', $require));
