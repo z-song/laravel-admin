@@ -106,7 +106,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Form $form
+     * @param Form    $form
      * @param Content $content
      *
      * @return mixed
@@ -125,7 +125,7 @@ class AdminController extends Controller
             $crawler->filter('form')->outerHtml(),
             Admin::style(),
             Admin::html(),
-            Admin::script()
+            Admin::script(),
         ]);
     }
 }

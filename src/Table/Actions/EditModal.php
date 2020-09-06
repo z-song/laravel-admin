@@ -7,8 +7,9 @@ use Encore\Admin\Admin;
 class EditModal extends Edit
 {
     /**
-     * @return string
      * @throws \Throwable
+     *
+     * @return string
      */
     public function render()
     {
