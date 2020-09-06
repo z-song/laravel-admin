@@ -4,15 +4,102 @@ namespace Encore\Admin\Form\Field;
 
 class Date extends Text
 {
-    protected $format = 'YYYY-MM-DD';
+    /**
+     * @var string
+     */
+    protected $view = 'admin::form.date';
 
+    /**
+     * @var string
+     */
+    protected $icon = 'fa-calendar-alt';
+
+    /**
+     * @var array
+     */
+    protected $options = [
+        'format'           => 'YYYY-MM-DD',
+        'allowInputToggle' => true,
+        'icons'            => [
+            'time' => 'fas fa-clock',
+        ],
+    ];
+
+    /**
+     * Set picker format.
+     *
+     * @param string $format
+     *
+     * @return $this
+     */
     public function format($format)
     {
-        $this->format = $format;
-
-        return $this;
+        return $this->options(compact('format'));
     }
 
+    /**
+     * Set max value.
+     *
+     * @param string $maxDate
+     *
+     * @return $this
+     */
+    public function max($maxDate)
+    {
+        return $this->options(compact('maxDate'));
+    }
+
+    /**
+     * Set min value.
+     *
+     * @param string $minDate
+     *
+     * @return $this
+     */
+    public function min($minDate)
+    {
+        return $this->options(compact('minDate'));
+    }
+
+    /**
+     * Set default value.
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function default($defaultDate)
+    {
+        return $this->options(compact('defaultDate'));
+    }
+
+    /**
+     * Set enabled values.
+     *
+     * @param array|string $value
+     *
+     * @return $this
+     */
+    public function enable($enabledDates)
+    {
+        return $this->options(compact('enabledDates'));
+    }
+
+    /**
+     * Set disabled values.
+     *
+     * @param $value
+     *
+     * @return $thiss
+     */
+    public function disable($disabledDates = null)
+    {
+        return $this->options(compact('disabledDates'));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function prepare($value)
     {
         if ($value === '') {
@@ -22,18 +109,19 @@ class Date extends Text
         return $value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function render()
     {
-        $this->options['format'] = $this->format;
-        $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
-        $this->options['allowInputToggle'] = true;
+        $this->options(['locale' => $this->options['locale'] ?? config('app.locale')]);
 
-        $this->script = "$('{$this->getElementClassSelector()}').parent().datetimepicker(".json_encode($this->options).');';
+        $this->addVariables([
+            'icon'    => $this->icon,
+            'options' => $this->options,
+        ]);
 
-        $this->prepend('<i class="fa fa-calendar fa-fw"></i>')
-            ->defaultAttribute('style', 'width: 110px');
-
-        admin_assets('datetimepicker');
+        $this->attribute(['autocomplete' => 'off']);
 
         return parent::render();
     }

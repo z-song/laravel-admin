@@ -12,6 +12,11 @@ use Illuminate\Support\Arr;
 trait CanCascadeFields
 {
     /**
+     * @var string
+     */
+    protected $cascadeEvent = 'change';
+
+    /**
      * @var array
      */
     protected $conditions = [];
@@ -102,7 +107,7 @@ trait CanCascadeFields
      */
     protected function applyCascadeConditions()
     {
-        if( $this->form ) {
+        if ($this->form) {
             $this->form->fields()
                 ->filter(function (Form\Field $field) {
                     return $field instanceof CascadeGroup
@@ -164,55 +169,63 @@ trait CanCascadeFields
 
         $cascadeGroups = collect($this->conditions)->map(function ($condition) {
             return [
-                'class'    => $this->getCascadeClass($condition['value']),
+                'class'    => str_replace(' ', '.', $this->getCascadeClass($condition['value'])),
                 'operator' => $condition['operator'],
                 'value'    => $condition['value'],
             ];
-        })->toJson();
-
-        $script = <<<SCRIPT
-;(function () {
-    var operator_table = {
-        '=': function(a, b) {
-            if ($.isArray(a) && $.isArray(b)) {
-                return $(a).not(b).length === 0 && $(b).not(a).length === 0;
-            }
-
-            return a == b;
-        },
-        '>': function(a, b) { return a > b; },
-        '<': function(a, b) { return a < b; },
-        '>=': function(a, b) { return a >= b; },
-        '<=': function(a, b) { return a <= b; },
-        '!=': function(a, b) {
-             if ($.isArray(a) && $.isArray(b)) {
-                return !($(a).not(b).length === 0 && $(b).not(a).length === 0);
-             }
-
-             return a != b;
-        },
-        'in': function(a, b) { return $.inArray(a, b) != -1; },
-        'notIn': function(a, b) { return $.inArray(a, b) == -1; },
-        'has': function(a, b) { return $.inArray(b, a) != -1; },
-    };
-    var cascade_groups = {$cascadeGroups};
-    $('{$this->getElementClassSelector()}').on('{$this->cascadeEvent}', function (e, state) {
-
-        {$this->getFormFrontValue()}
-
-        cascade_groups.forEach(function (event) {
-            var group = $('div.cascade-group.'+event.class);
-            if( operator_table[event.operator](checked, event.value) ) {
-                group.removeClass('hide');
-            } else {
-                group.addClass('hide');
-            }
         });
-    })
-})();
-SCRIPT;
 
-        Admin::script($script);
+        Admin::view('admin::form.cascade', [
+            'event'         => $this->cascadeEvent,
+            'cascadeGroups' => $cascadeGroups,
+            'selector'      => $this->getElementClassSelector(),
+            'value'         => $this->getFormFrontValue(),
+        ]);
+//
+//        $script = <<<SCRIPT
+//;(function () {
+//    var operator_table = {
+//        '=': function(a, b) {
+//            if ($.isArray(a) && $.isArray(b)) {
+//                return $(a).not(b).length === 0 && $(b).not(a).length === 0;
+//            }
+//
+//            return a == b;
+//        },
+//        '>': function(a, b) { return a > b; },
+//        '<': function(a, b) { return a < b; },
+//        '>=': function(a, b) { return a >= b; },
+//        '<=': function(a, b) { return a <= b; },
+//        '!=': function(a, b) {
+//             if ($.isArray(a) && $.isArray(b)) {
+//                return !($(a).not(b).length === 0 && $(b).not(a).length === 0);
+//             }
+//
+//             return a != b;
+//        },
+//        'in': function(a, b) { return $.inArray(a, b) != -1; },
+//        'notIn': function(a, b) { return $.inArray(a, b) == -1; },
+//        'has': function(a, b) { return $.inArray(b, a) != -1; },
+//    };
+//    var cascade_groups = {$cascadeGroups};
+//    $.admin.initialize('{$this->getElementClassSelector()}', function () {
+//        $('{$this->getElementClassSelector()}').on('{$this->cascadeEvent}', function (e, state) {
+//            {$this->getFormFrontValue()}
+//            var self = $(this);
+//            cascade_groups.forEach(function (event) {
+//                var group = self.parents('.form-group').siblings('div.cascade-group.'+event.class);
+//                if(operator_table[event.operator](checked, event.value)) {
+//                    group.removeClass('d-none');
+//                } else {
+//                    group.addClass('d-none');
+//                }
+//            });
+//        })
+//    });
+//})();
+//SCRIPT;
+//
+//        Admin::script($script);
     }
 
     /**
@@ -220,25 +233,23 @@ SCRIPT;
      */
     protected function getFormFrontValue()
     {
-        switch (get_class($this)) {
-            case Radio::class:
-            case RadioButton::class:
-            case RadioCard::class:
-            case Select::class:
-            case BelongsTo::class:
-            case BelongsToMany::class:
-            case MultipleSelect::class:
-                return 'var checked = $(this).val();';
-            case Checkbox::class:
-            case CheckboxButton::class:
-            case CheckboxCard::class:
+        switch (true) {
+            case $this instanceof Checkbox:
                 return <<<SCRIPT
 var checked = $('{$this->getElementClassSelector()}:checked').map(function(){
   return $(this).val();
 }).get();
 SCRIPT;
-            case SwitchField::class:
-                return "var checked = state ? 'on' : 'off';";
+            case $this instanceof SwitchField:
+                return <<<'SCRIPT'
+var checked = this.checked ? $(this).data('onval') : $(this).data('offval');
+SCRIPT;
+            case $this instanceof Radio:
+            case $this instanceof Select:
+            case $this instanceof MultipleSelect:
+            case $this instanceof Text:
+            case $this instanceof Textarea:
+                return 'var checked = $(this).val();';
             default:
                 throw new \InvalidArgumentException('Invalid form field type');
         }

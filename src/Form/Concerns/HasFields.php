@@ -58,6 +58,7 @@ use Illuminate\Support\Arr;
  * @method Field\HasMany        morphMany($relationName, $label = '', $callback)
  * @method Field\BelongsTo      belongsTo($column, $selectable, $label = '')
  * @method Field\BelongsToMany  belongsToMany($column, $selectable, $label = '')
+ * @method Field\WangEditor     wangEditor($column, $label = '')
  */
 trait HasFields
 {
@@ -102,6 +103,7 @@ trait HasFields
         'switch'         => Field\SwitchField::class,
         'text'           => Field\Text::class,
         'textarea'       => Field\Textarea::class,
+        'wangEditor'     => Field\WangEditor::class,
         'time'           => Field\Time::class,
         'timeRange'      => Field\TimeRange::class,
         'url'            => Field\Url::class,
@@ -187,36 +189,5 @@ trait HasFields
         }
 
         return false;
-    }
-
-    /**
-     * Collect assets required by registered field.
-     *
-     * @return array
-     */
-    public static function collectFieldAssets(): array
-    {
-        if (!empty(static::$collectedAssets)) {
-            return static::$collectedAssets;
-        }
-
-        $css = collect();
-        $js = collect();
-
-        foreach (static::$availableFields as $field) {
-            if (!method_exists($field, 'getAssets')) {
-                continue;
-            }
-
-            $assets = call_user_func([$field, 'getAssets']);
-
-            $css->push(Arr::get($assets, 'css'));
-            $js->push(Arr::get($assets, 'js'));
-        }
-
-        return static::$collectedAssets = [
-            'css' => $css->flatten()->unique()->filter()->toArray(),
-            'js'  => $js->flatten()->unique()->filter()->toArray(),
-        ];
     }
 }

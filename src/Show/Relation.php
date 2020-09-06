@@ -2,8 +2,8 @@
 
 namespace Encore\Admin\Show;
 
-use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Table;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -117,7 +117,7 @@ class Relation extends Field
             || $relation instanceof BelongsToMany
             || $relation instanceof HasManyThrough
         ) {
-            $renderable = new Grid($relation->getRelated(), $this->builder);
+            $renderable = new Table($relation->getRelated(), $this->builder);
 
             $renderable->setName($this->name)
                 ->setTitle($this->title)

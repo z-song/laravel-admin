@@ -1,3 +1,5 @@
+@php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))
+
 <style>
     .nav-tabs > li:hover > i{
         display: inline;
@@ -12,9 +14,9 @@
         display: none;
     }
 </style>
-<div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}}">
+<div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}} form-group" {!! admin_attrs($group_attrs) !!}>
     <div class="row header">
-        <div class="col-md-2 {{$viewClass['label']}}"><h4 class="pull-right">{{ $label }}</h4></div>
+        <div class="col-md-2 {{$viewClass['label']}}"><label class="float-right">{{ $label }}</label></div>
         <div class="col-md-8 {{$viewClass['field']}}">
             <button type="button" class="btn btn-default btn-sm add"><i class="fa fa-plus-circle" style="font-size: large;"></i></button>
         </div>
@@ -31,11 +33,9 @@
                 <i class="close-tab fa fa-times" ></i>
             </li>
         @endforeach
-
     </ul>
-    
-    <div class="tab-content has-many-{{$column}}-forms">
 
+    <div class="tab-content has-many-{{$column}}-forms">
         @foreach($forms as $pk => $form)
             <div class="tab-pane fields-group has-many-{{$column}}-form @if ($form == reset($forms)) active @endif" id="{{ $relationName . '_' . $pk }}">
                 @foreach($form->fields() as $field)
@@ -58,5 +58,42 @@
             {!! $template !!}
         </div>
     </template>
-
 </div>
+
+<script>
+    $('#has-many-{{ $column }} > .nav').off('click', 'i.close-tab').on('click', 'i.close-tab', function(){
+        var $navTab = $(this).siblings('a');
+        var $pane = $($navTab.attr('href'));
+        if($pane.hasClass('new')){
+            $pane.remove();
+        }else{
+            $pane.removeClass('active').find('.{{ \Encore\Admin\Form\NestedForm::REMOVE_FLAG_CLASS }}').val(1);
+        }
+        if($navTab.closest('li').hasClass('active')){
+            $navTab.closest('li').remove();
+            $('#has-many-{{ $column }} > .nav > li:nth-child(1) > a').tab('show');
+        }else{
+            $navTab.closest('li').remove();
+        }
+    });
+
+    var index = 0;
+    $('#has-many-{{ $column }} > .header').off('click', '.add').on('click', '.add', function(){
+        index++;
+        var navTabHtml = $('#has-many-{{ $column }} > template.nav-tab-tpl').html().replace(/{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}/g, index);
+        var paneHtml = $('#has-many-{{ $column }} > template.pane-tpl').html().replace(/{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}/g, index);
+        $('#has-many-{{ $column }} > .nav').append(navTabHtml);
+        $('#has-many-{{ $column }} > .tab-content').append(paneHtml);
+        $('#has-many-{{ $column }} > .nav > li:last-child a').tab('show');
+    });
+
+    if ($('.has-error').length) {
+        $('.has-error').parent('.tab-pane').each(function () {
+            var tabId = '#'+$(this).attr('id');
+            $('li a[href="'+tabId+'"] i').removeClass('d-none');
+        });
+
+        var first = $('.has-error:first').parent().attr('id');
+        $('li a[href="#'+first+'"]').tab('show');
+    }
+</script>

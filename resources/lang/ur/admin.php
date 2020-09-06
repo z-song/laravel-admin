@@ -98,7 +98,7 @@ return [
         'filter_clear'       => 'سارے دکھاو',
         'filter_placeholder' => 'فلٹر',
     ],
-    'grid_items_selected'    => '{n} آئٹمز منتخب',
+    'table_items_selected'    => '{n} آئٹمز منتخب',
 
     'menu_titles'            => [],
     'prev'                   => 'پچھلا',

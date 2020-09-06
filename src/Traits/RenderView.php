@@ -9,11 +9,13 @@ trait RenderView
 {
     /**
      * @param string $view
-     * @param array $data
-     * @return string
+     * @param array  $data
+     *
      * @throws \Throwable
+     *
+     * @return string
      */
-    public static function view(string $view, $data = []) : string
+    public static function view(string $view, $data = []): string
     {
         list($head, $body) = static::getDOMDocument($view, $data);
 
@@ -42,9 +44,11 @@ trait RenderView
 
     /**
      * @param string $view
-     * @param array $data
-     * @return \DOMDocument
+     * @param array  $data
+     *
      * @throws \Throwable
+     *
+     * @return \DOMDocument
      */
     protected static function getDOMDocument(string $view, $data = [])
     {
@@ -54,7 +58,7 @@ trait RenderView
 
         libxml_use_internal_errors(true);
 
-        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $content);
+        $dom->loadHTML('<?xml encoding="utf-8" ?>'.$content);
 
         libxml_use_internal_errors(false);
 
@@ -68,34 +72,59 @@ trait RenderView
 
     /**
      * @param DOMElement $element
+     *
      * @return void
      */
     protected static function resolve(DOMElement $element)
     {
-        $method = 'resolve' . ucfirst($element->tagName);
+        $method = 'resolve'.ucfirst($element->tagName);
 
         return static::{$method}($element);
     }
 
     /**
      * @param DOMElement $element
+     *
      * @return void
      */
     protected static function resolveScript(DOMElement $element)
     {
         if ($element->hasAttribute('src')) {
-            static::js(admin_asset($element->getAttribute('src')));
+            if ($element->hasAttribute('dep')) {
+                static::dep(admin_asset($element->getAttribute('src')));
+            } else {
+                static::js(admin_asset($element->getAttribute('src')));
+            }
         } elseif (!empty(trim($element->nodeValue))) {
             if ($require = $element->getAttribute('require')) {
                 admin_assets(explode(',', $require));
             }
 
-            static::script(';(function () {' . $element->nodeValue . '})();');
+            if ($selector = $element->getAttribute('selector')) {
+                if ($element->getAttribute('nested')) {
+                    $script = <<<SCRIPT
+;$.admin.initialize('$selector', function () {
+    $(this).addClass('initialized');
+    {$element->nodeValue}
+});
+SCRIPT;
+                } else {
+                    $obj = $element->getAttribute('all') ? "$('{$selector}')" : "$('{$selector}').get(0)";
+                    $script = <<<SCRIPT
+;(function () {{$element->nodeValue}}).call({$obj});
+SCRIPT;
+                }
+
+                return static::script($script);
+            }
+
+            static::script(';(function () {'.$element->nodeValue.'})();');
         }
     }
 
     /**
      * @param DOMElement $element
+     *
      * @return void
      */
     protected static function resolveStyle(DOMElement $element)
@@ -107,6 +136,7 @@ trait RenderView
 
     /**
      * @param DOMElement $element
+     *
      * @return void
      */
     protected static function resolveLink(DOMElement $element)
@@ -118,6 +148,7 @@ trait RenderView
 
     /**
      * @param DOMElement $element
+     *
      * @return void
      */
     protected static function resolveTemplate(DOMElement $element)

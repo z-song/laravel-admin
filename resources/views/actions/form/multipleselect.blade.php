@@ -4,9 +4,12 @@
 
         <option value=""></option>
         @foreach($options as $select => $option)
-            <option value="{{$select}}" {{ in_array($select, old($column, $value) ?: []) ? 'selected' : '' }}>{{$option}}</option>
+            <option value="{{$select}}" {{ in_array($select, $value ?: []) ? 'selected' : '' }}>{{$option}}</option>
         @endforeach
     </select>
     @include('admin::actions.form.help-block')
 </div>
 
+<script require="select2" selector="{{ $selector }}">
+    $(this).select2(@json($configs));
+</script>

@@ -1,16 +1,16 @@
-<div class="box box-info">
-    <div class="box-header with-border">
-        <h3 class="box-title">{{ $form->title() }}</h3>
+<div class="card card-@color card-outline">
+    <div class="card-header">
+        <h3 class="card-title">{{ $form->title() }}</h3>
 
-        <div class="box-tools">
+        <div class="card-tools">
             {!! $form->renderTools() !!}
         </div>
     </div>
-    <!-- /.box-header -->
+    <!-- /.card-header -->
     <!-- form start -->
     {!! $form->open() !!}
 
-    <div class="box-body">
+    <div class="card-body">
 
         @if(!$tabObj->isEmpty())
             @include('admin::form.tab', compact('tabObj'))
@@ -23,18 +23,18 @@
                     @endforeach
                 @else
                     @foreach($layout->columns() as $column)
-                        <div class="col-md-{{ $column->width() }}">
+{{--                        <div class="col-md-{{ $column->width() }}">--}}
                             @foreach($column->fields() as $field)
                                 {!! $field->render() !!}
                             @endforeach
-                        </div>
+{{--                        </div>--}}
                     @endforeach
                 @endif
             </div>
         @endif
 
     </div>
-    <!-- /.box-body -->
+    <!-- /.card-body -->
 
     {!! $form->renderFooter() !!}
 
@@ -42,7 +42,57 @@
         {!! $field->render() !!}
     @endforeach
 
-<!-- /.box-footer -->
+<!-- /.card-footer -->
     {!! $form->close() !!}
 </div>
+
+@if(!$tabObj->isEmpty())
+<script>
+    var hash = document.location.hash;
+    if (hash) {
+        $('.nav-tabs a[href="' + hash + '"]').tab('show');
+    }
+
+    // Change hash for page-reload
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+        history.pushState(null,null, e.target.hash);
+    });
+
+    if ($('.has-error').length) {
+        $('.has-error').each(function () {
+            var tabId = '#'+$(this).closest('.tab-pane').attr('id');
+            $('li a[href="'+tabId+'"] i').removeClass('d-none');
+        });
+
+        var first = $('.has-error:first').closest('.tab-pane').attr('id');
+        $('li a[href="#'+first+'"]').tab('show');
+    }
+</script>
+@endif
+
+@if($confirm)
+<script selector="form.{{ $class }}">
+    var $form = $(this);
+    $form.find('button[type=submit]').click(function (e) {
+        e.preventDefault();
+        $.admin.swal.fire({
+            title: "{{ $confirm }}",
+            icon: "warning",
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "{{ admin_trans('admin.confirm') }}",
+            cancelButtonText: "{{ admin_trans('admin.cancel') }}",
+        }).then(function (result) {
+            if (result.value) {
+                $form.submit();
+            }
+        });
+    });
+</script>
+@endif
+
+<script selector="form.{{ $class }}">
+    $.admin.initForm($(this));
+</script>
 

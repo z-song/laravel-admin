@@ -3,11 +3,10 @@
 namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Actions\Action;
-use Encore\Admin\Actions\GridAction;
 use Encore\Admin\Actions\Response;
 use Encore\Admin\Actions\RowAction;
+use Encore\Admin\Actions\TableAction;
 use Encore\Admin\Widgets\Form;
-use Encore\Admin\Widgets\Selectable\Selectable;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
@@ -26,17 +25,13 @@ class HandleController extends Controller
     {
         $form = $this->resolveForm($request);
 
-        if ($errors = $form->validate($request)) {
-            return back()->withInput()->withErrors($errors);
+        if ($response = $form->validate($request)) {
+            return $response;
         }
 
-        $result = $form->sanitize()->handle($request);
+        $form->sanitize()->handle($request);
 
-        if (method_exists($form, 'result')) {
-            return back()->withInput()->with('__result', $result);
-        }
-
-        return $result;
+        return $form->getResponse();
     }
 
     /**
@@ -59,7 +54,7 @@ class HandleController extends Controller
         }
 
         /** @var Form $form */
-        $form = app($formClass);
+        $form = app()->make($formClass);
 
         if (!method_exists($form, 'handle')) {
             throw new Exception("Form method {$formClass}::handle() does not exist.");
@@ -80,7 +75,7 @@ class HandleController extends Controller
         $model = null;
         $arguments = [];
 
-        if ($action instanceof GridAction) {
+        if ($action instanceof TableAction) {
             $model = $action->retrieveModel($request);
             $arguments[] = $model;
         }
@@ -125,7 +120,7 @@ class HandleController extends Controller
             throw new Exception("Form [{$actionClass}] does not exist.");
         }
 
-        /** @var GridAction $form */
+        /** @var TableAction $form */
         $action = app($actionClass);
 
         if (!method_exists($action, 'handle')) {
@@ -160,12 +155,12 @@ class HandleController extends Controller
     public function handleSelectable(Request $request)
     {
         $class = $request->get('selectable');
-        $args  = $request->get('args', []);
+        $args = $request->get('args', []);
 
         $class = str_replace('_', '\\', $class);
 
         if (class_exists($class)) {
-            /** @var \Encore\Admin\Grid\Selectable $selectable */
+            /** @var \Encore\Admin\Table\Selectable $selectable */
             $selectable = new $class(...array_values($args));
 
             return $selectable->render();

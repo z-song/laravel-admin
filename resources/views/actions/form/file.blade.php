@@ -1,27 +1,24 @@
-@admin_assets('fileinput')
-
 <div class="form-group">
     <label>{{ $label }}</label>
     <input type="file" class="{{$class}}" name="{{$name}}" {!! $attributes !!} />
     @include('admin::actions.form.help-block')
 </div>
 
-<script require="fileinput">
-    var $input = $("input{{ $selector }}");
-    $input.fileinput({!! $options !!});
+<script require="fileinput" selector="{{ $selector }}">
+    $(this).fileinput({!! $options !!});
 
     @if($settings['showRemove'])
-    $input.on('filebeforedelete', function() {
+    $(this).on('filebeforedelete', function() {
         return new Promise(function(resolve, reject) {
             var remove = resolve;
-            swal({
-                title: "{{ trans('admin.delete_confirm') }}",
-                type: "warning",
+            $.admin.swal.fire({
+                title: "{{ admin_trans('admin.delete_confirm') }}",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "{{ trans('admin.confirm') }}",
                 showLoaderOnConfirm: true,
-                cancelButtonText: "{{ trans('admin.cancel') }}",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "{{ admin_trans('admin.confirm') }}",
+                cancelButtonText: "{{ admin_trans('admin.cancel') }}",
                 preConfirm: function() {
                     return new Promise(function(resolve) {
                         resolve(remove());

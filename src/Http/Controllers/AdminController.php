@@ -2,8 +2,11 @@
 
 namespace Encore\Admin\Http\Controllers;
 
+use Encore\Admin\Admin;
+use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
+use Symfony\Component\DomCrawler\Crawler;
 
 class AdminController extends Controller
 {
@@ -50,7 +53,7 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
-            ->body($this->grid());
+            ->body($this->table());
     }
 
     /**
@@ -79,10 +82,11 @@ class AdminController extends Controller
      */
     public function edit($id, Content $content)
     {
-        return $content
+        $content
             ->title($this->title())
-            ->description($this->description['edit'] ?? trans('admin.edit'))
-            ->body($this->form()->edit($id));
+            ->description($this->description['edit'] ?? trans('admin.edit'));
+
+        return $this->renderModalForm($this->form()->edit($id), $content);
     }
 
     /**
@@ -94,9 +98,34 @@ class AdminController extends Controller
      */
     public function create(Content $content)
     {
-        return $content
+        $content
             ->title($this->title())
-            ->description($this->description['create'] ?? trans('admin.create'))
-            ->body($this->form());
+            ->description($this->description['create'] ?? trans('admin.create'));
+
+        return $this->renderModalForm($this->form(), $content);
+    }
+
+    /**
+     * @param Form $form
+     * @param Content $content
+     *
+     * @return mixed
+     */
+    public function renderModalForm($form, $content)
+    {
+        if (!request()->has('_modal')) {
+            return $content->body($form);
+        }
+
+        $crawler = new Crawler(
+            $form->disableTools()->disableFooterCheck()->render()
+        );
+
+        return implode("\r\n", [
+            $crawler->filter('form')->outerHtml(),
+            Admin::style(),
+            Admin::html(),
+            Admin::script()
+        ]);
     }
 }

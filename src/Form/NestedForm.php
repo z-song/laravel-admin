@@ -53,6 +53,8 @@ use Illuminate\Support\Collection;
  */
 class NestedForm
 {
+    use Form\Concerns\HandleCascadeFields;
+
     const DEFAULT_KEY_NAME = '__LA_KEY__';
 
     const REMOVE_FLAG_NAME = '_remove_';
@@ -165,7 +167,7 @@ class NestedForm
      *
      * @return $this
      */
-    public function setForm(Form $form = null)
+    public function setForm($form = null)
     {
         $this->form = $form;
 
@@ -325,6 +327,8 @@ class NestedForm
      */
     public function pushField(Field $field)
     {
+        $field->setForm($this);
+
         $this->fields->push($field);
 
         return $this;
@@ -362,26 +366,17 @@ class NestedForm
      *
      * @return array
      */
-    public function getTemplateHtmlAndScript()
+    public function getTemplate()
     {
         $html = '';
-        $scripts = [];
 
         /* @var Field $field */
         foreach ($this->fields() as $field) {
-
             //when field render, will push $script to Admin
             $html .= $field->render();
-
-            /*
-             * Get and remove the last script of Admin::$script stack.
-             */
-            if ($field->getScript()) {
-                $scripts[] = array_pop(Admin::$script);
-            }
         }
 
-        return [$html, implode("\r\n", $scripts)];
+        return $html;
     }
 
     /**
@@ -432,13 +427,11 @@ class NestedForm
             /* @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
-            $field->setForm($this->form);
+            $field->setForm($this)->setNested();
 
-            $field = $this->formatField($field);
-
-            $this->pushField($field);
-
-            return $field;
+            return tap($this->formatField($field), function ($field) {
+                $this->pushField($field);
+            });
         }
 
         return $this;

@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Show\Actions;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class Delete extends Action
@@ -20,9 +19,9 @@ class Delete extends Action
 
     public function handle(Request $request)
     {
-        $key   = $request->get('key');
+        $key = $request->get('key');
         $model = $request->get('model');
-        $path  = $request->get('path');
+        $path = $request->get('path');
 
         $trans = [
             'failed'    => trans('admin.delete_failed'),
@@ -57,7 +56,7 @@ class Delete extends Action
         $text = trans('admin.delete');
 
         return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
+<div class="btn-group float-right" style="margin-right: 5px">
     <a href="javascript:void(0);" class="btn btn-sm btn-danger delete-record" title="{$text}">
         <i class="fa fa-trash"></i><span class="hidden-xs">  {$text}</span>
     </a>

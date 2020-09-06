@@ -4,9 +4,9 @@
     <label>{{ $label }}</label>
     <div>
     @foreach($options as $option => $label)
-        <span class="icheck">
-            <label class="radio-inline">
-                <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
+        <span class="icheck-@color">
+            <input id="@id" type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == $value) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />
+            <label for="@id" class="radio-inline">&nbsp;{{$label}}&nbsp;&nbsp;
             </label>
         </span>
     @endforeach

@@ -5,26 +5,20 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Form\Builder;
-use Encore\Admin\Form\Concerns\HandleCascadeFields;
-use Encore\Admin\Form\Concerns\HasFields;
-use Encore\Admin\Form\Concerns\HasHooks;
+use Encore\Admin\Form\Concerns;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Form\Footer;
 use Encore\Admin\Form\Layout\Layout;
 use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Validator;
-use Spatie\EloquentSortable\Sortable;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -32,9 +26,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Form implements Renderable
 {
-    use HasHooks;
-    use HasFields;
-    use HandleCascadeFields;
+    use Concerns\HasHooks;
+    use Concerns\HasFields;
+    use Concerns\HasResponse;
+    use Concerns\ValidatesFields;
+    use Concerns\HandleCascadeFields;
     use ShouldSnakeAttributes;
     /**
      * Remove flag in `has many` form.
@@ -47,11 +43,6 @@ class Form implements Renderable
      * @var Model
      */
     protected $model;
-
-    /**
-     * @var \Illuminate\Validation\Validator
-     */
-    protected $validator;
 
     /**
      * @var Builder
@@ -92,13 +83,6 @@ class Form implements Renderable
     protected $ignored = [];
 
     /**
-     * Collected field assets.
-     *
-     * @var array
-     */
-    protected static $collectedAssets = [];
-
-    /**
      * @var Form\Tab
      */
     protected $tab = null;
@@ -119,19 +103,14 @@ class Form implements Renderable
      * Create a new form instance.
      *
      * @param $model
-     * @param \Closure $callback
      */
-    public function __construct($model, Closure $callback = null)
+    public function __construct($model)
     {
         $this->model = $model;
 
         $this->builder = new Builder($this);
 
         $this->initLayout();
-
-        if ($callback instanceof Closure) {
-            $callback($this);
-        }
 
         $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses_deep($this->model), true);
 
@@ -238,93 +217,17 @@ class Form implements Renderable
     }
 
     /**
-     * Destroy data entity and remove files.
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function destroy($id)
-    {
-        try {
-            if (($ret = $this->callDeleting($id)) instanceof Response) {
-                return $ret;
-            }
-
-            collect(explode(',', $id))->filter()->each(function ($id) {
-                $builder = $this->model()->newQuery();
-
-                if ($this->isSoftDeletes) {
-                    $builder = $builder->withTrashed();
-                }
-
-                $model = $builder->with($this->getRelations())->findOrFail($id);
-
-                if ($this->isSoftDeletes && $model->trashed()) {
-                    $this->deleteFiles($model, true);
-                    $model->forceDelete();
-
-                    return;
-                }
-
-                $this->deleteFiles($model);
-                $model->delete();
-            });
-
-            if (($ret = $this->callDeleted()) instanceof Response) {
-                return $ret;
-            }
-
-            $response = [
-                'status'  => true,
-                'message' => trans('admin.delete_succeeded'),
-            ];
-        } catch (\Exception $exception) {
-            $response = [
-                'status'  => false,
-                'message' => $exception->getMessage() ?: trans('admin.delete_failed'),
-            ];
-        }
-
-        return response()->json($response);
-    }
-
-    /**
-     * Remove files in record.
-     *
-     * @param Model $model
-     * @param bool  $forceDelete
-     */
-    protected function deleteFiles(Model $model, $forceDelete = false)
-    {
-        // If it's a soft delete, the files in the data will not be deleted.
-        if (!$forceDelete && $this->isSoftDeletes) {
-            return;
-        }
-
-        $data = $model->toArray();
-
-        $this->fields()->filter(function ($field) {
-            return $field instanceof Field\File;
-        })->each(function (Field\File $file) use ($data) {
-            $file->setOriginal($data);
-
-            $file->destroy();
-        });
-    }
-
-    /**
      * Store a new record.
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\Http\JsonResponse
      */
     public function store()
     {
-        $data = \request()->all();
+        $data = request()->all();
 
         // Handle validation errors.
-        if ($validationMessages = $this->validationMessages($data)) {
-            return $this->responseValidationError($validationMessages);
+        if ($response = $this->validateErrorResponse($data)) {
+            return $response;
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -347,85 +250,12 @@ class Form implements Renderable
             return $response;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin.save_succeeded'))) {
+        // For quick create store
+        if ($response = $this->quickCreateResponse()) {
             return $response;
         }
 
         return $this->redirectAfterStore();
-    }
-
-    /**
-     * @param MessageBag $message
-     *
-     * @return $this|\Illuminate\Http\JsonResponse
-     */
-    protected function responseValidationError(MessageBag $message)
-    {
-        if (\request()->ajax() && !\request()->pjax()) {
-            return response()->json([
-                'status'     => false,
-                'validation' => $message,
-                'message'    => $message->first(),
-            ]);
-        }
-
-        return back()->withInput()->withErrors($message);
-    }
-
-    /**
-     * Get ajax response.
-     *
-     * @param string $message
-     *
-     * @return bool|\Illuminate\Http\JsonResponse
-     */
-    protected function ajaxResponse($message)
-    {
-        $request = Request::capture();
-
-        // ajax but not pjax
-        if ($request->ajax() && !$request->pjax()) {
-            return response()->json([
-                'status'    => true,
-                'message'   => $message,
-                'display'   => $this->applayFieldDisplay(),
-            ]);
-        }
-
-        return false;
-    }
-
-    /**
-     * @return array
-     */
-    protected function applayFieldDisplay()
-    {
-        $editable = [];
-
-        /** @var Field $field */
-        foreach ($this->fields() as $field) {
-            if (!\request()->has($field->column())) {
-                continue;
-            }
-
-            $newValue = $this->model->fresh()->getAttribute($field->column());
-
-            if ($newValue instanceof Arrayable) {
-                $newValue = $newValue->toArray();
-            }
-
-            if ($field instanceof Field\BelongsTo || $field instanceof Field\BelongsToMany) {
-                $selectable = $field->getSelectable();
-
-                if (method_exists($selectable, 'display')) {
-                    $display = $selectable::display();
-
-                    $editable[$field->column()] = $display->call($this->model, $newValue);
-                }
-            }
-        }
-
-        return $editable;
     }
 
     /**
@@ -478,6 +308,10 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
+            if (in_array($column, ['_token', '_saved', '_method'])) {
+                continue;
+            }
+
             if (method_exists($this->model, $column) ||
                 method_exists($this->model, $column = Str::camel($column))) {
                 $relation = call_user_func([$this->model, $column]);
@@ -503,8 +337,6 @@ class Form implements Renderable
     {
         $data = ($data) ?: request()->all();
 
-        $isEditable = $this->isEditable($data);
-
         if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
             return $data;
         }
@@ -521,12 +353,8 @@ class Form implements Renderable
         $this->setFieldOriginalValue();
 
         // Handle validation errors.
-        if ($validationMessages = $this->validationMessages($data)) {
-            if (!$isEditable) {
-                return back()->withInput()->withErrors($validationMessages);
-            }
-
-            return response()->json(['errors' => Arr::dot($validationMessages->getMessages())], 422);
+        if ($response = $this->validateErrorResponse($data)) {
+            return $response;
         }
 
         if (($response = $this->prepare($data)) instanceof Response) {
@@ -550,79 +378,12 @@ class Form implements Renderable
             return $result;
         }
 
-        if ($response = $this->ajaxResponse(trans('admin.update_succeeded'))) {
+        // For inline edit updates.
+        if ($response = $this->inlineEditResponse()) {
             return $response;
         }
 
         return $this->redirectAfterUpdate($id);
-    }
-
-    /**
-     * Get RedirectResponse after store.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectAfterStore()
-    {
-        $resourcesPath = $this->resource(0);
-
-        $key = $this->model->getKey();
-
-        return $this->redirectAfterSaving($resourcesPath, $key);
-    }
-
-    /**
-     * Get RedirectResponse after update.
-     *
-     * @param mixed $key
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectAfterUpdate($key)
-    {
-        $resourcesPath = $this->resource(-1);
-
-        return $this->redirectAfterSaving($resourcesPath, $key);
-    }
-
-    /**
-     * Get RedirectResponse after data saving.
-     *
-     * @param string $resourcesPath
-     * @param string $key
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    protected function redirectAfterSaving($resourcesPath, $key)
-    {
-        if (request('after-save') == 1) {
-            // continue editing
-            $url = rtrim($resourcesPath, '/')."/{$key}/edit";
-        } elseif (request('after-save') == 2) {
-            // continue creating
-            $url = rtrim($resourcesPath, '/').'/create';
-        } elseif (request('after-save') == 3) {
-            // view resource
-            $url = rtrim($resourcesPath, '/')."/{$key}";
-        } else {
-            $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
-        }
-
-        admin_toastr(trans('admin.save_succeeded'));
-
-        return redirect($url);
-    }
-
-    /**
-     * Check if request is from editable.
-     *
-     * @param array $input
-     *
-     * @return bool
-     */
-    protected function isEditable(array $input = []): bool
-    {
-        return array_key_exists('_editable', $input) || array_key_exists('_edit_inline', $input);
     }
 
     /**
@@ -635,40 +396,11 @@ class Form implements Renderable
      */
     protected function handleColumnUpdates($id, $data)
     {
-        $data = $this->handleEditable($data);
-
         $data = $this->handleFileDelete($data);
 
         $data = $this->handleFileSort($data);
 
-        if ($this->handleOrderable($id, $data)) {
-            return response([
-                'status'  => true,
-                'message' => trans('admin.update_succeeded'),
-            ]);
-        }
-
         return $data;
-    }
-
-    /**
-     * Handle editable update.
-     *
-     * @param array $input
-     *
-     * @return array
-     */
-    protected function handleEditable(array $input = []): array
-    {
-        if (array_key_exists('_editable', $input)) {
-            $name = $input['name'];
-            $value = $input['value'];
-
-            Arr::forget($input, ['pk', 'value', 'name']);
-            Arr::set($input, $name, $value);
-        }
-
-        return $input;
     }
 
     /**
@@ -712,29 +444,6 @@ class Form implements Renderable
         request()->replace($input);
 
         return $input;
-    }
-
-    /**
-     * Handle orderable update.
-     *
-     * @param int   $id
-     * @param array $input
-     *
-     * @return bool
-     */
-    protected function handleOrderable($id, array $input = [])
-    {
-        if (array_key_exists('_orderable', $input)) {
-            $model = $this->model->find($id);
-
-            if ($model instanceof Sortable) {
-                $input['_orderable'] == 1 ? $model->moveOrderUp() : $model->moveOrderDown();
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -1059,51 +768,6 @@ class Form implements Renderable
     }
 
     /**
-     * Get validation messages.
-     *
-     * @param array $input
-     *
-     * @return MessageBag|bool
-     */
-    public function validationMessages($input)
-    {
-        $failedValidators = [];
-
-        /** @var Field $field */
-        foreach ($this->fields() as $field) {
-            if (!$validator = $field->getValidator($input)) {
-                continue;
-            }
-
-            if (($validator instanceof Validator) && !$validator->passes()) {
-                $failedValidators[] = $validator;
-            }
-        }
-
-        $message = $this->mergeValidationMessages($failedValidators);
-
-        return $message->any() ? $message : false;
-    }
-
-    /**
-     * Merge validation messages from input validators.
-     *
-     * @param \Illuminate\Validation\Validator[] $validators
-     *
-     * @return MessageBag
-     */
-    protected function mergeValidationMessages($validators): MessageBag
-    {
-        $messageBag = new MessageBag();
-
-        foreach ($validators as $validator) {
-            $messageBag = $messageBag->merge($validator->messages());
-        }
-
-        return $messageBag;
-    }
-
-    /**
      * Get all relations of model from callable.
      *
      * @return array
@@ -1250,6 +914,18 @@ class Form implements Renderable
     }
 
     /**
+     * Disable form tools.
+     *
+     * @return $this
+     */
+    public function disableTools()
+    {
+        $this->builder->getTools()->disable();
+
+        return $this;
+    }
+
+    /**
      * @param Closure|null $callback
      *
      * @return Form\Tools
@@ -1270,7 +946,7 @@ class Form implements Renderable
      */
     public function isCreating(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), ['.create', '.store']);
+        return Str::endsWith(request()->route()->getName(), ['.create', '.store']);
     }
 
     /**
@@ -1280,39 +956,7 @@ class Form implements Renderable
      */
     public function isEditing(): bool
     {
-        return Str::endsWith(\request()->route()->getName(), ['.edit', '.update']);
-    }
-
-    /**
-     * Disable form submit.
-     *
-     * @param bool $disable
-     *
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function disableSubmit(bool $disable = true): self
-    {
-        $this->builder()->getFooter()->disableSubmit($disable);
-
-        return $this;
-    }
-
-    /**
-     * Disable form reset.
-     *
-     * @param bool $disable
-     *
-     * @return $this
-     *
-     * @deprecated
-     */
-    public function disableReset(bool $disable = true): self
-    {
-        $this->builder()->getFooter()->disableReset($disable);
-
-        return $this;
+        return Str::endsWith(request()->route()->getName(), ['.edit', '.update']);
     }
 
     /**
@@ -1358,6 +1002,22 @@ class Form implements Renderable
     }
 
     /**
+     * Disable all footer checkbox.
+     *
+     * @return $this
+     */
+    public function disableFooterCheck()
+    {
+        $this->footer(function (Footer $footer) {
+            $footer->disableViewCheck()
+                ->disableEditingCheck()
+                ->disableCreatingCheck();
+        });
+
+        return $this;
+    }
+
+    /**
      * Footer setting for form.
      *
      * @param Closure $callback
@@ -1382,7 +1042,7 @@ class Form implements Renderable
      */
     public function resource($slice = -2): string
     {
-        $segments = explode('/', trim(\request()->getUri(), '/'));
+        $segments = explode('/', trim(request()->getUri(), '/'));
 
         if ($slice !== 0) {
             $segments = array_slice($segments, 0, $slice);

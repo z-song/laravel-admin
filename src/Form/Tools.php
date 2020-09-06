@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Actions\_List;
 use Encore\Admin\Form\Actions\Action;
 use Encore\Admin\Form\Actions\Delete;
@@ -19,7 +18,7 @@ class Tools implements Renderable
     protected $form;
 
     /**
-     * @var Collection 
+     * @var Collection
      */
     protected $default;
 
@@ -36,6 +35,11 @@ class Tools implements Renderable
      * @var Collection
      */
     protected $prepends;
+
+    /**
+     * @var bool
+     */
+    protected $disable = false;
 
     /**
      * Create a new Tools instance.
@@ -114,6 +118,18 @@ class Tools implements Renderable
         $action = new Delete($this->getListPath());
 
         $this->default->put('delete', $action->setModel($this->form->getModel()));
+
+        return $this;
+    }
+
+    /**
+     * Disable all tools.
+     *
+     * @return $this
+     */
+    public function disable()
+    {
+        $this->disable = true;
 
         return $this;
     }
@@ -250,6 +266,10 @@ class Tools implements Renderable
      */
     public function render()
     {
+        if ($this->disable) {
+            return '';
+        }
+
         $this->addView()
             ->addDelete()
             ->addList();

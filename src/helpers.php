@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\Arr;
 use Encore\Admin\Admin;
+use Illuminate\Support\Arr;
+use Illuminate\Support\MessageBag;
 
 if (!function_exists('admin_path')) {
 
@@ -35,7 +35,7 @@ if (!function_exists('admin_url')) {
             return $path;
         }
 
-        $secure = $secure ?: (config('admin.https') || config('admin.secure'));
+        $secure = $secure ?: (config('admin.https'));
 
         return url(admin_base_path($path), $parameters, $secure);
     }
@@ -150,7 +150,7 @@ if (!function_exists('admin_asset')) {
      */
     function admin_asset($path)
     {
-        return (config('admin.https') || config('admin.secure')) ? secure_asset($path) : asset($path);
+        return (config('admin.https')) ? secure_asset($path) : asset($path);
     }
 }
 
@@ -171,7 +171,28 @@ if (!function_exists('admin_assets')) {
             if ($js = Arr::get(Admin::$assets, "{$asset}.js")) {
                 Admin::js($js);
             }
+
+            if ($js = Arr::get(Admin::$assets, "{$asset}.dep")) {
+                Admin::dep($js);
+            }
         }
+    }
+}
+
+if (!function_exists('admin_color')) {
+
+    /**
+     * @param string $prefix
+     *
+     * @return string
+     */
+    function admin_color($tpl = '')
+    {
+        if ($tpl) {
+            return str_replace('%s', config('admin.theme.color'), $tpl);
+        }
+
+        return config('admin.theme.color');
     }
 }
 
@@ -340,4 +361,55 @@ if (!function_exists('json_encode_options')) {
 
         return str_replace($data['toReplace'], $data['original'], $json);
     }
+}
+
+if (!function_exists('admin_attrs')) {
+    function admin_attrs(array $attributes = [])
+    {
+        $str = [];
+
+        foreach ($attributes as $name => $value) {
+            $str[] = "$name=\"$value\"";
+        }
+
+        return implode(' ', $str);
+    }
+}
+
+function admin_login_page_backgroud()
+{
+    if (config('admin.login_background_image')) {
+        $image = config('admin.login_background_image');
+    } else {
+        $hour = date('H');
+
+        $index = 1;
+
+        if ($hour > 8 && $hour < 18) {
+            $index = 2;
+        } elseif ($hour >= 18 && $hour < 20) {
+            $index = 3;
+        } elseif ($hour >= 20 || $hour <= 8) {
+            $index = 4;
+        }
+
+        $image = "/vendor/laravel-admin/laravel-admin/images/login-bg{$index}.svg";
+    }
+
+    return "style=\"background: url({$image}) no-repeat;background-size: cover;\"";
+}
+
+if (!function_exists('admin_view')) {
+
+    /**
+     * @param string $view
+     * @param array $data
+     * @return string
+     * @throws Throwable
+     */
+    function admin_view($view, $data = [])
+    {
+        return Admin::view($view, $data);
+    }
+
 }

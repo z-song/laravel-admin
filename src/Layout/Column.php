@@ -2,13 +2,13 @@
 
 namespace Encore\Admin\Layout;
 
-use Encore\Admin\Grid;
+use Encore\Admin\Table;
 use Illuminate\Contracts\Support\Renderable;
 
 class Column implements Buildable
 {
     /**
-     * grid system prefix width.
+     * table system prefix width.
      *
      * @var array
      */
@@ -96,7 +96,7 @@ class Column implements Buildable
         $this->startColumn();
 
         foreach ($this->contents as $content) {
-            if ($content instanceof Renderable || $content instanceof Grid) {
+            if ($content instanceof Renderable || $content instanceof Table) {
                 echo $content->render();
             } else {
                 echo (string) $content;

@@ -2,10 +2,10 @@
 
 namespace Encore\Admin\Actions;
 
-use Encore\Admin\Grid\Column;
+use Encore\Admin\Table\Column;
 use Illuminate\Http\Request;
 
-abstract class RowAction extends GridAction
+abstract class RowAction extends TableAction
 {
     /**
      * @var \Illuminate\Database\Eloquent\Model
@@ -20,7 +20,7 @@ abstract class RowAction extends GridAction
     /**
      * @var string
      */
-    public $selectorPrefix = '.grid-row-action-';
+    public $selectorPrefix = '.table-row-action-';
 
     /**
      * @var bool
@@ -142,6 +142,19 @@ abstract class RowAction extends GridAction
 
     public function display($value)
     {
+    }
+
+    public function getElementClass()
+    {
+        return parent::getElementClass().' dropdown-item';
+    }
+
+    /**
+     * @return string
+     */
+    public function getActiontElementClass()
+    {
+        return parent::getElementClass();
     }
 
     /**

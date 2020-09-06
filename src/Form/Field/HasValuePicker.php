@@ -4,7 +4,6 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Arr;
 
 /**
  * @mixin Field
@@ -19,6 +18,7 @@ trait HasValuePicker
     /**
      * @param string $picker
      * @param string $column
+     *
      * @return $this
      */
     public function pick($picker, $column = '')
@@ -41,12 +41,11 @@ trait HasValuePicker
     }
 
     /**
-     * @param \Closure|null $callback
      * @return $this
      */
-    protected function mountPicker(\Closure $callback = null)
+    protected function mountPicker()
     {
-        $this->picker && $this->picker->mount($this, $callback);
+        $this->picker && $this->picker->mount($this);
 
         return $this;
     }
@@ -73,10 +72,11 @@ trait HasValuePicker
             ->attribute('type', 'text')
             ->attribute('id', $this->id)
             ->attribute('name', $this->elementName ?: $this->formatName($this->column))
-            ->attribute('value', old($this->elementName ?: $this->column, $this->value()))
+            ->attribute('value', $this->value())
             ->attribute('class', 'form-control '.$this->getElementClassString())
             ->attribute('placeholder', $this->getPlaceholder())
             ->addVariables([
+                'picker'  => $this->picker,
                 'preview' => $this->picker->getPreview(get_called_class()),
             ]);
 

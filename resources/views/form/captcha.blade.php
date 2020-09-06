@@ -1,26 +1,21 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
-
+<div {!! admin_attrs($group_attrs) !!}>
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
-
     <div class="{{$viewClass['field']}}">
-
-        @include('admin::form.error')
-
-        <div class="input-group" style="width: 250px;">
-
+        <div class="input-group" style="width: 300px;">
+            <span class="input-group-prepend">
+                <span class="input-group-text py-0">
+                   <img @el src="{{ captcha_src() }}" style="height:30px;cursor: pointer;"  title="Click to refresh"/>
+                </span>
+            </span>
             <input {!! $attributes !!} />
-
-            <span class="input-group-addon clearfix" style="padding: 1px;"><img id="{{$column}}-captcha" src="{{ captcha_src() }}" style="height:30px;cursor: pointer;"  title="Click to refresh"/></span>
-
         </div>
-
+        @include('admin::form.error')
         @include('admin::form.help-block')
-
     </div>
 </div>
 
 <script>
-    $('#{{$column}}-captcha').click(function () {
+    @el.click(function () {
         $(this).attr('src', $(this).attr('src')+'?'+Math.random());
     });
 </script>

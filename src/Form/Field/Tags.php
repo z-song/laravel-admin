@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
@@ -181,8 +180,6 @@ class Tags extends Field
         if (!$this->shouldRender()) {
             return '';
         }
-
-        admin_assets('select2');
 
         if ($this->keyAsValue) {
             $options = $this->value + $this->options;

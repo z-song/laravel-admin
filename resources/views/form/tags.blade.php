@@ -1,11 +1,8 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+<div {!! admin_attrs($group_attrs) !!}>
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-
-        @include('admin::form.error')
-
         <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
 
             @foreach($options as $key => $option)
@@ -15,13 +12,14 @@
         </select>
         <input type="hidden" name="{{$name}}[]" />
 
+        @include('admin::form.error')
         @include('admin::form.help-block')
 
     </div>
 </div>
 
-<script>
-    $("{{ $selector }}").select2({
+<script require="select2" @script>
+    $(this).select2({
         tags: true,
         tokenSeparators: @json($separators),
         createTag: function(params) {
@@ -33,7 +31,9 @@
             }
         }
     });
+</script>
 
+<script>
     $(document).off('keyup', '.select2-selection--multiple .select2-search__field').on('keyup', '.select2-selection--multiple .select2-search__field', function (event) {
         try {
             if (event.keyCode == 13) {

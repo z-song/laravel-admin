@@ -11,7 +11,7 @@ class ValuePicker
     /**
      * @var string
      */
-    protected $modal;
+    public $modal;
 
     /**
      * @var Text|File
@@ -43,15 +43,15 @@ class ValuePicker
      *
      * @param string $selecteable
      * @param string $column
-     * @param bool $multiple
+     * @param bool   $multiple
      * @param string $separator
      */
     public function __construct($selecteable, $column = '', $multiple = false, $separator = ';')
     {
         $this->selecteable = $selecteable;
-        $this->column      = $column;
-        $this->multiple    = $multiple;
-        $this->separator   = $separator;
+        $this->column = $column;
+        $this->multiple = $multiple;
+        $this->separator = $separator;
     }
 
     /**
@@ -70,14 +70,11 @@ class ValuePicker
 
     /**
      * @param Field $field
-     * @param \Closure|null $callback
      */
-    public function mount(Field $field, \Closure $callback = null)
+    public function mount(Field $field)
     {
         $this->field = $field;
         $this->modal = sprintf('picker-modal-%s', $field->getElementClassString());
-
-        $this->addPickBtn($callback);
 
         Admin::view('admin::components.filepicker', [
             'url'       => $this->getLoadUrl(),
@@ -92,27 +89,8 @@ class ValuePicker
     }
 
     /**
-     * @param \Closure|null $callback
-     */
-    protected function addPickBtn(\Closure $callback = null)
-    {
-        $text = admin_trans('admin.browse');
-
-        $btn = <<<HTML
-<a class="btn btn-primary" data-toggle="modal" data-target="#{$this->modal}">
-    <i class="fa fa-folder-open"></i>  {$text}
-</a>
-HTML;
-
-        if ($callback) {
-            $callback($btn);
-        } else {
-            $this->field->addVariables(compact('btn'));
-        }
-    }
-
-    /**
      * @param string $field
+     *
      * @return array|\Illuminate\Support\Collection
      */
     public function getPreview(string $field)

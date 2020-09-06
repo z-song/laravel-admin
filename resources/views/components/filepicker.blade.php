@@ -4,10 +4,10 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" style="border-radius: 5px;">
                 <div class="modal-header">
+                    <h4 class="modal-title">{{ admin_trans('admin.choose') }}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">{{ admin_trans('admin.choose') }}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="loading text-center">
@@ -16,7 +16,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{ admin_trans('admin.cancel') }}</button>
-                    <button type="button" class="btn btn-primary submit">{{ admin_trans('admin.submit') }}</button>
+                    <button type="button" class="btn btn-@color submit">{{ admin_trans('admin.submit') }}</button>
                 </div>
             </div>
         </div>
@@ -37,9 +37,11 @@ modal.on('show.bs.modal', function (e) {
     load($(this).attr('href'));
     e.preventDefault();
 }).on('click', 'tr', function (e) {
-    $(this).find('input.select').iCheck('toggle');
+    $(this).find('input.select').each(function(){
+        this.checked = !this.checked;
+    }).trigger('change');
     e.preventDefault();
-}).on('submit', '.box-header form', function (e) {
+}).on('submit', '.card-header form', function (e) {
     load($(this).attr('action')+'&'+$(this).serialize());
     return false;
 });
@@ -55,33 +57,31 @@ modal.on('show.bs.modal', function (e) {
     var load = function (url) {
         $.get(url, function (data) {
             modal.find('.modal-body').html(data);
-            modal.find('input.select').iCheck({
-                radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
-            });
-            modal.find('.box-header:first').hide();
+            modal.find('.card-header:first').hide();
 
             modal.find('input.select').each(function (index, el) {
                 if ($.inArray($(el).val().toString(), value) >=0 ) {
-                    $(el).iCheck('toggle');
+                    $(el).prop('checked', !$(el).prop('checked'));
                 }
             });
         });
     };
 
-    modal.on('ifChecked', 'input.select', function (e) {
-        if ($(this).val().length == 0) {
-            return;
-        }
+    modal.on('change', 'input.select', function () {
+        if (this.checked) {
+            if ($(this).val().length == 0) {
+                return;
+            }
 
-        if (value.indexOf($(this).val()) < 0) {
-            value.push($(this).val());
-        }
-    }).on('ifUnchecked', 'input.select', function (e) {
-        var val = $(this).val();
-        var index = value.indexOf(val);
-        if (index !== -1) {
-            value.splice(index, 1);
+            if (value.indexOf($(this).val()) < 0) {
+                value.push($(this).val());
+            }
+        } else {
+            var val = $(this).val();
+            var index = value.indexOf(val);
+            if (index !== -1) {
+                value.splice(index, 1);
+            }
         }
     }).find('.modal-footer .submit').click(function () {
         pickInput.val(value.join(separator));
@@ -99,22 +99,20 @@ modal.on('show.bs.modal', function (e) {
     var load = function (url) {
         $.get(url, function (data) {
             modal.find('.modal-body').html(data);
-            modal.find('input.select').iCheck({
-                radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
-            });
-            modal.find('.box-header:first').hide();
+            modal.find('.card-header:first').hide();
 
             modal.find('input.select').each(function (index, el) {
                 if ($(el).val() == value) {
-                    $(el).iCheck('toggle');
+                    $(el).prop('checked', !$(el).prop('checked'));
                 }
             });
         });
     };
 
-    modal.on('ifChecked', 'input.select', function (e) {
-        value = $(this).val();
+    modal.on('change', 'input.select', function (e) {
+        if (this.checked) {
+            value = $(this).val();
+        }
     }).find('.modal-footer .submit').click(function () {
         pickInput.val(value);
         modal.modal('toggle');
@@ -130,7 +128,7 @@ $('.picker-file-preview').on('click', 'a.remove', function () {
     var preview = $(this).parents('.file-preview-frame');
     var current = preview.data('val');
 
-    preview.addClass('hide');
+    preview.addClass('d-none');
 
     var input = pickInput.val().split(separator);
 
@@ -144,7 +142,7 @@ $('.picker-file-preview').on('click', 'a.remove', function () {
     updateValue();
 
     if (input.length === 0) {
-        $(this).parents('.picker-file-preview').addClass('hide');
+        $(this).parents('.picker-file-preview').addClass('d-none');
     }
 });
 
@@ -174,7 +172,7 @@ refresh = function () {
     });
 
     if (values.length > 0) {
-        preview.removeClass('hide');
+        preview.removeClass('d-none');
     }
 };
 @endif

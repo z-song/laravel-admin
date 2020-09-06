@@ -6,17 +6,24 @@ use Encore\Admin\Form\Field;
 
 class Text extends Field
 {
-    use PlainInput, HasValuePicker;
+    use PlainInput;
+    use HasValuePicker;
+    use CanCascadeFields;
 
     /**
      * @var string
      */
-    protected $icon = 'fa-pencil';
+    protected $icon = 'fa-pencil-alt';
 
     /**
      * @var bool
      */
     protected $withoutIcon = false;
+
+    /**
+     * @var array
+     */
+    protected $inputmask;
 
     /**
      * Set custom fa-icon.
@@ -41,20 +48,29 @@ class Text extends Field
     {
         $this->initPlainInput();
 
-        if (!$this->withoutIcon) {
-            $this->prepend('<i class="fa '.$this->icon.' fa-fw"></i>');
+        if ($this->prepend instanceof Field) {
+            $this->prepend = $this->prepend->renderPrepend();
         }
+
+        if (!$this->withoutIcon) {
+            $this->prependText('<i class="fa '.$this->icon.' fa-fw"></i>');
+        }
+
         $this->defaultAttribute('type', 'text')
-            ->defaultAttribute('id', $this->id)
+//            ->defaultAttribute('id', $this->id)
             ->defaultAttribute('name', $this->elementName ?: $this->formatName($this->column))
-            ->defaultAttribute('value', old($this->elementName ?: $this->column, $this->value()))
+            ->defaultAttribute('value', $this->value())
             ->defaultAttribute('class', 'form-control '.$this->getElementClassString())
             ->defaultAttribute('placeholder', $this->getPlaceholder())
             ->mountPicker()
             ->addVariables([
-                'prepend' => $this->prepend,
-                'append'  => $this->append,
+                'prepend'   => $this->prepend,
+                'append'    => $this->append,
+                'picker'    => $this->picker,
+                'inputmask' => $this->inputmask,
             ]);
+
+        $this->addCascadeScript();
 
         return parent::render();
     }
@@ -68,11 +84,7 @@ class Text extends Field
      */
     public function inputmask($options)
     {
-        admin_assets('inputmask');
-
-        $options = json_encode_options($options);
-
-        $this->script = "$('{$this->getElementClassSelector()}').inputmask($options);";
+        $this->inputmask = $options;
 
         return $this;
     }

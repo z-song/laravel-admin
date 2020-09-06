@@ -9,12 +9,10 @@ class Radio extends Field
 {
     use CanCascadeFields;
 
-    protected $inline = true;
-
     /**
-     * @var string
+     * @var bool
      */
-    protected $cascadeEvent = 'ifChecked';
+    protected $inline = true;
 
     /**
      * Set options.
@@ -99,7 +97,7 @@ class Radio extends Field
         $this->addVariables([
             'options' => $this->options,
             'checked' => $this->checked,
-            'inline' => $this->inline
+            'inline'  => $this->inline,
         ]);
 
         return parent::render();

@@ -98,7 +98,7 @@ return [
         'filter_clear'       => 'Toon alle',
         'filter_placeholder' => 'Filter',
     ],
-    'grid_items_selected'    => '{n} items geselecteerd',
+    'table_items_selected'    => '{n} items geselecteerd',
 
     'prev'                   => 'Vorige',
     'next'                   => 'Volgende',

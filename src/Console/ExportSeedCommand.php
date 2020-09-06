@@ -20,7 +20,7 @@ class ExportSeedCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Export seed a Laravel-admin database tables menu, roles and permissions';
+    protected $description = 'Export seed a Laravel-admin database tables menu';
 
     /**
      * Execute the console command.
@@ -37,32 +37,16 @@ class ExportSeedCommand extends Command
         $contents = $this->getStub('AdminTablesSeeder');
 
         $replaces = [
-            'DummyClass' => $name,
-
+            'DummyClass'      => $name,
             'ClassMenu'       => config('admin.database.menu_model'),
-            'ClassPermission' => config('admin.database.permissions_model'),
-            'ClassRole'       => config('admin.database.roles_model'),
-
-            'TableRoleMenu'        => config('admin.database.role_menu_table'),
-            'TableRolePermissions' => config('admin.database.role_permissions_table'),
-
             'ArrayMenu'       => $this->getTableDataArrayAsString(config('admin.database.menu_table'), $exceptFields),
-            'ArrayPermission' => $this->getTableDataArrayAsString(config('admin.database.permissions_table'), $exceptFields),
-            'ArrayRole'       => $this->getTableDataArrayAsString(config('admin.database.roles_table'), $exceptFields),
-
-            'ArrayPivotRoleMenu'        => $this->getTableDataArrayAsString(config('admin.database.role_menu_table'), $exceptFields),
-            'ArrayPivotRolePermissions' => $this->getTableDataArrayAsString(config('admin.database.role_permissions_table'), $exceptFields),
         ];
 
         if ($exportUsers) {
             $replaces = array_merge($replaces, [
                 'ClassUsers'            => config('admin.database.users_model'),
-                'TableRoleUsers'        => config('admin.database.role_users_table'),
-                'TablePermissionsUsers' => config('admin.database.user_permissions_table'),
 
                 'ArrayUsers'                 => $this->getTableDataArrayAsString(config('admin.database.users_table'), $exceptFields),
-                'ArrayPivotRoleUsers'        => $this->getTableDataArrayAsString(config('admin.database.role_users_table'), $exceptFields),
-                'ArrayPivotPermissionsUsers' => $this->getTableDataArrayAsString(config('admin.database.user_permissions_table'), $exceptFields),
             ]);
         } else {
             $contents = preg_replace('/\/\/ users tables[\s\S]*?(?=\/\/ finish)/mu', '', $contents);

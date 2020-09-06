@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Class Admin.
  *
- * @method static \Encore\Admin\Grid grid($model, \Closure $callable)
+ * @method static \Encore\Admin\Table table($model, \Closure $callable)
  * @method static \Encore\Admin\Form form($model, \Closure $callable)
  * @method static \Encore\Admin\Show show($model, $callable = null)
  * @method static \Encore\Admin\Tree tree($model, \Closure $callable = null)

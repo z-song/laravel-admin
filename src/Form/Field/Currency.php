@@ -62,7 +62,7 @@ class Currency extends Text
     {
         $this->inputmask($this->options);
 
-        $this->prepend($this->symbol)
+        $this->prependText($this->symbol)
             ->defaultAttribute('style', 'width: 120px');
 
         return parent::render();

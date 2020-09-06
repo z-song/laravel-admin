@@ -1,27 +1,17 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+<div {!! admin_attrs($group_attrs) !!}>
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-
-        @include('admin::form.error')
-
-        <div class="btn-group radio-group-toggle">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
             @foreach($options as $option => $label)
-                <label class="btn btn-default {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'active':'' }}">
-                    <input type="radio" name="{{$name}}" value="{{$option}}" class="hide minimal {{$class}}" {{ ($option == old($column, $value)) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
+                <label class="btn btn-@color {{ ($option == $value) || ($value === null && in_array($label, $checked)) ?'active':'' }}">
+                    <input type="radio" name="{{$name}}" value="{{$option}}" class="{{$class}}" {{ ($option == $value) || ($value === null && in_array($label, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
                 </label>
             @endforeach
         </div>
-
+        @include('admin::form.error')
         @include('admin::form.help-block')
 
     </div>
 </div>
-
-<script>
-    $('.radio-group-toggle label').click(function() {
-        $(this).parent().children().removeClass('active');
-        $(this).addClass('active');
-    });
-</script>

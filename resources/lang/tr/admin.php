@@ -99,7 +99,7 @@ return [
         'filter_placeholder' => 'Filtrele',
     ],
     'menu_titles'            => [],
-    'grid_items_selected'    => '{n} öğe seçildi',
+    'table_items_selected'    => '{n} öğe seçildi',
     'menu_titles'            => [],
     'prev'                   => 'Önceki',
     'next'                   => 'Sonraki',

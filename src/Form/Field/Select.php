@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
@@ -22,11 +21,6 @@ class Select extends Field
      * @var array
      */
     protected $config = [];
-
-    /**
-     * @var string
-     */
-    protected $cascadeEvent = 'change';
 
     /**
      * Set options.
@@ -108,39 +102,9 @@ class Select extends Field
             $class = $field;
         }
 
-        $placeholder = json_encode([
-            'id'   => '',
-            'text' => trans('admin.choose'),
-        ]);
-
         $strAllowClear = var_export($allowClear, true);
 
-        $script = <<<SCRIPT
-$(document).off('change', "{$this->getElementClassSelector()}");
-$(document).on('change', "{$this->getElementClassSelector()}", function () {
-    var target = $(this).closest('.fields-group').find(".$class");
-    $.get("$sourceUrl",{q : this.value}, function (data) {
-        target.find("option").remove();
-        $(target).select2({
-            placeholder: $placeholder,
-            allowClear: $strAllowClear,
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        });
-        if (target.data('value')) {
-            $(target).val(target.data('value'));
-        }
-        $(target).trigger('change');
-    });
-});
-SCRIPT;
-
-        Admin::script($script);
-
-        return $this;
+        return $this->addVariables(['load' => compact('class', 'sourceUrl', 'strAllowClear', 'idField', 'textField')]);
     }
 
     /**
@@ -157,48 +121,9 @@ SCRIPT;
     {
         $fieldsStr = implode('.', $fields);
         $urlsStr = implode('^', $sourceUrls);
-
-        $placeholder = json_encode([
-            'id'   => '',
-            'text' => trans('admin.choose'),
-        ]);
-
         $strAllowClear = var_export($allowClear, true);
 
-        $script = <<<SCRIPT
-var fields = '$fieldsStr'.split('.');
-var urls = '$urlsStr'.split('^');
-
-var refreshOptions = function(url, target) {
-    $.get(url).then(function(data) {
-        target.find("option").remove();
-        $(target).select2({
-            placeholder: $placeholder,
-            allowClear: $strAllowClear,
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        }).trigger('change');
-    });
-};
-
-$(document).off('change', "{$this->getElementClassSelector()}");
-$(document).on('change', "{$this->getElementClassSelector()}", function () {
-    var _this = this;
-    var promises = [];
-
-    fields.forEach(function(field, index){
-        var target = $(_this).closest('.fields-group').find('.' + fields[index]);
-        promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
-    });
-});
-SCRIPT;
-
-        Admin::script($script);
-
-        return $this;
+        return $this->addVariables(['loads' => compact('fieldsStr', 'urlsStr', 'strAllowClear', 'idField', 'textField')]);
     }
 
     /**
@@ -255,6 +180,7 @@ SCRIPT;
         $ajaxOptions = [
             'url' => $url.'?'.http_build_query($parameters),
         ];
+
         $configs = array_merge([
             'allowClear'         => true,
             'placeholder'        => [
@@ -266,27 +192,9 @@ SCRIPT;
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
-        $options = json_encode(array_merge($ajaxOptions, $options));
+        $options = array_merge($ajaxOptions, $options);
 
-        $this->script = <<<SCRIPT
-
-$.ajax($options).done(function(data) {
-
-  $("{$this->getElementClassSelector()}").each(function(index, element) {
-      $(element).select2({
-        data: data,
-        $configs
-      });
-      var value = $(element).data('value') + '';
-      if (value) {
-        value = value.split(',');
-        $(element).select2('val', value);
-      }
-  });
-});
-SCRIPT;
-
-        return $this;
+        return $this->addVariables(['remote' => compact('options', 'configs')]);
     }
 
     /**
@@ -309,43 +217,7 @@ SCRIPT;
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
-        $this->script = <<<SCRIPT
-
-$("{$this->getElementClassSelector()}").select2({
-  ajax: {
-    url: "$url",
-    dataType: 'json',
-    delay: 250,
-    data: function (params) {
-      return {
-        q: params.term,
-        page: params.page
-      };
-    },
-    processResults: function (data, params) {
-      params.page = params.page || 1;
-
-      return {
-        results: $.map(data.data, function (d) {
-                   d.id = d.$idField;
-                   d.text = d.$textField;
-                   return d;
-                }),
-        pagination: {
-          more: data.next_page_url
-        }
-      };
-    },
-    cache: true
-  },
-  $configs,
-  escapeMarkup: function (markup) {
-      return markup;
-  }
-});
-SCRIPT;
-
-        return $this;
+        return $this->addVariables(['ajax' => compact('url', 'idField', 'textField', 'configs')]);
     }
 
     /**
@@ -368,31 +240,16 @@ SCRIPT;
     /**
      * {@inheritdoc}
      */
-    public function readOnly()
+    public function readonly()
     {
-        //移除特定字段名称,增加MultipleSelect的修订
-        //没有特定字段名可以使多个readonly的JS代码片段被Admin::script的array_unique精简代码
-        $script = <<<'SCRIPT'
-$("form select").on("select2:opening", function (e) {
-    if($(this).attr('readonly') || $(this).is(':hidden')){
-    e.preventDefault();
-    }
-});
-$(document).ready(function(){
-    $('select').each(function(){
-        if($(this).is('[readonly]')){
-            $(this).closest('.form-group').find('span.select2-selection__choice__remove').first().remove();
-            $(this).closest('.form-group').find('li.select2-search').first().remove();
-            $(this).closest('.form-group').find('span.select2-selection__clear').first().remove();
-        }
-    });
-});
-SCRIPT;
-        Admin::script($script);
+        $this->addVariables(['readonly' => true]);
 
-        return parent::readOnly();
+        return parent::readonly();
     }
 
+    /**
+     * @return array
+     */
     protected function getOptions()
     {
         if ($this->options instanceof \Closure) {
@@ -421,20 +278,13 @@ SCRIPT;
             ],
         ], $this->config);
 
-        $configs = json_encode($configs);
-
-        if (empty($this->script)) {
-            $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
-        }
-
         $this->addVariables([
             'options' => $this->getOptions(),
             'groups'  => $this->groups,
-        ]);
+            'configs' => $configs,
+        ])->attribute('data-value', implode(',', (array) $this->value()));
 
         $this->addCascadeScript();
-
-        $this->attribute('data-value', implode(',', (array) $this->value()));
 
         return parent::render();
     }

@@ -1,15 +1,15 @@
 <div>
     <span class="{{ $elementClass }}" data-inserted="0" data-key="{{ $key }}" data-name="{{ $name }}"
-          data-toggle="collapse" data-target="#grid-collapse-{{ $name }}">
+          data-toggle="collapse" data-target="#table-collapse-{{ $name }}">
         <a href="javascript:void(0)"><i class="fa fa-angle-double-down"></i>&nbsp;&nbsp;{{ $value }}</a>
     </span>
-    <template class="grid-expand-{{ $name }}">
+    <template class="table-expand-{{ $name }}">
         <tr style='background-color: #ecf0f5;'>
             <td colspan='100%' style='padding:0 !important; border:0;'>
-                <div id="grid-collapse-{{ $name }}" class="collapse">
+                <div id="table-collapse-{{ $name }}" class="collapse">
                     <div style="padding: 10px 10px 0 10px;" class="html">
                         @if($html)
-                            {{ $html }}
+                            {!! $html !!}
                         @else
                             <div class="loading text-center" style="padding: 20px 0px;">
                                 <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
@@ -40,22 +40,21 @@
             var name = $(this).data('name');
             var row = $(this).closest('tr');
 
-            row.after($('template.grid-expand-'+name).html());
+            row.after($('template.table-expand-'+name).html());
 
             $(this).data('inserted', 1);
 
-            load('{{ $url }}'+'&key='+key, $('#grid-collapse-'+name));
+            load('{{ $url }}'+'&key='+key, $('#table-collapse-'+name));
         }
 
         $("i", this).toggleClass("fa-angle-double-down fa-angle-double-up");
     });
 
     $(document).on('pjax:click', '.collapse a.pjax, .collapse a.pjax', function (e) {
-        console.log(11111);
         // load($(this).attr('href'), $(this).parent('.collapse'));
         e.preventDefault();
         return false;
-    }).on('pjax:submit', '.collapse .box-header form', function (e) {
+    }).on('pjax:submit', '.collapse .card-header form', function (e) {
         // load($(this).attr('action')+'&'+$(this).serialize(), $(this).parent('.collapse'));
         return false;
     });
@@ -69,7 +68,7 @@
             var name = $(this).data('name');
             var row = $(this).closest('tr');
 
-            row.after($('template.grid-expand-'+name).html());
+            row.after($('template.table-expand-'+name).html());
 
             $(this).data('inserted', 1);
         }
@@ -84,9 +83,9 @@
     @endif
 </script>
 
-@if($loadGrid)
+@if($loadTable)
 <style>
-    .collapse .grid-box .box-header:first-child {
+    .collapse .table-box .card-header:first-child {
         display: none;
     }
 </style>

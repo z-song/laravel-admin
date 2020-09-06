@@ -57,7 +57,7 @@ a.editable-empty {
     line-height: 1.2;
 }
 
-.table-has-many label.control-label[for=inputError]+br {
+.table-has-many label.control-label[for=inputError] + br {
     display: none;
 }
 
@@ -159,7 +159,7 @@ a.editable-empty {
 
 .select2-container--default .select2-selection--multiple {
     border: 1px solid #d2d6de !important;
-    border-radius: 0 !important;
+    border-radius: 0.25rem !important;
 }
 
 .select2-container--default .select2-selection--multiple:focus {
@@ -190,3 +190,14 @@ a.editable-empty {
     padding-right: 10px !important;
 }
 
+.swal2-popup {
+    font-size: 0.6rem !important;
+}
+
+.swal2-popup.swal2-toast {
+    padding: 1rem 1.5rem !important;
+}
+
+.table tbody>tr.selected {
+    background-color: #ffffd5 !important;
+}

@@ -4,28 +4,10 @@ namespace Encore\Admin\Form\Field;
 
 class Number extends Text
 {
-    public function render()
-    {
-        $this->default($this->default);
-
-        $this->script = <<<SCRIPT
-
-$('{$this->getElementClassSelector()}:not(.initialized)')
-    .addClass('initialized')
-    .bootstrapNumber({
-        upClass: 'success',
-        downClass: 'primary',
-        center: true
-    });
-
-SCRIPT;
-
-        $this->prepend('')->defaultAttribute('style', 'width: 100px');
-
-        admin_assets('bootstrapNumber');
-
-        return parent::render();
-    }
+    /**
+     * @var string
+     */
+    protected $view = 'admin::form.number';
 
     /**
      * Set min value of number field.
@@ -36,9 +18,7 @@ SCRIPT;
      */
     public function min($value)
     {
-        $this->attribute('min', $value);
-
-        return $this;
+        return $this->attribute('min', $value);
     }
 
     /**
@@ -50,8 +30,58 @@ SCRIPT;
      */
     public function max($value)
     {
-        $this->attribute('max', $value);
+        return $this->attribute('max', $value);
+    }
 
-        return $this;
+    /**
+     * Set step value of number field.
+     *
+     * @param int $step
+     *
+     * @return $this
+     */
+    public function step($step = 1)
+    {
+        return $this->attribute('step', $step);
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return $this
+     */
+    public function prefix($prefix)
+    {
+        return $this->attribute('prefix', $prefix);
+    }
+
+    /**
+     * @param string $suffix
+     *
+     * @return $this
+     */
+    public function suffix($suffix)
+    {
+        return $this->attribute('suffix', $suffix);
+    }
+
+    /**
+     * @param int $decimals
+     *
+     * @return $this
+     */
+    public function decimals($decimals)
+    {
+        return $this->attribute('data-decimals', $decimals);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function render()
+    {
+        $this->attribute('type', 'number');
+
+        return parent::render();
     }
 }

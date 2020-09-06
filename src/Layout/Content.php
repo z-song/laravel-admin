@@ -168,17 +168,6 @@ class Content implements Renderable
      */
     public function view($view, $data = [])
     {
-        $this->view = compact('view', 'data');
-
-        return $this;
-    }
-
-    /**
-     * @param string $view
-     * @param array  $data
-     */
-    public function component($view, $data = [])
-    {
         return $this->body(Admin::view($view, $data));
     }
 

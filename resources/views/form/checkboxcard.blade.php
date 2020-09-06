@@ -1,27 +1,27 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($column) ?: 'has-error' !!}">
-
+<div {!! admin_attrs($group_attrs) !!}>
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
-
     <div class="{{$viewClass['field']}}" id="{{$id}}">
-
-        @include('admin::form.error')
-
-        <div class="card-group checkbox-group-toggle">
+        <div class="card-group checkbox-card-group">
         @foreach($options as $option => $label)
-            <label class="panel panel-default {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?'active':'' }}">
-                <div class="panel-body">
-                <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="hide {{$class}}" {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
+            <label class="card {{ false !== array_search($option, array_filter($value ?? [])) || ($value === null && in_array($option, $checked)) ?admin_color('bg-%s'):'' }}">
+                <div class="card-body">
+                <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="d-none {{$class}}" {{ false !== array_search($option, array_filter($value ?? [])) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
                 </div>
             </label>
         @endforeach
         </div>
-
         <input type="hidden" name="{{$name}}[]">
-
+        @include('admin::form.error')
         @include('admin::form.help-block')
-
     </div>
 </div>
+
+<script>
+    $('.checkbox-card-group label').on('click', function () {
+        $(this).toggleClass('bg-@color');
+        return false;
+    });
+</script>
 
 <style>
     .card-group label {
@@ -30,15 +30,11 @@
         font-weight: 400;
     }
 
-    .card-group .panel {
+    .card-group .card {
         margin-bottom: 0px;
     }
 
-    .card-group .panel-body {
+    .card-group .card-body {
         padding: 10px 15px;
-    }
-
-    .card-group .active {
-        border: 2px solid #367fa9;
     }
 </style>

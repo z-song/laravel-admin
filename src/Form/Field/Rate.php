@@ -7,7 +7,7 @@ class Rate extends Text
     public function render()
     {
         $this->prepend('')
-            ->append('%')
+            ->append('<span class="input-group-text">%</span>')
             ->defaultAttribute('style', 'text-align:right;')
             ->defaultAttribute('placeholder', 0);
 

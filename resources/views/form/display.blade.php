@@ -1,14 +1,12 @@
-<div class="{{$viewClass['form-group']}}">
+<div {!! admin_attrs($group_attrs) !!}>
     <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
-        <div class="box box-solid box-default no-margin">
-            <!-- /.box-header -->
-            <div class="box-body">
+        <div class="card card-solid card-default m-0">
+            <!-- /.card-header -->
+            <div class="card-body py-2 px-4">
                 {!! $value !!}&nbsp;
-            </div><!-- /.box-body -->
+            </div><!-- /.card-body -->
         </div>
-
         @include('admin::form.help-block')
-
     </div>
 </div>

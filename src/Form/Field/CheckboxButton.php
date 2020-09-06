@@ -2,15 +2,8 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Admin;
-
 class CheckboxButton extends Checkbox
 {
-    /**
-     * @var string
-     */
-    protected $cascadeEvent = 'change';
-
     /**
      * {@inheritdoc}
      */

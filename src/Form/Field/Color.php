@@ -5,6 +5,11 @@ namespace Encore\Admin\Form\Field;
 class Color extends Text
 {
     /**
+     * @var string
+     */
+    protected $view = 'admin::form.color';
+
+    /**
      * Use `hex` format.
      *
      * @return $this
@@ -41,14 +46,9 @@ class Color extends Text
      */
     public function render()
     {
-        $options = json_encode($this->options);
+        $this->attribute('autocomplete', 'off');
 
-        $this->script = "$('{$this->getElementClassSelector()}').parent().colorpicker($options);";
-
-        $this->prepend('<i></i>')
-            ->defaultAttribute('style', 'width: 140px');
-
-        admin_assets('colorpicker');
+        $this->addVariables(['options' => $this->options]);
 
         return parent::render();
     }

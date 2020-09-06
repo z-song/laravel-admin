@@ -18,7 +18,7 @@ class _List implements Renderable
         $text = trans('admin.list');
 
         return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
+<div class="btn-group float-right" style="margin-right: 5px">
     <a href="{$this->path}" class="btn btn-sm btn-default" title="$text">
         <i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span>
     </a>

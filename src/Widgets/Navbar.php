@@ -49,18 +49,6 @@ class Navbar implements Renderable
     }
 
     /**
-     * @param $element
-     *
-     * @return Navbar
-     *
-     * @deprecated
-     */
-    public function add($element)
-    {
-        return $this->right($element);
-    }
-
-    /**
      * @param string $part
      *
      * @return mixed

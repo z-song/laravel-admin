@@ -2,9 +2,9 @@
 
 namespace Tests\Controllers;
 
-use Encore\Admin\Http\Controllers\AdminController;
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
+use Encore\Admin\Http\Controllers\AdminController;
+use Encore\Admin\Table;
 use Tests\Models\File;
 
 class FileController extends AdminController
@@ -12,20 +12,20 @@ class FileController extends AdminController
     protected $title = 'Files';
 
     /**
-     * Make a grid builder.
+     * Make a table builder.
      *
-     * @return Grid
+     * @return Table
      */
-    protected function grid()
+    protected function table()
     {
-        $grid = new Grid(new File());
+        $table = new Table(new File());
 
-        $grid->id('ID')->sortable();
+        $table->id('ID')->sortable();
 
-        $grid->created_at();
-        $grid->updated_at();
+        $table->created_at();
+        $table->updated_at();
 
-        return $grid;
+        return $table;
     }
 
     /**

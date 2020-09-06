@@ -4,7 +4,7 @@
         @foreach($tabObj->getTabs() as $tab)
             <li {{ $tab['active'] ? 'class=active' : '' }}>
                 <a href="#tab-{{ $tab['id'] }}" data-toggle="tab">
-                    {{ $tab['title'] }} <i class="fa fa-exclamation-circle text-red hide"></i>
+                    {{ $tab['title'] }} <i class="fa fa-exclamation-circle text-red d-none"></i>
                 </a>
             </li>
         @endforeach

@@ -7,11 +7,11 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
     {!! $action_script !!}
 
     var options = {
-        type: 'question',
+        icon: 'question',
         showCancelButton: true,
         showLoaderOnConfirm: true,
-        confirmButtonText: '{{ trans('admin.submit') }}',
-        cancelButtonText: '{{ trans('admin.cancel') }}',
+        confirmButtonText: '{{ admin_trans('admin.submit') }}',
+        cancelButtonText: '{{ admin_trans('admin.cancel') }}',
     };
 
     Object.assign(options, @json($options));
@@ -32,18 +32,11 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
         });
     };
 
-    $.admin.swal(options).then(function(result) {
+    $.admin.swal.fire(options).then(function(result) {
         if (typeof result.dismiss !== 'undefined') {
             return Promise.reject();
         }
-
-        if (typeof result.status === "boolean") {
-            var response = result;
-        } else {
-            var response = result.value;
-        }
-
-        return [response, $target];
+        return [result.value, $target];
     }).then($.admin.action.then).catch($.admin.action.catch);
 });
 </script>

@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form;
-
 class Captcha extends Text
 {
     protected $rules = 'required|captcha';
@@ -20,7 +18,7 @@ class Captcha extends Text
         $this->label = trans('admin.captcha');
     }
 
-    public function setForm(Form $form = null)
+    public function setForm($form = null)
     {
         $this->form = $form;
         $this->form->ignore($this->column);

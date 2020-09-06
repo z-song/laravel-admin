@@ -1,4 +1,4 @@
-<div class="{{$viewClass['form-group']}}">
+<div {!! admin_attrs($group_attrs) !!}>
 
     <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
@@ -8,59 +8,42 @@
             <tr>
                 <th>{{ __('Key') }}</th>
                 <th>{{ __('Value') }}</th>
-                <th style="width: 75px;"></th>
+                <th style="width: 90px;"></th>
             </tr>
             </thead>
+
             <tbody class="kv-{{$column}}-table">
-
-            @foreach(old("{$column}.keys", ($value ?: [])) as $k => $v)
-
-                @php($keysErrorKey = "{$column}.keys.{$loop->index}")
-                @php($valsErrorKey = "{$column}.values.{$loop->index}")
-
-                <tr>
-                    <td>
-                        <div class="form-group {{ $errors->has($keysErrorKey) ? 'has-error' : '' }}">
-                            <div class="col-sm-12">
-                                <input name="{{ $name }}[keys][]" value="{{ old("{$column}.keys.{$k}", $k) }}" class="form-control" required/>
-
-                                @if($errors->has($keysErrorKey))
-                                    @foreach($errors->get($keysErrorKey) as $message)
-                                        <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
-                                    @endforeach
-                                @endif
-                            </div>
+            @foreach(($value ?: []) as $k => $v)
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <input name="{{ $name }}[keys][]" value="{{ $k }}" class="form-control" required/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input name="{{ $name }}[values][]" value="{{ $v }}" class="form-control  {{ $class }} values" />
+                        <div class="{{$class}} values-error d-none validation-error">
+                            <label class="col-form-label text-danger"><i class="fas fa-bell"></i></label>
                         </div>
-                    </td>
-                    <td>
-                        <div class="form-group {{ $errors->has($valsErrorKey) ? 'has-error' : '' }}">
-                            <div class="col-sm-12">
-                                <input name="{{ $name }}[values][]" value="{{ old("{$column}.values.{$k}", $v) }}" class="form-control" />
-                                @if($errors->has($valsErrorKey))
-                                    @foreach($errors->get($valsErrorKey) as $message)
-                                        <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
-                                    @endforeach
-                                @endif
-                            </div>
-                        </div>
-                    </td>
+                    </div>
+                </td>
 
-                    <td class="form-group">
-                        <div>
-                            <div class="{{$column}}-remove btn btn-warning btn-sm pull-right">
-                                <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+                <td class="form-group">
+                    <span class="{{$column}}-remove btn btn-warning btn-sm float-right">
+                        <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                    </span>
+                </td>
+            </tr>
             @endforeach
             </tbody>
+
             <tfoot>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>
-                        <div class="{{ $column }}-add btn btn-success btn-sm pull-right">
+                        <div class="{{ $column }}-add btn btn-success btn-sm float-right">
                             <i class="fa fa-save"></i>&nbsp;{{ __('admin.new') }}
                         </div>
                     </td>
@@ -70,29 +53,45 @@
     </div>
 </div>
 
-<template class="{{$column}}-tpl">
-    <tr>
-        <td>
-            <div class="form-group  ">
-                <div class="col-sm-12">
+<template>
+    <template class="{{$column}}-tpl">
+        <tr>
+            <td>
+                <div class="form-group">
                     <input name="{{ $name }}[keys][]" class="form-control" required/>
                 </div>
-            </div>
-        </td>
-        <td>
-            <div class="form-group  ">
-                <div class="col-sm-12">
-                    <input name="{{ $name }}[values][]" class="form-control" />
+            </td>
+            <td>
+                <div class="form-group">
+                    <input name="{{ $name }}[values][]" class="form-control {{ $class }} values" />
+                    <div class="{{$class}} values-error d-none validation-error">
+                        <label class="col-form-label text-danger"><i class="fas fa-bell"></i></label>
+                    </div>
                 </div>
-            </div>
-        </td>
-
-        <td class="form-group">
-            <div>
-                <div class="{{$column}}-remove btn btn-warning btn-sm pull-right">
+            </td>
+            <td class="form-group">
+                <div class="{{$column}}-remove btn btn-warning btn-sm float-right">
                     <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
                 </div>
-            </div>
-        </td>
-    </tr>
+            </td>
+        </tr>
+    </template>
 </template>
+
+
+<script>
+    $('.{{ $column }}-add').on('click', function () {
+        var tpl = $('template.{{ $column }}-tpl').html();
+        $('tbody.kv-{{ $column }}-table').append(tpl);
+    });
+
+    $('tbody').on('click', '.{{ $column }}-remove', function () {
+        $(this).closest('tr').remove();
+    });
+</script>
+
+<style>
+    td .form-group {
+        margin-bottom: 0 !important;
+    }
+</style>

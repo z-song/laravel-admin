@@ -1,12 +1,9 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+<div {!! admin_attrs($group_attrs) !!}>
 
     <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}} picker-{{ $column }}">
-
-        @include('admin::form.error')
-
-        <div class="picker-file-preview {{ empty($preview) ? 'hide' : '' }}">
+        <div class="picker-file-preview {{ empty($preview) ? 'd-none' : '' }}">
             @foreach($preview as $item)
             <div class="file-preview-frame" data-val="{!! $item['value'] !!}">
                 <div class="file-content">
@@ -31,11 +28,14 @@
 
         <div class="input-group">
             <input {!! $attributes !!} />
-            <span class="input-group-btn">
-              {!! $btn !!}
+            <span class="input-group-append">
+                <button type="button" class="btn btn-@color text-white" data-toggle="modal" data-target="#{{ $picker->modal }}">
+                    <i class="fa fa-folder-open"></i>  {{ admin_trans('admin.browse') }}
+                </button>
             </span>
         </div>
 
+        @include('admin::form.error')
         @include('admin::form.help-block')
 
     </div>

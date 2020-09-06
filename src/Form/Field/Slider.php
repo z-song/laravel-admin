@@ -7,9 +7,9 @@ use Encore\Admin\Form\Field;
 class Slider extends Field
 {
     protected $options = [
-        'type'     => 'single',
-        'prettify' => false,
-        'hasGrid'  => true,
+        'type'      => 'single',
+        'prettify'  => false,
+        'hasTable'  => true,
     ];
 
     public function render()

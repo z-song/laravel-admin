@@ -1,6 +1,6 @@
-<div class="box-footer">
+@admin_assets('icheck')
 
-    {{ csrf_field() }}
+<div class="card-footer row">
 
     <div class="col-md-{{$width['label']}}">
     </div>
@@ -8,30 +8,27 @@
     <div class="col-md-{{$width['field']}}">
 
         @if(in_array('submit', $buttons))
-        <div class="btn-group pull-right">
-            <button type="submit" class="btn btn-primary">{{ trans('admin.submit') }}</button>
+        <div class="btn-group float-right">
+            <button type="submit" class="btn btn-@color">{{ admin_trans('admin.submit') }}</button>
         </div>
 
         @foreach($submit_redirects as $value => $redirect)
             @if(in_array($redirect, $checkboxes))
-            <label class="pull-right" style="margin: 5px 10px 0 0;">
-                <input type="checkbox" class="after-submit" name="after-save" value="{{ $value }}" {{ ($default_check == $redirect) ? 'checked' : '' }}> {{ trans("admin.{$redirect}") }}
-            </label>
+            <span class="icheck-default">
+                <input id="@id" type="checkbox" class="after-submit" name="_saved" value="{{ $value }}" {{ ($default_check == $redirect) ? 'checked' : '' }}>
+                <label for="@id" class="float-right" style="margin: 5px 10px 0 0;">
+                     {{ admin_trans("admin.{$redirect}") }}
+                </label>
+            </span>
             @endif
         @endforeach
 
         @endif
 
         @if(in_array('reset', $buttons))
-        <div class="btn-group pull-left">
-            <button type="reset" class="btn btn-warning">{{ trans('admin.reset') }}</button>
+        <div class="btn-group float-left">
+            <button type="reset" class="btn btn-warning">{{ admin_trans('admin.reset') }}</button>
         </div>
         @endif
     </div>
 </div>
-
-<script require="icheck">
-    $('.after-submit').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChecked', function () {
-        $('.after-submit').not(this).iCheck('uncheck');
-    });
-</script>

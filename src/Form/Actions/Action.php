@@ -14,7 +14,7 @@ class Action extends BaseAction
 
     /**
      * @param Model $model
-     * 
+     *
      * @return $this
      */
     public function setModel(Model $model)

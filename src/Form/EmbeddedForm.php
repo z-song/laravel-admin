@@ -224,12 +224,12 @@ class EmbeddedForm
             foreach ($jsonKey as $index => $name) {
                 $elementName[$index] = "{$this->column}[$name]";
                 $errorKey[$index] = "{$this->column}.$name";
-                $elementClass[$index] = "{$this->column}_$name";
+                $elementClass[$index] = "field-{$this->column}-$name";
             }
         } else {
             $elementName = "{$this->column}[$jsonKey]";
             $errorKey = "{$this->column}.$jsonKey";
-            $elementClass = "{$this->column}_$jsonKey";
+            $elementClass = "field-{$this->column}-$jsonKey";
         }
 
         $field->setElementName($elementName)
