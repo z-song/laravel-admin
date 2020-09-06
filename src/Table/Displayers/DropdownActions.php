@@ -54,7 +54,6 @@ class DropdownActions extends Actions
     protected function prependDefaultActions()
     {
         foreach ($this->defaultClass as $class) {
-
             if ($this->table->modalForm && $class == Edit::class) {
                 $class = EditModal::class;
             }

@@ -403,13 +403,14 @@ if (!function_exists('admin_view')) {
 
     /**
      * @param string $view
-     * @param array $data
-     * @return string
+     * @param array  $data
+     *
      * @throws Throwable
+     *
+     * @return string
      */
     function admin_view($view, $data = [])
     {
         return Admin::view($view, $data);
     }
-
 }

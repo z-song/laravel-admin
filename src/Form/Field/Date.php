@@ -98,7 +98,7 @@ class Date extends Text
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function prepare($value)
     {
@@ -110,7 +110,7 @@ class Date extends Text
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function render()
     {
