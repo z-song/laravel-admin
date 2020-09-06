@@ -10,9 +10,9 @@ trait HasActions
     /**
      * Callback for table actions.
      *
-     * @var Closure
+     * @var []Closure
      */
-    protected $actionsCallback;
+    protected $actionsCallback = [];
 
     /**
      * Actions column display class.
@@ -31,7 +31,21 @@ trait HasActions
     public function actions($actions)
     {
         if ($actions instanceof Closure) {
-            $this->actionsCallback = $actions;
+            $this->actionsCallback[] = $actions;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $action
+     */
+    public function dblclick($action = 'select')
+    {
+        if (in_array($action, ['view', 'edit', 'delete', 'select'])) {
+            $this->actions(function (Table\Displayers\DropdownActions $actions) use ($action) {
+                $actions->dblclick($action);
+            });
         }
 
         return $this;

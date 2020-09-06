@@ -143,27 +143,20 @@ class DropdownActions extends Actions
             'edit'      => Edit::class,
             'view'      => View::class,
             'delete'    => Delete::class,
+            'select'    => 'select',
         ], $action);
 
         return $this;
     }
 
     /**
-     * @param null|\Closure $callback
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @return string
      */
-    public function display($callback = null)
+    protected function getDblclickElement()
     {
-        if ($callback instanceof \Closure) {
-            $callback->call($this, $this);
+        if ($this->dblclick == 'select') {
+            return 'table-row-checkbox';
         }
-
-        if ($this->disableAll) {
-            return '';
-        }
-
-        $this->prependDefaultActions();
 
         $dblclick = '';
 
@@ -180,10 +173,32 @@ class DropdownActions extends Actions
             }
         }
 
+        return $dblclick;
+    }
+
+    /**
+     * @param []\Closure $callback
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     */
+    public function display($callback = [])
+    {
+        if (is_array($callback) && !empty($callback)) {
+            foreach ($callback as $item) {
+                $item->call($this, $this);
+            }
+        }
+
+        if ($this->disableAll) {
+            return '';
+        }
+
+        $this->prependDefaultActions();
+
         $variables = [
             'default'  => $this->default,
             'custom'   => $this->custom,
-            'dblclick' => $dblclick,
+            'dblclick' => $this->getDblclickElement(),
             'table'    => $this->table->tableID,
         ];
 
