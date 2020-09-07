@@ -15,7 +15,6 @@ class DateMultiple extends Text
         'https://cdn.jsdelivr.net/npm/shortcut-buttons-flatpickr@0.1.0/dist/shortcut-buttons-flatpickr.min.js',
         'https://npmcdn.com/flatpickr@4.6.6/dist/l10n/zh.js',
 
-         
     ];
 
     protected $format = 'YYYY-MM-DD';
