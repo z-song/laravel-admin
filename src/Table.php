@@ -502,7 +502,8 @@ class Table
     <input type="checkbox" class="table-select-all" id='select-all'/>
     <label for='select-all'></label>
 </div>
-HTML);
+HTML
+        );
 
         $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
             ->displayUsing(Displayers\RowSelector::class)
