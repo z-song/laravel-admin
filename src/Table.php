@@ -497,16 +497,16 @@ class Table
 
         admin_assets('icheck');
 
-        $check = admin_color(<<<'HTML'
+        $check = <<<'HTML'
 <div class='icheck-%s d-inline'>
     <input type="checkbox" class="table-select-all" id='select-all'/>
     <label for='select-all'></label>
 </div>
-HTML);
+HTML;
 
         $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
             ->displayUsing(Displayers\RowSelector::class)
-            ->addHeader($check);
+            ->addHeader(admin_color($check));
     }
 
     /**
