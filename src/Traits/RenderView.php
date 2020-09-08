@@ -4,6 +4,7 @@ namespace Encore\Admin\Traits;
 
 use DOMDocument;
 use DOMElement;
+use Encore\Admin\Assets;
 
 trait RenderView
 {
@@ -97,7 +98,7 @@ trait RenderView
             }
         } elseif (!empty(trim($element->nodeValue))) {
             if ($require = $element->getAttribute('require')) {
-                admin_assets(explode(',', $require));
+                Assets::require($require);
             }
 
             if ($selector = $element->getAttribute('selector')) {

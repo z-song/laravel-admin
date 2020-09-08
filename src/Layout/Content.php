@@ -272,18 +272,6 @@ class Content implements Renderable
     }
 
     /**
-     * @return array
-     */
-    protected function getUserData()
-    {
-        if (!$user = Admin::user()) {
-            return [];
-        }
-
-        return Arr::only($user->toArray(), ['id', 'username', 'email', 'name', 'avatar']);
-    }
-
-    /**
      * Render this content.
      *
      * @return string
@@ -296,7 +284,6 @@ class Content implements Renderable
             'breadcrumb'  => $this->breadcrumb,
             '__content'   => $this->build(),
             '__view'      => $this->view,
-            '__user'      => $this->getUserData(),
         ];
 
         return view('admin::content', $items)->render();

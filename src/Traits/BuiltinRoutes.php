@@ -2,7 +2,10 @@
 
 namespace Encore\Admin\Traits;
 
+use Encore\Admin\Assets;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Http\Controllers\AuthController;
+use Illuminate\Support\Arr;
 
 trait BuiltinRoutes
 {
@@ -43,6 +46,20 @@ trait BuiltinRoutes
             $router->get('auth/logout', $authController.'@getLogout')->name('admin.logout');
             $router->get('auth/setting', $authController.'@getSetting')->name('admin.setting');
             $router->put('auth/setting', $authController.'@putSetting');
+
+            $router->get('_require_config.js', function () {
+
+                if ($user = Admin::user()) {
+                    $user = Arr::only($user->toArray(), ['id', 'username', 'email', 'name', 'avatar']);
+                }
+
+                return view('admin::partials.config', [
+                    'requirejs' => Assets::config(),
+                    'user'      => $user ?: [],
+                    'trans'     => [],
+                ]);
+
+            })->name('admin-require-config');
         });
     }
 }

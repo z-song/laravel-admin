@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/icheck-bootstrap/icheck-bootstrap.min.css") }}">
     <link rel="stylesheet" href="{{ admin_asset("vendor/laravel-admin/AdminLTE/css/adminlte.min.css") }}">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
-    <script src="{{ Admin::jQuery() }}"></script>
+    
+    <script src="{{ admin_asset("vendor/laravel-admin/jquery/jquery.min.js") }}"></script>
 </head>
 <body class="text-sm row vh-100 overflow-hidden">
 

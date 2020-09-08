@@ -1,4 +1,5 @@
-(function ($) {
+// (function ($) {
+define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
 
     // NProgress init
     NProgress.configure({parent: '#pjax-container'});
@@ -415,13 +416,12 @@
         this.token = $('meta[name=csrf-token]').attr('content');
         this.user = __user;
 
-        this.swal = swal;
+        this.swal = Swal;
         this.toastr = new Toast();
 
         this.totop = null;
         this.table = null;
         this.form = null;
-        this.loadedScripts = [];
 
         this.enableTotop();
     }
@@ -462,49 +462,6 @@
 
     Admin.prototype.getToken = function () {
         return $('meta[name="csrf-token"]').attr('content');
-    };
-
-    Admin.prototype.loadScripts = function(arr) {
-        var loaded = this.loadedScripts;
-        var _arr = $.map(arr, function(src) {
-            if ($.inArray(src, loaded) >= 0) {
-                return;
-            }
-
-            loaded.push(src);
-
-            return $.getScript(src);
-        });
-
-        _arr.push($.Deferred(function(deferred){
-            $(deferred.resolve);
-        }));
-
-        return $.when.apply($, _arr);
-    };
-
-    Admin.prototype.loadCss = function (css) {
-        var existingCss = $('link[rel=stylesheet]');
-        $.map(css, function (href) {
-            var matchedCss = existingCss.filter(function () {
-                return this.getAttribute("href") === href
-            });
-
-            if (matchedCss.length === 0) {
-                $("<link/>", {rel: "stylesheet", type: "text/css", href: href,})
-                    .appendTo("head");
-            }
-        });
-    };
-
-    Admin.prototype.loadAssets = function (dep, js, css, callback) {
-        var admin = this;
-
-        return admin.loadScripts(dep).then(function () {
-            admin.loadScripts(js).then(function () {
-                admin.loadCss(css);
-            }).then(callback);
-        });
     };
 
     Admin.prototype.action = {
@@ -560,7 +517,7 @@
         if (typeof $.initialize !== 'undefined') {
             $.initialize(selector+':not(.initialized)', callback);
         } else {
-           callback.call($(selector).get(0));
+            callback.call($(selector).get(0));
         }
     };
 
@@ -574,4 +531,5 @@
 
     $.fn.admin = $.admin = new Admin();
 
-})(jQuery);
+    return $;
+});

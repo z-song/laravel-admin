@@ -154,28 +154,16 @@ if (!function_exists('admin_asset')) {
     }
 }
 
-if (!function_exists('admin_assets')) {
+if (!function_exists('admin_assets_require')) {
 
     /**
      * @param $path
      *
      * @return string
      */
-    function admin_assets($assets)
+    function admin_assets_require($assets)
     {
-        foreach (Arr::wrap($assets) as $asset) {
-            if ($css = Arr::get(Admin::$assets, "{$asset}.css")) {
-                Admin::css($css);
-            }
-
-            if ($js = Arr::get(Admin::$assets, "{$asset}.js")) {
-                Admin::js($js);
-            }
-
-            if ($js = Arr::get(Admin::$assets, "{$asset}.dep")) {
-                Admin::dep($js);
-            }
-        }
+        \Encore\Admin\Assets::require($assets);
     }
 }
 

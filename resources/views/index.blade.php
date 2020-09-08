@@ -13,10 +13,8 @@
     <link rel="shortcut icon" href="{{$favicon}}">
     @endif
 
-    {!! Admin::css() !!}
-
-    <script src="{{ Admin::jQuery() }}"></script>
-    {!! Admin::headerJs() !!}
+    <script src="{{ admin_asset('vendor/laravel-admin/require.js') }}"></script>
+    <script src="{{ route('admin-require-config') }}"></script>
 </head>
 
 <body class="hold-transition {{join(' ', config('admin.theme.layout'))}} {{ config('admin.theme.accent') ? 'accent-'.config('admin.theme.accent') : '' }}">
@@ -28,28 +26,16 @@
 @endif
 
 <div class="wrapper">
-
     @include('admin::partials.header')
-
     @include('admin::partials.sidebar')
-
     <div class="content-wrapper" id="pjax-container">
         {!! Admin::style() !!}
         @yield('content')
         {!! Admin::html() !!}
         {!! Admin::script() !!}
     </div>
-
     @include('admin::partials.footer')
-
 </div>
-
-<script>
-    var __user = @json($__user);
-</script>
-
-<!-- REQUIRED JS SCRIPTS -->
-{!! Admin::js() !!}
 
 </body>
 </html>

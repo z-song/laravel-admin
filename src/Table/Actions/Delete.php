@@ -45,6 +45,6 @@ class Delete extends RowAction
      */
     public function dialog()
     {
-        $this->question(trans('admin.delete_confirm'), '', ['confirmButtonColor' => '#d33']);
+        $this->question(trans('admin.delete_confirm'));
     }
 }
