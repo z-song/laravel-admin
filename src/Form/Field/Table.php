@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\NestedForm;
+use Encore\Admin\Form;
 
 class Table extends HasMany
 {
@@ -90,8 +91,13 @@ class Table extends HasMany
     {
         $form = new NestedForm($column);
 
-        $form->setForm($this->form)
-            ->setKey($key);
+        if ($this->form instanceof Form) {
+            $form->setForm($this->form)
+                ->setKey($key);
+        } else {
+            $form->setWidgetForm($this->form)
+                ->setKey($key);
+        }
 
         call_user_func($builder, $form);
 

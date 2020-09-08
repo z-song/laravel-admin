@@ -52,7 +52,7 @@ use Illuminate\Support\Collection;
 class EmbeddedForm
 {
     /**
-     * @var Form
+     * @var Form  | \Encore\Admin\Widgets\Form
      */
     protected $parent = null;
 
@@ -271,7 +271,11 @@ class EmbeddedForm
             /** @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
-            $field->setForm($this->parent);
+            if ($this->parent instanceof Form) {
+                $field->setForm($this->parent);
+            } else {
+                $field->setWidgetForm($this->parent);
+            }
 
             $this->pushField($field);
 

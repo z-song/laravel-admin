@@ -329,7 +329,11 @@ class HasMany extends Field
     {
         $form = new Form\NestedForm($column, $model);
 
-        $form->setForm($this->form);
+        if ($this->form instanceof Form) {
+            $form->setForm($this->form);
+        } else {
+            $form->setWidgetForm($this->form);
+        }
 
         call_user_func($builder, $form);
 

@@ -7,6 +7,7 @@ use Encore\Admin\Form;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Encore\Admin\Widgets\Form as WidgetForm;
 
 /**
  * Class NestedForm.
@@ -91,7 +92,7 @@ class NestedForm
     protected $original = [];
 
     /**
-     * @var \Encore\Admin\Form
+     * @var \Encore\Admin\Form | \Encore\Admin\Widgets\Form
      */
     protected $form;
 
@@ -166,6 +167,20 @@ class NestedForm
      * @return $this
      */
     public function setForm(Form $form = null)
+    {
+        $this->form = $form;
+
+        return $this;
+    }
+
+    /**
+     * Set Widget/Form.
+     *
+     * @param WidgetForm $form
+     *
+     * @return $this
+     */
+    public function setWidgetForm(WidgetForm $form = null)
     {
         $this->form = $form;
 
@@ -432,7 +447,11 @@ class NestedForm
             /* @var Field $field */
             $field = new $className($column, array_slice($arguments, 1));
 
-            $field->setForm($this->form);
+            if ($this->form instanceof Form) {
+                $field->setForm($this->form);
+            } else {
+                $field->setWidgetForm($this->form);
+            }
 
             $field = $this->formatField($field);
 
