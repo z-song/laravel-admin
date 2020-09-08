@@ -127,9 +127,13 @@ abstract class AbstractFilter
      */
     protected function formatLabel($label)
     {
-        $label = $label ?: ucfirst($this->column);
+        if ($label) {
+            return $label;
+        }
 
-        return str_replace(['.', '_'], ' ', $label);
+        $label = ucfirst($this->column);
+
+        return __(str_replace(['.', '_'], ' ', $label));
     }
 
     /**
