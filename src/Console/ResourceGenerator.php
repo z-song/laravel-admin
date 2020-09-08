@@ -40,7 +40,7 @@ class ResourceGenerator
         'password' => 'password|pwd',
         'url'      => 'url|link|src|href',
         'mobile'   => 'mobile|phone',
-        'color'    => 'color|rgb',
+//        'color'    => 'color|rgb',
         'image'    => 'image|img|avatar|pic|picture|cover',
         'file'     => 'file|attachment',
     ];

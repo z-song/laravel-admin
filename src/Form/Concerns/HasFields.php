@@ -20,7 +20,6 @@ use Illuminate\Support\Arr;
  * @method Field\Id             id($column, $label = '')
  * @method Field\Ip             ip($column, $label = '')
  * @method Field\Url            url($column, $label = '')
- * @method Field\Color          color($column, $label = '')
  * @method Field\Email          email($column, $label = '')
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
@@ -72,7 +71,7 @@ trait HasFields
         'checkbox'       => Field\Checkbox::class,
         'checkboxButton' => Field\CheckboxButton::class,
         'checkboxCard'   => Field\CheckboxCard::class,
-        'color'          => Field\Color::class,
+//        'color'          => Field\Color::class,
         'currency'       => Field\Currency::class,
         'date'           => Field\Date::class,
         'dateRange'      => Field\DateRange::class,

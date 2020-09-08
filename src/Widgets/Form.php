@@ -31,7 +31,6 @@ use Illuminate\Support\Fluent;
  * @method Field\Id             id($name, $label = '')
  * @method Field\Ip             ip($name, $label = '')
  * @method Field\Url            url($name, $label = '')
- * @method Field\Color          color($name, $label = '')
  * @method Field\Email          email($name, $label = '')
  * @method Field\Mobile         mobile($name, $label = '')
  * @method Field\Slider         slider($name, $label = '')
