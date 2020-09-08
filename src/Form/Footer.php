@@ -173,6 +173,8 @@ class Footer implements Renderable
      */
     public function render()
     {
+        admin_assets_require('icheck');
+
         return Admin::view($this->view, [
             'width'            => $this->builder->getWidth(),
             'buttons'          => $this->buttons,

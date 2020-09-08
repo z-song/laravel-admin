@@ -94,7 +94,7 @@ class HasMany extends Field
             list($this->label, $this->builder) = $arguments;
         }
 
-        admin_assets('initialize');
+        admin_assets_require('initialize');
     }
 
     /**

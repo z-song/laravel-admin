@@ -35,7 +35,7 @@ class Select extends Presenter
     {
         $this->options = $options;
 
-        admin_assets('select2');
+        admin_assets_require('select2');
     }
 
     /**

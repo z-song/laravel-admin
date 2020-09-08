@@ -109,7 +109,7 @@ class Between extends AbstractFilter
      */
     protected function setupDatetime($options = [])
     {
-        admin_assets('datetimepicker');
+        admin_assets_require('datetimepicker');
 
         $options['format'] = Arr::get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
         $options['locale'] = Arr::get($options, 'locale', config('app.locale'));

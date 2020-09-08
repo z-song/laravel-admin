@@ -44,7 +44,7 @@ class CheckFilter extends Filter
      */
     public function render()
     {
-        admin_assets('icheck');
+        admin_assets_require('icheck');
 
         $value = $this->getFilterValue([]);
 

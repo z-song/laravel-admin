@@ -495,7 +495,7 @@ class Table
             return;
         }
 
-        admin_assets('icheck');
+        admin_assets_require('icheck');
 
         $check = <<<'HTML'
 <div class='icheck-%s d-inline'>

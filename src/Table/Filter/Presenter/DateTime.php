@@ -26,7 +26,7 @@ class DateTime extends Presenter
     {
         $this->options = $this->getOptions($options);
 
-        admin_assets('datetimepicker');
+        admin_assets_require('datetimepicker');
     }
 
     /**

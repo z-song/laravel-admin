@@ -1,5 +1,3 @@
-@admin_assets('icheck')
-
 <div class="card-footer row">
 
     <div class="col-md-{{$width['label']}}">

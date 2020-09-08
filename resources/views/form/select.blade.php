@@ -1,5 +1,3 @@
-@admin_assets('select2')
-
 <div {!! admin_attrs($group_attrs) !!}>
 
 <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>

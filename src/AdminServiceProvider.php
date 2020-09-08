@@ -84,10 +84,6 @@ class AdminServiceProvider extends ServiceProvider
 
     protected function registerBladeDirective()
     {
-        Blade::directive('admin_assets', function ($name) {
-            return "<?php echo \Encore\Admin\Admin::renderAssets({$name}); ?>";
-        });
-
         Blade::directive('el', function ($name) {
             return <<<PHP
 <?php

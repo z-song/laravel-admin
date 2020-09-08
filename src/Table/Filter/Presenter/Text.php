@@ -160,7 +160,7 @@ class Text extends Presenter
      */
     public function inputmask($options = [], $icon = 'pencil-alt'): self
     {
-        admin_assets('inputmask');
+        admin_assets_require('inputmask');
 
         $options = json_encode($options);
 

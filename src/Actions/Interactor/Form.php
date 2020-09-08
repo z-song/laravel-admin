@@ -198,6 +198,8 @@ class Form extends Interactor
      */
     public function checkbox($column, $label = '')
     {
+        admin_assets_require('icheck');
+
         $field = new Field\Checkbox($column, $this->formatLabel($label));
 
         return $this->addField($field);
@@ -211,6 +213,8 @@ class Form extends Interactor
      */
     public function radio($column, $label = '')
     {
+        admin_assets_require('icheck');
+
         $field = new Field\Radio($column, $this->formatLabel($label));
 
         return $this->addField($field);

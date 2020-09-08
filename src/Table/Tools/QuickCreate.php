@@ -190,6 +190,8 @@ class QuickCreate implements Renderable
      */
     public function date($column, $placeholder = '')
     {
+        admin_assets_require('datetimepicker');
+
         $field = new Field\Date($column, $this->formatPlaceholder($placeholder));
 
         return $this->addField($field);
