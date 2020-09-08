@@ -12,6 +12,7 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
         showLoaderOnConfirm: true,
         confirmButtonText: '{{ admin_trans('admin.submit') }}',
         cancelButtonText: '{{ admin_trans('admin.cancel') }}',
+        confirmButtonColor: '#d33',
     };
 
     Object.assign(options, @json($options));

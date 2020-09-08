@@ -50,9 +50,9 @@
 </style>
 
 <script>
-    $(".column-selector .dropdown-menu").on("click", function(e) {
-        e.stopPropagation();
-    });
+$(".column-selector .dropdown-menu").on("click", function(e) {
+    e.stopPropagation();
+});
 
 $('.column-select-submit').on('click', function () {
 
@@ -75,7 +75,7 @@ $('.column-select-submit').on('click', function () {
         url.searchParams.set('_columns_', selected.join());
     }
 
-    $.pjax({container:'#pjax-container', url: url.toString()});
+    $.admin.redirect(url.toString());
 });
 
 $('.column-select-all').on('click', function () {
