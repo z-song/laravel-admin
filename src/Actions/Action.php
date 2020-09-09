@@ -358,8 +358,8 @@ var actionResolver = function (data) {
                     window.location = then.value;
                 }
 
-                if (then.action == 'oepn') {
-                    window.open(this.value, '_blank');
+                if (then.action == 'open') {
+                    window.open(then.value, '_blank');
                 }
             };
 
