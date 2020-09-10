@@ -13,8 +13,8 @@
     </ul>
 </div>
 
-<script>
-    $('.{{ $name }}').click(function (e) {
+<script selector=".{{ $name }}">
+    $(this).click(function (e) {
         e.preventDefault();
         var rows = $.admin.table.selected().join();
         if (!rows) {
@@ -22,5 +22,15 @@
         }
         var href = $(this).attr('href').replace('__rows__', rows);
         location.href = href;
+    });
+
+    var $btn = $(this);
+
+    $.admin.on('table-select', function (e, num) {
+        if (num > 0) {
+            $btn.removeClass('d-none');
+        } else {
+            $btn.addClass('d-none');
+        }
     });
 </script>

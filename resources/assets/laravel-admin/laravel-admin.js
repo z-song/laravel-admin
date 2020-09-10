@@ -149,7 +149,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         } else {
             this.select(id);
         }
-        this.toggleBatchAction();
+
+        $.admin.emit('table-select', [this.selected().length]);
     };
 
     Table.prototype.toggleAll = function (checked) {
@@ -160,7 +161,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
             $checkbox.prop('checked', false).trigger('change');
             this.selects = {};
         }
-        this.toggleBatchAction();
+
+        $.admin.emit('table-select', [this.selected().length]);
     };
 
     Table.prototype.selected = function () {
@@ -169,22 +171,6 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
 
     Table.prototype.findRow  = function (id) {
         return this.$el.find('tr[data-key=' + id + ']');
-    };
-
-    Table.prototype.toggleBatchAction = function () {
-        var selected = this.selected().length;
-        var $btn = this.box().find('.table-select-all-btn');
-        var $select = $btn.find('.selected');
-        var $export = this.box().find('a.export-selected');
-
-        if (selected > 0) {
-            $btn.show();
-            $export.removeClass('d-none');
-            $select.html($select.data('tpl').replace('{n}', selected));
-        } else {
-            $btn.hide();
-            $export.addClass('d-none');
-        }
     };
 
     function Form ($el) {
@@ -429,6 +415,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         this.form = null;
 
         this.enableTotop();
+
+        this.$bus = $({});
     }
 
     Admin.prototype.enableTotop = function () {
@@ -539,6 +527,18 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         var arr = desc.split(".");
         while(arr.length && (obj = obj[arr.shift()]));
         return obj;
+    };
+
+    Admin.prototype.emit = function () {
+        this.$bus.trigger.apply(this.$bus, arguments);
+    };
+
+    Admin.prototype.on = function () {
+        this.$bus.on.apply(this.$bus, arguments);
+    };
+
+    Admin.prototype.off = function () {
+        this.$bus.off.apply(this.$bus, arguments);
     };
 
     $.fn.admin = $.admin = new Admin();

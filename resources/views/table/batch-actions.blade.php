@@ -19,8 +19,21 @@
 </div>
 @endif
 
-<script>
+<script selector=".table-select-all-btn">
+
     $('.table-select-all').on('change', function(event) {
         $.admin.table.toggleAll(this.checked);
+    });
+
+    var $btn = $(this);
+
+    $.admin.on('table-select', function (e, num) {
+        if (num > 0) {
+            $btn.show();
+            var $select = $btn.find('.selected');
+            $select.html($select.data('tpl').replace('{n}', num));
+        } else {
+            $btn.hide();
+        }
     });
 </script>
