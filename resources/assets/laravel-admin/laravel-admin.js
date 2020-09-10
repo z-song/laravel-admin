@@ -1,5 +1,6 @@
-// (function ($) {
 define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
+
+    $(window).trigger('load.lte.treeview');
 
     // NProgress init
     NProgress.configure({parent: '#pjax-container'});

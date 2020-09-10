@@ -349,6 +349,8 @@ class Form implements Renderable
     {
         $data = ($data) ?: request()->all();
 
+        $this->callEditing();
+
         if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
             return $data;
         }
