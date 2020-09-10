@@ -35,6 +35,23 @@ class Assets
     /**
      * @var array
      */
+    public static $requires = ['admin'];
+
+    /**
+     * @var array
+     */
+    public static $requireAlias = [
+        'icheck' => 'css!icheck-bootstrap/icheck-bootstrap.min',
+    ];
+
+    /**
+     * @var array
+     */
+    public static $packages = [];
+
+    /**
+     * @var array
+     */
     public static $assets = [
         'admin'                   => [
             'js'     => 'laravel-admin/laravel-admin',
@@ -124,12 +141,11 @@ class Assets
         ]
     ];
 
-    public static $requires = ['admin'];
 
-    public static $requireAlias = [
-        'icheck' => 'css!icheck-bootstrap/icheck-bootstrap.min',
-    ];
 
+    /**
+     * @return array
+     */
     public static function getRequires()
     {
         foreach (static::$css as $css) {
@@ -143,6 +159,9 @@ class Assets
         return array_unique(static::$requires);
     }
 
+    /**
+     * @param $module
+     */
     public static function require($module)
     {
         if (is_array($module)) {
@@ -172,6 +191,9 @@ class Assets
         Arr::get(static::$assets, "{$module}.export", $export);
     }
 
+    /**
+     * @return array
+     */
     public static function getExports()
     {
         return array_map(function ($module) {
@@ -179,6 +201,10 @@ class Assets
         }, static::$requires);
     }
 
+    /**
+     * @param string $module
+     * @param array  $assets
+     */
     public static function define($module, $assets)
     {
         array_walk_recursive($assets, function (&$asset) {
@@ -188,18 +214,26 @@ class Assets
         static::$assets[$module] = $assets;
     }
 
+    /**
+     * @param string $module
+     * @param string|array $requires
+     */
     public static function alias($module, $requires)
     {
         static::$requireAlias[$module] = $requires;
     }
 
-    public static $packages = [];
-
+    /**
+     * @param array $package
+     */
     public static function package($package)
     {
         static::$packages[] = $package;
     }
 
+    /**
+     * @return array
+     */
     public static function config()
     {
         $config = [
