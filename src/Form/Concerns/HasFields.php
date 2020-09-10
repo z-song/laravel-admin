@@ -58,6 +58,7 @@ use Illuminate\Support\Arr;
  * @method Field\BelongsTo      belongsTo($column, $selectable, $label = '')
  * @method Field\BelongsToMany  belongsToMany($column, $selectable, $label = '')
  * @method Field\WangEditor     wangEditor($column, $label = '')
+ * @method Field\CheckTree      checktree($column, $label = '')
  */
 trait HasFields
 {
@@ -71,6 +72,7 @@ trait HasFields
         'checkbox'       => Field\Checkbox::class,
         'checkboxButton' => Field\CheckboxButton::class,
         'checkboxCard'   => Field\CheckboxCard::class,
+        'checktree'      => Field\CheckTree::class,
 //        'color'          => Field\Color::class,
         'currency'       => Field\Currency::class,
         'date'           => Field\Date::class,

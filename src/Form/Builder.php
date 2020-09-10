@@ -594,8 +594,6 @@ class Builder
     {
         $this->removeReservedFields();
 
-//        dd($this->fields());
-
         return Admin::view($this->view, [
             'form'   => $this,
             'confirm'=> $this->confirm,

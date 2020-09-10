@@ -103,4 +103,5 @@ return [
     'prev'                    => '上一步',
     'next'                    => '下一步',
     'quick_create'            => '快速创建',
+    'all_menus'               => '所有菜单',
 ];

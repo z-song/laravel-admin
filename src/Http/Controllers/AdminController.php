@@ -102,7 +102,7 @@ class AdminController extends Controller
             ->title($this->title())
             ->description($this->description['create'] ?? trans('admin.create'));
 
-        return $this->renderModalForm($this->form(), $content);
+        return $this->renderModalForm($this->form()->create(), $content);
     }
 
     /**

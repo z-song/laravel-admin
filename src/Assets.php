@@ -118,6 +118,10 @@ class Assets
         'wangEditor'              => [
             'js' => 'https://cdndelivr.net/npm/wangeditor@3.1.1/release/wangEditor.min',
         ],
+        'treejs' => [
+            'js' => 'treejs/dist/tree.min',
+            'export' => 'Tree',
+        ]
     ];
 
     public static $requires = ['admin'];
