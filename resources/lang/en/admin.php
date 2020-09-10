@@ -105,4 +105,6 @@ return [
     'next'                   => 'Next',
     'quick_create'           => 'Quick create',
     'all_menus'              => 'All menus',
+    'accessible_routes'      => 'Accessible routes',
+    'visible_menu'           => 'Visible menu',
 ];
