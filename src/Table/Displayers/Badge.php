@@ -7,8 +7,12 @@ use Illuminate\Support\Arr;
 
 class Badge extends AbstractDisplayer
 {
-    public function display($style = 'red')
+    public function display($style = '')
     {
+        if (empty($style)) {
+            $style = admin_color();
+        }
+
         if ($this->value instanceof Arrayable) {
             $this->value = $this->value->toArray();
         }
@@ -18,7 +22,7 @@ class Badge extends AbstractDisplayer
                 $style = Arr::get($style, $this->getOriginalValue(), 'red');
             }
 
-            return "<span class='badge bg-{$style}'>$name</span>";
+            return "<span class='badge badge-pill badge-{$style}'>$name</span>";
         })->implode('&nbsp;');
     }
 }

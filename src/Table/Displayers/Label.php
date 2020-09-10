@@ -7,8 +7,12 @@ use Illuminate\Support\Arr;
 
 class Label extends AbstractDisplayer
 {
-    public function display($style = 'success')
+    public function display($style = '')
     {
+        if (empty($style)) {
+            $style = admin_color();
+        }
+
         if ($this->value instanceof Arrayable) {
             $this->value = $this->value->toArray();
         }
@@ -22,7 +26,7 @@ class Label extends AbstractDisplayer
                 }
             }
 
-            return "<span class='label label-{$style}'>$item</span>";
+            return "<span class='badge badge-{$style}'>$item</span>";
         })->implode('&nbsp;');
     }
 }
