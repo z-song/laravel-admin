@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\DB;
  */
 class Menu extends Model
 {
-    use DefaultDatetimeFormat;
-    use ModelTree {
-        ModelTree::boot as treeBoot;
-    }
+    use DefaultDatetimeFormat,
+        ModelTree {
+            ModelTree::boot as treeBoot;
+        }
 
     /**
      * The attributes that are mass assignable.
@@ -50,7 +50,7 @@ class Menu extends Model
     public function allNodes(): array
     {
         $connection = config('admin.database.connection') ?: config('database.default');
-        $orderColumn = DB::connection($connection)->getQueryGrammar()->wrap($this->orderColumn);
+        $orderColumn = DB::connection($connection)->getQueryGrammar()->wrap($this->getOrderColumn());
 
         $byOrder = 'ROOT ASC,'.$orderColumn;
 

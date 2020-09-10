@@ -6,6 +6,7 @@ use Encore\Admin\Assets;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Http\Controllers\AuthController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Lang;
 
 trait BuiltinRoutes
 {
@@ -56,7 +57,7 @@ trait BuiltinRoutes
                 return view('admin::partials.config', [
                     'requirejs' => Assets::config(),
                     'user'      => $user ?: [],
-                    'trans'     => [],
+                    'trans'     => Lang::get('admin'),
                 ]);
 
             })->name('admin-require-config');

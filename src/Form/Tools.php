@@ -23,6 +23,11 @@ class Tools implements Renderable
     protected $default;
 
     /**
+     * @var array
+     */
+    protected $defaultTools = ['view', 'delete', 'list'];
+
+    /**
      * Tools should be appends to default tools.
      *
      * @var Collection
@@ -95,7 +100,9 @@ class Tools implements Renderable
      */
     protected function addView()
     {
-        $this->default->put('view', new View($this->getViewPath()));
+        if (in_array('view', $this->defaultTools)) {
+            $this->default->put('view', new View($this->getViewPath()));
+        }
 
         return $this;
     }
@@ -105,7 +112,9 @@ class Tools implements Renderable
      */
     protected function addList()
     {
-        $this->default->put('list', new _List($this->getListPath()));
+        if (in_array('list', $this->defaultTools)) {
+            $this->default->put('list', new _List($this->getListPath()));
+        }
 
         return $this;
     }
@@ -115,9 +124,11 @@ class Tools implements Renderable
      */
     protected function addDelete()
     {
-        $action = new Delete($this->getListPath());
+        if (in_array('delete', $this->defaultTools)) {
+            $action = new Delete($this->getListPath());
 
-        $this->default->put('delete', $action->setModel($this->form->getModel()));
+            $this->default->put('delete', $action->setModel($this->form->getModel()));
+        }
 
         return $this;
     }
@@ -142,7 +153,7 @@ class Tools implements Renderable
     public function disableList(bool $disable = true)
     {
         if ($disable) {
-            $this->default->pull('list');
+            array_delete($this->defaultTools, 'list');
         } elseif (!$this->default->has('list')) {
             $this->addList();
         }
@@ -158,7 +169,7 @@ class Tools implements Renderable
     public function disableDelete(bool $disable = true)
     {
         if ($disable) {
-            $this->default->pull('delete');
+            array_delete($this->defaultTools, 'delete');
         } elseif (!$this->default->has('delete')) {
             $this->addDelete();
         }
@@ -174,7 +185,7 @@ class Tools implements Renderable
     public function disableView(bool $disable = true)
     {
         if ($disable) {
-            $this->default->pull('view');
+            array_delete($this->defaultTools, 'view');
         } elseif (!$this->default->has('view')) {
             $this->addView();
         }
@@ -270,9 +281,7 @@ class Tools implements Renderable
             return '';
         }
 
-        $this->addView()
-            ->addDelete()
-            ->addList();
+        $this->addView()->addDelete()->addList();
 
         $output = $this->renderCustomTools($this->prepends);
 

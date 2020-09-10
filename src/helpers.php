@@ -402,3 +402,12 @@ if (!function_exists('admin_view')) {
         return Admin::view($view, $data);
     }
 }
+
+if (!function_exists('admin_user')) {
+
+    function admin_user()
+    {
+        return \Encore\Admin\Facades\Admin::user();
+    }
+}
+
