@@ -177,6 +177,18 @@ class Form implements Renderable
     }
 
     /**
+     * Generate a create form.
+     *
+     * @return $this
+     */
+    public function create(): self
+    {
+        $this->callCreating();
+
+        return $this;
+    }
+
+    /**
      * Use tab to split form.
      *
      * @param string  $title

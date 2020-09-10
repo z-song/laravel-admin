@@ -98,6 +98,18 @@ trait HasHooks
     }
 
     /**
+     * Set after getting creating model callback.
+     *
+     * @param Closure $callback
+     *
+     * @return $this
+     */
+    public function creating(Closure $callback)
+    {
+        return $this->registerHook('creating', $callback);
+    }
+
+    /**
      * Set after getting editing model callback.
      *
      * @param Closure $callback
@@ -143,6 +155,16 @@ trait HasHooks
     public function saved(Closure $callback)
     {
         return $this->registerHook('saved', $callback);
+    }
+
+    /**
+     * Call creating callbacks.
+     *
+     * @return mixed
+     */
+    protected function callCreating()
+    {
+        return $this->callHooks('creating');
     }
 
     /**
