@@ -80,7 +80,11 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
     })();
 
     $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-        if (options.type.toLowerCase() === 'post' || originalOptions.type.toLowerCase() === 'post') {
+        if (originalOptions.method && originalOptions.method.toLowerCase() === 'delete') {
+            options.data = $.param($.extend(originalOptions.data, { _token : $.admin.getToken()}));
+        } else if ((options.type && options.type.toLowerCase() === 'post')
+            || (originalOptions.type && originalOptions.type.toLowerCase() === 'post'))
+        {
             if (originalOptions.data instanceof FormData) {
                 originalOptions.data.append('_token', $.admin.getToken());
                 options.data = originalOptions.data;
@@ -527,6 +531,13 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
 
     Admin.prototype.initForm = function ($form) {
         this.form = new Form($form);
+    };
+
+    Admin.prototype.trans = function (desc) {
+        var obj = __trans;
+        var arr = desc.split(".");
+        while(arr.length && (obj = obj[arr.shift()]));
+        return obj;
     };
 
     $.fn.admin = $.admin = new Admin();

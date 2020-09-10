@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 class Delete extends RowAction
 {
     /**
+     * @var string
+     */
+    protected $method = 'DELETE';
+
+    /**
      * @return array|null|string
      */
     public function name()
@@ -38,6 +43,14 @@ class Delete extends RowAction
         }
 
         return $this->response()->success($trans['succeeded'])->refresh();
+    }
+
+    /**
+     * @return string
+     */
+    public function getHandleRoute()
+    {
+        return $this->parent->resource() . '/'. $this->getKey();
     }
 
     /**

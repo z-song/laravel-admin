@@ -106,6 +106,16 @@ class AdminController extends Controller
     }
 
     /**
+     * Destroy record
+     *
+     * @param $id
+     */
+    public function destroy($id)
+    {
+        return app(HandleController::class)->handleAction(request());
+    }
+
+    /**
      * @param Form    $form
      * @param Content $content
      *

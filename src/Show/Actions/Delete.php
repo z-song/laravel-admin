@@ -10,6 +10,8 @@ class Delete extends Action
 
     protected $path;
 
+    protected $method = 'DELETE';
+
     public function __construct($path = '')
     {
         $this->path = $path;
@@ -49,6 +51,14 @@ class Delete extends Action
     public function dialog()
     {
         $this->confirm(trans('admin.delete_confirm'));
+    }
+
+    /**
+     * @return string
+     */
+    public function getHandleRoute()
+    {
+        return $this->path . '/'. $this->model->getKey();
     }
 
     public function html()
