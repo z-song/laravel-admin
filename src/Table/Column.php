@@ -14,9 +14,11 @@ use Illuminate\Support\Str;
 
 class Column
 {
-    use Column\HasHeader;
-    use Column\InlineEditing;
-    use Column\ExtendDisplay;
+    use Column\HasHeader,
+        Column\InlineEditing,
+        Column\ExtendDisplay,
+        Column\InsertPosition,
+        Column\AsTree;
 
     const SELECT_COLUMN_NAME = '__row_selector__';
 
