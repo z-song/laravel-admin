@@ -25,4 +25,14 @@ trait HasResourceActions
     {
         return $this->form()->store();
     }
+
+    /**
+     * Destroy record
+     *
+     * @param $id
+     */
+    public function destroy($id)
+    {
+        return app(HandleController::class)->handleAction(request());
+    }
 }

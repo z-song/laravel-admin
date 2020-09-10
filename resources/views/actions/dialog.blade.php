@@ -2,6 +2,7 @@
 $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
     var data = $(this).data();
     var $target = $(this);
+    var url = $(this).attr('url') || '{{ $url }}';
     Object.assign(data, @json($parameters));
 
     {!! $action_script !!}
@@ -19,11 +20,9 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
 
     options.preConfirm = function(input) {
         return new Promise(function(resolve, reject) {
-            Object.assign(data, {_input: input});
-
             $.ajax({
                 method: '{{ $method }}',
-                url: '{{ $url }}',
+                url: url,
                 data: data
             }).done(function (data) {
                 resolve(data);

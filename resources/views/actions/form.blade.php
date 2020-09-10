@@ -2,6 +2,7 @@
 $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
     var data = $(this).data();
     var $target = $(this);
+    var url = $(this).attr('url') || '{{ $url }}';
     var $modal = $('#'+$(this).attr('modal'));
 
     Object.assign(data, @json($parameters));
@@ -20,7 +21,7 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
 
             $.ajax({
                 method: '{{ $method }}',
-                url: '{{ $url }}',
+                url: url,
                 data: formData,
                 cache: false,
                 contentType: false,

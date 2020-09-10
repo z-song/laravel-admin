@@ -25,10 +25,10 @@ class AdminController extends Controller
      * @var array
      */
     protected $description = [
-        //        'index'  => 'Index',
-        //        'show'   => 'Show',
-        //        'edit'   => 'Edit',
-        //        'create' => 'Create',
+        // 'index'  => 'Index',
+        // 'show'   => 'Show',
+        // 'edit'   => 'Edit',
+        // 'create' => 'Create',
     ];
 
     /**
@@ -103,16 +103,6 @@ class AdminController extends Controller
             ->description($this->description['create'] ?? trans('admin.create'));
 
         return $this->renderModalForm($this->form()->create(), $content);
-    }
-
-    /**
-     * Destroy record
-     *
-     * @param $id
-     */
-    public function destroy($id)
-    {
-        return app(HandleController::class)->handleAction(request());
     }
 
     /**

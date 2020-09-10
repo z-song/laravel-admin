@@ -39,41 +39,11 @@
     <!-- /.card-body -->
 </div>
 
-
 <script require="nestable">
     $('#{{ $id }}').nestable(@json($options));
 
-    $('.tree_branch_delete').click(function() {
-        var id = $(this).data('id');
-        $.admin.swal.fire({
-            title: "{{ admin_trans('admin.delete_confirm') }}",
-            icon: "warning",
-            showCancelButton: true,
-            showLoaderOnConfirm: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "{{ admin_trans('admin.confirm') }}",
-            cancelButtonText: "{{ admin_trans('admin.cancel') }}",
-            preConfirm: function() {
-                return new Promise(function(resolve) {
-                    $.delete({
-                        url: '{{ $url }}/' + id,
-                    }).done(function (data) {
-                        $.admin.reload('{{ admin_trans('admin.delete_succeeded') }}');
-                        resolve(data);
-                    });
-                });
-            }
-        }).then(function(result) {
-            var data = result.value;
-            if (typeof data === 'object') {
-                $.admin.toastr.show(data);
-            }
-        });
-    });
-
     $('.{{ $id }}-save').click(function () {
         var serialize = $('#{{ $id }}').nestable('serialize');
-
         $.post('{{ $url }}', {
             _order: JSON.stringify(serialize)
         },

@@ -241,6 +241,7 @@ class Tree implements Renderable
             'keyName'        => $this->model->getKeyName(),
             'branchView'     => $this->view['branch'],
             'branchCallback' => $this->branchCallback,
+            'model'          => get_class($this->model),
         ]);
 
         return Admin::view($this->view['tree'], [

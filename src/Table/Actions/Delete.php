@@ -50,7 +50,7 @@ class Delete extends RowAction
      */
     public function getHandleRoute()
     {
-        return $this->parent->resource() . '/'. $this->getKey();
+        return '';
     }
 
     /**
@@ -59,5 +59,15 @@ class Delete extends RowAction
     public function dialog()
     {
         $this->question(trans('admin.delete_confirm'));
+    }
+
+    /**
+     * @return string
+     */
+    public function render()
+    {
+        $this->attribute('url', $this->parent->resource() . '/'. $this->getKey());
+
+        return parent::render();
     }
 }
