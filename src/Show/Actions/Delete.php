@@ -56,7 +56,7 @@ class Delete extends Action
     /**
      * @return string
      */
-    public function getHandleRoute()
+    public function getHandleUrl()
     {
         return $this->path . '/'. $this->model->getKey();
     }

@@ -48,7 +48,7 @@ class Delete extends RowAction
     /**
      * @return string
      */
-    public function getHandleRoute()
+    public function getHandleUrl()
     {
         return '';
     }

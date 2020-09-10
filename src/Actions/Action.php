@@ -219,7 +219,7 @@ abstract class Action implements Renderable
     /**
      * @return string
      */
-    public function getHandleRoute()
+    public function getHandleUrl()
     {
         return admin_url('_handle_action_');
     }
@@ -266,7 +266,7 @@ abstract class Action implements Renderable
             'parameters'    => array_merge($this->parameters(), ['_action' => $this->getCalledClass()]),
             'action_script' => $this->actionScript(),
             'method'        => $this->getMethod(),
-            'url'           => $this->getHandleRoute(),
+            'url'           => $this->getHandleUrl(),
         ];
 
         if ($this->interactor) {
