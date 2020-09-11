@@ -57,14 +57,8 @@
         var $form = $(this);
         $form.find('button[type=submit]').click(function (e) {
             e.preventDefault();
-            $.admin.swal.fire({
+            $.admin.confirm({
                 title: "{{ $confirm }}",
-                icon: "warning",
-                showCancelButton: true,
-                showLoaderOnConfirm: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "{{ admin_trans('admin.confirm') }}",
-                cancelButtonText: "{{ admin_trans('admin.cancel') }}",
             }).then(function (result) {
                 if (result.value) {
                     $form.submit();

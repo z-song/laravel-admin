@@ -4,11 +4,8 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
     var $target = $(this);
     var url = $(this).attr('url') || '{{ $url }}';
     var $modal = $('#'+$(this).attr('modal'));
-
     Object.assign(data, @json($parameters));
-
     {!! $action_script !!}
-
     $modal.modal('show');
     $modal.find('form').off('submit').on('submit', function (e) {
         e.preventDefault();
@@ -37,14 +34,8 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
         });
 
         @if (!empty($confirm))
-        $.admin.swal.fire({
+        $.admin.confirm({
             title: '{{ $confirm }}',
-            icon: "warning",
-            showCancelButton: true,
-            showLoaderOnConfirm: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "{{ admin_trans('admin.confirm') }}",
-            cancelButtonText: "{{ admin_trans('admin.cancel') }}",
             preConfirm: function() {
                 return _promise;
             }
@@ -55,7 +46,7 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
             return [result.value, $target];
         }).then($.admin.action.then).catch($.admin.action.catch);
         @else
-        _promise.then($.admin.action.then).catch($.admin.action.catch);
+_promise.then($.admin.action.then).catch($.admin.action.catch);
         @endif
     });
 });

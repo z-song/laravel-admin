@@ -17,14 +17,8 @@
     $(this).on('filebeforedelete', function() {
         return new Promise(function(resolve, reject) {
             var remove = resolve;
-            $.admin.swal.fire({
+            $.admin.confirm({
                 title: "{{ admin_trans('admin.delete_confirm') }}",
-                icon: "warning",
-                showCancelButton: true,
-                showLoaderOnConfirm: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "{{ admin_trans('admin.confirm') }}",
-                cancelButtonText: "{{ admin_trans('admin.cancel') }}",
                 preConfirm: function() {
                     return new Promise(function(resolve) {
                         resolve(remove());

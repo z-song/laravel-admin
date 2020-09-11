@@ -4,20 +4,9 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
     var $target = $(this);
     var url = $(this).attr('url') || '{{ $url }}';
     Object.assign(data, @json($parameters));
-
     {!! $action_script !!}
-
-    var options = {
-        icon: 'question',
-        showCancelButton: true,
-        showLoaderOnConfirm: true,
-        confirmButtonText: '{{ admin_trans('admin.submit') }}',
-        cancelButtonText: '{{ admin_trans('admin.cancel') }}',
-        confirmButtonColor: '#d33',
-    };
-
+    var options = {};
     Object.assign(options, @json($options));
-
     options.preConfirm = function(input) {
         return new Promise(function(resolve, reject) {
             $.ajax({
@@ -32,7 +21,7 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
         });
     };
 
-    $.admin.swal.fire(options).then(function(result) {
+    $.admin.confirm(options).then(function(result) {
         if (typeof result.dismiss !== 'undefined') {
             return Promise.reject();
         }

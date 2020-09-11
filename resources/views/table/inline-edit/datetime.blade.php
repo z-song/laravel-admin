@@ -22,19 +22,18 @@
             @endslot
             @slot('shown')
             var $input  = $popover.find('.ie-input');
-
-            $popover.find('.ie-container').datetimepicker({
-                inline: true,
-                format: '{{ $format }}',
-                date: $input.val(),
-                locale: '{{ $locale }}',
-                icons: {
-                    time: 'fas fa-clock'
-                }
-            }).on('dp.change', function (event) {
-                var date = event.date.format('{{ $format }}');
-                $input.val(date);
-            });
+    $popover.find('.ie-container').datetimepicker({
+        inline: true,
+        format: '{{ $format }}',
+        date: $input.val(),
+        locale: '{{ $locale }}',
+        icons: {
+            time: 'fas fa-clock'
+        }
+    }).on('dp.change', function (event) {
+        var date = event.date.format('{{ $format }}');
+        $input.val(date);
+    });
             @endslot
         @endcomponent
     </script>

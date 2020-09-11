@@ -2,14 +2,14 @@
     <a href="{{ $url }}" class="btn btn-sm btn-@color table-create-btn mr-2" data-toggle="modal" data-target="#table-create-modal">
         <i class="fa fa-plus"></i><span class="hidden-xs">&nbsp;&nbsp;{{ admin_trans('admin.new') }}</span>
     </a>
-    <script>
-        $('#table-create-modal').on('show.bs.modal', function (e) {
-            if ($(this).data('loaded') != 1) {
-                $(this).find('.modal-body').load($(e.relatedTarget).attr('href')+'?_modal');
-                $(this).data('loaded', 1);
-            }
-        });
-    </script>
+<script>
+    $('#table-create-modal').on('show.bs.modal', function (e) {
+        if ($(this).data('loaded') != 1) {
+            $(this).find('.modal-body').load($(e.relatedTarget).attr('href')+'?_modal');
+            $(this).data('loaded', 1);
+        }
+    });
+</script>
 
     <template>
         <div class="modal fade" tabindex="-1" role="dialog" id="table-create-modal">

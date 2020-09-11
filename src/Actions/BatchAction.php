@@ -19,14 +19,12 @@ abstract class BatchAction extends TableAction
         $warning = __('No data selected!');
 
         return <<<SCRIPT
-        var key = $.admin.table.selected();
-
-        if (key.length === 0) {
-            $.admin.toastr.warning('{$warning}');
-            return ;
-        }
-
-        Object.assign(data, {_key:key});
+var key = $.admin.table.selected();
+    if (key.length === 0) {
+        $.admin.toastr.warning('{$warning}');
+        return ;
+    }
+    Object.assign(data, {_key:key});
 SCRIPT;
     }
 

@@ -4,9 +4,7 @@ $('{{ $selector }}').off('{{ $event }}').on('{{ $event }}', function() {
     var $target = $(this);
     var url = $(this).attr('url') || '{{ $url }}';
     Object.assign(data, @json($parameters));
-
     {!! $action_script !!}
-
     new Promise(function (resolve,reject) {
         $.ajax({
             method: '{{ $method }}',

@@ -65,7 +65,6 @@
     };
 
 @if($relation == \Encore\Admin\Table\Displayers\BelongsTo::class)
-
     var selected = null;
 
     var load = function (url) {

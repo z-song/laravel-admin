@@ -416,6 +416,19 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         this.__trans = window.__trans;
     }
 
+    Admin.prototype.confirm = function (options) {
+        options = Object.assign(options, {
+            icon: 'question',
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: this.trans('confirm'),
+            cancelButtonText: this.trans('cancel'),
+        });
+
+        return this.swal.fire(options);
+    };
+
     Admin.prototype.enableTotop = function () {
         var $totop = $('<button/>', {
             id: 'totop',
