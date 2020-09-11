@@ -7,11 +7,23 @@ use Illuminate\Database\Eloquent\Collection;
 
 class BatchDelete extends BatchAction
 {
+    /**
+     * @var string
+     */
+    protected $method = 'DELETE';
+
+    /**
+     * @return array|\Illuminate\Contracts\Translation\Translator|string|null
+     */
     public function name()
     {
         return trans('admin.batch_delete');
     }
 
+    /**
+     * @param Collection $collection
+     * @return \Encore\Admin\Actions\Response
+     */
     public function handle(Collection $collection)
     {
         try {
@@ -23,8 +35,19 @@ class BatchDelete extends BatchAction
         return $this->response()->success(trans('admin.delete_succeeded'))->refresh();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function dialog()
     {
         $this->confirm(trans('admin.delete_confirm'));
+    }
+
+    /**
+     * @return string
+     */
+    public function getHandleUrl()
+    {
+        return $this->parent->resource().'/_batch_delete';
     }
 }

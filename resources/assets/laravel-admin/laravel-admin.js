@@ -155,12 +155,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
 
     Table.prototype.toggleAll = function (checked) {
         var $checkbox = this.$el.find('input.table-row-checkbox');
-        if (checked) {
-            $checkbox.prop('checked', true).trigger('change');
-        } else {
-            $checkbox.prop('checked', false).trigger('change');
-            this.selects = {};
-        }
+        $checkbox.prop('checked', checked).trigger('change');
 
         $.admin.emit('table-select', [this.selected().length]);
     };
@@ -417,6 +412,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         this.enableTotop();
 
         this.$bus = $({});
+
+        this.__trans = window.__trans;
     }
 
     Admin.prototype.enableTotop = function () {
@@ -515,7 +512,9 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
     };
 
     Admin.prototype.initTable = function ($table) {
-        this.table = new Table($table);
+        if(!this.table) {
+            this.table = new Table($table);
+        }
     };
 
     Admin.prototype.initForm = function ($form) {
@@ -523,9 +522,9 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
     };
 
     Admin.prototype.trans = function (desc) {
-        var obj = __trans;
-        var arr = desc.split(".");
-        while(arr.length && (obj = obj[arr.shift()]));
+        var obj = this.__trans;
+        var arr = desc.split('.');
+        while(arr.length && (obj = obj[arr.shift()])) {}
         return obj;
     };
 

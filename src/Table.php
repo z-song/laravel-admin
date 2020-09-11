@@ -182,7 +182,7 @@ class Table
      */
     protected function initialize()
     {
-        $this->tableID = uniqid('table-table');
+        $this->tableID = uniqid('table-');
 
         $this->columns = Collection::make();
         $this->rows = Collection::make();

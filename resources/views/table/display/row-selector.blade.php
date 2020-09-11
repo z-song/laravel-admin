@@ -5,6 +5,6 @@
 
 <script require="icheck">
     $('.table-row-checkbox').on('change', function () {
-        $.admin.table.toggle($(this).data('id'));
+        $.admin.table[this.checked ? 'select' : 'unselect']($(this).data('id'));
     });
 </script>
