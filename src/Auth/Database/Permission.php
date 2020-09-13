@@ -111,13 +111,16 @@ class Permission extends Model
      */
     protected function matchRequest(array $match, Request $request): bool
     {
+        $match_pattern = NULL;
         if ($match['path'] == '/') {
             $path = '/';
         } else {
+            $match_pattern = preg_replace('/(?<!\\\\)\//i','\/', $match['path']);
             $path = trim($match['path'], '/');
         }
 
-        if (!$request->is($path)) {
+
+        if (!$request->is($path) && (!is_null($match_pattern) && !preg_match("/".$match_pattern."/", $request->fullUrl())) ) {
             return false;
         }
 
