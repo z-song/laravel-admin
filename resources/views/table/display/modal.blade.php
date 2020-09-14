@@ -18,12 +18,12 @@
 
 @if($table)
 <style>
-    .card.table-box {
+    .card.table-card {
         box-shadow: none;
         border-top: none;
     }
 
-    .table-box .card-header:first-child {
+    .table-card .card-header:first-child {
         display: none;
     }
 </style>
@@ -35,11 +35,6 @@
     var modalBody = modal.find('.modal-body');
 
     var load = function (url) {
-
-        modalBody.html("<div class='loading text-center' style='height:200px;'>\
-                <i class='fa fa-spinner fa-pulse fa-3x fa-fw' style='margin-top: 80px;'></i>\
-            </div>");
-
         $.get(url, function (data) {
             modalBody.html(data);
         });

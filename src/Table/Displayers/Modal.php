@@ -46,7 +46,7 @@ class Modal extends AbstractDisplayer
             $html = call_user_func_array($callback->bindTo($this->row), [$this->row]);
         }
 
-        return Admin::view('admin::components.column-modal', [
+        return Admin::view('admin::table.display.modal', [
             'url'      => $this->getLoadUrl(),
             'async'    => $async,
             'table'    => is_subclass_of($callback, Simple::class),

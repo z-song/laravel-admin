@@ -22,70 +22,55 @@
     </template>
 </div>
 
-<script>
-    var expand = $('.{{ $elementClass }}');
-
+<script selector=".{{ $elementClass }}">
     @if($async)
-
     var load = function (url, target) {
         $.get(url, function (data) {
             target.find('.html').html(data);
         });
     };
 
-    expand.on('click', function (e) {
+    $(this).on('click', function (e) {
         var target = $(this);
         if (target.data('inserted') == '0') {
             var key  = target.data('key');
             var name = $(this).data('name');
             var row = $(this).closest('tr');
-
             row.after($('template.table-expand-'+name).html());
-
             $(this).data('inserted', 1);
-
             load('{{ $url }}'+'&key='+key, $('#table-collapse-'+name));
         }
-
-        $("i", this).toggleClass("fa-angle-double-down fa-angle-double-up");
+        $('i', this).toggleClass('fa-angle-double-down fa-angle-double-up');
     });
 
-    $(document).on('pjax:click', '.collapse a.pjax, .collapse a.pjax', function (e) {
-        // load($(this).attr('href'), $(this).parent('.collapse'));
+    $('.table-card').on('pjax:click click', '.collapse .page-item a, .card-footer a', function (e) {
+        load($(this).attr('href'), $(this).closest('.collapse'));
         e.preventDefault();
         return false;
-    }).on('pjax:submit', '.collapse .card-header form', function (e) {
-        // load($(this).attr('action')+'&'+$(this).serialize(), $(this).parent('.collapse'));
+    }).on('submit', '.collapse .card-header form', function (e) {
+        load($(this).attr('action')+'&'+$(this).serialize(), $(this).closest('.collapse'));
+        e.preventDefault();
         return false;
     });
-
     @else
-
-    expand.on('click', function () {
-
+    $(this).on('click', function () {
         if ($(this).data('inserted') == '0') {
-
             var name = $(this).data('name');
             var row = $(this).closest('tr');
-
             row.after($('template.table-expand-'+name).html());
-
             $(this).data('inserted', 1);
         }
-
         $("i", this).toggleClass("fa-angle-double-down fa-angle-double-up");
     });
-
     @endif
-
     @if ($expand)
-        expand.trigger('click');
+        $(this).trigger('click');
     @endif
 </script>
 
 @if($loadTable)
 <style>
-    .collapse .table-box .card-header:first-child {
+    .collapse .table-card .card-header:first-child {
         display: none;
     }
 </style>
