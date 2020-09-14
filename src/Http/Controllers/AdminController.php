@@ -17,14 +17,14 @@ class AdminController extends Controller
      *
      * @var string
      */
-    protected $title = 'Title';
+    public $title = 'Title';
 
     /**
      * Set description for following 4 action pages.
      *
      * @var array
      */
-    protected $description = [
+    public $description = [
         // 'index'  => 'Index',
         // 'show'   => 'Show',
         // 'edit'   => 'Edit',
