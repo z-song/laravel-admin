@@ -74,6 +74,18 @@ trait HasResponse
     }
 
     /**
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function download($url)
+    {
+        $this->response->download = $url;
+
+        return $this;
+    }
+
+    /**
      * @param mixed $data
      *
      * @return $this

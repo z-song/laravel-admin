@@ -351,6 +351,17 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         if (data.redirect) {
             $.admin.redirect(data.redirect);
         }
+
+        if (data.download) {
+            var $download = $('<a>', {
+                href: data.download,
+                target:'_blank',
+                download: '',
+            });
+            $download.hide().appendTo('body');
+            $download[0].click();
+            $download.remove();
+        }
     };
 
     function Toast() {

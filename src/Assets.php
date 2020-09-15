@@ -78,6 +78,7 @@ class Assets
             'css' => '/vendor/laravel-admin/sweetalert2/sweetalert2.min',
         ],
         'initialize'              => [
+            'deps' => ['jquery'],
             'js' => 'jquery.initialize/jquery.initialize',
         ],
         'nestable'                => [
