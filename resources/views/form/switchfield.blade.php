@@ -10,8 +10,8 @@
 
 <script require="toggle" @script>
     $(this).bootstrapToggle().change(function () {
-        $(this).parents('.form-group')
-            .find('input[type=hidden]')
+        $(this).parents('.fields-group')
+            .find('input[type=hidden][name={{$name}}]')
             .val(this.checked ? '{{ $state['on']['value'] }}':'{{$state['off']['value']}}');
     });
 </script>

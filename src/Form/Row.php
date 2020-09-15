@@ -5,6 +5,9 @@ namespace Encore\Admin\Form;
 use Encore\Admin\Form;
 use Illuminate\Contracts\Support\Renderable;
 
+/**
+ * @mixin Form
+ */
 class Row implements Renderable
 {
     /**
@@ -41,13 +44,15 @@ class Row implements Renderable
      * @param \Closure $callback
      * @param Form     $form
      */
-    public function __construct(\Closure $callback, Form $form)
+    public function __construct(\Closure $callback = null, Form $form)
     {
         $this->callback = $callback;
 
         $this->form = $form;
 
-        call_user_func($this->callback, $this);
+        if (!is_null($this->callback)) {
+            call_user_func($this->callback, $this);
+        }
     }
 
     /**
@@ -69,6 +74,10 @@ class Row implements Renderable
      */
     public function width($width = 12)
     {
+        if ($width > 0 && $width < 1) {
+            $width *= 12;
+        }
+
         $this->defaultFieldWidth = $width;
 
         return $this;

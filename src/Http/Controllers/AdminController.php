@@ -17,14 +17,14 @@ class AdminController extends Controller
      *
      * @var string
      */
-    public $title = 'Title';
+    protected $title = 'Title';
 
     /**
      * Set description for following 4 action pages.
      *
      * @var array
      */
-    public $description = [
+    protected $description = [
         // 'index'  => 'Index',
         // 'show'   => 'Show',
         // 'edit'   => 'Edit',
@@ -36,9 +36,17 @@ class AdminController extends Controller
      *
      * @return string
      */
-    protected function title()
+    public function title()
     {
         return $this->title;
+    }
+
+    /**
+     * @return array
+     */
+    public function descripttion()
+    {
+        return $this->description;
     }
 
     /**

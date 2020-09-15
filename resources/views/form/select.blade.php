@@ -98,7 +98,7 @@
     @isset($ajax)
     $(this).select2({
         ajax: {
-            url: "{{ $url }}",
+            url: "{{ $ajax['url'] }}",
             dataType: 'json',
             delay: 250,
             data: function (params) {
@@ -112,8 +112,8 @@
 
                 return {
                     results: $.map(data.data, function (d) {
-                        d.id = d.{{$idField}};
-                        d.text = d.{{$textField}};
+                        d.id = d.{{ $ajax['idField'] }};
+                        d.text = d.{{ $ajax['textField'] }};
                         return d;
                     }),
                     pagination: {
@@ -123,7 +123,7 @@
             },
             cache: true
         },
-        {{$configs}},
+        {!! $ajax['configs'] !!},
         escapeMarkup: function (markup) {
             return markup;
         }

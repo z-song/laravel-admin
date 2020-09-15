@@ -95,6 +95,11 @@ class Form implements Renderable
     public $rows = [];
 
     /**
+     * @var null
+     */
+    public $currentRow = null;
+
+    /**
      * @var bool
      */
     protected $isSoftDeletes = false;
@@ -910,9 +915,13 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function row(Closure $callback): self
+    public function row(Closure $callback = null)
     {
-        $this->rows[] = new Row($callback, $this);
+        $this->rows[] = $this->currentRow = new Row($callback, $this);
+
+        if (is_null($callback)) {
+            return $this->currentRow;
+        }
 
         return $this;
     }
