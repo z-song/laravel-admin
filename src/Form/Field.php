@@ -1002,8 +1002,12 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function addVariables(array $variables = []): self
+    public function addVariables($variables = []): self
     {
+        if (func_num_args() == 2) {
+            $variables = [func_get_arg(0) => func_get_arg(1)];
+        }
+
         $this->variables = array_merge($this->variables, $variables);
 
         return $this;

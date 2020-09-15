@@ -11,7 +11,7 @@ class UserController extends AdminController
     /**
      * {@inheritdoc}
      */
-    protected function title()
+    public function title()
     {
         return trans('admin.administrator');
     }

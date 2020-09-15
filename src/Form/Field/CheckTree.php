@@ -32,6 +32,11 @@ class CheckTree extends Field
         }
     }
 
+    public function closeDepth($depth = 3)
+    {
+        return $this->addVariables('closeDepth', $depth);
+    }
+
     public function render()
     {
         $options = [

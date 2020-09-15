@@ -14,7 +14,7 @@
     var $input = $(this);
     var tree = new Tree('.treejs', {
         data: @json($options),
-        closeDepth: 3,
+        closeDepth: {{ $closeDepth ?? 3 }},
         loaded: function () {
             this.values = @json($checked);
         },
