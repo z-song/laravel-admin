@@ -99,7 +99,10 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         statusCode: {
             500: function(xhr) {
                 $.admin.toastr.error(xhr.responseJSON.message, {position:"bottom"});
-            }
+            },
+            403: function (xhr) {
+                $.admin.toastr.error(xhr.responseJSON.message, {position:"bottom"});
+            },
         }
     });
 
@@ -522,7 +525,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
                 $.admin.toastr.error(request.responseJSON.message, {
                     position:"bottom",
                     timer: 10000
-                }).css("width","500px");
+                }).css('width', '500px');
             }
         }
     };

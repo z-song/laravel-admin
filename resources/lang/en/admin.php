@@ -107,4 +107,5 @@ return [
     'all_menus'              => 'All menus',
     'accessible_routes'      => 'Accessible routes',
     'visible_menu'           => 'Visible menu',
+    'accessible_actions'     => 'Accessible actions',
 ];

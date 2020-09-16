@@ -104,6 +104,7 @@ return [
     'next'                    => '下一步',
     'quick_create'            => '快速创建',
     'all_menus'               => '所有菜单',
-    'accessible_routes'      => '可访问路由',
-    'visible_menu'           => '可见菜单',
+    'accessible_routes'       => '可访问路由',
+    'visible_menu'            => '可见菜单',
+    'accessible_actions'      => '可访问操作',
 ];
