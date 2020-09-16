@@ -44,19 +44,31 @@ trait HasPermissions
     /**
      * Check if user has no permission.
      *
-     * @param $permission
-     *
+     * @param  iterable|string  $abilities
+     * @param  array|mixed  $arguments
      * @return bool
      */
-    public function cannot(string $permission): bool
+    public function cant($abilities, $arguments = []): bool
     {
-        return !$this->can($permission);
+        return !$this->can($abilities, $arguments);
+    }
+
+    /**
+     * Check if user has no permission.
+     *
+     * @param  iterable|string  $abilities
+     * @param  array|mixed  $arguments
+     * @return bool
+     */
+    public function cannot($abilities, $arguments = []): bool
+    {
+        return $this->cant($abilities, $arguments);
     }
 
     /**
      * Check if user is administrator.
      *
-     * @return mixed
+     * @return bool
      */
     public function isAdministrator(): bool
     {
@@ -68,7 +80,7 @@ trait HasPermissions
      *
      * @param string $role
      *
-     * @return mixed
+     * @return bool
      */
     public function isRole(string $role): bool
     {
@@ -80,7 +92,7 @@ trait HasPermissions
      *
      * @param array $roles
      *
-     * @return mixed
+     * @return bool
      */
     public function inRoles(array $roles = []): bool
     {
