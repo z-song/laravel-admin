@@ -107,4 +107,7 @@ return [
     'accessible_routes'       => '可访问路由',
     'visible_menu'            => '可见菜单',
     'accessible_actions'      => '可访问操作',
+    'index'                   => '列表',
+    'store'                   => '保存',
+    'update'                  => '更新',
 ];

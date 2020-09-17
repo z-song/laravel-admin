@@ -108,4 +108,7 @@ return [
     'accessible_routes'      => 'Accessible routes',
     'visible_menu'           => 'Visible menu',
     'accessible_actions'     => 'Accessible actions',
+    'index'                   => 'Index',
+    'store'                   => 'Store',
+    'update'                  => 'Update',
 ];

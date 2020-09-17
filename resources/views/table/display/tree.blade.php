@@ -1,5 +1,5 @@
 <span class="tree-column-wrap" data-key='{{ $key }}' data-parent="{{ $parent }}">
-    {!!  str_repeat('<span></span>', $space - 1)  !!}
+    {!!  str_repeat('<span></span>', $space)  !!}
     @if($has_children)
         <a href="#" class="mr-2 column-tree-expand"><i class="fas fa-chevron-down"></i></a>
     @endif

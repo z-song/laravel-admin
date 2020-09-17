@@ -23,7 +23,7 @@ trait HasResourceActions
      */
     public function store()
     {
-        return $this->form()->store();
+        return $this->form()->create()->store();
     }
 
     /**
