@@ -96,7 +96,7 @@ class Assets
 //        ],
         'fileinput'               => [
             'css' => 'bootstrap-fileinput/css/fileinput.min',
-            'js'  => 'bootstrap-fileinput/fileinput',
+            'js'  => 'bootstrap-fileinput/js/fileinput.min',
         ],
         'moment'                  => [
             'js' => 'moment/moment-with-locales.min',
