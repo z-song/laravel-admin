@@ -428,10 +428,7 @@ class HasMany extends Field
 
                 $model = $relation->getRelated()->replicate()->forceFill($data);
 
-                $forms[$key] = $this->buildNestedForm($this->column, function ($form) use ($key) {
-                    $form->setKey($key);
-                    call_user_func($this->builder, $form);
-                }, $model)
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $model)
                     ->fill($data);
             }
         } else {
