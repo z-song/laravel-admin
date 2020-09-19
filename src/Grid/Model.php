@@ -372,7 +372,7 @@ class Model
         }
 
         if ($this->relation) {
-            $this->model = $this->relation->getQuery();
+            $this->model = $this->relation;
         }
 
         $this->setSort();
