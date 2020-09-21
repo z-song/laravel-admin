@@ -171,7 +171,8 @@ class Footer implements Renderable
      */
     protected function setupScript()
     {
-        $script = <<<'EOT'
+        $script = <<<EOT
+        
 $('.after-submit').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChecked', function () {
     $('.after-submit').not(this).iCheck('uncheck');
 });
