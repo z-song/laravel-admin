@@ -18,6 +18,7 @@
                            value="{{ old($column['start'], $value['start'] ?? null) }}"
                            class="form-control {{$class['start']}}"
                            style="width: 160px"
+                           autocomplete="off"
                             {!! $attributes !!}
                     />
                 </div>
@@ -39,6 +40,7 @@
                            value="{{ old($column['end'], $value['end'] ?? null) }}"
                            class="form-control {{$class['end']}}"
                            style="width: 160px"
+                           autocomplete="off"
                             {!! $attributes !!}
                     />
                 </div>
