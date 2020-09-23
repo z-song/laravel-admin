@@ -50,7 +50,7 @@ trait BuiltinRoutes
             $router->get('auth/setting', $authController . '@getSetting')->name('admin.setting');
             $router->put('auth/setting', $authController . '@putSetting');
 
-            $router->get('_require_config.js', function () {
+            $router->get('_require_config', function () {
 
                 if ($user = Admin::user()) {
                     $user = Arr::only($user->toArray(), ['id', 'username', 'email', 'name', 'avatar']);
