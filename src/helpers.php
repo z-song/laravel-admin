@@ -1,7 +1,6 @@
 <?php
 
 use Encore\Admin\Admin;
-use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
 
 if (!function_exists('admin_path')) {
@@ -404,10 +403,8 @@ if (!function_exists('admin_view')) {
 }
 
 if (!function_exists('admin_user')) {
-
     function admin_user()
     {
         return \Encore\Admin\Facades\Admin::user();
     }
 }
-

@@ -8,7 +8,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 class SingleUserLogin extends AuthenticateSession
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function logout($request)
     {

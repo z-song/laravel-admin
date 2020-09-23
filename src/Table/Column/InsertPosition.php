@@ -30,7 +30,7 @@ trait InsertPosition
     }
 
     /**
-     * @param integer $position
+     * @param int $position
      *
      * @return $this
      */
@@ -51,7 +51,7 @@ trait InsertPosition
     /**
      * @param string $name
      *
-     * @return integer
+     * @return int
      */
     protected function findPositionByName($name)
     {

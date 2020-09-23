@@ -21,8 +21,7 @@ class CheckTree extends Field
 
             if (in_array($item['id'], $checked)
                 && isset($item['children'])
-                && count(array_intersect($checked, Arr::pluck($item['children'], 'id'))) > 0)
-            {
+                && count(array_intersect($checked, Arr::pluck($item['children'], 'id'))) > 0) {
                 array_delete($checked, $item['id']);
             }
 
@@ -44,7 +43,7 @@ class CheckTree extends Field
                 'id'        => 0,
                 'text'      => admin_trans('admin.all_menus'),
                 'children'  => $this->options,
-            ]
+            ],
         ];
 
         $checked = $this->value ?: [];

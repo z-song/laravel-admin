@@ -3,7 +3,6 @@
 namespace Encore\Admin\Tree;
 
 use Encore\Admin\Actions\Action;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class Delete extends Action
@@ -86,7 +85,7 @@ class Delete extends Action
 
     public function html()
     {
-        $url = $this->path . '/'. $this->key;
+        $url = $this->path.'/'.$this->key;
 
         $text = trans('admin.delete');
 

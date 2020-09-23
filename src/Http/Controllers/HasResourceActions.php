@@ -27,7 +27,7 @@ trait HasResourceActions
     }
 
     /**
-     * Destroy record
+     * Destroy record.
      *
      * @param $id
      */

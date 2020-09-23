@@ -22,6 +22,7 @@ class BatchDelete extends BatchAction
 
     /**
      * @param Collection $collection
+     *
      * @return \Encore\Admin\Actions\Response
      */
     public function handle(Collection $collection)
@@ -36,7 +37,7 @@ class BatchDelete extends BatchAction
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function dialog()
     {
