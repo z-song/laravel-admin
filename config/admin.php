@@ -144,7 +144,7 @@ return [
     | devices without invalidating the session on their current device.
     |
     */
-    'single_device_login' => true,
+    'single_device_login' => false,
 
     /*
     |--------------------------------------------------------------------------
