@@ -44,6 +44,7 @@ class AdminServiceProvider extends ServiceProvider
         'admin.pjax'       => Middleware\Pjax::class,
         'admin.bootstrap'  => Middleware\Bootstrap::class,
         'admin.session'    => Middleware\Session::class,
+        'admin.sul'        => Middleware\SingleUserLogin::class,
     ];
 
     /**
@@ -231,6 +232,10 @@ PHP;
         // register route middleware.
         foreach ($this->routeMiddleware as $key => $middleware) {
             app('router')->aliasMiddleware($key, $middleware);
+        }
+
+        if (config('admin.single_device_login')) {
+            array_push($this->middlewareGroups['admin'], 'admin.sul');
         }
 
         // register middleware group.

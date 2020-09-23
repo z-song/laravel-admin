@@ -47,6 +47,11 @@ class AuthController extends Controller
         $remember = $request->get('remember', false);
 
         if ($this->guard()->attempt($credentials, $remember)) {
+
+            if (config('admin.single_device_login')) {
+                $this->guard()->logoutOtherDevices($credentials['password']);
+            }
+
             return $this->sendLoginResponse($request);
         }
 

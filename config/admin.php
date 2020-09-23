@@ -137,6 +137,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Single device login / 单设备登录
+    |--------------------------------------------------------------------------
+    |
+    | Invalidating and "logging out" a user's sessions that are active on other
+    | devices without invalidating the session on their current device.
+    |
+    */
+    'single_device_login' => true,
+
+    /*
+    |--------------------------------------------------------------------------
     | Laravel-admin upload setting
     |--------------------------------------------------------------------------
     |
