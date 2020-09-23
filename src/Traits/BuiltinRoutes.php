@@ -38,6 +38,9 @@ trait BuiltinRoutes
                 $router->get('_handle_renderable_',
                     'HandleController@handleRenderable')->name('admin.handle-renderable');
 
+                // requirejs配置
+                $router->get('_require_config', 'PagesController@requireConfig')->name('admin-require-config');
+
                 $router->fallback('PagesController@error404');
             });
 
@@ -49,20 +52,6 @@ trait BuiltinRoutes
             $router->get('auth/logout', $authController . '@getLogout')->name('admin.logout');
             $router->get('auth/setting', $authController . '@getSetting')->name('admin.setting');
             $router->put('auth/setting', $authController . '@putSetting');
-
-            $router->get('_require_config', function () {
-
-                if ($user = Admin::user()) {
-                    $user = Arr::only($user->toArray(), ['id', 'username', 'email', 'name', 'avatar']);
-                }
-
-                return view('admin::partials.config', [
-                    'requirejs' => Assets::config(),
-                    'user'      => $user ?: [],
-                    'trans'     => Lang::get('admin'),
-                ]);
-
-            })->name('admin-require-config');
         });
     }
 }
