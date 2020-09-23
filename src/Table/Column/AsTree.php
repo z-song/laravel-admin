@@ -20,7 +20,6 @@ trait AsTree
         $this->table->model()->where($column, 0);
 
         $this->table->model()->collection(function (Collection $collection) use ($column) {
-
             $children = $this->getTreeChildren($collection->map->getKey()->toArray(), $column);
 
             if ($children->isEmpty()) {
@@ -65,6 +64,7 @@ trait AsTree
 
     /**
      * @param array $keys
+     *
      * @return Collection
      */
     protected function getTreeChildren($keys, $column)

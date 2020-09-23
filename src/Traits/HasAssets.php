@@ -3,7 +3,6 @@
 namespace Encore\Admin\Traits;
 
 use Encore\Admin\Assets;
-use Illuminate\Support\Arr;
 
 trait HasAssets
 {
@@ -42,9 +41,9 @@ trait HasAssets
             return Assets::$script = array_merge(Assets::$script, (array) $script);
         }
 
-        $script     = array_unique(Assets::$script);
-        $requires   = Assets::getRequires();
-        $exports    = Assets::getExports();
+        $script = array_unique(Assets::$script);
+        $requires = Assets::getRequires();
+        $exports = Assets::getExports();
 
         return view('admin::partials.script', compact('script', 'requires', 'exports'));
     }

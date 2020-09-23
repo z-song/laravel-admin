@@ -66,7 +66,7 @@ class Delete extends RowAction
      */
     public function render()
     {
-        $this->attribute('url', $this->parent->resource() . '/'. $this->getKey());
+        $this->attribute('url', $this->parent->resource().'/'.$this->getKey());
 
         return parent::render();
     }

@@ -2,11 +2,8 @@
 
 namespace Encore\Admin\Traits;
 
-use Encore\Admin\Assets;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Http\Controllers\AuthController;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Lang;
 
 trait BuiltinRoutes
 {
@@ -33,10 +30,14 @@ trait BuiltinRoutes
 
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
                 $router->post('_handle_action_', 'HandleController@handleAction')->name('admin.handle-action');
-                $router->get('_handle_selectable_',
-                    'HandleController@handleSelectable')->name('admin.handle-selectable');
-                $router->get('_handle_renderable_',
-                    'HandleController@handleRenderable')->name('admin.handle-renderable');
+                $router->get(
+                    '_handle_selectable_',
+                    'HandleController@handleSelectable'
+                )->name('admin.handle-selectable');
+                $router->get(
+                    '_handle_renderable_',
+                    'HandleController@handleRenderable'
+                )->name('admin.handle-renderable');
 
                 // requirejs配置
                 $router->get('_require_config', 'PagesController@requireConfig')->name('admin-require-config');
@@ -47,11 +48,11 @@ trait BuiltinRoutes
             $authController = config('admin.auth.controller', AuthController::class);
 
             /* @var \Illuminate\Routing\Router $router */
-            $router->get('auth/login', $authController . '@getLogin')->name('admin.login');
-            $router->post('auth/login', $authController . '@postLogin');
-            $router->get('auth/logout', $authController . '@getLogout')->name('admin.logout');
-            $router->get('auth/setting', $authController . '@getSetting')->name('admin.setting');
-            $router->put('auth/setting', $authController . '@putSetting');
+            $router->get('auth/login', $authController.'@getLogin')->name('admin.login');
+            $router->post('auth/login', $authController.'@postLogin');
+            $router->get('auth/logout', $authController.'@getLogout')->name('admin.logout');
+            $router->get('auth/setting', $authController.'@getSetting')->name('admin.setting');
+            $router->put('auth/setting', $authController.'@putSetting');
         });
     }
 }

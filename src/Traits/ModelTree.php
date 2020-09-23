@@ -51,7 +51,7 @@ trait ModelTree
 
         $parent = $this->parent;
 
-        while(!is_null($parent)) {
+        while (!is_null($parent)) {
             $parents->push($parent);
             $parent = $parent->parent;
         }

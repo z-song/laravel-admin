@@ -13,7 +13,7 @@ class TreeDisplay extends AbstractDisplayer
             'parent'       => $this->row->getParentKey(),
             'value'        => $this->getValue(),
             'has_children' => $this->getAttribute('__has_children'),
-            'space'        => $this->getAttribute('__space')
+            'space'        => $this->getAttribute('__space'),
         ]);
     }
 }

@@ -61,7 +61,7 @@ class Assets
                 'jquery',
                 'pjax',
                 'css!laravel-admin/laravel-admin',
-                'css!fontawesome-free/css/all.min'
+                'css!fontawesome-free/css/all.min',
             ],
             'export' => '$',
         ],
@@ -79,7 +79,7 @@ class Assets
         ],
         'initialize'              => [
             'deps' => ['jquery'],
-            'js' => 'jquery.initialize/jquery.initialize',
+            'js'   => 'jquery.initialize/jquery.initialize',
         ],
         'nestable'                => [
             'css' => '/vendor/laravel-admin/nestable/nestable',
@@ -115,7 +115,7 @@ class Assets
         ],
         'bootstrap-input-spinner' => [
             'deps' => 'jquery',
-            'js' => 'bootstrap-input-spinner/bootstrap-input-spinner',
+            'js'   => 'bootstrap-input-spinner/bootstrap-input-spinner',
         ],
         'toggle'                  => [
             'css' => 'bootstrap4-toggle/css/bootstrap4-toggle.min',
@@ -137,12 +137,10 @@ class Assets
             'js' => 'https://cdndelivr.net/npm/wangeditor@3.1.1/release/wangEditor.min',
         ],
         'treejs' => [
-            'js' => 'treejs/dist/tree.min',
+            'js'     => 'treejs/dist/tree.min',
             'export' => 'Tree',
-        ]
+        ],
     ];
-
-
 
     /**
      * @return array
@@ -150,7 +148,7 @@ class Assets
     public static function getRequires()
     {
         foreach (static::$css as $css) {
-            static::$requires[] = 'css!' . $css;
+            static::$requires[] = 'css!'.$css;
         }
 
         foreach (static::$js as $js) {
@@ -216,7 +214,7 @@ class Assets
     }
 
     /**
-     * @param string $module
+     * @param string       $module
      * @param string|array $requires
      */
     public static function alias($module, $requires)
@@ -240,26 +238,26 @@ class Assets
         $config = [
             'baseUrl' => '/vendor/laravel-admin/',
             'map'     => [
-                '*' => ['css' => 'requirecss']
+                '*' => ['css' => 'requirecss'],
             ],
             'packages' => static::$packages,
         ];
 
         foreach (static::$assets as $module => $assets) {
             if (Arr::has($assets, 'js')) {
-                Arr::set($config, "paths.{$module}", (array)$assets['js']);
+                Arr::set($config, "paths.{$module}", (array) $assets['js']);
             }
 
             if (Arr::has($assets, 'css')) {
                 $deps = Arr::get($config, "shim.{$module}.deps", []);
                 Arr::set($config, "shim.{$module}.deps", array_merge($deps, array_map(function ($css) {
                     return "css!{$css}";
-                }, (array)$assets['css'])));
+                }, (array) $assets['css'])));
             }
 
             if (Arr::has($assets, 'deps')) {
                 $deps = Arr::get($config, "shim.{$module}.deps", []);
-                Arr::set($config, "shim.{$module}.deps", array_merge($deps, (array)$assets['deps']));
+                Arr::set($config, "shim.{$module}.deps", array_merge($deps, (array) $assets['deps']));
             }
         }
 

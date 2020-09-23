@@ -73,7 +73,7 @@ trait HasFields
         'checkboxButton' => Field\CheckboxButton::class,
         'checkboxCard'   => Field\CheckboxCard::class,
         'checktree'      => Field\CheckTree::class,
-//        'color'          => Field\Color::class,
+        //        'color'          => Field\Color::class,
         'currency'       => Field\Currency::class,
         'date'           => Field\Date::class,
         'dateRange'      => Field\DateRange::class,
