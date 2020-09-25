@@ -469,6 +469,16 @@ HTML;
     }
 
     /**
+     * @return $this
+     */
+    public function noBorder()
+    {
+        $this->border = false;
+
+        return $this;
+    }
+
+    /**
      * Set value for this field.
      *
      * @param Model $model
