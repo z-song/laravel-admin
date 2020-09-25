@@ -25,10 +25,10 @@ class PagesController extends Controller
             $user = Arr::only($user->toArray(), ['id', 'username', 'email', 'name', 'avatar']);
         }
 
-        return view('admin::partials.config', [
+        return response(view('admin::partials.config', [
             'requirejs' => Assets::config(),
             'user'      => $user ?: [],
             'trans'     => Lang::get('admin'),
-        ]);
+        ]))->header('Content-Type', 'application/javascript');
     }
 }

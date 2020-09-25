@@ -9,15 +9,14 @@ use Encore\Admin\Traits\HasAssets;
 use Encore\Admin\Traits\RenderView;
 use Encore\Admin\Widgets\Navbar;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Traits\Macroable;
 
 /**
  * Class Admin.
  */
 class Admin
 {
-    use HasAssets;
-    use RenderView;
-    use BuiltinRoutes;
+    use HasAssets, RenderView, BuiltinRoutes, Macroable;
 
     /**
      * The Laravel admin version.
