@@ -46,24 +46,6 @@ class DateRange extends Field
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function value($value = null)
-    {
-        if (is_null($value)) {
-            if (!is_null($this->value) && is_null($this->value['start']) && is_null($this->value['end'])) {
-                return $this->getDefault();
-            }
-
-            return $this->value;
-        }
-
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
      * Set picker format.
      *
      * @param string $format
@@ -97,18 +79,6 @@ class DateRange extends Field
     public function min($minDate)
     {
         return $this->options(compact('minDate'));
-    }
-
-    /**
-     * Set default value.
-     *
-     * @param string $value
-     *
-     * @return $this
-     */
-    public function default($defaultDate)
-    {
-        return $this->options(compact('defaultDate'));
     }
 
     /**
