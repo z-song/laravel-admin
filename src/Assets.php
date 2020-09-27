@@ -94,9 +94,13 @@ class Assets
 //            'css' => 'bootstrap-colorpicker/css/bootstrap-colorpicker.min',
 //            'js'  => 'bootstrap-colorpicker/js/bootstrap-colorpicker.min',
 //        ],
-        'fileinput'               => [
+        'fileinput-base' => [
+            'js' => 'bootstrap-fileinput/js/fileinput.min',
             'css' => 'bootstrap-fileinput/css/fileinput.min',
-            'js'  => 'bootstrap-fileinput/js/fileinput.min',
+        ],
+        'fileinput'               => [
+            'js'  => 'bootstrap-fileinput/themes/fas/theme.min',
+            'deps' => 'fileinput-base',
         ],
         'moment'                  => [
             'js' => 'moment/moment-with-locales.min',
