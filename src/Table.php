@@ -582,7 +582,7 @@ HTML;
             $this->columnNames[] = $column->getName();
         });
 
-        $this->buildRows($data);
+        $this->buildRows($data, $collection);
 
         $this->builded = true;
     }
@@ -594,10 +594,10 @@ HTML;
      *
      * @return void
      */
-    protected function buildRows(array $data)
+    protected function buildRows(array $data, Collection $collection)
     {
-        $this->rows = collect($data)->map(function ($model, $number) {
-            return new Row($number, $model, $this->keyName);
+        $this->rows = collect($data)->map(function ($model, $number) use ($collection) {
+            return new Row($number, $model, $collection->get($number)->getKey());
         });
 
         if ($this->rowsCallback) {
