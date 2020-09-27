@@ -34,22 +34,22 @@ class Row
     /**
      * @var string
      */
-    protected $keyName;
+    protected $key;
 
     /**
-     * Constructor.
-     *
-     * @param $number
-     * @param $data
+     * Row constructor.
+     * @param mixed $number
+     * @param array $data
+     * @param mixed $key
      */
-    public function __construct($number, $data, $keyName)
+    public function __construct($number, $data, $key)
     {
         $this->data = $data;
         $this->number = $number;
-        $this->keyName = $keyName;
+        $this->key = $key;
 
         $this->attributes = [
-            'data-key' => $this->getKey(),
+            'data-key' => $key,
         ];
     }
 
@@ -60,7 +60,7 @@ class Row
      */
     public function getKey()
     {
-        return Arr::get($this->data, $this->keyName);
+        return $this->key;
     }
 
     /**
