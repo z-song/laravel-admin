@@ -48,7 +48,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         {
             $submit_btn = $('form[pjax-container] :submit');
             if ($submit_btn) {
-                $submit_btn.button('reset')
+                $submit_btn.button('reset');
             }
         }
         NProgress.done();
@@ -136,6 +136,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         }
         this.selects[id] = id;
         this.findRow(id).addClass('selected');
+
+        $.admin.emit('table-select', [this.selected().length]);
     };
 
     Table.prototype.unselect = function (id) {
@@ -144,6 +146,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         }
         delete this.selects[id];
         this.findRow(id).removeClass('selected');
+
+        $.admin.emit('table-select', [this.selected().length]);
     };
 
     Table.prototype.toggle = function (id) {
@@ -152,8 +156,6 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
         } else {
             this.select(id);
         }
-
-        $.admin.emit('table-select', [this.selected().length]);
     };
 
     Table.prototype.toggleAll = function (checked) {
