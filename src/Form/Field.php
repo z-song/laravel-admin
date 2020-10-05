@@ -323,7 +323,7 @@ class Field implements Renderable
         $column = is_array($this->column) ? current($this->column) : $this->column;
         $label = ucfirst($column);
 
-        return __(str_replace(['.', '_', '->'], ' ', $label));
+        return str_replace(['.', '_', '->'], ' ', $label);
     }
 
     /**

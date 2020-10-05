@@ -133,7 +133,7 @@ abstract class AbstractFilter
 
         $label = ucfirst($this->column);
 
-        return __(str_replace(['.', '_'], ' ', $label));
+        return str_replace(['.', '_'], ' ', $label);
     }
 
     /**

@@ -159,7 +159,7 @@ class Field implements Renderable
 
         $label = ucfirst($this->name);
 
-        return __(str_replace(['.', '_'], ' ', $label));
+        return str_replace(['.', '_'], ' ', $label);
     }
 
     /**
