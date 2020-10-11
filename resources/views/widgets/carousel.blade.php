@@ -9,7 +9,7 @@
     <div class="carousel-inner">
 
         @foreach($items as $key => $item)
-        <div class="item {{ $key == 0 ? 'active' : '' }}">
+        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
             <img src="{{ url($item['image']) }}" alt="{{$item['caption']}}" style='max-width:{{ $width }}px;max-height:{{ $height }}px;display: block;margin-left: auto;margin-right: auto;'>
             <div class="carousel-caption">
                 {{$item['caption']}}
@@ -18,10 +18,10 @@
         @endforeach
 
     </div>
-    <a class="left carousel-control" href="#{!! $id !!}" data-slide="prev">
-        <span class="fa fa-angle-left"></span>
+    <a class="carousel-control-prev" href="#{!! $id !!}" role="button" data-slide="prev">
+        <span class="fas fa-angle-left"></span>
     </a>
-    <a class="right carousel-control" href="#{!! $id !!}" data-slide="next">
-        <span class="fa fa-angle-right"></span>
+    <a class="carousel-control-next" href="#{!! $id !!}" role="button" data-slide="next">
+        <span class="fas fa-angle-right"></span>
     </a>
 </div>
