@@ -400,7 +400,12 @@ HTML;
         $field = $this;
 
         return $this->unescape()->as(function ($value) use ($field) {
-            $content = json_decode($value, true);
+
+            if (is_string($value)) {
+                $content = json_decode($value, true);
+            } else {
+                $content = $value;
+            }
 
             if (json_last_error() == 0) {
                 $field->border = false;
