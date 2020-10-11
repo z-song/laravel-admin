@@ -94,6 +94,10 @@ class Assets
 //            'css' => 'bootstrap-colorpicker/css/bootstrap-colorpicker.min',
 //            'js'  => 'bootstrap-colorpicker/js/bootstrap-colorpicker.min',
 //        ],
+        'sortable' => [
+            'js' => 'bootstrap-fileinput/js/plugins/sortable.min',
+            'export' => 'Sortable'
+        ],
         'fileinput-base'          => [
             'js' => 'bootstrap-fileinput/js/fileinput.min',
         ],

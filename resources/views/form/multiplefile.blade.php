@@ -14,6 +14,12 @@
     </div>
 </div>
 
+@if($settings['showDrag'])
+    <script require="sortable" @script>
+        window.Sortable = Sortable;
+    </script>
+@endif
+
 <script require="fileinput" @script>
     $(this).fileinput(@json($options));
 

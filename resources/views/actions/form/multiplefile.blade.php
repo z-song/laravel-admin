@@ -4,6 +4,12 @@
     @include('admin::actions.form.help-block')
 </div>
 
+@if($settings['showDrag'])
+    <script require="sortable" @script>
+        window.Sortable = Sortable;
+    </script>
+@endif
+
 <script require="fileinput" selector="{{ $selector }}">
     $(this).fileinput(@json($options));
 
