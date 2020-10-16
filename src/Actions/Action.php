@@ -130,7 +130,7 @@ abstract class Action implements Renderable
     public function selector($prefix)
     {
         if (is_null($this->selector)) {
-            return static::makeSelector(get_called_class(), $prefix);
+            return static::makeSelector(get_called_class() . spl_object_id($this), $prefix);
         }
 
         return $this->selector;
