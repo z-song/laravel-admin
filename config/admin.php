@@ -53,6 +53,8 @@ return [
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
+
+        'as' => config('admin.route.prefix') ? config('admin.route.prefix') . '.' : '',
     ],
 
     /*

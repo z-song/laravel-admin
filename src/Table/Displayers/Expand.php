@@ -46,6 +46,6 @@ class Expand extends AbstractDisplayer
     {
         $renderable = str_replace('\\', '_', $this->renderable);
 
-        return route('admin.handle-renderable', compact('renderable'));
+        return route(config('admin.route.as') . 'handle_renderable', compact('renderable'));
     }
 }

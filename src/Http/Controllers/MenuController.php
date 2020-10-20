@@ -54,7 +54,7 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        return redirect()->route('admin.auth.menu.edit', ['menu' => $id]);
+        return redirect()->route(config('admin.route.as') . 'auth_menus.edit', ['menu' => $id]);
     }
 
     /**
