@@ -53,6 +53,8 @@ return [
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
+
+        'as' => 'admin.',
     ],
 
     /*
@@ -185,8 +187,8 @@ return [
         'users_model' => Encore\Admin\Models\Administrator::class,
 
         // Menu table and model.
-        'menu_table' => 'admin_menu',
-        'menu_model' => Encore\Admin\Models\Menu::class,
+        'menus_table' => 'admin_menus',
+        'menus_model' => Encore\Admin\Models\Menu::class,
     ],
 
     /*

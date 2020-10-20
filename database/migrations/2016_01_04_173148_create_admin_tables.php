@@ -31,7 +31,7 @@ class CreateAdminTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create(config('admin.database.menu_table'), function (Blueprint $table) {
+        Schema::create(config('admin.database.menus_table'), function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id')->default(0);
             $table->integer('order')->default(0);
@@ -51,6 +51,6 @@ class CreateAdminTables extends Migration
     public function down()
     {
         Schema::dropIfExists(config('admin.database.users_table'));
-        Schema::dropIfExists(config('admin.database.menu_table'));
+        Schema::dropIfExists(config('admin.database.menus_table'));
     }
 }
