@@ -408,3 +408,18 @@ if (!function_exists('admin_user')) {
         return \Encore\Admin\Facades\Admin::user();
     }
 }
+
+if (!function_exists('admin_route')) {
+    /**
+     * @param $name
+     * @param array $parameters
+     * @param bool $absolute
+     * @return mixed
+     */
+    function admin_route($name, $parameters = [], $absolute = true)
+    {
+        $name = config('admin.route.as', '').$name;
+
+        return app('url')->route($name, $parameters, $absolute);
+    }
+}

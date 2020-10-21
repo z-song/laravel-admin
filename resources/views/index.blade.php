@@ -14,7 +14,7 @@
     @endif
 
     <script src="{{ admin_asset('vendor/laravel-admin/require.js') }}"></script>
-    <script src="{{ admin_asset('_require_config') }}"></script>
+    <script src="{{ admin_route('require-config') }}"></script>
 </head>
 
 <body class="hold-transition {{join(' ', config('admin.theme.layout'))}} {{ config('admin.theme.accent') ? 'accent-'.config('admin.theme.accent') : '' }}">
