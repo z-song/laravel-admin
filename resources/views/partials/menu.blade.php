@@ -1,4 +1,4 @@
-@if(admin_user()->canSeeMenu($item['id']))
+@if(admin_user()->canSeeMenu($item))
     @if(!isset($item['children']))
         <li class="nav-item">
             @if(url()->isValidUrl($item['uri']))
