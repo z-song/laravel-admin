@@ -33,7 +33,7 @@ class ExportSeedCommand extends Command
         $exceptFields = explode(',', $this->option('except-fields'));
         $exportUsers = $this->option('users');
 
-        $seedFile = $this->laravel->databasePath().'/seeds/'.$name.'.php';
+        $seedFile = $this->laravel->databasePath().'/seeders/'.$name.'.php';
         $contents = $this->getStub('AdminTablesSeeder');
 
         $replaces = [
