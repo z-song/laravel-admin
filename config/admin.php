@@ -54,7 +54,7 @@ return [
 
         'middleware' => ['web', 'admin'],
 
-        'as' => config('admin.route.prefix') ? config('admin.route.prefix') . '.' : '',
+        'as' => 'admin.',
     ],
 
     /*
@@ -125,16 +125,6 @@ return [
 
         // Redirect to the specified URI when user is not authorized.
         'redirect_to' => 'auth/login',
-
-        // The URIs that should be excluded from authorization.
-        'excepts' => [
-            'auth/login',
-            'auth/logout',
-            '_handle_form_',
-            '_handle_action_',
-            '_handle_selectable_',
-            '_handle_renderable_',
-        ],
     ],
 
     /*
