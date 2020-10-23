@@ -37,7 +37,7 @@
             {!! $template !!}
 
             <div class="form-group row">
-                <label class="{{$viewClass['label']}} control-label"></label>
+                <label class="{{$viewClass['label']}} col-form-label"></label>
                 <div class="{{$viewClass['field']}}">
                     <div class="remove btn btn-warning btn-sm float-right">
                         <i class="fa fa-trash"></i>&nbsp;{{ admin_trans('admin.remove') }}
@@ -50,7 +50,7 @@
 
     @if($options['allowCreate'])
     <div class="form-group row">
-        <label class="{{$viewClass['label']}} control-label"></label>
+        <label class="{{$viewClass['label']}} col-form-label"></label>
         <div class="{{$viewClass['field']}}">
             <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ admin_trans('admin.new') }}</div>
         </div>

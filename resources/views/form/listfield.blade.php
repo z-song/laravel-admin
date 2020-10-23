@@ -1,5 +1,5 @@
 <div {!! admin_attrs($group_attrs) !!}>
-    <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
         <table class="table table-hover">
             <tbody class="list-{{$column}}-table">

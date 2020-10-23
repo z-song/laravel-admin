@@ -1,6 +1,6 @@
 <div {!! admin_attrs($group_attrs) !!}>
 
-<label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+<label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
         <select class="form-control {{$class}} d-none" style="width: 100%;" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
