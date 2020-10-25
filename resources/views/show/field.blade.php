@@ -1,5 +1,5 @@
 <div class="form-group row mb-3">
-    <label class="col-{{$width['label']}} control-label text-right">{{ $label }}</label>
+    <label class="col-{{$width['label']}} col-form-label text-right">{{ $label }}</label>
     <div class="col-{{$width['field']}}">
         @if($wrapped)
         <div class="card card-solid m-0 card-show">

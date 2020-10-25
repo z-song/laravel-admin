@@ -1,5 +1,5 @@
 <div {!! admin_attrs($group_attrs) !!}>
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
         <input type="checkbox" class="form-control {{ $class }}" {{ $value == $state['on']['value'] ? 'checked' : '' }} {!! $attributes !!} />
         <input type="hidden" name="{{$name}}" value="{{ $value }}" />

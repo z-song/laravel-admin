@@ -1,6 +1,6 @@
 <div {!! admin_attrs($group_attrs) !!}>
 
-    <label for="{{$id['lat']}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label for="{{$id['lat']}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
         <div id="map_{{$id['lat'].$id['lng']}}" style="width: 100%;height: 300px"></div>

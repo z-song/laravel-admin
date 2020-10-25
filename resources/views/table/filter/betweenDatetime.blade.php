@@ -1,5 +1,5 @@
 <div class="form-group row">
-    <label class="col-2 control-label text-right">{{$label}}</label>
+    <label class="col-2 col-form-label text-right">{{$label}}</label>
     <div class="col-8" style="width: 390px">
         <div class="row">
             <div class="input-group col">

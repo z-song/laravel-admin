@@ -23,6 +23,13 @@ class Select extends Field
     protected $config = [];
 
     /**
+     *  Data attribute for Option.
+     *
+     * @var array
+     */
+    protected $optionDataAttributes = [];
+
+    /**
      * Set options.
      *
      * @param array|callable|string $options
@@ -55,8 +62,23 @@ class Select extends Field
     }
 
     /**
-     * @param array $groups
+     * Set option data attributes.
+     *
+     * @param string $dataKey
+     * @param array|callable $attributes
+     *
+     * @return $this|mixed
      */
+    public function optionDataAttributes($dataKey, $attributes)
+    {
+        if ($attributes instanceof Arrayable) {
+            $attributes = $attributes->toArray();
+        }
+
+        $this->optionDataAttributes[$dataKey] = (array) $attributes;
+
+        return $this;
+    }
 
     /**
      * Set option groups.
@@ -266,6 +288,29 @@ class Select extends Field
     }
 
     /**
+     * @return array
+     */
+    protected function getOptionDataAttributes()
+    {
+        $arrayOptionAttributes = [];
+        foreach ($this->optionDataAttributes as $dataKey => $attributes) {
+            foreach ($attributes as $key => $value) {
+                if (is_array($value)) {
+                    $value = json_encode($value, true);
+                }
+                $arrayOptionAttributes[$key][] = "data-" . $dataKey . "='" . $value . "'";
+            }
+        }
+
+        $stringOptionAttributes = [];
+        foreach ($arrayOptionAttributes as $attributeKey => $arrayOptionAttribute) {
+            $stringOptionAttributes[$attributeKey] = implode(' ', $arrayOptionAttribute);
+        }
+
+        return $stringOptionAttributes;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function render()
@@ -280,6 +325,7 @@ class Select extends Field
 
         $this->addVariables([
             'options' => $this->getOptions(),
+            'optionDataAttributes' => $this->getOptionDataAttributes(),
             'groups'  => $this->groups,
             'configs' => $configs,
         ])->attribute('data-value', implode(',', (array) $this->value()));
