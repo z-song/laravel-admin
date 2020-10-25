@@ -10,14 +10,14 @@
                 @foreach($groups as $group)
                     <optgroup label="{{ $group['label'] }}">
                         @foreach($group['options'] as $select => $option)
-                            <option value="{{$select}}" {{ $select == $value ?'selected':'' }}>{{$option}}</option>
+                            <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ $select == $value ?'selected':'' }}>{{$option}}</option>
                         @endforeach
                     </optgroup>
                 @endforeach
              @else
                 <option value=""></option>
                 @foreach($options as $select => $option)
-                    <option value="{{$select}}" {{ $select == $value ?'selected':'' }}>{{$option}}</option>
+                    <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ $select == $value ?'selected':'' }}>{{$option}}</option>
                 @endforeach
             @endif
         </select>
