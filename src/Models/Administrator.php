@@ -66,7 +66,7 @@ class Administrator extends Model implements AuthenticatableContract
      *
      * @return bool
      */
-    public function canSeeMenu($menuID)
+    public function canSeeMenu($menu)
     {
         return true;
     }
