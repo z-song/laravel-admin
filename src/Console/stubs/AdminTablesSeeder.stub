@@ -1,5 +1,8 @@
 <?php
 
+namespace Database\Seeders;
+
+use DB;
 use Illuminate\Database\Seeder;
 
 class DummyClass extends Seeder
@@ -12,18 +15,18 @@ class DummyClass extends Seeder
     public function run()
     {
         // base tables
-        ClassMenu::truncate();
-        ClassMenu::insert(
+        \ClassMenu::truncate();
+        \ClassMenu::insert(
             ArrayMenu
         );
 
-        ClassPermission::truncate();
-        ClassPermission::insert(
+        \ClassPermission::truncate();
+        \ClassPermission::insert(
             ArrayPermission
         );
 
-        ClassRole::truncate();
-        ClassRole::insert(
+        \ClassRole::truncate();
+        \ClassRole::insert(
             ArrayRole
         );
 
@@ -39,8 +42,8 @@ class DummyClass extends Seeder
         );
 
         // users tables
-        ClassUsers::truncate();
-        ClassUsers::insert(
+        \ClassUsers::truncate();
+        \ClassUsers::insert(
             ArrayUsers
         );
 
