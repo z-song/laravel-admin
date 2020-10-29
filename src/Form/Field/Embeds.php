@@ -230,7 +230,7 @@ class Embeds extends Field
      */
     protected function buildEmbeddedForm()
     {
-        $form = new EmbeddedForm($this->column);
+        $form = new EmbeddedForm($this->getEmbeddedColumnName());
 
         $form->setParent($this->form);
 
@@ -239,6 +239,30 @@ class Embeds extends Field
         $form->fill($this->getEmbeddedData());
 
         return $form;
+    }
+
+    /**
+     * Determine the column name to use with the embedded form
+     *
+     * @return array|string
+     */
+    protected function getEmbeddedColumnName()
+    {
+        if ($this->isNested()) {
+            return $this->elementName;
+        }
+
+        return $this->column;
+    }
+
+    /**
+     * Check if the field is in a nested form
+     *
+     * @return bool
+     */
+    protected function isNested()
+    {
+        return !empty($this->elementName);
     }
 
     /**
