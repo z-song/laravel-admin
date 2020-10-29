@@ -16,24 +16,24 @@
 </style>
 <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}} form-group" {!! admin_attrs($group_attrs) !!}>
     <div class="row header">
-        <div class="col-md-2 {{$viewClass['label']}}"><label class="float-right">{{ $label }}</label></div>
-        <div class="col-md-8 {{$viewClass['field']}}">
+        <div class="{{$viewClass['label']}}"><label class="float-right">{{ $label }}</label></div>
+        <div class="{{$viewClass['field']}}">
             <button type="button" class="btn btn-default btn-sm add"><i class="fa fa-plus-circle" style="font-size: large;"></i></button>
         </div>
     </div>
 
-    <hr style="margin-top: 0px;">
-
-    <ul class="nav nav-tabs">
-        @foreach($forms as $pk => $form)
-            <li class="@if ($form == reset($forms)) active @endif ">
-                <a href="#{{ $relationName . '_' . $pk }}" data-toggle="tab">
-                    {{ $pk }} <i class="fa fa-exclamation-circle text-red hide"></i>
-                </a>
-                <i class="close-tab fa fa-times" ></i>
-            </li>
-        @endforeach
-    </ul>
+    <div class="row my-2 pl-2">
+        <ul class="nav nav-tabs col-10 offset-2">
+            @foreach($forms as $pk => $form)
+                <li class="nav-item">
+                    <a href="#{{ $relationName . '_' . $pk }}" class="nav-link @if ($loop->index == 0) active @endif " data-toggle="tab">
+                        {{ $pk }} <i class="fa fa-exclamation-circle text-red d-none"></i>
+                    </a>
+                    <i class="close-tab fa fa-times" ></i>
+                </li>
+            @endforeach
+        </ul>
+    </div>
 
     <div class="tab-content has-many-{{$column}}-forms">
         @foreach($forms as $pk => $form)
@@ -46,9 +46,9 @@
     </div>
 
     <template class="nav-tab-tpl">
-        <li class="new">
-            <a href="#{{ $relationName . '_new_' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}" data-toggle="tab">
-                &nbsp;New {{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }} <i class="fa fa-exclamation-circle text-red hide"></i>
+        <li class="new nav-item">
+            <a href="#{{ $relationName . '_new_' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}" class="nav-link" data-toggle="tab">
+                &nbsp;New {{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }} <i class="fa fa-exclamation-circle text-red d-none"></i>
             </a>
             <i class="close-tab fa fa-times" ></i>
         </li>
@@ -82,9 +82,9 @@
         index++;
         var navTabHtml = $('#has-many-{{ $column }} > template.nav-tab-tpl').html().replace(/{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}/g, index);
         var paneHtml = $('#has-many-{{ $column }} > template.pane-tpl').html().replace(/{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}/g, index);
-        $('#has-many-{{ $column }} > .nav').append(navTabHtml);
+        $('#has-many-{{ $column }} .row > .nav').append(navTabHtml);
         $('#has-many-{{ $column }} > .tab-content').append(paneHtml);
-        $('#has-many-{{ $column }} > .nav > li:last-child a').tab('show');
+        $('#has-many-{{ $column }} .row > .nav > li:last-child a').tab('show');
     });
 
     if ($('.has-error').length) {

@@ -10,7 +10,7 @@
     </script>
 @endif
 
-<script require="fileinput" selector="{{ $selector }}">
+<script require="fileinput" selector="{{ $selector }}" all="true">
     $(this).fileinput(@json($options));
 
     @if($settings['showRemove'])

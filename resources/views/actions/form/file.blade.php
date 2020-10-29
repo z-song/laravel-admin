@@ -4,7 +4,7 @@
     @include('admin::actions.form.help-block')
 </div>
 
-<script require="fileinput" selector="{{ $selector }}">
+<script require="fileinput" selector="{{ $selector }}" all="true">
     $(this).fileinput({!! $options !!});
 
     @if($settings['showRemove'])

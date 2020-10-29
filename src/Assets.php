@@ -79,7 +79,7 @@ class Assets
         ],
         'initialize'              => [
             'deps' => ['jquery'],
-            'js'   => 'jquery.initialize/jquery.initialize',
+            'js'   => 'jquery.initialize/jquery.initialize.min',
         ],
         'nestable'                => [
             'css' => '/vendor/laravel-admin/nestable/nestable',
