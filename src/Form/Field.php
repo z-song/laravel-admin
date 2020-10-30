@@ -170,7 +170,7 @@ class Field implements Renderable
     /**
      * Parent form.
      *
-     * @var Form
+     * @var Form|WidgetForm
      */
     protected $form = null;
 
