@@ -421,8 +421,10 @@ class HasMany extends Field
                 $hidden[] = $field->render();
             } else {
                 /* Hide label and set field width 100% */
-                $field->setLabelClass(['d-none']);
-                $field->setWidth(12, 0);
+                if ($this->viewMode === 'default') {
+                    $field->setLabelClass(['d-none']);
+                    $field->setWidth(12, 0);
+                }
                 $fields[] = $field->render();
                 $headers[] = $field->label();
             }
