@@ -983,6 +983,14 @@ class Form implements Renderable
     }
 
     /**
+     * @return mixed
+     */
+    public function getResourceId()
+    {
+        return current(request()->route()->parameters());
+    }
+
+    /**
      * Disable View Checkbox on footer.
      *
      * @param bool $disable
