@@ -4,6 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\EmbeddedForm;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Widgets\Form as WidgetForm;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -232,7 +233,11 @@ class Embeds extends Field
     {
         $form = new EmbeddedForm($this->getEmbeddedColumnName());
 
-        $form->setParent($this->form);
+        if ($this->form instanceof WidgetForm) {
+            $form->setParentWidgetForm($this->form);
+        } else {
+            $form->setParent($this->form);
+        }
 
         call_user_func($this->builder, $form);
 

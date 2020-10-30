@@ -4,6 +4,7 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
+use Encore\Admin\Widgets\Form as WidgetForm;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\NestedForm;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
@@ -329,7 +330,11 @@ class HasMany extends Field
     {
         $form = new Form\NestedForm($column, $model);
 
-        $form->setForm($this->form);
+        if ($this->form instanceof WidgetForm) {
+            $form->setWidgetForm($this->form);
+        } else {
+            $form->setForm($this->form);
+        }
 
         call_user_func($builder, $form);
 
