@@ -46,6 +46,8 @@ class Modal extends AbstractDisplayer
             $html = call_user_func_array($callback->bindTo($this->row), [$this->row]);
         }
 
+        $mark = str_replace('.', '_', $this->getColumn()->getName());
+
         return Admin::view('admin::table.display.modal', [
             'url'      => $this->getLoadUrl(),
             'async'    => $async,
@@ -54,7 +56,8 @@ class Modal extends AbstractDisplayer
             'html'     => $html,
             'key'      => $this->getKey(),
             'value'    => $this->value,
-            'name'     => $this->getKey().'-'.str_replace('.', '_', $this->getColumn()->getName()),
+            'name'     => $this->getKey().'-'.$mark,
+            'mark'     => $mark, 
         ]);
     }
 }

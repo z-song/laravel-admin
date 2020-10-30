@@ -2,7 +2,7 @@
    <a href="javascript:void(0)"><i class="fa fa-clone"></i>&nbsp;&nbsp;{{ $value }}</a>
 </span>
 
-<div class="modal table-modal fade" id="table-modal-{{ $name }}" tabindex="-1" role="dialog">
+<div class="modal table-modal fade {{ $mark }}" id="table-modal-{{ $name }}" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="border-radius: 5px;">
             <div class="modal-header">
@@ -31,7 +31,7 @@
 
 @if($async)
 <script>
-    var modal = $('.table-modal');
+    var modal = $('.{{ $mark }}');
     var modalBody = modal.find('.modal-body');
 
     var load = function (url) {

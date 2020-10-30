@@ -65,15 +65,15 @@
 <script>
     showCloseTab();
 
-    let index = 0;
+    var index = 0;
     $('#has-many-{{ $column }} .nav')
     // 新增
         .on('click', '.add-{{$column}}-tab', function () {
             index++;
-            let default_key_name = '{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}';
-            let reg = new RegExp(default_key_name, "g");
-            let navTabHtml = $('#has-many-{{ $column }} > template.nav-tab-tpl').html().replace(reg, index);
-            let paneHtml = $('#has-many-{{ $column }} > template.pane-tpl').html().replace(reg, index);
+            var default_key_name = '{{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}';
+            var reg = new RegExp(default_key_name, "g");
+            var navTabHtml = $('#has-many-{{ $column }} > template.nav-tab-tpl').html().replace(reg, index);
+            var paneHtml = $('#has-many-{{ $column }} > template.pane-tpl').html().replace(reg, index);
             $(this).before(navTabHtml);
             $('#has-many-{{ $column }} .row .tab-content').append(paneHtml);
             $(this).prev().find('a').tab('show');
@@ -81,8 +81,8 @@
         })
         // 关闭
         .on('click', '.close-{{$column}}-tab', function () {
-            let navTab = $(this).parent().parent();
-            let pane = $(navTab.find('a').attr('href'));
+            var navTab = $(this).parent().parent();
+            var pane = $(navTab.find('a').attr('href'));
 
             if (pane.hasClass('new')) {
                 pane.remove();
