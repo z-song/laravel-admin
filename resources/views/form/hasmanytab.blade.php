@@ -82,7 +82,7 @@
         // 关闭
         .on('click', '.close-{{$column}}-tab', function () {
             let navTab = $(this).parent().parent();
-            let pane = $(navTab.attr('href'));
+            let pane = $(navTab.find('a').attr('href'));
 
             if (pane.hasClass('new')) {
                 pane.remove();
