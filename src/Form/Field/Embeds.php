@@ -247,7 +247,7 @@ class Embeds extends Field
     }
 
     /**
-     * Determine the column name to use with the embedded form
+     * Determine the column name to use with the embedded form.
      *
      * @return array|string
      */
@@ -261,7 +261,7 @@ class Embeds extends Field
     }
 
     /**
-     * Check if the field is in a nested form
+     * Check if the field is in a nested form.
      *
      * @return bool
      */

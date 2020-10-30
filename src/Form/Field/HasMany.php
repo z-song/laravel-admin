@@ -4,9 +4,9 @@ namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
-use Encore\Admin\Widgets\Form as WidgetForm;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\NestedForm;
+use Encore\Admin\Widgets\Form as WidgetForm;
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
