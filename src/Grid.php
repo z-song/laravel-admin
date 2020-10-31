@@ -1072,13 +1072,13 @@ class Grid
      */
     public function render()
     {
-        $this->handleExportRequest(true);
-
         try {
             $this->build();
         } catch (\Exception $e) {
             return Handler::renderException($e);
         }
+
+        $this->handleExportRequest(true);
 
         $this->callRenderingCallback();
 
