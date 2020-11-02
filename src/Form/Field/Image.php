@@ -27,6 +27,10 @@ class Image extends File
      */
     public function prepare($image)
     {
+        if (is_string($image)) {
+            return $image;
+        }
+
         if ($this->picker) {
             return parent::prepare($image);
         }
