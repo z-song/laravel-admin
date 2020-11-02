@@ -67,7 +67,10 @@ class Assets
         ],
         'jquery'                  => ['js' => 'jquery/jquery.min'],
         'pjax'                    => ['js' => 'jquery-pjax/jquery.pjax', 'deps' => 'jquery'],
-        'NProgress'               => ['js' => 'nprogress/nprogress'],
+        'NProgress'               => [
+            'js' => 'nprogress/nprogress',
+            'css' => '/vendor/laravel-admin/nprogress/nprogress',
+        ],
         'bootstrap'               => ['js' => 'bootstrap/js/bootstrap.bundle.min'],
         'adminlte'                => [
             'js'  => 'AdminLTE/js/adminlte.min',
