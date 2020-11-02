@@ -400,7 +400,6 @@ HTML;
         $field = $this;
 
         return $this->unescape()->as(function ($value) use ($field) {
-
             if (is_string($value)) {
                 $content = json_decode($value, true);
             } else {

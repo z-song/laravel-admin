@@ -38,6 +38,7 @@ class Row
 
     /**
      * Row constructor.
+     *
      * @param mixed $number
      * @param array $data
      * @param mixed $key

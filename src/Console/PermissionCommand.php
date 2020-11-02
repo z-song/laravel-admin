@@ -140,12 +140,12 @@ class PermissionCommand extends Command
         switch ($permission) {
             case 'create':
             case 'list':
-                $http_path = '/' . $resource;
+                $http_path = '/'.$resource;
                 break;
             case 'edit':
             case 'delete':
             case 'view':
-                $http_path = '/' . $resource . '/*';
+                $http_path = '/'.$resource.'/*';
                 break;
             default:
                 $http_path = '';

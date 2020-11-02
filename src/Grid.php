@@ -580,7 +580,7 @@ class Grid
     /**
      * Build the grid rows.
      *
-     * @param array $data
+     * @param array      $data
      * @param Collection $collection
      *
      * @return void

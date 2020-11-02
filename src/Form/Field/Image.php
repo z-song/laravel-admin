@@ -47,8 +47,10 @@ class Image extends File
     }
 
     /**
-     * force file type to image
+     * force file type to image.
+     *
      * @param $file
+     *
      * @return array|bool|int[]|string[]
      */
     public function guessPreviewType($file)
