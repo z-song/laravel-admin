@@ -37,7 +37,7 @@ class MultipleImage extends MultipleFile
             $this->name = null;
         }); */
 
-        /* Copied from single image prepare section and made necessary changes so the return 
+        /* Copied from single image prepare section and made necessary changes so the return
         value is same as before, but now thumbnails are saved to the disk as well. */
 
         $path = $this->upload($image);
