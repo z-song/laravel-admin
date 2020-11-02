@@ -541,9 +541,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
     };
 
     Admin.prototype.initTable = function ($table) {
-        if(!this.table) {
-            this.table = new Table($table);
-        }
+        this.table = new Table($table);
     };
 
     Admin.prototype.initForm = function ($form) {
