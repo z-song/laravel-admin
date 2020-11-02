@@ -7,11 +7,19 @@
         @include('admin::form.error')
         @include('admin::form.help-block')
     </div>
+    <input type="hidden" class="form-control {{$class}}" name="{{$name}}" value="{{ $value }}"/>
 </div>
 
 <script require="fileinput" @script>
 
-    $(this).fileinput({!! $options !!});
+    $(this).fileinput({!! $options !!}).on('change', function () {
+        var this_hidden = $(this).parents('.field-control:first').next();
+        if ($(this).val()) {
+            this_hidden.prop('disabled', true);
+        } else {
+            this_hidden.prop('disabled', false);
+        }
+    });
 
     @if($settings['showRemove'])
     $(this).on('filebeforedelete', function() {
