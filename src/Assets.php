@@ -244,7 +244,7 @@ class Assets
     public static function config()
     {
         $config = [
-            'baseUrl' => '/vendor/laravel-admin/',
+            'baseUrl' => admin_asset('/vendor/laravel-admin/'),
             'map'     => [
                 '*' => ['css' => 'requirecss'],
             ],
