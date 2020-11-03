@@ -125,15 +125,11 @@ return [
 
         // Redirect to the specified URI when user is not authorized.
         'redirect_to' => 'auth/login',
-        
+
         // The URIs that should be excluded from authorization.
         'excepts' => [
             'auth/login',
             'auth/logout',
-            '_handle_form_',
-            '_handle_action_',
-            '_handle_selectable_',
-            '_handle_renderable_',
         ],
     ],
 

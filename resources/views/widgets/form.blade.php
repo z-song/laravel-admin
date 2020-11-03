@@ -13,7 +13,7 @@
 
         <div class="card-body">
             @foreach($fields as $field)
-                {!! $field->render() !!}
+                {!! $field->renderInForm() !!}
             @endforeach
         </div>
 

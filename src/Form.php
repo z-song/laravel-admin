@@ -105,6 +105,11 @@ class Form implements Renderable
     protected $isSoftDeletes = false;
 
     /**
+     * @var Field
+     */
+    protected $insertPoint;
+
+    /**
      * Create a new form instance.
      *
      * @param $model
@@ -137,7 +142,24 @@ class Form implements Renderable
         $this->fields()->push($field);
         $this->layout->addField($field);
 
+        if ($this->insertPoint) {
+            $this->insertPoint->insertAfter($field);
+        }
+
         return $this;
+    }
+
+    /**
+     * @param Field $field
+     */
+    public function beginInsertAfter($field)
+    {
+        $this->insertPoint = $field;
+    }
+
+    public function endInsertAfter()
+    {
+        $this->insertPoint = null;
     }
 
     /**
@@ -980,6 +1002,14 @@ class Form implements Renderable
     public function isEditing(): bool
     {
         return Str::endsWith(request()->route()->getName(), ['.edit', '.update']);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResourceId()
+    {
+        return current(request()->route()->parameters());
     }
 
     /**

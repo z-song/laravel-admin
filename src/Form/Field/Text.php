@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Encore\Admin\Form\Concerns\CanInsertAfter;
 use Encore\Admin\Form\Field;
 
 class Text extends Field
@@ -9,6 +10,7 @@ class Text extends Field
     use PlainInput;
     use HasValuePicker;
     use CanCascadeFields;
+    use CanInsertAfter;
 
     /**
      * @var string

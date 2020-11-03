@@ -2,27 +2,33 @@
 
 <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
-    <div class="{{$viewClass['field']}}">
-        <input type="hidden" name="{{$name}}"/>
+    <div class="{{$viewClass['field']}} mx-0 row">
+        <div class="col" data-field="{{$group_attrs['data-field']}}">
+            <input type="hidden" name="{{$name}}"/>
 
-        <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}" {!! $attributes !!} >
-            @if($groups)
-                @foreach($groups as $group)
-                    <optgroup label="{{ $group['label'] }}">
-                        @foreach($group['options'] as $select => $option)
-                            <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ isset($value) && $select == $value ?'selected':'' }}>{{$option}}</option>
-                        @endforeach
-                    </optgroup>
-                @endforeach
-             @else
-                <option value=""></option>
-                @foreach($options as $select => $option)
-                    <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ isset($value) && $select == $value ?'selected':'' }}>{{$option}}</option>
-                @endforeach
-            @endif
-        </select>
-        @include('admin::form.error')
-        @include('admin::form.help-block')
+            <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}" {!! $attributes !!} >
+                @if($groups)
+                    @foreach($groups as $group)
+                        <optgroup label="{{ $group['label'] }}">
+                            @foreach($group['options'] as $select => $option)
+                                <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ isset($value) && $select == $value ?'selected':'' }}>{{$option}}</option>
+                            @endforeach
+                        </optgroup>
+                    @endforeach
+                 @else
+                    <option value=""></option>
+                    @foreach($options as $select => $option)
+                        <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ isset($value) && $select == $value ?'selected':'' }}>{{$option}}</option>
+                    @endforeach
+                @endif
+            </select>
+            @include('admin::form.error')
+            @include('admin::form.help-block')
+        </div>
+
+        @foreach($after ?? [] as $content)
+            {!!  $content->renderAfter()  !!}
+        @endforeach
 
     </div>
 </div>
