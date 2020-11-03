@@ -185,8 +185,10 @@ if (!function_exists('array_delete')) {
      */
     function array_delete(&$array, $value)
     {
+        $value = \Illuminate\Support\Arr::wrap($value);
+
         foreach ($array as $index => $item) {
-            if ($value == $item) {
+            if (in_array($item, $value)) {
                 unset($array[$index]);
             }
         }
