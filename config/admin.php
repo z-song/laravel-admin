@@ -138,6 +138,10 @@ return [
         'excepts' => [
             'auth/login',
             'auth/logout',
+            '_handle_action_',
+            '_handle_form_',
+            '_handle_selectable_',
+            '_handle_renderable_',
         ],
     ],
 
