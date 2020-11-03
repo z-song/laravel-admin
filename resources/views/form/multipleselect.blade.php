@@ -2,16 +2,22 @@
 
     <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
-    <div class="{{$viewClass['field']}}">
-        <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
-            @foreach($options as $select => $option)
-                <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{  in_array($select, (array)$value) ?'selected':'' }}>{{$option}}</option>
-            @endforeach
-        </select>
-        <input type="hidden" name="{{$name}}[]" />
+    <div class="{{$viewClass['field']}} mx-0 row">
+        <div class="col" data-field="{{$group_attrs['data-field']}}">
+            <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}[]" multiple="multiple" data-placeholder="{{ $placeholder }}" {!! $attributes !!} >
+                @foreach($options as $select => $option)
+                    <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{  in_array($select, (array)$value) ?'selected':'' }}>{{$option}}</option>
+                @endforeach
+            </select>
+            <input type="hidden" name="{{$name}}[]" />
 
-        @include('admin::form.error')
-        @include('admin::form.help-block')
+            @include('admin::form.error')
+            @include('admin::form.help-block')
+        </div>
+
+        @foreach($after ?? [] as $content)
+            {!!  $content->renderAfter()  !!}
+        @endforeach
 
     </div>
 </div>

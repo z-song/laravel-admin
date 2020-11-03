@@ -25,7 +25,7 @@
                     @foreach($layout->columns() as $column)
 {{--                        <div class="col-md-{{ $column->width() }}">--}}
                             @foreach($column->fields() as $field)
-                                {!! $field->render() !!}
+                                {!! $field->renderInform() !!}
                             @endforeach
 {{--                        </div>--}}
                     @endforeach

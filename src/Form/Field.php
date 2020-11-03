@@ -1172,6 +1172,11 @@ class Field implements Renderable
         return Admin::view($this->getView(), $this->variables());
     }
 
+    public function renderInform()
+    {
+        return $this->render();
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
