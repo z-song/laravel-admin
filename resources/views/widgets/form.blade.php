@@ -19,7 +19,7 @@
 
         <!-- /.card-body -->
         @if(count($buttons) > 0)
-        <div class="card-footer row">
+        <div class="card-footer row mx-0">
             <div class="col-{{$width['label']}}"></div>
 
             <div class="col-{{$width['field']}}">

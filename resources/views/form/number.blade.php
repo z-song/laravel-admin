@@ -1,6 +1,6 @@
 <div {!! admin_attrs($group_attrs) !!}>
     <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
-    <div class="{{$viewClass['field']}} row">
+    <div class="{{$viewClass['field']}} row mx-0">
         <div class="col" data-field="{{$group_attrs['data-field']}}">
             <div class="input-group" style="width: 300px;">
                 <input {!! $attributes !!} />

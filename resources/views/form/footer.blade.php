@@ -1,4 +1,4 @@
-<div class="card-footer row">
+<div class="card-footer row mx-0">
 
     <div class="col-md-{{$width['label']}}">
     </div>
