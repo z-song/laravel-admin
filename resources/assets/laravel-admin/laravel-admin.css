@@ -103,3 +103,10 @@ a.editable-empty {
 .field-control>.col:not(:first-child) {
     padding-left: 15px;
 }
+
+.dd-handle {
+    margin: 5px 0 !important;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
