@@ -11,12 +11,16 @@
 </div>
 
 <script require="wangEditor" @script>
-    var E = window.wangEditor;
-    var $editor = new E(this);
-    var $textarea = $(this).parent().find('textarea');
-    $editor.customConfig.onchange = function (html) {
-        $textarea.val(html);
-    }
-    $editor.customConfig.zIndex = 100;
-    $editor.create();
+    var editor = new wangEditor(this);
+    var textarea = $(this).parent().find('textarea');
+    editor.config.onchange = function (html) {
+        textarea.val(html);
+    };
+    editor.config.zIndex = 500;
+
+    @isset($config)
+        Object.assign(editor.config, @json($config));
+    @endisset
+
+    editor.create();
 </script>
