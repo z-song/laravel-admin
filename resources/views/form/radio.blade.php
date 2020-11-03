@@ -3,9 +3,10 @@
     <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
-        @foreach($options as $option => $label)
+        <div class="form-group mb-0 mt-2">
+            @foreach($options as $option => $label)
 
-            {!! $inline ? admin_color('<span class="icheck-%s">') : admin_color('<div class="radio icheck-%s">') !!}
+                {!! $inline ? admin_color('<span class="icheck-%s">') : admin_color('<div class="radio icheck-%s">') !!}
                 <input
                     id="@id"
                     type="radio"
@@ -17,9 +18,10 @@
                 />
                 <label for="@id">&nbsp;{{$label}}&nbsp;&nbsp;</label>
 
-            {!! $inline ? '</span>' :  '</div>' !!}
+                {!! $inline ? '</span>' :  '</div>' !!}
 
-        @endforeach
+            @endforeach
+        </div>
         @include('admin::form.error')
         @include('admin::form.help-block')
 

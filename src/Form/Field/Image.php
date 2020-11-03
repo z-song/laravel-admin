@@ -27,7 +27,7 @@ class Image extends File
      */
     public function prepare($image)
     {
-        if (is_string($image)) {
+        if (is_string($image) || $image === null) {
             return $image;
         }
 
