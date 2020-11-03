@@ -1,5 +1,9 @@
 @if(admin_user()->canSeeMenu($item))
     @if(!isset($item['children']))
+        @if(isset($item['group']) && $item['group'])
+            <li class="nav-header">{{$item['group']}}</li>
+        @endif
+
         <li class="nav-item">
             @if(url()->isValidUrl($item['uri']))
                 <a href="{{ $item['uri'] }}" target="_blank" class="nav-link">
@@ -11,6 +15,9 @@
             </a>
         </li>
     @else
+        @if(isset($item['group']) && $item['group'])
+            <li class="nav-header">{{ $item['group'] }}</li>
+        @endif
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
                 <i class="nav-icon {{ $item['icon'] }}" ></i>

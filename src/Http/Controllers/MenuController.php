@@ -38,6 +38,7 @@ class MenuController extends Controller
                     $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
                     $form->text('uri', trans('admin.uri'));
+                    $form->text('group', trans('admin.group'));
                     $form->hidden('_saved')->default(1);
 
                     $column->append($form);
@@ -119,6 +120,7 @@ class MenuController extends Controller
         $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
         $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
         $form->text('uri', trans('admin.uri'));
+        $form->text('group', trans('admin.group'));
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

@@ -38,6 +38,7 @@ class CreateAdminTables extends Migration
             $table->string('title', 50);
             $table->string('icon', 50);
             $table->string('uri')->nullable();
+            $table->string('group')->nullable();
 
             $table->timestamps();
         });

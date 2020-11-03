@@ -110,4 +110,5 @@ return [
     'index'                   => '列表',
     'store'                   => '保存',
     'update'                  => '更新',
+    'group'                   => '分组',
 ];
