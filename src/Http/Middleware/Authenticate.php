@@ -37,8 +37,24 @@ class Authenticate
      */
     protected function shouldPassThrough($request)
     {
-        $except = trim(admin_base_path('auth/login'), '/');
+        // 下面的路由不验证登陆
+        $excepts = config('admin.auth.excepts', []);
 
-        return $request->is($except);
+        array_delete($excepts, [
+            '_handle_action_',
+            '_handle_form_',
+            '_handle_selectable_',
+            '_handle_renderable_',
+        ]);
+
+        return collect($excepts)
+            ->map('admin_base_path')
+            ->contains(function ($except) use ($request) {
+                if ($except !== '/') {
+                    $except = trim($except, '/');
+                }
+
+                return $request->is($except);
+            });
     }
 }
