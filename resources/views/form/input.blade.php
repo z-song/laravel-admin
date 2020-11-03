@@ -2,8 +2,7 @@
 
     <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
 
-    <div class="{{$viewClass['field']}} mx-0 row">
-        <div class="col" data-field="{{$group_attrs['data-field']}}">
+    <div class="{{$viewClass['field']}}">
             <div class="input-group">
                 @if ($prepend)
                     <div class="input-group-prepend">
@@ -28,11 +27,6 @@
 
             @include('admin::form.error')
             @include('admin::form.help-block')
-        </div>
-
-        @foreach($after ?? [] as $content)
-            {!!  $content->renderAfter()  !!}
-        @endforeach
     </div>
 </div>
 
