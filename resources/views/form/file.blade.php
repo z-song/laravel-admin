@@ -11,23 +11,20 @@
 </div>
 
 <script require="fileinput" @script>
-
+    var this_hidden = $(this).parents('.field-control:first').next();
     $(this).fileinput({!! $options !!}).on('change', function () {
-        var this_hidden = $(this).parents('.field-control:first').next();
-        if ($(this).val()) {
-            this_hidden.prop('disabled', true);
-        } else {
-            this_hidden.prop('disabled', false);
-        }
+        this_hidden.prop('disabled', true);
     });
 
     @if($settings['showRemove'])
     $(this).on('filebeforedelete', function() {
+        var _this = $(this);
         return new Promise(function(resolve, reject) {
             var remove = resolve;
             $.admin.confirm({
                 title: "{{ admin_trans('admin.delete_confirm') }}",
                 preConfirm: function() {
+                    this_hidden.val('');
                     return new Promise(function(resolve) {
                         resolve(remove());
                     });
