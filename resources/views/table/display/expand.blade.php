@@ -30,7 +30,7 @@
         });
     };
 
-    $(this).on('click', function (e) {
+    $('.{{ $elementClass }}').on('click', function (e) {
         var target = $(this);
         if (target.data('inserted') == '0') {
             var key  = target.data('key');
@@ -53,7 +53,7 @@
         return false;
     });
     @else
-    $(this).on('click', function () {
+    $('.{{ $elementClass }}').on('click', function () {
         if ($(this).data('inserted') == '0') {
             var name = $(this).data('name');
             var row = $(this).closest('tr');
