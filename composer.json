@@ -15,7 +15,8 @@
         "php": ">=7.0.0",
         "symfony/dom-crawler": "~3.1|~4.0|~5.0",
         "laravel/framework": ">=8.0",
-        "doctrine/dbal": "2.*"
+        "doctrine/dbal": "2.*",
+        "fzaninotto/faker": "^1.9"
     },
     "require-dev": {
         "laravel/laravel": ">=8.0",
@@ -41,7 +42,7 @@
         ]
     },
     "scripts": {
-        "test": "./vendor/bin/phpunit"
+        "test": "phpunit"
     },
     "suggest": {
         "intervention/image": "Required to handling and manipulation upload images (~2.3).",
