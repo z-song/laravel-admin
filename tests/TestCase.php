@@ -64,7 +64,9 @@ class TestCase extends BaseTestCase
 
         require __DIR__.'/routes.php';
 
-        require __DIR__.'/seeds/factory.php';
+        UserFactory::new()->create();
+        ProfileFactory::new()->create();
+        TagFactory::new()->create();
 
 //        \Encore\Admin\Admin::$css = [];
 //        \Encore\Admin\Admin::$js = [];
