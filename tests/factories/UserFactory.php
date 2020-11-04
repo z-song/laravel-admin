@@ -2,11 +2,12 @@
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Tests\Models\User;
 
-class UserFactory extends Factory{
-
+class UserFactory extends Factory
+{
 	protected $model = User::class;
 
-	public function definition(): array{
+	public function definition(): array
+	{
 		return [
 			'username' => $this->faker->userName,
 			'email'    => $this->faker->email,

@@ -2,13 +2,14 @@
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Tests\Models\Tag;
 
-class TagFactory extends Factory{
-
+class TagFactory extends Factory
+{
 	protected $model = Tag::class;
 
-	public function definition(): array{
+	public function definition(): array
+	{
 		return [
-			'name' => $this->faker->word,
+			'name'	=> $this->faker->word,
 		];
 	}
 
