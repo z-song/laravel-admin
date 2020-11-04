@@ -5,6 +5,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
+use Tests\Factories\ProfileFactory;
+use Tests\Factories\TagFactory;
+use Tests\Factories\UserFactory;
 
 class TestCase extends BaseTestCase
 {

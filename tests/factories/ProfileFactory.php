@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Factories;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Tests\Models\Profile;
 
