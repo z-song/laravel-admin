@@ -1,6 +1,6 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Models\Administrator;
 use Tests\Models\User as UserModel;
 
 class UserFormTest extends TestCase
