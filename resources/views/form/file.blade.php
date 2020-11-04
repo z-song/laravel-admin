@@ -18,7 +18,6 @@
 
     @if($settings['showRemove'])
     $(this).on('filebeforedelete', function() {
-        var _this = $(this);
         return new Promise(function(resolve, reject) {
             var remove = resolve;
             $.admin.confirm({
