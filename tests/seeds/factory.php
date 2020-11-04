@@ -1,11 +1,11 @@
 <?php
 
 use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory = app(Factory::class);
+$factory = Factory::new();
 
-$factory->define(Tests\Models\User::class, function (Faker $faker) {
+$factory->define(Tests\Models\User::class,static function(Faker $faker){
     return [
         'username' => $faker->userName,
         'email'    => $faker->email,
@@ -15,7 +15,7 @@ $factory->define(Tests\Models\User::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(Tests\Models\Profile::class, function (Faker $faker) {
+$factory->define(Tests\Models\Profile::class,static function(Faker $faker){
     return [
         'first_name' => $faker->firstName,
         'last_name'  => $faker->lastName,
@@ -29,7 +29,7 @@ $factory->define(Tests\Models\Profile::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(Tests\Models\Tag::class, function (Faker $faker) {
+$factory->define(Tests\Models\Tag::class,static function(Faker $faker){
     return [
         'name' => $faker->word,
     ];
