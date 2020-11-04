@@ -33,6 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Tests\\Factories\\": "tests/factories",
             "Tests\\Models\\": "tests/models",
             "Tests\\Controllers\\": "tests/controllers"
         },

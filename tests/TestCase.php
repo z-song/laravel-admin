@@ -1,6 +1,9 @@
 <?php
 
+use Encore\Admin\AdminServiceProvider;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -16,20 +19,20 @@ class TestCase extends BaseTestCase
     /**
      * Boots the application.
      *
-     * @return \Illuminate\Foundation\Application
+     * @return Application
      */
-    public function createApplication()
+    public function createApplication(): Application
     {
         $app = require __DIR__.'/../vendor/laravel/laravel/bootstrap/app.php';
 
-        $app->booting(function () {
+        $app->booting(static function () {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
             $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
         });
 
-        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+        $app->make(Kernel::class)->bootstrap();
 
-        $app->register('Encore\Admin\AdminServiceProvider');
+        $app->register(AdminServiceProvider::class);
 
         return $app;
     }
@@ -53,7 +56,7 @@ class TestCase extends BaseTestCase
             $this->app['config']->set($key, $value);
         }
 
-        $this->artisan('vendor:publish', ['--provider' => 'Encore\Admin\AdminServiceProvider']);
+        $this->artisan('vendor:publish', ['--provider' => AdminServiceProvider::class]);
 
         Schema::defaultStringLength(191);
 
@@ -82,7 +85,7 @@ class TestCase extends BaseTestCase
 
         (new CreateTestTables())->down();
 
-        DB::select("delete from `migrations` where `migration` = '2016_01_04_173148_create_admin_tables'");
+        DB::select("DELETE FROM `migrations` WHERE `migration` = '2016_01_04_173148_create_admin_tables'");
 
         parent::tearDown();
     }
@@ -92,7 +95,7 @@ class TestCase extends BaseTestCase
      *
      * @return void
      */
-    public function migrateTestTables()
+    public function migrateTestTables(): void
     {
         $fileSystem = new Filesystem();
 
