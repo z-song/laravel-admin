@@ -23,7 +23,7 @@ class Select extends Field
      * @var array
      */
     protected $config = [
-        'theme' => 'bootstrap4',
+//        'theme' => 'bootstrap4',
     ];
 
     /**
