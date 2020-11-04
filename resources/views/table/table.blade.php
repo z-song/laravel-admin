@@ -30,14 +30,9 @@
 
     <!-- /.card-header -->
     <div class="card-body table-responsive p-0">
-        <table class="table table-hover table-table table-head-fixed" id="{{ $table->tableID }}">
-            <thead>
-                <tr>
-                    @foreach($table->visibleColumns() as $column)
-                    <th {!! $column->formatHtmlAttributes() !!}>{!! $column->getLabel() !!}{!! $column->renderHeader() !!}</th>
-                    @endforeach
-                </tr>
-            </thead>
+        <table class="{{ $table_class }}" id="{{ $table->tableID }}">
+
+            @include('admin::table.table-header', ['columns' => $table->visibleColumns()])
 
             @if ($table->hasQuickCreate())
                 {!! $table->renderQuickCreate() !!}

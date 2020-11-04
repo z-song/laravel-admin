@@ -106,6 +106,11 @@ class Column
     protected static $model;
 
     /**
+     * @var ColumnGroup
+     */
+    protected $group;
+
+    /**
      * @param string $name
      * @param string $label
      */
@@ -161,6 +166,22 @@ class Column
         if (is_null(static::$model) && ($model instanceof BaseModel)) {
             static::$model = $model->newInstance();
         }
+    }
+
+    /**
+     * @param ColumnGroup $group
+     */
+    public function setGroup(ColumnGroup $group)
+    {
+        $this->group = $group;
+    }
+
+    /**
+     * @return ColumnGroup
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 
     /**
