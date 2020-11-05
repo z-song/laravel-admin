@@ -6,6 +6,7 @@ use Closure;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form as BaseForm;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Form\Layout\Row;
 use Encore\Admin\Layout\Content;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
@@ -120,9 +121,9 @@ class Form implements Renderable
     public $confirm = '';
 
     /**
-     * @var Form
+     * @var bool
      */
-    protected $form;
+    protected $horizontal = false;
 
     /**
      * Form constructor.
@@ -180,6 +181,14 @@ class Form implements Renderable
         $this->confirm = $message;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function horizontal()
+    {
+        $this->horizontal = true;
     }
 
     /**
@@ -298,6 +307,18 @@ class Form implements Renderable
     }
 
     /**
+     * Add a row in form.
+     *
+     * @param Closure $callback
+     *
+     * @return \Encore\Admin\Form
+     */
+    public function row(Closure $callback = null)
+    {
+        return $this->rows[] = new Row($this, $callback);
+    }
+
+    /**
      * Disable reset button.
      *
      * @return $this
@@ -391,7 +412,7 @@ class Form implements Renderable
 
         return [
             'id'         => $this->attributes['id'],
-            'fields'     => $this->fields,
+            'rows'       => $this->rows,
             'attributes' => $this->formatAttribute(),
             'method'     => $this->attributes['method'],
             'buttons'    => $this->buttons,
@@ -455,6 +476,10 @@ class Form implements Renderable
         if (method_exists($this, 'form')) {
             $this->form();
         }
+
+        if ($this->horizontal) {
+            $this->fields()->each->horizontal();
+        }
     }
 
     protected function prepareHandle()
@@ -489,6 +514,24 @@ class Form implements Renderable
      * @return Field|$this
      */
     public function __call($method, $arguments)
+    {
+        $field = $this->resolveField($method, $arguments);
+
+        if (!$field instanceof Field) {
+            return $field;
+        }
+
+        $this->row()->column()->addField($field);
+
+        return $field;
+    }
+
+    /**
+     * @param string $method
+     * @param array $arguments
+     * @return $this
+     */
+    public function resolveField($method, $arguments)
     {
         if (!$this->hasField($method)) {
             return $this;

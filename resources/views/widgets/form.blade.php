@@ -10,11 +10,20 @@
             </div>
         </div>
 
-
         <div class="card-body">
-            @foreach($fields as $field)
-                {!! $field->renderInForm() !!}
+            <div class="fields-group">
+            @foreach($rows as $row)
+                <div class="row">
+                    @foreach($row->getColumns() as $column)
+                        <div class="{{ $column->width() }}">
+                            @foreach($column->getFields() as $field)
+                                {!! $field->render() !!}
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
             @endforeach
+            </div>
         </div>
 
         <!-- /.card-body -->
@@ -37,7 +46,6 @@
             </div>
         </div>
         @endif
-
     </div>
 </form>
 

@@ -14,9 +14,9 @@ trait HasResponse
     protected $response;
 
     /**
-     * @return Fluent
+     * @return $this
      */
-    public function getResponse()
+    public function response()
     {
         return $this->response;
     }
