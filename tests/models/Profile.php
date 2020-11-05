@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-	use HasFactory;
+    use HasFactory;
 
     protected $table = 'test_user_profiles';
 

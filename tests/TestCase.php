@@ -72,8 +72,8 @@ class TestCase extends BaseTestCase
 
         User::factory()->create();
         Profile::factory()->create()->each(static function (Profile $profile) {
-        	$profile->user()->associate(User::factory()->make())->save();
-		});
+            $profile->user()->associate(User::factory()->make())->save();
+        });
         Tag::factory()->create();
 
 //        \Encore\Admin\Admin::$css = [];
