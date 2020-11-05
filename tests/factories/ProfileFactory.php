@@ -23,7 +23,7 @@ class ProfileFactory extends Factory
             'start_at'		 => $this->faker->dateTime,
             'end_at'		   => $this->faker->dateTime,
 
-			'user_id'		=> User::factory(),
+            'user_id'		=> User::factory(),
         ];
     }
 }
