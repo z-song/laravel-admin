@@ -31,6 +31,7 @@ class Form implements Renderable
     use Concerns\HasResponse;
     use Concerns\ValidatesFields;
     use Concerns\HandleCascadeFields;
+    use Concerns\RenderFieldsInline;
     use ShouldSnakeAttributes;
     /**
      * Remove flag in `has many` form.
@@ -142,24 +143,11 @@ class Form implements Renderable
         $this->fields()->push($field);
         $this->layout->addField($field);
 
-        if ($this->insertPoint) {
-            $this->insertPoint->insertAfter($field);
+        if ($this->inline && ! $field instanceof Field\Inline) {
+            $this->inline->addField($field);
         }
 
         return $this;
-    }
-
-    /**
-     * @param Field $field
-     */
-    public function beginInsertAfter($field)
-    {
-        $this->insertPoint = $field;
-    }
-
-    public function endInsertAfter()
-    {
-        $this->insertPoint = null;
     }
 
     /**

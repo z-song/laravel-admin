@@ -111,4 +111,5 @@ return [
     'index'                   => 'Index',
     'store'                   => 'Store',
     'update'                  => 'Update',
+    'group'                   => 'Group',
 ];

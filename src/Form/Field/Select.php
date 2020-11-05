@@ -2,7 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Concerns\CanInsertAfter;
+use Encore\Admin\Form\Concerns\CanRenderInline;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class Select extends Field
 {
     use CanCascadeFields;
-    use CanInsertAfter;
+    use CanRenderInline;
 
     /**
      * @var array
@@ -23,7 +23,7 @@ class Select extends Field
      * @var array
      */
     protected $config = [
-        'theme' => 'bootstrap4',
+//        'theme' => 'bootstrap4',
     ];
 
     /**

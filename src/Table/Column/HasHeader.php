@@ -4,6 +4,7 @@ namespace Encore\Admin\Table\Column;
 
 use Encore\Admin\Table\Column;
 use Encore\Admin\Table\Model;
+use Encore\Admin\Widgets\Tooltip;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 
@@ -63,7 +64,7 @@ trait HasHeader
      */
     protected function addHelp($message)
     {
-        return $this->addHeader(new Help($message));
+        return $this->addHeader(new Tooltip($message));
     }
 
     /**

@@ -36,7 +36,7 @@
         $.ajax({
             url: '{{ request()->url() }}',
             type: 'POST',
-            data: $(this).serialize(),
+            data: $(this).serializeArray(),
         }).done(function (data, textStatus, jqXHR) {
             if (data.status) {
                 $.admin.reload(data.message);
