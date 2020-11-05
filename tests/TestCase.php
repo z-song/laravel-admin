@@ -8,9 +8,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
-use Tests\Factories\ProfileFactory;
-use Tests\Factories\TagFactory;
-use Tests\Factories\UserFactory;
+use Tests\Models\Profile;
+use Tests\Models\Tag;
+use Tests\Models\User;
 
 class TestCase extends BaseTestCase
 {
@@ -70,9 +70,11 @@ class TestCase extends BaseTestCase
 
         require __DIR__.'/routes.php';
 
-        UserFactory::new()->create();
-        ProfileFactory::new()->create();
-        TagFactory::new()->create();
+        User::factory()->create();
+        Profile::factory()->create()->each(static function (Profile $profile) {
+        	$profile->user()->associate(User::factory()->make())->save();
+		});
+        Tag::factory()->create();
 
 //        \Encore\Admin\Admin::$css = [];
 //        \Encore\Admin\Admin::$js = [];
