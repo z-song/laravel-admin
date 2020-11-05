@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Concerns\CanRenderInline;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +11,6 @@ use Illuminate\Support\Str;
 class Select extends Field
 {
     use CanCascadeFields;
-    use CanRenderInline;
 
     /**
      * @var array

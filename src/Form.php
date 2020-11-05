@@ -8,8 +8,7 @@ use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Concerns;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Footer;
-use Encore\Admin\Form\Layout\Layout;
-use Encore\Admin\Form\Row;
+use Encore\Admin\Form\Layout\Row;
 use Encore\Admin\Form\Tab;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
 use Illuminate\Contracts\Support\Renderable;
@@ -31,7 +30,6 @@ class Form implements Renderable
     use Concerns\HasResponse;
     use Concerns\ValidatesFields;
     use Concerns\HandleCascadeFields;
-    use Concerns\RenderFieldsInline;
     use ShouldSnakeAttributes;
     /**
      * Remove flag in `has many` form.
@@ -72,11 +70,6 @@ class Form implements Renderable
     protected $inputs = [];
 
     /**
-     * @var Layout
-     */
-    protected $layout;
-
-    /**
      * Ignored saving fields.
      *
      * @var array
@@ -96,19 +89,14 @@ class Form implements Renderable
     public $rows = [];
 
     /**
-     * @var null
-     */
-    public $currentRow = null;
-
-    /**
      * @var bool
      */
     protected $isSoftDeletes = false;
 
     /**
-     * @var Field
+     * @var bool
      */
-    protected $insertPoint;
+    protected $horizontal = false;
 
     /**
      * Create a new form instance.
@@ -120,8 +108,6 @@ class Form implements Renderable
         $this->model = $model;
 
         $this->builder = new Builder($this);
-
-        $this->initLayout();
 
         $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses_deep($this->model), true);
 
@@ -137,17 +123,23 @@ class Form implements Renderable
     {
         $field->setForm($this);
 
-        $width = $this->builder->getWidth();
-        $field->setWidth($width['field'], $width['label']);
-
-        $this->fields()->push($field);
-        $this->layout->addField($field);
-
-        if ($this->inline && ! $field instanceof Field\Inline) {
-            $this->inline->addField($field);
+        if ($this->horizontal) {
+            $field->horizontal();
+            $width = $this->builder->getWidth();
+            $field->setWidth($width['field'], $width['label']);
         }
 
+        $this->fields()->push($field);
+
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function horizontal()
+    {
+        $this->horizontal = true;
     }
 
     /**
@@ -207,14 +199,14 @@ class Form implements Renderable
      * Use tab to split form.
      *
      * @param string  $title
-     * @param Closure $content
+     * @param Closure $callback
      * @param bool    $active
      *
      * @return $this
      */
-    public function tab($title, Closure $content, bool $active = false): self
+    public function tab($title, Closure $callback, bool $active = false): self
     {
-        $this->setTab()->append($title, $content, $active);
+        $this->getTab()->add($title, $callback, $active);
 
         return $this;
     }
@@ -225,16 +217,6 @@ class Form implements Renderable
      * @return Tab
      */
     public function getTab()
-    {
-        return $this->tab;
-    }
-
-    /**
-     * Set Tab instance.
-     *
-     * @return Tab
-     */
-    public function setTab(): Tab
     {
         if ($this->tab === null) {
             $this->tab = new Tab($this);
@@ -930,13 +912,7 @@ class Form implements Renderable
      */
     public function row(Closure $callback = null)
     {
-        $this->rows[] = $this->currentRow = new Row($callback, $this);
-
-        if (is_null($callback)) {
-            return $this->currentRow;
-        }
-
-        return $this;
+        return $this->rows[] = new Row($this, $callback);
     }
 
     /**
@@ -1127,31 +1103,6 @@ class Form implements Renderable
     }
 
     /**
-     * Add a new layout column.
-     *
-     * @param int      $width
-     * @param \Closure $closure
-     *
-     * @return $this
-     */
-    public function column($width, \Closure $closure): self
-    {
-        $width = $width < 1 ? round(12 * $width) : $width;
-
-        $this->layout->column($width, $closure);
-
-        return $this;
-    }
-
-    /**
-     * Initialize filter layout.
-     */
-    protected function initLayout()
-    {
-        $this->layout = new Layout($this);
-    }
-
-    /**
      * Getter.
      *
      * @param string $name
@@ -1177,14 +1128,12 @@ class Form implements Renderable
     }
 
     /**
-     * Generate a Field object and add to form builder if Field exists.
-     *
      * @param string $method
-     * @param array  $arguments
+     * @param array $arguments
      *
-     * @return Field
+     * @return Field\Nullable|mixed
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if ($className = static::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, ''); //[0];
@@ -1202,10 +1151,19 @@ class Form implements Renderable
     }
 
     /**
-     * @return Layout
+     * Generate a Field object and add to form builder if Field exists.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return Field
      */
-    public function getLayout(): Layout
+    public function __call($method, $arguments)
     {
-        return $this->layout;
+        $field = $this->resolveField($method, $arguments);
+
+        $this->row()->column()->addField($field);
+
+        return $field;
     }
 }

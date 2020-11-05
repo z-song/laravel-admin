@@ -179,7 +179,7 @@ class Field implements Renderable
      *
      * @var bool
      */
-    protected $horizontal = true;
+    protected $horizontal = false;
 
     /**
      * column data format.
@@ -804,9 +804,9 @@ class Field implements Renderable
     /**
      * @return $this
      */
-    public function disableHorizontal(): self
+    public function horizontal(): self
     {
-        $this->horizontal = false;
+        $this->horizontal = true;
 
         return $this;
     }
@@ -832,7 +832,7 @@ class Field implements Renderable
             ];
         }
 
-        return ['label' => $this->getLabelClass(), 'field' => '', 'form-group' => ''];
+        return ['label' => $this->getLabelClass(), 'field' => 'field-control', 'form-group' => 'form-group'];
     }
 
     /**
@@ -1171,11 +1171,6 @@ class Field implements Renderable
         }
 
         return Admin::view($this->getView(), $this->variables());
-    }
-
-    public function renderInform()
-    {
-        return $this->render();
     }
 
     /**
