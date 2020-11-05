@@ -4,6 +4,7 @@ namespace Tests\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Tests\Models\Profile;
+use Tests\Models\User;
 
 class ProfileFactory extends Factory
 {
@@ -21,6 +22,8 @@ class ProfileFactory extends Factory
             'color'			   => $this->faker->hexColor,
             'start_at'		 => $this->faker->dateTime,
             'end_at'		   => $this->faker->dateTime,
+
+			'user_id'		=> User::factory(),
         ];
     }
 }

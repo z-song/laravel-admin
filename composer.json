@@ -15,10 +15,10 @@
         "php": ">=7.0.0",
         "symfony/dom-crawler": "~3.1|~4.0|~5.0",
         "laravel/framework": ">=8.0",
-        "doctrine/dbal": "2.*",
-        "fzaninotto/faker": "^1.9"
+        "doctrine/dbal": "2.*"
     },
     "require-dev": {
+        "fzaninotto/faker": "^1.9",
         "laravel/laravel": ">=8.0",
         "intervention/image": "~2.3",
         "laravel/browser-kit-testing": "^6.0"

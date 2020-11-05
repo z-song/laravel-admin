@@ -71,9 +71,7 @@ class TestCase extends BaseTestCase
         require __DIR__.'/routes.php';
 
         User::factory()->create();
-        Profile::factory()->create()->each(static function (Profile $profile) {
-            $profile->user()->associate(User::factory()->make())->save();
-        });
+        Profile::factory()->create();
         Tag::factory()->create();
 
 //        \Encore\Admin\Admin::$css = [];
