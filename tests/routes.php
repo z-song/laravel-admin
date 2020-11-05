@@ -1,10 +1,9 @@
 <?php
 
+use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\Route;
-use Tests\Controllers\FileController;
-use Tests\Controllers\ImageController;
-use Tests\Controllers\MultipleImageController;
-use Tests\Controllers\UserController;
+
+Admin::routes();
 
 Route::group([
     'prefix'     => config('admin.route.prefix'),
