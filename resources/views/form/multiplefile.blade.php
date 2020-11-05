@@ -1,6 +1,6 @@
 <div {!! admin_attrs($group_attrs) !!}>
 
-    <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
+    <label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
         <input type="file" class="{{$class}}" name="{{$name}}[]" {!! $attributes !!} />
@@ -10,6 +10,8 @@
 
         @include('admin::form.error')
         @include('admin::form.help-block')
+
+        <input type="hidden" class="{{$class}}_orig" name="{{$name}}_orig[]" value="{{ json_encode($value) }}"/>
 
     </div>
     <input type="hidden" class="{{$class}}" name="{{ $old_flag."[$name]" }}" value="{{ isset($value) ? json_encode($value) : '' }}"/>
@@ -31,6 +33,7 @@
         old_files.splice(id, 1);
         var old_files_val = JSON.stringify(old_files);
         return new Promise(function(resolve, reject) {
+            reject();return;
             var remove = resolve;
             $.admin.confirm({
                 title: "{{ admin_trans('admin.delete_confirm') }}",
@@ -46,9 +49,10 @@
     @endif
 
     @if($settings['showDrag'])
-    $(this).on('filesorted', function(event, params) {
+    $(this).on('filesorted', function(event, files) {
+        console.log(arguments);
         var order = [];
-        params.stack.forEach(function (item) {
+        files.stack.forEach(function (item) {
             order.push(item.key);
         });
         $("input{{ $selector }}_sort").val(order);

@@ -1,5 +1,5 @@
 <div {!! admin_attrs($group_attrs) !!}>
-    <label for="{{$id['start']}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
+    <label for="{{$id['start']}}" class="{{$viewClass['label']}}">{{$label}}</label>
     <div class="{{$viewClass['field']}}">
         <div class="row">
             <div class="field-control ml-2" style="width: 250px;">
