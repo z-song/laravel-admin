@@ -11,8 +11,7 @@
     {!! $form->open() !!}
 
     <div class="card-body">
-
-        @if($tabObj)
+        @if($tabObj->isNotEmpty())
             @include('admin::form.tab', compact('tabObj'))
         @else
             <div class="fields-group">

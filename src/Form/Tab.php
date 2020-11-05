@@ -62,4 +62,12 @@ class Tab
 
         return $this->tabs;
     }
+
+    /**
+     * @return bool
+     */
+    public function isNotEmpty()
+    {
+        return !empty($this->tabs);
+    }
 }
