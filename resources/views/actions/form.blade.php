@@ -63,8 +63,16 @@ _promise.then($.admin.action.then).catch($.admin.action.catch);
                 </div>
                 <form>
                     <div class="modal-body">
-                        @foreach($fields as $field)
-                            {!! $field->render() !!}
+                        @foreach($rows as $row)
+                            <div class="row">
+                                @foreach($row->getColumns() as $column)
+                                    <div class="{{ $column->width() }}">
+                                        @foreach($column->getFields() as $field)
+                                            {!! $field->render() !!}
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
                         @endforeach
                     </div>
                     <div class="modal-footer">
