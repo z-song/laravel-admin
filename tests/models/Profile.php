@@ -4,6 +4,7 @@ namespace Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Tests\Factories\ProfileFactory;
 
 class Profile extends Model
 {
@@ -11,7 +12,12 @@ class Profile extends Model
 
     protected $table = 'test_user_profiles';
 
-    public function user()
+    protected static function newFactory()
+	{
+		return ProfileFactory::new();
+	}
+
+	public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
