@@ -16,10 +16,10 @@ class User extends Model
 
     protected $casts = ['data' => 'array'];
 
-	protected static function newFactory()
-	{
-		return UserFactory::new();
-	}
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
 
     public function profile()
     {

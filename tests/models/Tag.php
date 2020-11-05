@@ -12,10 +12,10 @@ class Tag extends Model
 
     protected $table = 'test_tags';
 
-	protected static function newFactory()
-	{
-		return TagFactory::new();
-	}
+    protected static function newFactory()
+    {
+        return TagFactory::new();
+    }
 
     public function users()
     {

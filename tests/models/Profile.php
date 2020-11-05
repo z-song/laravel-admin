@@ -13,11 +13,11 @@ class Profile extends Model
     protected $table = 'test_user_profiles';
 
     protected static function newFactory()
-	{
-		return ProfileFactory::new();
-	}
+    {
+        return ProfileFactory::new();
+    }
 
-	public function user()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
