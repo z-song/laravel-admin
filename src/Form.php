@@ -908,7 +908,7 @@ class Form implements Renderable
      *
      * @param Closure $callback
      *
-     * @return $this
+     * @return Row
      */
     public function row(Closure $callback = null)
     {

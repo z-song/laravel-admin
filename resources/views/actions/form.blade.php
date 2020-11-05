@@ -63,17 +63,7 @@ _promise.then($.admin.action.then).catch($.admin.action.catch);
                 </div>
                 <form>
                     <div class="modal-body">
-                        @foreach($rows as $row)
-                            <div class="row">
-                                @foreach($row->getColumns() as $column)
-                                    <div class="{{ $column->width() }}">
-                                        @foreach($column->getFields() as $field)
-                                            {!! $field->render() !!}
-                                        @endforeach
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endforeach
+                        @include('admin::form.fields')
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('admin.close') }}</button>

@@ -20,6 +20,11 @@ class Row
     protected $form;
 
     /**
+     * @var string
+     */
+    public $html;
+
+    /**
      * Row constructor.
      *
      * @param Form $form
@@ -32,6 +37,14 @@ class Row
         if ($callback) {
             call_user_func($callback, $this);
         }
+    }
+
+    /**
+     * @param string $html
+     */
+    public function html($html)
+    {
+        $this->html = $html;
     }
 
     /**

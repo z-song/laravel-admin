@@ -12,17 +12,7 @@
 
         <div class="card-body">
             <div class="fields-group">
-            @foreach($rows as $row)
-                <div class="row">
-                    @foreach($row->getColumns() as $column)
-                        <div class="{{ $column->width() }}">
-                            @foreach($column->getFields() as $field)
-                                {!! $field->render() !!}
-                            @endforeach
-                        </div>
-                    @endforeach
-                </div>
-            @endforeach
+                @include('admin::form.fields')
             </div>
         </div>
 

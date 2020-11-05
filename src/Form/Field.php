@@ -1190,6 +1190,12 @@ class Field implements Renderable
      */
     public function __toString()
     {
-        return $this->render()->render();
+        $render = $this->render();
+
+        if ($render instanceof Renderable) {
+            return $render->render();
+        }
+
+        return $render;
     }
 }

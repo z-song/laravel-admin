@@ -56,6 +56,7 @@ class Tab
             }
         }
 
+        // 如果没有active的tab，设置第一个为active
         if (!empty($this->tabs) && $hasActive === false) {
             $this->tabs[0]->active = true;
         }

@@ -1,21 +1,16 @@
 @php(\Illuminate\Support\Arr::forget($group_attrs, 'class'))
 
-<div class="row">
-    <div class="{{$viewClass['label']}}">
-        <label class="float-right">{{ $label }}</label>
-    </div>
-    <div class="{{$viewClass['field']}}"></div>
-</div>
+<label class="{{$viewClass['label']}}">{{ $label }}</label>
 
 <hr class="pt-0">
 
-<div id="has-many-{{$column}}" class="has-many-{{$column}} form-group" {!! admin_attrs($group_attrs) !!}>
+<div id="has-many-{{$column}}" class="has-many-{{$column}} form-group pl-5" {!! admin_attrs($group_attrs) !!}>
     <div class="has-many-{{$column}}-forms">
         @foreach($forms as $pk => $form)
         <div class="has-many-{{$column}}-form fields-group" data-key="{{ $pk }}">
-            @foreach($form->fields() as $field)
-                {!! $field->render() !!}
-            @endforeach
+
+            @include('admin::form.fields', ['rows' => $form->getRows()])
+
             @if($options['allowDelete'])
             <div class="form-group row">
                 <label class="{{$viewClass['label']}}"></label>

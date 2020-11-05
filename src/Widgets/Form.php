@@ -311,7 +311,7 @@ class Form implements Renderable
      *
      * @param Closure $callback
      *
-     * @return \Encore\Admin\Form
+     * @return Row
      */
     public function row(Closure $callback = null)
     {

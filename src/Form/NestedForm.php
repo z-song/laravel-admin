@@ -4,6 +4,7 @@ namespace Encore\Admin\Form;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
+use Encore\Admin\Form\Layout\Row;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -95,6 +96,11 @@ class NestedForm
      * @var \Encore\Admin\Form
      */
     protected $form;
+
+    /**
+     * @var array
+     */
+    protected $rows = [];
 
     /**
      * Create a new NestedForm instance.
@@ -344,6 +350,14 @@ class NestedForm
     }
 
     /**
+     * @return array
+     */
+    public function getRows()
+    {
+        return $this->rows;
+    }
+
+    /**
      * Fill data to all fields in form.
      *
      * @param array $data
@@ -367,6 +381,8 @@ class NestedForm
      */
     public function getTemplate()
     {
+        return admin_view('admin::form.fields', ['rows' => $this->getRows()]);
+
         $html = '';
 
         /* @var Field $field */
@@ -411,14 +427,23 @@ class NestedForm
     }
 
     /**
-     * Add nested-form fields dynamically.
+     * Add a row in form.
      *
-     * @param string $method
-     * @param array  $arguments
+     * @param Closure $callback
      *
-     * @return mixed
+     * @return Row
      */
-    public function __call($method, $arguments)
+    public function row(\Closure $callback = null)
+    {
+        return $this->rows[] = new Row($this, $callback);
+    }
+
+    /**
+     * @param string $method
+     * @param array $arguments
+     * @return $this
+     */
+    public function resolveField($method, $arguments = [])
     {
         if ($className = Form::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, '');
@@ -434,5 +459,24 @@ class NestedForm
         }
 
         return $this;
+    }
+
+    /**
+     * Add nested-form fields dynamically.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        $field = $this->resolveField($method, $arguments);
+
+        if ($field instanceof Field) {
+            $this->row()->column()->addField($field);
+        }
+
+        return $field;
     }
 }

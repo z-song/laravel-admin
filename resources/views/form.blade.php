@@ -15,17 +15,7 @@
             @include('admin::form.tab', compact('tabObj'))
         @else
             <div class="fields-group">
-                @foreach($form->getRows() as $row)
-                    <div class="row">
-                    @foreach($row->getColumns() as $column)
-                        <div class="{{ $column->width() }}">
-                        @foreach($column->getFields() as $field)
-                            {!! $field->render() !!}
-                        @endforeach
-                        </div>
-                    @endforeach
-                    </div>
-                @endforeach
+                @include('admin::form.fields', ['rows' => $form->getRows()])
             </div>
         @endif
 

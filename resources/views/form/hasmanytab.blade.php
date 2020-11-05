@@ -8,8 +8,8 @@
 </style>
 <div id="has-many-{{$column}}" class="nav-tabs-custom has-many-{{$column}} form-group" {!! admin_attrs($group_attrs) !!}>
     <div class="row header">
-        <div class="{{$viewClass['label']}}"><label class="float-right">{{ $label }}</label></div>
-        <div class="{{$viewClass['field']}}">
+        <label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
+        <div class="{{$viewClass['field']}}" style="width: 100%;">
             <ul class="nav nav-tabs" role="tablist">
                 @foreach($forms as $pk => $form)
                     <li class="nav-item" role="presentation">
