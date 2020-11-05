@@ -23,7 +23,7 @@ trait BuiltinRoutes
         Route::group($attributes, static function () {
 
             /* @var \Illuminate\Support\Facades\Route $router */
-			Route::namespace('\Encore\Admin\Http\Controllers')->group(static function () {
+            Route::namespace('\Encore\Admin\Http\Controllers')->group(static function () {
 
                 /* @var \Illuminate\Routing\Router $router */
                 Route::resource('auth/users', 'UserController')->names('auth_users');

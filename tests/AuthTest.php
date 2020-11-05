@@ -2,10 +2,10 @@
 
 class AuthTest extends TestCase
 {
-	public function testNothing()
-	{
-		$this->assertTrue(true);
-	}
+    public function testNothing()
+    {
+        $this->assertTrue(true);
+    }
 
 //    public function testLoginPage()
 //    {

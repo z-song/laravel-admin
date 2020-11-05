@@ -15,10 +15,10 @@ class UsersTest extends TestCase
         $this->be($this->user, 'admin');
     }
 
-	public function testNothing()
-	{
-		$this->assertTrue(true);
-	}
+    public function testNothing()
+    {
+        $this->assertTrue(true);
+    }
 
 //    public function testUsersIndexPage()
 //    {

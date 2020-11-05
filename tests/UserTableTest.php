@@ -13,10 +13,10 @@ class UserTableTest extends TestCase
         $this->be(Administrator::first(), 'admin');
     }
 
-	public function testNothing()
-	{
-		$this->assertTrue(true);
-	}
+    public function testNothing()
+    {
+        $this->assertTrue(true);
+    }
 
 //    public function testIndexPage()
 //    {

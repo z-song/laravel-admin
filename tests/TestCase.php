@@ -81,7 +81,7 @@ class TestCase extends BaseTestCase
 
     protected function tearDown(): void
     {
-		$this->artisan('admin:uninstall');
+        $this->artisan('admin:uninstall');
 
         (new CreateAdminTables())->down();
 
