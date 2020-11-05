@@ -1,12 +1,18 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Tests\Controllers\FileController;
+use Tests\Controllers\ImageController;
+use Tests\Controllers\MultipleImageController;
+use Tests\Controllers\UserController;
+
 Route::group([
     'prefix'     => config('admin.route.prefix'),
     'namespace'  => 'Tests\Controllers',
     'middleware' => ['web', 'admin'],
-], function ($router) {
-    $router->resource('images', ImageController::class);
-    $router->resource('multiple-images', MultipleImageController::class);
-    $router->resource('files', FileController::class);
-    $router->resource('users', UserController::class);
+], static function () {
+	Route::resource('images', ImageController::class);
+	Route::resource('multiple-images', MultipleImageController::class);
+	Route::resource('files', FileController::class);
+	Route::resource('users', UserController::class);
 });

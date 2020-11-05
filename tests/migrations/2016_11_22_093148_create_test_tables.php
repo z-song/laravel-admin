@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTestTables extends Migration
 {
@@ -10,9 +11,9 @@ class CreateTestTables extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('test_images', function (Blueprint $table) {
+        Schema::create('test_images', static function (Blueprint $table) {
             $table->increments('id');
             $table->string('image1');
             $table->string('image2');
@@ -23,13 +24,13 @@ class CreateTestTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('test_multiple_images', function (Blueprint $table) {
+        Schema::create('test_multiple_images', static function (Blueprint $table) {
             $table->increments('id');
             $table->text('pictures');
             $table->timestamps();
         });
 
-        Schema::create('test_files', function (Blueprint $table) {
+        Schema::create('test_files', static function (Blueprint $table) {
             $table->increments('id');
             $table->string('file1');
             $table->string('file2');
@@ -40,7 +41,7 @@ class CreateTestTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('test_users', function (Blueprint $table) {
+        Schema::create('test_users', static function (Blueprint $table) {
             $table->increments('id');
             $table->string('username');
             $table->string('email');
@@ -51,7 +52,7 @@ class CreateTestTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('test_user_profiles', function (Blueprint $table) {
+        Schema::create('test_user_profiles', static function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_id');
             $table->string('first_name')->nullable();
@@ -67,13 +68,13 @@ class CreateTestTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('test_tags', function (Blueprint $table) {
+        Schema::create('test_tags', static function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
         });
 
-        Schema::create('test_user_tags', function (Blueprint $table) {
+        Schema::create('test_user_tags', static function (Blueprint $table) {
             $table->integer('user_id');
             $table->integer('tag_id');
             $table->index(['user_id', 'tag_id']);
@@ -86,7 +87,7 @@ class CreateTestTables extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('test_images');
         Schema::dropIfExists('test_multiple_images');
