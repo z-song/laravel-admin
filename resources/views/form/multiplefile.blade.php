@@ -12,6 +12,7 @@
         @include('admin::form.help-block')
 
     </div>
+    <input type="hidden" class="{{$class}}" name="{{ $old_flag."[$name]" }}" value="{{ isset($value) ? json_encode($value) : '' }}"/>
 </div>
 
 @if($settings['showDrag'])
@@ -24,7 +25,11 @@
     $(this).fileinput(@json($options));
 
     @if($settings['showRemove'])
-    $(this).on('filebeforedelete', function() {
+    $(this).on('filebeforedelete', function(event, id) {
+        var old_files_elm = $(this).parents('.field-control:first').next();
+        var old_files = JSON.parse(old_files_elm.val());
+        old_files.splice(id, 1);
+        var old_files_val = JSON.stringify(old_files);
         return new Promise(function(resolve, reject) {
             var remove = resolve;
             $.admin.confirm({
@@ -32,6 +37,7 @@
                 preConfirm: function() {
                     return new Promise(function(resolve) {
                         resolve(remove());
+                        old_files_elm.val(old_files_val);
                     });
                 }
             });

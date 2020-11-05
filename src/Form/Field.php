@@ -22,6 +22,7 @@ class Field implements Renderable
 
     const FILE_DELETE_FLAG = '_file_del_';
     const FILE_SORT_FLAG = '_file_sort_';
+    const FILE_OLD_FLAG = '_file_old_';
 
     /**
      * Element id.
