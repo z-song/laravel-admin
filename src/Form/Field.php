@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form;
 
 use Closure;
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Widgets\Form as WidgetForm;
@@ -443,21 +444,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setForm($form = null)
-    {
-        $this->form = $form;
-
-        return $this;
-    }
-
-    /**
-     * Set Widget/Form as field parent.
-     *
-     * @param WidgetForm $form
-     *
-     * @return $this
-     */
-    public function setWidgetForm(WidgetForm $form)
+    public function setForm(AbstractForm $form = null)
     {
         $this->form = $form;
 
@@ -474,10 +461,7 @@ class Field implements Renderable
      */
     public function setWidth($field = 8, $label = 2): self
     {
-        $this->width = [
-            'label' => $label,
-            'field' => $field,
-        ];
+        $this->width = compact('field', 'label');
 
         return $this;
     }
@@ -826,8 +810,8 @@ class Field implements Renderable
     {
         if ($this->horizontal) {
             return [
-                'label'      => "col-{$this->width['label']} {$this->getLabelClass()} text-right pr-3",
-                'field'      => "col-{$this->width['field']} field-control col-form-label",
+                'label'      => "col-{$this->width['label']} {$this->getLabelClass()} text-right pr-3 col-form-label",
+                'field'      => "col-{$this->width['field']} field-control",
                 'form-group' => $this->getGroupClass(true),
             ];
         }

@@ -362,26 +362,6 @@ class Builder
     }
 
     /**
-     * If the parant form has rows.
-     *
-     * @return bool
-     */
-    public function hasRows(): bool
-    {
-        return !empty($this->form->rows);
-    }
-
-    /**
-     * Get field rows of form.
-     *
-     * @return array
-     */
-    public function getRows(): array
-    {
-        return $this->form->rows;
-    }
-
-    /**
      * @return array
      */
     public function getHiddenFields(): array
@@ -592,10 +572,18 @@ class Builder
      */
     public function render(): string
     {
+        if ($this->form->isHorizontal()) {
+            $this->fields()->each(function (Field $field) {
+                $field->horizontal()
+                    ->setWidth($this->width['field'], $this->width['label']);
+            });
+        }
+
         $this->hideReservedFields();
 
         return Admin::view($this->view, [
             'form'   => $this,
+            'rows'   => $this->form->getRows(),
             'confirm'=> $this->confirm,
             'class'  => $this->formClass,
             'tabObj' => $this->form->getTab(),

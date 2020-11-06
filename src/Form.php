@@ -8,7 +8,6 @@ use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Concerns;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Footer;
-use Encore\Admin\Form\Layout\Row;
 use Encore\Admin\Form\Tab;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
 use Illuminate\Contracts\Support\Renderable;
@@ -23,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class Form.
  */
-class Form implements Renderable
+class Form extends AbstractForm implements Renderable
 {
     use Concerns\HasHooks;
     use Concerns\HasFields;
@@ -82,21 +81,9 @@ class Form implements Renderable
     protected $tab = null;
 
     /**
-     * Field rows in form.
-     *
-     * @var array
-     */
-    public $rows = [];
-
-    /**
      * @var bool
      */
     protected $isSoftDeletes = false;
-
-    /**
-     * @var bool
-     */
-    protected $horizontal = false;
 
     /**
      * Create a new form instance.
@@ -123,24 +110,11 @@ class Form implements Renderable
     {
         $field->setForm($this);
 
-        if ($this->horizontal) {
-            $field->horizontal();
-            $width = $this->builder->getWidth();
-            $field->setWidth($width['field'], $width['label']);
-        }
-
         $this->fields()->push($field);
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function horizontal()
-    {
-        $this->horizontal = true;
-    }
 
     /**
      * @return Model
@@ -904,18 +878,6 @@ class Form implements Renderable
     }
 
     /**
-     * Add a row in form.
-     *
-     * @param Closure $callback
-     *
-     * @return Row
-     */
-    public function row(Closure $callback = null)
-    {
-        return $this->rows[] = new Row($this, $callback);
-    }
-
-    /**
      * Tools setting for form.
      *
      * @param Closure $callback
@@ -1148,22 +1110,5 @@ class Form implements Renderable
         admin_error('Error', "Field type [$method] does not exist.");
 
         return new Field\Nullable();
-    }
-
-    /**
-     * Generate a Field object and add to form builder if Field exists.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return Field
-     */
-    public function __call($method, $arguments)
-    {
-        $field = $this->resolveField($method, $arguments);
-
-        $this->row()->column()->addField($field);
-
-        return $field;
     }
 }

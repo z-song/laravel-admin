@@ -2,10 +2,10 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Form;
-use Encore\Admin\Form\Layout\Row;
 
-class TabItem
+class TabItem extends AbstractForm
 {
     /**
      * @var string
@@ -21,11 +21,6 @@ class TabItem
      * @var bool
      */
     public $active = false;
-
-    /**
-     * @var array
-     */
-    public $rows = [];
 
     /**
      * @var Form
@@ -50,38 +45,6 @@ class TabItem
         if ($callback) {
             $callback($this);
         }
-    }
-
-    /**
-     * @param \Closure|null $callback
-     * @return Row
-     */
-    public function row(\Closure $callback = null)
-    {
-        return $this->rows[] = new Row($this->form, $callback);
-    }
-
-    /**
-     * @return array
-     */
-    public function getRows()
-    {
-        return $this->rows;
-    }
-
-    /**
-     * @param string $method
-     * @param array $arguments
-     *
-     * @return Field\Nullable|mixed
-     */
-    public function __call($method, $arguments = [])
-    {
-        $field = $this->form->resolveField($method, $arguments);
-
-        $this->row()->column()->addField($field);
-
-        return $field;
     }
 }
 

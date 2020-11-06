@@ -2,9 +2,9 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
-use Encore\Admin\Form\Layout\Row;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -51,7 +51,7 @@ use Illuminate\Support\Collection;
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
  */
-class NestedForm
+class NestedForm extends AbstractForm
 {
     use Form\Concerns\HandleCascadeFields;
 
@@ -96,11 +96,6 @@ class NestedForm
      * @var \Encore\Admin\Form
      */
     protected $form;
-
-    /**
-     * @var array
-     */
-    protected $rows = [];
 
     /**
      * Create a new NestedForm instance.
@@ -350,14 +345,6 @@ class NestedForm
     }
 
     /**
-     * @return array
-     */
-    public function getRows()
-    {
-        return $this->rows;
-    }
-
-    /**
      * Fill data to all fields in form.
      *
      * @param array $data
@@ -382,16 +369,6 @@ class NestedForm
     public function getTemplate()
     {
         return admin_view('admin::form.fields', ['rows' => $this->getRows()]);
-
-        $html = '';
-
-        /* @var Field $field */
-        foreach ($this->fields() as $field) {
-            //when field render, will push $script to Admin
-            $html .= $field->render();
-        }
-
-        return $html;
     }
 
     /**
@@ -427,18 +404,6 @@ class NestedForm
     }
 
     /**
-     * Add a row in form.
-     *
-     * @param Closure $callback
-     *
-     * @return Row
-     */
-    public function row(\Closure $callback = null)
-    {
-        return $this->rows[] = new Row($this, $callback);
-    }
-
-    /**
      * @param string $method
      * @param array $arguments
      * @return $this
@@ -459,24 +424,5 @@ class NestedForm
         }
 
         return $this;
-    }
-
-    /**
-     * Add nested-form fields dynamically.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return mixed
-     */
-    public function __call($method, $arguments)
-    {
-        $field = $this->resolveField($method, $arguments);
-
-        if ($field instanceof Field) {
-            $this->row()->column()->addField($field);
-        }
-
-        return $field;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Form;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -48,7 +49,7 @@ use Illuminate\Support\Collection;
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
  */
-class EmbeddedForm
+class EmbeddedForm extends AbstractForm
 {
     /**
      * @var Form
@@ -255,14 +256,11 @@ class EmbeddedForm
     }
 
     /**
-     * Add nested-form fields dynamically.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return Field|$this
+     * @param $method
+     * @param array $arguments
+     * @return $this|Field
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if ($className = Form::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, '');

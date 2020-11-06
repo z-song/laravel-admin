@@ -15,7 +15,7 @@
             @include('admin::form.tab', compact('tabObj'))
         @else
             <div class="fields-group">
-                @include('admin::form.fields', ['rows' => $form->getRows()])
+                @include('admin::form.fields')
             </div>
         @endif
 
