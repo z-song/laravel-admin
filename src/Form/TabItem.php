@@ -46,5 +46,15 @@ class TabItem extends AbstractForm
             $callback($this);
         }
     }
+
+    public function fields()
+    {
+        return $this->form->fields();
+    }
+
+    public function resolveField($method, $arguments = [])
+    {
+        return $this->form->resolveField($method, $arguments);
+    }
 }
 
