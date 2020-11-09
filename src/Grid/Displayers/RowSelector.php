@@ -11,7 +11,7 @@ class RowSelector extends AbstractDisplayer
         Admin::script($this->script());
 
         return <<<EOT
-<input type="checkbox" class="{$this->grid->getGridRowName()}-checkbox" data-id="{$this->getKey()}" />
+<input type="checkbox" class="{$this->grid->getGridRowName()}-checkbox" data-id="{$this->getKey()}"  autocomplete="off"/>
 EOT;
     }
 
