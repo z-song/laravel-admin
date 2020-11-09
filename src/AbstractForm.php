@@ -44,8 +44,6 @@ abstract class AbstractForm
      */
     public function row(\Closure $callback = null)
     {
-        $this->horizontal = false;
-
         return $this->rows[] = new Row($this, $callback);
     }
 
