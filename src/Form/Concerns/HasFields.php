@@ -25,6 +25,7 @@ use Illuminate\Support\Arr;
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
+ * @method Field\Preview        preview($column, $label = '')
  * @method Field\Date           date($column, $label = '')
  * @method Field\Datetime       datetime($column, $label = '')
  * @method Field\Time           time($column, $label = '')
@@ -89,6 +90,7 @@ trait HasFields
         'hidden'         => Field\Hidden::class,
         'id'             => Field\Id::class,
         'image'          => Field\Image::class,
+        'preview'        => Field\Preview::class,
         'ip'             => Field\Ip::class,
         'mobile'         => Field\Mobile::class,
         'month'          => Field\Month::class,

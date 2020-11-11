@@ -28,6 +28,7 @@ use Illuminate\Support\Collection;
  * @method Field\Editor         editor($column, $label = '')
  * @method Field\File           file($column, $label = '')
  * @method Field\Image          image($column, $label = '')
+ * @method Field\Preview        preview($column, $label = '')
  * @method Field\Date           date($column, $label = '')
  * @method Field\Datetime       datetime($column, $label = '')
  * @method Field\Time           time($column, $label = '')
