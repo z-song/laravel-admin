@@ -12,7 +12,11 @@ trait HandleCascadeFields
      */
     public function cascadeGroup(\Closure $closure, array $dependency)
     {
-        $this->pushField($group = new Field\CascadeGroup($dependency));
+        $group = new Field\CascadeGroup($dependency, $this);
+
+        $this->pushField($group);
+
+        $this->row()->html($group);
 
         call_user_func($closure, $this);
 

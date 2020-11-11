@@ -3,6 +3,7 @@
 namespace Encore\Admin\Widgets;
 
 use Closure;
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form as BaseForm;
 use Encore\Admin\Form\Field;
@@ -62,7 +63,7 @@ use Illuminate\Support\Fluent;
  * @method Field\ListField      list($column, $label = '')
  * @method mixed                handle(Request $request)
  */
-class Form implements Renderable
+class Form extends AbstractForm implements Renderable
 {
     use BaseForm\Concerns\HandleCascadeFields;
     use BaseForm\Concerns\ValidatesFields;
@@ -118,11 +119,6 @@ class Form implements Renderable
      * @var string
      */
     public $confirm = '';
-
-    /**
-     * @var Form
-     */
-    protected $form;
 
     /**
      * Form constructor.
@@ -363,9 +359,7 @@ class Form implements Renderable
      */
     public function pushField(Field $field)
     {
-        $field->setWidgetForm($this);
-
-        array_push($this->fields, $field);
+        $this->fields[] = $field->setForm($this);
 
         return $this;
     }
@@ -391,7 +385,7 @@ class Form implements Renderable
 
         return [
             'id'         => $this->attributes['id'],
-            'fields'     => $this->fields,
+            'rows'       => $this->getRows(),
             'attributes' => $this->formatAttribute(),
             'method'     => $this->attributes['method'],
             'buttons'    => $this->buttons,
@@ -455,6 +449,10 @@ class Form implements Renderable
         if (method_exists($this, 'form')) {
             $this->form();
         }
+
+        if ($this->horizontal) {
+            $this->fields()->each->horizontal();
+        }
     }
 
     protected function prepareHandle()
@@ -481,14 +479,11 @@ class Form implements Renderable
     }
 
     /**
-     * Generate a Field object and add to form builder if Field exists.
-     *
      * @param string $method
-     * @param array  $arguments
-     *
-     * @return Field|$this
+     * @param array $arguments
+     * @return $this
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if (!$this->hasField($method)) {
             return $this;

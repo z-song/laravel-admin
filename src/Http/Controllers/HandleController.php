@@ -31,7 +31,7 @@ class HandleController extends Controller
 
         $form->sanitize()->handle($request);
 
-        return $form->getResponse();
+        return $form->response();
     }
 
     /**

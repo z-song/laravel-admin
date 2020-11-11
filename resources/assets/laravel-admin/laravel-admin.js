@@ -222,12 +222,6 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
     Form.prototype.field = function (name, $group) {
         var selector = '[data-field="'+name+'"],[data-field$=",'+name+'"],[data-field^="'+name+',"]';
 
-        var inline = this.$el.find('.field-control>.col').filter(selector);
-
-        if (inline.length > 0) {
-            return inline;
-        }
-
         if (typeof $group !== 'undefined') {
             return $group.find(selector);
         }
@@ -236,7 +230,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
     };
 
     Form.prototype.fields = function (name) {
-        return this.$el.find('.fields-group> .form-group');
+        return this.$el.find('.fields-group .form-group');
     };
 
     Form.prototype.submit = function (e) {

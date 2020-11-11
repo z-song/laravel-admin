@@ -29,7 +29,7 @@
             {!! $value !!}
             var self = $(this);
             cascade_groups.forEach(function (event) {
-                var group = self.parents('.form-group').siblings('div.cascade-group.'+event.class);
+                var group = self.closest('.row').siblings('div.cascade-group.'+event.class);
                 if(operator_table[event.operator](checked, event.value)) {
                     group.removeClass('d-none');
                 } else {

@@ -10,11 +10,10 @@
             </div>
         </div>
 
-
         <div class="card-body">
-            @foreach($fields as $field)
-                {!! $field->renderInForm() !!}
-            @endforeach
+            <div class="fields-group">
+                @include('admin::form.fields')
+            </div>
         </div>
 
         <!-- /.card-body -->
@@ -37,7 +36,6 @@
             </div>
         </div>
         @endif
-
     </div>
 </form>
 

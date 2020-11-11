@@ -19,15 +19,13 @@ class DummyClass extends Form
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return $this
      */
     public function handle(Request $request)
     {
         //dump($request->all());
 
-        admin_success('Processed successfully.');
-
-        return back();
+        return $this->success('Processed successfully.');
     }
 
     /**
