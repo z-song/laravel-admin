@@ -204,7 +204,7 @@ trait CanCascadeFields
     var cascade_groups = {$cascadeGroups};
         
     cascade_groups.forEach(function (event) {
-        var default_value = {$this->getDefault()} + '';
+        var default_value = '{$this->getDefault()}' + '';
         var class_name = event.class;
         if(default_value == event.value) {
             $('.'+class_name+'').removeClass('hide');
