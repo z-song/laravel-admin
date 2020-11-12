@@ -316,8 +316,8 @@ class Field implements Renderable
      */
     protected function formatLabel($arguments = []): string
     {
-        if ($label) {
-            return $label;
+        if (isset($arguments[0])) {
+            return $arguments[0];
         }
 
         $column = is_array($this->column) ? current($this->column) : $this->column;
