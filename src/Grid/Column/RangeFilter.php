@@ -109,6 +109,7 @@ SCRIPT;
         <li class="text-right">
             <button class="btn btn-sm btn-primary btn-flat column-filter-submit pull-left" data-loading-text="{$this->trans('search')}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{$this->trans('search')}</button>
             <button class="btn btn-sm btn-default btn-flat column-filter-all" data-loading-text="..."><i class="fa fa-undo"></i></button>
+            <span><a href="{$this->getFormAction()}" class="btn btn-sm btn-default btn-flat column-filter-all"><i class="fa fa-undo"></i></a></span>
         </li>
     </ul>
     </form>
