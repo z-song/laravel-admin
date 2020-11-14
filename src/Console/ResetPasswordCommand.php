@@ -3,6 +3,7 @@
 namespace Encore\Admin\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordCommand extends Command
 {
@@ -45,7 +46,7 @@ class ResetPasswordCommand extends Command
             goto enterPassword;
         }
 
-        $user->password = bcrypt($password);
+        $user->password = Hash::make($password);
 
         $user->save();
 

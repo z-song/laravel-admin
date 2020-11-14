@@ -7,6 +7,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -143,7 +144,7 @@ class AuthController extends Controller
 
         $form->saving(function (Form $form) {
             if ($form->password && $form->model()->password != $form->password) {
-                $form->password = bcrypt($form->password);
+                $form->password = Hash::make($form->password);
             }
         });
 
