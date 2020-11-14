@@ -47,18 +47,6 @@ class MenuController extends Controller
     }
 
     /**
-     * Redirect to edit page.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function show($id)
-    {
-        return redirect()->route(config('admin.route.as') . 'auth_menus.edit', ['menu' => $id]);
-    }
-
-    /**
      * @return \Encore\Admin\Tree
      */
     protected function treeView()

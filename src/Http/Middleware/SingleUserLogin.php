@@ -16,6 +16,6 @@ class SingleUserLogin extends AuthenticateSession
 
         $request->session()->flush();
 
-        throw new AuthenticationException('Unauthenticated.', [], route(config('admin.route.as') . 'login'));
+        throw new AuthenticationException('Unauthenticated.', [], admin_url('auth/login'));
     }
 }

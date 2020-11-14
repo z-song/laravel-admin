@@ -41,9 +41,11 @@ return [
     | Laravel-admin route settings
     |--------------------------------------------------------------------------
     |
-    | The routing configuration of the admin page, including the path prefix,
-    | the controller namespace, and the default middleware. If you want to
-    | access through the root path, just set the prefix to empty string.
+    | The routing configuration of the admin page,
+    | including the path prefix, the controller namespace, the default middleware and routing alias prefix.
+    | If you want to access through the root path,
+    | just set the prefix to empty string,
+    | but routing alias prefix cannot empty.
     |
     */
     'route' => [
@@ -54,7 +56,7 @@ return [
 
         'middleware' => ['web', 'admin'],
 
-        'as' => 'admin.',
+        'as' => 'admin',
     ],
 
     /*
