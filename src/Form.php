@@ -641,7 +641,7 @@ class Form implements Renderable
 
         $data = $this->handleFileDelete($data);
 
-        $data = $this->handleFileSort($data);
+        $data = $this->handleFileSort($id, $data);
 
         if ($this->handleOrderable($id, $data)) {
             return response([
@@ -695,7 +695,7 @@ class Form implements Renderable
      *
      * @return array
      */
-    protected function handleFileSort(array $input = []): array
+    protected function handleFileSort($id, array $input = []): array
     {
         if (!array_key_exists(Field::FILE_SORT_FLAG, $input)) {
             return $input;
@@ -707,6 +707,19 @@ class Form implements Renderable
             return $input;
         }
 
+        foreach ($sorts as &$value)
+            $value = explode(',', $value);
+
+        $record = $this->model::find($id);
+
+        foreach ($sorts as $sorted_field => $sorted_order) {
+            $temp = [];
+            foreach ($sorted_order as $item)
+                $temp[] = $record[$sorted_field][$item];
+
+            $record->update([$sorted_field => $temp]);
+        }
+        
         foreach ($sorts as $column => $order) {
             $input[$column] = $order;
         }
