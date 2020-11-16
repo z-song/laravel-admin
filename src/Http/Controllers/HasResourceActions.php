@@ -2,8 +2,27 @@
 
 namespace Encore\Admin\Http\Controllers;
 
+use Encore\Admin\Actions\Response;
+
 trait HasResourceActions
 {
+    protected $response;
+
+    /**
+     * @param string $plugin 'swal' or 'toastr'
+     * @return Response
+     */
+    public function response($plugin = 'swal')
+    {
+        if (is_null($this->response)) {
+            $this->response = new Response();
+        }
+
+        $this->response->$plugin();
+
+        return $this->response;
+    }
+
     /**
      * Update the specified resource in storage.
      *
