@@ -16,6 +16,10 @@ class DateRange extends Field
     ];
 
     protected $format = 'YYYY-MM-DD';
+    protected $startOptions = [];
+    protected $endOptions = [];
+    protected $startOptionsJson;
+    protected $endOptionsJson;
 
     /**
      * Column name.
@@ -34,7 +38,44 @@ class DateRange extends Field
         $this->id = $this->formatId($this->column);
 
         $this->options(['format' => $this->format]);
+        $this->options['locale'] = config('app.locale');
+
     }
+
+    public function format($format)
+    {
+        $this->format = $format;
+        $this->options(['format' => $this->format]);
+        return $this;
+    }
+
+    public function defaultStart($date)
+    {
+        $this->startOptions(["defaultDate" => $date]);
+        return $this;
+    }
+
+    public function defaultEnd($date)
+    {
+        $this->endOptions(["defaultDate" => $date]);
+        return $this;
+    }
+
+    public function startOptions(Array $opt = []){
+        $result = array_merge($this->options, $opt);
+        $this->startOptions = array_merge($this->startOptions, $result);
+        $this->startOptionsJson = json_encode($this->startOptions);
+        return $this;
+    }
+
+
+    public function endOptions(Array $opt = []){
+        $result = array_merge($this->options, $opt);
+        $this->endOptions = array_merge($this->endOptions, $result);
+        $this->endOptionsJson = json_encode($this->endOptions);
+        return $this;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -50,16 +91,14 @@ class DateRange extends Field
 
     public function render()
     {
-        $this->options['locale'] = config('app.locale');
-
-        $startOptions = json_encode($this->options);
-        $endOptions = json_encode($this->options + ['useCurrent' => false]);
+        $this->startOptions();
+        $this->endOptions();
 
         $class = $this->getElementClassSelector();
 
         $this->script = <<<EOT
-            $('{$class['start']}').datetimepicker($startOptions);
-            $('{$class['end']}').datetimepicker($endOptions);
+            $('{$class['start']}').datetimepicker($this->startOptionsJson);
+            $('{$class['end']}').datetimepicker($this->endOptionsJson);
             $("{$class['start']}").on("dp.change", function (e) {
                 $('{$class['end']}').data("DateTimePicker").minDate(e.date);
             });
