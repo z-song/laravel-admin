@@ -170,7 +170,7 @@ class Form implements Renderable
     }
 
     /**
-     * @return array
+     * @return $this
      */
     public function confirm($message)
     {
@@ -556,7 +556,6 @@ SCRIPT;
         $script = <<<SCRIPT
 ;(function () {
     $('form#{$id}').submit(function (e) {
-        e.preventDefault();
         $(this).find('div.cascade-group.hide :input').attr('disabled', true);
     });
 })();
