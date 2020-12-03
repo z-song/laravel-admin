@@ -130,22 +130,23 @@ abstract class Action implements Renderable
     public function selector($prefix)
     {
         if (is_null($this->selector)) {
-            return static::makeSelector(get_called_class().spl_object_id($this), $prefix);
+            return static::makeSelector($prefix);
         }
 
         return $this->selector;
     }
 
     /**
-     * @param string $class
      * @param string $prefix
      *
      * @return string
      */
-    public static function makeSelector($class, $prefix)
+    public static function makeSelector($prefix)
     {
+        $class = get_called_class();
+
         if (!isset(static::$selectors[$class])) {
-            static::$selectors[$class] = uniqid($prefix).mt_rand(1000, 9999);
+            static::$selectors[$class] = $prefix . strtolower(class_basename($class));
         }
 
         return static::$selectors[$class];

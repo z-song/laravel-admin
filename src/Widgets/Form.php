@@ -170,7 +170,7 @@ class Form implements Renderable
     }
 
     /**
-     * @return array
+     * @return $this
      */
     public function confirm($message)
     {
