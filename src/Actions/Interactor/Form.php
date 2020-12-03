@@ -525,7 +525,7 @@ class Form extends Interactor
         var modalId = $(this).attr('modal');
         Object.assign(data, {$parameters});
         {$this->action->actionScript()}
-		$('#'+modalId).removeAttr('tabindex').modal('show');
+        $('#'+modalId).removeAttr('tabindex').modal('show');
         $('#'+modalId+' form').off('submit').on('submit', function (e) {
             e.preventDefault();
             var form = this;
