@@ -10,9 +10,9 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Class Administrator.
+ * Class User.
  */
-class Administrator extends Model implements AuthenticatableContract
+class User extends Model implements AuthenticatableContract
 {
     use Authenticatable;
     use DefaultDatetimeFormat;

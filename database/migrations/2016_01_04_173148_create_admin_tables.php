@@ -28,10 +28,11 @@ class CreateAdminTables extends Migration
             $table->string('name');
             $table->string('avatar')->nullable();
             $table->string('remember_token', 100)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 
-        Schema::create(config('admin.database.menu_table'), function (Blueprint $table) {
+        Schema::create(config('admin.database.menus_table'), function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id')->default(0);
             $table->integer('order')->default(0);
@@ -39,7 +40,7 @@ class CreateAdminTables extends Migration
             $table->string('icon', 50);
             $table->string('uri')->nullable();
             $table->string('group')->nullable();
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -52,6 +53,6 @@ class CreateAdminTables extends Migration
     public function down()
     {
         Schema::dropIfExists(config('admin.database.users_table'));
-        Schema::dropIfExists(config('admin.database.menu_table'));
+        Schema::dropIfExists(config('admin.database.menus_table'));
     }
 }

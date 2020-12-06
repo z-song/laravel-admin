@@ -4,7 +4,7 @@ class AuthTest extends TestCase
 {
     public function testLoginPage()
     {
-        $this->visit('admin/auth/login')
+        $this->visit('admin/login')
             ->see('login');
     }
 
@@ -12,14 +12,14 @@ class AuthTest extends TestCase
     {
         $this->visit('admin')
             ->dontSeeIsAuthenticated('admin')
-            ->seePageIs('admin/auth/login');
+            ->seePageIs('admin/login');
     }
 
     public function testLogin()
     {
         $credentials = ['username' => 'admin', 'password' => 'admin'];
 
-        $this->visit('admin/auth/login')
+        $this->visit('admin/login')
             ->see('login')
             ->submitForm('Login', $credentials)
             ->see('dashboard')
@@ -52,8 +52,8 @@ class AuthTest extends TestCase
 
     public function testLogout()
     {
-        $this->visit('admin/auth/logout')
-            ->seePageIs('admin/auth/login')
+        $this->visit('admin/logout')
+            ->seePageIs('admin/login')
             ->dontSeeIsAuthenticated('admin');
     }
 }

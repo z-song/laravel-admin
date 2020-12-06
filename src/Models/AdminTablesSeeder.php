@@ -14,36 +14,42 @@ class AdminTablesSeeder extends Seeder
     public function run()
     {
         // create a user.
-        Administrator::truncate();
-        Administrator::create([
+        User::truncate();
+        User::create([
             'username' => 'admin',
             'password' => bcrypt('admin'),
-            'name'     => 'Administrator',
+            'name'     => trans('admin.administrator'),
         ]);
 
         // add default menus.
         Menu::truncate();
         Menu::insert([
             [
-                'parent_id' => 0,
-                'order'     => 1,
-                'title'     => 'Home',
-                'icon'      => 'fas fa-tachometer-alt',
-                'uri'       => '/',
+                'parent_id'   => 0,
+                'order'       => 1,
+                'title'       => trans('admin.home'),
+                'icon'        => 'fas fa-tachometer-alt',
+                'uri'         => '/',
+                'created_at'  => date('Y-m-d H:i:s'),
+                'updated_at'  => date('Y-m-d H:i:s'),
             ],
             [
                 'parent_id' => 0,
                 'order'     => 2,
-                'title'     => 'Users',
+                'title'     => trans('admin.auth_users'),
                 'icon'      => 'fas fa-users',
-                'uri'       => 'auth/users',
+                'uri'       => 'auth_users',
+                'created_at'  => date('Y-m-d H:i:s'),
+                'updated_at'  => date('Y-m-d H:i:s'),
             ],
             [
                 'parent_id' => 0,
                 'order'     => 3,
-                'title'     => 'Menu',
+                'title'     => trans('admin.auth_menus'),
                 'icon'      => 'fas fa-bars',
-                'uri'       => 'auth/menu',
+                'uri'       => 'auth_menus',
+                'created_at'  => date('Y-m-d H:i:s'),
+                'updated_at'  => date('Y-m-d H:i:s'),
             ],
         ]);
     }

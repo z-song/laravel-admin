@@ -4,6 +4,7 @@ Route::group([
     'prefix'     => config('admin.route.prefix'),
     'namespace'  => 'Tests\Controllers',
     'middleware' => ['web', 'admin'],
+    'as' => 'admin',
 ], function ($router) {
     $router->resource('images', ImageController::class);
     $router->resource('multiple-images', MultipleImageController::class);

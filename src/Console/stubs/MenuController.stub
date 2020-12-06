@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+use Encore\Admin\Http\Controllers\Auth\MenuController as BaseMenuController;
+
+class MenuController extends BaseMenuController
+{
+
+}

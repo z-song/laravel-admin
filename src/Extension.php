@@ -255,7 +255,7 @@ abstract class Extension
     {
         return [
             'title'    => 'required',
-            'path'     => ['required', Rule::unique(Config::get('admin.database.menu_table'), 'uri')],
+            'path'     => ['required', Rule::unique(Config::get('admin.database.menus_table'), 'uri')],
             'icon'     => 'required',
             'children' => 'nullable|array',
         ];
@@ -276,7 +276,7 @@ abstract class Extension
      */
     protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0, array $children = [])
     {
-        $menuModel = config('admin.database.menu_model');
+        $menuModel = config('admin.database.menus_model');
 
         $lastOrder = $menuModel::max('order');
         /**

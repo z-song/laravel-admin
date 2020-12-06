@@ -73,10 +73,12 @@ class InstallCommand extends Command
         $this->makeDir('/');
         $this->line('<info>Admin directory was created:</info> '.str_replace(base_path(), '', $this->directory));
 
-        $this->makeDir('Controllers');
+        $this->makeDir('Controllers/Auth');
 
         $this->createHomeController();
         $this->createAuthController();
+        $this->createUserController();
+        $this->createMenuController();
         $this->createExampleController();
 
         $this->createBootstrapFile();
@@ -107,14 +109,48 @@ class InstallCommand extends Command
      */
     public function createAuthController()
     {
-        $authController = $this->directory.'/Controllers/AuthController.php';
+        $authController = $this->directory.'/Controllers/Auth/AuthController.php';
         $contents = $this->getStub('AuthController');
 
         $this->laravel['files']->put(
             $authController,
-            str_replace('DummyNamespace', config('admin.route.namespace'), $contents)
+            str_replace('DummyNamespace', config('admin.route.namespace').'\\Auth', $contents)
         );
         $this->line('<info>AuthController file was created:</info> '.str_replace(base_path(), '', $authController));
+    }
+
+    /**
+     * Create UserController.
+     *
+     * @return void
+     */
+    public function createUserController()
+    {
+        $userController = $this->directory.'/Controllers/Auth/UserController.php';
+        $contents = $this->getStub('UserController');
+
+        $this->laravel['files']->put(
+            $userController,
+            str_replace('DummyNamespace', config('admin.route.namespace').'\\Auth', $contents)
+        );
+        $this->line('<info>UserController file was created:</info> '.str_replace(base_path(), '', $userController));
+    }
+
+    /**
+     * Create MenuController.
+     *
+     * @return void
+     */
+    public function createMenuController()
+    {
+        $menuController = $this->directory.'/Controllers/Auth/MenuController.php';
+        $contents = $this->getStub('MenuController');
+
+        $this->laravel['files']->put(
+            $menuController,
+            str_replace('DummyNamespace', config('admin.route.namespace').'\\Auth', $contents)
+        );
+        $this->line('<info>MenuController file was created:</info> '.str_replace(base_path(), '', $menuController));
     }
 
     /**

@@ -2,6 +2,14 @@
     min-height: calc(100vh - calc(2.341rem + 1px) - calc(3.5rem + 1px));
 }
 
+i.fas,
+i.fas:before,
+i.fa,
+i.fa:before {
+    width: 17px;
+    text-align: center;
+}
+
 input.content {
     min-height: 0 !important;
     padding: 6px 12px !important;

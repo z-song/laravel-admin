@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+use Encore\Admin\Http\Controllers\Auth\UserController as BaseUserController;
+
+class UserController extends BaseUserController
+{
+
+}

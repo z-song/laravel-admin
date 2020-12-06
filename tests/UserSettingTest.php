@@ -1,6 +1,6 @@
 <?php
 
-use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Models\User;
 use Illuminate\Support\Facades\File;
 
 class UserSettingTest extends TestCase
@@ -9,12 +9,12 @@ class UserSettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(Administrator::first(), 'admin');
+        $this->be(User::first(), 'admin');
     }
 
     public function testVisitSettingPage()
     {
-        $this->visit('admin/auth/setting')
+        $this->visit('admin/self_setting')
             ->see('User setting')
             ->see('Username')
             ->see('Name')
@@ -32,9 +32,9 @@ class UserSettingTest extends TestCase
             'name' => 'tester',
         ];
 
-        $this->visit('admin/auth/setting')
+        $this->visit('admin/self_setting')
             ->submitForm('Submit', $data)
-            ->seePageIs('admin/auth/setting');
+            ->seePageIs('admin/self_setting');
 
         $this->seeInDatabase('admin_users', ['name' => $data['name']]);
     }
@@ -43,12 +43,12 @@ class UserSettingTest extends TestCase
     {
         File::cleanDirectory(public_path('uploads/images'));
 
-        $this->visit('admin/auth/setting')
+        $this->visit('admin/self_setting')
             ->attach(__DIR__.'/assets/test.jpg', 'avatar')
             ->press('Submit')
-            ->seePageIs('admin/auth/setting');
+            ->seePageIs('admin/self_setting');
 
-        $avatar = Administrator::first()->avatar;
+        $avatar = User::first()->avatar;
 
         $this->assertEquals('http://localhost:8000/uploads/images/test.jpg', $avatar);
     }
@@ -60,9 +60,9 @@ class UserSettingTest extends TestCase
             'password_confirmation' => '123',
         ];
 
-        $this->visit('admin/auth/setting')
+        $this->visit('admin/self_setting')
             ->submitForm('Submit', $data)
-            ->seePageIs('admin/auth/setting')
+            ->seePageIs('admin/self_setting')
             ->see('The Password confirmation does not match.');
     }
 
@@ -73,11 +73,11 @@ class UserSettingTest extends TestCase
             'password_confirmation' => '123456',
         ];
 
-        $this->visit('admin/auth/setting')
+        $this->visit('admin/self_setting')
             ->submitForm('Submit', $data)
-            ->seePageIs('admin/auth/setting');
+            ->seePageIs('admin/self_setting');
 
-        $this->assertTrue(app('hash')->check($data['password'], Administrator::first()->makeVisible('password')->password));
+        $this->assertTrue(app('hash')->check($data['password'], User::first()->makeVisible('password')->password));
 
         $this->visit('admin/auth/logout')
             ->seePageIs('admin/auth/login')

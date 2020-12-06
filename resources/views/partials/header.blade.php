@@ -34,12 +34,12 @@
                 <i class="far fa-user"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                <a href="{{ admin_url('auth/logout') }}" class="dropdown-item">
+                <a href="{{ admin_url('logout') }}" class="dropdown-item">
                     <i class="fas fa-sign-out-alt mr-2"></i> {{ admin_trans('admin.logout') }}
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="{{ admin_url('auth/setting') }}" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> {{ admin_trans('admin.setting') }}
+                <a href="{{ admin_url('self_setting') }}" class="dropdown-item">
+                    <i class="fas fa-file mr-2"></i> {{ admin_trans('admin.self_setting') }}
                 </a>
             </div>
         </li>

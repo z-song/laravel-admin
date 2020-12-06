@@ -54,7 +54,7 @@ return [
 
         'middleware' => ['web', 'admin'],
 
-        'as' => 'admin.',
+        'as' => 'admin',
     ],
 
     /*
@@ -101,8 +101,8 @@ return [
     |
     */
     'auth' => [
-
-        'controller' => App\Admin\Controllers\AuthController::class,
+        // Turn on when you need to rewrite
+//        'controller' => App\Admin\Controllers\Auth\AuthController::class,
 
         'guard' => 'admin',
 
@@ -116,7 +116,7 @@ return [
         'providers' => [
             'admin' => [
                 'driver' => 'eloquent',
-                'model'  => Encore\Admin\Models\Administrator::class,
+                'model'  => Encore\Admin\Models\User::class,
             ],
         ],
 
@@ -124,12 +124,12 @@ return [
         'remember' => true,
 
         // Redirect to the specified URI when user is not authorized.
-        'redirect_to' => 'auth/login',
+        'redirect_to' => 'login',
 
         // The URIs that should be excluded from authorization.
         'excepts' => [
-            'auth/login',
-            'auth/logout',
+            'login',
+            'logout',
         ],
     ],
 
@@ -178,13 +178,17 @@ return [
         // Database connection for following tables.
         'connection' => '',
 
-        // User tables and model.
+        // User tables model and controller.
         'users_table' => 'admin_users',
-        'users_model' => Encore\Admin\Models\Administrator::class,
+        'users_model' => Encore\Admin\Models\User::class,
+        // Turn on when you need to rewrite
+//        'users_controller' => App\Admin\Controllers\Auth\UserController::class,
 
-        // Menu table and model.
-        'menu_table' => 'admin_menu',
-        'menu_model' => Encore\Admin\Models\Menu::class,
+        // Menu table model and controller.
+        'menus_table' => 'admin_menus',
+        'menus_model' => Encore\Admin\Models\Menu::class,
+        // Turn on when you need to rewrite
+//        'menus_controller' => App\Admin\Controllers\Auth\MenuController::class,
     ],
 
     /*

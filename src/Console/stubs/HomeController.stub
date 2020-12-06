@@ -13,8 +13,8 @@ class HomeController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->title('Dashboard')
-            ->description('Description...')
+            ->title(trans('admin.home'))
+            ->description(trans('admin.description'))
             ->row(Dashboard::title())
             ->row(function (Row $row) {
 

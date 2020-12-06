@@ -1,8 +1,9 @@
 <?php
 
-namespace Encore\Admin\Http\Controllers;
+namespace Encore\Admin\Http\Controllers\Auth;
 
 use Encore\Admin\Form;
+use Encore\Admin\Http\Controllers\AdminController;
 use Encore\Admin\Show;
 use Encore\Admin\Table;
 
@@ -13,7 +14,7 @@ class UserController extends AdminController
      */
     public function title()
     {
-        return trans('admin.administrator');
+        return trans('admin.auth_users');
     }
 
     /**
