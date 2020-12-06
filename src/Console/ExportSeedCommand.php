@@ -38,8 +38,8 @@ class ExportSeedCommand extends Command
 
         $replaces = [
             'DummyClass'      => $name,
-            'ClassMenu'       => config('admin.database.menu_model'),
-            'ArrayMenu'       => $this->getTableDataArrayAsString(config('admin.database.menu_table'), $exceptFields),
+            'ClassMenu'       => config('admin.database.menus_model'),
+            'ArrayMenu'       => $this->getTableDataArrayAsString(config('admin.database.menus_table'), $exceptFields),
         ];
 
         if ($exportUsers) {
