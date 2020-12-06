@@ -36,14 +36,14 @@ class AdminTablesSeeder extends Seeder
                 'order'     => 2,
                 'title'     => 'Users',
                 'icon'      => 'fas fa-users',
-                'uri'       => 'auth/users',
+                'uri'       => 'auth_users',
             ],
             [
                 'parent_id' => 0,
                 'order'     => 3,
                 'title'     => 'Menu',
                 'icon'      => 'fas fa-bars',
-                'uri'       => 'auth/menu',
+                'uri'       => 'auth_menus',
             ],
         ]);
     }

@@ -54,7 +54,7 @@ return [
 
         'middleware' => ['web', 'admin'],
 
-        'as' => 'admin.',
+        'as' => 'admin',
     ],
 
     /*

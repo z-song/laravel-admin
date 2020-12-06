@@ -17,7 +17,7 @@ trait BuiltinRoutes
         $attributes = [
             'prefix'     => config('admin.route.prefix'),
             'middleware' => config('admin.route.middleware'),
-            'as'         => config('admin.route.as'),
+            'as'         => config('admin.route.as').'.',
         ];
 
         app('router')->group($attributes, function ($router) {
@@ -26,8 +26,8 @@ trait BuiltinRoutes
             $router->namespace('\Encore\Admin\Http\Controllers')->group(function ($router) {
 
                 /* @var \Illuminate\Routing\Router $router */
-                $router->resource('auth/users', 'UserController')->names('auth_users');
-                $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('auth_menus');
+                $router->resource('auth_users', 'UserController')->names('auth_users');
+                $router->resource('auth_menus', 'MenuController')->except(['create', 'show'])->names('auth_menus');
 
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('handle_form');
                 $router->post('_handle_action_', 'HandleController@handleAction')->name('handle_action');
@@ -35,7 +35,7 @@ trait BuiltinRoutes
                 $router->get('_handle_renderable_', 'HandleController@handleRenderable')->name('handle_renderable');
 
                 // requirejs配置
-                $router->get('_require_config', 'PagesController@requireConfig')->name('require-config');
+                $router->get('_require_config', 'PagesController@requireConfig')->name('require_config');
 
                 $router->fallback('PagesController@error404')->name('error404');
             });
