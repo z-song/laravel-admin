@@ -17,7 +17,7 @@ trait BuiltinRoutes
         $attributes = [
             'prefix'     => config('admin.route.prefix'),
             'middleware' => config('admin.route.middleware'),
-            'as'         => config('admin.route.as'),
+            'as'         => config('admin.route.as').'.',
         ];
 
         app('router')->group($attributes, function ($router) {
@@ -35,7 +35,7 @@ trait BuiltinRoutes
                 $router->get('_handle_renderable_', 'HandleController@handleRenderable')->name('handle_renderable');
 
                 // requirejs配置
-                $router->get('_require_config', 'PagesController@requireConfig')->name('require-config');
+                $router->get('_require_config', 'PagesController@requireConfig')->name('require_config');
 
                 $router->fallback('PagesController@error404')->name('error404');
             });
