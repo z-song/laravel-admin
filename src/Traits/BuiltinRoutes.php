@@ -26,7 +26,7 @@ trait BuiltinRoutes
             $router->namespace('\Encore\Admin\Http\Controllers')->group(function ($router) {
 
                 /* @var \Illuminate\Routing\Router $router */
-                $router->resource('auth/users', 'UserController')->names('auth_users');
+                $router->resource('auth_users', 'UserController')->names('auth_users');
                 $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('auth_menus');
 
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('handle_form');
