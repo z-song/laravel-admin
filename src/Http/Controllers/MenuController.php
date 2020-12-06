@@ -33,7 +33,7 @@ class MenuController extends Controller
                     $form->title(trans('admin.new'));
                     $form->action(admin_url('auth/menu'));
 
-                    $menuModel = config('admin.database.menu_model');
+                    $menuModel = config('admin.database.menus_model');
 
                     $form->select('parent_id', trans('admin.parent_id'))->options($menuModel::selectOptions());
                     $form->text('title', trans('admin.title'))->rules('required')->prepend(new Form\Field\Icon('icon'));
@@ -63,7 +63,7 @@ class MenuController extends Controller
      */
     protected function treeView()
     {
-        $menuModel = config('admin.database.menu_model');
+        $menuModel = config('admin.database.menus_model');
 
         $tree = new Tree(new $menuModel());
 
@@ -111,7 +111,7 @@ class MenuController extends Controller
      */
     public function form()
     {
-        $menuModel = config('admin.database.menu_model');
+        $menuModel = config('admin.database.menus_model');
 
         $form = new Form(new $menuModel());
 
