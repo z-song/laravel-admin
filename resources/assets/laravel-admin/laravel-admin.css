@@ -1,3 +1,7 @@
+.text-sm .wrapper .content-wrapper {
+    min-height: calc(100vh - calc(2.341rem + 1px) - calc(3.5rem + 1px));
+}
+
 input.content {
     min-height: 0 !important;
     padding: 6px 12px !important;

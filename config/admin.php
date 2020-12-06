@@ -219,7 +219,7 @@ return [
         | Top Navigation: use the class `.layout-top-nav` to remove the sidebar and have your links at the top navbar.
         |
         */
-        'layout' => ['sidebar-mini', 'sidebar-collapse', 'text-sm'],
+        'layout' => ['sidebar-mini', 'layout-fixed', 'text-sm', 'sidebar-collapse'],
 
         /*
         |--------------------------------------------------------------------------
