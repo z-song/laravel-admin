@@ -31,7 +31,7 @@ class MenuController extends Controller
                 $row->column(6, function (Column $column) {
                     $form = new \Encore\Admin\Widgets\Form();
                     $form->title(trans('admin.new'));
-                    $form->action(admin_url('auth/menu'));
+                    $form->action(admin_url('auth_menus'));
 
                     $menuModel = config('admin.database.menus_model');
 
@@ -44,18 +44,6 @@ class MenuController extends Controller
                     $column->append($form);
                 });
             });
-    }
-
-    /**
-     * Redirect to edit page.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function show($id)
-    {
-        return redirect()->route(config('admin.route.as') . 'auth_menus.edit', ['menu' => $id]);
     }
 
     /**

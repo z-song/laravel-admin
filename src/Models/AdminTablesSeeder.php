@@ -43,7 +43,7 @@ class AdminTablesSeeder extends Seeder
                 'order'     => 3,
                 'title'     => 'Menu',
                 'icon'      => 'fas fa-bars',
-                'uri'       => 'auth/menu',
+                'uri'       => 'auth_menus',
             ],
         ]);
     }
