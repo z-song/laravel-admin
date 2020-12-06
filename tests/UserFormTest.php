@@ -1,6 +1,6 @@
 <?php
 
-use Encore\Admin\Models\User;
+use Encore\Admin\Auth\Database\Administrator;
 use Tests\Models\User as UserModel;
 
 class UserFormTest extends TestCase
@@ -9,7 +9,7 @@ class UserFormTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(User::first(), 'admin');
+        $this->be(Administrator::first(), 'admin');
     }
 
     public function testCreatePage()

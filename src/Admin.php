@@ -86,7 +86,7 @@ class Admin
             return $this->menu;
         }
 
-        $menuClass = config('admin.database.menus_model');
+        $menuClass = config('admin.database.menu_model');
 
         /** @var Menu $menuModel */
         $menuModel = new $menuClass();

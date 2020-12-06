@@ -1,6 +1,6 @@
 <?php
 
-use Encore\Admin\Models\User;
+use Encore\Admin\Auth\Database\Administrator;
 
 class IndexTest extends TestCase
 {
@@ -8,7 +8,7 @@ class IndexTest extends TestCase
     {
         parent::setUp();
 
-        $this->be(User::first(), 'admin');
+        $this->be(Administrator::first(), 'admin');
     }
 
     public function testIndex()

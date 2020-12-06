@@ -12,8 +12,8 @@
                 </div>
                 <div class="col-sm-6">
                     @if ($breadcrumb)
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ admin_url('/') }}"><i class="fa fa-home"></i> {{trans('admin.home')}}</a></li>
+                    <ol class="breadcrumb float-sm-right mr-4">
+                        <li class="breadcrumb-item"><a href="{{ admin_url('/') }}"><i class="fa fa-dashboard"></i> {{__('Home')}}</a></li>
                         @foreach($breadcrumb as $item)
                             @if($loop->last)
                                 <li class="active breadcrumb-item">
@@ -42,14 +42,12 @@
                         @endforeach
                     </ol>
                     @elseif(config('admin.enable_default_breadcrumb'))
-                    <ol class="breadcrumb float-sm-right" >
-                        <li class="breadcrumb-item"><a href="{{ admin_url('/') }}"><i class="fas fa-home"></i> {{trans('admin.home')}}</a></li>
-                        @for($i = 2; $i <= count(request()->segments()); $i++)
-                            @if(is_numeric(request()->segment($i)))
-                                <li class="breadcrumb-item">{{ request()->segment($i) }}</li>
-                            @else
-                                <li class="breadcrumb-item">{{ trans('admin.'.request()->segment($i)) }}</li>
-                            @endif
+                    <ol class="breadcrumb float-sm-right mr-4" >
+                        <li class="breadcrumb-item"><a href="{{ admin_url('/') }}"><i class="fa fa-dashboard"></i> {{__('Home')}}</a></li>
+                        @for($i = 2; $i <= count(Request::segments()); $i++)
+                            <li class="breadcrumb-item">
+                                {{ucfirst(Request::segment($i))}}
+                            </li>
                         @endfor
                     </ol>
                     @endif

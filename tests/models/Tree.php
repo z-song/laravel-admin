@@ -20,7 +20,7 @@ class Tree extends Model
 
         $this->setConnection($connection);
 
-        $this->setTable(config('admin.database.menus_table'));
+        $this->setTable(config('admin.database.menu_table'));
 
         parent::__construct($attributes);
     }

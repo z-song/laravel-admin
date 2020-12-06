@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use Encore\Admin\Http\Controllers\Auth\AuthController as BaseAuthController;
+use Encore\Admin\Http\Controllers\AuthController as BaseAuthController;
 
 class AuthController extends BaseAuthController
 {

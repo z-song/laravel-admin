@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Http\Controllers\Auth;
+namespace Encore\Admin\Http\Controllers;
 
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -38,7 +38,6 @@ class AuthController extends Controller
      * @param Request $request
      *
      * @return mixed
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function postLogin(Request $request)
     {
@@ -108,7 +107,7 @@ class AuthController extends Controller
         );
 
         return $content
-            ->title(trans('admin.self_setting'))
+            ->title(trans('admin.user_setting'))
             ->body($form->edit(Admin::user()->id));
     }
 
@@ -142,7 +141,7 @@ class AuthController extends Controller
                 return $form->model()->password;
             });
 
-        $form->setAction(admin_url('self_setting'));
+        $form->setAction(admin_url('auth/setting'));
 
         $form->ignore(['password_confirmation']);
 
@@ -155,7 +154,7 @@ class AuthController extends Controller
         $form->saved(function () {
             admin_toastr(trans('admin.update_succeeded'));
 
-            return redirect(admin_url('self_setting'));
+            return redirect(admin_url('auth/setting'));
         });
 
         return $form;

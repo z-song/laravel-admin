@@ -29,8 +29,8 @@
 
     </div>
     <!-- /.card-header -->
-    <div class="card-body">
-        <div class="dd m-0" id="{{ $id }}">
+    <div class="card-body p-0">
+        <div class="dd" id="{{ $id }}">
             <ol class="dd-list">
                 @each($branchView, $items, 'branch')
             </ol>
