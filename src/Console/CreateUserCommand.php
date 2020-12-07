@@ -3,6 +3,7 @@
 namespace Encore\Admin\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 
 class CreateUserCommand extends Command
 {
@@ -30,7 +31,7 @@ class CreateUserCommand extends Command
 
         $username = $this->ask('Please enter a username to login');
 
-        $password = bcrypt($this->secret('Please enter a password to login'));
+        $password = Hash::make($this->secret('Please enter a password to login'));
 
         $name = $this->ask('Please enter a name to display');
 

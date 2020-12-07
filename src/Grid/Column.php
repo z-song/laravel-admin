@@ -521,7 +521,7 @@ class Column
                 ($last = array_pop($this->displayCallbacks))
             ) {
                 $last = $this->bindOriginalRowModel($last, $key);
-                $value = call_user_func($last, $previous);
+                $value = call_user_func_array($last, [$previous, $this]);
             }
         }
 
