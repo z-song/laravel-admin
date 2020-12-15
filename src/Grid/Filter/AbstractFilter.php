@@ -94,6 +94,11 @@ abstract class AbstractFilter
     protected $ignore = false;
 
     /**
+     * @var bool
+     */
+	protected $ignoreRelation = false;
+	
+    /**
      * AbstractFilter constructor.
      *
      * @param $column
@@ -255,6 +260,18 @@ abstract class AbstractFilter
         $this->ignore = true;
 
         return $this;
+    }
+
+    /**
+     * Ignore relation when using table.column in filter column.
+     *
+     * @return AbstractFilter
+     */
+    public function ignoreRelation($ignore = true)
+    {
+		$this->ignoreRelation = $ignore;
+
+		return $this;
     }
 
     /**
@@ -459,6 +476,10 @@ abstract class AbstractFilter
      */
     protected function buildCondition()
     {
+		if($this->ignoreRelation) {
+			return [$this->query => func_get_args()];
+		}
+
         $column = explode('.', $this->column);
 
         if (count($column) == 1) {
