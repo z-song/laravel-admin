@@ -557,6 +557,6 @@ abstract class AbstractFilter
             return $this->presenter()->{$method}(...$params);
         }
 
-        throw new \Exception('Method "' . $method . '" not exists.');
+        throw new \Exception('Method "'.$method.'" not exists.');
     }
 }
