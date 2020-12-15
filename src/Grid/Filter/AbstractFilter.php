@@ -96,8 +96,8 @@ abstract class AbstractFilter
     /**
      * @var bool
      */
-	protected $ignoreRelation = false;
-	
+    protected $ignoreRelation = false;
+
     /**
      * AbstractFilter constructor.
      *
@@ -269,9 +269,9 @@ abstract class AbstractFilter
      */
     public function ignoreRelation($ignore = true)
     {
-		$this->ignoreRelation = $ignore;
+        $this->ignoreRelation = $ignore;
 
-		return $this;
+        return $this;
     }
 
     /**
@@ -476,9 +476,9 @@ abstract class AbstractFilter
      */
     protected function buildCondition()
     {
-		if($this->ignoreRelation) {
-			return [$this->query => func_get_args()];
-		}
+        if ($this->ignoreRelation) {
+            return [$this->query => func_get_args()];
+        }
 
         $column = explode('.', $this->column);
 
@@ -557,6 +557,6 @@ abstract class AbstractFilter
             return $this->presenter()->{$method}(...$params);
         }
 
-        throw new \Exception('Method "'.$method.'" not exists.');
+        throw new \Exception('Method "' . $method . '" not exists.');
     }
 }
