@@ -47,6 +47,6 @@ class OperationLog extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(Administrator::class);
+        return $this->belongsTo(config('admin.database.users_model'));
     }
 }
