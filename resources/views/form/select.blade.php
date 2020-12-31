@@ -48,6 +48,8 @@
                 $(target).val(target.data('value'));
             }
             $(target).trigger('change');
+        });
+
     });
     @endisset
 
