@@ -24,7 +24,7 @@
     };
     var cascade_groups = @json($cascadeGroups);
 
-    // $.admin.initialize('{$this->getElementClassSelector()}', function () {
+    $.admin.initialize('{{ $selector }}', function () {
         $(this).on('{{ $event }}', function (e, state) {
             {!! $value !!}
             var self = $(this);
@@ -37,5 +37,5 @@
                 }
             });
         })
-    // });
+    });
 </script>
