@@ -5,6 +5,7 @@ namespace Encore\Admin\Form;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Form\Field\Hidden;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -38,6 +39,11 @@ class Builder
      * @var Collection
      */
     protected $fields;
+
+    /**
+     * @var string
+     */
+    protected $confirm = '';
 
     /**
      * @var array
@@ -97,6 +103,11 @@ class Builder
     protected $title;
 
     /**
+     * @var string
+     */
+    protected $formClass;
+
+    /**
      * Builder constructor.
      *
      * @param Form $form
@@ -117,6 +128,8 @@ class Builder
     {
         $this->tools = new Tools($this);
         $this->footer = new Footer($this);
+
+        $this->formClass = uniqid('model-form-');
     }
 
     /**
@@ -154,7 +167,7 @@ class Builder
     /**
      * @return string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
     }
@@ -166,9 +179,37 @@ class Builder
      *
      * @return bool
      */
-    public function isMode($mode)
+    public function isMode($mode): bool
     {
-        return $this->mode == $mode;
+        return $this->mode === $mode;
+    }
+
+    /**
+     * Check if is creating resource.
+     *
+     * @return bool
+     */
+    public function isCreating(): bool
+    {
+        return $this->isMode(static::MODE_CREATE);
+    }
+
+    /**
+     * Check if is editing resource.
+     *
+     * @return bool
+     */
+    public function isEditing(): bool
+    {
+        return $this->isMode(static::MODE_EDIT);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->form->model();
     }
 
     /**
@@ -194,11 +235,13 @@ class Builder
     }
 
     /**
+     * @param int|null $slice
+     *
      * @return string
      */
-    public function getResource($slice = null)
+    public function getResource(int $slice = null): string
     {
-        if ($this->mode == self::MODE_CREATE) {
+        if ($this->mode === self::MODE_CREATE) {
             return $this->form->resource(-1);
         }
         if ($slice !== null) {
@@ -214,7 +257,7 @@ class Builder
      *
      * @return $this
      */
-    public function setWidth($field = 8, $label = 2)
+    public function setWidth($field = 8, $label = 2): self
     {
         $this->width = [
             'label' => $label,
@@ -229,7 +272,7 @@ class Builder
      *
      * @return array
      */
-    public function getWidth()
+    public function getWidth(): array
     {
         return $this->width;
     }
@@ -249,7 +292,7 @@ class Builder
      *
      * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         if ($this->action) {
             return $this->action;
@@ -273,7 +316,7 @@ class Builder
      *
      * @return $this
      */
-    public function setView($view)
+    public function setView($view): self
     {
         $this->view = $view;
 
@@ -287,7 +330,7 @@ class Builder
      *
      * @return $this
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -299,7 +342,7 @@ class Builder
      *
      * @return Collection
      */
-    public function fields()
+    public function fields(): Collection
     {
         return $this->fields;
     }
@@ -314,34 +357,14 @@ class Builder
     public function field($name)
     {
         return $this->fields()->first(function (Field $field) use ($name) {
-            return $field->column() == $name;
+            return $field->column() === $name;
         });
     }
 
     /**
-     * If the parant form has rows.
-     *
-     * @return bool
-     */
-    public function hasRows()
-    {
-        return !empty($this->form->rows);
-    }
-
-    /**
-     * Get field rows of form.
-     *
      * @return array
      */
-    public function getRows()
-    {
-        return $this->form->rows;
-    }
-
-    /**
-     * @return array
-     */
-    public function getHiddenFields()
+    public function getHiddenFields(): array
     {
         return $this->hiddenFields;
     }
@@ -382,8 +405,8 @@ class Builder
      */
     public function option($option, $value = null)
     {
-        if (func_num_args() == 1) {
-            return array_get($this->options, $option);
+        if (func_num_args() === 1) {
+            return Arr::get($this->options, $option);
         }
 
         $this->options[$option] = $value;
@@ -394,17 +417,17 @@ class Builder
     /**
      * @return string
      */
-    public function title()
+    public function title(): string
     {
         if ($this->title) {
             return $this->title;
         }
 
-        if ($this->mode == static::MODE_CREATE) {
+        if ($this->mode === static::MODE_CREATE) {
             return trans('admin.create');
         }
 
-        if ($this->mode == static::MODE_EDIT) {
+        if ($this->mode === static::MODE_EDIT) {
             return trans('admin.edit');
         }
 
@@ -416,15 +439,11 @@ class Builder
      *
      * @return bool
      */
-    public function hasFile()
+    public function hasFile(): bool
     {
-        foreach ($this->fields() as $field) {
-            if ($field instanceof Field\File) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->fields()->contains(function ($field) {
+            return $field instanceof Field\File || $field instanceof Field\MultipleFile;
+        });
     }
 
     /**
@@ -436,12 +455,14 @@ class Builder
     {
         $previous = URL::previous();
 
-        if (!$previous || $previous == URL::current()) {
+        if (!$previous || $previous === URL::current()) {
             return;
         }
 
         if (Str::contains($previous, url($this->getResource()))) {
-            $this->addHiddenField((new Hidden(static::PREVIOUS_URL_KEY))->value($previous));
+            $this->addHiddenField(
+                (new Hidden(static::PREVIOUS_URL_KEY))->value($previous)
+            );
         }
     }
 
@@ -452,7 +473,7 @@ class Builder
      *
      * @return string
      */
-    public function open($options = [])
+    public function open($options = []): string
     {
         $attributes = [];
 
@@ -463,21 +484,15 @@ class Builder
         $this->addRedirectUrlField();
 
         $attributes['action'] = $this->getAction();
-        $attributes['method'] = array_get($options, 'method', 'post');
+        $attributes['method'] = Arr::get($options, 'method', 'post');
+        $attributes['class'] = implode(' ', ['form-horizontal', $this->formClass]);
         $attributes['accept-charset'] = 'UTF-8';
-
-        $attributes['class'] = array_get($options, 'class');
 
         if ($this->hasFile()) {
             $attributes['enctype'] = 'multipart/form-data';
         }
 
-        $html = [];
-        foreach ($attributes as $name => $value) {
-            $html[] = "$name=\"$value\"";
-        }
-
-        return '<form '.implode(' ', $html).' pjax-container>';
+        return '<form '.admin_attrs($attributes).'>';
     }
 
     /**
@@ -485,7 +500,7 @@ class Builder
      *
      * @return string
      */
-    public function close()
+    public function close(): string
     {
         $this->form = null;
         $this->fields = null;
@@ -494,24 +509,39 @@ class Builder
     }
 
     /**
+     * @param string $message
+     */
+    public function confirm(string $message)
+    {
+        $this->confirm = $message;
+
+        return $this;
+    }
+
+    /**
      * Remove reserved fields like `id` `created_at` `updated_at` in form fields.
      *
      * @return void
      */
-    protected function removeReservedFields()
+    protected function hideReservedFields()
     {
-        if (!$this->isMode(static::MODE_CREATE)) {
+        if (!$this->isCreating()) {
             return;
         }
 
-        $reservedColumns = [
-            $this->form->model()->getKeyName(),
-            $this->form->model()->getCreatedAtColumn(),
-            $this->form->model()->getUpdatedAtColumn(),
+        $reserved = [
+            $this->getModel()->getCreatedAtColumn(),
+            $this->getModel()->getUpdatedAtColumn(),
         ];
 
-        $this->fields = $this->fields()->reject(function (Field $field) use ($reservedColumns) {
-            return in_array($field->column(), $reservedColumns);
+        if ($this->getModel()->incrementing) {
+            $reserved[] = $this->getModel()->getKeyName();
+        }
+
+        $this->fields()->each(function (Field $field) use ($reserved) {
+            if (in_array($field->column(), $reserved, true)) {
+                $field->setDisplay(false);
+            }
         });
     }
 
@@ -520,7 +550,7 @@ class Builder
      *
      * @return string
      */
-    public function renderTools()
+    public function renderTools(): string
     {
         return $this->tools->render();
     }
@@ -530,7 +560,7 @@ class Builder
      *
      * @return string
      */
-    public function renderFooter()
+    public function renderFooter(): string
     {
         return $this->footer->render();
     }
@@ -540,45 +570,24 @@ class Builder
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
-        $this->removeReservedFields();
-
-        $tabObj = $this->form->getTab();
-
-        if (!$tabObj->isEmpty()) {
-            $script = <<<'SCRIPT'
-
-var hash = document.location.hash;
-if (hash) {
-    $('.nav-tabs a[href="' + hash + '"]').tab('show');
-}
-
-// Change hash for page-reload
-$('.nav-tabs a').on('shown.bs.tab', function (e) {
-    history.pushState(null,null, e.target.hash);
-});
-
-if ($('.has-error').length) {
-    $('.has-error').each(function () {
-        var tabId = '#'+$(this).closest('.tab-pane').attr('id');
-        $('li a[href="'+tabId+'"] i').removeClass('hide');
-    });
-
-    var first = $('.has-error:first').closest('.tab-pane').attr('id');
-    $('li a[href="#'+first+'"]').tab('show');
-}
-
-SCRIPT;
-            Admin::script($script);
+        if ($this->form->isHorizontal()) {
+            $this->fields()->each(function (Field $field) {
+                $field->horizontal()
+                    ->setWidth($this->width['field'], $this->width['label']);
+            });
         }
 
-        $data = [
-            'form'   => $this,
-            'tabObj' => $tabObj,
-            'width'  => $this->width,
-        ];
+        $this->hideReservedFields();
 
-        return view($this->view, $data)->render();
+        return Admin::view($this->view, [
+            'form'   => $this,
+            'rows'   => $this->form->getRows(),
+            'confirm'=> $this->confirm,
+            'class'  => $this->formClass,
+            'tabObj' => $this->form->getTab(),
+            'width'  => $this->width,
+        ]);
     }
 }

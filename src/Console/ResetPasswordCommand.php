@@ -2,7 +2,6 @@
 
 namespace Encore\Admin\Console;
 
-use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Console\Command;
 
 class ResetPasswordCommand extends Command
@@ -26,14 +25,12 @@ class ResetPasswordCommand extends Command
      */
     public function handle()
     {
-        $users = Administrator::all();
+        $userModel = config('admin.database.users_model');
 
         askForUserName:
-        $username = $this->askWithCompletion('Please enter a username who needs to reset his password', $users->pluck('username')->toArray());
+        $username = $this->ask('Please enter a username who needs to reset his password');
 
-        $user = $users->first(function ($user) use ($username) {
-            return $user->username == $username;
-        });
+        $user = $userModel::query()->where('username', $username)->first();
 
         if (is_null($user)) {
             $this->error('The user you entered is not exists');

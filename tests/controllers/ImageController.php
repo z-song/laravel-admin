@@ -2,79 +2,32 @@
 
 namespace Tests\Controllers;
 
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\ModelForm;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
+use Encore\Admin\Http\Controllers\AdminController;
+use Encore\Admin\Table;
 use Tests\Models\Image;
 
-class ImageController extends Controller
+class ImageController extends AdminController
 {
-    use ModelForm;
+    protected $title = 'Images';
 
     /**
-     * Index interface.
+     * Make a table builder.
      *
-     * @return Content
+     * @return Table
      */
-    public function index()
+    protected function table()
     {
-        return Admin::content(function (Content $content) {
-            $content->header('header');
-            $content->description('description');
+        $table = new Table(new Image());
 
-            $content->body($this->grid());
-        });
-    }
+        $table->id('ID')->sortable();
 
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     *
-     * @return Content
-     */
-    public function edit($id)
-    {
-        return Admin::content(function (Content $content) use ($id) {
-            $content->header('header');
-            $content->description('description');
+        $table->created_at();
+        $table->updated_at();
 
-            $content->body($this->form()->edit($id));
-        });
-    }
+        $table->disableFilter();
 
-    /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-            $content->header('Upload image');
-
-            $content->body($this->form());
-        });
-    }
-
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return Admin::grid(Image::class, function (Grid $grid) {
-            $grid->id('ID')->sortable();
-
-            $grid->created_at();
-            $grid->updated_at();
-
-            $grid->disableFilter();
-        });
+        return $table;
     }
 
     /**
@@ -84,20 +37,22 @@ class ImageController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Image::class, function (Form $form) {
-            $form->display('id', 'ID');
+        $form = new Form(new Image());
 
-            $form->image('image1');
-            $form->image('image2')->rotate(90);
-            $form->image('image3')->flip('v');
-            $form->image('image4')->move(null, 'renamed.jpeg');
-            $form->image('image5')->name(function ($file) {
-                return 'asdasdasdasdasd.'.$file->guessExtension();
-            });
-            $form->image('image6')->uniqueName();
+        $form->display('id', 'ID');
 
-            $form->display('created_at', 'Created At');
-            $form->display('updated_at', 'Updated At');
+        $form->image('image1');
+        $form->image('image2')->rotate(90);
+        $form->image('image3')->flip('v');
+        $form->image('image4')->move(null, 'renamed.jpeg');
+        $form->image('image5')->name(function ($file) {
+            return 'asdasdasdasdasd.'.$file->guessExtension();
         });
+        $form->image('image6')->uniqueName();
+
+        $form->display('created_at', 'Created At');
+        $form->display('updated_at', 'Updated At');
+
+        return $form;
     }
 }

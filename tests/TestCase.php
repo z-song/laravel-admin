@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
@@ -30,7 +31,7 @@ class TestCase extends BaseTestCase
         return $app;
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -38,14 +39,14 @@ class TestCase extends BaseTestCase
 
         $this->app['config']->set('database.default', 'mysql');
         $this->app['config']->set('database.connections.mysql.host', env('MYSQL_HOST', 'localhost'));
-        $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
-        $this->app['config']->set('database.connections.mysql.username', 'root');
-        $this->app['config']->set('database.connections.mysql.password', '');
+        $this->app['config']->set('database.connections.mysql.database', env('MYSQL_DATABASE', 'laravel_admin_test'));
+        $this->app['config']->set('database.connections.mysql.username', env('MYSQL_USER', 'root'));
+        $this->app['config']->set('database.connections.mysql.password', env('MYSQL_PASSWORD', ''));
         $this->app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
         $this->app['config']->set('admin', $adminConfig);
 
-        foreach (array_dot(array_get($adminConfig, 'auth'), 'auth.') as $key => $value) {
+        foreach (Arr::dot(Arr::get($adminConfig, 'auth'), 'auth.') as $key => $value) {
             $this->app['config']->set($key, $value);
         }
 
@@ -64,9 +65,13 @@ class TestCase extends BaseTestCase
         require __DIR__.'/routes.php';
 
         require __DIR__.'/seeds/factory.php';
+
+//        \Encore\Admin\Admin::$css = [];
+//        \Encore\Admin\Admin::$js = [];
+//        \Encore\Admin\Admin::$script = [];
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         (new CreateAdminTables())->down();
 

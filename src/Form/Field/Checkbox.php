@@ -6,15 +6,15 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Checkbox extends MultipleSelect
 {
+    /**
+     * @var bool
+     */
     protected $inline = true;
 
-    protected static $css = [
-        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/all.css',
-    ];
-
-    protected static $js = [
-        '/vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js',
-    ];
+    /**
+     * @var bool
+     */
+    protected $canCheckAll = false;
 
     /**
      * Set options.
@@ -29,7 +29,41 @@ class Checkbox extends MultipleSelect
             $options = $options->toArray();
         }
 
-        $this->options = (array) $options;
+        if (is_callable($options)) {
+            $this->options = $options;
+        } else {
+            $this->options = (array) $options;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a checkbox above this component, so you can select all checkboxes by click on it.
+     *
+     * @return $this
+     */
+    public function canCheckAll()
+    {
+        $this->canCheckAll = true;
+
+        return $this;
+    }
+
+    /**
+     * Set checked.
+     *
+     * @param array|callable|string $checked
+     *
+     * @return $this
+     */
+    public function checked($checked = [])
+    {
+        if ($checked instanceof Arrayable) {
+            $checked = $checked->toArray();
+        }
+
+        $this->checked = (array) $checked;
 
         return $this;
     }
@@ -63,8 +97,16 @@ class Checkbox extends MultipleSelect
      */
     public function render()
     {
-        $this->script = "$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
+        $this->addVariables([
+            'checked'       => $this->checked,
+            'inline'        => $this->inline,
+            'canCheckAll'   => $this->canCheckAll,
+            'checkAllClass' => uniqid('check-all-'),
+            'options'       => $this->getOptions(),
+        ]);
 
-        return parent::render()->with('inline', $this->inline);
+        $this->addCascadeScript();
+
+        return parent::fieldRender();
     }
 }

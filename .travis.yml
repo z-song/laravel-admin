@@ -1,7 +1,9 @@
 language: php
 
 php:
-  - 7
+  - 7.2
+  - 7.3
+  - 7.4
 
 matrix:
   fast_finish: true
@@ -14,7 +16,7 @@ services:
   - mysql
 
 before_script:
-  - mysql -e 'create database if not exists laravel_admin;'
+  - mysql -e 'create database if not exists laravel_admin_test;'
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction
 

@@ -47,6 +47,7 @@ class CreateTestTables extends Migration
             $table->string('mobile')->nullable();
             $table->string('avatar')->nullable();
             $table->string('password');
+            $table->json('data')->nullable();
             $table->timestamps();
         });
 

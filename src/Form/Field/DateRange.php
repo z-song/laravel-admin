@@ -6,36 +6,108 @@ use Encore\Admin\Form\Field;
 
 class DateRange extends Field
 {
-    protected static $css = [
-        '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-    ];
+    protected $view = 'admin::form.daterange';
 
-    protected static $js = [
-        '/vendor/laravel-admin/moment/min/moment-with-locales.min.js',
-        '/vendor/laravel-admin/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-    ];
+    protected $icon = 'fa-calendar-alt';
 
-    protected $format = 'YYYY-MM-DD';
+    /**
+     * @var array
+     */
+    protected $options = [
+        'format'           => 'YYYY-MM-DD',
+        'allowInputToggle' => true,
+        'icons'            => [
+            'time' => 'fas fa-clock',
+        ],
+    ];
 
     /**
      * Column name.
      *
-     * @var string
+     * @var array
      */
     protected $column = [];
 
+    /**
+     * DateRange constructor.
+     *
+     * @param $column
+     * @param $arguments
+     */
     public function __construct($column, $arguments)
     {
         $this->column['start'] = $column;
         $this->column['end'] = $arguments[0];
 
         array_shift($arguments);
+
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($this->column);
-
-        $this->options(['format' => $this->format]);
     }
 
+    /**
+     * Set picker format.
+     *
+     * @param string $format
+     *
+     * @return $this
+     */
+    public function format($format)
+    {
+        return $this->options(compact('format'));
+    }
+
+    /**
+     * Set max value.
+     *
+     * @param string $maxDate
+     *
+     * @return $this
+     */
+    public function max($maxDate)
+    {
+        return $this->options(compact('maxDate'));
+    }
+
+    /**
+     * Set min value.
+     *
+     * @param string $minDate
+     *
+     * @return $this
+     */
+    public function min($minDate)
+    {
+        return $this->options(compact('minDate'));
+    }
+
+    /**
+     * Set enabled values.
+     *
+     * @param array|string $value
+     *
+     * @return $this
+     */
+    public function enable($enabledDates)
+    {
+        return $this->options(compact('enabledDates'));
+    }
+
+    /**
+     * Set disabled values.
+     *
+     * @param $value
+     *
+     * @return $thiss
+     */
+    public function disable($disabledDates = null)
+    {
+        return $this->options(compact('disabledDates'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function prepare($value)
     {
         if ($value === '') {
@@ -47,23 +119,15 @@ class DateRange extends Field
 
     public function render()
     {
-        $this->options['locale'] = config('app.locale');
+        $this->options(['locale' => $this->options['locale'] ?? config('app.locale')]);
 
-        $startOptions = json_encode($this->options);
-        $endOptions = json_encode($this->options + ['useCurrent' => false]);
+        $this->addVariables([
+            'icon'          => $this->icon,
+            'start_options' => $this->options,
+            'end_options'   => array_merge($this->options, ['useCurrent' => false]),
+        ]);
 
-        $class = $this->getElementClassSelector();
-
-        $this->script = <<<EOT
-            $('{$class['start']}').datetimepicker($startOptions);
-            $('{$class['end']}').datetimepicker($endOptions);
-            $("{$class['start']}").on("dp.change", function (e) {
-                $('{$class['end']}').data("DateTimePicker").minDate(e.date);
-            });
-            $("{$class['end']}").on("dp.change", function (e) {
-                $('{$class['start']}').data("DateTimePicker").maxDate(e.date);
-            });
-EOT;
+        $this->attribute(['autocomplete' => 'off']);
 
         return parent::render();
     }

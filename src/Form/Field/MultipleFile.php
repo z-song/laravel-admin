@@ -2,32 +2,16 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Support\ViewErrorBag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MultipleFile extends Field
 {
     use UploadField;
-
-    /**
-     * Css.
-     *
-     * @var array
-     */
-    protected static $css = [
-        '/vendor/laravel-admin/bootstrap-fileinput/css/fileinput.min.css?v=4.3.7',
-    ];
-
-    /**
-     * Js.
-     *
-     * @var array
-     */
-    protected static $js = [
-        '/vendor/laravel-admin/bootstrap-fileinput/js/plugins/canvas-to-blob.min.js?v=4.3.7',
-        '/vendor/laravel-admin/bootstrap-fileinput/js/fileinput.min.js?v=4.3.7',
-    ];
 
     /**
      * Create a new File instance.
@@ -57,7 +41,7 @@ class MultipleFile extends Field
      */
     public function getValidator(array $input)
     {
-        if (request()->has(static::FILE_DELETE_FLAG)) {
+        if (!request()->hasFile($this->column)) {
             return false;
         }
 
@@ -73,9 +57,9 @@ class MultipleFile extends Field
 
         $attributes[$this->column] = $this->label;
 
-        list($rules, $input) = $this->hydrateFiles(array_get($input, $this->column, []));
+        list($rules, $input) = $this->hydrateFiles(Arr::get($input, $this->column, []));
 
-        return Validator::make($input, $rules, $this->validationMessages, $attributes);
+        return \validator($input, $rules, $this->getValidationMessages(), $attributes);
     }
 
     /**
@@ -94,11 +78,37 @@ class MultipleFile extends Field
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
-            $rules[$this->column.$key] = $this->getRules();
-            $input[$this->column.$key] = $file;
+            $rules[$this->column.'@'.$key] = is_object($file) ? $this->getRules() : 'string';
+            $input[$this->column.'@'.$key] = $file;
         }
 
         return [$rules, $input];
+    }
+
+    /**
+     * Sort files.
+     *
+     * @param $original
+     * @return array
+     */
+    protected function sortFiles($original)
+    {
+        $fileSort = request(static::FILE_SORT_FLAG);
+        $column = $fileSort[$this->column];
+
+        if ($column) {
+            $order = explode(',', $column);
+
+            $new = [];
+
+            foreach ($order as $item) {
+                $new[] = Arr::get($original, $item);
+            }
+
+            return $new;
+        } else {
+            return $original;
+        }
     }
 
     /**
@@ -111,12 +121,37 @@ class MultipleFile extends Field
     public function prepare($files)
     {
         if (request()->has(static::FILE_DELETE_FLAG)) {
+            if ($this->pathColumn) {
+                return $this->destroyFromHasMany(request(static::FILE_DELETE_FLAG));
+            }
+
             return $this->destroy(request(static::FILE_DELETE_FLAG));
         }
 
-        $targets = array_map([$this, 'prepareForeach'], $files);
+        // 将新旧数据分开
+        $original = $uploadFiles = [];
+        foreach ($files as $file) {
+            if (is_object($file)) {
+                array_push($uploadFiles, $file);
+            } else {
+                array_push($original, $file);
+            }
+        }
 
-        return array_merge($this->original(), $targets);
+        if (request()->has(static::FILE_SORT_FLAG)) {
+            $original = $this->sortFiles($original);
+        }
+
+        $targets = array_map([$this, 'prepareForeach'], $uploadFiles);
+
+        // for create or update
+        if ($this->pathColumn) {
+            $targets = array_map(function ($target) {
+                return [$this->pathColumn => $target];
+            }, $targets);
+        }
+
+        return array_merge($original, $targets);
     }
 
     /**
@@ -156,7 +191,7 @@ class MultipleFile extends Field
     {
         $files = $this->value ?: [];
 
-        return array_map([$this, 'objectUrl'], $files);
+        return array_values(array_map([$this, 'objectUrl'], $files));
     }
 
     /**
@@ -187,13 +222,70 @@ class MultipleFile extends Field
         $config = [];
 
         foreach ($files as $index => $file) {
-            $config[] = [
+            if (is_array($file) && $this->pathColumn) {
+                $index = Arr::get($file, $this->getRelatedKeyName(), $index);
+                $file = Arr::get($file, $this->pathColumn);
+            }
+
+            $preview = array_merge([
                 'caption' => basename($file),
                 'key'     => $index,
-            ];
+            ], $this->guessPreviewType($file));
+
+            $config[] = $preview;
         }
 
         return $config;
+    }
+
+    /**
+     * Get related model key name.
+     *
+     * @return string
+     */
+    protected function getRelatedKeyName()
+    {
+        if (is_null($this->form)) {
+            return;
+        }
+
+        return $this->form->model()->{$this->column}()->getRelated()->getKeyName();
+    }
+
+    /**
+     * Allow to sort files.
+     *
+     * @return $this
+     */
+    public function sortable()
+    {
+        $this->fileActionSettings['showDrag'] = true;
+
+        return $this;
+    }
+
+    /**
+     * Fort validation error message.
+     *
+     * @return void
+     */
+    protected function formatValidationMessage()
+    {
+        if (!($errors = session()->get('errors')) || !($errors instanceof ViewErrorBag)) {
+            return;
+        }
+
+        $messages = [];
+
+        foreach ($errors->keys() as $key) {
+            if (Str::startsWith($key, $this->column.'@')) {
+                array_push($messages, ...$errors->get($key));
+            }
+        }
+
+        if (!empty($messages)) {
+            $errors->getBag('default')->merge([$this->column => $messages]);
+        }
     }
 
     /**
@@ -212,11 +304,20 @@ class MultipleFile extends Field
             $this->setupPreviewOptions();
         }
 
-        $options = json_encode($this->options);
+        $this->addVariables([
+            'options'   => $this->options,
+            'settings'  => $this->fileActionSettings,
+        ]);
 
-        $this->script = <<<EOT
-$("input{$this->getElementClassSelector()}").fileinput({$options});
-EOT;
+        if ($this->fileActionSettings['showDrag']) {
+            $this->addVariables([
+                'sortable'  => true,
+                'sort_flag' => static::FILE_SORT_FLAG,
+                'old_flag' => static::FILE_OLD_FLAG,
+            ]);
+        }
+
+        $this->formatValidationMessage();
 
         return parent::render();
     }
@@ -224,20 +325,44 @@ EOT;
     /**
      * Destroy original files.
      *
-     * @return string.
+     * @param string $key
+     *
+     * @return array
      */
     public function destroy($key)
     {
         $files = $this->original ?: [];
 
-        $file = array_get($files, $key);
+        $path = Arr::get($files, $key);
 
-        if ($this->storage->exists($file)) {
-            $this->storage->delete($file);
+        if (!$this->retainable && $this->storage->exists($path)) {
+            $this->storage->delete($path);
         }
 
         unset($files[$key]);
 
-        return array_values($files);
+        return $files;
+    }
+
+    /**
+     * Destroy original files from hasmany related model.
+     *
+     * @param int $key
+     *
+     * @return array
+     */
+    public function destroyFromHasMany($key)
+    {
+        $files = collect($this->original ?: [])->keyBy($this->getRelatedKeyName())->toArray();
+
+        $path = Arr::get($files, "{$key}.{$this->pathColumn}");
+
+        if (!$this->retainable && $this->storage->exists($path)) {
+            $this->storage->delete($path);
+        }
+
+        $files[$key][Form::REMOVE_FLAG_NAME] = 1;
+
+        return $files;
     }
 }

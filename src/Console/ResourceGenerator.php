@@ -15,9 +15,9 @@ class ResourceGenerator
      * @var array
      */
     protected $formats = [
-        'form_field'  => "\$form->%s('%s', '%s')",
-        'show_field'  => "\$show->%s('%s')",
-        'grid_column' => "\$grid->%s('%s')",
+        'form_field'   => "\$form->%s('%s', __('%s'))",
+        'show_field'   => "\$show->field('%s', __('%s'))",
+        'table_column' => "\$table->column('%s', __('%s'))",
     ];
 
     /**
@@ -40,7 +40,7 @@ class ResourceGenerator
         'password' => 'password|pwd',
         'url'      => 'url|link|src|href',
         'mobile'   => 'mobile|phone',
-        'color'    => 'color|rgb',
+        //        'color'    => 'color|rgb',
         'image'    => 'image|img|avatar|pic|picture|cover',
         'file'     => 'file|attachment',
     ];
@@ -179,7 +179,7 @@ class ResourceGenerator
         return $output;
     }
 
-    public function generateGrid()
+    public function generateTable()
     {
         $output = '';
 
@@ -187,7 +187,7 @@ class ResourceGenerator
             $name = $column->getName();
             $label = $this->formatLabel($name);
 
-            $output .= sprintf($this->formats['grid_column'], $name, $label);
+            $output .= sprintf($this->formats['table_column'], $name, $label);
             $output .= ";\r\n";
         }
 

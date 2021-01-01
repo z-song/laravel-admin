@@ -1,25 +1,19 @@
-<div class="box">
+<div class="card card-@color card-outline">
 
-    <div class="box-header">
+    <div class="card-header">
 
         <div class="btn-group">
-            <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="expand">
-                <i class="fa fa-plus-square-o"></i>&nbsp;{{ trans('admin.expand') }}
-            </a>
-            <a class="btn btn-primary btn-sm {{ $id }}-tree-tools" data-action="collapse">
-                <i class="fa fa-minus-square-o"></i>&nbsp;{{ trans('admin.collapse') }}
-            </a>
+            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="expand" title="{{ admin_trans('admin.expand') }}">
+                <i class="fa fa-plus-square-o"></i>&nbsp;{{ admin_trans('admin.expand') }}
+            </button>
+            <button class="btn btn-@color btn-sm {{ $id }}-tree-tools" data-action="collapse" title="{{ admin_trans('admin.collapse') }}">
+                <i class="fa fa-minus-square-o"></i>&nbsp;{{ admin_trans('admin.collapse') }}
+            </button>
         </div>
 
         @if($useSave)
         <div class="btn-group">
-            <a class="btn btn-info btn-sm  {{ $id }}-save"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.save') }}</a>
-        </div>
-        @endif
-
-        @if($useRefresh)
-        <div class="btn-group">
-            <a class="btn btn-warning btn-sm {{ $id }}-refresh"><i class="fa fa-refresh"></i>&nbsp;{{ trans('admin.refresh') }}</a>
+            <button class="btn btn-@color btn-sm {{ $id }}-save" title="{{ admin_trans('admin.save') }}"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ admin_trans('admin.save') }}</span></button>
         </div>
         @endif
 
@@ -28,19 +22,43 @@
         </div>
 
         @if($useCreate)
-        <div class="btn-group pull-right">
-            <a class="btn btn-success btn-sm" href="{{ $path }}/create"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</a>
+        <div class="btn-group float-right">
+            <a class="btn btn-success btn-sm" href="{{ url($path) }}/create"><i class="fa fa-save"></i><span class="hidden-xs">&nbsp;{{ admin_trans('admin.new') }}</span></a>
         </div>
         @endif
 
     </div>
-    <!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
+    <!-- /.card-header -->
+    <div class="card-body p-0">
         <div class="dd" id="{{ $id }}">
             <ol class="dd-list">
                 @each($branchView, $items, 'branch')
             </ol>
         </div>
     </div>
-    <!-- /.box-body -->
+    <!-- /.card-body -->
 </div>
+
+<script require="nestable">
+    $('#{{ $id }}').nestable(@json($options));
+
+    $('.{{ $id }}-save').click(function () {
+        var serialize = $('#{{ $id }}').nestable('serialize');
+        $.post('{{ $url }}', {
+            _order: JSON.stringify(serialize)
+        },
+        function(data){
+            $.admin.reload('{{ admin_trans('admin.save_succeeded') }}');
+        });
+    });
+
+    $('.{{ $id }}-tree-tools').on('click', function(e){
+        var action = $(this).data('action');
+        if (action === 'expand') {
+            $('.dd').nestable('expandAll');
+        }
+        if (action === 'collapse') {
+            $('.dd').nestable('collapseAll');
+        }
+    });
+</script>

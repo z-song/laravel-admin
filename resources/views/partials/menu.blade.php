@@ -1,27 +1,32 @@
-@if(Admin::user()->visible($item['roles']))
+@if(admin_user()->canSeeMenu($item))
     @if(!isset($item['children']))
-        <li>
+        @if(isset($item['group']) && $item['group'])
+            <li class="nav-header">{{$item['group']}}</li>
+        @endif
+
+        <li class="nav-item">
             @if(url()->isValidUrl($item['uri']))
-                <a href="{{ $item['uri'] }}" target="_blank">
+                <a href="{{ $item['uri'] }}" target="_blank" class="nav-link">
             @else
-                 <a href="{{ admin_base_path($item['uri']) }}">
+                 <a href="{{ admin_url($item['uri']) }}" class="nav-link">
             @endif
-                <i class="fa {{$item['icon']}}"></i>
-                @if (Lang::has($titleTranslation = 'admin.menu_titles.' . trim(str_replace(' ', '_', strtolower($item['title'])))))
-                    <span>{{ __($titleTranslation) }}</span>
-                @else
-                    <span>{{ $item['title'] }}</span>
-                @endif
+                <i class="nav-icon {{$item['icon']}}"></i>
+                <p>{{ admin_trans($item['title']) }}</p>
             </a>
         </li>
     @else
-        <li class="treeview">
-            <a href="#">
-                <i class="fa {{ $item['icon'] }}"></i>
-                <span>{{ $item['title'] }}</span>
-                <i class="fa fa-angle-left pull-right"></i>
+        @if(isset($item['group']) && $item['group'])
+            <li class="nav-header">{{ $item['group'] }}</li>
+        @endif
+        <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+                <i class="nav-icon {{ $item['icon'] }}" ></i>
+                <p>
+                    {{ admin_trans($item['title']) }}
+                    <i class="right fas fa-angle-left"></i>
+                </p>
             </a>
-            <ul class="treeview-menu">
+            <ul class="nav nav-treeview">
                 @foreach($item['children'] as $item)
                     @include('admin::partials.menu', $item)
                 @endforeach

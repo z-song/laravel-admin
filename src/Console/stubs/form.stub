@@ -1,0 +1,54 @@
+<?php
+
+namespace DummyNamespace;
+
+use Encore\Admin\Widgets\Form;
+use Illuminate\Http\Request;
+
+class DummyClass extends Form
+{
+    /**
+     * The form title.
+     *
+     * @var string
+     */
+    public $title = 'DummyTitle';
+
+    /**
+     * Handle the form request.
+     *
+     * @param Request $request
+     *
+     * @return $this
+     */
+    public function handle(Request $request)
+    {
+        //dump($request->all());
+
+        return $this->success('Processed successfully.');
+    }
+
+    /**
+     * Build a form here.
+     */
+    public function form()
+    {
+        $this->text('name')->rules('required');
+        $this->email('email')->rules('email');
+        $this->datetime('created_at');
+    }
+
+    /**
+     * The data of the form.
+     *
+     * @return array $data
+     */
+    public function data()
+    {
+        return [
+            'name'       => 'John Doe',
+            'email'      => 'John.Doe@gmail.com',
+            'created_at' => now(),
+        ];
+    }
+}

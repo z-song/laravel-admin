@@ -6,6 +6,7 @@ use Encore\Admin\Show\Divider;
 use Encore\Admin\Show\Field;
 use Encore\Admin\Show\Panel;
 use Encore\Admin\Show\Relation;
+use Encore\Admin\Traits\ShouldSnakeAttributes;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,9 +19,12 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\Relation as EloquentRelation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Show implements Renderable
 {
+    use ShouldSnakeAttributes;
+
     /**
      * The Eloquent model to show.
      *
@@ -62,6 +66,18 @@ class Show implements Renderable
     protected $panel;
 
     /**
+     * Extended fields.
+     *
+     * @var array
+     */
+    public static $extendedFields = [];
+
+    /**
+     * @var \Closure
+     */
+    protected static $initCallback;
+
+    /**
      * Show constructor.
      *
      * @param Model $model
@@ -74,6 +90,33 @@ class Show implements Renderable
 
         $this->initPanel();
         $this->initContents();
+
+        if (static::$initCallback instanceof \Closure) {
+            call_user_func(static::$initCallback, $this);
+        }
+    }
+
+    /**
+     * Initialize with user pre-defined default disables, etc.
+     *
+     * @param \Closure $callback
+     */
+    public static function init(\Closure $callback = null)
+    {
+        static::$initCallback = $callback;
+    }
+
+    /**
+     * Register custom field.
+     *
+     * @param string $abstract
+     * @param string $class
+     *
+     * @return void
+     */
+    public static function extend($abstract, $class)
+    {
+        static::$extendedFields[$abstract] = $class;
     }
 
     /**
@@ -284,7 +327,24 @@ class Show implements Renderable
             $this->resource = implode('/', $segments);
         }
 
-        return $this->resource;
+        return url($this->resource);
+    }
+
+    /**
+     * Set field and label width in fields.
+     *
+     * @param int $fieldWidth
+     * @param int $labelWidth
+     *
+     * @return $this
+     */
+    public function setWidth($fieldWidth = 8, $labelWidth = 2)
+    {
+        collect($this->fields)->each(function ($field) use ($fieldWidth, $labelWidth) {
+            $field->setWidth($fieldWidth, $labelWidth);
+        });
+
+        return $this;
     }
 
     /**
@@ -328,10 +388,6 @@ class Show implements Renderable
         }
 
         if ($field = $this->handleRelationField($method, $arguments)) {
-            return $field;
-        }
-
-        if ($field = $this->handleModelField($method, $label)) {
             return $field;
         }
 
@@ -391,7 +447,9 @@ class Show implements Renderable
                 return $this->addRelation($method, $arguments[1], $arguments[0]);
             }
 
-            return $this->addField($method)->setRelation(snake_case($method));
+            return $this->addField($method, Arr::get($arguments, 0))->setRelation(
+                $this->shouldSnakeAttributes() ? Str::snake($method) : $method
+            );
         }
 
         if ($relation    instanceof HasMany
@@ -417,6 +475,12 @@ class Show implements Renderable
         return false;
     }
 
+    /**
+     * @param string $relation
+     * @param string $label
+     *
+     * @return Field
+     */
     protected function showRelationAsField($relation = '', $label = '')
     {
         return $this->addField($relation, $label);

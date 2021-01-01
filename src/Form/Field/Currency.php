@@ -10,13 +10,6 @@ class Currency extends Text
     protected $symbol = '$';
 
     /**
-     * @var array
-     */
-    protected static $js = [
-        '/vendor/laravel-admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
-    ];
-
-    /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *
      * @var array
@@ -67,13 +60,9 @@ class Currency extends Text
      */
     public function render()
     {
-        $options = json_encode($this->options);
+        $this->inputmask($this->options);
 
-        $this->script = <<<EOT
-$('{$this->getElementClassSelector()}').inputmask($options);
-EOT;
-
-        $this->prepend($this->symbol)
+        $this->prependText($this->symbol)
             ->defaultAttribute('style', 'width: 120px');
 
         return parent::render();

@@ -30,3 +30,100 @@ a.editable-empty {
     color: #3c8dbc;
     border-bottom: none !important;
 }
+
+.form-group > label.asterisk:before {
+    content: "* ";
+    color: red;
+}
+
+.mailbox-attachments li {
+    width: 300px !important;
+}
+
+.table-has-many .form-group {
+    margin-bottom: 0 !important;
+}
+
+
+.table-has-many label.control-label[for=inputError] {
+    position: absolute;
+    z-index: 100;
+    background-color: #fff;
+    border: 1px solid #dd4b39;
+    border-radius: 5px;
+    text-align: left;
+    top: 34px;
+    padding: 8px;
+    line-height: 1.2;
+}
+
+.table-has-many label.control-label[for=inputError] + br {
+    display: none;
+}
+
+#totop {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    z-index: 99999;
+    outline: none;
+    background-color: rgb(34, 45, 50);
+    color: rgb(238, 238, 238);
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 4px;
+    opacity: 0.5;
+}
+
+#totop:hover {
+    opacity: 1;
+}
+
+.file-input .glyphicon-folder-open {
+    display: inline;
+}
+
+.swal2-popup {
+    font-size: 0.6rem !important;
+}
+
+.swal2-popup.swal2-toast {
+    padding: 1rem 1.5rem !important;
+}
+
+.table tbody>tr.selected {
+    background-color: #ffffd5 !important;
+}
+
+.field-control>.col {
+    padding: 0;
+}
+
+.field-control>.col:not(:first-child) {
+    padding-left: 15px;
+}
+
+.dd-handle {
+    margin: 5px 0 !important;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.select2-container--default .select2-selection--single {
+    font-size: 1rem !important;
+    height: calc(2.25rem + 2px) !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    margin-top: -3px !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    min-height: calc(2.25rem + 2px) !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding: 0 .375rem .375rem !important;
+    margin-top: 0 !important;
+}
+

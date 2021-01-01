@@ -2,7 +2,11 @@
 
 namespace Encore\Admin\Show;
 
-use Encore\Admin\Admin;
+use Encore\Admin\Show;
+use Encore\Admin\Show\Actions\_List;
+use Encore\Admin\Show\Actions\Action;
+use Encore\Admin\Show\Actions\Delete;
+use Encore\Admin\Show\Actions\Edit;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
@@ -12,9 +16,9 @@ class Tools implements Renderable
     /**
      * The panel that holds this tool.
      *
-     * @var Panel
+     * @var Show
      */
-    protected $panel;
+    protected $show;
 
     /**
      * @var string
@@ -22,11 +26,9 @@ class Tools implements Renderable
     protected $resource;
 
     /**
-     * Default tools.
-     *
-     * @var array
+     * @var Collection
      */
-    protected $tools = ['delete', 'edit', 'list'];
+    protected $default;
 
     /**
      * Tools should be appends to default tools.
@@ -45,12 +47,12 @@ class Tools implements Renderable
     /**
      * Tools constructor.
      *
-     * @param Panel $panel
+     * @param Show $show
      */
-    public function __construct(Panel $panel)
+    public function __construct(Show $show)
     {
-        $this->panel = $panel;
-
+        $this->show = $show;
+        $this->default = new Collection();
         $this->appends = new Collection();
         $this->prepends = new Collection();
     }
@@ -64,6 +66,10 @@ class Tools implements Renderable
      */
     public function append($tool)
     {
+        if ($tool instanceof Action) {
+            $tool->setModel($this->form->getModel());
+        }
+
         $this->appends->push($tool);
 
         return $this;
@@ -78,6 +84,10 @@ class Tools implements Renderable
      */
     public function prepend($tool)
     {
+        if ($tool instanceof Action) {
+            $tool->setModel($this->form->getModel());
+        }
+
         $this->prepends->push($tool);
 
         return $this;
@@ -91,10 +101,42 @@ class Tools implements Renderable
     public function getResource()
     {
         if (is_null($this->resource)) {
-            $this->resource = $this->panel->getParent()->getResourcePath();
+            $this->resource = $this->show->getResourcePath();
         }
 
         return $this->resource;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function addEdit()
+    {
+        $this->default->put('edit', new Edit($this->getEditPath()));
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function addList()
+    {
+        $this->default->put('list', new _List($this->getListPath()));
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function addDelete()
+    {
+        $action = new Delete($this->getListPath());
+
+        $this->default->put('delete', $action->setModel($this->show->getModel()));
+
+        return $this;
     }
 
     /**
@@ -102,9 +144,13 @@ class Tools implements Renderable
      *
      * @return $this
      */
-    public function disableList()
+    public function disableList(bool $disable = true)
     {
-        array_delete($this->tools, 'list');
+        if ($disable) {
+            $this->default->pull('list');
+        } elseif (!$this->default->has('list')) {
+            $this->addList();
+        }
 
         return $this;
     }
@@ -114,9 +160,13 @@ class Tools implements Renderable
      *
      * @return $this
      */
-    public function disableDelete()
+    public function disableDelete(bool $disable = true)
     {
-        array_delete($this->tools, 'delete');
+        if ($disable) {
+            $this->default->pull('delete');
+        } elseif (!$this->default->has('delete')) {
+            $this->addDelete();
+        }
 
         return $this;
     }
@@ -126,9 +176,13 @@ class Tools implements Renderable
      *
      * @return $this
      */
-    public function disableEdit()
+    public function disableEdit(bool $disable = true)
     {
-        array_delete($this->tools, 'edit');
+        if ($disable) {
+            $this->default->pull('edit');
+        } elseif (!$this->default->has('edit')) {
+            $this->addEdit();
+        }
 
         return $this;
     }
@@ -140,7 +194,7 @@ class Tools implements Renderable
      */
     protected function getListPath()
     {
-        return '/'.ltrim($this->getResource(), '/');
+        return ltrim($this->getResource(), '/');
     }
 
     /**
@@ -150,7 +204,7 @@ class Tools implements Renderable
      */
     protected function getEditPath()
     {
-        $key = $this->panel->getParent()->getModel()->getKey();
+        $key = $this->show->getModel()->getKey();
 
         return $this->getListPath().'/'.$key.'/edit';
     }
@@ -162,109 +216,9 @@ class Tools implements Renderable
      */
     protected function getDeletePath()
     {
-        $key = $this->panel->getParent()->getModel()->getKey();
+        $key = $this->show->getModel()->getKey();
 
         return $this->getListPath().'/'.$key;
-    }
-
-    /**
-     * Render `list` tool.
-     *
-     * @return string
-     */
-    protected function renderList()
-    {
-        $list = trans('admin.list');
-
-        return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default">
-        <i class="fa fa-list"></i> {$list}
-    </a>
-</div>
-HTML;
-    }
-
-    /**
-     * Render `edit` tool.
-     *
-     * @return string
-     */
-    protected function renderEdit()
-    {
-        $edit = trans('admin.edit');
-
-        return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getEditPath()}" class="btn btn-sm btn-primary">
-        <i class="fa fa-edit"></i> {$edit}
-    </a>
-</div>
-HTML;
-    }
-
-    /**
-     * Render `delete` tool.
-     *
-     * @return string
-     */
-    protected function renderDelete()
-    {
-        $deleteConfirm = trans('admin.delete_confirm');
-        $confirm = trans('admin.confirm');
-        $cancel = trans('admin.cancel');
-
-        $class = uniqid();
-
-        $script = <<<SCRIPT
-
-$('.{$class}-delete').unbind('click').click(function() {
-
-    swal({
-      title: "$deleteConfirm",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "$confirm",
-      closeOnConfirm: false,
-      cancelButtonText: "$cancel"
-    },
-    function(){
-        $.ajax({
-            method: 'post',
-            url: '{$this->getDeletePath()}',
-            data: {
-                _method:'delete',
-                _token:LA.token,
-            },
-            success: function (data) {
-                $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });
-
-                if (typeof data === 'object') {
-                    if (data.status) {
-                        swal(data.message, '', 'success');
-                    } else {
-                        swal(data.message, '', 'error');
-                    }
-                }
-            }
-        });
-    });
-});
-
-SCRIPT;
-
-        $delete = trans('admin.delete');
-
-        Admin::script($script);
-
-        return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete">
-        <i class="fa fa-trash"></i>  {$delete}
-    </a>
-</div>
-HTML;
     }
 
     /**
@@ -296,11 +250,14 @@ HTML;
      */
     public function render()
     {
+        $this->addEdit()
+            ->addDelete()
+            ->addList();
+
         $output = $this->renderCustomTools($this->prepends);
 
-        foreach ($this->tools as $tool) {
-            $renderMethod = 'render'.ucfirst($tool);
-            $output .= $this->$renderMethod();
+        foreach ($this->default as $tool) {
+            $output .= $tool->render();
         }
 
         return $output.$this->renderCustomTools($this->appends);

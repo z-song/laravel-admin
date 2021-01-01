@@ -4,5 +4,14 @@ namespace Encore\Admin\Form\Field;
 
 class Month extends Date
 {
-    protected $format = 'MM';
+    /**
+     * @var array
+     */
+    protected $options = [
+        'format'           => 'MM',
+        'allowInputToggle' => true,
+        'icons'            => [
+            'time' => 'fas fa-clock',
+        ],
+    ];
 }

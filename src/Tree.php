@@ -60,14 +60,9 @@ class Tree implements Renderable
     public $useSave = true;
 
     /**
-     * @var bool
-     */
-    public $useRefresh = true;
-
-    /**
      * @var array
      */
-    protected $nestableOptions = [];
+    protected $options = [];
 
     /**
      * Header tools.
@@ -85,7 +80,7 @@ class Tree implements Renderable
     {
         $this->model = $model;
 
-        $this->path = app('request')->getPathInfo();
+        $this->path = \request()->getPathInfo();
         $this->elementId .= uniqid();
 
         $this->setupTools();
@@ -157,7 +152,7 @@ class Tree implements Renderable
      */
     public function nestable($options = [])
     {
-        $this->nestableOptions = array_merge($this->nestableOptions, $options);
+        $this->options = array_merge($this->options, $options);
 
         return $this;
     }
@@ -183,16 +178,6 @@ class Tree implements Renderable
     }
 
     /**
-     * Disable refresh.
-     *
-     * @return void
-     */
-    public function disableRefresh()
-    {
-        $this->useRefresh = false;
-    }
-
-    /**
      * Save tree order from a input.
      *
      * @param string $serialize
@@ -213,93 +198,6 @@ class Tree implements Renderable
     }
 
     /**
-     * Build tree grid scripts.
-     *
-     * @return string
-     */
-    protected function script()
-    {
-        $deleteConfirm = trans('admin.delete_confirm');
-        $saveSucceeded = trans('admin.save_succeeded');
-        $refreshSucceeded = trans('admin.refresh_succeeded');
-        $deleteSucceeded = trans('admin.delete_succeeded');
-        $confirm = trans('admin.confirm');
-        $cancel = trans('admin.cancel');
-
-        $nestableOptions = json_encode($this->nestableOptions);
-
-        return <<<SCRIPT
-
-        $('#{$this->elementId}').nestable($nestableOptions);
-
-        $('.tree_branch_delete').click(function() {
-            var id = $(this).data('id');
-            swal({
-              title: "$deleteConfirm",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "$confirm",
-              closeOnConfirm: false,
-              cancelButtonText: "$cancel"
-            },
-            function(){
-                $.ajax({
-                    method: 'post',
-                    url: '{$this->path}/' + id,
-                    data: {
-                        _method:'delete',
-                        _token:LA.token,
-                    },
-                    success: function (data) {
-                        $.pjax.reload('#pjax-container');
-
-                        if (typeof data === 'object') {
-                            if (data.status) {
-                                swal(data.message, '', 'success');
-                            } else {
-                                swal(data.message, '', 'error');
-                            }
-                        }
-                    }
-                });
-            });
-        });
-
-        $('.{$this->elementId}-save').click(function () {
-            var serialize = $('#{$this->elementId}').nestable('serialize');
-
-            $.post('{$this->path}', {
-                _token: LA.token,
-                _order: JSON.stringify(serialize)
-            },
-            function(data){
-                $.pjax.reload('#pjax-container');
-                toastr.success('{$saveSucceeded}');
-            });
-        });
-
-        $('.{$this->elementId}-refresh').click(function () {
-            $.pjax.reload('#pjax-container');
-            toastr.success('{$refreshSucceeded}');
-        });
-
-        $('.{$this->elementId}-tree-tools').on('click', function(e){
-            var target = $(e.target),
-                action = target.data('action');
-            if (action === 'expand') {
-                $('.dd').nestable('expandAll');
-            }
-            if (action === 'collapse') {
-                $('.dd').nestable('collapseAll');
-            }
-        });
-
-
-SCRIPT;
-    }
-
-    /**
      * Set view of tree.
      *
      * @param string $view
@@ -312,7 +210,7 @@ SCRIPT;
     /**
      * Return all items of the tree.
      *
-     * @param array $items
+     * @return array
      */
     public function getItems()
     {
@@ -320,24 +218,7 @@ SCRIPT;
     }
 
     /**
-     * Variables in tree template.
-     *
-     * @return array
-     */
-    public function variables()
-    {
-        return [
-            'id'         => $this->elementId,
-            'tools'      => $this->tools->render(),
-            'items'      => $this->getItems(),
-            'useCreate'  => $this->useCreate,
-            'useSave'    => $this->useSave,
-            'useRefresh' => $this->useRefresh,
-        ];
-    }
-
-    /**
-     * Setup grid tools.
+     * Setup table tools.
      *
      * @param Closure $callback
      *
@@ -355,20 +236,27 @@ SCRIPT;
      */
     public function render()
     {
-        Admin::script($this->script());
-
         view()->share([
             'path'           => $this->path,
             'keyName'        => $this->model->getKeyName(),
             'branchView'     => $this->view['branch'],
             'branchCallback' => $this->branchCallback,
+            'model'          => get_class($this->model),
         ]);
 
-        return view($this->view['tree'], $this->variables())->render();
+        return Admin::view($this->view['tree'], [
+            'id'         => $this->elementId,
+            'tools'      => $this->tools->render(),
+            'items'      => $this->getItems(),
+            'useCreate'  => $this->useCreate,
+            'useSave'    => $this->useSave,
+            'url'        => url($this->path),
+            'options'    => $this->options,
+        ]);
     }
 
     /**
-     * Get the string contents of the grid view.
+     * Get the string contents of the table view.
      *
      * @return string
      */

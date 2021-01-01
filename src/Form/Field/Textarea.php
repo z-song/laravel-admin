@@ -6,6 +6,9 @@ use Encore\Admin\Form\Field;
 
 class Textarea extends Field
 {
+    use HasValuePicker;
+    use CanCascadeFields;
+
     /**
      * Default rows of textarea.
      *
@@ -32,6 +35,21 @@ class Textarea extends Field
      */
     public function render()
     {
-        return parent::render()->with(['rows' => $this->rows]);
+        if (!$this->shouldRender()) {
+            return '';
+        }
+
+        if (is_array($this->value)) {
+            $this->value = json_encode($this->value, JSON_PRETTY_PRINT);
+        }
+
+        $this->mountPicker();
+
+        $this->addCascadeScript();
+
+        return parent::fieldRender([
+            'picker' => $this->picker,
+            'rows'   => $this->rows,
+        ]);
     }
 }

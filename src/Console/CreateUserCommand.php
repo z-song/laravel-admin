@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Console;
 
-use Encore\Admin\Auth\Database\Administrator;
-use Encore\Admin\Auth\Database\Role;
 use Illuminate\Console\Command;
 
 class CreateUserCommand extends Command
@@ -27,26 +25,14 @@ class CreateUserCommand extends Command
      */
     public function handle()
     {
+        $userModel = config('admin.database.users_model');
         $username = $this->ask('Please enter a username to login');
-
         $password = bcrypt($this->secret('Please enter a password to login'));
-
         $name = $this->ask('Please enter a name to display');
 
-        $roles = Role::all();
-
-        /** @var array $selected */
-        $selected = $this->choice('Please choose a role for the user', $roles->pluck('name')->toArray(), null, null, true);
-
-        $roles = $roles->filter(function ($role) use ($selected) {
-            return in_array($role->name, $selected);
-        });
-
-        $user = new Administrator(compact('username', 'password', 'name'));
+        $user = new $userModel(compact('username', 'password', 'name'));
 
         $user->save();
-
-        $user->roles()->attach($roles);
 
         $this->info("User [$name] created successfully.");
     }

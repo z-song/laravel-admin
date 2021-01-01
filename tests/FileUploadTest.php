@@ -6,7 +6,7 @@ use Tests\Models\File as FileModel;
 
 class FileUploadTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -16,7 +16,7 @@ class FileUploadTest extends TestCase
     public function testFileUploadPage()
     {
         $this->visit('admin/files/create')
-            ->see('Upload file')
+            ->see('Files')
             ->seeInElement('h3[class=box-title]', 'Create')
             ->seeElement('input[name=file1]')
             ->seeElement('input[name=file2]')
@@ -130,7 +130,7 @@ class FileUploadTest extends TestCase
         }
 
         $this->visit('admin/files')
-            ->dontSeeInElement('td', 1);
+            ->seeInElement('td', 'svg');
     }
 
     public function testBatchDelete()
@@ -157,9 +157,7 @@ class FileUploadTest extends TestCase
         $this->assertEquals(FileModel::count(), 0);
 
         $this->visit('admin/files')
-            ->dontSeeInElement('td', 1)
-            ->dontSeeInElement('td', 2)
-            ->dontSeeInElement('td', 3);
+            ->seeInElement('td', 'svg');
 
         $this->assertEquals(iterator_count($fi), 0);
     }

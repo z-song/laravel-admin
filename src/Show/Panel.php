@@ -53,7 +53,7 @@ class Panel implements Renderable
     {
         $this->data = [
             'fields' => new Collection(),
-            'tools'  => new Tools($this),
+            'tools'  => new Tools($this->getParent()),
             'style'  => 'info',
             'title'  => trans('admin.detail'),
         ];

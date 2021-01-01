@@ -2,122 +2,76 @@
 
 namespace Tests\Controllers;
 
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\ModelForm;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
-use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
+use Encore\Admin\Http\Controllers\AdminController;
+use Encore\Admin\Table;
 use Tests\Models\Tag;
 use Tests\Models\User;
 
-class UserController extends Controller
+class UserController extends AdminController
 {
-    use ModelForm;
+    protected $title = 'Users';
 
     /**
-     * Index interface.
+     * Make a table builder.
      *
-     * @return Content
+     * @return Table
      */
-    public function index()
+    protected function table()
     {
-        return Admin::content(function (Content $content) {
-            $content->header('All users');
-            $content->description('description');
+        $table = new Table(new User());
 
-            $content->body($this->grid());
+        $table->id('ID')->sortable();
+
+        $table->username();
+        $table->email();
+        $table->mobile();
+        $table->full_name();
+        $table->avatar()->display(function ($avatar) {
+            return "<img src='{$avatar}' />";
         });
-    }
+        $table->profile()->postcode('Post code');
+        $table->profile()->address();
+        $table->position('Position');
+        $table->column('profile.color');
+        $table->profile()->start_at('开始时间');
+        $table->profile()->end_at('结束时间');
+        $table->column('data->json->field', 'Json Field');
 
-    /**
-     * Edit interface.
-     *
-     * @param $id
-     *
-     * @return Content
-     */
-    public function edit($id)
-    {
-        return Admin::content(function (Content $content) use ($id) {
-            $content->header('Edit user');
-            $content->description('description');
-
-            $content->body($this->form()->edit($id));
+        $table->column('column1_not_in_table')->display(function () {
+            return 'full name:'.$this->full_name;
         });
-    }
 
-    /**
-     * Create interface.
-     *
-     * @return Content
-     */
-    public function create()
-    {
-        return Admin::content(function (Content $content) {
-            $content->header('Create user');
-
-            $content->body($this->form());
+        $table->column('column2_not_in_table')->display(function () {
+            return $this->email.'#'.$this->profile['color'];
         });
-    }
 
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
-    protected function grid()
-    {
-        return Admin::grid(User::class, function (Grid $grid) {
-            $grid->id('ID')->sortable();
+        $table->tags()->display(function ($tags) {
+            $tags = collect($tags)->map(function ($tag) {
+                return "<code>{$tag['name']}</code>";
+            })->toArray();
 
-            $grid->username();
-            $grid->email();
-            $grid->mobile();
-            $grid->full_name();
-            $grid->avatar()->display(function ($avatar) {
-                return "<img src='{$avatar}' />";
-            });
-            $grid->profile()->postcode('Post code');
-            $grid->profile()->address();
-            $grid->position('Position');
-            $grid->profile()->color();
-            $grid->profile()->start_at('开始时间');
-            $grid->profile()->end_at('结束时间');
-
-            $grid->column('column1_not_in_table')->display(function () {
-                return 'full name:'.$this->full_name;
-            });
-
-            $grid->column('column2_not_in_table')->display(function () {
-                return $this->email.'#'.$this->profile['color'];
-            });
-
-            $grid->tags()->display(function ($tags) {
-                $tags = collect($tags)->map(function ($tag) {
-                    return "<code>{$tag['name']}</code>";
-                })->toArray();
-
-                return implode('', $tags);
-            });
-
-            $grid->created_at();
-            $grid->updated_at();
-
-            $grid->filter(function ($filter) {
-                $filter->like('username');
-                $filter->like('email');
-                $filter->like('profile.postcode');
-                $filter->between('profile.start_at')->datetime();
-                $filter->between('profile.end_at')->datetime();
-            });
-
-            $grid->actions(function ($actions) {
-                if ($actions->getKey() % 2 == 0) {
-                    $actions->append('<a href="/" class="btn btn-xs btn-danger">detail</a>');
-                }
-            });
+            return implode('', $tags);
         });
+
+        $table->created_at();
+        $table->updated_at();
+
+        $table->filter(function ($filter) {
+            $filter->like('username');
+            $filter->like('email');
+            $filter->like('profile.postcode');
+            $filter->between('profile.start_at')->datetime();
+            $filter->between('profile.end_at')->datetime();
+        });
+
+        $table->actions(function ($actions) {
+            if ($actions->getKey() % 2 == 0) {
+                $actions->append('<a href="/" class="btn btn-xs btn-danger">detail</a>');
+            }
+        });
+
+        return $table;
     }
 
     /**
@@ -130,35 +84,35 @@ class UserController extends Controller
         Form::extend('map', Form\Field\Map::class);
         Form::extend('editor', Form\Field\Editor::class);
 
-        return Admin::form(User::class, function (Form $form) {
-            $form->disableDeletion();
+        $form = new Form(new User());
 
-            $form->display('id', 'ID');
-            $form->text('username');
-            $form->email('email')->rules('required');
-            $form->mobile('mobile');
-            $form->image('avatar')->help('上传头像', 'fa-image');
-            $form->ignore(['password_confirmation']);
-            $form->password('password')->rules('confirmed');
-            $form->password('password_confirmation');
+        $form->display('id', 'ID');
+        $form->text('username');
+        $form->email('email')->rules('required');
+        $form->mobile('mobile');
+        $form->image('avatar')->help('上传头像', 'fa-image');
+        $form->ignore(['password_confirmation']);
+        $form->password('password')->rules('confirmed');
+        $form->password('password_confirmation');
 
-            $form->divide();
+        $form->divider();
 
-            $form->text('profile.first_name');
-            $form->text('profile.last_name');
-            $form->text('profile.postcode')->help('Please input your postcode');
-            $form->textarea('profile.address')->rows(15);
-            $form->map('profile.latitude', 'profile.longitude', 'Position');
-            $form->color('profile.color');
-            $form->datetime('profile.start_at');
-            $form->datetime('profile.end_at');
+        $form->text('profile.first_name');
+        $form->text('profile.last_name');
+        $form->text('profile.postcode')->help('Please input your postcode');
+        $form->textarea('profile.address')->rows(15);
+        $form->map('profile.latitude', 'profile.longitude', 'Position');
+        $form->color('profile.color');
+        $form->datetime('profile.start_at');
+        $form->datetime('profile.end_at');
 
-            $form->multipleSelect('tags', 'Tags')->options(Tag::all()->pluck('name', 'id')); //->rules('max:10|min:3');
+        $form->multipleSelect('tags', 'Tags')->options(Tag::all()->pluck('name', 'id')); //->rules('max:10|min:3');
 
-            $form->display('created_at', 'Created At');
-            $form->display('updated_at', 'Updated At');
+        $form->display('created_at', 'Created At');
+        $form->display('updated_at', 'Updated At');
 
-            $form->html('<a html-field>html...</a>');
-        });
+        $form->html('<a html-field>html...</a>');
+
+        return $form;
     }
 }

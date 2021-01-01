@@ -1,19 +1,28 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+<div {!! admin_attrs($group_attrs) !!}>
 
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
+        <div class="form-group mb-0 mt-2">
+            @foreach($options as $option => $label)
 
+                {!! $inline ? admin_color('<span class="icheck-%s">') : admin_color('<div class="radio icheck-%s">') !!}
+                <input
+                    id="@id"
+                    type="radio"
+                    name="{{$name}}"
+                    value="{{$option}}"
+                    class="minimal {{$class}}"
+                    {{ ($option == $value) || ($value === null && in_array($label, $checked)) ?'checked':'' }}
+                    {!! $attributes !!}
+                />
+                <label for="@id">&nbsp;{{$label}}&nbsp;&nbsp;</label>
+
+                {!! $inline ? '</span>' :  '</div>' !!}
+
+            @endforeach
+        </div>
         @include('admin::form.error')
-
-        @foreach($options as $option => $label)
-            @if(!$inline)<div class="radio">@endif
-                <label @if($inline)class="radio-inline"@endif>
-                    <input type="radio" name="{{$name}}" value="{{$option}}" class="minimal {{$class}}" {{ ($option == old($column, $value))?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
-                </label>
-            @if(!$inline)</div>@endif
-        @endforeach
-
         @include('admin::form.help-block')
 
     </div>

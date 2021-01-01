@@ -2,26 +2,15 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Select extends Field
 {
-    /**
-     * @var array
-     */
-    protected static $css = [
-        '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.min.css',
-    ];
-
-    /**
-     * @var array
-     */
-    protected static $js = [
-        '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.full.min.js',
-    ];
+    use CanCascadeFields;
 
     /**
      * @var array
@@ -31,7 +20,16 @@ class Select extends Field
     /**
      * @var array
      */
-    protected $config = [];
+    protected $config = [
+//        'theme' => 'bootstrap4',
+    ];
+
+    /**
+     *  Data attribute for Option.
+     *
+     * @var array
+     */
+    protected $optionDataAttributes = [];
 
     /**
      * Set options.
@@ -45,8 +43,8 @@ class Select extends Field
         // remote options
         if (is_string($options)) {
             // reload selected
-            if (class_exists($options) && in_array('Illuminate\Database\Eloquent\Model', class_parents($options))) {
-                return $this->selected(...func_get_args());
+            if (class_exists($options) && in_array(Model::class, class_parents($options))) {
+                return $this->model(...func_get_args());
             }
 
             return $this->loadRemoteOptions(...func_get_args());
@@ -66,8 +64,23 @@ class Select extends Field
     }
 
     /**
-     * @param array $groups
+     * Set option data attributes.
+     *
+     * @param string $dataKey
+     * @param array|callable $attributes
+     *
+     * @return $this|mixed
      */
+    public function optionDataAttributes($dataKey, $attributes)
+    {
+        if ($attributes instanceof Arrayable) {
+            $attributes = $attributes->toArray();
+        }
+
+        $this->optionDataAttributes[$dataKey] = (array) $attributes;
+
+        return $this;
+    }
 
     /**
      * Set option groups.
@@ -104,7 +117,7 @@ class Select extends Field
      *
      * @return $this
      */
-    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text')
+    public function load($field, $sourceUrl, $idField = 'id', $textField = 'text', bool $allowClear = true)
     {
         if (Str::contains($field, '.')) {
             $field = $this->formatName($field);
@@ -113,121 +126,65 @@ class Select extends Field
             $class = $field;
         }
 
-        $script = <<<EOT
-$(document).off('change', "{$this->getElementClassSelector()}");
-$(document).on('change', "{$this->getElementClassSelector()}", function () {
-    var target = $(this).closest('.fields-group').find(".$class");
-    $.get("$sourceUrl?q="+this.value, function (data) {
-        target.find("option").remove();
-        $(target).select2({
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        }).trigger('change');
-    });
-});
-EOT;
+        $strAllowClear = var_export($allowClear, true);
 
-        Admin::script($script);
-
-        return $this;
+        return $this->addVariables(['load' => compact('class', 'sourceUrl', 'strAllowClear', 'idField', 'textField')]);
     }
 
     /**
      * Load options for other selects on change.
      *
-     * @param string $fields
-     * @param string $sourceUrls
+     * @param array  $fields
+     * @param array  $sourceUrls
      * @param string $idField
      * @param string $textField
      *
      * @return $this
      */
-    public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text')
+    public function loads($fields = [], $sourceUrls = [], $idField = 'id', $textField = 'text', bool $allowClear = true)
     {
         $fieldsStr = implode('.', $fields);
         $urlsStr = implode('^', $sourceUrls);
-        $script = <<<EOT
-var fields = '$fieldsStr'.split('.');
-var urls = '$urlsStr'.split('^');
+        $strAllowClear = var_export($allowClear, true);
 
-var refreshOptions = function(url, target) {
-    $.get(url).then(function(data) {
-        target.find("option").remove();
-        $(target).select2({
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        }).trigger('change');
-    });
-};
-
-$(document).off('change', "{$this->getElementClassSelector()}");
-$(document).on('change', "{$this->getElementClassSelector()}", function () {
-    var _this = this;
-    var promises = [];
-
-    fields.forEach(function(field, index){
-        var target = $(_this).closest('.fields-group').find('.' + fields[index]);
-        promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
-    });
-
-    $.when(promises).then(function() {
-        console.log('开始更新其它select的选择options');
-    });
-});
-EOT;
-
-        Admin::script($script);
-
-        return $this;
+        return $this->addVariables(['loads' => compact('fieldsStr', 'urlsStr', 'strAllowClear', 'idField', 'textField')]);
     }
 
     /**
      * Load options from current selected resource(s).
      *
-     * @param Illuminate\Database\Eloquent\Model $model
-     * @param string                             $textField
-     * @param string                             $idField
+     * @param string $model
+     * @param string $idField
+     * @param string $textField
      *
      * @return $this
      */
-    protected function selected($model, $textField = 'name', $idField = 'id')
+    public function model($model, $idField = 'id', $textField = 'name')
     {
-        $this->options = function ($resource) use ($model, $textField, $idField) {
-            if (null == $resource) {
+        if (!class_exists($model)
+            || !in_array(Model::class, class_parents($model))
+        ) {
+            throw new \InvalidArgumentException("[$model] must be a valid model class");
+        }
+
+        $this->options = function ($value) use ($model, $idField, $textField) {
+            if (empty($value)) {
                 return [];
             }
 
-            if (is_array($resource) && !empty($resource) && isset($resource[0]['id'])) {
-                $resource = array_map(function ($res) {
-                    return $res['id'];
-                }, $resource);
-            } elseif (is_array($resource) && !empty($resource) && isset($resource['id'])) {
-                $resource = $resource['id'];
-            }
+            $resources = [];
 
-            $model = $model::find($resource);
-
-            if ($model) {
-                if ($model instanceof \Illuminate\Support\Collection) {
-                    $results = [];
-
-                    foreach ($model as $result) {
-                        $results[$result->{$idField}] = $result->{$textField};
-                    }
-
-                    return $results;
+            if (is_array($value)) {
+                if (Arr::isAssoc($value)) {
+                    $resources[] = Arr::get($value, $idField);
+                } else {
+                    $resources = array_column($value, $idField);
                 }
-
-                return [$model->{$idField} => $model->{$textField}];
+            } else {
+                $resources[] = $value;
             }
 
-            return [];
+            return $model::find($resources)->pluck($textField, $idField)->toArray();
         };
 
         return $this;
@@ -248,17 +205,20 @@ EOT;
             'url' => $url.'?'.http_build_query($parameters),
         ];
 
-        $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
+        $configs = array_merge([
+            'allowClear'         => true,
+            'placeholder'        => [
+                'id'        => '',
+                'text'      => trans('admin.choose'),
+            ],
+        ], $this->config);
 
-        $this->script = <<<EOT
+        $configs = json_encode($configs);
+        $configs = substr($configs, 1, strlen($configs) - 2);
 
-$.ajax($ajaxOptions).done(function(data) {
-  $("{$this->getElementClassSelector()}").select2({data: data});
-});
+        $options = array_merge($ajaxOptions, $options);
 
-EOT;
-
-        return $this;
+        return $this->addVariables(['remote' => compact('options', 'configs')]);
     }
 
     /**
@@ -281,44 +241,7 @@ EOT;
         $configs = json_encode($configs);
         $configs = substr($configs, 1, strlen($configs) - 2);
 
-        $this->script = <<<EOT
-
-$("{$this->getElementClassSelector()}").select2({
-  ajax: {
-    url: "$url",
-    dataType: 'json',
-    delay: 250,
-    data: function (params) {
-      return {
-        q: params.term,
-        page: params.page
-      };
-    },
-    processResults: function (data, params) {
-      params.page = params.page || 1;
-
-      return {
-        results: $.map(data.data, function (d) {
-                   d.id = d.$idField;
-                   d.text = d.$textField;
-                   return d;
-                }),
-        pagination: {
-          more: data.next_page_url
-        }
-      };
-    },
-    cache: true
-  },
-  $configs,
-  escapeMarkup: function (markup) {
-      return markup;
-  }
-});
-
-EOT;
-
-        return $this;
+        return $this->addVariables(['ajax' => compact('url', 'idField', 'textField', 'configs')]);
     }
 
     /**
@@ -341,33 +264,75 @@ EOT;
     /**
      * {@inheritdoc}
      */
-    public function render()
+    public function readonly()
     {
-        $configs = array_merge([
-            'allowClear'  => true,
-            'placeholder' => $this->label,
-        ], $this->config);
+        $this->addVariables(['readonly' => true]);
 
-        $configs = json_encode($configs);
+        return parent::readonly();
+    }
 
-        if (empty($this->script)) {
-            $this->script = "$(\"{$this->getElementClassSelector()}\").select2($configs);";
-        }
-
+    /**
+     * @return array
+     */
+    protected function getOptions()
+    {
         if ($this->options instanceof \Closure) {
             if ($this->form) {
                 $this->options = $this->options->bindTo($this->form->model());
             }
 
-            $this->options(call_user_func($this->options, $this->value));
+            $this->options(call_user_func($this->options, $this->value, $this));
         }
 
         $this->options = array_filter($this->options, 'strlen');
 
+        return $this->options;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOptionDataAttributes()
+    {
+        $arrayOptionAttributes = [];
+        foreach ($this->optionDataAttributes as $dataKey => $attributes) {
+            foreach ($attributes as $key => $value) {
+                if (is_array($value)) {
+                    $value = json_encode($value, true);
+                }
+                $arrayOptionAttributes[$key][] = "data-" . $dataKey . "='" . $value . "'";
+            }
+        }
+
+        $stringOptionAttributes = [];
+        foreach ($arrayOptionAttributes as $attributeKey => $arrayOptionAttribute) {
+            $stringOptionAttributes[$attributeKey] = implode(' ', $arrayOptionAttribute);
+        }
+
+        return $stringOptionAttributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function render()
+    {
+        $configs = array_merge([
+            'allowClear'  => true,
+            'placeholder' => [
+                'id'   => '',
+                'text' => $this->label,
+            ],
+        ], $this->config);
+
         $this->addVariables([
-            'options' => $this->options,
+            'options' => $this->getOptions(),
+            'optionDataAttributes' => $this->getOptionDataAttributes(),
             'groups'  => $this->groups,
-        ]);
+            'configs' => $configs,
+        ])->attribute('data-value', implode(',', (array) $this->value()));
+
+        $this->addCascadeScript();
 
         return parent::render();
     }

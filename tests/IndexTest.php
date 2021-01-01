@@ -4,7 +4,7 @@ use Encore\Admin\Auth\Database\Administrator;
 
 class IndexTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +28,7 @@ class IndexTest extends TestCase
 
             ->see('Dependencies')
             ->see('php')
-            ->see('>=7.0.0')
+//            ->see('>=7.0.0')
             ->see('laravel/framework');
     }
 
@@ -37,13 +37,7 @@ class IndexTest extends TestCase
         $this->visit('admin/')
             ->click('Users')
             ->seePageis('admin/auth/users')
-            ->click('Roles')
-            ->seePageis('admin/auth/roles')
-            ->click('Permission')
-            ->seePageis('admin/auth/permissions')
             ->click('Menu')
-            ->seePageis('admin/auth/menu')
-            ->click('Operation log')
-            ->seePageis('admin/auth/logs');
+            ->seePageis('admin/auth/menu');
     }
 }

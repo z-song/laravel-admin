@@ -27,6 +27,14 @@ class Image extends File
      */
     public function prepare($image)
     {
+        if (!is_object($image)) {
+            return $image;
+        }
+
+        if ($this->picker) {
+            return parent::prepare($image);
+        }
+
         if (request()->has(static::FILE_DELETE_FLAG)) {
             return $this->destroy();
         }
@@ -35,6 +43,10 @@ class Image extends File
 
         $this->callInterventionMethods($image->getRealPath());
 
-        return $this->uploadAndDeleteOriginal($image);
+        $path = $this->uploadAndDeleteOriginal($image);
+
+        $this->uploadAndDeleteOriginalThumbnail($image);
+
+        return $path;
     }
 }

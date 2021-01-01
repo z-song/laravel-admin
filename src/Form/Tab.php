@@ -3,7 +3,6 @@
 namespace Encore\Admin\Form;
 
 use Encore\Admin\Form;
-use Illuminate\Support\Collection;
 
 class Tab
 {
@@ -13,14 +12,9 @@ class Tab
     protected $form;
 
     /**
-     * @var Collection
+     * @var []TabItem
      */
-    protected $tabs;
-
-    /**
-     * @var int
-     */
-    protected $offset = 0;
+    protected $tabs = [];
 
     /**
      * Tab constructor.
@@ -30,48 +24,20 @@ class Tab
     public function __construct(Form $form)
     {
         $this->form = $form;
-
-        $this->tabs = new Collection();
     }
 
     /**
      * Append a tab section.
      *
      * @param string   $title
-     * @param \Closure $content
+     * @param \Closure $callback
      * @param bool     $active
      *
      * @return $this
      */
-    public function append($title, \Closure $content, $active = false)
+    public function add($title, \Closure $callback, $active = false)
     {
-        $fields = $this->collectFields($content);
-
-        $id = 'form-'.($this->tabs->count() + 1);
-
-        $this->tabs->push(compact('id', 'title', 'fields', 'active'));
-
-        return $this;
-    }
-
-    /**
-     * Collect fields under current tab.
-     *
-     * @param \Closure $content
-     *
-     * @return Collection
-     */
-    protected function collectFields(\Closure $content)
-    {
-        call_user_func($content, $this->form);
-
-        $all = $this->form->builder()->fields();
-
-        $fields = $all->slice($this->offset);
-
-        $this->offset = $all->count();
-
-        return $fields;
+        $this->tabs[] = new TabItem($title, $this->form, $callback, $active);
     }
 
     /**
@@ -81,14 +47,18 @@ class Tab
      */
     public function getTabs()
     {
-        // If there is no active tab, then active the first.
-        if ($this->tabs->filter(function ($tab) {
-            return $tab['active'];
-        })->isEmpty()) {
-            $first = $this->tabs->first();
-            $first['active'] = true;
+        $hasActive = false;
 
-            $this->tabs->offsetSet(0, $first);
+        foreach ($this->tabs as $tab) {
+            if ($tab->active) {
+                $hasActive = true;
+                break;
+            }
+        }
+
+        // 如果没有active的tab，设置第一个为active
+        if (!empty($this->tabs) && $hasActive === false) {
+            $this->tabs[0]->active = true;
         }
 
         return $this->tabs;
@@ -97,8 +67,8 @@ class Tab
     /**
      * @return bool
      */
-    public function isEmpty()
+    public function isNotEmpty()
     {
-        return $this->tabs->isEmpty();
+        return !empty($this->tabs);
     }
 }
