@@ -740,9 +740,8 @@ HTML;
         ) {
             $this->model()->with($method);
 
-            return $this->addColumn($method, $label)->setRelation(
-                $this->shouldSnakeAttributes() ? Str::snake($method) : $method
-            );
+			$method = $this->shouldSnakeAttributes() ? Str::snake($method) : $method;
+            return $this->addColumn($method, $label)->setRelation($method);
         }
 
         if ($relation instanceof Relations\HasMany
