@@ -3,7 +3,7 @@
 </span>
 
 <div class="modal table-modal fade {{ $mark }}" id="table-modal-{{ $name }}" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document" style="max-width: {{ $width }}" >
         <div class="modal-content" style="border-radius: 5px;">
             <div class="modal-header">
                 <h4 class="modal-title">{{ $title }}</h4>

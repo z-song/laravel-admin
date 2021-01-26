@@ -32,10 +32,17 @@ class Modal extends AbstractDisplayer
      */
     public function display($callback = null)
     {
-        if (func_num_args() == 2) {
-            list($title, $callback) = func_get_args();
-        } elseif (func_num_args() == 1) {
-            $title = $this->trans('title');
+        $width = '60%';
+        
+        switch(func_num_args()){
+            case 3:
+                list($title, $callback, $width) = func_get_args();
+                break;
+            case 2:
+                list($title, $callback) = func_get_args();
+                break;
+            default:
+                $title = $this->trans('title');
         }
 
         $html = '';
@@ -58,6 +65,7 @@ class Modal extends AbstractDisplayer
             'value'    => $this->value,
             'name'     => $this->getKey().'-'.$mark,
             'mark'     => $mark, 
+            'width'    => $width, 
         ]);
     }
 }

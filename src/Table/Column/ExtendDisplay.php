@@ -20,7 +20,7 @@ use Illuminate\Support\Arr;
  * @method $this orderable($column, $label = '')
  * @method $this table($titles = [])`
  * @method $this expand($callback = null)
- * @method $this modal($title, $callback = null)
+ * @method $this modal($title, $callback = null, $width = null)
  * @method $this carousel(int $width = 300, int $height = 200, $server = '')
  * @method $this downloadable($server = '')
  * @method $this copyable()
