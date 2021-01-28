@@ -47,6 +47,9 @@ class Between extends AbstractFilter
             }
         }
 
+        $parenName = $this->parent->getName();
+        $name = $parenName ? "{$parenName}_{$name}" : $name;
+
         return ['start' => "{$name}[start]", 'end' => "{$name}[end]"];
     }
 
