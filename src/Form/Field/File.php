@@ -127,7 +127,7 @@ class File extends Field
      */
     protected function preview()
     {
-        return $this->objectUrl($this->value);
+        return $this->objectUrl($this->value());
     }
 
     /**
@@ -159,9 +159,9 @@ class File extends Field
      */
     protected function initialPreviewConfig()
     {
-        $config = ['caption' => basename($this->value), 'key' => 0];
-
-        $config = array_merge($config, $this->guessPreviewType($this->value));
+        $config = ['caption' => basename($this->value()), 'key' => 0];
+    
+        $config = array_merge($config, $this->guessPreviewType($this->value()));
 
         return [$config];
     }
