@@ -18,6 +18,7 @@
 
 <script>
     $('.checkbox-card-group label').on('click', function () {
+        $(this).find("input").prop("checked", true);
         $(this).toggleClass('bg-@color');
         return false;
     });
