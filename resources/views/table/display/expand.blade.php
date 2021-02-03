@@ -22,7 +22,7 @@
     </template>
 </div>
 
-<script selector=".{{ $elementClass }}">
+<script selector=".{{ $elementClass }}" all="true">
     @if($async)
     var load = function (url, target) {
         $.get(url, function (data) {

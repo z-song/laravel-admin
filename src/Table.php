@@ -5,6 +5,7 @@ namespace Encore\Admin;
 use Closure;
 use Encore\Admin\Exception\Handler;
 use Encore\Admin\Table\Column;
+use Encore\Admin\Table\ColumnGroup;
 use Encore\Admin\Table\Concerns;
 use Encore\Admin\Table\Displayers;
 use Encore\Admin\Table\Model;
@@ -34,6 +35,7 @@ class Table
         Concerns\CanFixHeader,
         Concerns\CanFixColumns,
         Concerns\CanExportTable,
+        Concerns\CanCombineColumn,
         ShouldSnakeAttributes,
         Macroable {
             __call as macroCall;
@@ -316,6 +318,8 @@ class Table
     {
         $column = new Column($column, $label);
         $column->setTable($this);
+
+        $this->addGroupColumn($column);
 
         return tap($column, function ($value) {
             $this->columns->push($value);
@@ -806,7 +810,14 @@ HTML;
      */
     protected function variables()
     {
-        $this->variables['table'] = $this;
+        $this->variables = array_merge($this->variables, [
+            'table'       => $this,
+            'table_class' => 'table table-hover table-table',
+        ]);
+
+        if ($this->hasColumnGroup()) {
+            $this->variables['table_class'] .= ' table-bordered text-center';
+        }
 
         return $this->variables;
     }

@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form;
 
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Illuminate\Database\Eloquent\Model;
@@ -50,7 +51,7 @@ use Illuminate\Support\Collection;
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '')
  */
-class NestedForm
+class NestedForm extends AbstractForm
 {
     use Form\Concerns\HandleCascadeFields;
 
@@ -367,15 +368,7 @@ class NestedForm
      */
     public function getTemplate()
     {
-        $html = '';
-
-        /* @var Field $field */
-        foreach ($this->fields() as $field) {
-            //when field render, will push $script to Admin
-            $html .= $field->render();
-        }
-
-        return $html;
+        return admin_view('admin::form.fields', ['rows' => $this->getRows()]);
     }
 
     /**
@@ -411,14 +404,11 @@ class NestedForm
     }
 
     /**
-     * Add nested-form fields dynamically.
-     *
      * @param string $method
-     * @param array  $arguments
-     *
-     * @return mixed
+     * @param array $arguments
+     * @return $this
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if ($className = Form::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, '');

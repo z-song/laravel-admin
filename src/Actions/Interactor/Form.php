@@ -5,6 +5,7 @@ namespace Encore\Admin\Actions\Interactor;
 use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Form\Layout\Row;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\ValidationException;
@@ -17,6 +18,11 @@ class Form extends Interactor
      * @var array
      */
     protected $fields = [];
+
+    /**
+     * @var array
+     */
+    protected $rows = [];
 
     /**
      * @var string
@@ -381,9 +387,47 @@ class Form extends Interactor
 
         $field->setView($this->resolveView(get_class($field)));
 
-        array_push($this->fields, $field);
+        return $this->fields[] = $field;
+    }
+
+    /**
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
+    public function resolveField($method, $arguments)
+    {
+        return $this->{$method}(...$arguments);
+    }
+
+    /**
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        $field = $this->resolveField($method, $arguments);
+
+        if (!$field instanceof Field) {
+            return $field;
+        }
+
+        $this->row()->column()->addField($field);
 
         return $field;
+    }
+
+    /**
+     * Add a row in form.
+     *
+     * @param Closure $callback
+     *
+     * @return \Encore\Admin\Form
+     */
+    public function row(\Closure $callback = null)
+    {
+        return $this->rows[] = new Row($this, $callback);
     }
 
     /**
@@ -487,7 +531,7 @@ class Form extends Interactor
         );
 
         $data = array_merge($data, [
-            'fields'        => $this->fields,
+            'rows'          => $this->rows,
             'modal_id'      => $this->getModalId(),
             'modal_size'    => $this->modalSize,
             'confirm'       => $this->confirm,

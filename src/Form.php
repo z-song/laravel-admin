@@ -8,8 +8,6 @@ use Encore\Admin\Form\Builder;
 use Encore\Admin\Form\Concerns;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\Footer;
-use Encore\Admin\Form\Layout\Layout;
-use Encore\Admin\Form\Row;
 use Encore\Admin\Form\Tab;
 use Encore\Admin\Traits\ShouldSnakeAttributes;
 use Illuminate\Contracts\Support\Renderable;
@@ -24,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class Form.
  */
-class Form implements Renderable
+class Form extends AbstractForm implements Renderable
 {
     use Concerns\HasHooks;
     use Concerns\HasFields;
@@ -71,11 +69,6 @@ class Form implements Renderable
     protected $inputs = [];
 
     /**
-     * @var Layout
-     */
-    protected $layout;
-
-    /**
      * Ignored saving fields.
      *
      * @var array
@@ -86,18 +79,6 @@ class Form implements Renderable
      * @var Form\Tab
      */
     protected $tab = null;
-
-    /**
-     * Field rows in form.
-     *
-     * @var array
-     */
-    public $rows = [];
-
-    /**
-     * @var null
-     */
-    public $currentRow = null;
 
     /**
      * @var bool
@@ -115,8 +96,6 @@ class Form implements Renderable
 
         $this->builder = new Builder($this);
 
-        $this->initLayout();
-
         $this->isSoftDeletes = in_array(SoftDeletes::class, class_uses_deep($this->model), true);
 
         $this->callInitCallbacks();
@@ -131,14 +110,11 @@ class Form implements Renderable
     {
         $field->setForm($this);
 
-        $width = $this->builder->getWidth();
-        $field->setWidth($width['field'], $width['label']);
-
         $this->fields()->push($field);
-        $this->layout->addField($field);
 
         return $this;
     }
+
 
     /**
      * @return Model
@@ -197,14 +173,14 @@ class Form implements Renderable
      * Use tab to split form.
      *
      * @param string  $title
-     * @param Closure $content
+     * @param Closure $callback
      * @param bool    $active
      *
      * @return $this
      */
-    public function tab($title, Closure $content, bool $active = false): self
+    public function tab($title, Closure $callback, bool $active = false): self
     {
-        $this->setTab()->append($title, $content, $active);
+        $this->getTab()->add($title, $callback, $active);
 
         return $this;
     }
@@ -215,16 +191,6 @@ class Form implements Renderable
      * @return Tab
      */
     public function getTab()
-    {
-        return $this->tab;
-    }
-
-    /**
-     * Set Tab instance.
-     *
-     * @return Tab
-     */
-    public function setTab(): Tab
     {
         if ($this->tab === null) {
             $this->tab = new Tab($this);
@@ -356,7 +322,7 @@ class Form implements Renderable
 
         $this->callEditing();
 
-        if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
+        if (($data = $this->handleColumnUpdates($data)) instanceof Response) {
             return $data;
         }
 
@@ -413,11 +379,11 @@ class Form implements Renderable
      *
      * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|Response
      */
-    protected function handleColumnUpdates($id, $data)
+    protected function handleColumnUpdates($data)
     {
         $data = $this->handleFileDelete($data);
 
-        $data = $this->handleFileSort($data);
+        $data = $this->handleFileOld($data);
 
         return $data;
     }
@@ -444,20 +410,23 @@ class Form implements Renderable
      *
      * @return array
      */
-    protected function handleFileSort(array $input = []): array
+    protected function handleFileOld(array $input = []): array
     {
-        if (!array_key_exists(Field::FILE_SORT_FLAG, $input)) {
+        if (!array_key_exists(Field::FILE_OLD_FLAG, $input)) {
             return $input;
         }
 
-        $sorts = array_filter($input[Field::FILE_SORT_FLAG]);
+        $olds = array_filter($input[Field::FILE_OLD_FLAG]);
 
-        if (empty($sorts)) {
+        if (empty($olds)) {
             return $input;
         }
 
-        foreach ($sorts as $column => $order) {
-            $input[$column] = $order;
+        foreach ($olds as $column => $order) {
+            if (!isset($input[$column]) || !is_array($input[$column])) {
+                $input[$column] = [];
+            }
+            $input[$column] = array_merge(json_decode($order, true), $input[$column]);
         }
 
         request()->replace($input);
@@ -909,24 +878,6 @@ class Form implements Renderable
     }
 
     /**
-     * Add a row in form.
-     *
-     * @param Closure $callback
-     *
-     * @return $this
-     */
-    public function row(Closure $callback = null)
-    {
-        $this->rows[] = $this->currentRow = new Row($callback, $this);
-
-        if (is_null($callback)) {
-            return $this->currentRow;
-        }
-
-        return $this;
-    }
-
-    /**
      * Tools setting for form.
      *
      * @param Closure $callback
@@ -980,6 +931,14 @@ class Form implements Renderable
     public function isEditing(): bool
     {
         return Str::endsWith(request()->route()->getName(), ['.edit', '.update']);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResourceId()
+    {
+        return current(request()->route()->parameters());
     }
 
     /**
@@ -1106,31 +1065,6 @@ class Form implements Renderable
     }
 
     /**
-     * Add a new layout column.
-     *
-     * @param int      $width
-     * @param \Closure $closure
-     *
-     * @return $this
-     */
-    public function column($width, \Closure $closure): self
-    {
-        $width = $width < 1 ? round(12 * $width) : $width;
-
-        $this->layout->column($width, $closure);
-
-        return $this;
-    }
-
-    /**
-     * Initialize filter layout.
-     */
-    protected function initLayout()
-    {
-        $this->layout = new Layout($this);
-    }
-
-    /**
      * Getter.
      *
      * @param string $name
@@ -1156,14 +1090,12 @@ class Form implements Renderable
     }
 
     /**
-     * Generate a Field object and add to form builder if Field exists.
-     *
      * @param string $method
-     * @param array  $arguments
+     * @param array $arguments
      *
-     * @return Field
+     * @return Field\Nullable|mixed
      */
-    public function __call($method, $arguments)
+    public function resolveField($method, $arguments = [])
     {
         if ($className = static::findFieldClass($method)) {
             $column = Arr::get($arguments, 0, ''); //[0];
@@ -1178,13 +1110,5 @@ class Form implements Renderable
         admin_error('Error', "Field type [$method] does not exist.");
 
         return new Field\Nullable();
-    }
-
-    /**
-     * @return Layout
-     */
-    public function getLayout(): Layout
-    {
-        return $this->layout;
     }
 }

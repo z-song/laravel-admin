@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Actions;
 
+use Encore\Admin\Actions\Interactor\Form;
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
 use Illuminate\Contracts\Support\Renderable;
@@ -295,6 +296,10 @@ abstract class Action implements Renderable
     public function __call($method, $arguments = [])
     {
         if (in_array($method, Interactor\Interactor::$elements)) {
+            if ($this->interactor instanceof Form) {
+                return $this->interactor->__call($method, $arguments);
+            }
+
             return $this->interactor->{$method}(...$arguments);
         }
 

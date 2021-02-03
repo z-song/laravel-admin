@@ -2,6 +2,8 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
 
     $(window).trigger('load.lte.treeview');
 
+    $('body').Layout('fixLayoutHeight');
+
     // NProgress init
     NProgress.configure({parent: '#pjax-container'});
 
@@ -228,7 +230,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
     };
 
     Form.prototype.fields = function (name) {
-        return this.$el.find('.fields-group> .form-group');
+        return this.$el.find('.fields-group .form-group');
     };
 
     Form.prototype.submit = function (e) {
@@ -249,7 +251,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
                     .html(error);
 
                 $el.find('.validation-error')
-                    .closest('.field-control')
+                    .parent()
                     .find('.form-control')
                     .addClass('is-invalid');
             });
@@ -541,9 +543,7 @@ define(['jquery', 'NProgress', 'sweetalert2'], function($, NProgress, Swal) {
     };
 
     Admin.prototype.initTable = function ($table) {
-        if(!this.table) {
-            this.table = new Table($table);
-        }
+        this.table = new Table($table);
     };
 
     Admin.prototype.initForm = function ($form) {

@@ -78,7 +78,7 @@ class MultipleFile extends Field
         $rules = $input = [];
 
         foreach ($value as $key => $file) {
-            $rules[$this->column.'@'.$key] = $this->getRules();
+            $rules[$this->column.'@'.$key] = is_object($file) ? $this->getRules() : 'string';
             $input[$this->column.'@'.$key] = $file;
         }
 
@@ -88,22 +88,27 @@ class MultipleFile extends Field
     /**
      * Sort files.
      *
-     * @param string $order
-     *
+     * @param $original
      * @return array
      */
-    protected function sortFiles($order)
+    protected function sortFiles($original)
     {
-        $order = explode(',', $order);
+        $fileSort = request(static::FILE_SORT_FLAG);
+        $column = $fileSort[$this->column];
 
-        $new = [];
-        $original = $this->original();
+        if ($column) {
+            $order = explode(',', $column);
 
-        foreach ($order as $item) {
-            $new[] = Arr::get($original, $item);
+            $new = [];
+
+            foreach ($order as $item) {
+                $new[] = Arr::get($original, $item);
+            }
+
+            return $new;
+        } else {
+            return $original;
         }
-
-        return $new;
     }
 
     /**
@@ -123,11 +128,21 @@ class MultipleFile extends Field
             return $this->destroy(request(static::FILE_DELETE_FLAG));
         }
 
-        if (is_string($files) && request()->has(static::FILE_SORT_FLAG)) {
-            return $this->sortFiles($files);
+        // 将新旧数据分开
+        $original = $uploadFiles = [];
+        foreach ($files as $file) {
+            if (is_object($file)) {
+                array_push($uploadFiles, $file);
+            } else {
+                array_push($original, $file);
+            }
         }
 
-        $targets = array_map([$this, 'prepareForeach'], $files);
+        if (request()->has(static::FILE_SORT_FLAG)) {
+            $original = $this->sortFiles($original);
+        }
+
+        $targets = array_map([$this, 'prepareForeach'], $uploadFiles);
 
         // for create or update
         if ($this->pathColumn) {
@@ -136,7 +151,7 @@ class MultipleFile extends Field
             }, $targets);
         }
 
-        return array_merge($this->original(), $targets);
+        return array_merge($original, $targets);
     }
 
     /**
@@ -298,6 +313,7 @@ class MultipleFile extends Field
             $this->addVariables([
                 'sortable'  => true,
                 'sort_flag' => static::FILE_SORT_FLAG,
+                'old_flag' => static::FILE_OLD_FLAG,
             ]);
         }
 

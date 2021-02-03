@@ -1,9 +1,9 @@
 <div {!! admin_attrs($group_attrs) !!}>
-    <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">
+    <label for="{{$id}}" class="{{$viewClass['label']}}">
         {{$label}}
     </label>
     <div class="{{$viewClass['field']}}">
-        <div class="input-group"  style="width: 250px;">
+        <div class="input-group" style="width: 250px;">
             <div class="input-group-prepend">
                 <span class="input-group-text">
                     <i class="far {{ $icon }} fa-w"></i>

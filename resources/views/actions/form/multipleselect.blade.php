@@ -10,6 +10,6 @@
     @include('admin::actions.form.help-block')
 </div>
 
-<script require="select2" selector="{{ $selector }}">
+<script require="select2" selector="{{ $selector }}" all="true">
     $(this).select2(@json($configs));
 </script>

@@ -362,26 +362,6 @@ class Builder
     }
 
     /**
-     * If the parant form has rows.
-     *
-     * @return bool
-     */
-    public function hasRows(): bool
-    {
-        return !empty($this->form->rows);
-    }
-
-    /**
-     * Get field rows of form.
-     *
-     * @return array
-     */
-    public function getRows(): array
-    {
-        return $this->form->rows;
-    }
-
-    /**
      * @return array
      */
     public function getHiddenFields(): array
@@ -543,7 +523,7 @@ class Builder
      *
      * @return void
      */
-    protected function removeReservedFields()
+    protected function hideReservedFields()
     {
         if (!$this->isCreating()) {
             return;
@@ -558,10 +538,10 @@ class Builder
             $reserved[] = $this->getModel()->getKeyName();
         }
 
-        $this->form->getLayout()->removeReservedFields($reserved);
-
-        $this->fields = $this->fields()->reject(function (Field $field) use ($reserved) {
-            return in_array($field->column(), $reserved, true);
+        $this->fields()->each(function (Field $field) use ($reserved) {
+            if (in_array($field->column(), $reserved, true)) {
+                $field->setDisplay(false);
+            }
         });
     }
 
@@ -592,15 +572,22 @@ class Builder
      */
     public function render(): string
     {
-        $this->removeReservedFields();
+        if ($this->form->isHorizontal()) {
+            $this->fields()->each(function (Field $field) {
+                $field->horizontal()
+                    ->setWidth($this->width['field'], $this->width['label']);
+            });
+        }
+
+        $this->hideReservedFields();
 
         return Admin::view($this->view, [
             'form'   => $this,
+            'rows'   => $this->form->getRows(),
             'confirm'=> $this->confirm,
             'class'  => $this->formClass,
-            'tabObj' => $this->form->setTab(),
+            'tabObj' => $this->form->getTab(),
             'width'  => $this->width,
-            'layout' => $this->form->getLayout(),
         ]);
     }
 }

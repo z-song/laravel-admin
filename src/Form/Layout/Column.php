@@ -1,19 +1,20 @@
 <?php
-/**
- * Copyright (c) 2019. Mallto.Co.Ltd.<mall-to.com> All rights reserved.
- */
 
 namespace Encore\Admin\Form\Layout;
 
+use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Illuminate\Support\Collection;
 
+/**
+ * @mixin Form
+ */
 class Column
 {
     /**
      * @var Collection
      */
-    protected $fields;
+    protected $fields = [];
 
     /**
      * @var int
@@ -21,36 +22,36 @@ class Column
     protected $width;
 
     /**
+     * @var Form|\Encore\Admin\Widgets\Form
+     */
+    protected $form;
+
+    /**
+     * @var \Closure
+     */
+    protected $callback;
+
+    /**
      * Column constructor.
      *
      * @param int $width
      */
-    public function __construct($width = 12)
+    public function __construct($width = 12, $form, $callback = null)
     {
-        $this->width = $width;
-        $this->fields = new Collection();
-    }
+        if ($width < 1) {
+            $this->width = intval(12 * $width);
+        } elseif ($width == 1) {
+            $this->width = 12;
+        } else {
+            $this->width = $width;
+        }
 
-    /**
-     * Add a filter to this column.
-     *
-     * @param Field $field
-     */
-    public function add(Field $field)
-    {
-        $this->fields->push($field);
-    }
+        $this->form = $form;
+        $this->callback = $callback;
 
-    /**
-     * Remove fields from column.
-     *
-     * @param $fields
-     */
-    public function removeFields($fields)
-    {
-        $this->fields = $this->fields->reject(function (Field $field) use ($fields) {
-            return in_array($field->column(), $fields);
-        });
+        if ($this->callback) {
+            call_user_func($this->callback, $this);
+        }
     }
 
     /**
@@ -58,19 +59,17 @@ class Column
      *
      * @return Collection
      */
-    public function fields()
+    public function getFields()
     {
         return $this->fields;
     }
 
     /**
-     * Set column width.
-     *
-     * @param int $width
+     * @param Field $field
      */
-    public function setWidth($width)
+    public function addField(Field $field)
     {
-        $this->width = $width;
+        $this->fields[] = $field;
     }
 
     /**
@@ -80,6 +79,23 @@ class Column
      */
     public function width()
     {
-        return $this->width;
+        if ($this->width == 12) {
+            return 'col';
+        }
+
+        return "col-{$this->width}";
+    }
+
+    /**
+     * @param string $method
+     * @param array $arguments
+     *
+     * @return Field
+     */
+    public function __call($method, $arguments = [])
+    {
+        return $this->fields[] = call_user_func_array(
+            [$this->form, 'resolveField'], [$method, $arguments]
+        );
     }
 }

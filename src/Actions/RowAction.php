@@ -51,6 +51,10 @@ abstract class RowAction extends TableAction
      */
     public function row($key = null)
     {
+        if ($key instanceof \Closure) {
+            return $this->interactor->row($key);
+        }
+
         if (func_num_args() == 0) {
             return $this->row;
         }
@@ -72,6 +76,9 @@ abstract class RowAction extends TableAction
         return $this;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function getRow()
     {
         return $this->row;

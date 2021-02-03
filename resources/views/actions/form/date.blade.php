@@ -11,6 +11,6 @@
     @include('admin::actions.form.help-block')
 </div>
 
-<script require="datetimepicker" selector="{{ $selector }}">
+<script require="datetimepicker" selector="{{ $selector }}" all="true">
     $(this).datetimepicker(@json($options));
 </script>

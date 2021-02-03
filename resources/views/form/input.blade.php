@@ -1,10 +1,9 @@
 <div {!! admin_attrs($group_attrs) !!}>
 
-    <label for="{{$id}}" class="{{$viewClass['label']}} col-form-label">{{$label}}</label>
+    <label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
         <div class="input-group">
-
             @if ($prepend)
                 <div class="input-group-prepend">
                 {!! $prepend !!}
@@ -28,7 +27,6 @@
 
         @include('admin::form.error')
         @include('admin::form.help-block')
-
     </div>
 </div>
 

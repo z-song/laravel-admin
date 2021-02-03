@@ -67,7 +67,10 @@ class Assets
         ],
         'jquery'                  => ['js' => 'jquery/jquery.min'],
         'pjax'                    => ['js' => 'jquery-pjax/jquery.pjax', 'deps' => 'jquery'],
-        'NProgress'               => ['js' => 'nprogress/nprogress'],
+        'NProgress'               => [
+            'js' => 'nprogress/nprogress',
+            'css' => '/vendor/laravel-admin/nprogress/nprogress',
+        ],
         'bootstrap'               => ['js' => 'bootstrap/js/bootstrap.bundle.min'],
         'adminlte'                => [
             'js'  => 'AdminLTE/js/adminlte.min',
@@ -79,7 +82,7 @@ class Assets
         ],
         'initialize'              => [
             'deps' => ['jquery'],
-            'js'   => 'jquery.initialize/jquery.initialize',
+            'js'   => 'jquery.initialize/jquery.initialize.min',
         ],
         'nestable'                => [
             'css' => '/vendor/laravel-admin/nestable/nestable',
@@ -142,7 +145,8 @@ class Assets
             'js'  => 'ion-rangeslider/js/ion.rangeSlider.min',
         ],
         'wangEditor'              => [
-            'js' => 'https://cdndelivr.net/npm/wangeditor@3.1.1/release/wangEditor.min',
+            'js' => 'https://cdn.jsdelivr.net/npm/wangeditor@4.2.0/dist/wangEditor.min',
+            'export' => 'wangEditor',
         ],
         'treejs' => [
             'js'     => 'treejs/dist/tree.min',
@@ -244,7 +248,7 @@ class Assets
     public static function config()
     {
         $config = [
-            'baseUrl' => '/vendor/laravel-admin/',
+            'baseUrl' => admin_asset('/vendor/laravel-admin/'),
             'map'     => [
                 '*' => ['css' => 'requirecss'],
             ],

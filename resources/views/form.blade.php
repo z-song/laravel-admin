@@ -11,25 +11,11 @@
     {!! $form->open() !!}
 
     <div class="card-body">
-
-        @if(!$tabObj->isEmpty())
+        @if($tabObj->isNotEmpty())
             @include('admin::form.tab', compact('tabObj'))
         @else
             <div class="fields-group">
-
-                @if($form->hasRows())
-                    @foreach($form->getRows() as $row)
-                        {!! $row->render() !!}
-                    @endforeach
-                @else
-                    @foreach($layout->columns() as $column)
-{{--                        <div class="col-md-{{ $column->width() }}">--}}
-                            @foreach($column->fields() as $field)
-                                {!! $field->render() !!}
-                            @endforeach
-{{--                        </div>--}}
-                    @endforeach
-                @endif
+                @include('admin::form.fields')
             </div>
         @endif
 
@@ -46,7 +32,7 @@
     {!! $form->close() !!}
 </div>
 
-@if(!$tabObj->isEmpty())
+@if($tabObj)
 <script>
     var hash = document.location.hash;
     if (hash) {

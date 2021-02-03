@@ -3,6 +3,7 @@
 namespace Encore\Admin\Form;
 
 use Closure;
+use Encore\Admin\AbstractForm;
 use Encore\Admin\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Widgets\Form as WidgetForm;
@@ -22,6 +23,7 @@ class Field implements Renderable
 
     const FILE_DELETE_FLAG = '_file_del_';
     const FILE_SORT_FLAG = '_file_sort_';
+    const FILE_OLD_FLAG = '_file_old_';
 
     /**
      * Element id.
@@ -178,7 +180,7 @@ class Field implements Renderable
      *
      * @var bool
      */
-    protected $horizontal = true;
+    protected $horizontal = false;
 
     /**
      * column data format.
@@ -442,21 +444,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setForm($form = null)
-    {
-        $this->form = $form;
-
-        return $this;
-    }
-
-    /**
-     * Set Widget/Form as field parent.
-     *
-     * @param WidgetForm $form
-     *
-     * @return $this
-     */
-    public function setWidgetForm(WidgetForm $form)
+    public function setForm(AbstractForm $form = null)
     {
         $this->form = $form;
 
@@ -473,10 +461,7 @@ class Field implements Renderable
      */
     public function setWidth($field = 8, $label = 2): self
     {
-        $this->width = [
-            'label' => $label,
-            'field' => $field,
-        ];
+        $this->width = compact('field', 'label');
 
         return $this;
     }
@@ -803,9 +788,9 @@ class Field implements Renderable
     /**
      * @return $this
      */
-    public function disableHorizontal(): self
+    public function horizontal(): self
     {
-        $this->horizontal = false;
+        $this->horizontal = true;
 
         return $this;
     }
@@ -825,13 +810,13 @@ class Field implements Renderable
     {
         if ($this->horizontal) {
             return [
-                'label'      => "col-{$this->width['label']} {$this->getLabelClass()} text-right pr-3",
+                'label'      => "col-{$this->width['label']} {$this->getLabelClass()} text-right pr-3 col-form-label",
                 'field'      => "col-{$this->width['field']} field-control",
                 'form-group' => $this->getGroupClass(true),
             ];
         }
 
-        return ['label' => $this->getLabelClass(), 'field' => '', 'form-group' => ''];
+        return ['label' => $this->getLabelClass(), 'field' => 'field-control', 'form-group' => 'form-group'];
     }
 
     /**
@@ -1189,6 +1174,12 @@ class Field implements Renderable
      */
     public function __toString()
     {
-        return $this->render()->render();
+        $render = $this->render();
+
+        if ($render instanceof Renderable) {
+            return $render->render();
+        }
+
+        return $render;
     }
 }

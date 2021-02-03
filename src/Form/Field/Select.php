@@ -20,7 +20,9 @@ class Select extends Field
     /**
      * @var array
      */
-    protected $config = [];
+    protected $config = [
+//        'theme' => 'bootstrap4',
+    ];
 
     /**
      *  Data attribute for Option.

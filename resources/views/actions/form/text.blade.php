@@ -12,7 +12,7 @@
 </div>
 
 @if($inputmask)
-    <script require="inputmask" selector="{{ $selector }}">
+    <script require="inputmask" selector="{{ $selector }}" all="true">
         $(this).inputmask({!! json_encode_options($inputmask)  !!});
     </script>
 @endif
