@@ -55,9 +55,7 @@
         });
 
     $end.datetimepicker(@json($end_options))
-        .on('dp.change', function (e) {
-            $(this).data('DateTimePicker').maxDate(e.date);
-        });
+        .on('dp.change');
 
     $(this).addClass('initialized');
 </script>
