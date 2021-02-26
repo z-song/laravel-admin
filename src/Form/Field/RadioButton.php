@@ -14,10 +14,12 @@ class RadioButton extends Radio
     protected function addScript()
     {
         $script = <<<'SCRIPT'
-$('.radio-group-toggle label').click(function() {
-    $(this).parent().children().removeClass('active');
-    $(this).addClass('active');
-});
+    //设置radio button选中的样式
+    $('.radio-group-toggle label').filter('.active').attr('class','btn btn-primary active');
+    //radio button点击事件监测
+    $('.radio-group-toggle label').click(function() {
+      $(this).attr('class','btn btn-primary active').siblings().attr('class','btn btn-default');
+    });
 SCRIPT;
 
         Admin::script($script);
