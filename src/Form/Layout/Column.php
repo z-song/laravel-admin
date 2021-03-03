@@ -36,7 +36,7 @@ class Column
      *
      * @param int $width
      */
-    public function __construct($width = 12, $form, $callback = null)
+    public function __construct($width, $form, $callback = null)
     {
         if ($width < 1) {
             $this->width = intval(12 * $width);
