@@ -37,7 +37,7 @@ class Grid
         Concerns\CanDoubleClick,
         ShouldSnakeAttributes,
         Macroable {
-            __call as macroCall;
+            Macroable::__call as macroCall;
         }
 
     /**
