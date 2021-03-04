@@ -69,7 +69,7 @@ class Assets
         'pjax'                    => ['js' => 'jquery-pjax/jquery.pjax', 'deps' => 'jquery'],
         'NProgress'               => [
             'js' => 'nprogress/nprogress',
-            'css' => '/vendor/laravel-admin/nprogress/nprogress',
+            'css' => '../../vendor/laravel-admin/nprogress/nprogress',
         ],
         'bootstrap'               => ['js' => 'bootstrap/js/bootstrap.bundle.min'],
         'adminlte'                => [
@@ -78,14 +78,14 @@ class Assets
         ],
         'sweetalert2'             => [
             'js'  => 'sweetalert2/sweetalert2.min',
-            'css' => '/vendor/laravel-admin/sweetalert2/sweetalert2.min',
+            'css' => '../../vendor/laravel-admin/sweetalert2/sweetalert2.min',
         ],
         'initialize'              => [
             'deps' => ['jquery'],
             'js'   => 'jquery.initialize/jquery.initialize.min',
         ],
         'nestable'                => [
-            'css' => '/vendor/laravel-admin/nestable/nestable',
+            'css' => '../../vendor/laravel-admin/nestable/nestable',
             'js'  => 'nestable/jquery.nestable',
         ],
         'iconpicker'              => [
@@ -119,8 +119,8 @@ class Assets
         ],
         'select2'                 => [
             'css' => [
-                '/vendor/laravel-admin/select2/css/select2.min',
-                '/vendor/laravel-admin/select2-bootstrap4-theme/select2-bootstrap4.min',
+                '../../vendor/laravel-admin/select2/css/select2.min',
+                '../../vendor/laravel-admin/select2-bootstrap4-theme/select2-bootstrap4.min',
             ],
             'js'  => 'select2/js/select2.full.min',
         ],
