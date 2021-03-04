@@ -382,7 +382,7 @@ function admin_login_page_backgroud()
             $index = 4;
         }
 
-        $image = "/vendor/laravel-admin/laravel-admin/images/login-bg{$index}.svg";
+        $image = admin_asset("/vendor/laravel-admin/laravel-admin/images/login-bg{$index}.svg");
     }
 
     return "style=\"background: url({$image}) no-repeat;background-size: cover;\"";
