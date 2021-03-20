@@ -34,6 +34,12 @@ class Form extends Interactor
     protected $confirm = '';
 
     /**
+     * @var bool
+     */
+    protected $showButton = true;
+
+
+    /**
      * @param string $label
      *
      * @return array
@@ -341,6 +347,20 @@ class Form extends Interactor
     }
 
     /**
+     * @param $html
+     *
+     * @return Field\Html
+     */
+    public function html2($html)
+    {
+        $field = new Field\Html($html, []);
+
+        $this->addField($field);
+
+        return $field;
+    }
+
+    /**
      * @param $message
      *
      * @return $this
@@ -368,6 +388,16 @@ class Form extends Interactor
     public function modalSmall()
     {
         $this->modalSize = 'modal-sm';
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function hiddenButton()
+    {
+        $this->showButton = false;
 
         return $this;
     }
@@ -480,10 +510,11 @@ class Form extends Interactor
     public function addModalHtml()
     {
         $data = [
-            'fields'     => $this->fields,
-            'title'      => $this->action->name(),
-            'modal_id'   => $this->getModalId(),
-            'modal_size' => $this->modalSize,
+            'fields'      => $this->fields,
+            'title'       => $this->action->name(),
+            'modal_id'    => $this->getModalId(),
+            'modal_size'  => $this->modalSize,
+            'show_button' => $this->showButton,
         ];
 
         $modal = view('admin::actions.form.modal', $data)->render();

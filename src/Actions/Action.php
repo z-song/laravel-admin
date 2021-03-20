@@ -8,12 +8,12 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 
 /**
- * @method $this                success($title, $text = '', $options = [])
- * @method $this                error($title, $text = '', $options = [])
- * @method $this                warning($title, $text = '', $options = [])
- * @method $this                info($title, $text = '', $options = [])
- * @method $this                question($title, $text = '', $options = [])
- * @method $this                confirm($title, $text = '', $options = [])
+ * @method $this success($title, $text = '', $options = [])
+ * @method $this error($title, $text = '', $options = [])
+ * @method $this warning($title, $text = '', $options = [])
+ * @method $this info($title, $text = '', $options = [])
+ * @method $this question($title, $text = '', $options = [])
+ * @method $this confirm($title, $text = '', $options = [])
  * @method Field\Text           text($column, $label = '')
  * @method Field\Email          email($column, $label = '')
  * @method Field\Integer        integer($column, $label = '')
@@ -34,8 +34,10 @@ use Illuminate\Http\Request;
  * @method Field\Datetime       datetime($column, $label = '')
  * @method Field\Time           time($column, $label = '')
  * @method Field\Hidden         hidden($column, $label = '')
+ * @method Field\Html           html2($html)
  * @method $this                modalLarge()
  * @method $this                modalSmall()
+ * @method $this                hiddenButton()
  */
 abstract class Action implements Renderable
 {
@@ -130,7 +132,7 @@ abstract class Action implements Renderable
     public function selector($prefix)
     {
         if (is_null($this->selector)) {
-            return static::makeSelector(get_called_class().spl_object_id($this), $prefix);
+            return static::makeSelector(get_called_class(), $prefix);
         }
 
         return $this->selector;
@@ -358,8 +360,8 @@ var actionResolver = function (data) {
                     window.location = then.value;
                 }
 
-                if (then.action == 'open') {
-                    window.open(then.value, '_blank');
+                if (then.action == 'oepn') {
+                    window.open(this.value, '_blank');
                 }
             };
 
