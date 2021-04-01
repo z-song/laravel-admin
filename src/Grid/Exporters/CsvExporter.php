@@ -170,7 +170,7 @@ class CsvExporter extends AbstractExporter
                     $current = $column->fill($current);
                     $this->grid->columnNames[] = $column->getName();
                 });
-                fwrite($out, chr(0xEF) . chr(0xBB) . chr(0xBF));//导出的CSV文件是无BOM编码UTF-8，而我们通常使用UTF-8编码格式都是有BOM的。所以添加BOM于CSV中
+                fwrite($out, chr(0xEF).chr(0xBB).chr(0xBF));//导出的CSV文件是无BOM编码UTF-8，而我们通常使用UTF-8编码格式都是有BOM的。所以添加BOM于CSV中
                 // Write title
                 if (empty($titles)) {
                     fputcsv($handle, $titles = $this->getVisiableTitles());
