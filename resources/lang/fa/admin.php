@@ -98,5 +98,13 @@ return [
         'filter_clear'       => 'نمایش همه',
         'filter_placeholder' => 'فیلتر کردن',
     ],
-    'menu_titles'           => [],
+    'menu_titles'           => [
+        'dashboard'          => 'داشبورد',
+        'admin'              => 'ادمین',
+        'users'              => 'کاربران',
+        'roles'              => 'نقش ها',
+        'permission'         => 'دسترسی ها',
+        'menu'               => 'منو',
+        'operation_log'      => 'گزارش عملیات',
+    ],
 ];
