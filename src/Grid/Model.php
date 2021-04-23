@@ -334,6 +334,31 @@ class Model
         return $this->model->chunk($count, $callback);
     }
 
+
+    /**
+     * @param     $callback
+     * @param int $count
+     *
+     * @return LengthAwarePaginator|Collection
+     */
+    public function chunkById($callback, $count = 100)
+    {
+        if ($this->usePaginate) {
+            return $this->buildData(false)->chunk($count)->each($callback);
+        }
+
+        $this->setSort();
+
+        $this->queries->reject(function ($query) {
+            return $query['method'] == 'paginate';
+        })->each(function ($query) {
+            $this->model = $this->model->{$query['method']}(...$query['arguments']);
+        });
+
+        return $this->model->chunkById($count, $callback);
+    }
+
+
     /**
      * Add conditions to grid model.
      *
@@ -569,7 +594,7 @@ class Model
      */
     protected function setRelationSort($column)
     {
-        list($relationName, $relationColumn) = explode('.', $column);
+        [ $relationName, $relationColumn ] = explode('.', $column);
 
         if ($this->queries->contains(function ($query) use ($relationName) {
             return $query['method'] == 'with' && in_array($relationName, $query['arguments']);

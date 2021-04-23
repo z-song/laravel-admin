@@ -537,6 +537,24 @@ class Filter implements Renderable
         return $this->model->addConditions($conditions)->chunk($callback, $count);
     }
 
+
+    /**
+     * @param callable $callback
+     * @param int      $count
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator|Collection
+     */
+    public function chunkById(callable $callback, $count = 100)
+    {
+        $conditions = array_merge(
+            $this->conditions(),
+            $this->scopeConditions()
+        );
+
+        return $this->model->addConditions($conditions)->chunkById($callback, $count);
+    }
+
+
     /**
      * Get the string contents of the filter view.
      *

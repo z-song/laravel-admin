@@ -161,7 +161,7 @@ class CsvExporter extends AbstractExporter
             $handle = fopen('php://output', 'w');
             $titles = [];
 
-            $this->chunk(function ($collection) use ($handle, &$titles) {
+            $this->chunkById(function ($collection) use ($handle, &$titles) {
                 Column::setOriginalGridModels($collection);
 
                 $original = $current = $collection->toArray();
