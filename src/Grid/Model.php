@@ -592,7 +592,7 @@ class Model
      */
     protected function setRelationSort($column)
     {
-        [ $relationName, $relationColumn ] = explode('.', $column);
+        list($relationName, $relationColumn) = explode('.', $column);
 
         if ($this->queries->contains(function ($query) use ($relationName) {
             return $query['method'] == 'with' && in_array($relationName, $query['arguments']);
