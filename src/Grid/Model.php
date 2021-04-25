@@ -334,7 +334,6 @@ class Model
         return $this->model->chunk($count, $callback);
     }
 
-
     /**
      * @param     $callback
      * @param int $count
@@ -357,7 +356,6 @@ class Model
 
         return $this->model->chunkById($count, $callback);
     }
-
 
     /**
      * Add conditions to grid model.

@@ -77,7 +77,6 @@ abstract class AbstractExporter implements ExporterInterface
         return $this->grid->getFilter()->chunk($callback, $count);
     }
 
-
     /**
      * @param callable $callback
      * @param int      $count
@@ -90,7 +89,6 @@ abstract class AbstractExporter implements ExporterInterface
 
         return $this->grid->getFilter()->chunkById($callback, $count);
     }
-
 
     /**
      * @return \Illuminate\Support\Collection

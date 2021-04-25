@@ -537,7 +537,6 @@ class Filter implements Renderable
         return $this->model->addConditions($conditions)->chunk($callback, $count);
     }
 
-
     /**
      * @param callable $callback
      * @param int      $count
@@ -553,7 +552,6 @@ class Filter implements Renderable
 
         return $this->model->addConditions($conditions)->chunkById($callback, $count);
     }
-
 
     /**
      * Get the string contents of the filter view.
