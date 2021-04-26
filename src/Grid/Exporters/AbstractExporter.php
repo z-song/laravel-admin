@@ -81,13 +81,13 @@ abstract class AbstractExporter implements ExporterInterface
      * @param callable $callback
      * @param int      $count
      *
-     * @return \Illuminate\Pagination\LengthAwarePaginator|\Illuminate\Support\Collection
+     * @return bool
      */
-    public function chunkById(callable $callback, $count = 100)
+    public function chunkById(callable $callback, $count = 100, $column = null, $alias = null)
     {
         $this->grid->applyQuery();
 
-        return $this->grid->getFilter()->chunkById($callback, $count);
+        return $this->grid->getFilter()->chunkById($callback, $count, $column, $alias);
     }
 
     /**

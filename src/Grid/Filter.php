@@ -541,16 +541,16 @@ class Filter implements Renderable
      * @param callable $callback
      * @param int      $count
      *
-     * @return \Illuminate\Pagination\LengthAwarePaginator|Collection
+     * @return bool
      */
-    public function chunkById(callable $callback, $count = 100)
+    public function chunkById(callable $callback, $count = 100, $column = null, $alias = null)
     {
         $conditions = array_merge(
             $this->conditions(),
             $this->scopeConditions()
         );
 
-        return $this->model->addConditions($conditions)->chunkById($callback, $count);
+        return $this->model->addConditions($conditions)->chunkById($callback, $count, $column, $alias);
     }
 
     /**
