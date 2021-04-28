@@ -398,7 +398,7 @@ class Field implements Renderable
             return;
         }
 
-        $this->value = Arr::get($data, $this->column);
+        $this->value = Arr::get($data, Str::snake($this->column));
 
         $this->formatValue();
     }
