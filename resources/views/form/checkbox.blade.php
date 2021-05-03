@@ -15,6 +15,28 @@
 
         @include('admin::form.error')
 
+        @if($groups)
+
+        @foreach($groups as $group => $options)
+
+            <p style="{{ $canCheckAll ? 'margin: 15px 0 0 0;' : 'margin: 7px 0 0 0;' }}padding-bottom: 5px;border-bottom: 1px solid #eee;display: inline-block;">{{ $group }}</p>
+
+            @foreach($options as $option => $label)
+
+            <div class="checkbox icheck">
+
+                <label>
+                    <input type="checkbox" name="{{$name}}[]" value="{{$option}}" class="{{$class}}" {{ false !== array_search($option, array_filter(old($column, $value ?? []))) || ($value === null && in_array($option, $checked)) ?'checked':'' }} {!! $attributes !!} />&nbsp;{{$label}}&nbsp;&nbsp;
+                </label>
+
+            </div>
+
+            @endforeach
+
+        @endforeach
+
+        @else
+
         @foreach($options as $option => $label)
 
             {!! $inline ? '<span class="icheck">' : '<div class="checkbox icheck">' !!}
@@ -26,6 +48,8 @@
             {!! $inline ? '</span>' :  '</div>' !!}
 
         @endforeach
+
+        @endif
 
         <input type="hidden" name="{{$name}}[]">
 
