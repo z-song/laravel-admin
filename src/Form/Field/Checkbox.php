@@ -126,7 +126,7 @@ class Checkbox extends MultipleSelect
             'checked'     => $this->checked,
             'inline'      => $this->inline,
             'canCheckAll' => $this->canCheckAll,
-            'groups'      => $this->groups
+            'groups'      => $this->groups,
         ]);
 
         if ($this->canCheckAll) {
