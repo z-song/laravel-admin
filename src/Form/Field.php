@@ -247,6 +247,13 @@ class Field implements Renderable
     protected $callback;
 
     /**
+     * column is snake-casing attributes.
+     *
+     * @var bool
+     */
+    protected $snakeAttributes = false;
+
+    /**
      * @var bool
      */
     public $isJsonType = false;
@@ -380,6 +387,42 @@ class Field implements Renderable
     }
 
     /**
+     * Set snake attributes to the field.
+     *
+     * @param bool $snakeAttributes
+     *
+     * @return $this
+     */
+    public function setSnakeAttributes($snakeAttributes)
+    {
+        $this->snakeAttributes = $snakeAttributes;
+
+        return $this;
+    }
+
+    /**
+     * Get snake attributes of the field.
+     *
+     * @return bool
+     */
+    public function getSnakeAttributes()
+    {
+        return $this->snakeAttributes;
+    }
+
+    /**
+     * Determine if a column needs to be snaked.
+     *
+     * @param string|array $column
+     *
+     * @return string|array
+     */
+    protected function columnShouldSnaked($column)
+    {
+        return $this->getSnakeAttributes() ? Str::snake($column) : $column;
+    }
+
+    /**
      * Fill data to the field.
      *
      * @param array $data
@@ -392,13 +435,13 @@ class Field implements Renderable
 
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
-                $this->value[$key] = Arr::get($data, Str::snake($column));
+                $this->value[$key] = Arr::get($data, $this->columnShouldSnaked($column));
             }
 
             return;
         }
 
-        $this->value = Arr::get($data, Str::snake($this->column));
+        $this->value = Arr::get($data, $this->columnShouldSnaked($this->column));
 
         $this->formatValue();
     }
