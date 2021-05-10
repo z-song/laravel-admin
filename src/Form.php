@@ -192,6 +192,8 @@ class Form implements Renderable
         $this->builder->setMode(Builder::MODE_EDIT);
         $this->builder->setResourceId($id);
 
+        $this->setRelationFieldSnakeAttributes();
+
         $this->setFieldValue($id);
 
         return $this;
@@ -1006,6 +1008,34 @@ class Form implements Renderable
 
         $this->fields()->each(function (Field $field) use ($values) {
             $field->setOriginal($values);
+        });
+    }
+
+    /**
+     * Determine relational column needs to be snaked.
+     *
+     * @return void
+     */
+    protected function setRelationFieldSnakeAttributes()
+    {
+        $relations = $this->getRelations();
+
+        $this->fields()->each(function (Field $field) use ($relations) {
+            if ($field->getSnakeAttributes()) {
+                return;
+            }
+
+            $column = $field->column();
+
+            $column = is_array($column) ? head($column) : $column;
+
+            list($relation) = explode('.', $column);
+
+            if (!in_array($relation, $relations)) {
+                return;
+            }
+
+            $field->setSnakeAttributes($this->model::$snakeAttributes);
         });
     }
 
