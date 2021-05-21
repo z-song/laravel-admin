@@ -164,7 +164,7 @@ class Text extends Presenter
 
         if (is_array($this->filter->getId())) {
             $ids = $this->filter->getId();
-        }else{
+        } else {
             $ids[] = $this->filter->getId();
         }
 
