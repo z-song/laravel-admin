@@ -162,11 +162,7 @@ class Text extends Presenter
     {
         $options = json_encode($options);
 
-        if (is_array($this->filter->getId())) {
-            $ids = $this->filter->getId();
-        } else {
-            $ids[] = $this->filter->getId();
-        }
+        $ids = (array) $this->filter->getId();
 
         foreach ($ids as $id) {
             Admin::script("$('#{$this->filter->getFilterBoxId()} input.{$id}').inputmask($options);");
