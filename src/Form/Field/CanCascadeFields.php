@@ -92,7 +92,7 @@ trait CanCascadeFields
             $value = implode('-', $value);
         }
 
-        return sprintf('cascade-%s-%s', $this->getElementClassString(), $value);
+        return sprintf('cascade-%s-%s', $this->getElementClassString(), bin2hex($value));
     }
 
     /**
