@@ -162,7 +162,7 @@ trait CanCascadeFields
     {
         return addslashes(old($this->column(), $this->value()));
     }
-    
+
     /**
      * Add cascade scripts to contents.
      *
