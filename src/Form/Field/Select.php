@@ -180,34 +180,36 @@ EOT;
         $strAllowClear = var_export($allowClear, true);
 
         $script = <<<EOT
-var fields = '$fieldsStr'.split('.');
-var urls = '$urlsStr'.split('^');
+(function() {
+    var fields = '$fieldsStr'.split('.');
+    var urls = '$urlsStr'.split('^');
 
-var refreshOptions = function(url, target) {
-    $.get(url).then(function(data) {
-        target.find("option").remove();
-        $(target).select2({
-            placeholder: $placeholder,
-            allowClear: $strAllowClear,
-            data: $.map(data, function (d) {
-                d.id = d.$idField;
-                d.text = d.$textField;
-                return d;
-            })
-        }).trigger('change');
+    var refreshOptions = function(url, target) {
+        $.get(url).then(function(data) {
+            target.find("option").remove();
+            $(target).select2({
+                placeholder: $placeholder,
+                allowClear: $strAllowClear,
+                data: $.map(data, function (d) {
+                    d.id = d.$idField;
+                    d.text = d.$textField;
+                    return d;
+                })
+            }).trigger('change');
+        });
+    };
+
+    $(document).off('change', "{$this->getElementClassSelector()}");
+    $(document).on('change', "{$this->getElementClassSelector()}", function () {
+        var _this = this;
+        var promises = [];
+
+        fields.forEach(function(field, index){
+            var target = $(_this).closest('.fields-group').find('.' + fields[index]);
+            promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
+        });
     });
-};
-
-$(document).off('change', "{$this->getElementClassSelector()}");
-$(document).on('change', "{$this->getElementClassSelector()}", function () {
-    var _this = this;
-    var promises = [];
-
-    fields.forEach(function(field, index){
-        var target = $(_this).closest('.fields-group').find('.' + fields[index]);
-        promises.push(refreshOptions(urls[index] + "?q="+ _this.value, target));
-    });
-});
+})();
 EOT;
 
         Admin::script($script);
