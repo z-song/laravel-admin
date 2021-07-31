@@ -70,6 +70,9 @@ SCRIPT;
                 return $this->interactor->addElementAttr($content, $this->selector);
             }
         }
+        if (method_exists($this, 'html')) {
+            return $this->html();
+        }
 
         return sprintf(
             "<a href='javascript:void(0);' class='%s' %s>%s</a>",
