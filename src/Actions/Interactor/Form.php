@@ -617,6 +617,7 @@ PROMISE;
                     if (data.status === true) {
                         $('#'+modalId).modal('hide');
                     }
+                    $(':submit', '#'+modalId).button('reset');
                 },
                 error:function(request){
                     reject(request);
