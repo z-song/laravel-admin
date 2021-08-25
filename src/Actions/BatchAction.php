@@ -12,14 +12,14 @@ abstract class BatchAction extends GridAction
     public $selectorPrefix = '.grid-batch-action-';
 
     /**
-     * variable holding additional CSS classes for the button
+     * variable holding additional CSS classes for the button.
      *
-     * @var array $cssClasses
+     * @var array
      */
     private $cssClasses = [];
 
     /**
-     * add a single CSS class string to the CSS-Classes array
+     * add a single CSS class string to the CSS-Classes array.
      *
      * @param string $cssClass
      *
@@ -39,7 +39,7 @@ abstract class BatchAction extends GridAction
     }
 
     /**
-     * add multiple CSS class strings to the CSS-Classes array
+     * add multiple CSS class strings to the CSS-Classes array.
      *
      * @param array $cssClasses
      *
