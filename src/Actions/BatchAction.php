@@ -22,9 +22,11 @@ abstract class BatchAction extends GridAction
      * add a single CSS class string to the CSS-Classes array
      *
      * @param string $cssClass
+     *
      * @return $this
      */
-    public function addCssClass(string $cssClass) {
+    public function addCssClass(string $cssClass)
+    {
         if (empty($cssClass)) {
             return $this;
         }
@@ -32,6 +34,7 @@ abstract class BatchAction extends GridAction
             throw new \Exception(__METHOD__.': item is not a valid string');
         }
         $this->cssClasses[] = $cssClass;
+
         return $this;
     }
 
@@ -39,9 +42,11 @@ abstract class BatchAction extends GridAction
      * add multiple CSS class strings to the CSS-Classes array
      *
      * @param array $cssClasses
+     *
      * @return $this
      */
-    public function addCssClasses(array $cssClasses) {
+    public function addCssClasses(array $cssClasses)
+    {
         if (empty($cssClasses)) {
             return $this;
         }
@@ -54,6 +59,7 @@ abstract class BatchAction extends GridAction
             }
             $this->cssClasses[] = $item;
         }
+
         return $this;
     }
 
