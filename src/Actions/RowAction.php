@@ -115,12 +115,15 @@ abstract class RowAction extends GridAction
         }
 
         $modelClass = str_replace('_', '\\', $request->get('_model'));
-
+        $modelObj = new $modelClass();
+        if (method_exists($this, 'modelBooted')) {
+            $modelObj = $this->modelBooted($modelObj);
+        }
         if ($this->modelUseSoftDeletes($modelClass)) {
-            return $modelClass::withTrashed()->findOrFail($key);
+            return $modelObj->withTrashed()->findOrFail($key);
         }
 
-        return $modelClass::findOrFail($key);
+        return $modelObj->findOrFail($key);
     }
 
     public function display($value)
@@ -148,5 +151,17 @@ abstract class RowAction extends GridAction
             $this->getElementClass(),
             $this->asColumn ? $this->display($this->row($this->column->getName())) : $this->name()
         );
+    }
+
+    /**
+     * model booted function
+     * @param $model
+     * @return mixed
+     * @author ChenDasheng
+     * @created 2021/8/29 12:02
+     */
+    public function modelBooted($model)
+    {
+        return $model;
     }
 }
