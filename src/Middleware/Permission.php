@@ -70,9 +70,8 @@ class Permission
             throw new \InvalidArgumentException("Invalid permission method [$method].");
         }
 
-        call_user_func_array([Checker::class, $method], [$args]);
+        return call_user_func_array([Checker::class, $method], [$args]);
 
-        return true;
     }
 
     /**
