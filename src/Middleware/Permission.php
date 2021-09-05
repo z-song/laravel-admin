@@ -29,7 +29,7 @@ class Permission
             return $next($request);
         }
 
-        if (!Admin::user() || !empty($args) || $this->shouldPassThrough($request)) {
+        if (!Admin::user() || $this->shouldPassThrough($request)) {
             return $next($request);
         }
 
