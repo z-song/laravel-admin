@@ -198,7 +198,7 @@ STR;
 
         Admin::script("$('.$class').editable($options);");
 
-        $this->value = htmlentities($this->value);
+        $this->value = htmlentities($this->value ?? '');
 
         $attributes = [
             'href'       => '#',
