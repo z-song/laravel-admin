@@ -172,14 +172,14 @@
 </style>
 
 <script>
-    var theadHeight = $('.table-main thead tr').outerHeight();
+    var theadHeight = $('.table-main thead tr')[0].getBoundingClientRect().height;
     $('.table-fixed thead tr').outerHeight(theadHeight);
 
     var tfootHeight = $('.table-main tfoot tr').outerHeight();
     $('.table-fixed tfoot tr').outerHeight(tfootHeight);
 
     $('.table-main tbody tr').each(function(i, obj) {
-        var height = $(obj).outerHeight();
+        var height = obj.getBoundingClientRect().height;
 
         $('.table-fixed-left tbody tr').eq(i).outerHeight(height);
         $('.table-fixed-right tbody tr').eq(i).outerHeight(height);
