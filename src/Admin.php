@@ -226,7 +226,7 @@ class Admin
      *
      * @return string|void
      */
-    public function favicon($favicon = null)
+    public static function favicon($favicon = null)
     {
         if (is_null($favicon)) {
             return static::$favicon;
