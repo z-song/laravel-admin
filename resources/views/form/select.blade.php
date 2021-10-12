@@ -1,6 +1,6 @@
 <div {!! admin_attrs($group_attrs) !!}>
 
-<label for="{{$id}}" class="{{$viewClass['label']}}">{{$label}}</label>
+<label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
     <div class="{{$viewClass['field']}}">
         <input type="hidden" name="{{$name}}"/>
@@ -10,19 +10,20 @@
                 @foreach($groups as $group)
                     <optgroup label="{{ $group['label'] }}">
                         @foreach($group['options'] as $select => $option)
-                            <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ isset($value) && $select == $value ?'selected':'' }}>{{$option}}</option>
+                            <option value="{{$select}}" {{ $select == $value ?'selected':'' }}>{{$option}}</option>
                         @endforeach
                     </optgroup>
                 @endforeach
              @else
                 <option value=""></option>
                 @foreach($options as $select => $option)
-                    <option value="{{$select}}" {!! $optionDataAttributes ? $optionDataAttributes[$select] : '' !!} {{ isset($value) && $select == $value ?'selected':'' }}>{{$option}}</option>
+                    <option value="{{$select}}" {{ $select == $value ?'selected':'' }}>{{$option}}</option>
                 @endforeach
             @endif
         </select>
         @include('admin::form.error')
         @include('admin::form.help-block')
+
     </div>
 </div>
 
@@ -32,15 +33,15 @@
 
     @isset($load)
     $(this).off('change').on('change', function () {
-        var target = $(this).closest('.fields-group').find(".{{ $load['class'] }}");
+        var target = $(this).closest('.fields-group').find(".field-{{ $load['class'] }}");
         $.get("{{ $load['sourceUrl'] }}",{q : this.value}, function (data) {
             target.find("option").remove();
             $(target).select2({
                 placeholder: {id:'', text: '{{ admin_trans('admin.choose') }}'},
-                allowClear: {{ $strAllowClear }},
+                allowClear: {{ $load['strAllowClear'] }},
                 data: $.map(data, function (d) {
-                    d.id = d.{{$idField}};
-                    d.text = d.{{$textField}};
+                    d.id = d.{{ $load['idField']  }};
+                    d.text = d.{{ $load['textField']  }};
                     return d;
                 })
             });
@@ -49,7 +50,6 @@
             }
             $(target).trigger('change');
         });
-
     });
     @endisset
 
@@ -62,10 +62,10 @@
             target.find("option").remove();
             $(target).select2({
                 placeholder: {id:'', text: '{{ admin_trans('admin.choose') }}'},
-                allowClear: {{$strAllowClear}},
-                data: $.map(data, function (d) {
-                    d.id = d.{{$idField}};
-                    d.text = d.{{$textField}};
+              allowClear: {{ $load['strAllowClear'] }},
+              data: $.map(data, function (d) {
+                d.id = d.{{ $load['idField']  }};
+                d.text = d.{{ $load['textField']  }};
                     return d;
                 })
             }).trigger('change');
