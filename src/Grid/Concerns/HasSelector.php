@@ -58,7 +58,7 @@ trait HasSelector
             }
 
             if (is_null($selector['query'])) {
-                $this->model()->whereIn($column, (array)$values);
+                $this->model()->whereIn($column, (array) $values);
             } else {
                 call_user_func($selector['query'], $this->model(), $values);
             }
