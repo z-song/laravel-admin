@@ -53,8 +53,8 @@ trait HasSelector
 
             $values = $active[$column];
 
-            if ($selector['type'] == 'one') {
-                $values = current($values);
+            if ($selector['type'] === 'one') {
+                $values = (array)current($values);
             }
 
             if (is_null($selector['query'])) {
