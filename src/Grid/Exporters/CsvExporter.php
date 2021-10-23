@@ -170,7 +170,7 @@ class CsvExporter extends AbstractExporter
                     $current = $column->fill($current);
                     $this->grid->columnNames[] = $column->getName();
                 });
-                
+
                 // Write title
                 if (empty($titles)) {
                     fputcsv($handle, $titles = $this->getVisiableTitles());
