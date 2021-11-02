@@ -112,11 +112,11 @@ trait HasAssets
         static::ignoreMinify($css, $minify);
 
         if (!is_null($css)) {
-            return self::$css = array_merge((array) $css, self::$css);
+            return self::$css = array_merge(self::$css, (array) $css);
         }
 
         if (!$css = static::getMinifiedCss()) {
-            $css = array_merge(static::baseCss(), static::$css);
+            $css = array_merge(static::$css, static::baseCss());
         }
 
         $css = array_filter(array_unique($css));
