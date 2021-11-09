@@ -58,7 +58,7 @@ abstract class Selectable
     }
 
     /**
-     * @return Grid
+     * @return void
      */
     abstract public function make();
 

@@ -92,7 +92,7 @@ trait CanCascadeFields
             $value = implode('-', $value);
         }
 
-        return sprintf('cascade-%s-%s', $this->getElementClassString(), $value);
+        return sprintf('cascade-%s-%s', $this->getElementClassString(), bin2hex($value));
     }
 
     /**
@@ -156,6 +156,14 @@ trait CanCascadeFields
     }
 
     /**
+     * Js Value.
+     */
+    protected function getValueByJs()
+    {
+        return addslashes(old($this->column(), $this->value()));
+    }
+
+    /**
      * Add cascade scripts to contents.
      *
      * @return void
@@ -204,7 +212,7 @@ trait CanCascadeFields
     var cascade_groups = {$cascadeGroups};
         
     cascade_groups.forEach(function (event) {
-        var default_value = '{$this->getDefault()}' + '';
+        var default_value = '{$this->getValueByJs()}' + '';
         var class_name = event.class;
         if(default_value == event.value) {
             $('.'+class_name+'').removeClass('hide');

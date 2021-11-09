@@ -41,6 +41,14 @@
     Inspired by <a href="https://github.com/sleeping-owl/admin" target="_blank">SleepingOwlAdmin</a> and <a href="https://github.com/zofe/rapyd-laravel" target="_blank">rapyd-laravel</a>.
 </p>
 
+Sponsor
+------------
+
+<a href="https://ter.li/32ifxj">
+<img src="https://user-images.githubusercontent.com/1479100/102449272-dc356880-406e-11eb-9079-169c8c2af81c.png" alt="laravel-admin" width="200px;">
+</a>
+
+
 Requirements
 ------------
  - PHP >= 7.0.0

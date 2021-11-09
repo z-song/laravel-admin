@@ -220,12 +220,12 @@ class Tree implements Renderable
     protected function script()
     {
         $trans = [
-            'delete_confirm'    => trans('admin.delete_confirm'),
-            'save_succeeded'    => trans('admin.save_succeeded'),
-            'refresh_succeeded' => trans('admin.refresh_succeeded'),
-            'delete_succeeded'  => trans('admin.delete_succeeded'),
-            'confirm'           => trans('admin.confirm'),
-            'cancel'            => trans('admin.cancel'),
+            'delete_confirm'    => str_replace("'", "\'", trans('admin.delete_confirm')),
+            'save_succeeded'    => str_replace("'", "\'", trans('admin.save_succeeded')),
+            'refresh_succeeded' => str_replace("'", "\'", trans('admin.refresh_succeeded')),
+            'delete_succeeded'  => str_replace("'", "\'", trans('admin.delete_succeeded')),
+            'confirm'           => str_replace("'", "\'", trans('admin.confirm')),
+            'cancel'            => str_replace("'", "\'", trans('admin.cancel')),
         ];
 
         $nestableOptions = json_encode($this->nestableOptions);

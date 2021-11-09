@@ -935,7 +935,5 @@ class Grid
         $this->callRenderingCallback();
 
         return Admin::component($this->view, $this->variables());
-
-        return view($this->view, $this->variables());
     }
 }

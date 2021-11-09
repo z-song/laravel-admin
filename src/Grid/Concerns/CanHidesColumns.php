@@ -70,7 +70,9 @@ trait CanHidesColumns
      */
     protected function getVisibleColumnsFromQuery()
     {
-        $columns = explode(',', request(ColumnSelector::SELECT_COLUMN_NAME));
+        $requestColumn = request(ColumnSelector::SELECT_COLUMN_NAME);
+
+        $columns = $requestColumn ? explode(',', $requestColumn) : [];
 
         return array_filter($columns) ?:
             array_values(array_diff($this->columnNames, $this->hiddenColumns));

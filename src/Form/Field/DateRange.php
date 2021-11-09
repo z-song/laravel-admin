@@ -50,7 +50,7 @@ class DateRange extends Field
 
     public function render()
     {
-        $this->options['locale'] = config('app.locale');
+        $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
 
         $startOptions = json_encode($this->options);
         $endOptions = json_encode($this->options + ['useCurrent' => false]);

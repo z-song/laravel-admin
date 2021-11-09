@@ -106,6 +106,8 @@ class Builder
      * Builder constructor.
      *
      * @param Form $form
+     *
+     * @return void
      */
     public function __construct(Form $form)
     {
@@ -118,6 +120,8 @@ class Builder
 
     /**
      * Do initialize.
+     *
+     * @return void
      */
     public function init()
     {
@@ -170,7 +174,7 @@ class Builder
     /**
      * Returns builder is $mode.
      *
-     * @param $mode
+     * @param string $mode
      *
      * @return bool
      */
@@ -202,7 +206,7 @@ class Builder
     /**
      * Set resource Id.
      *
-     * @param $id
+     * @param mixed $id
      *
      * @return void
      */
@@ -268,6 +272,8 @@ class Builder
      * Set form action.
      *
      * @param string $action
+     *
+     * @return void
      */
     public function setAction($action)
     {
@@ -524,6 +530,8 @@ class Builder
 
     /**
      * @param string $message
+     *
+     * @return void
      */
     public function confirm(string $message)
     {
@@ -603,6 +611,8 @@ SCRIPT;
 
     /**
      * Add script for tab form.
+     *
+     * @return void
      */
     protected function addTabformScript()
     {
@@ -632,6 +642,11 @@ SCRIPT;
         Admin::script($script);
     }
 
+    /**
+     * Add script for cascade.
+     *
+     * @return void
+     */
     protected function addCascadeScript()
     {
         $script = <<<SCRIPT
