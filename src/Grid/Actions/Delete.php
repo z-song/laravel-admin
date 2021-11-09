@@ -29,8 +29,15 @@ class Delete extends RowAction
             'succeeded' => trans('admin.delete_succeeded'),
         ];
 
+        $isSoftDeletes = $this->modelUseSoftDeletes($model);;
+
         try {
-            DB::transaction(function () use ($model) {
+            DB::transaction(function () use ($model, $isSoftDeletes) {
+                if ($isSoftDeletes && $model->trashed()) {
+                    $model->forceDelete();
+                    return;
+                }
+
                 $model->delete();
             });
         } catch (\Exception $exception) {

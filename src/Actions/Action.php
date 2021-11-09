@@ -130,7 +130,7 @@ abstract class Action implements Renderable
     public function selector($prefix)
     {
         if (is_null($this->selector)) {
-            return static::makeSelector($prefix);
+            return static::makeSelector($prefix); // get_called_class().spl_object_id($this),
         }
 
         return $this->selector;
@@ -146,7 +146,7 @@ abstract class Action implements Renderable
         $class = get_called_class();
 
         if (!isset(static::$selectors[$class])) {
-            static::$selectors[$class] = $prefix . strtolower(class_basename($class));
+            static::$selectors[$class] = $prefix . strtolower(class_basename($class)); // uniqid($prefix).mt_rand(1000, 9999); | class_basename($class)
         }
 
         return static::$selectors[$class];

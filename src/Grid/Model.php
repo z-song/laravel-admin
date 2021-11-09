@@ -473,6 +473,8 @@ class Model
     protected function resolvePerPage($paginate)
     {
         if ($perPage = request($this->perPageName)) {
+            $perPage = min((int) $perPage, (int) max($this->grid->perPages));
+
             if (is_array($paginate)) {
                 $paginate['arguments'][0] = (int) $perPage;
 
