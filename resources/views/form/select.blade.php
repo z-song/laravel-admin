@@ -10,7 +10,7 @@
 
         <select class="form-control {{$class}}" style="width: 100%;" name="{{$name}}" {!! $attributes !!} >
             @if($groups)
-				<option value=""></option>
+                <option value=""></option>
                 @foreach($groups as $group)
                     <optgroup label="{{ $group['label'] }}">
                         @foreach($group['options'] as $select => $option)
