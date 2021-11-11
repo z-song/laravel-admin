@@ -118,9 +118,9 @@ trait HasAssets
 
         if (!is_null($css)) {
             if ($appendCss) {
-                return self::$appendCss = array_merge(self::$appendCss, (array)$css);
+                return self::$appendCss = array_merge(self::$appendCss, (array) $css);
             } else {
-                return self::$css = array_merge(self::$css, (array)$css);
+                return self::$css = array_merge(self::$css, (array) $css);
             }
         }
 
