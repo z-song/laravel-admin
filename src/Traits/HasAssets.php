@@ -27,6 +27,11 @@ trait HasAssets
     /**
      * @var array
      */
+    public static $appendCss = [];
+
+    /**
+     * @var array
+     */
     public static $js = [];
 
     /**
@@ -107,16 +112,20 @@ trait HasAssets
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function css($css = null, $minify = true)
+    public static function css($css = null, $minify = true, $appendCss = false)
     {
         static::ignoreMinify($css, $minify);
 
         if (!is_null($css)) {
-            return self::$css = array_merge((array) $css, self::$css);
+            if ($appendCss) {
+                return self::$appendCss = array_merge(self::$appendCss, (array)$css);
+            } else {
+                return self::$css = array_merge(self::$css, (array)$css);
+            }
         }
 
         if (!$css = static::getMinifiedCss()) {
-            $css = array_merge(static::baseCss(), static::$css);
+            $css = array_merge(static::$css, static::baseCss(), static::$appendCss);
         }
 
         $css = array_filter(array_unique($css));
