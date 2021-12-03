@@ -49,17 +49,18 @@ class GenerateMenuCommand extends Command
     public function handle()
     {
         $routes = collect($this->router->getRoutes())->filter(function (Route $route) {
+            $prefix = config('admin.route.prefix');
             $uri = $route->uri();
             // built-in, parameterized and no-GET are ignored
-            return Str::startsWith($uri, 'admin/')
-                && !Str::startsWith($uri, 'admin/auth/')
+            return Str::startsWith($uri, "{$prefix}/")
+                && !Str::startsWith($uri, "{$prefix}/auth/")
                 && !Str::endsWith($uri, '/create')
                 && !Str::contains($uri, '{')
                 && in_array('GET', $route->methods())
-                && !in_array(substr($route->uri(), strlen('admin/')), config('admin.menu_exclude'));
+                && !in_array(substr($route->uri(), strlen("{$prefix}/")), config('admin.menu_exclude'));
         })
-            ->map(function (Route $route) {
-                $uri = substr($route->uri(), strlen('admin/'));
+            ->map(function (Route $route, $prefix) {
+                $uri = substr($route->uri(), strlen("{$prefix}/"));
 
                 return [
                     'title' => Str::ucfirst(
@@ -75,9 +76,9 @@ class GenerateMenuCommand extends Command
         $news = $routes->diffKeys($menus)->map(function ($item, $key) {
             return [
                 'title' => $item,
-                'uri'   => $key,
+                'uri' => $key,
                 'order' => 10,
-                'icon'  => 'fa-list',
+                'icon' => 'fa-list',
             ];
         })->values()->toArray();
 
