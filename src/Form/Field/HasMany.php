@@ -283,9 +283,9 @@ class HasMany extends Field
      *
      * @return NestedForm
      */
-    protected function buildNestedForm($column, \Closure $builder, $model = null)
+    protected function buildNestedForm($column, \Closure $builder, $key = null, $model = null)
     {
-        $form = new Form\NestedForm($column, $model);
+        $form = new Form\NestedForm($column, $model, $key);
 
         $form->setForm($this->form);
 
@@ -386,7 +386,7 @@ class HasMany extends Field
 
                 $model = $relation->getRelated()->replicate()->forceFill($data);
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $model)
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $key, $model)
                     ->fill($data);
             }
         } else {
@@ -395,7 +395,7 @@ class HasMany extends Field
 
                 $model = $relation->getRelated()->replicate()->forceFill($data);
 
-                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, $model)
+                $forms[$key] = $this->buildNestedForm($this->column, $this->builder, null, $model)
                     ->fill($data);
             }
         }

@@ -103,13 +103,15 @@ class NestedForm
      * @param string $relation
      * @param Model  $model
      */
-    public function __construct($relation, $model = null)
+    public function __construct($relation, $model = null, $key = null)
     {
         $this->relationName = $relation;
 
         $this->model = $model;
 
         $this->fields = new Collection();
+
+        $this->key = $key;
     }
 
     /**
