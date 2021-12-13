@@ -102,6 +102,7 @@ class NestedForm
      *
      * @param string $relation
      * @param Model  $model
+     * @param mixed $key
      */
     public function __construct($relation, $model = null, $key = null)
     {

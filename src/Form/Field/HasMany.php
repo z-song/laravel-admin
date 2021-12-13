@@ -280,6 +280,7 @@ class HasMany extends Field
      * @param string   $column
      * @param \Closure $builder
      * @param null     $model
+     * @param mixed     $key
      *
      * @return NestedForm
      */
