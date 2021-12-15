@@ -64,12 +64,12 @@ class KeyValue extends Field
     {
         $this->script = <<<SCRIPT
 
-$('.{$this->column}-add').on('click', function () {
-    var tpl = $('template.{$this->column}-tpl').html();
-    $('tbody.kv-{$this->column}-table').append(tpl);
+$('.{$this->id}-add').on('click', function () {
+    var tpl = $('template.{$this->id}-tpl').html();
+    $('tbody.kv-{$this->id}-table').append(tpl);
 });
 
-$('tbody').on('click', '.{$this->column}-remove', function () {
+$('tbody').on('click', '.{$this->id}-remove', function () {
     $(this).closest('tr').remove();
 });
 
