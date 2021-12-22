@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request;
@@ -551,7 +552,7 @@ class Model
                 $method = 'orderByRaw';
                 $arguments = [$column];
             } else {
-                $column = $columnName;
+                $column = $columnNameContainsDots ? new Expression($columnName) : $columnName;
                 $method = 'orderBy';
                 $arguments = [$column, $this->sort['type']];
             }
