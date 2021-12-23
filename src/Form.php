@@ -807,7 +807,7 @@ class Form implements Renderable
                     $data = $prepared[$name];
                     $first = Arr::first($data);
 
-                    if (is_array($first)) { #relation updated via HasMany field
+                    if (is_array($first)) { //relation updated via HasMany field
                         foreach ($data as $related) {
                             /** @var Relations\HasOneOrMany $relation */
                             $relation = $this->model->$name();
@@ -828,11 +828,11 @@ class Form implements Renderable
 
                             $child->save();
                         }
-                    } else { #relation updated via MultipleSelect field
+                    } else { //relation updated via MultipleSelect field
                         $foreignKeyName = $relation->getForeignKeyName();
                         $localKeyName = $relation->getLocalKeyName();
 
-                        foreach($relation->get() as $child) {
+                        foreach ($relation->get() as $child) {
                             if (($ind = array_search($child->getKey(), $data)) !== false) {
                                 unset($data[$ind]);
                             } else {

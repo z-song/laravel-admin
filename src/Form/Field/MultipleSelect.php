@@ -37,9 +37,8 @@ class MultipleSelect extends Select
                 $fullKey = $relation->getQualifiedRelatedPivotKeyName();
                 $fullKeyArray = explode('.', $fullKey);
 
-                return $this->otherKey = 'pivot.' . end($fullKeyArray);
-            }
-            else if ($relation instanceof HasManyRelation) {
+                return $this->otherKey = 'pivot.'.end($fullKeyArray);
+            } elseif ($relation instanceof HasManyRelation) {
                 /* @var HasManyRelation $relation */
                 return $this->otherKey = $relation->getRelated()->getKeyName();
             }
