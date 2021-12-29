@@ -5,6 +5,13 @@ namespace Encore\Admin\Controllers;
 trait HasResourceActions
 {
     /**
+     * Route parameter name to use for edition or deletion
+     * Forexample in the `route/{id}/edit` the `id` is route-parameter-name
+     * Useful for when we have multiple parameter name like `order/{order_id}/payment/{payment_id}/edit` and we want to detect object using `payment_id`
+     */
+    public $routeParamName = null;
+
+    /**
      * Update the specified resource in storage.
      *
      * @param int $id
@@ -13,6 +20,8 @@ trait HasResourceActions
      */
     public function update($id)
     {
+        $routeParameters = request()->route()->parameters();
+        $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
         return $this->form()->update($id);
     }
 
@@ -35,6 +44,8 @@ trait HasResourceActions
      */
     public function destroy($id)
     {
+        $routeParameters = request()->route()->parameters();
+        $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
         return $this->form()->destroy($id);
     }
 }

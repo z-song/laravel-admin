@@ -63,6 +63,8 @@ class AdminController extends Controller
      */
     public function show($id, Content $content)
     {
+        $routeParameters = request()->route()->parameters();
+        $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
         return $content
             ->title($this->title())
             ->description($this->description['show'] ?? trans('admin.show'))
@@ -79,6 +81,8 @@ class AdminController extends Controller
      */
     public function edit($id, Content $content)
     {
+        $routeParameters = request()->route()->parameters();
+        $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
         return $content
             ->title($this->title())
             ->description($this->description['edit'] ?? trans('admin.edit'))
