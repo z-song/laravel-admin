@@ -117,7 +117,7 @@ $('{$this->getElementClass()}').on('click', function() {
 
     $.ajax({
         method: 'post',
-        url: '/{$this->resource}/release',
+        url: '{$this->resource}/release',
         data: {
             _token:LA.token,
             ids: selectedRows(),
@@ -172,53 +172,3 @@ $router->post('posts/release', 'PostController@release');
 ```
 
 这样整个流程就完成了。
-
-## 自定义导出
-
-`model-grid`默认只有简单的csv文件的导出功能,如果想要控制导出格式或导出字段,可以用下面的方式自定义导出功能
-
-新建导出类， 比如`app/Admin/Extensions/CustomExporter.php`：
-
-```php
-<?php
-
-namespace App\Admin\Extensions;
-
-use Encore\Admin\Grid\Exporters\AbstractExporter;
-
-class CustomExporter extends AbstractExporter
-{
-    public function export()
-    {
-        $filename = $this->getTable().'.csv';
-
-        // 这里获取数据
-        dd($this->getData());
-
-        // 根据上面的数据拼接出导出数据，
-        $output = '';
-
-        // 在这里控制你想输出的格式,或者使用第三方库导出Excel文件
-        $headers = [
-            'Content-Encoding'    => 'UTF-8',
-            'Content-Type'        => 'text/csv;charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"$filename\"",
-        ];
-
-        // 导出文件，
-        response(rtrim($output, "\n"), 200, $headers)->send();
-
-        exit;
-    }
-}
-```
-
-然后在grid中使用：
-```php
-use App\Admin\Extensions\CustomExporter;
-
-...
-
-$grid->exporter(new CustomExporter());
-```
-就好了，导出类的逻辑可参考 [CsvExporter.php](https://github.com/z-song/laravel-admin/blob/1.3/src/Grid/Exporters/CsvExporter.php)

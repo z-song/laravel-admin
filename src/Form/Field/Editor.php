@@ -12,7 +12,7 @@ class Editor extends Field
 
     public function render()
     {
-        $this->script = "CKEDITOR.replace('{$this->column}');";
+        $this->script = "CKEDITOR.replace('{$this->id}');";
 
         return parent::render();
     }

@@ -25,6 +25,15 @@ $form->saving(function (Form $form) {
 
 ```
 
+获取获取模型中的数据
+```php
+$form->saved(function (Form $form) {
+
+    $form->model()->id;
+
+});
+```
+
 可以直接在回调中返回`Symfony\Component\HttpFoundation\Response`的实例，来跳转或进入页面：
 ```php
 $form->saving(function (Form $form) {

@@ -2,81 +2,90 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Auth\Database\OperationLog;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
-use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 
-class LogController extends Controller
+class LogController extends AdminController
 {
     /**
-     * Index interface.
-     *
-     * @return Content
+     * {@inheritdoc}
      */
-    public function index()
+    protected function title()
     {
-        return Admin::content(function (Content $content) {
-            $content->header(trans('admin::lang.operation_log'));
-            $content->description(trans('admin::lang.list'));
-
-            $grid = Admin::grid(OperationLog::class, function (Grid $grid) {
-                $grid->model()->orderBy('id', 'DESC');
-
-                $grid->id('ID')->sortable();
-                $grid->user()->name();
-                $grid->method()->value(function ($method) {
-                    $color = array_get(OperationLog::$methodColors, $method, 'grey');
-
-                    return "<span class=\"badge bg-$color\">$method</span>";
-                });
-                $grid->path()->label('info');
-                $grid->ip()->label('primary');
-                $grid->input()->value(function ($input) {
-                    $input = json_decode($input, true);
-                    $input = array_except($input, '_pjax');
-
-                    return '<code>'.json_encode($input, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).'</code>';
-                });
-
-                $grid->created_at(trans('admin::lang.created_at'));
-
-                $grid->rows(function ($row) {
-                    $row->actions('delete');
-                });
-
-                $grid->disableCreation();
-
-                $grid->filter(function ($filter) {
-                    $filter->is('user_id', 'User')->select(Administrator::all()->pluck('name', 'id'));
-                    $filter->is('method')->select(array_combine(OperationLog::$methods, OperationLog::$methods));
-                    $filter->like('path');
-                    $filter->is('ip');
-
-                    $filter->useModal();
-                });
-            });
-
-            $content->body($grid);
-        });
+        return trans('admin.operation_log');
     }
 
+    /**
+     * @return Grid
+     */
+    protected function grid()
+    {
+        $grid = new Grid(new OperationLog());
+
+        $grid->model()->orderBy('id', 'DESC');
+
+        $grid->column('id', 'ID')->sortable();
+        $grid->column('user.name', 'User');
+        $grid->column('method')->display(function ($method) {
+            $color = Arr::get(OperationLog::$methodColors, $method, 'grey');
+
+            return "<span class=\"badge bg-$color\">$method</span>";
+        });
+        $grid->column('path')->label('info');
+        $grid->column('ip')->label('primary');
+        $grid->column('input')->display(function ($input) {
+            $input = json_decode($input, true);
+            $input = Arr::except($input, ['_pjax', '_token', '_method', '_previous_']);
+            if (empty($input)) {
+                return '<code>{}</code>';
+            }
+
+            return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_HEX_TAG).'</pre>';
+        });
+
+        $grid->column('created_at', trans('admin.created_at'));
+
+        $grid->actions(function (Grid\Displayers\Actions $actions) {
+            $actions->disableEdit();
+            $actions->disableView();
+        });
+
+        $grid->disableCreateButton();
+
+        $grid->filter(function (Grid\Filter $filter) {
+            $userModel = config('admin.database.users_model');
+
+            $filter->equal('user_id', 'User')->select($userModel::all()->pluck('name', 'id'));
+            $filter->equal('method')->select(array_combine(OperationLog::$methods, OperationLog::$methods));
+            $filter->like('path');
+            $filter->equal('ip');
+        });
+
+        return $grid;
+    }
+
+    /**
+     * @param mixed $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $ids = explode(',', $id);
 
         if (OperationLog::destroy(array_filter($ids))) {
-            return response()->json([
+            $data = [
                 'status'  => true,
-                'message' => trans('admin::lang.delete_succeeded'),
-            ]);
+                'message' => trans('admin.delete_succeeded'),
+            ];
         } else {
-            return response()->json([
+            $data = [
                 'status'  => false,
-                'message' => trans('admin::lang.delete_failed'),
-            ]);
+                'message' => trans('admin.delete_failed'),
+            ];
         }
+
+        return response()->json($data);
     }
 }

@@ -4,10 +4,13 @@ namespace Encore\Admin;
 
 use Closure;
 use Encore\Admin\Auth\Database\Menu;
+use Encore\Admin\Controllers\AuthController;
 use Encore\Admin\Layout\Content;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Encore\Admin\Traits\HasAssets;
+use Encore\Admin\Widgets\Navbar;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 
 /**
@@ -15,62 +18,67 @@ use InvalidArgumentException;
  */
 class Admin
 {
+    use HasAssets;
+
     /**
-     * @var array
+     * The Laravel admin version.
+     *
+     * @var string
      */
-    public static $script = [];
+    const VERSION = '1.8.14';
+
+    /**
+     * @var Navbar
+     */
+    protected $navbar;
 
     /**
      * @var array
      */
-    public static $css = [];
+    protected $menu = [];
+
+    /**
+     * @var string
+     */
+    public static $metaTitle;
+
+    /**
+     * @var string
+     */
+    public static $favicon;
 
     /**
      * @var array
      */
-    public static $js = [];
+    public static $extensions = [];
 
     /**
-     * @var bool
+     * @var []Closure
      */
-    protected static $initialized = false;
+    protected static $bootingCallbacks = [];
 
     /**
-     * @var bool
+     * @var []Closure
      */
-    protected static $bootstrapped = false;
+    protected static $bootedCallbacks = [];
 
     /**
-     * Initialize.
+     * Returns the long version of Laravel-admin.
+     *
+     * @return string The long application version
      */
-    public static function init()
+    public static function getLongVersion()
     {
-        if (!static::$initialized) {
-            Form::registerBuiltinFields();
-
-            static::$initialized = true;
-        }
-    }
-
-    /**
-     * Bootstrap.
-     */
-    public static function bootstrap()
-    {
-        if (!static::$bootstrapped) {
-            if (file_exists($bootstrap = admin_path('bootstrap.php'))) {
-                require $bootstrap;
-            }
-
-            static::$bootstrapped = true;
-        }
+        return sprintf('Laravel-admin <comment>version</comment> <info>%s</info>', self::VERSION);
     }
 
     /**
      * @param $model
      * @param Closure $callable
      *
-     * @return Grid
+     * @return \Encore\Admin\Grid
+     *
+     * @deprecated since v1.6.1
      */
     public function grid($model, Closure $callable)
     {
@@ -81,13 +89,12 @@ class Admin
      * @param $model
      * @param Closure $callable
      *
-     * @return Form
+     * @return \Encore\Admin\Form
+     *
+     *  @deprecated since v1.6.1
      */
     public function form($model, Closure $callable)
     {
-        static::init();
-        static::bootstrap();
-
         return new Form($this->getModel($model), $callable);
     }
 
@@ -95,26 +102,39 @@ class Admin
      * Build a tree.
      *
      * @param $model
+     * @param Closure|null $callable
      *
-     * @return Tree
+     * @return \Encore\Admin\Tree
      */
-    public function tree($model)
+    public function tree($model, Closure $callable = null)
     {
-        return new Tree($this->getModel($model));
+        return new Tree($this->getModel($model), $callable);
+    }
+
+    /**
+     * Build show page.
+     *
+     * @param $model
+     * @param mixed $callable
+     *
+     * @return Show
+     *
+     * @deprecated since v1.6.1
+     */
+    public function show($model, $callable = null)
+    {
+        return new Show($this->getModel($model), $callable);
     }
 
     /**
      * @param Closure $callable
      *
-     * @return Content
+     * @return \Encore\Admin\Layout\Content
+     *
+     * @deprecated since v1.6.1
      */
-    public function content(Closure $callable)
+    public function content(Closure $callable = null)
     {
-        static::init();
-        static::bootstrap();
-
-        Form::collectFieldAssets();
-
         return new Content($callable);
     }
 
@@ -125,7 +145,7 @@ class Admin
      */
     public function getModel($model)
     {
-        if ($model instanceof EloquentModel) {
+        if ($model instanceof Model) {
             return $model;
         }
 
@@ -137,120 +157,272 @@ class Admin
     }
 
     /**
-     * Get namespace of controllers.
-     *
-     * @return string
-     */
-    public function controllerNamespace()
-    {
-        $directory = config('admin.directory');
-
-        return 'App\\'.ucfirst(basename($directory)).'\\Controllers';
-    }
-
-    /**
-     * Add css or get all css.
-     *
-     * @param null $css
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
-     */
-    public static function css($css = null)
-    {
-        if (!is_null($css)) {
-            self::$css = array_merge(self::$css, (array) $css);
-
-            return;
-        }
-
-        $css = array_get(Form::collectFieldAssets(), 'css', []);
-
-        static::$css = array_merge(static::$css, $css);
-
-        return view('admin::partials.css', ['css' => array_unique(static::$css)]);
-    }
-
-    /**
-     * Add js or get all js.
-     *
-     * @param null $js
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
-     */
-    public static function js($js = null)
-    {
-        if (!is_null($js)) {
-            self::$js = array_merge(self::$js, (array) $js);
-
-            return;
-        }
-
-        $js = array_get(Form::collectFieldAssets(), 'js', []);
-
-        static::$js = array_merge(static::$js, $js);
-
-        return view('admin::partials.js', ['js' => array_unique(static::$js)]);
-    }
-
-    /**
-     * @param string $script
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
-     */
-    public static function script($script = '')
-    {
-        if (!empty($script)) {
-            self::$script = array_merge(self::$script, (array) $script);
-
-            return;
-        }
-
-        return view('admin::partials.script', ['script' => array_unique(self::$script)]);
-    }
-
-    /**
-     * Admin url.
-     *
-     * @param $url
-     *
-     * @return string
-     */
-    public static function url($url)
-    {
-        $prefix = trim(config('admin.base-url-prefix'), '/').'/'.trim(config('admin.prefix'), '/');
-
-        if (empty($prefix) || $prefix == '/') {
-            return '/'.trim($url, '/');
-        }
-
-        return "/$prefix/".trim($url, '/');
-    }
-
-    /**
      * Left sider-bar menu.
      *
      * @return array
      */
     public function menu()
     {
-        return Menu::toTree();
+        if (!empty($this->menu)) {
+            return $this->menu;
+        }
+
+        $menuClass = config('admin.database.menu_model');
+
+        /** @var Menu $menuModel */
+        $menuModel = new $menuClass();
+
+        return $this->menu = $menuModel->toTree();
+    }
+
+    /**
+     * @param array $menu
+     *
+     * @return array
+     */
+    public function menuLinks($menu = [])
+    {
+        if (empty($menu)) {
+            $menu = $this->menu();
+        }
+
+        $links = [];
+
+        foreach ($menu as $item) {
+            if (!empty($item['children'])) {
+                $links = array_merge($links, $this->menuLinks($item['children']));
+            } else {
+                $links[] = Arr::only($item, ['title', 'uri', 'icon']);
+            }
+        }
+
+        return $links;
+    }
+
+    /**
+     * Set admin title.
+     *
+     * @param string $title
+     *
+     * @return void
+     */
+    public static function setTitle($title)
+    {
+        self::$metaTitle = $title;
     }
 
     /**
      * Get admin title.
      *
-     * @return Config
+     * @return string
      */
     public function title()
     {
-        return config('admin.title');
+        return self::$metaTitle ? self::$metaTitle : config('admin.title');
     }
 
     /**
-     * @return mixed
+     * @param null|string $favicon
+     *
+     * @return string|void
+     */
+    public function favicon($favicon = null)
+    {
+        if (is_null($favicon)) {
+            return static::$favicon;
+        }
+
+        static::$favicon = $favicon;
+    }
+
+    /**
+     * Get the currently authenticated user.
+     *
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function user()
     {
-        return Auth::guard('admin')->user();
+        return $this->guard()->user();
+    }
+
+    /**
+     * Attempt to get the guard from the local cache.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
+     */
+    public function guard()
+    {
+        $guard = config('admin.auth.guard') ?: 'admin';
+
+        return Auth::guard($guard);
+    }
+
+    /**
+     * Set navbar.
+     *
+     * @param Closure|null $builder
+     *
+     * @return Navbar
+     */
+    public function navbar(Closure $builder = null)
+    {
+        if (is_null($builder)) {
+            return $this->getNavbar();
+        }
+
+        call_user_func($builder, $this->getNavbar());
+    }
+
+    /**
+     * Get navbar object.
+     *
+     * @return \Encore\Admin\Widgets\Navbar
+     */
+    public function getNavbar()
+    {
+        if (is_null($this->navbar)) {
+            $this->navbar = new Navbar();
+        }
+
+        return $this->navbar;
+    }
+
+    /**
+     * Register the laravel-admin builtin routes.
+     *
+     * @return void
+     *
+     * @deprecated Use Admin::routes() instead();
+     */
+    public function registerAuthRoutes()
+    {
+        $this->routes();
+    }
+
+    /**
+     * Register the laravel-admin builtin routes.
+     *
+     * @return void
+     */
+    public function routes()
+    {
+        $attributes = [
+            'prefix'     => config('admin.route.prefix'),
+            'middleware' => config('admin.route.middleware'),
+        ];
+
+        app('router')->group($attributes, function ($router) {
+
+            /* @var \Illuminate\Support\Facades\Route $router */
+            $router->namespace('\Encore\Admin\Controllers')->group(function ($router) {
+
+                /* @var \Illuminate\Routing\Router $router */
+                $router->resource('auth/users', 'UserController')->names('admin.auth.users');
+                $router->resource('auth/roles', 'RoleController')->names('admin.auth.roles');
+                $router->resource('auth/permissions', 'PermissionController')->names('admin.auth.permissions');
+                $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('admin.auth.menu');
+                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
+
+                $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
+                $router->post('_handle_action_', 'HandleController@handleAction')->name('admin.handle-action');
+                $router->get('_handle_selectable_', 'HandleController@handleSelectable')->name('admin.handle-selectable');
+                $router->get('_handle_renderable_', 'HandleController@handleRenderable')->name('admin.handle-renderable');
+            });
+
+            $authController = config('admin.auth.controller', AuthController::class);
+
+            /* @var \Illuminate\Routing\Router $router */
+            $router->get('auth/login', $authController.'@getLogin')->name('admin.login');
+            $router->post('auth/login', $authController.'@postLogin');
+            $router->get('auth/logout', $authController.'@getLogout')->name('admin.logout');
+            $router->get('auth/setting', $authController.'@getSetting')->name('admin.setting');
+            $router->put('auth/setting', $authController.'@putSetting');
+        });
+    }
+
+    /**
+     * Extend a extension.
+     *
+     * @param string $name
+     * @param string $class
+     *
+     * @return void
+     */
+    public static function extend($name, $class)
+    {
+        static::$extensions[$name] = $class;
+    }
+
+    /**
+     * @param callable $callback
+     */
+    public static function booting(callable $callback)
+    {
+        static::$bootingCallbacks[] = $callback;
+    }
+
+    /**
+     * @param callable $callback
+     */
+    public static function booted(callable $callback)
+    {
+        static::$bootedCallbacks[] = $callback;
+    }
+
+    /**
+     * Bootstrap the admin application.
+     */
+    public function bootstrap()
+    {
+        $this->fireBootingCallbacks();
+
+        require config('admin.bootstrap', admin_path('bootstrap.php'));
+
+        $this->addAdminAssets();
+
+        $this->fireBootedCallbacks();
+    }
+
+    /**
+     * Add JS & CSS assets to pages.
+     */
+    protected function addAdminAssets()
+    {
+        $assets = Form::collectFieldAssets();
+
+        self::css($assets['css']);
+        self::js($assets['js']);
+    }
+
+    /**
+     * Call the booting callbacks for the admin application.
+     */
+    protected function fireBootingCallbacks()
+    {
+        foreach (static::$bootingCallbacks as $callable) {
+            call_user_func($callable);
+        }
+    }
+
+    /**
+     * Call the booted callbacks for the admin application.
+     */
+    protected function fireBootedCallbacks()
+    {
+        foreach (static::$bootedCallbacks as $callable) {
+            call_user_func($callable);
+        }
+    }
+
+    /*
+     * Disable Pjax for current Request
+     *
+     * @return void
+     */
+    public function disablePjax()
+    {
+        if (request()->pjax()) {
+            request()->headers->set('X-PJAX', false);
+        }
     }
 }

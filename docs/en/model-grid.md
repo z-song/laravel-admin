@@ -18,7 +18,7 @@ CREATE TABLE `movies` (
 
 ```
 
-And the model of this table is `App\Models\Movie`,The following code can generate the data ggrid for `users`:
+And the model of this table is `App\Models\Movie`,The following code can generate the data grid for table `movies`:
 
 ```php
 
@@ -100,8 +100,9 @@ $grid->paginate(20);
 #### Modify the display output of column
 
 ```php
+use Illuminate\Support\Str;
 $grid->text()->display(function($text) {
-    return str_limit($text, 30, '...');
+    return Str::limit($text, 30, '...');
 });
 
 $grid->name()->display(function ($name) {
@@ -133,12 +134,17 @@ $grid->column('full_name')->display(function () {
 
 #### Disable the create button 
 ```php
-$grid->disableCreation();
+$grid->disableCreateButton();
 ```
 
 #### Disable Pagination
 ```php
 $grid->disablePagination();
+```
+
+#### Disable all tools on header of grid. Filter, refresh, export, batch actions
+```php
+$grid->disableTools();
 ```
 
 #### Disable data filter
@@ -151,6 +157,16 @@ $grid->disableFilter();
 $grid->disableExport();
 ```
 
+#### Disable row selector
+```php
+$grid->disableRowSelector();
+```
+
+#### Disable row actions
+```php
+$grid->disableActions();
+```
+
 #### Enable orderable grid
 ```php
 $grid->orderable();
@@ -159,53 +175,6 @@ $grid->orderable();
 #### Set options for perPage selector
 ```php
 $grid->perPages([10, 20, 30, 40, 50]);
-```
-
-#### Add query filters
-```php
-$grid->filter(function($filter){
-
-    // If you have too many filters，you can use a modal window to handle them.
-    $filter->useModal();
-
-    // sql: ... WHERE `user.name` LIKE "%$name%";
-    $filter->like('name', 'name');
-
-    // sql: ... WHERE `user.email` = $email;
-    $filter->is('emial', 'Email');
-
-    // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-    $filter->between('created_at', 'Created Time')->datetime();
-    
-    // sql: ... WHERE `article.author_id` = $id;
-    $filter->is('author_id', 'Author')->select(User::all()->pluck('name', 'id'));
-
-    // sql: ... WHERE `title` LIKE "%$input" OR `content` LIKE "%$input";
-    $filter->where(function ($query) {
-
-        $query->where('title', 'like', "%{$this->input}%")
-            ->orWhere('content', 'like', "%{$this->input}%");
-
-    }, 'Text');
-    
-    // sql: ... WHERE `rate` >= 6 AND `created_at` = {$input};
-    $filter->where(function ($query) {
-
-        $query->whereRaw("`rate` >= 6 AND `created_at` = {$this->input}");
-
-    }, 'Text');
-    
-    // relation filter, filter columns in relation `profile`
-    $filter->where(function ($query) {
-
-        $input = $this->input;
-
-        $query->whereHas('profile', function ($query) use ($input) {
-            $query->where('address', 'like', "%{$input}%")->orWhere('email', 'like', "%{$input}%");
-        });
-
-    }, 'Address or Email');
-});
 ```
 
 ## Relation
@@ -245,13 +214,16 @@ class User extends Model
 {
     public function profile()
     {
-        $this->hasOne(Profile::class);
+        return $this->hasOne(Profile::class);
     }
 }
 
 class Profile extends Model
 {
-    $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
 
 ```

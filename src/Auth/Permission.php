@@ -3,7 +3,7 @@
 namespace Encore\Admin\Auth;
 
 use Encore\Admin\Facades\Admin;
-use Illuminate\Support\Facades\Auth;
+use Encore\Admin\Middleware\Pjax;
 
 class Permission
 {
@@ -22,13 +22,13 @@ class Permission
 
         if (is_array($permission)) {
             collect($permission)->each(function ($permission) {
-                call_user_func([Permission::class, 'check'], $permission);
+                call_user_func([self::class, 'check'], $permission);
             });
 
             return;
         }
 
-        if (Auth::guard('admin')->user()->cannot($permission)) {
+        if (Admin::user()->cannot($permission)) {
             static::error();
         }
     }
@@ -46,9 +46,19 @@ class Permission
             return true;
         }
 
-        if (!Auth::guard('admin')->user()->inRoles($roles)) {
+        if (!Admin::user()->inRoles($roles)) {
             static::error();
         }
+    }
+
+    /**
+     * Don't check permission.
+     *
+     * @return bool
+     */
+    public static function free()
+    {
+        return true;
     }
 
     /**
@@ -64,7 +74,7 @@ class Permission
             return true;
         }
 
-        if (Auth::guard('admin')->user()->inRoles($roles)) {
+        if (Admin::user()->inRoles($roles)) {
             static::error();
         }
     }
@@ -72,14 +82,15 @@ class Permission
     /**
      * Send error response page.
      */
-    protected static function error()
+    public static function error()
     {
-        $content = Admin::content(function ($content) {
-            $content->body(view('admin::deny'));
-        });
+        $response = response(Admin::content()->withError(trans('admin.deny')));
 
-        response($content)->send();
-        exit;
+        if (!request()->pjax() && request()->ajax()) {
+            abort(403, trans('admin.deny'));
+        }
+
+        Pjax::respond($response);
     }
 
     /**
@@ -89,6 +100,6 @@ class Permission
      */
     public static function isAdministrator()
     {
-        return Auth::guard('admin')->user()->isRole('administrator');
+        return Admin::user()->isRole('administrator');
     }
 }

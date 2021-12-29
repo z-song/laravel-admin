@@ -1,34 +1,20 @@
 # 安装
 
+> 当前版本(1.5)需要安装`PHP 7+`和`Laravel 5.5`, 如果你使用更早的版本，请参考文档: [1.4](http://laravel-admin.org/docs/v1.4/#/zh/) 
+
 首先确保安装好了`laravel`，并且数据库连接设置正确。
 
 ```
-Laravel 5.1, 已经不维护了
-composer require encore/laravel-admin "1.1.*"
-
-Laravel 5.2
-composer require encore/laravel-admin "1.2.*"
-
-Laravel 5.3
-composer require encore/laravel-admin "1.3.*"
-
-Laravel 5.4
-composer require encore/laravel-admin "1.4.*"
-```
-
-在`config/app.php`加入`ServiceProvider`:
-
-```
-Encore\Admin\Providers\AdminServiceProvider::class
+composer require encore/laravel-admin "1.5.*"
 ```
 
 然后运行下面的命令来发布资源：
 
 ```
-php artisan vendor:publish --tag=laravel-admin
+php artisan vendor:publish --provider="Encore\Admin\AdminServiceProvider"
 ```
 
-在该命令会生成配置文件`config/admin.php`，可以在里面修改安装的地址、数据库连接、以及表名。
+在该命令会生成配置文件`config/admin.php`，可以在里面修改安装的地址、数据库连接、以及表名，建议都是用默认配置不修改。
 
 然后运行下面的命令完成安装：
 ```
@@ -37,7 +23,7 @@ php artisan admin:install
 
 启动服务后，在浏览器打开 `http://localhost/admin/` ,使用用户名 `admin` 和密码 `admin`登陆.
 
-## 产生的文件
+## 生成的文件
 
 安装完成之后,会在项目目录中生成以下的文件:
 
@@ -65,4 +51,4 @@ app/Admin
 
 ### 静态文件
 
-后台所需的前端静态文件在`/public/packages/admin`目录下.
+后台所需的前端静态文件在`/public/vendor/laravel-admin`目录下.

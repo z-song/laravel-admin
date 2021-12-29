@@ -2,16 +2,39 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Form\Field;
-
-class Currency extends Field
+class Currency extends Text
 {
+    /**
+     * @var string
+     */
     protected $symbol = '$';
 
+    /**
+     * @var array
+     */
     protected static $js = [
-        '/packages/admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
+        '/vendor/laravel-admin/AdminLTE/plugins/input-mask/jquery.inputmask.bundle.min.js',
     ];
 
+    /**
+     * @see https://github.com/RobinHerbots/Inputmask#options
+     *
+     * @var array
+     */
+    protected $options = [
+        'alias'              => 'currency',
+        'radixPoint'         => '.',
+        'prefix'             => '',
+        'removeMaskOnSubmit' => true,
+    ];
+
+    /**
+     * Set symbol for currency field.
+     *
+     * @param string $symbol
+     *
+     * @return $this
+     */
     public function symbol($symbol)
     {
         $this->symbol = $symbol;
@@ -19,19 +42,36 @@ class Currency extends Field
         return $this;
     }
 
-    public function prepare($value)
+    /**
+     * Set digits for input number.
+     *
+     * @param int $digits
+     *
+     * @return $this
+     */
+    public function digits($digits)
     {
-        return (float) str_replace(',', '', $value);
+        return $this->options(compact('digits'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function prepare($value)
+    {
+        return (float) $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function render()
     {
-        $this->script = <<<EOT
+        $this->inputmask($this->options);
 
-$('#{$this->id}').inputmask("currency", {radixPoint: '.', prefix:''})
+        $this->prepend($this->symbol)
+            ->defaultAttribute('style', 'width: 120px');
 
-EOT;
-
-        return parent::render()->with(['symbol' => $this->symbol]);
+        return parent::render();
     }
 }

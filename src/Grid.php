@@ -3,32 +3,47 @@
 namespace Encore\Admin;
 
 use Closure;
-use Encore\Admin\Exception\Handle;
-use Encore\Admin\Facades\Admin as AdminManager;
+use Encore\Admin\Exception\Handler;
 use Encore\Admin\Grid\Column;
-use Encore\Admin\Grid\Exporter;
-use Encore\Admin\Grid\Filter;
+use Encore\Admin\Grid\Concerns;
+use Encore\Admin\Grid\Displayers;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Row;
-use Encore\Admin\Pagination\AdminThreePresenter;
+use Encore\Admin\Grid\Tools;
+use Encore\Admin\Traits\ShouldSnakeAttributes;
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Macroable;
 use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
 class Grid
 {
+    use Concerns\HasElementNames,
+        Concerns\HasHeader,
+        Concerns\HasFooter,
+        Concerns\HasFilter,
+        Concerns\HasTools,
+        Concerns\HasTotalRow,
+        Concerns\HasHotKeys,
+        Concerns\HasQuickCreate,
+        Concerns\HasActions,
+        Concerns\HasSelector,
+        Concerns\CanHidesColumns,
+        Concerns\CanFixHeader,
+        Concerns\CanFixColumns,
+        Concerns\CanExportGrid,
+        Concerns\CanDoubleClick,
+        ShouldSnakeAttributes,
+        Macroable {
+            __call as macroCall;
+        }
+
     /**
      * The grid data model instance.
      *
-     * @var \Encore\Admin\Grid\Model
+     * @var \Encore\Admin\Grid\Model|\Illuminate\Database\Eloquent\Builder
      */
     protected $model;
 
@@ -82,13 +97,6 @@ class Grid
     protected $variables = [];
 
     /**
-     * The grid Filter.
-     *
-     * @var \Encore\Admin\Grid\Filter
-     */
-    protected $filter;
-
-    /**
      * Resource path of the grid.
      *
      * @var
@@ -103,67 +111,6 @@ class Grid
     protected $keyName = 'id';
 
     /**
-     * Allow batch deletion.
-     *
-     * @var bool
-     */
-    protected $allowBatchDeletion = true;
-
-    /**
-     * Allow creation.
-     *
-     * @var bool
-     */
-    protected $allowCreation = true;
-
-    /**
-     * Allow actions.
-     *
-     * @var bool
-     */
-    protected $allowActions = true;
-
-    /**
-     * Allow export data.
-     *
-     * @var bool
-     */
-    protected $allowExport = true;
-
-    /**
-     * If use grid filter.
-     *
-     * @var bool
-     */
-    protected $useFilter = true;
-
-    /**
-     * If grid use pagination.
-     *
-     * @var bool
-     */
-    protected $usePagination = true;
-
-    /**
-     * If grid use per-page selector.
-     *
-     * @var bool
-     */
-    protected $usePerPageSelector = true;
-
-    /**
-     * Is grid rows orderable.
-     *
-     * @var bool
-     */
-    protected $orderable = false;
-
-    /**
-     * @var Exporter
-     */
-    protected $exporter;
-
-    /**
      * View for grid to render.
      *
      * @var string
@@ -175,31 +122,122 @@ class Grid
      *
      * @var array
      */
-    protected $perPages = [10, 20, 30, 50, 100];
+    public $perPages = [10, 20, 30, 50, 100];
 
     /**
      * Default items count per-page.
      *
      * @var int
      */
-    protected $perPage = 20;
+    public $perPage = 20;
+
+    /**
+     * @var []callable
+     */
+    protected $renderingCallbacks = [];
+
+    /**
+     * Options for grid.
+     *
+     * @var array
+     */
+    protected $options = [
+        'show_pagination'        => true,
+        'show_tools'             => true,
+        'show_filter'            => true,
+        'show_exporter'          => true,
+        'show_actions'           => true,
+        'show_row_selector'      => true,
+        'show_create_btn'        => true,
+        'show_column_selector'   => true,
+        'show_define_empty_page' => true,
+        'show_perpage_selector'  => true,
+    ];
+
+    /**
+     * @var string
+     */
+    public $tableID;
+
+    /**
+     * Initialization closure array.
+     *
+     * @var []Closure
+     */
+    protected static $initCallbacks = [];
 
     /**
      * Create a new grid instance.
      *
      * @param Eloquent $model
-     * @param callable $builder
+     * @param Closure  $builder
      */
-    public function __construct(Eloquent $model, Closure $builder)
+    public function __construct(Eloquent $model, Closure $builder = null)
     {
+        $this->model = new Model($model, $this);
         $this->keyName = $model->getKeyName();
-        $this->model = new Model($model);
-        $this->columns = new Collection();
-        $this->rows = new Collection();
         $this->builder = $builder;
 
-        $this->setupFilter();
-        $this->setupExporter();
+        $this->initialize();
+
+        $this->callInitCallbacks();
+    }
+
+    /**
+     * Initialize.
+     */
+    protected function initialize()
+    {
+        $this->tableID = uniqid('grid-table');
+
+        $this->columns = Collection::make();
+        $this->rows = Collection::make();
+
+        $this->initTools()
+            ->initFilter();
+    }
+
+    /**
+     * Initialize with user pre-defined default disables and exporter, etc.
+     *
+     * @param Closure $callback
+     */
+    public static function init(Closure $callback = null)
+    {
+        static::$initCallbacks[] = $callback;
+    }
+
+    /**
+     * Call the initialization closure array in sequence.
+     */
+    protected function callInitCallbacks()
+    {
+        if (empty(static::$initCallbacks)) {
+            return;
+        }
+
+        foreach (static::$initCallbacks as $callback) {
+            call_user_func($callback, $this);
+        }
+    }
+
+    /**
+     * Get or set option for grid.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return $this|mixed
+     */
+    public function option($key, $value = null)
+    {
+        if (is_null($value)) {
+            return $this->options[$key];
+        }
+
+        $this->options[$key] = $value;
+
+        return $this;
     }
 
     /**
@@ -213,7 +251,7 @@ class Grid
     }
 
     /**
-     * Add column to Grid.
+     * Add a column to Grid.
      *
      * @param string $name
      * @param string $label
@@ -222,24 +260,15 @@ class Grid
      */
     public function column($name, $label = '')
     {
-        $relationName = $relationColumn = '';
-
-        if (strpos($name, '.') !== false) {
-            list($relationName, $relationColumn) = explode('.', $name);
-
-            $relation = $this->model()->eloquent()->$relationName();
-
-            $label = empty($label) ? ucfirst($relationColumn) : $label;
+        if (Str::contains($name, '.')) {
+            return $this->addRelationColumn($name, $label);
         }
 
-        $column = $this->addColumn($name, $label);
-
-        if (isset($relation) && $relation instanceof Relation) {
-            $this->model()->with($relationName);
-            $column->setRelation($relation, $relationColumn);
+        if (Str::contains($name, '->')) {
+            return $this->addJsonColumn($name, $label);
         }
 
-        return $column;
+        return $this->__call($name, array_filter([$label]));
     }
 
     /**
@@ -251,7 +280,7 @@ class Grid
      *
      * @param array $columns
      *
-     * @return Collection|void
+     * @return Collection|null
      */
     public function columns($columns = [])
     {
@@ -285,25 +314,89 @@ class Grid
         $column = new Column($column, $label);
         $column->setGrid($this);
 
-        return $this->columns[] = $column;
+        return tap($column, function ($value) {
+            $this->columns->push($value);
+        });
     }
 
     /**
-     * Add a blank column.
+     * Get all columns object.
      *
-     * @param $label
+     * @return Collection
+     */
+    public function getColumns()
+    {
+        return $this->columns;
+    }
+
+    /**
+     * Add a relation column to grid.
+     *
+     * @param string $name
+     * @param string $label
+     *
+     * @return $this|bool|Column
+     */
+    protected function addRelationColumn($name, $label = '')
+    {
+        list($relation, $column) = explode('.', $name);
+
+        $model = $this->model()->eloquent();
+
+        if (!method_exists($model, $relation) || !$model->{$relation}() instanceof Relations\Relation) {
+            $class = get_class($model);
+
+            admin_error("Call to undefined relationship [{$relation}] on model [{$class}].");
+
+            return $this;
+        }
+
+        $name = ($this->shouldSnakeAttributes() ? Str::snake($relation) : $relation).'.'.$column;
+
+        $this->model()->with($relation);
+
+        return $this->addColumn($name, $label)->setRelation($relation, $column);
+    }
+
+    /**
+     * Add a json type column to grid.
+     *
+     * @param string $name
+     * @param string $label
      *
      * @return Column
      */
-    public function blank($label)
+    protected function addJsonColumn($name, $label = '')
     {
-        return $this->addColumn('blank', $label);
+        $column = substr($name, strrpos($name, '->') + 2);
+
+        $name = str_replace('->', '.', $name);
+
+        return $this->addColumn($name, $label ?: ucfirst($column));
+    }
+
+    /**
+     * Prepend column to grid.
+     *
+     * @param string $column
+     * @param string $label
+     *
+     * @return Column
+     */
+    public function prependColumn($column = '', $label = '')
+    {
+        $column = new Column($column, $label);
+        $column->setGrid($this);
+
+        return tap($column, function ($value) {
+            $this->columns->prepend($value);
+        });
     }
 
     /**
      * Get Grid model.
      *
-     * @return Model
+     * @return Model|\Illuminate\Database\Eloquent\Builder
      */
     public function model()
     {
@@ -315,13 +408,15 @@ class Grid
      *
      * @param int $perPage
      *
-     * @return void
+     * @return $this
      */
     public function paginate($perPage = 20)
     {
         $this->perPage = $perPage;
 
-        $this->model()->paginate($perPage);
+        $this->model()->setPerPage($perPage);
+
+        return $this;
     }
 
     /**
@@ -331,229 +426,7 @@ class Grid
      */
     public function paginator()
     {
-        if (!$this->usePagination) {
-            return '';
-        }
-
-        $query = Input::all();
-
-        return $this->model()->eloquent()->appends($query)->render(
-            new AdminThreePresenter($this->model()->eloquent())
-        );
-    }
-
-    /**
-     * Build the grid.
-     *
-     * @return void
-     */
-    public function build()
-    {
-        if ($this->builded) {
-            return;
-        }
-
-        $data = $this->processFilter();
-
-        Column::setOriginalGridData($data);
-
-        $this->columns->map(function (Column $column) use (&$data) {
-            $data = $column->fill($data);
-
-            $this->columnNames[] = $column->getName();
-        });
-
-        $this->buildRows($data);
-
-        $this->builded = true;
-    }
-
-    /**
-     * Process the grid filter.
-     *
-     * @return array
-     */
-    public function processFilter()
-    {
-        call_user_func($this->builder, $this);
-
-        return $this->filter->execute();
-    }
-
-    /**
-     * Build the grid rows.
-     *
-     * @param array $data
-     *
-     * @return void
-     */
-    protected function buildRows(array $data)
-    {
-        $this->rows = collect($data)->map(function ($val, $key) {
-            $row = new Row($key, $val);
-
-            $row->setKeyName($this->keyName);
-            $row->setPath($this->resource());
-
-            return $row;
-        });
-
-        if ($this->rowsCallback) {
-            $this->rows->map($this->rowsCallback);
-        }
-    }
-
-    /**
-     * Set grid row callback function.
-     *
-     * @param callable $callable
-     *
-     * @return Collection|void
-     */
-    public function rows(Closure $callable = null)
-    {
-        if (is_null($callable)) {
-            return $this->rows;
-        }
-
-        $this->rowsCallback = $callable;
-    }
-
-    /**
-     * Setup grid filter.
-     *
-     * @return void
-     */
-    protected function setupFilter()
-    {
-        $this->filter = new Filter($this, $this->model());
-    }
-
-    /**
-     * Setup grid exporter.
-     *
-     * @return void
-     */
-    protected function setupExporter()
-    {
-        if (Input::has('_export')) {
-            $exporter = new Exporter($this);
-
-            $exporter->export();
-        }
-    }
-
-    /**
-     * Export url.
-     *
-     * @return string
-     */
-    public function exportUrl()
-    {
-        $query = $query = Input::all();
-        $query['_export'] = true;
-
-        return $this->resource().'?'.http_build_query($query);
-    }
-
-    /**
-     * If allow batch delete.
-     *
-     * @return bool
-     */
-    public function allowBatchDeletion()
-    {
-        return $this->allowBatchDeletion;
-    }
-
-    /**
-     * Disable batch deletion.
-     *
-     * @return $this
-     */
-    public function disableBatchDeletion()
-    {
-        $this->allowBatchDeletion = false;
-
-        return $this;
-    }
-
-    /**
-     * Disable creation.
-     *
-     * @return $this
-     */
-    public function disableCreation()
-    {
-        $this->allowCreation = false;
-
-        return $this;
-    }
-
-    /**
-     * If allow creation.
-     *
-     * @return bool
-     */
-    public function allowCreation()
-    {
-        return $this->allowCreation;
-    }
-
-    /**
-     * If allow actions.
-     *
-     * @return bool
-     */
-    public function allowActions()
-    {
-        return $this->allowActions;
-    }
-
-    /**
-     * Disable all actions.
-     *
-     * @return $this
-     */
-    public function disableActions()
-    {
-        $this->allowActions = false;
-
-        return $this;
-    }
-
-    /**
-     * If grid allows export.s.
-     *
-     * @return bool
-     */
-    public function allowExport()
-    {
-        return $this->allowExport;
-    }
-
-    /**
-     * Disable export.
-     *
-     * @return $this
-     */
-    public function disableExport()
-    {
-        $this->allowExport = false;
-
-        return $this;
-    }
-
-    /**
-     * Disable grid filter.
-     *
-     * @return $this
-     */
-    public function disableFilter()
-    {
-        $this->useFilter = false;
-
-        return $this;
+        return new Tools\Paginator($this, $this->options['show_perpage_selector']);
     }
 
     /**
@@ -561,13 +434,11 @@ class Grid
      *
      * @return $this
      */
-    public function disablePagination()
+    public function disablePagination(bool $disable = true)
     {
-        $this->model->usePaginate(false);
+        $this->model->usePaginate(!$disable);
 
-        $this->usePagination = false;
-
-        return $this;
+        return $this->option('show_pagination', !$disable);
     }
 
     /**
@@ -575,75 +446,9 @@ class Grid
      *
      * @return bool
      */
-    public function usePagination()
+    public function showPagination()
     {
-        return $this->usePagination;
-    }
-
-    /**
-     * Disable grid per-page selector.
-     */
-    public function disablePerPageSelector()
-    {
-        $this->usePerPageSelector = false;
-
-        return $this;
-    }
-
-    /**
-     * If this grid use per-page selector.
-     *
-     * @return bool
-     */
-    public function usePerPageSelector()
-    {
-        return $this->usePerPageSelector;
-    }
-
-    /**
-     * Set grid as orderable.
-     *
-     * @return $this
-     */
-    public function orderable()
-    {
-        $this->orderable = true;
-
-        return $this;
-    }
-
-    /**
-     * Is the grid orderable.
-     *
-     * @return bool
-     */
-    public function isOrderable()
-    {
-        return $this->orderable;
-    }
-
-    /**
-     * Set the grid filter.
-     *
-     * @param callable $callback
-     */
-    public function filter(Closure $callback)
-    {
-        call_user_func($callback, $this->filter);
-    }
-
-    /**
-     * Render the grid filter.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function renderFilter()
-    {
-        if (!$this->useFilter) {
-            return '';
-        }
-
-        return $this->filter->render();
+        return $this->option('show_pagination');
     }
 
     /**
@@ -657,32 +462,240 @@ class Grid
     }
 
     /**
-     * Generate per-page options.
+     * @param bool $disable
      *
-     * @return string
+     * @return $this
      */
-    public function perPageOptions()
+    public function disablePerPageSelector(bool $disable = true)
     {
-        $perPage = (int) app('request')->input(
-            $this->model->getPerPageName(),
-            $this->perPage
-        );
-
-        return collect($this->perPages)
-            ->push($this->perPage)
-            ->push($perPage)
-            ->unique()
-            ->sort()
-            ->map(function ($option) use ($perPage) {
-                $selected = ($option == $perPage) ? 'selected' : '';
-                $url = app('request')->fullUrlWithQuery([$this->model->getPerPageName() => $option]);
-
-                return "<option value=\"$url\" $selected>$option</option>";
-            })->implode("\r\n");
+        return $this->option('show_perpage_selector', !$disable);
     }
 
     /**
-     * Get current resource uri.
+     * Disable row selector.
+     *
+     * @return Grid|mixed
+     */
+    public function disableRowSelector(bool $disable = true)
+    {
+        return $this->disableBatchActions($disable);
+    }
+
+    /**
+     * Prepend checkbox column for grid.
+     *
+     * @return void
+     */
+    protected function prependRowSelectorColumn()
+    {
+        if (!$this->option('show_row_selector')) {
+            return;
+        }
+
+        $checkAllBox = "<input type=\"checkbox\" class=\"{$this->getSelectAllName()}\" />&nbsp;";
+
+        $this->prependColumn(Column::SELECT_COLUMN_NAME, ' ')
+            ->displayUsing(Displayers\RowSelector::class)
+            ->addHeader($checkAllBox);
+    }
+
+    /**
+     * Apply column filter to grid query.
+     *
+     * @return void
+     */
+    protected function applyColumnFilter()
+    {
+        $this->columns->each->bindFilterQuery($this->model());
+    }
+
+    /**
+     * Apply column search to grid query.
+     *
+     * @return void
+     */
+    protected function applyColumnSearch()
+    {
+        $this->columns->each->bindSearchQuery($this->model());
+    }
+
+    /**
+     * @return array|Collection|mixed
+     */
+    public function applyQuery()
+    {
+        $this->applyQuickSearch();
+
+        $this->applyColumnFilter();
+
+        $this->applyColumnSearch();
+
+        $this->applySelectorQuery();
+    }
+
+    /**
+     * Add row selector columns and action columns before and after the grid.
+     *
+     * @return void
+     */
+    protected function addDefaultColumns()
+    {
+        $this->prependRowSelectorColumn();
+
+        $this->appendActionsColumn();
+    }
+
+    /**
+     * Build the grid.
+     *
+     * @return void
+     */
+    public function build()
+    {
+        if ($this->builded) {
+            return;
+        }
+
+        $this->applyQuery();
+
+        $collection = $this->applyFilter(false);
+
+        $this->addDefaultColumns();
+
+        Column::setOriginalGridModels($collection);
+
+        $data = $collection->toArray();
+
+        $this->columns->map(function (Column $column) use (&$data) {
+            $data = $column->fill($data);
+
+            $this->columnNames[] = $column->getName();
+        });
+
+        $this->buildRows($data, $collection);
+
+        $this->builded = true;
+    }
+
+    /**
+     * Build the grid rows.
+     *
+     * @param array      $data
+     * @param Collection $collection
+     *
+     * @return void
+     */
+    protected function buildRows(array $data, Collection $collection)
+    {
+        $this->rows = collect($data)->map(function ($model, $number) use ($collection) {
+            return new Row($number, $model, $collection->get($number)->getKey());
+        });
+
+        if ($this->rowsCallback) {
+            $this->rows->map($this->rowsCallback);
+        }
+    }
+
+    /**
+     * Set grid row callback function.
+     *
+     * @param Closure $callable
+     *
+     * @return Collection|null
+     */
+    public function rows(Closure $callable = null)
+    {
+        if (is_null($callable)) {
+            return $this->rows;
+        }
+
+        $this->rowsCallback = $callable;
+    }
+
+    /**
+     * Get create url.
+     *
+     * @return string
+     */
+    public function getCreateUrl()
+    {
+        $queryString = '';
+
+        if ($constraints = $this->model()->getConstraints()) {
+            $queryString = http_build_query($constraints);
+        }
+
+        return sprintf(
+            '%s/create%s',
+            $this->resource(),
+            $queryString ? ('?'.$queryString) : ''
+        );
+    }
+
+    /**
+     * Alias for method `disableCreateButton`.
+     *
+     * @return $this
+     *
+     * @deprecated
+     */
+    public function disableCreation()
+    {
+        return $this->disableCreateButton();
+    }
+
+    /**
+     * Remove create button on grid.
+     *
+     * @return $this
+     */
+    public function disableCreateButton(bool $disable = true)
+    {
+        return $this->option('show_create_btn', !$disable);
+    }
+
+    /**
+     * Remove define empty page on grid.
+     *
+     * @return $this
+     */
+    public function disableDefineEmptyPage(bool $disable = true)
+    {
+        return $this->option('show_define_empty_page', !$disable);
+    }
+
+    /**
+     * If grid show define empty page on grid.
+     *
+     * @return bool
+     */
+    public function showDefineEmptyPage()
+    {
+        return $this->option('show_define_empty_page');
+    }
+
+    /**
+     * If allow creation.
+     *
+     * @return bool
+     */
+    public function showCreateBtn()
+    {
+        return $this->option('show_create_btn');
+    }
+
+    /**
+     * Render create button for grid.
+     *
+     * @return string
+     */
+    public function renderCreateButton()
+    {
+        return (new Tools\CreateButton($this))->render();
+    }
+
+    /**
+     * Get current resource url.
      *
      * @param string $path
      *
@@ -700,26 +713,7 @@ class Grid
             return $this->resourcePath;
         }
 
-        return app('router')->current()->getPath();
-    }
-
-    /**
-     * Handle table column for grid.
-     *
-     * @param string $method
-     * @param string $label
-     *
-     * @return bool|Column
-     */
-    protected function handleTableColumn($method, $label)
-    {
-        $connection = $this->model()->eloquent()->getConnectionName();
-
-        if (Schema::connection($connection)->hasColumn($this->model()->getTable(), $method)) {
-            return $this->addColumn($method, $label);
-        }
-
-        return false;
+        return url(app('request')->getPathInfo());
     }
 
     /**
@@ -755,20 +749,29 @@ class Grid
             return false;
         }
 
-        if (!($relation = $model->$method()) instanceof Relation) {
+        if (!($relation = $model->$method()) instanceof Relations\Relation) {
             return false;
         }
 
-        if ($relation instanceof HasOne || $relation instanceof BelongsTo) {
+        if ($relation instanceof Relations\HasOne ||
+            $relation instanceof Relations\BelongsTo ||
+            $relation instanceof Relations\MorphOne
+        ) {
             $this->model()->with($method);
 
-            return $this->addColumn($method, $label)->setRelation($method);
+            return $this->addColumn($method, $label)->setRelation(
+                $this->shouldSnakeAttributes() ? Str::snake($method) : $method
+            );
         }
 
-        if ($relation instanceof HasMany || $relation instanceof BelongsToMany || $relation instanceof MorphToMany) {
+        if ($relation instanceof Relations\HasMany
+            || $relation instanceof Relations\BelongsToMany
+            || $relation instanceof Relations\MorphToMany
+            || $relation instanceof Relations\HasManyThrough
+        ) {
             $this->model()->with($method);
 
-            return $this->addColumn($method, $label);
+            return $this->addColumn($this->shouldSnakeAttributes() ? Str::snake($method) : $method, $label);
         }
 
         return false;
@@ -780,18 +783,18 @@ class Grid
      * @param $method
      * @param $arguments
      *
-     * @return $this|Column
+     * @return Column
      */
     public function __call($method, $arguments)
     {
-        $label = isset($arguments[0]) ? $arguments[0] : ucfirst($method);
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $arguments);
+        }
+
+        $label = $arguments[0] ?? null;
 
         if ($this->model()->eloquent() instanceof MongodbModel) {
             return $this->addColumn($method, $label);
-        }
-
-        if ($column = $this->handleTableColumn($method, $label)) {
-            return $column;
         }
 
         if ($column = $this->handleGetMutatorColumn($method, $label)) {
@@ -837,7 +840,7 @@ class Grid
      * @param string $view
      * @param array  $variables
      */
-    public function view($view, $variables = [])
+    public function setView($view, $variables = [])
     {
         if (!empty($variables)) {
             $this->with($variables);
@@ -847,113 +850,90 @@ class Grid
     }
 
     /**
+     * Set grid title.
+     *
+     * @param string $title
+     *
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        $this->variables['title'] = $title;
+
+        return $this;
+    }
+
+    /**
+     * Set relation for grid.
+     *
+     * @param Relations\Relation $relation
+     *
+     * @return $this
+     */
+    public function setRelation(Relations\Relation $relation)
+    {
+        $this->model()->setRelation($relation);
+
+        return $this;
+    }
+
+    /**
+     * Set resource path for grid.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function setResource($path)
+    {
+        $this->resourcePath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set rendering callback.
+     *
+     * @param callable $callback
+     *
+     * @return $this
+     */
+    public function rendering(callable $callback)
+    {
+        $this->renderingCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Call callbacks before render.
+     *
+     * @return void
+     */
+    protected function callRenderingCallback()
+    {
+        foreach ($this->renderingCallbacks as $callback) {
+            call_user_func($callback, $this);
+        }
+    }
+
+    /**
      * Get the string contents of the grid view.
      *
      * @return string
      */
     public function render()
     {
+        $this->handleExportRequest(true);
+
         try {
             $this->build();
         } catch (\Exception $e) {
-            return with(new Handle($e))->render();
+            return Handler::renderException($e);
         }
 
-        AdminManager::script($this->script());
+        $this->callRenderingCallback();
 
-        return view($this->view, $this->variables())->render();
-    }
-
-    /**
-     * Js code for grid.
-     *
-     * @return string
-     */
-    public function script()
-    {
-        $path = app('router')->current()->getPath();
-        $token = csrf_token();
-        $confirm = trans('admin::lang.delete_confirm');
-
-        return <<<EOT
-
-$('.grid-select-all').change(function() {
-    if (this.checked) {
-        $('.grid-item').prop("checked", true);
-    } else {
-        $('.grid-item').prop("checked", false);
-    }
-});
-
-$('.batch-delete').on('click', function() {
-    var selected = [];
-    $('.grid-item:checked').each(function(){
-        selected.push($(this).data('id'));
-    });
-
-    if (selected.length == 0) {
-        return;
-    }
-
-    if(confirm("{$confirm}")) {
-        $.post('/{$path}/' + selected.join(), {_method:'delete','_token':'{$token}'}, function(data){
-            $.pjax.reload('#pjax-container');
-            noty({
-                text: "<strong>Succeeded!</strong>",
-                type:'success',
-                timeout: 1000
-            });
-        });
-    }
-});
-
-$('.grid-refresh').on('click', function() {
-    $.pjax.reload('#pjax-container');
-
-    noty({
-        text: "<strong>Succeeded!</strong>",
-        type:'success',
-        timeout: 1000
-    });
-});
-
-var grid_order = function(id, direction) {
-    $.post('/{$path}/' + id, {_method:'PUT', _token:'{$token}', _orderable:direction}, function(data){
-
-        if (data.status) {
-            noty({
-                text: "<strong>Succeeded!</strong>",
-                type:'success',
-                timeout: 1000
-            });
-
-            $.pjax.reload('#pjax-container');
-        }
-    });
-}
-
-$('.grid-order-up').on('click', function() {
-    grid_order($(this).data('id'), 1);
-});
-
-$('.grid-order-down').on('click', function() {
-    grid_order($(this).data('id'), 0);
-});
-
-$('.per-page').select2({minimumResultsForSearch: -1}).on("select2:select", function(e) {
-    $.pjax({url: this.value, container: '#pjax-container'});
-});
-
-EOT;
-    }
-
-    /**
-     * Get the string contents of the grid view.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->render();
+        return Admin::component($this->view, $this->variables());
     }
 }

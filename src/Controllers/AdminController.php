@@ -2,27 +2,101 @@
 
 namespace Encore\Admin\Controllers;
 
-trait AdminController
+use Encore\Admin\Layout\Content;
+use Illuminate\Routing\Controller;
+
+class AdminController extends Controller
 {
-    public function show($id)
+    use HasResourceActions;
+
+    /**
+     * Title for current resource.
+     *
+     * @var string
+     */
+    protected $title = 'Title';
+
+    /**
+     * Set description for following 4 action pages.
+     *
+     * @var array
+     */
+    protected $description = [
+        //        'index'  => 'Index',
+        //        'show'   => 'Show',
+        //        'edit'   => 'Edit',
+        //        'create' => 'Create',
+    ];
+
+    /**
+     * Get content title.
+     *
+     * @return string
+     */
+    protected function title()
     {
-        return $this->edit($id);
+        return $this->title;
     }
 
-    public function update($id)
+    /**
+     * Index interface.
+     *
+     * @param Content $content
+     *
+     * @return Content
+     */
+    public function index(Content $content)
     {
-        return $this->form()->update($id);
+        return $content
+            ->title($this->title())
+            ->description($this->description['index'] ?? trans('admin.list'))
+            ->body($this->grid());
     }
 
-    public function destroy($id)
+    /**
+     * Show interface.
+     *
+     * @param mixed   $id
+     * @param Content $content
+     *
+     * @return Content
+     */
+    public function show($id, Content $content)
     {
-        if ($this->form()->destroy($id)) {
-            return response()->json(['msg' => 'delete success!']);
-        }
+        return $content
+            ->title($this->title())
+            ->description($this->description['show'] ?? trans('admin.show'))
+            ->body($this->detail($id));
     }
 
-    public function store()
+    /**
+     * Edit interface.
+     *
+     * @param mixed   $id
+     * @param Content $content
+     *
+     * @return Content
+     */
+    public function edit($id, Content $content)
     {
-        return $this->form()->store();
+        return $content
+            ->title($this->title())
+            ->description($this->description['edit'] ?? trans('admin.edit'))
+            ->body($this->form()->edit($id));
+    }
+
+    /**
+     * Create interface.
+     *
+     * @param Content $content
+     *
+     * @return Content
+     */
+    public function create(Content $content)
+    {
+        return $content
+            ->title($this->title())
+            ->description($this->description['create'] ?? trans('admin.create'))
+            ->body($this->form());
     }
 }

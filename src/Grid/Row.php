@@ -2,6 +2,12 @@
 
 namespace Encore\Admin\Grid;
 
+use Closure;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
+
 class Row
 {
     /**
@@ -9,7 +15,7 @@ class Row
      *
      * @var
      */
-    protected $number;
+    public $number;
 
     /**
      * Row data.
@@ -26,77 +32,36 @@ class Row
     protected $attributes = [];
 
     /**
-     * Actions of row.
-     *
-     * @var
-     */
-    protected $actions;
-
-    /**
-     * The primary key name.
-     *
      * @var string
      */
-    protected $keyName = 'id';
+    protected $key;
 
     /**
-     * Action path.
+     * Row constructor.
      *
-     * @var
+     * @param mixed $number
+     * @param array $data
+     * @param mixed $key
      */
-    protected $path;
-
-    /**
-     * Constructor.
-     *
-     * @param $number
-     * @param $data
-     */
-    public function __construct($number, $data)
+    public function __construct($number, $data, $key)
     {
-        $this->number = $number;
-
         $this->data = $data;
+        $this->number = $number;
+        $this->key = $key;
+
+        $this->attributes = [
+            'data-key' => $key,
+        ];
     }
 
     /**
-     * Set primary key name.
-     *
-     * @param $keyName
-     */
-    public function setKeyName($keyName)
-    {
-        $this->keyName = $keyName;
-    }
-
-    /**
-     * Set action path.
-     *
-     * @param $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
-     * Get action path.
+     * Get the value of the model's primary key.
      *
      * @return mixed
      */
-    public function getPath()
+    public function getKey()
     {
-        return $this->path;
-    }
-
-    /**
-     * Get id of this row.
-     *
-     * @return null
-     */
-    public function id()
-    {
-        return $this->__get($this->keyName);
+        return $this->key;
     }
 
     /**
@@ -104,10 +69,38 @@ class Row
      *
      * @return string
      */
-    public function getHtmlAttributes()
+    public function getRowAttributes()
+    {
+        return $this->formatHtmlAttribute($this->attributes);
+    }
+
+    /**
+     * Get column attributes.
+     *
+     * @param string $column
+     *
+     * @return string
+     */
+    public function getColumnAttributes($column)
+    {
+        if ($attributes = Column::getAttributes($column, $this->getKey())) {
+            return $this->formatHtmlAttribute($attributes);
+        }
+
+        return '';
+    }
+
+    /**
+     * Format attributes to html.
+     *
+     * @param array $attributes
+     *
+     * @return string
+     */
+    private function formatHtmlAttribute($attributes = [])
     {
         $attrArr = [];
-        foreach ($this->attributes as $name => $val) {
+        foreach ($attributes as $name => $val) {
             $attrArr[] = "$name=\"$val\"";
         }
 
@@ -118,23 +111,21 @@ class Row
      * Set attributes.
      *
      * @param array $attributes
-     *
-     * @return null
      */
     public function setAttributes(array $attributes)
     {
-        $this->attributes = $attributes;
+        $this->attributes = array_merge($this->attributes, $attributes);
     }
 
     /**
      * Set style of the row.
      *
-     * @param $style
+     * @param array|string $style
      */
     public function style($style)
     {
         if (is_array($style)) {
-            $style = implode('', array_map(function ($key, $val) {
+            $style = implode(';', array_map(function ($key, $val) {
                 return "$key:$val";
             }, array_keys($style), array_values($style)));
         }
@@ -145,31 +136,11 @@ class Row
     }
 
     /**
-     * Set or Get actions.
-     *
-     * @param string $actions
-     *
-     * @return Action
-     */
-    public function actions($actions = 'edit|delete')
-    {
-        if (!is_null($this->actions)) {
-            return $this->actions;
-        }
-
-        $this->actions = new Action($actions);
-
-        $this->actions->setRow($this);
-
-        return $this->actions;
-    }
-
-    /**
      * Get data of this row.
      *
      * @return mixed
      */
-    public function cells()
+    public function model()
     {
         return $this->data;
     }
@@ -177,38 +148,65 @@ class Row
     /**
      * Getter.
      *
-     * @param $attr
+     * @param mixed $attr
      *
-     * @return null
+     * @return mixed
      */
     public function __get($attr)
     {
-        return array_get($this->data, $attr);
+        return Arr::get($this->data, $attr);
     }
 
     /**
      * Get or set value of column in this row.
      *
-     * @param $name
-     * @param null $value
+     * @param string $name
+     * @param mixed  $value
      *
      * @return $this|mixed
      */
     public function column($name, $value = null)
     {
         if (is_null($value)) {
-            $column = array_get($this->data, $name);
+            $column = Arr::get($this->data, $name);
 
-            return is_string($column) ? $column : var_export($column, true);
+            return $this->output($column);
         }
 
-        if (is_callable($value)) {
-            $value = $value->bindTo($this);
-            $value = $value($this->column($name));
+        if ($value instanceof Closure) {
+            $value = $value->call($this, $this->column($name));
         }
 
-        array_set($this->data, $name, $value);
+        Arr::set($this->data, $name, $value);
 
         return $this;
+    }
+
+    /**
+     * Output column value.
+     *
+     * @param mixed $value
+     *
+     * @return mixed|string
+     */
+    protected function output($value)
+    {
+        if ($value instanceof Renderable) {
+            $value = $value->render();
+        }
+
+        if ($value instanceof Htmlable) {
+            $value = $value->toHtml();
+        }
+
+        if ($value instanceof Jsonable) {
+            $value = $value->toJson();
+        }
+
+        if (!is_null($value) && !is_scalar($value)) {
+            return sprintf('<pre>%s</pre>', var_export($value, true));
+        }
+
+        return $value;
     }
 }

@@ -1,6 +1,6 @@
 # 常见问题汇总
 
-## 关于自定义视图
+## 重写内置视图
 
 如果有需要自己修改view，但是不方便直接修改`laravel-admin`的情况，可以用下面的办法解决
 
@@ -10,27 +10,15 @@
 app('view')->prependNamespace('admin', resource_path('views/admin'));
 ```
 
-这样就用`resources/views/admin`下的视图覆盖了`laravel-admin`的视图，要注意的问题是，更新`laravel-admin`的时候，可能会遇到视图不存在的问题，这个需要自行解决
+这样就用`resources/views/admin`下的视图覆盖了`laravel-admin`的视图，要注意的问题是，更新`laravel-admin`的时候，如果遇到视图方面的问题，需要重新复制`vendor/encore/laravel-admin/views`到项目的`resources/views/admin`中，注意备份原来已经修改过的视图。
 
 ## 设置语言
 
-完成安装之后，默认语言为英文(en)，如果要使用中文，打开`config/app.php`，将`locale`设置为`zh_CN`即可。
-
-## 自定义语言
-
-如果需要修改`laravel-admin`的语言包，可以用下面的方式解决
-
-复制`vendor/encore/laravel-admin/lang`到项目的`resources/lang/admin`，然后在`app/Admin/bootstrap.php`文件中加入代码：
-
-```php
-app('translator')->addNamespace('admin', resource_path('lang/admin'));
-```
-
-如果将系统语言locale设置为`zh-CN`，可以将`resources/lang/admin`目录下的`zh_CN`目录重命名为`zh-CN`即可，更新`laravel-admin`的时候，要做相应修改。
+完成安装之后，默认语言为英文(en)，如果要使用中文，打开`config/app.php`，将`locale`设置为`zh-CN`即可。
 
 ## 关于扩展自定义组件
 
-`laravel-admin`默认引用了大量前端资源，如果有网络问题或者有不需要使用的组件，可以参考[form组件管理](/docs/zh/field-management.md)将其移除。
+`laravel-admin`默认引用了大量前端资源，如果有网络问题或者有不需要使用的组件，可以参考[form组件管理](/zh/model-form-field-management.md)将其移除。
 
 关于富文本编辑器，由于静态资源包文件普遍太大，所以`laravel-admin`默认通过cdn的方式引用`ckeditor`，建议大家根据自己的需求扩展编辑器，自行配置。
 
@@ -44,7 +32,7 @@ Admin::css('path/to/your/js');
 ```
 
 
-## 自定义登陆页面和登陆逻辑
+## 重写登陆页面和登陆逻辑
 
 在路由文件`app/Admin/routes.php`中，覆盖掉登陆页面和登陆逻辑的路由，即可实现自定义的功能
 
@@ -68,4 +56,4 @@ Route::group([
 
 ## 更新静态资源
 
-如果遇到更新之后,部分组件不能正常使用,那有可能是`laravel-admin`自带的静态资源有更新了,所以需要手动去用`vendor/encore/laravel-admin/assets`的静态资源覆盖掉`public/packages`目录下的静态资源文件,覆盖完成之后不要忘记清理浏览器缓存.
+如果遇到更新之后,部分组件不能正常使用,那有可能是`laravel-admin`自带的静态资源有更新了,需要运行命令`php artisan vendor:publish --tag=laravel-admin-assets --force`来重新发布前端资源，发布之后不要忘记清理浏览器缓存.

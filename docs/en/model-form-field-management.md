@@ -114,7 +114,7 @@ Form::extend('php', PHPEditor::class);
 
 ```
 
-And then you can use PHP editor in [model-form](model-form.md):
+And then you can use PHP editor in [model-form](/en/model-form.md):
 
 ```
 
@@ -128,7 +128,7 @@ In this way, you can add any form fields you want to add.
 
 Here is another example to show you how to integrate ckeditor.
 
-At first download [CKEditor](http://ckeditor.com/download), unzip to public directory， for example `public/packages/ckeditor/`.
+At first download [CKEditor](http://ckeditor.com/download), unzip to public directory, for example `public/packages/ckeditor/`.
 
 Then Write Extension class `app/Admin/Extensions/Form/CKEditor.php`:
 ```php

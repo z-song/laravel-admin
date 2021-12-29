@@ -1,10 +1,12 @@
 <?php
 
-use Illuminate\Filesystem\ClassFinder;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Testing\TestCase as LaravelTestCase;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
 
-class TestCase extends LaravelTestCase
+class TestCase extends BaseTestCase
 {
     protected $baseUrl = 'http://localhost:8000';
 
@@ -17,45 +19,65 @@ class TestCase extends LaravelTestCase
     {
         $app = require __DIR__.'/../vendor/laravel/laravel/bootstrap/app.php';
 
-        $app->register('Encore\Admin\Providers\AdminServiceProvider');
+        $app->booting(function () {
+            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+            $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
+        });
 
         $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+
+        $app->register('Encore\Admin\AdminServiceProvider');
 
         return $app;
     }
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->app['config']->set('database.default', 'mysql');
-        $this->app['config']->set('database.connections.mysql.host', 'localhost');
-        $this->app['config']->set('database.connections.mysql.database', 'laravel_admin');
-        $this->app['config']->set('database.connections.mysql.username', 'root');
-        $this->app['config']->set('database.connections.mysql.password', '');
+        $adminConfig = require __DIR__.'/config/admin.php';
+
+        $this->app['config']->set('database.default', env('DB_CONNECTION', 'mysql'));
+        $this->app['config']->set('database.connections.mysql.host', env('MYSQL_HOST', 'localhost'));
+        $this->app['config']->set('database.connections.mysql.database', env('MYSQL_DATABASE', 'laravel_admin_test'));
+        $this->app['config']->set('database.connections.mysql.username', env('MYSQL_USER', 'root'));
+        $this->app['config']->set('database.connections.mysql.password', env('MYSQL_PASSWORD', ''));
         $this->app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
         $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
-        $this->app['config']->set('admin', require __DIR__.'/config/admin.php');
+        $this->app['config']->set('admin', $adminConfig);
 
-        $this->artisan('vendor:publish');
+        foreach (Arr::dot(Arr::get($adminConfig, 'auth'), 'auth.') as $key => $value) {
+            $this->app['config']->set($key, $value);
+        }
 
-        $this->migrate();
+        $this->artisan('vendor:publish', ['--provider' => 'Encore\Admin\AdminServiceProvider']);
+
+        Schema::defaultStringLength(191);
 
         $this->artisan('admin:install');
 
+        $this->migrateTestTables();
+
         if (file_exists($routes = admin_path('routes.php'))) {
             require $routes;
-            $this->app['admin.router']->register();
         }
 
         require __DIR__.'/routes.php';
 
         require __DIR__.'/seeds/factory.php';
+
+//        \Encore\Admin\Admin::$css = [];
+//        \Encore\Admin\Admin::$js = [];
+//        \Encore\Admin\Admin::$script = [];
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
-        $this->rollback();
+        (new CreateAdminTables())->down();
+
+        (new CreateTestTables())->down();
+
+        DB::select("delete from `migrations` where `migration` = '2016_01_04_173148_create_admin_tables'");
 
         parent::tearDown();
     }
@@ -65,37 +87,12 @@ class TestCase extends LaravelTestCase
      *
      * @return void
      */
-    public function migrate()
+    public function migrateTestTables()
     {
-        foreach ($this->getMigrations() as $migration) {
-            (new $migration())->up();
-        }
-    }
-
-    public function rollback()
-    {
-        foreach ($this->getMigrations() as $migration) {
-            (new $migration())->down();
-        }
-    }
-
-    protected function getMigrations()
-    {
-        $migrations = [];
-
         $fileSystem = new Filesystem();
-        $classFinder = new ClassFinder();
 
-        foreach ($fileSystem->files(__DIR__.'/../migrations') as $file) {
-            $fileSystem->requireOnce($file);
-            $migrations[] = $classFinder->findClass($file);
-        }
+        $fileSystem->requireOnce(__DIR__.'/migrations/2016_11_22_093148_create_test_tables.php');
 
-        foreach ($fileSystem->files(__DIR__.'/migrations') as $file) {
-            $fileSystem->requireOnce($file);
-            $migrations[] = $classFinder->findClass($file);
-        }
-
-        return $migrations;
+        (new CreateTestTables())->up();
     }
 }

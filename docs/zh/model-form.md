@@ -35,9 +35,9 @@ $grid = Admin::form(Movie::class, function(Form $form){
     $form->text('title', '电影标题');
     
     $directors = [
-        'John'  => 1,
-        'Smith' => 2,
-        'Kate'  => 3,
+        1 => 'John',
+        2 => 'Smith',
+        3 => 'Kate',
     ];
     
     $form->select('director', '导演')->options($directors);
@@ -52,7 +52,7 @@ $grid = Admin::form(Movie::class, function(Form $form){
     $form->switch('released', '发布？');
     
     // 添加日期时间选择框
-    $form->dateTime('release_at', '发布时间');
+    $form->datetime('release_at', '发布时间');
     
     // 两个时间显示
     $form->display('created_at', '创建时间');
@@ -108,4 +108,73 @@ $form->setWidth(10, 2);
 
 ```php
 $form->setAction('admin/users');
+```
+
+## 关联模型
+
+
+### 一对一
+`users`表和`profiles`表通过`profiles.user_id`字段生成一对一关联
+
+```sql
+
+CREATE TABLE `users` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `profiles` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`age` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`gender` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+`created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+
+对应的数据模分别为:
+
+```php
+
+class User extends Model
+{
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+}
+
+class Profile extends Model
+{
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+}
+
+```
+
+通过下面的代码可以关联在一个form里面:
+
+```php
+Admin::form(User::class, function (Form $form) {
+
+    $form->display('id');
+
+    $form->text('name');
+    $form->text('email');
+    
+    $form->text('profile.age');
+    $form->text('profile.gender');
+
+    $form->datetime('created_at');
+    $form->datetime('updated_at');
+});
+
 ```

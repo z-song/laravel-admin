@@ -1,1 +1,0 @@
-<input type="text" class="form-control" placeholder="{{$label}}" name="{{$name}}" value="{{ request($name, $value) }}">

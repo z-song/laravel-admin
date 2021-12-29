@@ -6,7 +6,7 @@ use Tests\Models\User as UserModel;
 
 class UserGridTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -16,7 +16,7 @@ class UserGridTest extends TestCase
     public function testIndexPage()
     {
         $this->visit('admin/users')
-            ->see('All users')
+            ->see('Users')
             ->seeInElement('tr th', 'Username')
             ->seeInElement('tr th', 'Email')
             ->seeInElement('tr th', 'Mobile')
@@ -32,17 +32,21 @@ class UserGridTest extends TestCase
             ->seeInElement('tr th', 'Created at')
             ->seeInElement('tr th', 'Updated at');
 
-        $this->seeElement('form[action="/admin/users"][method=get]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name=id]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name=username]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name=email]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name="profile[start_at][start]"]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name="profile[start_at][end]"]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name="profile[end_at][start]"]')
-            ->seeElement('form[action="/admin/users"][method=get] input[name="profile[end_at][end]"]');
+        $action = url('/admin/users');
 
-        $this->seeInElement('a[href="/admin/users?_export=1"]', 'Export')
-            ->seeInElement('a[href="/admin/users/create"]', 'New');
+        $this->seeElement("form[action='$action'][method=get]")
+            ->seeElement("form[action='$action'][method=get] input[name=id]")
+            ->seeElement("form[action='$action'][method=get] input[name=username]")
+            ->seeElement("form[action='$action'][method=get] input[name=email]")
+            ->seeElement("form[action='$action'][method=get] input[name='profile[start_at][start]']")
+            ->seeElement("form[action='$action'][method=get] input[name='profile[start_at][end]']")
+            ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][start]']")
+            ->seeElement("form[action='$action'][method=get] input[name='profile[end_at][end]']");
+
+        $urlAll = url('/admin/users?_export_=all');
+        $urlNew = url('/admin/users/create');
+        $this->seeInElement("a[href=\"{$urlAll}\"]", 'All')
+            ->seeInElement("a[href=\"{$urlNew}\"]", 'New');
     }
 
     protected function seedsTable($count = 100)
@@ -52,6 +56,8 @@ class UserGridTest extends TestCase
             ->each(function ($u) {
                 $u->profile()->save(factory(\Tests\Models\Profile::class)->make());
                 $u->tags()->saveMany(factory(\Tests\Models\Tag::class, 5)->make());
+                $u->data = ['json' => ['field' => random_int(0, 50)]];
+                $u->save();
             });
     }
 
@@ -60,7 +66,7 @@ class UserGridTest extends TestCase
         $this->seedsTable();
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(100, UserModel::all());
         $this->assertCount(100, ProfileModel::all());
@@ -71,30 +77,44 @@ class UserGridTest extends TestCase
         $this->seedsTable(65);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
-        $this->click(2)->seePageIs('admin/users?page=2');
+        $this->visit('admin/users?page=2');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
 
-        $this->click(3)->seePageIs('admin/users?page=3');
+        $this->visit('admin/users?page=3');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
 
-        $this->click(4)->seePageIs('admin/users?page=4');
+        $this->visit('admin/users?page=4');
         $this->assertCount(5, $this->crawler()->filter('td a i[class*=fa-edit]'));
-
-        $this->visit('admin/users?page=5')->seePageIs('admin/users?page=5');
-        $this->assertCount(0, $this->crawler()->filter('td a i[class*=fa-edit]'));
 
         $this->click(1)->seePageIs('admin/users?page=1');
         $this->assertCount(20, $this->crawler()->filter('td a i[class*=fa-edit]'));
     }
 
-    public function testIsFileter()
+    public function testOrderByJson()
+    {
+        $this->seedsTable(10);
+        $this->assertCount(10, UserModel::all());
+
+        $this->visit('admin/users?_sort[column]=data.json.field&_sort[type]=desc&_sort[cast]=unsigned');
+
+        $jsonTds = $this->crawler->filter('table.table tbody td.column-data-json-field');
+        $this->assertCount(10, $jsonTds);
+        $prevValue = PHP_INT_MAX;
+        foreach ($jsonTds as $jsonTd) {
+            $currentValue = (int) $jsonTd->nodeValue;
+            $this->assertTrue($currentValue <= $prevValue);
+            $prevValue = $currentValue;
+        }
+    }
+
+    public function testEqualFilter()
     {
         $this->seedsTable(50);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(50, UserModel::all());
         $this->assertCount(50, ProfileModel::all());
@@ -122,7 +142,7 @@ class UserGridTest extends TestCase
         $this->seedsTable(50);
 
         $this->visit('admin/users')
-            ->see('All users');
+            ->see('Users');
 
         $this->assertCount(50, UserModel::all());
         $this->assertCount(50, ProfileModel::all());
@@ -158,7 +178,7 @@ class UserGridTest extends TestCase
             ->seeInElement('td', $user->end_at);
     }
 
-    public function testValueCallback()
+    public function testDisplayCallback()
     {
         $this->seedsTable(1);
 

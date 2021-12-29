@@ -47,6 +47,7 @@ class CreateTestTables extends Migration
             $table->string('mobile')->nullable();
             $table->string('avatar')->nullable();
             $table->string('password');
+            $table->json('data')->nullable();
             $table->timestamps();
         });
 
@@ -87,12 +88,12 @@ class CreateTestTables extends Migration
      */
     public function down()
     {
-        Schema::drop('test_images');
-        Schema::drop('test_multiple_images');
-        Schema::drop('test_files');
-        Schema::drop('test_users');
-        Schema::drop('test_user_profiles');
-        Schema::drop('test_tags');
-        Schema::drop('test_user_tags');
+        Schema::dropIfExists('test_images');
+        Schema::dropIfExists('test_multiple_images');
+        Schema::dropIfExists('test_files');
+        Schema::dropIfExists('test_users');
+        Schema::dropIfExists('test_user_profiles');
+        Schema::dropIfExists('test_tags');
+        Schema::dropIfExists('test_user_tags');
     }
 }

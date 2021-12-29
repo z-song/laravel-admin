@@ -5,7 +5,7 @@ use Encore\Admin\Auth\Database\Role;
 
 class RolesTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -32,9 +32,11 @@ class RolesTest extends TestCase
     public function testAddRoleToUser()
     {
         $user = [
-            'username' => 'Test',
-            'name'     => 'Name',
-            'password' => '123456',
+            'username'              => 'Test',
+            'name'                  => 'Name',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
+
         ];
 
         $this->visit('admin/auth/users/create')
@@ -86,11 +88,18 @@ class RolesTest extends TestCase
 
     public function testEditRole()
     {
-        $this->visit('admin/auth/roles/1/edit')
+        $this->visit('admin/auth/roles/create')
+            ->see('Roles')
+            ->submitForm('Submit', ['slug' => 'developer', 'name' => 'Developer...'])
+            ->seePageIs('admin/auth/roles')
+            ->seeInDatabase(config('admin.database.roles_table'), ['slug' => 'developer', 'name' => 'Developer...'])
+            ->assertEquals(2, Role::count());
+
+        $this->visit('admin/auth/roles/2/edit')
             ->see('Roles')
             ->submitForm('Submit', ['name' => 'blablabla'])
             ->seePageIs('admin/auth/roles')
             ->seeInDatabase(config('admin.database.roles_table'), ['name' => 'blablabla'])
-            ->assertEquals(1, Role::count());
+            ->assertEquals(2, Role::count());
     }
 }

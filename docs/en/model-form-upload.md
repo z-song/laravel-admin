@@ -1,6 +1,6 @@
 # File/Image upload
 
-[model-form](/docs/zh/model-form.md) can build file and image upload field with following codes
+[model-form](/en/model-form.md) can build file and image upload field with following codes
 
 ```php
 $form->file('file_column');
@@ -24,7 +24,7 @@ $form->image('picture')->name(function ($file) {
 
 ```
 
-[model-form](/docs/zh/model-form.md) both support for local and cloud storage upload
+[model-form](/en/model-form.md) both support for local and cloud storage upload
 
 ### Upload to local
 
@@ -37,14 +37,15 @@ first add storage configuration, add a disk in `config/filesystems.php`:
 
     'admin' => [
         'driver' => 'local',
-        'root' => public_path('upload'),
+        'root' => public_path('uploads'),
         'visibility' => 'public',
+        'url' => env('APP_URL').'/uploads',
     ],
 ],
 
 ```
 
-set upload path to `public/upload`(public_path('upload'))。
+set upload path to `public/upload`(public_path('upload')).
 
 And then in `config/admin.php` select the `disk` set up above：
 
@@ -58,8 +59,6 @@ And then in `config/admin.php` select the `disk` set up above：
         'image'  => 'image',
         'file'   => 'file',
     ],
-
-    'host' => 'http://localhost:8000/upload/',
 ],
 
 ```
@@ -91,6 +90,7 @@ Also configure the disk, in the `config/filesystems.php` add an item:
         'secret_key'=> '',  //SecretKey
         'bucket'    => '',  //Bucket
         'notify_url'=> '',  //
+        'url'       => 'http://of8kfibjo.bkt.clouddn.com/',
     ],
 ],
 
@@ -108,10 +108,8 @@ Then modify the upload configuration of `laravel-admin` and open `config/admin.p
         'image'  => 'image',
         'file'   => 'file',
     ],
-
-    'host' => 'http://of8kfibjo.bkt.clouddn.com/',
 ],
 
 ```
 
-Select the above configuration` qiniu` for `disk`, `host` configured to `qiniu` cloud storage test domain name.
+Select the above configuration` qiniu` for `disk`

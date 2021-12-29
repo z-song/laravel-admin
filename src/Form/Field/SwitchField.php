@@ -3,60 +3,75 @@
 namespace Encore\Admin\Form\Field;
 
 use Encore\Admin\Form\Field;
+use Illuminate\Support\Arr;
 
 class SwitchField extends Field
 {
-    const STATE_ON = 1;
-    const STATE_OFF = 0;
-
     protected static $css = [
-        '/packages/admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
+        '/vendor/laravel-admin/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
     ];
 
     protected static $js = [
-        '/packages/admin/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+        '/vendor/laravel-admin/bootstrap-switch/dist/js/bootstrap-switch.min.js',
     ];
 
-    protected $states = [];
+    protected $states = [
+        'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
+        'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
+    ];
 
-    public function __construct($column, $arguments = [])
+    protected $size = 'small';
+
+    public function setSize($size)
     {
-        $this->initStates();
+        $this->size = $size;
 
-        parent::__construct($column, $arguments);
-    }
-
-    protected function initStates()
-    {
-        $this->states = ['on' => static::STATE_ON, 'off' => static::STATE_OFF];
+        return $this;
     }
 
     public function states($states = [])
     {
-        $this->states = $states;
+        foreach (Arr::dot($states) as $key => $state) {
+            Arr::set($this->states, $key, $state);
+        }
+
+        return $this;
     }
 
     public function prepare($value)
     {
         if (isset($this->states[$value])) {
-            return $this->states[$value];
+            return $this->states[$value]['value'];
         }
+
+        return $value;
     }
 
     public function render()
     {
-        $key = array_search($this->value, $this->states);
+        if (!$this->shouldRender()) {
+            return '';
+        }
 
-        $this->value = ($key == 'on') ? 'on' : 'off';
+        foreach ($this->states as $state => $option) {
+            if ($this->value() == $option['value']) {
+                $this->value = $state;
+                break;
+            }
+        }
 
         $this->script = <<<EOT
 
-$('#{$this->id}_checkbox').bootstrapSwitch({
-    size:'small',
+$('{$this->getElementClassSelector()}.la_checkbox').bootstrapSwitch({
+    size:'{$this->size}',
+    onText: '{$this->states['on']['text']}',
+    offText: '{$this->states['off']['text']}',
+    onColor: '{$this->states['on']['color']}',
+    offColor: '{$this->states['off']['color']}',
     onSwitchChange: function(event, state) {
-        $('#{$this->id}').val(state ? 'on' : 'off');
+        $(event.target).closest('.bootstrap-switch').next().val(state ? 'on' : 'off').change();
     }
-});;
+});
 
 EOT;
 

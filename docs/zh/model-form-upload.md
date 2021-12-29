@@ -1,6 +1,6 @@
 # 文件/图片上传
 
-[model-form](model-form.md)通过以下的调用来生成form元素。
+[model-form](/zh/model-form.md)通过以下的调用来生成form元素。
 
 ```php
 $form->file('file_column');
@@ -24,7 +24,7 @@ $form->image('picture')->name(function ($file) {
 
 ```
 
-[model-form](/model-form.md)支持本地和云存储的文件上传
+[model-form](/zh/model-form.md)支持本地和云存储的文件上传
 
 ## 本地上传
 
@@ -37,37 +37,33 @@ $form->image('picture')->name(function ($file) {
 
     'admin' => [
         'driver' => 'local',
-        'root' => public_path('upload'),
+        'root' => public_path('uploads'),
         'visibility' => 'public',
+        'url' => env('APP_URL').'/uploads',
     ],
 ],
 
 ```
 
-设置上传的路径为`public/upload`(public_path('upload'))。
+设置上传的路径为`public/uploads`(public_path('uploads'))。
 
 然后选择上传的`disk`，打开`config/admin.php`找到：
 
 ```php
-
+    
 'upload'  => [
 
     'disk' => 'admin',
 
     'directory'  => [
-        'image'  => 'image',
-        'file'   => 'file',
-    ],
-
-    'host' => 'http://localhost:8000/upload/',
+        'image'  => 'images',
+        'file'   => 'files',
+    ]
 ],
-    
 
 ```
 
-将`disk`设置为上面添加的`admin`，`directory.image`和`directory.file`分别为用`$form->image($column)`和`$form->file($column)`上传的图片和文件的上传目录
-
-`host`为图片和文件的网络访问url前缀。
+将`disk`设置为上面添加的`admin`，`directory.image`和`directory.file`分别为用`$form->image($column)`和`$form->file($column)`上传的图片和文件的上传目录。
 
 
 ## 云盘上传
@@ -92,6 +88,7 @@ $form->image('picture')->name(function ($file) {
         'secret_key'=> '',  //SecretKey
         'bucket'    => '',  //Bucket名字
         'notify_url'=> '',  //持久化处理回调地址
+        'url'       => 'http://of8kfibjo.bkt.clouddn.com/',  // 填写文件访问根url
     ],
 ],
 
@@ -109,10 +106,8 @@ $form->image('picture')->name(function ($file) {
         'image'  => 'image',
         'file'   => 'file',
     ],
-
-    'host' => 'http://of8kfibjo.bkt.clouddn.com/',
 ],
 
 ```
 
-`disk`选择上面配置的`qiniu`，`host`配置为七牛云存储的测试域名。
+`disk`选择上面配置的`qiniu`。

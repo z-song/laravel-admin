@@ -18,7 +18,7 @@ CREATE TABLE `movies` (
 
 ```
 
-对应的数据模型为`App\Models\Movie`，下面的代码可以生成`users`的数据表格：
+对应的数据模型为`App\Models\Movie`，下面的代码可以生成表`movies`的数据表格：
 
 ```php
 
@@ -88,7 +88,11 @@ $grid->model()->orderBy('id', 'desc');
 
 $grid->model()->take(100);
 
+...
+
 ```
+
+其它查询方法可以参考`eloquent`的查询方法.
 
 #### 设置每页显示行数
 
@@ -101,8 +105,9 @@ $grid->paginate(15);
 
 
 ```php
+use Illuminate\Support\Str;
 $grid->text()->display(function($text) {
-    return str_limit($text, 30, '...');
+    return Str::limit($text, 30, '...');
 });
 
 $grid->name()->display(function ($name) {
@@ -133,7 +138,7 @@ $grid->column('full_name')->display(function () {
 
 #### 禁用创建按钮
 ```php
-$grid->disableCreation();
+$grid->disableCreateButton();
 ```
 
 #### 禁用分页条
@@ -151,60 +156,19 @@ $grid->disableFilter();
 $grid->disableExport();
 ```
 
+#### 禁用行选择checkbox
+```php
+$grid->disableRowSelector();
+```
+
+#### 禁用行操作列
+```php
+$grid->disableActions();
+```
+
 #### 设置分页选择器选项
 ```php
 $grid->perPages([10, 20, 30, 40, 50]);
-```
-
-#### 添加查询过滤器
-```php
-$grid->filter(function($filter){
-
-    // 如果过滤器太多，可以使用弹出模态框来显示过滤器.
-    $filter->useModal();
-    
-    // 禁用id查询框
-    $filter->disableIdFilter();
-
-    // sql: ... WHERE `user.name` LIKE "%$name%";
-    $filter->like('name', 'name');
-
-    // sql: ... WHERE `user.email` = $email;
-    $filter->is('emial', 'Email');
-
-    // sql: ... WHERE `user.created_at` BETWEEN $start AND $end;
-    $filter->between('created_at', 'Created Time')->datetime();
-    
-    // sql: ... WHERE `article.author_id` = $id;
-    $filter->is('author_id', 'Author')->select(User::all()->pluck('name', 'id'));
-
-    // sql: ... WHERE `title` LIKE "%$input" OR `content` LIKE "%$input";
-    $filter->where(function ($query) {
-
-        $query->where('title', 'like', "%{$this->input}%")
-            ->orWhere('content', 'like', "%{$this->input}%");
-
-    }, 'Text');
-    
-    // sql: ... WHERE `rate` >= 6 AND `created_at` = {$input};
-    $filter->where(function ($query) {
-
-        $query->whereRaw("`rate` >= 6 AND `created_at` = {$this->input}");
-
-    }, 'Text');
-    
-    // 关系查询，查询对应关系`profile`的字段
-    $filter->where(function ($query) {
-
-        $input = $this->input;
-
-        $query->whereHas('profile', function ($query) use ($input) {
-            $query->where('address', 'like', "%{$input}%")->orWhere('email', 'like', "%{$input}%");
-        });
-
-    }, '地址或手机号');
-    
-});
 ```
 
 ## 关联模型
@@ -243,7 +207,7 @@ class User extends Model
 {
     public function profile()
     {
-        $this->hasOne(Profile::class);
+        return $this->hasOne(Profile::class);
     }
 }
 
@@ -251,7 +215,7 @@ class Profile extends Model
 {
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 }
 
