@@ -76,9 +76,9 @@ class GenerateMenuCommand extends Command
         $news = $routes->diffKeys($menus)->map(function ($item, $key) {
             return [
                 'title' => $item,
-                'uri' => $key,
+                'uri'   => $key,
                 'order' => 10,
-                'icon' => 'fa-list',
+                'icon'  => 'fa-list',
             ];
         })->values()->toArray();
 
