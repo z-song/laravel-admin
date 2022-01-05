@@ -99,7 +99,8 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected function ensureHttps()
     {
-        if ((config('admin.https') || config('admin.secure')) && \Str::startsWith(request()->getRequestUri(), '/admin')) {
+        $is_admin = \Str::startsWith(request()->getRequestUri(), '/' . ltrim(config('admin.route.prefix'), '/'))
+        if ((config('admin.https') || config('admin.secure')) && $is_admin) {
             url()->forceScheme('https');
             $this->app['request']->server->set('HTTPS', true);
         }
