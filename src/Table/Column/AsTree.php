@@ -73,10 +73,12 @@ trait AsTree
 
         $model = $this->table->model()->getOriginalModel();
 
+        $tableName = $model->getConnection()->getTablePrefix() . $model->getTable();
+
         $sql = <<<SQL
 SELECT GROUP_CONCAT(lv SEPARATOR ',') as children FROM (
-    SELECT @pv:=(SELECT GROUP_CONCAT({$model->getKeyName()} SEPARATOR ',') FROM `{$model->getTable()}`
-    WHERE FIND_IN_SET({$column}, @pv)) AS lv FROM `{$model->getTable()}`
+    SELECT @pv:=(SELECT GROUP_CONCAT({$model->getKeyName()} SEPARATOR ',') FROM `{$tableName}`
+    WHERE FIND_IN_SET({$column}, @pv)) AS lv FROM `{$tableName}`
     JOIN
     (SELECT @pv:='{$keys}') tmp
 ) a;
