@@ -48,8 +48,8 @@ class GenerateMenuCommand extends Command
      */
     public function handle()
     {
-        $routes = collect($this->router->getRoutes())->filter(function (Route $route) {
-            $prefix = config('admin.route.prefix');
+        $prefix = config('admin.route.prefix');
+        $routes = collect($this->router->getRoutes())->filter(function (Route $route) use ($prefix) {
             $uri = $route->uri();
             // built-in, parameterized and no-GET are ignored
             return Str::startsWith($uri, "{$prefix}/")
@@ -59,7 +59,7 @@ class GenerateMenuCommand extends Command
                 && in_array('GET', $route->methods())
                 && !in_array(substr($route->uri(), strlen("{$prefix}/")), config('admin.menu_exclude'));
         })
-            ->map(function (Route $route, $prefix) {
+            ->map(function (Route $route) use ($prefix) {
                 $uri = substr($route->uri(), strlen("{$prefix}/"));
 
                 return [
@@ -76,9 +76,9 @@ class GenerateMenuCommand extends Command
         $news = $routes->diffKeys($menus)->map(function ($item, $key) {
             return [
                 'title' => $item,
-                'uri' => $key,
+                'uri'   => $key,
                 'order' => 10,
-                'icon' => 'fa-list',
+                'icon'  => 'fa-list',
             ];
         })->values()->toArray();
 
