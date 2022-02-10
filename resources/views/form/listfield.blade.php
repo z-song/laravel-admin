@@ -1,7 +1,6 @@
-
 @php($listErrorKey = "$column.values")
 
-<div class="{{$viewClass['form-group']}} {{ $errors->has($listErrorKey) ? 'has-error' : '' }}">
+<div id="{{$containerId}}" class="{{$viewClass['form-group']}} {{ $errors->has($listErrorKey) ? 'has-error' : '' }}">
 
     <label class="{{$viewClass['label']}} control-label">{{$label}}</label>
 
