@@ -54,7 +54,7 @@ class ExampleController extends AdminController
      *
      * @return Form
      */
-    protected function form()
+    protected function form($id = null)
     {
         $form = new Form(new ExampleModel);
 
