@@ -7,7 +7,8 @@ use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Form\NestedForm;
 use Encore\Admin\Widgets\Form as WidgetForm;
-use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
+use Illuminate\Database\Eloquent\Relations\HasMany as HasManyRelation;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -412,7 +413,7 @@ class HasMany extends Field
 
         $relation = call_user_func([$model, $this->relationName]);
 
-        if (!$relation instanceof Relation && !$relation instanceof MorphMany) {
+        if (!$relation instanceof HasManyRelation && !$relation instanceof BelongsToMany && !$relation instanceof MorphMany) {
             throw new \Exception('hasMany field must be a HasMany or MorphMany relation.');
         }
 

@@ -741,6 +741,30 @@ class Form implements Renderable
         return false;
     }
 
+    protected function updateHasManyRelation($name, $data, $attachable = false)
+    {
+        foreach ($data as $key => $related) {
+            $relation = $this->model->$name();
+
+            /** @var Model $child */
+            $child = $relation->findOrNew($key);
+
+            if (Arr::get($related, static::REMOVE_FLAG_NAME) == 1) {
+                if ($attachable) $this->model->$name()->detach($child);
+                else $child->delete();
+                continue;
+            }
+
+            Arr::forget($related, static::REMOVE_FLAG_NAME);
+
+            $child->fill($related);
+
+            $child->save();
+
+            if ($attachable && $child->wasRecentlyCreated) $this->model->$name()->attach($child);
+        }
+    }
+
     /**
      * Update relation data.
      *
@@ -770,8 +794,15 @@ class Form implements Renderable
             switch (true) {
                 case $relation instanceof Relations\BelongsToMany:
                 case $relation instanceof Relations\MorphToMany:
-                    if (isset($prepared[$name])) {
-                        $relation->sync($prepared[$name]);
+                    $data = $prepared[$name];
+                    $first = Arr::first($data);
+
+                    if (is_array($first)) { //relation updated via HasMany field
+                        $this->updateHasManyRelation($name, $data, true);
+                    } else { //relation updated via MultipleSelect field
+                        if (isset($prepared[$name])) {
+                            $relation->sync($prepared[$name]);
+                        }
                     }
                     break;
                 case $relation instanceof Relations\HasOne:
@@ -808,26 +839,7 @@ class Form implements Renderable
                     $first = Arr::first($data);
 
                     if (is_array($first)) { //relation updated via HasMany field
-                        foreach ($data as $related) {
-                            /** @var Relations\HasOneOrMany $relation */
-                            $relation = $this->model->$name();
-
-                            $keyName = $relation->getRelated()->getKeyName();
-
-                            /** @var Model $child */
-                            $child = $relation->findOrNew(Arr::get($related, $keyName));
-
-                            if (Arr::get($related, static::REMOVE_FLAG_NAME) == 1) {
-                                $child->delete();
-                                continue;
-                            }
-
-                            Arr::forget($related, static::REMOVE_FLAG_NAME);
-
-                            $child->fill($related);
-
-                            $child->save();
-                        }
+                        $this->updateHasManyRelation($name, $data);
                     } else { //relation updated via MultipleSelect field
                         $foreignKeyName = $relation->getForeignKeyName();
                         $localKeyName = $relation->getLocalKeyName();
