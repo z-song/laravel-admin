@@ -28,6 +28,14 @@ php artisan admin:make UserController --model=App\\User
 // under windows use:
 php artisan admin:make UserController --model=App\User
 ```
+or with more recent laravel versions use
+```php
+php artisan admin:controller App\\Models\\User
+
+// under windows use:
+php artisan admin:controller App\Models\User
+```
+
 The above command will create the controller in `app/Admin/Controllers/UserController.php`.
 
 ## Add route
