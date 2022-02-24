@@ -30,6 +30,7 @@ use Illuminate\Support\Arr;
  * @method $this suffix($suffix, $delimiter = '&nbsp;')
  * @method $this secret($dotCount = 6)
  * @method $this limit($limit = 100, $end = '...')
+ * @method $this number($decimals = 0, $decimal_seperator = '.', $thousands_seperator = ',')
  */
 trait ExtendDisplay
 {
@@ -59,6 +60,7 @@ trait ExtendDisplay
         'suffix'        => Displayers\Suffix::class,
         'secret'        => Displayers\Secret::class,
         'limit'         => Displayers\Limit::class,
+        'number'        => Displayers\Number::class,
     ];
 
     /**
