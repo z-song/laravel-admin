@@ -288,15 +288,15 @@ class Builder
     public function getAction(): string
     {
         if ($this->action) {
-            return $this->action;
+            return admin_url($this->action);
         }
 
         if ($this->isMode(static::MODE_EDIT)) {
-            return $this->form->resource().'/'.$this->id;
+            return admin_url($this->form->resource().'/'.$this->id);
         }
 
         if ($this->isMode(static::MODE_CREATE)) {
-            return $this->form->resource(-1);
+            return admin_url($this->form->resource(-1));
         }
 
         return '';
