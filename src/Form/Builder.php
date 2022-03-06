@@ -288,15 +288,15 @@ class Builder
     public function getAction(): string
     {
         if ($this->action) {
-            return admin_url($this->action);
+            return admin_url(str_replace('http://', '//',$this->action));
         }
 
         if ($this->isMode(static::MODE_EDIT)) {
-            return admin_url($this->form->resource().'/'.$this->id);
+            return admin_url(str_replace('http://', '//',$this->form->resource().'/'.$this->id));
         }
 
         if ($this->isMode(static::MODE_CREATE)) {
-            return admin_url($this->form->resource(-1));
+            return admin_url(str_replace('http://', '//',$this->form->resource(-1)));
         }
 
         return '';
