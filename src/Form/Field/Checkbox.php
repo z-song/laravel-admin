@@ -66,7 +66,7 @@ class Checkbox extends MultipleSelect
      *
      * @return $this
      */
-    public function groups($groups = [])
+    public function groups(array $groups = [])
     {
         $this->groups = $groups;
 

@@ -801,25 +801,51 @@ class Form implements Renderable
                     break;
                 case $relation instanceof Relations\HasMany:
                 case $relation instanceof Relations\MorphMany:
-                    foreach ($prepared[$name] as $related) {
-                        /** @var Relations\HasOneOrMany $relation */
-                        $relation = $this->model->$name();
+                    /** @var Relations\HasOneOrMany $relation */
+                    $relation = $this->model->$name();
 
-                        $keyName = $relation->getRelated()->getKeyName();
+                    $data = $prepared[$name];
+                    $first = Arr::first($data);
 
-                        /** @var Model $child */
-                        $child = $relation->findOrNew(Arr::get($related, $keyName));
+                    if (is_array($first)) { //relation updated via HasMany field
+                        foreach ($data as $related) {
+                            /** @var Relations\HasOneOrMany $relation */
+                            $relation = $this->model->$name();
 
-                        if (Arr::get($related, static::REMOVE_FLAG_NAME) == 1) {
-                            $child->delete();
-                            continue;
+                            $keyName = $relation->getRelated()->getKeyName();
+
+                            /** @var Model $child */
+                            $child = $relation->findOrNew(Arr::get($related, $keyName));
+
+                            if (Arr::get($related, static::REMOVE_FLAG_NAME) == 1) {
+                                $child->delete();
+                                continue;
+                            }
+
+                            Arr::forget($related, static::REMOVE_FLAG_NAME);
+
+                            $child->fill($related);
+
+                            $child->save();
+                        }
+                    } else { //relation updated via MultipleSelect field
+                        $foreignKeyName = $relation->getForeignKeyName();
+                        $localKeyName = $relation->getLocalKeyName();
+
+                        foreach ($relation->get() as $child) {
+                            if (($ind = array_search($child->getKey(), $data)) !== false) {
+                                unset($data[$ind]);
+                            } else {
+                                $child->$foreignKeyName = null;
+                                $child->save();
+                            }
                         }
 
-                        Arr::forget($related, static::REMOVE_FLAG_NAME);
-
-                        $child->fill($related);
-
-                        $child->save();
+                        foreach ($data as $id) {
+                            $child = $relation->getRelated()->find($id);
+                            $child->$foreignKeyName = $this->model->$localKeyName;
+                            $child->save();
+                        }
                     }
                     break;
             }

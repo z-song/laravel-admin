@@ -124,9 +124,6 @@ class PermissionCommand extends Command
             case 'delete':
                 $http_method = ['DELETE'];
                 break;
-            case 'filter':
-                $http_method = [];
-                break;
             default:
                 $http_method = ['GET'];
         }
@@ -140,6 +137,7 @@ class PermissionCommand extends Command
         switch ($permission) {
             case 'create':
             case 'list':
+            case 'filter':
                 $http_path = '/'.$resource;
                 break;
             case 'edit':
