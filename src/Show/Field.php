@@ -391,11 +391,12 @@ HTML;
     }
 
     /**
-     * Show field as number
-     * 
-     * @param int $decimals
+     * Show field as number.
+     *
+     * @param int    $decimals
      * @param string $decimal_seperator
      * @param string $thousands_seperator
+     *
      * @return Field
      */
     public function number($decimals = 0, $decimal_seperator = '.', $thousands_seperator = ',')
