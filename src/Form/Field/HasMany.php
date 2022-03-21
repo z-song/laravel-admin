@@ -336,7 +336,7 @@ class HasMany extends Field
             $form->setForm($this->form);
         }
 
-        if(!is_null($elementName)){
+        if (!is_null($elementName)) {
             $form->setKey($elementName);
         }
 
