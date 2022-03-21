@@ -89,7 +89,7 @@ class Table extends HasMany
         return 'id';
     }
 
-    protected function buildNestedForm($column, \Closure $builder, $key = null)
+    protected function buildNestedForm($column, \Closure $builder, $key = null, $model = null)
     {
         $form = new NestedForm($column);
 
