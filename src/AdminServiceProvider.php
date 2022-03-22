@@ -115,7 +115,7 @@ class AdminServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__.'/../config' => config_path()], 'laravel-admin-config');
-            if (substr($this->app->version(), 0, 1) >= 9) {
+            if (version_compare($this->app->version(), '9.0.0', '>=')) {
                 $this->publishes([__DIR__.'/../resources/lang' => base_path('lang')], 'laravel-admin-lang');
             } else {
                 $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang')], 'laravel-admin-lang');
