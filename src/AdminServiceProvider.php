@@ -5,6 +5,7 @@ namespace Encore\Admin;
 use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -99,7 +100,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected function ensureHttps()
     {
-        $is_admin = \Str::startsWith(request()->getRequestUri(), '/'.ltrim(config('admin.route.prefix'), '/'));
+        $is_admin = Str::startsWith(request()->getRequestUri(), '/'.ltrim(config('admin.route.prefix'), '/'));
         if ((config('admin.https') || config('admin.secure')) && $is_admin) {
             url()->forceScheme('https');
             $this->app['request']->server->set('HTTPS', true);
