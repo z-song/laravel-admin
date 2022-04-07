@@ -11,7 +11,7 @@ use Illuminate\Support\Arr;
 /**
  * Trait ExtendDisplay.
  *
- * @method $this editable()
+ * @method $this editable($type = '')
  * @method $this image($server = '', $width = 200, $height = 200)
  * @method $this label($style = 'success')
  * @method $this button($style = null)

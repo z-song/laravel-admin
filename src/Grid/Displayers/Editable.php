@@ -68,6 +68,13 @@ class Editable extends AbstractDisplayer
     }
 
     /**
+     * Number type editable
+     */
+    public function number()
+    {
+    }
+
+    /**
      * Select type editable.
      *
      * @param array|\Closure $options
@@ -217,7 +224,16 @@ STR;
             return "$name='$attribute'";
         })->implode(' ');
 
-        $html = $this->type === 'select' ? '' : $this->value;
+        switch ($this->type) {
+            case 'select':
+                $html = '';
+                break;
+            case 'number':
+                $html = number_format($this->value);
+                break;
+            default:
+                $html = $this->value;
+        }
 
         return "<a $attributes>{$html}</a>";
     }
