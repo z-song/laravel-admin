@@ -33,6 +33,10 @@ trait CanExportGrid
 
         $this->disablePagination();
 
+        if ($this->builder) {
+            call_user_func($this->builder, $this);
+        }
+
         if ($forceExport) {
             $this->getExporter($scope)->export();
         }
