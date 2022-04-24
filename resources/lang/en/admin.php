@@ -2,6 +2,7 @@
 
 return [
     'online'                => 'Online',
+    'greeting'              => 'Hello,',
     'login'                 => 'Login',
     'logout'                => 'Logout',
     'setting'               => 'Setting',

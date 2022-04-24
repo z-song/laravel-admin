@@ -2,6 +2,7 @@
 
 return [
     'online'                => 'آنلاین',
+    'greeting'              => 'سلام، وقت بخیر',
     'login'                 => 'ورود',
     'logout'                => 'خروج',
     'setting'               => 'تنظیمات',
