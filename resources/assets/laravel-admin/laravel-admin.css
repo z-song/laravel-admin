@@ -83,3 +83,10 @@ a.editable-empty {
 .file-input .glyphicon-folder-open {
     display: inline;
 }
+
+.grid-dropdown-actions.dropdown > ul.dropdown-menu {
+    min-width: 70px !important;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);
+    left: -65px;
+    top: 5px;
+}
