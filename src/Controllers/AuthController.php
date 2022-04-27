@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Cookie;
 
 class AuthController extends Controller
 {
@@ -19,18 +20,20 @@ class AuthController extends Controller
      */
     protected $loginView = 'admin::login';
 
+    protected $redirectTo;
+
     /**
      * Show the login page.
      *
      * @return \Illuminate\Contracts\View\Factory|Redirect|\Illuminate\View\View
      */
-    public function getLogin()
+    public function getLogin(Request $request)
     {
         if ($this->guard()->check()) {
             return redirect($this->redirectPath());
         }
-
-        return view($this->loginView);
+        $returnUrl = $request->get('returnUrl');
+        return view($this->loginView,['returnUrl'=>$returnUrl]);
     }
 
     /**
@@ -193,7 +196,9 @@ class AuthController extends Controller
         admin_toastr(trans('admin.login_successful'));
 
         $request->session()->regenerate();
-
+        if($request->has('returnUrl')){
+            $this->redirectTo = $request->input('returnUrl');
+        }
         return redirect()->intended($this->redirectPath());
     }
 
