@@ -39,12 +39,14 @@
     <div class="wrapper">
 
         @if ($isFull)
-            {!! Admin::style() !!}
-            <div id="app" style="padding: 10px">
-                @yield('content')
+            <div id="pjax-container">
+                {!! Admin::style() !!}
+                <div id="app" style="padding: 10px">
+                    @yield('content')
+                </div>
+                {!! Admin::script() !!}
+                {!! Admin::html() !!}
             </div>
-            {!! Admin::script() !!}
-            {!! Admin::html() !!}
         @else
             @include('admin::partials.header')
 
