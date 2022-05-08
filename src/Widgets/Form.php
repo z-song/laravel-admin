@@ -170,7 +170,7 @@ class Form implements Renderable
     }
 
     /**
-     * @return array
+     * @return Form
      */
     public function confirm($message)
     {
@@ -391,7 +391,7 @@ class Form implements Renderable
     /**
      * Get all fields of form.
      *
-     * @return Field[]
+     * @return \Illuminate\Support\Collection
      */
     public function fields()
     {
@@ -613,7 +613,7 @@ SCRIPT;
      * @param string $method
      * @param array  $arguments
      *
-     * @return Field|$this
+     * @return Field|Form
      */
     public function __call($method, $arguments)
     {

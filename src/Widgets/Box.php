@@ -40,7 +40,7 @@ class Box extends Widget implements Renderable
      * Box constructor.
      *
      * @param string $title
-     * @param string $content
+     * @param string|Renderable $content
      */
     public function __construct($title = '', $content = '', $footer = '')
     {
@@ -158,7 +158,7 @@ SCRIPT;
     /**
      * Set box style.
      *
-     * @param string $styles
+     * @param string|array<string> $styles
      *
      * @return $this|Box
      */
