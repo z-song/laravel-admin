@@ -1263,7 +1263,7 @@ class Form implements Renderable
      * @param string $message
      * @param string $on
      *
-     * @return $this
+     * @return $this|void
      */
     public function confirm(string $message, $on = null)
     {
@@ -1311,7 +1311,7 @@ class Form implements Renderable
     /**
      * @param Closure|null $callback
      *
-     * @return Form\Tools
+     * @return Form\Tools|void
      */
     public function header(Closure $callback = null)
     {
@@ -1421,7 +1421,7 @@ class Form implements Renderable
      *
      * @param Closure $callback
      *
-     * @return \Encore\Admin\Form\Footer
+     * @return \Encore\Admin\Form\Footer|void
      */
     public function footer(Closure $callback = null)
     {
@@ -1489,7 +1489,7 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function column($width, \Closure $closure): self
+    public function column($width, Closure $closure): self
     {
         $width = $width < 1 ? round(12 * $width) : $width;
 

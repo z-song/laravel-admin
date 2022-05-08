@@ -132,7 +132,7 @@ class Grid
     public $perPage = 20;
 
     /**
-     * @var []callable
+     * @var callable[]
      */
     protected $renderingCallbacks = [];
 
@@ -162,7 +162,7 @@ class Grid
     /**
      * Initialization closure array.
      *
-     * @var []Closure
+     * @var Closure[]
      */
     protected static $initCallbacks = [];
 
@@ -699,7 +699,7 @@ class Grid
      *
      * @param string $path
      *
-     * @return string
+     * @return string|Grid
      */
     public function resource($path = null)
     {
