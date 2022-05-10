@@ -3,7 +3,7 @@
 namespace Encore\Admin\Grid\Column;
 
 use Carbon\Carbon;
-use Encore\Admin\Grid\Column;
+use Closure;
 use Encore\Admin\Grid\Displayers;
 use Encore\Admin\Grid\Model;
 use Illuminate\Support\Arr;
@@ -299,6 +299,19 @@ trait ExtendDisplay
 
             return $bool ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
         });
+    }
+
+    /**
+     * Display column as Jalali/Persian date.
+     * Installing composer morilog/jalali is required
+     *
+     * @param string $format
+     *
+     * @return $this
+     */
+    public function jalali($format = '%Y-%M-%d H:i')
+    {
+        return $this->display(fn ($v) => "<span dir='ltr'>" . \Morilog\Jalali\Jalalian::forge($v)->format($format) . "</span>");
     }
 
     /**
