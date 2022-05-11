@@ -214,7 +214,7 @@ trait CanCascadeFields
     cascade_groups.forEach(function (event) {
         var default_value = '{$this->getValueByJs()}' + '';
         var class_name = event.class;
-        if(default_value == event.value) {
+        if(operator_table[event.operator](default_value, event.value)) {
             $('.'+class_name+'').removeClass('hide');
         }
     });
