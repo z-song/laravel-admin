@@ -309,7 +309,7 @@ trait ExtendDisplay
      *
      * @return $this
      */
-    public function jalali($format = '%Y-%M-%d H:i')
+    public function jalali($format = '%Y-%m-%d H:i')
     {
         return $this->display(fn ($v) => "<span dir='ltr'>" . \Morilog\Jalali\Jalalian::forge($v)->format($format) . "</span>");
     }
