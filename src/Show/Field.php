@@ -391,6 +391,19 @@ HTML;
     }
 
     /**
+     * Display column as Jalali/Persian date.
+     * Installing composer morilog/jalali is required
+     *
+     * @param string $format
+     *
+     * @return $this
+     */
+    public function jalali($format = '%Y-%m-%d H:i')
+    {
+        return $this->unescape()->as(fn ($v) => "<span dir='ltr'>" . \Morilog\Jalali\Jalalian::forge($v)->format($format) . "</span>");
+    }
+
+    /**
      * Show field as number.
      *
      * @param int    $decimals
