@@ -7,9 +7,11 @@
             </div>
             <form>
             <div class="modal-body">
-                @foreach($fields as $field)
-                    {!! $field->render() !!}
-                @endforeach
+                <div class="fields-group">
+                    @foreach($fields as $field)
+                        {!! $field->render() !!}
+                    @endforeach
+                </div>        
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('admin.close') }}</button>
