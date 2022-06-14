@@ -77,10 +77,11 @@
                                class="{{$active ? 'active' : ''}}">{{ $option }}</a>
                             @if(!$active && $selector['type'] == 'many')
                                 &nbsp;
-                                <a href="{{ \Encore\Admin\Grid\Tools\Selector::url($column, $value) }}" class="add"><i
-                                            class="fa-solid fa-plus-square-o"></i></a>
+                                <a href="{{ \Encore\Admin\Grid\Tools\Selector::url($column, $value) }}" class="add">
+                                    <i class="fa-solid fa-square-plus"></i>
+                                </a>
                             @else
-                                <a style="visibility: hidden;"><i class="fa-solid fa-plus-square-o"></i></a>
+                                <a style="visibility: hidden;"><i class="fa-solid fa-square-plus"></i></a>
                             @endif
                         </li>
                     @endforeach
