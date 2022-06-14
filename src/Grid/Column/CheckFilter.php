@@ -97,7 +97,7 @@ HTML;
 <span class="dropdown">
 <form action="{$this->getFormAction()}" pjax-container style="display: inline-block;">
     <a href="javascript:void(0);" class="dropdown-toggle {$active}" data-toggle="dropdown">
-        <i class="fa fa-filter"></i>
+        <i class="fa-solid fa-filter"></i>
     </a>
     <ul class="dropdown-menu" role="menu" style="padding: 10px;box-shadow: 0 2px 3px 0 rgba(0,0,0,.2);left: -70px;border-radius: 0;">
 
@@ -114,8 +114,8 @@ HTML;
         </li>
         <li class="divider"></li>
         <li class="text-right">
-            <button class="btn btn-sm btn-flat btn-primary pull-left" data-loading-text="{$this->trans('search')}..."><i class="fa fa-search"></i>&nbsp;&nbsp;{$this->trans('search')}</button>
-            <span><a href="{$this->getFormAction()}" class="btn btn-sm btn-flat btn-default"><i class="fa fa-undo"></i></a></span>
+            <button class="btn btn-sm btn-flat btn-primary pull-left" data-loading-text="{$this->trans('search')}..."><i class="fa-solid fa-search"></i>&nbsp;&nbsp;{$this->trans('search')}</button>
+            <span><a href="{$this->getFormAction()}" class="btn btn-sm btn-flat btn-default"><i class="fa-solid fa-undo"></i></a></span>
         </li>
     </ul>
 </form>

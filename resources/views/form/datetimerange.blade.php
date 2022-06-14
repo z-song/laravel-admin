@@ -7,12 +7,12 @@
             <div class="col-lg-12">
                 @if($errors->has($errorKey['start']))
                     @foreach($errors->get($errorKey['start']) as $message)
-                        <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
+                        <label class="control-label" for="inputError"><i class="fa-solid fa-times-circle-o"></i> {{$message}}</label><br/>
                     @endforeach
                 @endif
 
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
                     <input type="text"
                            name="{{$name['start']}}"
                            value="{{ old($column['start'], $value['start'] ?? null) }}"
@@ -29,12 +29,12 @@
             <div class="col-lg-12">
                 @if($errors->has($errorKey['end']))
                     @foreach($errors->get($errorKey['end']) as $message)
-                        <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
+                        <label class="control-label" for="inputError"><i class="fa-solid fa-times-circle-o"></i> {{$message}}</label><br/>
                     @endforeach
                 @endif
 
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
                     <input type="text"
                            name="{{$name['end']}}"
                            value="{{ old($column['end'], $value['end'] ?? null) }}"

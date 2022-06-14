@@ -13,9 +13,9 @@
         <h3 class="box-title">Available extensions</h3>
 
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa-solid fa-minus"></i>
             </button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa-solid fa-times"></i></button>
         </div>
     </div>
     <!-- /.box-header -->
@@ -25,14 +25,14 @@
             @foreach($extensions as $extension)
             <li class="item">
                 <div class="product-img">
-                    <i class="fa fa-{{$extension['icon']}} fa-2x ext-icon"></i>
+                    <i class="fa-solid fa-{{$extension['icon']}} fa-2x ext-icon"></i>
                 </div>
                 <div class="product-info">
                     <a href="{{ $extension['link'] }}" target="_blank" class="product-title">
                         {{ $extension['name'] }}
                     </a>
                     @if($extension['installed'])
-                        <span class="pull-right installed"><i class="fa fa-check"></i></span>
+                        <span class="pull-right installed"><i class="fa-solid fa-check"></i></span>
                     @endif
                 </div>
             </li>

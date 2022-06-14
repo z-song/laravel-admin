@@ -133,7 +133,7 @@ abstract class Selectable
         $this->column('__remove__', ' ')->display(function () use ($hide, $key) {
             return <<<BTN
 <a href="javascript:void(0);" class="grid-row-remove {$hide}" data-key="{$this->getAttribute($key)}">
-    <i class="fa fa-trash"></i>
+    <i class="fa-solid fa-trash"></i>
 </a>
 BTN;
         });

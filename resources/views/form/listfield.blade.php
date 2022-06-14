@@ -9,7 +9,7 @@
 
         @if($errors->has($listErrorKey))
             @foreach($errors->get($listErrorKey) as $message)
-                <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
+                <label class="control-label" for="inputError"><i class="fa-solid fa-times-circle-o"></i> {{$message}}</label><br/>
             @endforeach
         @endif
 
@@ -28,7 +28,7 @@
                                 <input name="{{ $column }}[values][]" value="{{ old("{$column}.values.{$k}", $v) }}" class="form-control" />
                                 @if($errors->has($itemErrorKey))
                                     @foreach($errors->get($itemErrorKey) as $message)
-                                        <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
+                                        <label class="control-label" for="inputError"><i class="fa-solid fa-times-circle-o"></i> {{$message}}</label><br/>
                                     @endforeach
                                 @endif
                             </div>
@@ -37,7 +37,7 @@
 
                     <td style="width: 75px;">
                         <div class="{{$column}}-remove btn btn-warning btn-sm pull-right">
-                            <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                            <i class="fa-solid fa-trash">&nbsp;</i>{{ __('admin.remove') }}
                         </div>
                     </td>
                 </tr>
@@ -48,7 +48,7 @@
                     <td></td>
                     <td>
                         <div class="{{ $column }}-add btn btn-success btn-sm pull-right">
-                            <i class="fa fa-save"></i>&nbsp;{{ __('admin.new') }}
+                            <i class="fa-solid fa-save"></i>&nbsp;{{ __('admin.new') }}
                         </div>
                     </td>
                 </tr>
@@ -67,7 +67,7 @@
 
             <td style="width: 75px;">
                 <div class="{{$column}}-remove btn btn-warning btn-sm pull-right">
-                    <i class="fa fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                    <i class="fa-solid fa-trash">&nbsp;</i>{{ __('admin.remove') }}
                 </div>
             </td>
         </tr>

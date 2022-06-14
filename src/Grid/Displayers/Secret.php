@@ -14,7 +14,7 @@ class Secret extends AbstractDisplayer
 
         return <<<HTML
 <span class="secret-wrapper">
-    <i class="fa fa-eye" style="cursor: pointer;"></i>
+    <i class="fa-solid fa-eye" style="cursor: pointer;"></i>
     &nbsp;
     <span class="secret-placeholder" style="vertical-align: middle;">{$dots}</span>
     <span class="secret-content" style="display: none;">{$this->getValue()}</span>

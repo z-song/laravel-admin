@@ -19,7 +19,7 @@ class JalaliDate extends Text
 
     public function render()
     {
-        $this->prepend('<i class="fa fa-calendar fa-fw"></i>');
+        $this->prepend('<i class="fa-solid fa-calendar fa-fw"></i>');
 
         $this->value(jdate($this->value())->format($this->format));
 

@@ -6,7 +6,7 @@
             @else
                  <a href="{{ admin_url($item['uri']) }}">
             @endif
-                <i class="fa {{$item['icon']}}"></i>
+                <i class="fa-solid {{$item['icon']}}"></i>
                 @if (Lang::has($titleTranslation = 'admin.menu_titles.' . trim(str_replace(' ', '_', strtolower($item['title'])))))
                     <span>{{ __($titleTranslation) }}</span>
                 @else
@@ -17,13 +17,13 @@
     @else
         <li class="treeview">
             <a href="#">
-                <i class="fa {{ $item['icon'] }}"></i>
+                <i class="fa-solid {{ $item['icon'] }}"></i>
                 @if (Lang::has($titleTranslation = 'admin.menu_titles.' . trim(str_replace(' ', '_', strtolower($item['title'])))))
                     <span>{{ __($titleTranslation) }}</span>
                 @else
                     <span>{{ admin_trans($item['title']) }}</span>
                 @endif
-                <i class="fa fa-angle-left pull-right"></i>
+                <i class="fa-solid fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
                 @foreach($item['children'] as $item)
