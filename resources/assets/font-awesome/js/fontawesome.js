@@ -1,6 +1,6 @@
 /*!
- * Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com
- * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ * Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license (Commercial License)
  * Copyright 2022 Fonticons, Inc.
  */
 (function () {
@@ -1753,11 +1753,6 @@
 
   function nodeAsComment(node) {
     var comment = " ".concat(node.outerHTML, " ");
-    /* BEGIN.ATTRIBUTION */
-
-    comment = "".concat(comment, "Font Awesome fontawesome.com ");
-    /* END.ATTRIBUTION */
-
     return comment;
   }
 
