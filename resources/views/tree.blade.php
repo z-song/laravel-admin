@@ -40,7 +40,7 @@
     </div>
     <!-- /.box-header -->
     <div class="box-body table-responsive no-padding">
-        <div class="dd" id="{{ $id }}">
+        <div class="dd dd-tree" id="{{ $id }}">
             <ol class="dd-list">
                 @each($branchView, $items, 'branch')
             </ol>
