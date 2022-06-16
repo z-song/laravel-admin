@@ -57,7 +57,7 @@ modal.on('show.bs.modal', function (e) {
             modal.find('.modal-body').html(data);
             modal.find('input.select').iCheck({
                 radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
+                checkboxClass:'icheckbox_flat-blue'
             });
             modal.find('.box-header:first').hide();
 
@@ -101,7 +101,7 @@ modal.on('show.bs.modal', function (e) {
             modal.find('.modal-body').html(data);
             modal.find('input.select').iCheck({
                 radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
+                checkboxClass:'icheckbox_flat-blue'
             });
             modal.find('.box-header:first').hide();
 

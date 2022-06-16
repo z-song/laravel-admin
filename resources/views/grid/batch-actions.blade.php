@@ -20,7 +20,7 @@
 @endif
 
 <script>
-$('.{{ $all }}').iCheck({checkboxClass:'icheckbox_minimal-blue'});
+$('.{{ $all }}').iCheck({checkboxClass:'icheckbox_flat-blue'});
 
 $('.{{ $all }}').on('ifChanged', function(event) {
     if (this.checked) {

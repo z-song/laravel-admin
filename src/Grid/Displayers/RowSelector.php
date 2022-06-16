@@ -23,7 +23,7 @@ EOT;
         $selected = trans('admin.grid_items_selected');
 
         return <<<EOT
-$('.{$row}-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
+$('.{$row}-checkbox').iCheck({checkboxClass:'icheckbox_flat-blue'}).on('ifChanged', function () {
 
     var id = $(this).data('id');
 

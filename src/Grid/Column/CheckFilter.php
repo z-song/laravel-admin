@@ -60,7 +60,7 @@ $('.{$this->class['all']}').on('ifChanged', function () {
 });
 
 $('.{$this->class['item']},.{$this->class['all']}').iCheck({
-    checkboxClass:'icheckbox_minimal-blue'
+    checkboxClass:'icheckbox_flat-blue'
 });
 SCRIPT;
 

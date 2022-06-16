@@ -89,6 +89,6 @@ $('.column-select-all').on('click', function () {
 });
 
 $('.column-select-item').iCheck({
-    checkboxClass:'icheckbox_minimal-blue'
+    checkboxClass:'icheckbox_flat-blue'
 });
 </script>
