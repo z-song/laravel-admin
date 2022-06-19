@@ -84,12 +84,19 @@ class AdminServiceProvider extends ServiceProvider
 
         $this->compatibleBlade();
 
+
         Blade::directive('box', function ($title) {
             return "<?php \$box = new \Encore\Admin\Widgets\Box({$title}, '";
         });
-
         Blade::directive('endbox', function ($expression) {
             return "'); echo \$box->render(); ?>";
+        });
+
+        Blade::directive('can', function ($permission) {
+            return "<?php if (\Encore\Admin\Facades\Admin::user()->can({$permission})): ?>";
+        });
+        Blade::directive('endcan', function () {
+            return "<?php endif; ?>";
         });
     }
 
