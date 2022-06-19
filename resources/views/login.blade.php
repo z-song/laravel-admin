@@ -25,14 +25,9 @@
 <body class="hold-transition login-page"
     @if (config('admin.login_background_image')) style="background: url({{ config('admin.login_background_image') }}) no-repeat;background-size: cover;" @endif>
     <div class="login-box">
-        <div class="login-logo">
-            <a href="{{ admin_url('/') }}"><b>{{ config('admin.name') }}</b></a>
-            <br /><br />
-        </div>
-        <!-- /.login-logo -->
         <div class="@if (config('admin.login_background_image')) login-box-body @endif">
-            <h1 class="text-center">😊👋</h1>
-            <p class="login-box-msg">{{ trans('admin.greeting') }}</p>
+            <h1>{{ trans('admin.greeting') }}</h1>
+            <p class="login-box-msg">{{ trans('admin.welcome') }}</p>
 
             <form action="{{ admin_url('auth/login') }}" method="post">
                 <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
@@ -46,7 +41,7 @@
 
                     <input type="text" class="form-control" placeholder="{{ trans('admin.username') }}"
                         name="username" value="{{ old('username') }}">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
 
@@ -76,8 +71,7 @@
                     <!-- /.col -->
                     <div class="col-xs-4">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <button type="submit"
-                            class="btn btn-primary btn-block btn-flat">{{ trans('admin.login') }}</button>
+                        <button type="submit" class="btn btn-primary btn-block">{{ trans('admin.login') }}</button>
                     </div>
                     <!-- /.col -->
                 </div>
