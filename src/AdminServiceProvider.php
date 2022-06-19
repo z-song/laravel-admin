@@ -98,6 +98,13 @@ class AdminServiceProvider extends ServiceProvider
         Blade::directive('endcan', function () {
             return "<?php endif; ?>";
         });
+
+        Blade::directive('canAny', function ($permissions) {
+            return "<?php if (\Encore\Admin\Facades\Admin::user()->canAny({$permissions})): ?>";
+        });
+        Blade::directive('endcanAny', function () {
+            return "<?php endif; ?>";
+        });
     }
 
     /**
