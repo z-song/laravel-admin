@@ -42,6 +42,25 @@ trait HasPermissions
     }
 
     /**
+     * Check if user has any of permissions.
+     *
+     * @param array $abilities
+     * @param array $arguments
+     *
+     * @return bool
+     */
+    public function canAny(array $abilities, $arguments = []): bool
+    {
+        foreach ($abilities as $ability) {
+            if ($this->can($ability)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Check if user has no permission.
      *
      * @param $permission
