@@ -480,9 +480,10 @@ class Form implements Renderable
         $relations = [];
 
         foreach ($inputs as $column => $value) {
-            if ((method_exists($this->model, $column) ||
-                method_exists($this->model, $column = Str::camel($column))) &&
-                !method_exists(Model::class, $column)
+            if ((method_exists($this->model, 'isRelation') && $this->model->isRelation($column)) ||
+                (!method_exists($this->model, 'isRelation') && (method_exists($this->model, $column) ||
+                    method_exists($this->model, $column = Str::camel($column))) &&
+                    !method_exists(Model::class, $column))
             ) {
                 $relation = call_user_func([$this->model, $column]);
 
@@ -601,13 +602,13 @@ class Form implements Renderable
     {
         if (request('after-save') == 1) {
             // continue editing
-            $url = rtrim($resourcesPath, '/')."/{$key}/edit";
+            $url = rtrim($resourcesPath, '/') . "/{$key}/edit";
         } elseif (request('after-save') == 2) {
             // continue creating
-            $url = rtrim($resourcesPath, '/').'/create';
+            $url = rtrim($resourcesPath, '/') . '/create';
         } elseif (request('after-save') == 3) {
             // view resource
-            $url = rtrim($resourcesPath, '/')."/{$key}";
+            $url = rtrim($resourcesPath, '/') . "/{$key}";
         } else {
             $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
         }
@@ -751,7 +752,7 @@ class Form implements Renderable
     protected function updateRelation($relationsData)
     {
         foreach ($relationsData as $name => $values) {
-            if (!method_exists($this->model, $name)) {
+            if ((method_exists($this->model, 'isRelation') && !$this->model->isRelation($name)) || (!method_exists($this->model, 'isRelation') && !method_exists($this->model, $name))) {
                 continue;
             }
 
@@ -903,7 +904,8 @@ class Form implements Renderable
     {
         foreach ((array) $columns as $column) {
             if ((!$containsDot && Str::contains($column, '.')) ||
-                ($containsDot && !Str::contains($column, '.'))) {
+                ($containsDot && !Str::contains($column, '.'))
+            ) {
                 return true;
             }
         }
@@ -1179,7 +1181,12 @@ class Form implements Renderable
             if (Str::contains($column, '.')) {
                 list($relation) = explode('.', $column);
 
-                if (method_exists($this->model, $relation) &&
+                if (method_exists($this->model, 'isRelation')) {
+                    if ($this->model->isRelation($relation)) {
+                        $relations[] = $relation;
+                    }
+                } elseif (
+                    method_exists($this->model, $relation) &&
                     !method_exists(Model::class, $relation) &&
                     $this->model->$relation() instanceof Relations\Relation
                 ) {
@@ -1190,7 +1197,8 @@ class Form implements Renderable
                     if ($this->model->isRelation($column)) {
                         $relations[] = $column;
                     }
-                } elseif (method_exists($this->model, $column) &&
+                } elseif (
+                    method_exists($this->model, $column) &&
                     !method_exists(Model::class, $column)
                 ) {
                     $relations[] = $column;
