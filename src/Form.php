@@ -1185,10 +1185,16 @@ class Form implements Renderable
                 ) {
                     $relations[] = $relation;
                 }
-            } elseif (method_exists($this->model, $column) &&
-                !method_exists(Model::class, $column)
-            ) {
-                $relations[] = $column;
+            } else {
+                if (method_exists($this->model, 'isRelation')) {
+                    if ($this->model->isRelation($column)) {
+                        $relations[] = $column;
+                    }
+                } elseif (method_exists($this->model, $column) &&
+                    !method_exists(Model::class, $column)
+                ) {
+                    $relations[] = $column;
+                }
             }
         }
 
