@@ -125,6 +125,8 @@ class MultipleSelect extends Select
     {
         $value = (array) $value;
 
-        return array_filter($value, 'strlen');
+        return array_filter($value, function ($v) {
+            return !is_null($v) && strlen($v) > 0;
+        });
     }
 }
