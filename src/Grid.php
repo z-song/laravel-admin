@@ -728,6 +728,8 @@ class Grid
     {
         if ($this->model()->eloquent()->hasGetMutator($method)) {
             return $this->addColumn($method, $label);
+        } elseif (method_exists($this->model()->eloquent(), 'hasAttributeGetMutator') && $this->model()->eloquent()->hasAttributeGetMutator($method)) {
+            return $this->addColumn($method, $label);
         }
 
         return false;
