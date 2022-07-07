@@ -4,11 +4,13 @@ namespace Encore\Admin\Grid\Concerns;
 
 use Closure;
 use Encore\Admin\Grid\Tools\Header;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Renderable;
 
 trait HasHeader
 {
     /**
-     * @var Closure
+     * @var array
      */
     protected $header;
 
@@ -22,10 +24,22 @@ trait HasHeader
     public function header(Closure $closure = null)
     {
         if (!$closure) {
-            return $this->header;
+            return function ($query) {
+                return array_reduce($this->header, function ($contents, $closure) use ($query) {
+                    $content = call_user_func($closure, $query);
+                    if ($content instanceof Renderable) {
+                        $content = $content->render();
+                    }
+
+                    if ($content instanceof Htmlable) {
+                        $content = $content->toHtml();
+                    }
+                    return $contents . $content;
+                });
+            };
         }
 
-        $this->header = $closure;
+        $this->header[] = $closure;
 
         return $this;
     }
