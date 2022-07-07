@@ -34,6 +34,7 @@ trait HasHeader
                     if ($content instanceof Htmlable) {
                         $content = $content->toHtml();
                     }
+
                     return $contents . $content;
                 });
             };
