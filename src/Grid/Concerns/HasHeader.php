@@ -35,7 +35,7 @@ trait HasHeader
                         $content = $content->toHtml();
                     }
 
-                    return $contents . $content;
+                    return $contents.$content;
                 });
             };
         }
