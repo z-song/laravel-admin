@@ -154,6 +154,10 @@ trait HasAssets
 
         array_unshift(static::$baseCss, "vendor/laravel-admin/AdminLTE/dist/css/skins/{$skin}.min.css");
 
+        if (config('admin.rtl', false)) {
+            static::$baseCss[] = 'vendor/laravel-admin/RTL/all.min.css';
+        }
+
         return static::$baseCss;
     }
 
