@@ -1,0 +1,41 @@
+.main-sidebar {
+    .user-panel {
+        .image {
+            float: none !important;
+            text-align: center;
+
+            & > img.img-circle {
+                max-width: 160px;
+                border: 5px solid #fff;
+                box-shadow: 0 0 5px #000;
+            }
+        }
+        .info {
+            float: none !important;
+            position: initial;
+            padding: 15px;
+            text-align: center;
+
+            & > a {
+                padding-right: 0;
+                margin-right: -5px;
+            }
+        }
+    }
+
+    .sidebar-menu {
+        overflow: visible;
+
+        & > li {
+            margin: 0.8em 0;
+
+            &.header:first-child {
+                display: none;
+            }
+        }
+    }
+}
+
+body.sidebar-mini .main-sidebar .user-panel .image > img.img-circle {
+    border-width: 2px;
+}
