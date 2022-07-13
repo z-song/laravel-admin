@@ -74,6 +74,8 @@ class FilePond extends Field
      */
     public function __construct($column, $arguments = [])
     {
+        $this->initStorage();
+
         parent::__construct($column, $arguments);
     }
 
