@@ -25,6 +25,7 @@ use Illuminate\Support\Arr;
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\File           file($column, $label = '')
+ * @method Field\FilePond       filepond($column, $label = '')
  * @method Field\Image          image($column, $label = '')
  * @method Field\JalaliDate     jalali($column, $label = '')
  * @method Field\Date           date($column, $label = '')
@@ -88,6 +89,7 @@ trait HasFields
         'embeds'            => Field\Embeds::class,
         'email'             => Field\Email::class,
         'file'              => Field\File::class,
+        'filepond'          => Field\FilePond::class,
         'hidden'            => Field\Hidden::class,
         'id'                => Field\Id::class,
         'image'             => Field\Image::class,
