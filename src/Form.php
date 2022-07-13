@@ -513,7 +513,7 @@ class Form implements Renderable
             return $data;
         }
 
-        /* @var Model $this ->model */
+        /* @var Model $this->model */
         $builder = $this->model();
 
         if ($this->isSoftDeletes) {
@@ -541,7 +541,7 @@ class Form implements Renderable
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
-                /* @var Model $this ->model */
+                /* @var Model $this->model */
                 $this->model->setAttribute($column, $value);
             }
 
