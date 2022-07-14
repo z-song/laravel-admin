@@ -202,12 +202,11 @@ class FilePond extends Field
 
             return $this->value;
         } else {
-            // Validate method input
-            if (!($file instanceof UploadedFile || is_array($file))) {
-                abort(500, 'invalid input file');
+            if (!($file instanceof UploadedFile || is_array($file) || is_string($file))) {
+                abort(500, 'Invalid input file on FilePond!');
             }
 
-            if ($this->picker) {
+            if ($this->picker || is_string($file)) {
                 return parent::prepare($file);
             }
 
@@ -323,7 +322,10 @@ class FilePond extends Field
             $options['server'] = $this->serverUrl;
             $options['storeAsFile'] = false;
         } else {
-            $options['server'] = null;
+            $options['server'] = [
+                'url' => $this->storage->url('/'),
+                'load' => './'
+            ];
             $options['storeAsFile'] = true;
         }
 
