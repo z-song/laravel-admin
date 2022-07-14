@@ -311,13 +311,21 @@ class FilePond extends Field
     protected function setupScripts()
     {
         $options = [
-            'storeAsFile' => true,
             'acceptedFileTypes' => ['image/jpeg'],
             'imageResizeTargetHeight' => 512,
             'imageResizeTargetWidth' => 512,
             'imageResizeMode' => 'contain',
             'labelIdle' => $this->options["msgPlaceholder"],
         ];
+
+        // Set filepond server-url
+        if ($this->useSeparateServer) {
+            $options['server'] = $this->serverUrl;
+            $options['storeAsFile'] = false;
+        } else {
+            $options['server'] = null;
+            $options['storeAsFile'] = true;
+        }
 
         if ($this->attributes['data-initial-preview'] ?? false) {
             $options['files'] = [[
@@ -332,16 +340,6 @@ class FilePond extends Field
 
         // Start script with block-scope
         $this->script = '{';
-
-        // Set filepond server-url
-        if ($this->useSeparateServer) {
-            $this->script .= <<<EOT
-            // Config FilePond
-            FilePond.setOptions({
-                server: '{$this->serverUrl}',
-            });
-EOT;
-        }
 
         $this->script .= <<<EOT
         // FilePond form submit button loading handler
