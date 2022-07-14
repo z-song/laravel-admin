@@ -314,7 +314,9 @@ class FilePond extends Field
             'imageResizeTargetHeight' => 512,
             'imageResizeTargetWidth' => 512,
             'imageResizeMode' => 'contain',
+            'maxFiles' => 1,
             'labelIdle' => $this->options["msgPlaceholder"],
+            'required' => $this->attributes['required'] ?? false,
         ];
 
         // Set filepond server-url
@@ -323,8 +325,7 @@ class FilePond extends Field
             $options['storeAsFile'] = false;
         } else {
             $options['server'] = [
-                'url' => $this->storage->url('/'),
-                'load' => './'
+                'load' => $this->storage->url('/'),
             ];
             $options['storeAsFile'] = true;
         }
