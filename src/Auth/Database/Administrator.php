@@ -47,7 +47,7 @@ class Administrator extends Model implements AuthenticatableContract
      */
     public function getAvatarAttribute($avatar)
     {
-        if($avatar === null) {
+        if ($avatar === null) {
             $avatar = '';
         }
 
