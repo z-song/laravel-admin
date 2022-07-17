@@ -21,8 +21,8 @@ class FilePond extends Field
      * @var array
      */
     protected static $css = [
-        '/vendor/filepond/filepond.min.css',
-        '/vendor/filepond/filepond-plugin-image-preview.min.css',
+        '/vendor/laravel-admin/filepond/filepond.min.css',
+        '/vendor/laravel-admin/filepond/filepond-plugin-image-preview.min.css',
     ];
 
     /**
@@ -31,11 +31,11 @@ class FilePond extends Field
      * @var array
      */
     protected static $js = [
-        '/vendor/filepond/filepond.min.js',
-        '/vendor/filepond/filepond-plugin-file-validate-type.min.js',
-        '/vendor/filepond/filepond-plugin-image-resize.min.js',
-        '/vendor/filepond/filepond-plugin-image-preview.min.js',
-        '/vendor/filepond/filepond-plugin-image-transform.min.js',
+        '/vendor/laravel-admin/filepond/filepond.min.js',
+        '/vendor/laravel-admin/filepond/filepond-plugin-file-validate-type.min.js',
+        '/vendor/laravel-admin/filepond/filepond-plugin-image-resize.min.js',
+        '/vendor/laravel-admin/filepond/filepond-plugin-image-preview.min.js',
+        '/vendor/laravel-admin/filepond/filepond-plugin-image-transform.min.js',
     ];
 
     /**
