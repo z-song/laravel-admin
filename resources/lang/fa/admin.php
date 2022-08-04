@@ -102,7 +102,7 @@ return [
     ],
     'menu_titles'           => [
         'dashboard'          => 'داشبورد',
-        'admin'              => 'ادمین',
+        'admin'              => 'مدیران',
         'users'              => 'کاربران',
         'roles'              => 'نقش ها',
         'permission'         => 'دسترسی ها',
