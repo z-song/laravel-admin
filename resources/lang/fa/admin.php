@@ -109,4 +109,5 @@ return [
         'menu'               => 'منو',
         'operation_log'      => 'گزارش عملیات',
     ],
+    'grid_items_selected'    => '{n} مورد انتخاب شده',
 ];
