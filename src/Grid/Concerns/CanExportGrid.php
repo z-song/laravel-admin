@@ -88,7 +88,7 @@ trait CanExportGrid
      */
     public function showExportBtn()
     {
-        return $this->option('show_exporter');
+        return $this->option('show_exporter', true);
     }
 
     /**
@@ -120,7 +120,8 @@ trait CanExportGrid
             return;
         }
 
-        $this->getExporter($scope)->setCallback($callback);
+        //$this->getExporter($scope)->setCallback($callback);
+        $this->getExporter($scope)->export();
 
         return $this;
     }
