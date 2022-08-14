@@ -38,8 +38,8 @@ class BelongsTo extends Select
         $.get(url, function (data) {
             modal.find('.modal-body').html(data);
             modal.find('.select').iCheck({
-                radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
+                radioClass: 'iradio_minimal-blue',
+                checkboxClass: 'icheckbox_minimal-blue'
             });
             modal.find('.box-header:first').hide();
 
