@@ -84,6 +84,12 @@ Configurations
 ------------
 The file `config/admin.php` contains an array of configurations, you can find the default configurations in there.
 
+Right to left support
+------------
+just go to this path `<YOUR_PROJECT_PATH>\vendor\encore\laravel-admin\src\Traits\HasAssets.php` and modify `$baseCss` array for loading right to left (rtl) version of bootstap and AdminLTE css files.    
+**bootstrap.min.css** change it to **bootstrap.rtl.min.css**    
+**AdminLTE.min.css** change it to **AdminLTE.rtl.min.css**  
+
 ## Extensions
 
 | Extension                                        | Description                              | laravel-admin                              |
