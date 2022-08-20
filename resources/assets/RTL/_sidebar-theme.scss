@@ -1,3 +1,5 @@
+$sidebar-item-radius: 20px;
+
 body.modern-ui {
     .main-header > nav.navbar {
         background: transparent;
@@ -60,6 +62,26 @@ body.modern-ui {
         color: inherit;
         background: #cfd4d9;
         border-radius: 50px 0 0 50px;
+    }
+
+    .sidebar-menu li.treeview {
+        &>.treeview-menu {
+            background: #cfd4d9;
+            border-radius: 0 0 0 $sidebar-item-radius;
+            margin: 0;
+
+            &>li:last-child>a {
+                border-radius: 0 0 0 $sidebar-item-radius;
+            }
+
+            &>li.active>a, &>li>a:hover {
+                background-color: #8997a5;
+            }
+        }
+
+        &.active>a {
+            border-radius: $sidebar-item-radius 0 0 0;
+        }
     }
 
     @media (max-width: 767px) {
