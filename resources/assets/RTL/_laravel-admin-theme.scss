@@ -29,41 +29,10 @@ body,
     font-family: inherit;
 }
 
-body.modern-ui {
-    .main-header > nav.navbar {
-        background: transparent;
-        backdrop-filter: blur(10px);
-
-        .navbar-nav.nav > li > a,
-        a.sidebar-toggle,
-        a {
-            color: #444;
-            padding: 10px;
-            margin: 5px;
-            border-radius: 3em;
-
-            &:hover {
-                background-color: rgba($color: #000000, $alpha: 0.1);
-                color: inherit;
-            }
-        }
-    }
-
-    @media (max-width: 767px) {
-        &.fixed {
-            &.sidebar-open {
-                .main-header > nav.navbar {
-                    a.sidebar-toggle {
-                        color: #fff;
-                    }
-                }
-            }
-
-            .content-wrapper {
-                padding-top: 100px;
-            }
-        }
-    }
+.main-header #navbar-search-input.form-control {
+    border-radius: 17px;
+    background-color: #fff;
+    box-shadow: 1px 1px 5px rgba(119, 119, 119, 0.35);
 }
 
 .content-header > h1 {
@@ -74,6 +43,11 @@ body.modern-ui {
     @media (min-width: 992px) {
         padding: 30px;
     }
+}
+
+.main-footer {
+    background: none;
+    border: none;
 }
 
 .login-box-body,
@@ -129,12 +103,6 @@ body.modern-ui {
     background: none;
 }
 
-.main-header #navbar-search-input.form-control {
-    border-radius: 17px;
-    background-color: #fff;
-    box-shadow: 1px 1px 5px rgb(119 119 119 / 35%);
-}
-
 .iconpicker .iconpicker-item {
     width: 28px;
     height: 28px;
@@ -172,10 +140,10 @@ body.modern-ui {
     padding: 0;
 
     &:hover {
-        box-shadow: inset 0px 3px 5px rgb(0 0 0 / 20%), 0 0 5px #c2c9cf;
+        box-shadow: inset 0px 3px 5px rgba(0, 0, 0, 0.2), 0 0 5px #c2c9cf;
     }
 
     &:active {
-        box-shadow: inset 0px 5px 7px rgb(0 0 0 / 30%), 0 0 5px #c2c9cf;
+        box-shadow: inset 0px 5px 7px rgba(0, 0, 0, 0.3), 0 0 5px #c2c9cf;
     }
 }

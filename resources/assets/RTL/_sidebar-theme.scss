@@ -1,3 +1,84 @@
+body.modern-ui {
+    .main-header > nav.navbar {
+        background: transparent;
+        backdrop-filter: blur(10px);
+
+        .navbar-nav.nav > li > a,
+        a.sidebar-toggle,
+        a {
+            color: #444;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 3em;
+
+            &:hover {
+                background-color: rgba($color: #000000, $alpha: 0.1);
+                color: inherit;
+            }
+        }
+    }
+
+    .main-header .logo {
+        background-color: transparent;
+        color: #444;
+        text-shadow: 2px 2px 5px #ccc;
+
+        &:hover {
+            background-color: inherit;
+            color: #000;
+            text-shadow: 2px 2px 10px;
+        }
+    }
+
+    .wrapper, .main-sidebar, .left-side {
+        background-color: #ecf0f4;
+    }
+
+    .sidebar {
+        .sidebar-form {
+            border-radius: 50px;
+            border: 1px solid #cbcccd;
+
+            input {
+                border-radius: 0 50px 50px 0;
+                background-color: #fff;
+            }
+            .btn {
+                border-radius: 50px 0 0 50px;
+                background-color: #fff;
+            }
+        }
+        a {
+            color: #444;
+        }
+        .user-panel>.info, .user-panel>.info>a {
+            color: #333;
+        }
+    }
+
+    .sidebar-menu>li:hover>a, .sidebar-menu>li.active>a {
+        color: inherit;
+        background: #cfd4d9;
+        border-radius: 50px 0 0 50px;
+    }
+
+    @media (max-width: 767px) {
+        &.fixed {
+            &.sidebar-open {
+                .main-header > nav.navbar {
+                    a.sidebar-toggle {
+                        color: #fff;
+                    }
+                }
+            }
+
+            .content-wrapper {
+                padding-top: 100px;
+            }
+        }
+    }
+}
+
 .main-sidebar {
     .user-panel {
         .image {
@@ -7,7 +88,7 @@
             & > img.img-circle {
                 max-width: 160px;
                 border: 5px solid #fff;
-                box-shadow: 0 0 5px #000;
+                box-shadow: 0 0 5px #ccc;
             }
         }
         .info {
