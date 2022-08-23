@@ -31,8 +31,8 @@ a.editable-empty {
     border-bottom: none !important;
 }
 
-.form-group > label.asterisk:before {
-    content: "* ";
+.form-group > label.asterisk:after {
+    content: " *";
     color: red;
 }
 
