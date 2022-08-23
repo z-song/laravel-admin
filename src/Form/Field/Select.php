@@ -71,6 +71,11 @@ class Select extends Field
             $this->options = (array) $options;
         }
 
+        // Check options on rules, too
+        if (!empty($this->options)) {
+            $this->rules('in:' . implode(',', array_keys($this->options)));
+        }
+
         return $this;
     }
 
