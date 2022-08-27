@@ -194,7 +194,6 @@ class FilePond extends Field
 
             $response = Http::post($this->ackUrl, ['file' => $file, 'dir' => $this->directory, 'public' => $this->isPublic]);
             if ($response->failed()) {
-                \Log::debug("ackUrl: {$this->ackUrl} file: {$file} dir: {$this->directory}");
                 throw $response->toException();
             }
 
