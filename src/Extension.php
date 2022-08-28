@@ -357,6 +357,8 @@ abstract class Extension
      */
     protected static function createMenu($title, $uri, $icon = 'fa-bars', $parentId = 0, array $children = [])
     {
+        $parentId  = intval($parentId);
+        
         $menuModel = config('admin.database.menu_model');
 
         $lastOrder = $menuModel::max('order');
