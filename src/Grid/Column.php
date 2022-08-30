@@ -553,7 +553,7 @@ class Column
     public function fill(array $data)
     {
         foreach ($data as $key => &$row) {
-            $this->original = $value = Arr::get($row, $this->name);
+            $this->original = $value = Arr::get($row, $this->isRelation() ? $this->relation : $this->name);
 
             $value = $this->htmlEntityEncode($value);
 
