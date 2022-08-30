@@ -9,7 +9,7 @@ class BelongsToMany extends MultipleSelect
     use BelongsToRelation;
 
     protected $variables = [
-        'multiple' => true
+        'multiple' => true,
     ];
 
     protected function addScript()

@@ -23,7 +23,7 @@ class Field implements Renderable
     const FILE_SORT_FLAG = '_file_sort_';
 
     /**
-     * Uniq id for field container
+     * Uniq id for field container.
      *
      * @var string
      */

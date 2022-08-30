@@ -12,8 +12,8 @@ class MorphTo extends BelongsTo
 
     public function __construct($morphName, $arguments = [])
     {
-        $this->typeColumn = $morphName . '_type';
-        $column = $morphName . '_id';
+        $this->typeColumn = $morphName.'_type';
+        $column = $morphName.'_id';
         parent::__construct($column, $arguments);
 
         if (empty($arguments[1])) {
@@ -22,7 +22,7 @@ class MorphTo extends BelongsTo
 
         $this->addVariables([
             'typeColumn' => $this->typeColumn,
-            'morphClass' => $this->morphClass()
+            'morphClass' => $this->morphClass(),
         ]);
     }
 
@@ -32,9 +32,10 @@ class MorphTo extends BelongsTo
     public function morphClass()
     {
         if (!$this->morphClass) {
-            $modelClass = (new $this->selectable)->model;
-            $this->morphClass = (new $modelClass)->getMorphClass();
+            $modelClass = (new $this->selectable())->model;
+            $this->morphClass = (new $modelClass())->getMorphClass();
         }
+
         return $this->morphClass;
     }
 
@@ -47,6 +48,7 @@ class MorphTo extends BelongsTo
         if ($this->currenMorphClass() == $this->morphClass()) {
             return parent::value();
         }
+
         return null;
     }
 
