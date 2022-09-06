@@ -710,7 +710,12 @@ class Form implements Renderable
         }
 
         foreach ($sorts as $column => $order) {
-            $input[$column] = $order;
+            $arr = explode('[',$column);
+            if(count($arr) > 1){
+                $input[$arr[0]][$arr[1]] = $order;
+            }else{
+                $input[$column] = $order;
+            }
         }
 
         request()->replace($input);
