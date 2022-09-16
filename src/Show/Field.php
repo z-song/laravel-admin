@@ -425,7 +425,7 @@ HTML;
             if (json_last_error() == 0) {
                 $field->border = false;
 
-                return '<pre><code>'.json_encode($content, JSON_PRETTY_PRINT).'</code></pre>';
+                return '<pre><code>'.json_encode($content, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE).'</code></pre>';
             }
 
             return $value;
