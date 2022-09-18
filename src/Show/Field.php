@@ -351,6 +351,23 @@ HTML;
     }
 
     /**
+     * Show field as a bool.
+     *
+     * @param array $map
+     * @param bool  $default
+     *
+     * @return Field
+     */
+    public function bool(array $map = [], $default = false)
+    {
+        return $this->unescape()->as(function ($value) use ($map, $default) {
+            $bool = empty($map) ? boolval($value) : Arr::get($map, $value, $default);
+
+            return $bool ? '<i class="fa-solid fa-check text-green"></i>' : '<i class="fa-solid fa-close text-red"></i>';
+        });
+    }
+
+    /**
      * Show field as labels.
      *
      * @param string $style
