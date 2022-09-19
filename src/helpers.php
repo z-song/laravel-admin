@@ -135,7 +135,7 @@ if (!function_exists('admin_info')) {
     {
         $message = new MessageBag(get_defined_vars());
 
-        session()->now($type, $message);
+        session()->flash($type, $message);
     }
 }
 

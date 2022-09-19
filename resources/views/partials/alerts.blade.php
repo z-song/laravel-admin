@@ -22,6 +22,7 @@
         <h4><i class="icon fa-solid fa-check"></i>{{ \Illuminate\Support\Arr::get($success->get('title'), 0) }}</h4>
         <p>{!!  \Illuminate\Support\Arr::get($success->get('message'), 0) !!}</p>
     </div>
+    @php(session()->forget('success'))
 @endif
 
 @if($info = session()->get('info'))
@@ -30,6 +31,7 @@
         <h4><i class="icon fa-solid fa-info"></i>{{ \Illuminate\Support\Arr::get($info->get('title'), 0) }}</h4>
         <p>{!!  \Illuminate\Support\Arr::get($info->get('message'), 0) !!}</p>
     </div>
+    @php(session()->forget('info'))
 @endif
 
 @if($warning = session()->get('warning'))
@@ -38,4 +40,5 @@
         <h4><i class="icon fa-solid fa-warning"></i>{{ \Illuminate\Support\Arr::get($warning->get('title'), 0) }}</h4>
         <p>{!!  \Illuminate\Support\Arr::get($warning->get('message'), 0) !!}</p>
     </div>
+    @php(session()->forget('warning'))
 @endif
