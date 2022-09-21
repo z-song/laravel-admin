@@ -20,7 +20,7 @@ class BatchActions extends AbstractTool
     /**
      * @var bool
      */
-    private $holdAll = false;
+    private $hideAll = false;
 
     /**
      * BatchActions constructor.
@@ -55,15 +55,15 @@ class BatchActions extends AbstractTool
     }
 
     /**
-     * Disable delete And Hode SelectAll Checkbox.
+     * Disable delete And Hide SelectAll Checkbox.
      *
      * @return $this
      */
-    public function disableDeleteAndHodeSelectAll()
+    public function disableDeleteAndHideSelectAll()
     {
         $this->enableDelete = false;
 
-        $this->holdAll = true;
+        $this->hideAll = true;
 
         return $this;
     }
@@ -128,7 +128,7 @@ class BatchActions extends AbstractTool
             'all'     => $this->grid->getSelectAllName(),
             'row'     => $this->grid->getGridRowName(),
             'actions' => $this->actions,
-            'holdAll' => $this->holdAll,
+            'hideAll' => $this->hideAll,
         ]);
     }
 }
