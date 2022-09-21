@@ -101,7 +101,7 @@ return [
         'filter_placeholder' => 'فیلتر کردن',
     ],
     'menu_titles'           => [
-        'dashboard'          => 'داشبورد',
+        'dashboard'          => 'پیشخان',
         'admin'              => 'مدیران',
         'users'              => 'کاربران',
         'roles'              => 'نقش ها',
@@ -110,4 +110,9 @@ return [
         'operation_log'      => 'گزارش عملیات',
     ],
     'grid_items_selected'    => '{n} مورد انتخاب شده',
+    'grid_all_items_selected'=> 'همه موارد در تمام صفحات',
+
+    'prev'                   => 'قبلی',
+    'next'                   => 'بعدی',
+    'quick_create'           => 'ایجاد سریع',
 ];

@@ -23,6 +23,11 @@ class BatchActions extends AbstractTool
     private $hideAll = false;
 
     /**
+     * @var bool
+     */
+    private $showTotalIncludingOtherPages = false;
+
+    /**
      * BatchActions constructor.
      */
     public function __construct()
@@ -64,6 +69,18 @@ class BatchActions extends AbstractTool
         $this->enableDelete = false;
 
         $this->hideAll = true;
+
+        return $this;
+    }
+
+    /**
+     * Disable delete And Hide SelectAll Checkbox.
+     *
+     * @return $this
+     */
+    public function showTotalIncludingOtherPages()
+    {
+        $this->showTotalIncludingOtherPages = true;
 
         return $this;
     }
@@ -129,6 +146,7 @@ class BatchActions extends AbstractTool
             'row'     => $this->grid->getGridRowName(),
             'actions' => $this->actions,
             'hideAll' => $this->hideAll,
+            'showTotalIncludingOtherPages' => $this->showTotalIncludingOtherPages,
         ]);
     }
 }

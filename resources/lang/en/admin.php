@@ -100,6 +100,7 @@ return [
         'filter_placeholder' => 'Filter',
     ],
     'grid_items_selected'    => '{n} items selected',
+    'grid_all_items_selected'=> 'All items including other pages',
 
     'menu_titles'            => [],
     'prev'                   => 'Prev',
