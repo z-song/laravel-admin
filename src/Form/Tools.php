@@ -180,7 +180,7 @@ class Tools implements Renderable
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="$text"><i class="fa-solid fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
+    <a href="{$this->getListPath()}" class="btn btn-sm btn-outline" title="$text"><i class="fa-solid fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
 </div>
 EOT;
     }
@@ -196,7 +196,7 @@ EOT;
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary" title="{$view}">
+    <a href="{$this->getViewPath()}" class="btn btn-sm btn-outline" title="{$view}">
         <i class="fa-solid fa-eye"></i><span class="hidden-xs"> {$view}</span>
     </a>
 </div>

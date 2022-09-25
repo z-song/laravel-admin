@@ -3,6 +3,7 @@
 namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Layout\Row;
 use Illuminate\Routing\Controller;
 
 class AdminController extends Controller
@@ -86,7 +87,10 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['edit'] ?? trans('admin.edit'))
-            ->body($this->form()->edit($id));
+            ->row(function (Row $row) use (&$id) {
+                $row->column(2, '');
+                $row->column(8, $this->form()->edit($id));
+            });
     }
 
     /**
@@ -101,6 +105,9 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['create'] ?? trans('admin.create'))
-            ->body($this->form());
+            ->row(function (Row $row) {
+                $row->column(2, '');
+                $row->column(8, $this->form());
+            });
     }
 }

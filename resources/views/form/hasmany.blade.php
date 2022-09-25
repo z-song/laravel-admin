@@ -41,7 +41,7 @@
             <div class="form-group">
                 <label class="{{$viewClass['label']}} control-label"></label>
                 <div class="{{$viewClass['field']}}">
-                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa-solid fa-trash"></i>&nbsp;{{ trans('admin.remove') }}</div>
+                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa-solid fa-trash"></i> {{ trans('admin.remove') }}</div>
                 </div>
             </div>
             <hr>
@@ -52,7 +52,7 @@
     <div class="form-group">
         <label class="{{$viewClass['label']}} control-label"></label>
         <div class="{{$viewClass['field']}}">
-            <div class="add btn btn-success btn-sm"><i class="fa-solid fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>
+            <div class="add btn btn-success btn-sm"><i class="fa-solid fa-add"></i> {{ trans('admin.new') }}</div>
         </div>
     </div>
     @endif

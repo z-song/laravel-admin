@@ -48,7 +48,7 @@
                     <td class="form-group">
                         <div>
                             <div class="{{$column}}-remove btn btn-warning btn-sm pull-right">
-                                <i class="fa-solid fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                                <i class="fa-solid fa-trash"> </i>{{ __('admin.remove') }}
                             </div>
                         </div>
                     </td>
@@ -61,7 +61,7 @@
                     <td></td>
                     <td>
                         <div class="{{ $column }}-add btn btn-success btn-sm pull-right">
-                            <i class="fa-solid fa-save"></i>&nbsp;{{ __('admin.new') }}
+                            <i class="fa-solid fa-add"></i> {{ __('admin.new') }}
                         </div>
                     </td>
                 </tr>
@@ -88,7 +88,7 @@
             <td class="form-group">
                 <div>
                     <div class="{{$column}}-remove btn btn-warning btn-sm pull-right">
-                        <i class="fa-solid fa-trash">&nbsp;</i>{{ __('admin.remove') }}
+                        <i class="fa-solid fa-trash"> </i>{{ __('admin.remove') }}
                     </div>
                 </div>
             </td>

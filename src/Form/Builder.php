@@ -80,7 +80,7 @@ class Builder
      */
     protected $width = [
         'label' => 2,
-        'field' => 8,
+        'field' => 9,
     ];
 
     /**

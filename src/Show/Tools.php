@@ -190,7 +190,7 @@ class Tools implements Renderable
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="{$list}">
+    <a href="{$this->getListPath()}" class="btn btn-sm btn-outline" title="{$list}">
         <i class="fa-solid fa-list"></i><span class="hidden-xs"> {$list}</span>
     </a>
 </div>
