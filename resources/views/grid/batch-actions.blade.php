@@ -6,7 +6,7 @@
         <span class="sr-only">Toggle Dropdown</span>
     </button>
     @if(!$actions->isEmpty())
-    <ul class="dropdown-menu" role="menu">
+    <ul class="dropdown-menu" role="menu" style="left: 0; right: auto">
         @foreach($actions as $action)
             @if($action instanceof \Encore\Admin\Actions\BatchAction)
                 <li>{!! $action->render() !!}</li>
@@ -25,7 +25,7 @@
             <span class="sr-only">Toggle Dropdown</span>
         </button>
         @if(!$actions->isEmpty())
-        <ul class="dropdown-menu" role="menu">
+        <ul class="dropdown-menu" role="menu" style="left: 0; right: auto">
             @foreach($actions as $action)
                 @if($action instanceof \Encore\Admin\Actions\BatchAction)
                     <li>{!! $action->render() !!}</li>
