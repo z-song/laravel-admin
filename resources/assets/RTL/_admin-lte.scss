@@ -1,0 +1,20 @@
+body.modern-ui {
+  .box {
+    border-top: none;
+  }
+  .box-info {
+    box-shadow: 10px 10px 10px #00c0ef1a;
+  }
+  .box-primary {
+    box-shadow: 10px 10px 10px #3c8dbc1a;
+  }
+  .box-warning {
+    box-shadow: 10px 10px 10px #f39c121a;
+  }
+  .box-danger {
+    box-shadow: 10px 10px 10px #dd4b391a;
+  }
+  .box-success {
+    box-shadow: 10px 10px 10px #00a65a1a;
+  }
+}
