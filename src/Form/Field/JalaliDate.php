@@ -2,8 +2,6 @@
 
 namespace Encore\Admin\Form\Field;
 
-use Encore\Admin\Rules\JalaliDate as RulesJalaliDate;
-use Exception;
 use Morilog\Jalali\Jalalian;
 
 class JalaliDate extends Text
@@ -21,7 +19,7 @@ class JalaliDate extends Text
     {
         $this->prepend('<i class="fa-solid fa-calendar fa-fw"></i>');
 
-        $this->value(jdate($this->value())->format($this->format));
+        $this->value(empty($this->value()) ? null : jdate($this->value())->format($this->format));
 
         return parent::render();
     }
@@ -35,6 +33,8 @@ class JalaliDate extends Text
     public function prepare($value)
     {
         $tok = preg_split('/(\-|\/)/', $value, 3);
+
+        if (count($tok) < 3) return null;
 
         return (new Jalalian($tok[0], $tok[1], $tok[2]))->toCarbon();
     }
