@@ -141,6 +141,16 @@ trait InlineEditing
     }
 
     /**
+     * Grid inline number input.
+     *
+     * @return $this
+     */
+    public function number($number2persian = true)
+    {
+        return $this->displayUsing(Displayers\InputNumber::class, [$number2persian]);
+    }
+
+    /**
      * Grid inline ip input.
      *
      * @return $this

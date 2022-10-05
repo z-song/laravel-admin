@@ -8,12 +8,12 @@ class Number extends AbstractDisplayer
      * Show field as number
      *
      * @param int $decimals
-     * @param string $decimal_seperator
-     * @param string $thousands_seperator
+     * @param string $decimal_separator
+     * @param string $thousands_separator
      * @return Field
      */
-    public function display($decimals = 0, $decimal_seperator = '.', $thousands_seperator = ',')
+    public function display($decimals = 0, $decimal_separator = '.', $thousands_separator = ',')
     {
-        return number_format($this->value, $decimals, $decimal_seperator, $thousands_seperator);
+        return number_format($this->value, $decimals, $decimal_separator, $thousands_separator);
     }
 }
