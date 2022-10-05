@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Form\Field;
 
+use Exception;
 use Morilog\Jalali\Jalalian;
 
 class JalaliDate extends Text
@@ -24,6 +25,20 @@ class JalaliDate extends Text
         return parent::render();
     }
 
+    public function getValidator(array $input)
+    {
+        $this->rules('digits:8');
+
+        $value = $input[$this->column()];
+
+        try {
+            $this->prepare($value);
+        } catch (Exception $e) {
+        }
+
+        return parent::getValidator($input);
+    }
+
     /**
      * Prepare data for insert or update
      *
@@ -32,9 +47,18 @@ class JalaliDate extends Text
      */
     public function prepare($value)
     {
-        $tok = preg_split('/(\-|\/)/', $value, 3);
+        if (is_numeric($value) && strlen($value) === 8) {
+            $tok = [
+                substr($value, 0, 4),
+                substr($value, 4, 2),
+                substr($value, 6, 2),
+            ];
+        } else {
 
-        if (count($tok) < 3) return null;
+            $tok = preg_split('/(\-|\/)/', $value, 3);
+
+            if (count($tok) < 3) throw new Exception('Invalid JalaliDate!');
+        }
 
         return (new Jalalian($tok[0], $tok[1], $tok[2]))->toCarbon();
     }
