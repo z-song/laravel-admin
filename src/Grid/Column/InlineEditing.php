@@ -145,7 +145,7 @@ trait InlineEditing
      *
      * @return $this
      */
-    public function number($number2persian = true)
+    public function inputNumber($number2persian = true)
     {
         return $this->displayUsing(Displayers\InputNumber::class, [$number2persian]);
     }
