@@ -32,8 +32,16 @@ class JalaliDate extends Text
         $value = $input[$this->column()];
 
         try {
-            $this->prepare($value);
+            $tok = $this->tokenizeValue($value);
+
+            $input[$this->column()] =
+                str_pad($tok[0], 4, '0', STR_PAD_LEFT) .
+                str_pad($tok[1], 2, '0', STR_PAD_LEFT) .
+                str_pad($tok[2], 2, '0', STR_PAD_LEFT);
         } catch (Exception $e) {
+
+            $this->removeRule('digits:8');
+            $this->rules('shamsi_date');
         }
 
         return parent::getValidator($input);
@@ -47,7 +55,15 @@ class JalaliDate extends Text
      */
     public function prepare($value)
     {
+        $tok = $this->tokenizeValue($value);
+
+        return (new Jalalian($tok[0], $tok[1], $tok[2]))->toCarbon();
+    }
+
+    protected function tokenizeValue($value)
+    {
         if (is_numeric($value) && strlen($value) === 8) {
+
             $tok = [
                 substr($value, 0, 4),
                 substr($value, 4, 2),
@@ -60,6 +76,9 @@ class JalaliDate extends Text
             if (count($tok) < 3) throw new Exception('Invalid JalaliDate!');
         }
 
-        return (new Jalalian($tok[0], $tok[1], $tok[2]))->toCarbon();
+        // Test is able to create jalalian
+        new Jalalian($tok[0], $tok[1], $tok[2]);
+
+        return $tok;
     }
 }
