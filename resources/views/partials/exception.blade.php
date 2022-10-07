@@ -9,6 +9,15 @@
             </h4>
             <p>{{ $error->first('message') }}</p>
         </div>
+    @else
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4>
+                <i class="icon fa-solid fa-warning"></i>
+                خطا!
+            </h4>
+            <p>خطایی رخ داده است!</p>
+        </div>
     @endif
 
     @if (config('app.debug') == true)
