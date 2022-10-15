@@ -68,6 +68,11 @@ $(document).on('pjax:complete', function (xhr) {
     $.admin.grid.selects = {};
 });
 
+$(document).on('pjax:start', function () {
+    // To close all open select2
+    $('body').trigger('mousedown');
+});
+
 $(document).click(function () {
     $('.sidebar-form .dropdown-menu').hide();
 });
