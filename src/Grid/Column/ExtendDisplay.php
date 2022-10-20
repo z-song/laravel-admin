@@ -311,7 +311,19 @@ trait ExtendDisplay
      */
     public function jalali($format = '%Y-%m-%d H:i')
     {
-        return $this->display(fn ($v) => empty($v) ? "" : "<span dir='ltr'>" . \Morilog\Jalali\Jalalian::forge($v)->format($format) . "</span>");
+        return $this->display(function ($v) use ($format) {
+            if (empty($v)) {
+                return "";
+            } else {
+
+                $jdate = \Morilog\Jalali\Jalalian::forge($v)->format($format);
+                if (request(\Encore\Admin\Grid\Exporter::$queryName)) {
+                    return $jdate;
+                } else {
+                    return "<span dir='ltr'>" . $jdate . "</span>";
+                }
+            }
+        });
     }
 
     /**
