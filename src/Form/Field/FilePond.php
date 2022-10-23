@@ -67,6 +67,20 @@ class FilePond extends Field
     protected $ackUrl;
 
     /**
+     * Image resizing target width
+     *
+     * @var int
+     */
+    protected int $targetWidth = 512;
+
+    /**
+     * Image resizing target height
+     *
+     * @var int
+     */
+    protected int $targetHeight = 512;
+
+    /**
      * Create a new File instance.
      *
      * @param string $column
@@ -77,6 +91,19 @@ class FilePond extends Field
         $this->initStorage();
 
         parent::__construct($column, $arguments);
+    }
+
+    /**
+     * Set image resizing dimensions
+     *
+     * @param integer $width
+     * @param integer $height
+     * @return void
+     */
+    public function setResizeDimensions(int $width = 512, int $height = 512)
+    {
+        $this->targetWidth = $width;
+        $this->targetHeight = $height;
     }
 
     /**
@@ -310,8 +337,8 @@ class FilePond extends Field
     {
         $options = [
             'acceptedFileTypes' => ['image/jpeg'],
-            'imageResizeTargetHeight' => 512,
-            'imageResizeTargetWidth' => 512,
+            'imageResizeTargetHeight' => $this->targetHeight,
+            'imageResizeTargetWidth' => $this->targetWidth,
             'imageResizeMode' => 'contain',
             'maxFiles' => 1,
             'labelIdle' => $this->options["msgPlaceholder"],
