@@ -248,7 +248,7 @@ EOT;
             /*
              * Dont show upload path/url for security reaseon
              */
-            if(!$this->hidePreview()) {
+            if (!$this->hidePreview()) {
                 $this->attribute('data-initial-preview', $this->preview());
                 $this->attribute('data-initial-caption', $this->initialCaption($this->value));
             }
