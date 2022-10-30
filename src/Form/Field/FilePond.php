@@ -81,6 +81,13 @@ class FilePond extends Field
     protected int $targetHeight = 512;
 
     /**
+     * Max files
+     *
+     * @var int
+     */
+    protected int $maxFiles = 1;
+
+    /**
      * Create a new File instance.
      *
      * @param string $column
@@ -98,12 +105,31 @@ class FilePond extends Field
      *
      * @param integer $width
      * @param integer $height
-     * @return void
+     * @return FilePond
      */
     public function setResizeDimensions(int $width = 512, int $height = 512)
     {
         $this->targetWidth = $width;
         $this->targetHeight = $height;
+
+        return $this;
+    }
+
+    /**
+     * Set max-files
+     *
+     * @param integer $maxFiles
+     * @return FilePond
+     */
+    public function setMaxFiles(int $maxFiles)
+    {
+        $this->maxFiles = $maxFiles;
+
+        if ($this->maxFiles > 0) {
+            $this->attribute('multiple');
+        }
+
+        return $this;
     }
 
     /**
@@ -340,7 +366,7 @@ class FilePond extends Field
             'imageResizeTargetHeight' => $this->targetHeight,
             'imageResizeTargetWidth' => $this->targetWidth,
             'imageResizeMode' => 'contain',
-            'maxFiles' => 1,
+            'maxFiles' => $this->maxFiles,
             'labelIdle' => $this->options["msgPlaceholder"],
             'required' => $this->attributes['required'] ?? false,
         ];
