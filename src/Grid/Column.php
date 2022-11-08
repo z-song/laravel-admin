@@ -553,11 +553,12 @@ class Column
     public function fill(array $data)
     {
         foreach ($data as $key => &$row) {
-            $this->original = $value = Arr::get($row, $this->isRelation() ? $this->relation : $this->name);
+            $name = $this->isRelation() ? $this->relation : $this->name;
+            $this->original = $value = Arr::get($row, $name);
 
             $value = $this->htmlEntityEncode($value);
 
-            Arr::set($row, $this->name, $value);
+            Arr::set($row, $name, $value);
 
             if ($this->isDefinedColumn()) {
                 $this->useDefinedColumn();
@@ -565,7 +566,7 @@ class Column
 
             if ($this->hasDisplayCallbacks()) {
                 $value = $this->callDisplayCallbacks($this->original, $key);
-                Arr::set($row, $this->name, $value);
+                Arr::set($row, $name, $value);
             }
         }
 
