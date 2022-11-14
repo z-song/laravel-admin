@@ -22,6 +22,7 @@ trait HasResourceActions
     {
         $routeParameters = request()->route()->parameters();
         $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
+        $this->editingId = $id;
         return $this->form()->update($id);
     }
 
@@ -46,6 +47,7 @@ trait HasResourceActions
     {
         $routeParameters = request()->route()->parameters();
         $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
+        $this->editingId = $id;
         return $this->form()->destroy($id);
     }
 }

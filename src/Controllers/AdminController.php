@@ -30,6 +30,11 @@ class AdminController extends Controller
     ];
 
     /**
+     * ID of editing element
+     */
+    protected $editingId;
+
+    /**
      * Get content title.
      *
      * @return string
@@ -66,6 +71,7 @@ class AdminController extends Controller
     {
         $routeParameters = request()->route()->parameters();
         $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
+        $this->editingId = $id;
         return $content
             ->title($this->title())
             ->description($this->description['show'] ?? trans('admin.show'))
@@ -84,6 +90,7 @@ class AdminController extends Controller
     {
         $routeParameters = request()->route()->parameters();
         $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
+        $this->editingId = $id;
         return $content
             ->title($this->title())
             ->description($this->description['edit'] ?? trans('admin.edit'))
