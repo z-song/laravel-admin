@@ -1,21 +1,25 @@
 $sidebar-item-radius: 20px;
 
 body.modern-ui {
-    .main-header > nav.navbar {
+    .main-header {
         background: transparent;
         backdrop-filter: blur(10px);
 
-        .navbar-nav.nav > li > a,
-        a.sidebar-toggle,
-        a {
-            color: #444;
-            padding: 10px;
-            margin: 5px;
-            border-radius: 3em;
+        &  > nav.navbar{
+            background-color: inherit;
 
-            &:hover {
-                background-color: rgba($color: #000000, $alpha: 0.1);
-                color: inherit;
+            .navbar-nav.nav > li > a,
+            a.sidebar-toggle,
+            a {
+                color: #444;
+                padding: 10px;
+                margin: 5px;
+                border-radius: 3em;
+
+                &:hover {
+                    background-color: rgba($color: #000000, $alpha: 0.1);
+                    color: inherit;
+                }
             }
         }
     }
