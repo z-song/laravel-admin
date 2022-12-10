@@ -4,6 +4,7 @@ namespace Encore\Admin\Controllers;
 
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Grid\Filter;
 use Encore\Admin\Show;
 use Illuminate\Support\Str;
 
@@ -27,6 +28,12 @@ class PermissionController extends AdminController
         $permissionModel = config('admin.database.permissions_model');
 
         $grid = new Grid(new $permissionModel());
+
+        $grid->filter(function (Filter $filter) {
+            $filter->like('slug', trans('admin.slug'));
+            $filter->like('name', trans('admin.name'));
+            $filter->like('http_path', trans('admin.route'));
+        });
 
         $grid->column('id', 'ID')->sortable();
         $grid->column('slug', trans('admin.slug'));
