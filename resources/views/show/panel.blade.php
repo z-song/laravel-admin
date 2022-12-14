@@ -1,25 +1,13 @@
-<div class="box box-{{ $style }}">
-    <div class="box-header with-border">
-        <h3 class="box-title">{{ $title }}</h3>
-
-        <div class="box-tools">
+<div class="panel panel-{{ $style }}">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-right">{{ $title }}</h3>
+        <div class="pull-left">
             {!! $tools !!}
         </div>
     </div>
-    <!-- /.box-header -->
-    <!-- form start -->
-    <div class="form-horizontal">
-
-        <div class="box-body">
-
-            <div class="fields-group">
-
-                @foreach($fields as $field)
-                    {!! $field->render() !!}
-                @endforeach
-            </div>
-
-        </div>
-        <!-- /.box-body -->
-    </div>
+    <ul class="list-group">
+        @foreach ($fields as $field)
+            {!! $field->render() !!}
+        @endforeach
+    </ul>
 </div>
