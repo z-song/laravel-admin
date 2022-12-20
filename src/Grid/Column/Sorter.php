@@ -69,7 +69,7 @@ class Sorter implements Renderable
         $type = 'desc';
 
         if ($this->isSorted()) {
-            $type = $this->sort['type'] == 'desc' ? 'asc' : 'desc';
+            $type = $this->sort['type'] == 'desc' ? 'desc' : 'asc';
             $icon .= "-amount-{$this->sort['type']}";
         }
 
