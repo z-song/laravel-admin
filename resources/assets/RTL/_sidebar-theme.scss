@@ -1,26 +1,38 @@
 $sidebar-item-radius: 20px;
 
 body.modern-ui {
-    .main-header {
+    .main-header > nav.navbar {
         background: transparent;
         backdrop-filter: blur(10px);
 
-        &  > nav.navbar{
-            background-color: inherit;
+        .navbar-nav.nav > li > a,
+        a.sidebar-toggle,
+        a {
+            color: #444;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 3em;
 
-            .navbar-nav.nav > li > a,
-            a.sidebar-toggle,
-            a {
-                color: #444;
-                padding: 10px;
-                margin: 5px;
-                border-radius: 3em;
-
-                &:hover {
-                    background-color: rgba($color: #000000, $alpha: 0.1);
-                    color: inherit;
-                }
+            &:hover {
+                background-color: rgba($color: #000000, $alpha: 0.1);
+                color: inherit;
             }
+        }
+    }
+
+    .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+        max-height: 200px;
+        overflow-y: auto;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 30px 30px;
+        background-color: #ffffffcc;
+
+        & > li > a {
+            margin: 0;
+        }
+
+        & > li.active > a {
+            color: #fff;
         }
     }
 
@@ -36,7 +48,9 @@ body.modern-ui {
         }
     }
 
-    .wrapper, .main-sidebar, .left-side {
+    .wrapper,
+    .main-sidebar,
+    .left-side {
         background-color: #ecf0f4;
     }
 
@@ -57,33 +71,36 @@ body.modern-ui {
         a {
             color: #444;
         }
-        .user-panel>.info, .user-panel>.info>a {
+        .user-panel > .info,
+        .user-panel > .info > a {
             color: #333;
         }
     }
 
-    .sidebar-menu>li:hover>a, .sidebar-menu>li.active>a {
+    .sidebar-menu > li:hover > a,
+    .sidebar-menu > li.active > a {
         color: inherit;
         background: #cfd4d9;
         border-radius: 50px 0 0 50px;
     }
 
     .sidebar-menu li.treeview {
-        &>.treeview-menu {
+        & > .treeview-menu {
             background: #cfd4d9;
             border-radius: 0 0 0 $sidebar-item-radius;
             margin: 0;
 
-            &>li:last-child>a {
+            & > li:last-child > a {
                 border-radius: 0 0 0 $sidebar-item-radius;
             }
 
-            &>li.active>a, &>li>a:hover {
+            & > li.active > a,
+            & > li > a:hover {
                 background-color: #8997a5;
             }
         }
 
-        &.active>a {
+        &.active > a {
             border-radius: $sidebar-item-radius 0 0 0;
         }
     }
