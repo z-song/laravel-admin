@@ -131,3 +131,9 @@ input.select2-search__field {
     backdrop-filter: blur(3px);
     box-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.3);
 }
+
+.modern-ui.fixed {
+    .nprogress-custom-parent #nprogress .spinner, .nprogress-custom-parent #nprogress .bar {
+        position: fixed;
+    }
+}
