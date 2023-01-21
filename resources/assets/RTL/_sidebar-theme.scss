@@ -20,19 +20,24 @@ body.modern-ui {
         }
     }
 
-    .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
-        max-height: 200px;
-        overflow-y: auto;
-        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 0 0 30px 30px;
-        background-color: #ffffffcc;
-
-        & > li > a {
-            margin: 0;
+    .navbar-custom-menu > .navbar-nav > li {
+        &> .dropdown-menu {
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 30px 30px;
+            background-color: #ffffffcc;
+    
+            & > li > a {
+                margin: 0;
+            }
+    
+            & > li.active > a {
+                color: #fff;
+            }
         }
-
-        & > li.active > a {
-            color: #fff;
+        &.user-menu > .dropdown-menu {
+            max-height: none;
         }
     }
 
