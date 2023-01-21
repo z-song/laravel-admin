@@ -89,7 +89,7 @@ return [
     'all'                   => 'همه',
     'current_page'          => 'همین صفحه',
     'selected_rows'         => 'انتخاب سطر',
-    'upload'                => 'آپلود',
+    'upload'                => 'بارگذاری',
     'new_folder'            => 'پوشه جدید',
     'time'                  => 'زمان',
     'size'                  => 'حجم',
@@ -115,4 +115,5 @@ return [
     'prev'                   => 'قبلی',
     'next'                   => 'بعدی',
     'quick_create'           => 'ایجاد سریع',
+    'member_since'           => 'عضویت از تاریخ',
 ];

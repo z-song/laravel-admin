@@ -106,4 +106,5 @@ return [
     'prev'                   => 'Prev',
     'next'                   => 'Next',
     'quick_create'           => 'Quick create',
+    'member_since'           => 'Member since admin',
 ];
