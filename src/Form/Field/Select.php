@@ -145,11 +145,16 @@ $(document).on('change', "{$this->getElementClassSelector()}", function () {
             })
         });
         if (target.data('value')) {
-            $(target).val(target.data('value'));
+            if (typeof target.data('value') === 'string') {
+                $(target).val(target.data('value').split(','));
+            } else {
+                $(target).val(target.data('value'));
+            }
         }
         $(target).trigger('change');
     });
 });
+$("{$this->getElementClassSelector()}").trigger('change');
 EOT;
 
         Admin::script($script);
