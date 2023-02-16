@@ -530,7 +530,7 @@ class Model
             // relationship should be camel case
             $columnName = Str::camel(Str::before($columnName, '.'));
 
-            return $query['method'] === 'with' && in_array($columnName, $query['arguments'], true);
+            return $query['method'] === 'with' && in_array(strtok($columnName, '.'), $query['arguments'], true);
         });
         if ($columnNameContainsDots === true && $isRelation) {
             $this->setRelationSort($columnName);
