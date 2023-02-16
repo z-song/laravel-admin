@@ -410,6 +410,8 @@ class Show implements Renderable
 
         if ($this->model->hasGetMutator($method)) {
             return $this->addField($method, $label);
+        } elseif (method_exists($this->model, 'hasAttributeGetMutator') && $this->model->hasAttributeGetMutator($method)) {
+            return $this->addField($method, $label);
         }
 
         return false;
