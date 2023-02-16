@@ -483,10 +483,6 @@ class Model
             $this->perPage = (int) $perPage;
         }
 
-        if (isset($paginate['arguments'][0])) {
-            return $paginate['arguments'];
-        }
-
         if ($name = $this->grid->getName()) {
             return [$this->perPage, ['*'], "{$name}_page"];
         }
