@@ -614,6 +614,10 @@ class Field implements Renderable
             $rules = $this->updateRules ?: $this->rules;
         }
 
+        if ($rules instanceof \Closure) {
+            $rules = $rules->call($this, $this->form);
+        }
+
         $this->addRequiredAttribute($rules);
     }
 
