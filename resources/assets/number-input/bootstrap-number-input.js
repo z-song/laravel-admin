@@ -37,7 +37,7 @@
             var max = self.attr('max');
 
             function setText(n) {
-                n = isNaN(n) ? 0 : n;
+                n = isNaN(n) ? 0 : parseInt(n);
                 if ((min && n < min)) {
                     n = min;
                 } else if (max && n > max) {
