@@ -210,7 +210,7 @@ trait CanCascadeFields
         'oneNotIn': function(a, b) { return a.filter(v => b.includes(v)).length == 0; },
     };
     var cascade_groups = {$cascadeGroups};
-        
+
     cascade_groups.forEach(function (event) {
         var default_value = '{$this->getValueByJs()}' + '';
         var class_name = event.class;
@@ -218,11 +218,9 @@ trait CanCascadeFields
             $('.'+class_name+'').removeClass('hide');
         }
     });
-    
+
     $('{$this->getElementClassSelector()}').on('{$this->cascadeEvent}', function (e) {
-
         {$this->getFormFrontValue()}
-
         cascade_groups.forEach(function (event) {
             var group = $('div.cascade-group.'+event.class);
             if( operator_table[event.operator](checked, event.value) ) {

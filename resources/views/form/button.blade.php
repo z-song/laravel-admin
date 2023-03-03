@@ -1,4 +1,4 @@
-<div class="{{$viewClass['form-group']}}">
+<div id="{{$containerId}}"  class="{{$viewClass['form-group']}}">
 
     <label class="{{$viewClass['label']}} control-label"></label>
 

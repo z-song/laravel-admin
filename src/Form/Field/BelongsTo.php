@@ -12,11 +12,11 @@ class BelongsTo extends Select
     {
         $script = <<<SCRIPT
 ;(function () {
-
-    var grid = $('.belongsto-{$this->column()}');
+    var fieldContainer = $('#{$this->containerId}');
+    var grid = fieldContainer.find('.relation-grid');
     var modal = $('#{$this->modalID}');
     var table = grid.find('.grid-table');
-    var selected = $("{$this->getElementClassSelector()}").val();
+    var selected = fieldContainer.find("{$this->getElementClassSelector()}").val();
     var row = null;
 
     // open modal
@@ -29,10 +29,8 @@ class BelongsTo extends Select
     grid.on('click', '.grid-row-remove', function () {
         selected = null;
         $(this).parents('tr').remove();
-        $("{$this->getElementClassSelector()}").val(null);
-
-        var empty = $('.belongsto-{$this->column()}').find('template.empty').html();
-
+        fieldContainer.find("{$this->getElementClassSelector()}").val(null);
+        var empty = fieldContainer.find('.relation-grid').find('template.empty').html();
         table.find('tbody').append(empty);
     });
 
@@ -40,8 +38,8 @@ class BelongsTo extends Select
         $.get(url, function (data) {
             modal.find('.modal-body').html(data);
             modal.find('.select').iCheck({
-                radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
+                radioClass: 'iradio_minimal-blue',
+                checkboxClass: 'icheckbox_minimal-blue'
             });
             modal.find('.box-header:first').hide();
 
@@ -54,8 +52,7 @@ class BelongsTo extends Select
     };
 
     var update = function (callback) {
-
-        $("{$this->getElementClassSelector()}")
+        fieldContainer.find("{$this->getElementClassSelector()}")
             .select2({data: [selected]})
             .val(selected)
             .trigger('change')

@@ -4,7 +4,7 @@
     <div class="{{$viewClass['field']}}"></div>
 </div>
 
-<hr style="margin-top: 0px;">
+<hr  style="margin-top: 0px;">
 
 <div id="has-many-{{$column}}" class="has-many-{{$column}}">
 
@@ -31,7 +31,7 @@
 
         @endforeach
     </div>
-    
+
 
     <template class="{{$column}}-tpl">
         <div class="has-many-{{$column}}-form fields-group">

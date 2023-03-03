@@ -158,7 +158,7 @@ STYLE;
      */
     public function render()
     {
-        $this->modalID = sprintf('modal-selector-%s', $this->getElementClassString());
+        $this->modalID = sprintf('modal-selector-%s', $this->containerId);
 
         $this->addScript()->addHtml()->addStyle();
 

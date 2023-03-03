@@ -59,6 +59,7 @@ use Illuminate\Support\Arr;
  * @method Field\HasMany        morphMany($relationName, $label = '', $callback)
  * @method Field\BelongsTo      belongsTo($column, $selectable, $label = '')
  * @method Field\BelongsToMany  belongsToMany($column, $selectable, $label = '')
+ * @method Field\MorphTo        MorphTo($column, $selectable, $label = '')
  */
 trait HasFields
 {
@@ -123,6 +124,7 @@ trait HasFields
         'morphMany'         => Field\HasMany::class,
         'belongsTo'         => Field\BelongsTo::class,
         'belongsToMany'     => Field\BelongsToMany::class,
+        'morphTo'           => Field\MorphTo::class,
     ];
 
     /**

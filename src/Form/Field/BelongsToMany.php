@@ -8,15 +8,19 @@ class BelongsToMany extends MultipleSelect
 {
     use BelongsToRelation;
 
+    protected $variables = [
+        'multiple' => true,
+    ];
+
     protected function addScript()
     {
         $script = <<<SCRIPT
 ;(function () {
-
-    var grid = $('.belongstomany-{$this->column()}');
+    var fieldContainer = $('#{$this->containerId}');
+    var grid = fieldContainer.find('.relation-grid');
     var modal = $('#{$this->modalID}');
     var table = grid.find('.grid-table');
-    var selected = $("{$this->getElementClassSelector()}").val() || [];
+    var selected = fieldContainer.find("{$this->getElementClassSelector()}").val() || [];
     var rows = {};
 
     table.find('tbody').children().each(function (index, tr) {
@@ -42,10 +46,10 @@ class BelongsToMany extends MultipleSelect
         }
 
         $(this).parents('tr').remove();
-        $("{$this->getElementClassSelector()}").val(selected);
+        fieldContainer.find("{$this->getElementClassSelector()}").val(selected);
 
         if (selected.length == 0) {
-            var empty = $('.belongstomany-{$this->column()}').find('template.empty').html();
+            var empty = $('.relation-grid').find('template.empty').html();
             table.find('tbody').append(empty);
         }
     });
@@ -68,8 +72,7 @@ class BelongsToMany extends MultipleSelect
     };
 
     var update = function (callback) {
-
-        $("{$this->getElementClassSelector()}")
+        fieldContainer.find("{$this->getElementClassSelector()}")
             .select2({data: selected})
             .val(selected)
             .trigger('change')
@@ -85,7 +88,7 @@ class BelongsToMany extends MultipleSelect
         });
 
         if (selected.length == 0) {
-            var empty = $('.belongstomany-{$this->column()}').find('template.empty').html();
+            var empty = $('.relation-grid').find('template.empty').html();
             table.find('tbody').append(empty);
         } else {
             table.find('.empty-grid').parent().remove();
