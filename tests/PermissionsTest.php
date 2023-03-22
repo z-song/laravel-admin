@@ -3,6 +3,7 @@
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Auth\Database\Permission;
 use Encore\Admin\Auth\Database\Role;
+use Illuminate\Http\Request;
 
 class PermissionsTest extends TestCase
 {
@@ -192,6 +193,21 @@ class PermissionsTest extends TestCase
             ->seeInDatabase(config('admin.database.role_permissions_table'), ['role_id' => 2, 'permission_id' => 6]);
 
         $this->assertTrue(Administrator::find(2)->can('can-remove'));
+    }
+
+    public function testPermissionWithoutHttpMethodAndHttpPath()
+    {
+        //  1.add a permission without http_path and http_method
+        $permission = Permission::create([
+            'slug'        => 'not-http-based-permission',
+            'name'        => 'Not http based permission',
+            'http_path'   => '',
+            'http_method' => [''],
+        ]);
+
+        // 2.check that this permissions does not pass through protected routes (as it is checked in the Permission middleware)
+        $request = Request::create('admin/auth/permissions');
+        $this->assertFalse($permission->shouldPassThrough($request));
     }
 
     public function testEditPermission()
