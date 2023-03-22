@@ -64,7 +64,7 @@ class Permission extends Model
     public function shouldPassThrough(Request $request): bool
     {
         if (empty($this->http_method) && empty($this->http_path)) {
-            return true;
+            return false;
         }
 
         $method = $this->http_method;
