@@ -199,9 +199,9 @@ class PermissionsTest extends TestCase
     {
         //  1.add a permission without http_path and http_method
         $permission = Permission::create([
-            'slug' => 'not-http-based-permission',
-            'name' => 'Not http based permission',
-            'http_path' => '',
+            'slug'        => 'not-http-based-permission',
+            'name'        => 'Not http based permission',
+            'http_path'   => '',
             'http_method' => [''],
         ]);
 
