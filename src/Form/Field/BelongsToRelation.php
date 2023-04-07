@@ -62,7 +62,7 @@ trait BelongsToRelation
         $selectable = str_replace('\\', '_', $this->selectable);
         $args = [$multiple];
 
-        return route('admin.handle-selectable', compact('selectable', 'args'));
+        return route(admin_get_route('handle-selectable'), compact('selectable', 'args'));
     }
 
     /**

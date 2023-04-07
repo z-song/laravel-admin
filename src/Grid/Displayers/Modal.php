@@ -22,7 +22,7 @@ class Modal extends AbstractDisplayer
     {
         $renderable = str_replace('\\', '_', $this->renderable);
 
-        return route('admin.handle-renderable', compact('renderable'));
+        return route(admin_get_route('handle-renderable'), compact('renderable'));
     }
 
     /**
