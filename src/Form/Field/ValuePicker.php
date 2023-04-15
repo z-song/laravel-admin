@@ -100,7 +100,7 @@ class ValuePicker
 
         $btn = <<<HTML
 <a class="btn btn-primary" data-toggle="modal" data-target="#{$this->modal}">
-    <i class="fa-solid fa-folder-open"></i>  {$text}
+    <i class="fa-regular fa-folder-open"></i>  {$text}
 </a>
 HTML;
 

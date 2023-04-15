@@ -3,7 +3,7 @@
         <input type="text" name="{{ $key }}" class="form-control grid-quick-search" style="width: 200px;" value="{{ $value }}" placeholder="{{ $placeholder }}">
 
         <div class="input-group-btn" style="display: inline-block;">
-            <button type="submit" class="btn btn-default"><i class="fa-solid fa-search"></i></button>
+            <button type="submit" class="btn btn-default"><i class="fa-regular fa-search"></i></button>
         </div>
     </div>
 </form>

@@ -41,7 +41,7 @@ class Help implements Renderable
 
         return <<<HELP
 <a href="javascript:void(0);" class="grid-column-help" {$data}>
-    <i class="fa-solid fa-question-circle"></i>
+    <i class="fa-regular fa-question-circle"></i>
 </a>
 HELP;
     }

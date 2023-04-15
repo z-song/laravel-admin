@@ -22,7 +22,7 @@ class Decimal extends Text
     {
         $this->inputmask($this->options);
 
-        $this->prepend('<i class="fa-solid '.$this->icon.' fa-fw"></i>')
+        $this->prepend('<i class="fa-regular '.$this->icon.' fa-fw"></i>')
             ->defaultAttribute('style', 'width: 130px');
 
         return parent::render();

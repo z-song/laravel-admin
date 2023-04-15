@@ -369,6 +369,7 @@ class FilePond extends Field
             'maxFiles' => $this->maxFiles,
             'labelIdle' => $this->options["msgPlaceholder"],
             'required' => $this->attributes['required'] ?? false,
+            'credits' => false,
         ];
 
         // Set filepond server-url

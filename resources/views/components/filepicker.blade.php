@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="loading text-center">
-                        <i class="fa-solid fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <i class="fa-regular fa-spinner fa-pulse fa-3x fa-fw"></i>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -1,9 +1,12 @@
 $sidebar-item-radius: 20px;
 
 body.modern-ui {
+    .main-header {
+        backdrop-filter: blur(10px);
+    }
+
     .main-header > nav.navbar {
         background: transparent;
-        backdrop-filter: blur(10px);
 
         .navbar-nav.nav > li > a,
         a.sidebar-toggle,
@@ -20,24 +23,19 @@ body.modern-ui {
         }
     }
 
-    .navbar-custom-menu > .navbar-nav > li {
-        &> .dropdown-menu {
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 0 0 30px 30px;
-            background-color: #ffffffcc;
-    
-            & > li > a {
-                margin: 0;
-            }
-    
-            & > li.active > a {
-                color: #fff;
-            }
+    .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+        max-height: 200px;
+        overflow-y: auto;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 30px 30px;
+        background-color: #ffffffcc;
+
+        & > li > a {
+            margin: 0;
         }
-        &.user-menu > .dropdown-menu {
-            max-height: none;
+
+        & > li.active > a {
+            color: #fff;
         }
     }
 
@@ -167,4 +165,15 @@ body.modern-ui {
 
 body.sidebar-mini .main-sidebar .user-panel .image > img.img-circle {
     border-width: 2px;
+}
+
+///////// FIX SlimScroll requirement /////////////
+aside.main-sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    direction: ltr;
+
+    & > section.sidebar {
+        direction: rtl;
+    }
 }

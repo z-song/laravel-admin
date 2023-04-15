@@ -13,7 +13,7 @@
     >
         <span class="ie-display">{{ $display }}</span>
 
-        <i class="fa-solid fa-edit" style="visibility: hidden;"></i>
+        <i class="fa-regular fa-edit" style="visibility: hidden;"></i>
     </a>
 </span>
 

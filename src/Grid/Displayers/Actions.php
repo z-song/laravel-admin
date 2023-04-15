@@ -198,7 +198,7 @@ class Actions extends AbstractDisplayer
     {
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getRouteKey()}" class="{$this->grid->getGridRowName()}-view">
-    <i class="fa-solid fa-eye"></i>
+    <i class="fa-regular fa-eye"></i>
 </a>
 EOT;
     }
@@ -212,7 +212,7 @@ EOT;
     {
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getRouteKey()}/edit" class="{$this->grid->getGridRowName()}-edit">
-    <i class="fa-solid fa-edit"></i>
+    <i class="fa-regular fa-edit"></i>
 </a>
 EOT;
     }
@@ -228,7 +228,7 @@ EOT;
 
         return <<<EOT
 <a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
-    <i class="fa-solid fa-trash"></i>
+    <i class="fa-regular fa-trash"></i>
 </a>
 EOT;
     }

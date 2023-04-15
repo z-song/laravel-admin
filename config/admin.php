@@ -123,7 +123,7 @@ return [
 
         'providers' => [
             'admin' => [
-                'driver' => 'eloquent',
+                'driver' => 'eloquent-cache',
                 'model'  => Encore\Admin\Auth\Database\Administrator::class,
             ],
         ],
@@ -426,4 +426,33 @@ return [
     'extensions' => [
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Change site theme
+    |--------------------------------------------------------------------------
+    |
+    | Here are the list of all the themes of the site.
+    |
+    */
+    'site_themes' => [
+        'theme_0' => 'ساده',
+        'theme_fast_simple' => 'سریع - ساده',
+        'theme_1' => 'قالب 1',
+        'theme_2' => 'قالب 2',
+        'theme_3' => 'قالب 3',
+        'theme_4' => 'قالب 4',
+        'theme_5' => 'قالب 5',
+        'theme_6' => 'قالب 6',
+        'theme_7' => 'قالب 7',
+        'theme_8' => 'قالب 8',
+        'theme_9' => 'قالب 9',
+        'theme_10' => 'قالب 10',
+        'theme_11' => 'قالب 11',
+        'theme_13' => 'دفترچه',
+        'theme_14' => 'آبی راه',
+        'theme_17' => 'لوزی - کرم',
+    ],
+    'default_site_theme' => env('DEFAULT_SITE_THEME', 'theme_0'),
+    'change_theme_way' => env('CHANGE_THEME_WAY', 'selectable'), // auto or selectable [by user]
 ];

@@ -52,7 +52,7 @@ class DateMultiple extends Text
             })
           ]});";
 
-        $this->prepend('<i class="fa-solid fa-calendar fa-fw"></i>')
+        $this->prepend('<i class="fa-regular fa-calendar fa-fw"></i>')
             ->defaultAttribute('style', 'width: 100%');
 
         return parent::render();

@@ -78,16 +78,16 @@
                             @if(!$active && $selector['type'] == 'many')
                                 &nbsp;
                                 <a href="{{ \Encore\Admin\Grid\Tools\Selector::url($column, $value) }}" class="add">
-                                    <i class="fa-solid fa-square-plus"></i>
+                                    <i class="fa-regular fa-square-plus"></i>
                                 </a>
                             @else
-                                <a style="visibility: hidden;"><i class="fa-solid fa-square-plus"></i></a>
+                                <a style="visibility: hidden;"><i class="fa-regular fa-square-plus"></i></a>
                             @endif
                         </li>
                     @endforeach
                     <li>
                         <a href="{{ \Encore\Admin\Grid\Tools\Selector::url($column) }}" class="clear"><i
-                                    class="fa-solid fa-trash"></i></a>
+                                    class="fa-regular fa-trash"></i></a>
                     </li>
                 </ul>
             </div>

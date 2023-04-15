@@ -85,6 +85,6 @@ class Sorter implements Renderable
 
         $url = url()->current().'?'.http_build_query($query);
 
-        return "<a class=\"fa-solid fa-fw $icon\" href=\"$url\"></a>";
+        return "<a class=\"fa-regular fa-fw $icon\" href=\"$url\"></a>";
     }
 }

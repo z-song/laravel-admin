@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
+use ReflectionMethod;
 use Spatie\EloquentSortable\Sortable;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -483,6 +484,12 @@ class Form implements Renderable
                 method_exists($this->model, $column = Str::camel($column))) &&
                 !method_exists(Model::class, $column)
             ) {
+                // Prevent accessors conflict with relations
+                $methodName = method_exists($this->model, $column) ? $column : Str::camel($column);
+                if (!(new ReflectionMethod($this->model, $methodName))?->isPublic()) {
+                    continue;
+                }
+
                 $relation = call_user_func([$this->model, $column]);
 
                 if ($relation instanceof Relations\Relation) {

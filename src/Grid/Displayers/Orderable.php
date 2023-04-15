@@ -18,10 +18,10 @@ class Orderable extends AbstractDisplayer
 
 <div class="btn-group">
     <button type="button" class="btn btn-xs btn-info {$this->grid->getGridRowName()}-orderable" data-id="{$this->getKey()}" data-direction="1">
-        <i class="fa-solid fa-caret-up fa-fw"></i>
+        <i class="fa-regular fa-caret-up fa-fw"></i>
     </button>
     <button type="button" class="btn btn-xs btn-default {$this->grid->getGridRowName()}-orderable" data-id="{$this->getKey()}" data-direction="0">
-        <i class="fa-solid fa-caret-down fa-fw"></i>
+        <i class="fa-regular fa-caret-down fa-fw"></i>
     </button>
 </div>
 

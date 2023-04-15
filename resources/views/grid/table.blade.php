@@ -1,9 +1,9 @@
+@if(isset($title))
+<div class="box-header with-border text-center no-padding">
+    <h3 class="box-title"> {{ $title }}</h3>
+</div>
+@endif
 <div class="box grid-box">
-    @if(isset($title))
-    <div class="box-header with-border">
-        <h3 class="box-title"> {{ $title }}</h3>
-    </div>
-    @endif
 
     @if ( $grid->showTools() || $grid->showExportBtn() || $grid->showCreateBtn() )
     <div class="box-header with-border">

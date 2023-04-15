@@ -28,7 +28,7 @@ SCRIPT;
     <div style="height: 20px; border-bottom: 1px solid #eee; text-align: center;margin-top: 20px;margin-bottom: 20px;">
       <span style="font-size: 16px; background-color: #ffffff; padding: 0 10px;">
         <a data-toggle="collapse" href="#{$this->name}" class="{$this->name}-title">
-          <i class="fa-solid fa-angle-double-up"></i>&nbsp;&nbsp;{$title}
+          <i class="fa-regular fa-angle-double-up"></i>&nbsp;&nbsp;{$title}
         </a>
       </span>
     </div>

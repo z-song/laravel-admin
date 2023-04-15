@@ -18,7 +18,7 @@ class JalaliDate extends Text
 
     public function render()
     {
-        $this->prepend('<i class="fa-solid fa-calendar fa-fw"></i>');
+        $this->prepend('<i class="fa-regular fa-calendar fa-fw"></i>');
 
         $this->value(empty($this->value()) ? null : jdate($this->value())->format($this->format));
 
@@ -30,6 +30,10 @@ class JalaliDate extends Text
         $this->rules('digits:8');
 
         $value = $input[$this->column()];
+
+        if (empty($value)) {
+            return parent::getValidator($input);
+        }
 
         try {
             $tok = $this->tokenizeValue($value);
@@ -55,6 +59,8 @@ class JalaliDate extends Text
      */
     public function prepare($value)
     {
+        if (empty($value)) return null;
+
         $tok = $this->tokenizeValue($value);
 
         return (new Jalalian($tok[0], $tok[1], $tok[2]))->toCarbon();

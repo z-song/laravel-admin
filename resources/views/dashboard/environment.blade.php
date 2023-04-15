@@ -3,9 +3,9 @@
         <h3 class="box-title">Environment</h3>
 
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa-solid fa-minus"></i>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa-regular fa-minus"></i>
             </button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa-solid fa-times"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa-regular fa-times"></i></button>
         </div>
     </div>
 

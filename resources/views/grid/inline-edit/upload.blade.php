@@ -1,5 +1,5 @@
 <a href='javascript:void(0);' class='text-muted inline-upload-trigger' data-target="{{ $target }}">
-    <i class="fa-solid fa-upload"></i>&nbsp;{!! $value !!}
+    <i class="fa-regular fa-upload"></i>&nbsp;{!! $value !!}
 </a>
 <div class="hide">
   <input type="file" class="inline-upload" id="{{ $target }}" data-key="{{ $key }}" {{ $multiple ? 'multiple' : '' }}/>

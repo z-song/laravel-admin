@@ -317,14 +317,14 @@ class Field implements Renderable
             return <<<HTML
 <ul class="mailbox-attachments clearfix">
     <li style="margin-bottom: 0;">
-      <span class="mailbox-attachment-icon"><i class="fa-solid {$field->getFileIcon($name)}"></i></span>
+      <span class="mailbox-attachment-icon"><i class="fa-regular {$field->getFileIcon($name)}"></i></span>
       <div class="mailbox-attachment-info">
         <div class="mailbox-attachment-name">
-            <i class="fa-solid fa-paperclip"></i> {$name}
+            <i class="fa-regular fa-paperclip"></i> {$name}
             </div>
             <span class="mailbox-attachment-size">
               {$size}&nbsp;
-              <a href="{$url}" class="btn btn-default btn-xs pull-right" target="_blank" $download><i class="fa-solid fa-cloud-download"></i></a>
+              <a href="{$url}" class="btn btn-default btn-xs pull-right" target="_blank" $download><i class="fa-regular fa-cloud-download"></i></a>
             </span>
       </div>
     </li>
@@ -363,7 +363,7 @@ HTML;
         return $this->unescape()->as(function ($value) use ($map, $default) {
             $bool = empty($map) ? boolval($value) : Arr::get($map, $value, $default);
 
-            return $bool ? '<i class="fa-solid fa-check text-green"></i>' : '<i class="fa-solid fa-close text-red"></i>';
+            return $bool ? '<i class="fa-regular fa-check text-green"></i>' : '<i class="fa-regular fa-close text-red"></i>';
         });
     }
 

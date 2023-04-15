@@ -53,10 +53,11 @@ class AdminController extends Controller
      */
     public function index(Content $content)
     {
+        $grid = $this->grid();
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
-            ->body($this->grid());
+            ->body($grid);
     }
 
     /**
@@ -72,10 +73,11 @@ class AdminController extends Controller
         $routeParameters = request()->route()->parameters();
         $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
         $this->editingId = $id;
+        $detail = $this->detail($id);
         return $content
             ->title($this->title())
             ->description($this->description['show'] ?? trans('admin.show'))
-            ->body($this->detail($id));
+            ->body($detail);
     }
 
     /**

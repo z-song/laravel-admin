@@ -48,7 +48,7 @@ class Text extends Field
         $this->initPlainInput();
 
         if (!$this->withoutIcon) {
-            $this->prepend('<i class="fa-solid '.$this->icon.' fa-fw"></i>');
+            $this->prepend('<i class="fa-regular '.$this->icon.' fa-fw"></i>');
         }
         $this->defaultAttribute('type', $this->type)
             ->defaultAttribute('id', $this->id)

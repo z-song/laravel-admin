@@ -1,6 +1,6 @@
 <div class="btn-group pull-right" style="margin-right: 10px">
-    <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#{{ $modalID }}"><i class="fa-solid fa-filter"></i>&nbsp;&nbsp;{{ trans('admin.filter') }}</a>
-    <a href="{!! $action !!}" class="btn btn-sm btn-facebook"><i class="fa-solid fa-undo"></i>&nbsp;&nbsp;{{ trans('admin.reset') }}</a>
+    <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#{{ $modalID }}"><i class="fa-regular fa-filter"></i>&nbsp;&nbsp;{{ trans('admin.filter') }}</a>
+    <a href="{!! $action !!}" class="btn btn-sm btn-facebook"><i class="fa-regular fa-undo"></i>&nbsp;&nbsp;{{ trans('admin.reset') }}</a>
 </div>
 
 <div class="modal fade" id="{{ $modalID }}" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

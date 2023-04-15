@@ -1,7 +1,7 @@
 <div>
     <span class="{{ $elementClass }}" data-inserted="0" data-key="{{ $key }}" data-name="{{ $name }}"
           data-toggle="collapse" data-target="#grid-collapse-{{ $name }}">
-        <a href="javascript:void(0)"><i class="fa-solid fa-angle-double-down"></i>&nbsp;&nbsp;{{ $value }}</a>
+        <a href="javascript:void(0)"><i class="fa-regular fa-angle-double-down"></i>&nbsp;&nbsp;{{ $value }}</a>
     </span>
     <template class="grid-expand-{{ $name }}">
         <tr style='background-color: #ecf0f5;'>
@@ -12,7 +12,7 @@
                             {!! $html !!}
                         @else
                             <div class="loading text-center" style="padding: 20px 0px;">
-                                <i class="fa-solid fa-spinner fa-pulse fa-3x fa-fw"></i>
+                                <i class="fa-regular fa-spinner fa-pulse fa-3x fa-fw"></i>
                             </div>
                         @endif
                     </div>

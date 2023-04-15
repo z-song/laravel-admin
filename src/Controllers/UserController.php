@@ -2,6 +2,10 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Auth\Database\Administrator;
+use Encore\Admin\Auth\Database\Permission;
+use Encore\Admin\Auth\Database\Role;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -86,7 +90,9 @@ class UserController extends AdminController
     public function form()
     {
         $userModel = config('admin.database.users_model');
+        /** @var Permission $permissionModel */
         $permissionModel = config('admin.database.permissions_model');
+        /** @var Role $roleModel */
         $roleModel = config('admin.database.roles_model');
 
         $form = new Form(new $userModel());
@@ -121,6 +127,20 @@ class UserController extends AdminController
             }
         });
 
+        $form->saved(function (Form $form) {
+            /** @var Administrator $model */
+            $model = $form->model();
+            $model->clearCaches();
+        });
+
         return $form;
+    }
+
+    public function changeTheme()
+    {
+        if ($theme_key = request()->theme_key) {
+            Admin::user()->site_theme = $theme_key;
+            Admin::user()->save();
+        }
     }
 }

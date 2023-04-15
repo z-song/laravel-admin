@@ -11,7 +11,7 @@
             <div class="file-preview-frame" data-val="{!! $item['value'] !!}">
                 <div class="file-content">
                     @if($item['is_file'])
-                        <i class="fa-solid fa-file-text-o"></i>
+                        <i class="fa-regular fa-file-text-o"></i>
                     @else
                         <img src="{{ $item['url'] }}"/>
                     @endif
@@ -19,10 +19,10 @@
                 <div class="file-caption-info">{{ basename($item['url']) }}</div>
                 <div class="file-actions">
                     <a class="btn btn-default btn-sm remove">
-                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-regular fa-trash"></i>
                     </a>
                     <a class="btn btn-default btn-sm" target="_blank" download="{{ basename($item['url']) }}" href="{{ $item['url'] }}">
-                        <i class="fa-solid fa-download"></i>
+                        <i class="fa-regular fa-download"></i>
                     </a>
                 </div>
             </div>
@@ -45,15 +45,15 @@
     <template id="file-preview">
         <div class="file-preview-frame" data-val="_val_">
             <div class="file-content">
-                <i class="fa-solid fa-file-text-o"></i>
+                <i class="fa-regular fa-file-text-o"></i>
             </div>
             <div class="file-caption-info">_name_</div>
             <div class="file-actions">
                 <a class="btn btn-default btn-sm remove">
-                    <i class="fa-solid fa-trash"></i>
+                    <i class="fa-regular fa-trash"></i>
                 </a>
                 <a class="btn btn-default btn-sm" target="_blank" download="_name_" href="_url_">
-                    <i class="fa-solid fa-download"></i>
+                    <i class="fa-regular fa-download"></i>
                 </a>
             </div>
         </div>
@@ -66,10 +66,10 @@
             <div class="file-caption-info">_name_</div>
             <div class="file-actions">
                 <a class="btn btn-default btn-sm remove">
-                    <i class="fa-solid fa-trash"></i>
+                    <i class="fa-regular fa-trash"></i>
                 </a>
                 <a class="btn btn-default btn-sm" target="_blank" download="_name_" href="_url_">
-                    <i class="fa-solid fa-download"></i>
+                    <i class="fa-regular fa-download"></i>
                 </a>
             </div>
         </div>

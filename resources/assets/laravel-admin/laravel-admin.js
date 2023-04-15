@@ -16,10 +16,12 @@ $.fn.editable.defaults.error = function (data) {
 };
 
 toastr.options = {
-    closeButton: true,
+    closeButton: false,
     progressBar: true,
     showMethod: 'slideDown',
-    timeOut: 4000
+    timeOut: 4000,
+    rtl: true,
+    positionClass: 'toast-top-center'
 };
 
 $.pjax.defaults.timeout = 5000;

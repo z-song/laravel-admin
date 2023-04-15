@@ -84,9 +84,17 @@ body,
     border-bottom-left-radius: 7px;
 }
 
-.sidebar-menu .treeview-menu > li > a {
-    padding: 10px 15px 10px 5px;
-    min-width: 230px;
+.sidebar-menu .treeview-menu {
+    padding-left: 0;
+
+    & > li {
+        padding-left: 0;
+
+        & > a {
+            padding: 10px 15px 10px 5px;
+            min-width: 100%;
+        }
+    }
 }
 
 .sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {

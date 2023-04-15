@@ -16,7 +16,7 @@
     <div class="row header">
         <div class="col-md-2 {{$viewClass['label']}}"><h4 class="pull-right">{{ $label }}</h4></div>
         <div class="col-md-9 {{$viewClass['field']}}">
-            <button type="button" class="btn btn-default btn-sm add"><i class="fa-solid fa-plus-circle" style="font-size: large;"></i></button>
+            <button type="button" class="btn btn-default btn-sm add"><i class="fa-regular fa-plus-circle" style="font-size: large;"></i></button>
         </div>
     </div>
 
@@ -26,9 +26,9 @@
         @foreach($forms as $pk => $form)
             <li class="@if ($form == reset($forms)) active @endif ">
                 <a href="#{{ $relationName . '_' . $pk }}" data-toggle="tab">
-                    {{ $pk }} <i class="fa-solid fa-exclamation-circle text-red hide"></i>
+                    {{ $pk }} <i class="fa-regular fa-exclamation-circle text-red hide"></i>
                 </a>
-                <i class="close-tab fa-solid fa-times" ></i>
+                <i class="close-tab fa-regular fa-times" ></i>
             </li>
         @endforeach
 
@@ -48,9 +48,9 @@
     <template class="nav-tab-tpl">
         <li class="new">
             <a href="#{{ $relationName . '_new_' . \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }}" data-toggle="tab">
-                &nbsp;New {{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }} <i class="fa-solid fa-exclamation-circle text-red hide"></i>
+                &nbsp;New {{ \Encore\Admin\Form\NestedForm::DEFAULT_KEY_NAME }} <i class="fa-regular fa-exclamation-circle text-red hide"></i>
             </a>
-            <i class="close-tab fa-solid fa-times" ></i>
+            <i class="close-tab fa-regular fa-times" ></i>
         </li>
     </template>
     <template class="pane-tpl">

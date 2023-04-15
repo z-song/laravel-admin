@@ -3,6 +3,7 @@
 namespace Encore\Admin\Widgets;
 
 use Encore\Admin\Widgets\Navbar\RefreshButton;
+use Encore\Admin\Widgets\Navbar\SelectThemeButton;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 
@@ -67,7 +68,11 @@ class Navbar implements Renderable
      */
     public function render($part = 'right')
     {
-        if ($part == 'right') {
+        if ($part === 'right') {
+            if (config('admin.change_theme_way') === 'selectable') {
+                $this->right(new SelectThemeButton());
+            }
+
             $this->right(new RefreshButton());
         }
 

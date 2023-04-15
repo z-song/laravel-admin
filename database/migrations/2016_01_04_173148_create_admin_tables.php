@@ -28,6 +28,7 @@ class CreateAdminTables extends Migration
             $table->string('name');
             $table->string('avatar')->nullable();
             $table->string('remember_token', 100)->nullable();
+            $table->string('site_theme', 120)->nullable();
             $table->timestamps();
         });
 

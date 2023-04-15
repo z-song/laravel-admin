@@ -2,12 +2,14 @@
 
 namespace Encore\Admin;
 
-use Encore\Admin\Layout\Content;
-use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Routing\Router;
+use Encore\Admin\Layout\Content;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
+use Illuminate\Auth\EloquentUserProvider;
 
 class AdminServiceProvider extends ServiceProvider
 {
@@ -81,6 +83,10 @@ class AdminServiceProvider extends ServiceProvider
         }
 
         $this->registerPublishing();
+
+        Auth::provider('eloquent-cache', function ($app, array $config) {
+            return new CacheUserProvider($app['hash'], $config['model']);
+        });
 
         $this->compatibleBlade();
 

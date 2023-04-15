@@ -5,7 +5,7 @@
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="min-width: 32px;">
                 <span class="{{ $group_name }}-label">{{ $default['label'] }}</span>
                 &nbsp;&nbsp;
-                <span class="fa-solid fa-caret-down"></span>
+                <span class="fa-regular fa-caret-down"></span>
             </button>
             <ul class="dropdown-menu {{ $group_name }}">
                 @foreach($group as $index => $item)
@@ -15,7 +15,7 @@
         </div>
     @endif
     <div class="input-group-addon">
-        <i class="fa-solid fa-calendar"></i>
+        <i class="fa-regular fa-calendar"></i>
     </div>
     <input class="form-control" id="{{$id}}" placeholder="{{$label}}" name="{{$name}}" value="{{ request($name, $value) }}">
 </div>

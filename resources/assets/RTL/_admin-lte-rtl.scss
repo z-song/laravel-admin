@@ -446,6 +446,13 @@ body {
     margin-right: 3px;
 }
 
+.select2-container--default .select2-selection--single,
+.select2-selection .select2-selection--single {
+    padding: 9px 12px;
+    border-radius: 4px;
+    height: 40px;
+}
+
 .select2-dropdown {
     border-radius: 4px;
 }

@@ -19,9 +19,9 @@
 
     </div>
     <a class="left carousel-control" href="#{!! $id !!}" data-slide="prev">
-        <span class="fa-solid fa-angle-left"></span>
+        <span class="fa-regular fa-angle-left"></span>
     </a>
     <a class="right carousel-control" href="#{!! $id !!}" data-slide="next">
-        <span class="fa-solid fa-angle-right"></span>
+        <span class="fa-regular fa-angle-right"></span>
     </a>
 </div>

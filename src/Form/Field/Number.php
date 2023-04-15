@@ -8,6 +8,7 @@ class Number extends Text
     protected $number2commaSeparated = false;
     protected $number2persianSuffix = '';
     protected $number2commaSeparatedSuffix = '';
+    protected $number2persianRial2Toman = false;
 
     protected static $js = [
         '/vendor/laravel-admin/num2persian/dist/num2persian.min.js',
@@ -31,10 +32,11 @@ class Number extends Text
         return parent::render();
     }
 
-    public function enableShowAsPersian($enable = true, $suffix = '')
+    public function enableShowAsPersian($enable = true, $suffix = '', $rial2Toman = false)
     {
         $this->number2persian = $enable;
         $this->number2persianSuffix = $suffix;
+        $this->number2persianRial2Toman = $rial2Toman;
 
         return $this;
     }
@@ -79,8 +81,9 @@ class Number extends Text
     {
         $number2persianScript = '';
         if ($this->number2persian) {
+            $value = $this->number2persianRial2Toman ? "(this.value / 10)" : "this.value";
             $number2persianScript = <<<SCR
-            $('#number2persian-box-{$this->id}').text(parseInt(this.value).num2persian() + '{$this->number2persianSuffix}');
+            $('#number2persian-box-{$this->id}').text(parseInt($value).num2persian() + '{$this->number2persianSuffix}');
 SCR;
         }
 

@@ -3,9 +3,20 @@
 namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 trait HasPermissions
 {
+    protected function clearHasPermissionsCaches()
+    {
+        Cache::forget($this->getAllPermissionsCacheKey());
+    }
+
+    protected function getAllPermissionsCacheKey(): string
+    {
+        return $this->getGeneralCacheKey() . '.all-permissions';
+    }
+
     /**
      * Get all permissions of user.
      *
@@ -13,7 +24,9 @@ trait HasPermissions
      */
     public function allPermissions(): Collection
     {
-        return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->merge($this->permissions);
+        return Cache::remember($this->getAllPermissionsCacheKey(), now()->addHour(), function () {
+            return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->merge($this->permissions);
+        });
     }
 
     /**

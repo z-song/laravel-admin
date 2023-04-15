@@ -10,12 +10,12 @@
         <!-- breadcrumb start -->
         @if ($breadcrumb)
         <ol class="breadcrumb" style="margin-right: 30px;">
-            <li><a href="{{ admin_url('/') }}"><i class="fa-solid fa-dashboard"></i> {{__('Home')}}</a></li>
+            <li><a href="{{ admin_url('/') }}"><i class="fa-regular fa-dashboard"></i> {{__('Home')}}</a></li>
             @foreach($breadcrumb as $item)
                 @if($loop->last)
                     <li class="active">
                         @if (\Illuminate\Support\Arr::has($item, 'icon'))
-                            <i class="fa-solid fa-{{ $item['icon'] }}"></i>
+                            <i class="fa-regular fa-{{ $item['icon'] }}"></i>
                         @endif
                         {{ $item['text'] }}
                     </li>
@@ -24,13 +24,13 @@
                     @if (\Illuminate\Support\Arr::has($item, 'url'))
                         <a href="{{ admin_url(\Illuminate\Support\Arr::get($item, 'url')) }}">
                             @if (\Illuminate\Support\Arr::has($item, 'icon'))
-                                <i class="fa-solid fa-{{ $item['icon'] }}"></i>
+                                <i class="fa-regular fa-{{ $item['icon'] }}"></i>
                             @endif
                             {{ $item['text'] }}
                         </a>
                     @else
                         @if (\Illuminate\Support\Arr::has($item, 'icon'))
-                            <i class="fa-solid fa-{{ $item['icon'] }}"></i>
+                            <i class="fa-regular fa-{{ $item['icon'] }}"></i>
                         @endif
                         {{ $item['text'] }}
                     @endif
@@ -40,7 +40,7 @@
         </ol>
         @elseif(config('admin.enable_default_breadcrumb'))
         <ol class="breadcrumb" style="margin-right: 30px;">
-            <li><a href="{{ admin_url('/') }}"><i class="fa-solid fa-dashboard"></i> {{__('Home')}}</a></li>
+            <li><a href="{{ admin_url('/') }}"><i class="fa-regular fa-dashboard"></i> {{__('Home')}}</a></li>
             @for($i = 2; $i <= count(Request::segments()); $i++)
                 <li>
                 {{ucfirst(Request::segment($i))}}
