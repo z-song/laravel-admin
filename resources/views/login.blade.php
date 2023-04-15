@@ -41,7 +41,7 @@
 
                     <input type="text" class="form-control" placeholder="{{ trans('admin.username') }}"
                         name="username" value="{{ old('username') }}">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    <span class="fa-regular fa-user form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
 
@@ -54,7 +54,7 @@
 
                     <input type="password" class="form-control" placeholder="{{ trans('admin.password') }}"
                         name="password">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <span class="fa-regular fa-lock form-control-feedback"></span>
                 </div>
                 <div class="row">
                     <div class="col-xs-8">
