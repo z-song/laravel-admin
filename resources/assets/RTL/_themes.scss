@@ -1,0 +1,273 @@
+
+body.modern-ui {
+    &.theme_1 {
+        background: #f7f8f8;
+        background: linear-gradient(to right, #acbb78, #f7f8f8);
+    }
+
+    &.theme_2 {
+        background: #e4e5e6;
+        background: linear-gradient(-135deg, #e4e5e6, #71bceb);
+    }
+
+    &.theme_3 {
+        background: #efefbb;
+        background: linear-gradient(to right, #d4d3dd, #efefbb);
+    }
+
+    &.theme_4 {
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+    }
+
+    &.theme_5 {
+        background-size: 50px 50px;
+        background-color: #a5def5;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 50%,
+            transparent
+        );
+    }
+
+    &.theme_6 {
+        background-size: 50px 50px;
+        background-color: #ffcd83;
+        background-image: linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 50%,
+            transparent
+        );
+    }
+
+    &.theme_7 {
+        background-color: #e9d4b8;
+        background-image: repeating-linear-gradient(
+                45deg,
+                transparent 5px,
+                rgba(10, 35, 45, 0.1) 5px,
+                rgba(10, 35, 45, 0.1) 10px,
+                rgba(210, 118, 110, 0) 10px,
+                rgba(210, 118, 110, 0) 35px,
+                rgba(210, 118, 110, 0.1) 35px,
+                rgba(210, 118, 110, 0.1) 40px,
+                rgba(10, 35, 45, 0.1) 40px,
+                rgba(10, 35, 45, 0.1) 50px,
+                rgba(10, 35, 45, 0) 50px,
+                rgba(10, 35, 45, 0) 60px,
+                rgba(210, 118, 110, 0.1) 60px,
+                rgba(210, 118, 110, 0.1) 70px,
+                rgba(246, 179, 84, 0.1) 70px,
+                rgba(246, 179, 84, 0.1) 80px,
+                rgba(246, 179, 84, 0) 80px,
+                rgba(246, 179, 84, 0) 90px,
+                rgba(210, 118, 110, 0.1) 90px,
+                rgba(210, 118, 110, 0.1) 110px,
+                rgba(210, 118, 110, 0) 110px,
+                rgba(210, 118, 110, 0) 120px,
+                rgba(10, 35, 45, 0.1) 120px,
+                rgba(10, 35, 45, 0.1) 140px
+            ),
+            repeating-linear-gradient(
+                -45deg,
+                transparent 5px,
+                rgba(10, 35, 45, 0.1) 5px,
+                rgba(10, 35, 45, 0.1) 10px,
+                rgba(210, 118, 110, 0) 10px,
+                rgba(210, 118, 110, 0) 35px,
+                rgba(210, 118, 110, 0.1) 35px,
+                rgba(210, 118, 110, 0.1) 40px,
+                rgba(10, 35, 45, 0.1) 40px,
+                rgba(10, 35, 45, 0.1) 50px,
+                rgba(10, 35, 45, 0) 50px,
+                rgba(10, 35, 45, 0) 60px,
+                rgba(210, 118, 110, 0.1) 60px,
+                rgba(210, 118, 110, 0.1) 70px,
+                rgba(246, 179, 84, 0.1) 70px,
+                rgba(246, 179, 84, 0.1) 80px,
+                rgba(246, 179, 84, 0) 80px,
+                rgba(246, 179, 84, 0) 90px,
+                rgba(210, 118, 110, 0.1) 90px,
+                rgba(210, 118, 110, 0.1) 110px,
+                rgba(210, 118, 110, 0) 110px,
+                rgba(210, 118, 110, 0) 140px,
+                rgba(10, 35, 45, 0.1) 140px,
+                rgba(10, 35, 45, 0.1) 160px
+            );
+    }
+
+    &.theme_8 {
+        background-size: 50px 50px;
+        background-color: #ac0;
+        background-image: linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.2) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.2) 75%,
+            transparent 75%,
+            transparent
+        );
+    }
+
+    &.theme_9 {
+        background-size: 50px 50px;
+        background-color: #fdd6e8;
+        background-image: linear-gradient(
+            -45deg,
+            rgba(255, 255, 255, 0.2) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.2) 75%,
+            transparent 75%,
+            transparent
+        );
+    }
+
+    &.theme_10 {
+        background-color: #eee;
+        background-size: 512px 512px;
+        background-position: 0 0, 256px 256px;
+        background-image: linear-gradient(
+                45deg,
+                #ddd 25%,
+                transparent 25%,
+                transparent 75%,
+                #ddd 75%,
+                #ddd
+            ),
+            linear-gradient(
+                45deg,
+                #ddd 25%,
+                transparent 25%,
+                transparent 75%,
+                #ddd 75%,
+                #ddd
+            );
+    }
+
+    &.theme_11 {
+        background-color: #eee;
+        background-size: 512px 512px;
+        background-image: linear-gradient(
+                45deg,
+                #ddd 25%,
+                transparent 25%,
+                transparent 75%,
+                #ddd 75%,
+                #ddd
+            ),
+            linear-gradient(
+                -45deg,
+                #ddd 25%,
+                transparent 25%,
+                transparent 75%,
+                #ddd 75%,
+                #ddd
+            );
+    }
+
+    &.theme_13 {
+        background-color: #fff;
+        background-size: 100% 1.2em;
+        background-image: linear-gradient(
+                0deg,
+                transparent 79px,
+                #abced4 79px,
+                #abced4 81px,
+                transparent 81px
+            ),
+            linear-gradient(#eee 0.05em, transparent 0.05em);
+    }
+
+    &.theme_14 {
+        background-color: #d6e4ef;
+        background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+        background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+        background-image: linear-gradient(#c5dbed 2px, transparent 2px),
+            linear-gradient(0, #c5dbed 2px, transparent 2px),
+            linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+            linear-gradient(0, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    }
+
+    &.theme_17 {
+        background-color: #fff5d5;
+        background-image: repeating-linear-gradient(
+                120deg,
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.1) 1px,
+                transparent 1px,
+                transparent 60px
+            ),
+            repeating-linear-gradient(
+                60deg,
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.1) 1px,
+                transparent 1px,
+                transparent 60px
+            ),
+            linear-gradient(
+                60deg,
+                rgba(0, 0, 0, 0.1) 25%,
+                transparent 25%,
+                transparent 75%,
+                rgba(0, 0, 0, 0.1) 75%,
+                rgba(0, 0, 0, 0.1)
+            ),
+            linear-gradient(
+                120deg,
+                rgba(0, 0, 0, 0.1) 25%,
+                transparent 25%,
+                transparent 75%,
+                rgba(0, 0, 0, 0.1) 75%,
+                rgba(0, 0, 0, 0.1)
+            );
+        background-size: 70px 120px;
+    }
+
+    &.theme_fast_simple {
+        .main-header {
+            backdrop-filter: none;
+            background-color: #fff;
+            box-shadow: 0 0 9px #999;
+        }
+        #totop {
+            backdrop-filter: none;
+            background-color: #fff;
+        }
+        #nprogress .spinner {
+            backdrop-filter: none;
+            background-color: #fff;
+        }
+    }
+
+    .wrapper,
+    .main-sidebar,
+    .left-side,
+    .content-wrapper,
+    .right-side {
+        background: transparent;
+    }
+
+    .sidebar-menu > li:hover > a,
+    .sidebar-menu > li.active > a,
+    .sidebar-menu li.treeview > .treeview-menu {
+        background-color: #73767847;
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

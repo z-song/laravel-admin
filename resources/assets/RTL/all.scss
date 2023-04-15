@@ -12,3 +12,44 @@
 
 @import "laravel-admin-theme";
 @import "sidebar-theme";
+@import "rounded-corner-theme";
+
+@import "themes";
+
+@import "global";
+
+.grid-table .column-permissions {
+  overflow-wrap: anywhere;
+
+  .label {
+    display: inline-block;
+    margin: 2px;
+  }
+}
+
+.progress {
+  height: 3px;
+  box-shadow: 0 0 2px #aaa;
+}
+
+// Fix magnify bug
+.magnify-modal {
+  direction: ltr;
+}
+
+ul.list-group.list-group-boxed {
+  background: #f3f3f3;
+
+  li.list-group-item {
+    border: none;
+    margin: 10px;
+    border-radius: 7px;
+    box-shadow: 0 3px 5px #dadcdf;
+    overflow: hidden;
+
+    &:last-child {
+      border-bottom-left-radius: 25px;
+      border-bottom-right-radius: 25px;
+    }
+  }
+}

@@ -549,3 +549,18 @@ body {
 .input-group-addon:first-child {
     border-color: #d2d6de;
 }
+
+.form-horizontal .control-label {
+    text-align: right;
+}
+
+.grid-box .grid-selector {
+    ul > li,
+    .select-label {
+        float: right;
+    }
+    .select-options {
+        margin-left: 0;
+        margin-right: 100px;
+    }
+}
