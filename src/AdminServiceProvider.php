@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminServiceProvider extends ServiceProvider
