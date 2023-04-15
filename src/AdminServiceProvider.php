@@ -6,10 +6,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Router;
 use Encore\Admin\Layout\Content;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Auth\EloquentUserProvider;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminServiceProvider extends ServiceProvider
 {
@@ -110,6 +112,21 @@ class AdminServiceProvider extends ServiceProvider
         });
         Blade::directive('endcanAny', function () {
             return "<?php endif; ?>";
+        });
+
+        Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
+            /** @var Collection $this */
+            $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+            return new LengthAwarePaginator(
+                $this->forPage($page, $perPage),
+                $total ?: $this->count(),
+                $perPage,
+                $page,
+                [
+                    'path' => LengthAwarePaginator::resolveCurrentPath(),
+                    'pageName' => $pageName,
+                ]
+            );
         });
     }
 
