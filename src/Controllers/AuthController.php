@@ -44,7 +44,6 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
-        \Log::debug('login process');
         // Prepare inputs
         $request->merge(['mobile' => parse_numbers($request->input('mobile'))]);
         if (config('admin.auth.mode') === 'otp') {
@@ -52,19 +51,16 @@ class AuthController extends Controller
         }
 
         $this->loginValidator($request->all())->validate();
-        \Log::debug('valid data');
 
         $credentials = $request->only([$this->username(), 'password']);
         $remember = $request->get('remember', false);
 
         if ($this->guard()->attempt($credentials, $remember)) {
-            \Log::debug('successful login');
             return $this->sendLoginResponse($request);
         }
 
         $sessionData = [];
         if (config('admin.auth.mode') === 'otp') {
-            \Log::debug('set session data');
             $sessionData['mobile'] = $request->input('mobile');
         }
 
