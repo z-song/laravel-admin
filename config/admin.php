@@ -134,9 +134,13 @@ return [
         // Redirect to the specified URI when user is not authorized.
         'redirect_to' => 'auth/login',
 
+        // Authentication mode otp, user-pass
+        'mode' => null,
+
         // The URIs that should be excluded from authorization.
         'excepts' => [
             'auth/login',
+            'auth/req-otp',
             'auth/logout',
         ],
     ],

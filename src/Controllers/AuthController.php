@@ -2,9 +2,11 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -42,18 +44,65 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
+        \Log::debug('login process');
+        // Prepare inputs
+        $request->merge(['mobile' => parse_numbers($request->input('mobile'))]);
+        if (config('admin.auth.mode') === 'otp') {
+            $request->merge(['password' => parse_numbers($request->input('password'))]);
+        }
+
         $this->loginValidator($request->all())->validate();
+        \Log::debug('valid data');
 
         $credentials = $request->only([$this->username(), 'password']);
         $remember = $request->get('remember', false);
 
         if ($this->guard()->attempt($credentials, $remember)) {
+            \Log::debug('successful login');
             return $this->sendLoginResponse($request);
         }
 
-        return back()->withInput()->withErrors([
+        $sessionData = [];
+        if (config('admin.auth.mode') === 'otp') {
+            \Log::debug('set session data');
+            $sessionData['mobile'] = $request->input('mobile');
+        }
+
+        return back()->with($sessionData)->withInput()->withErrors([
             $this->username() => $this->getFailedLoginMessage(),
         ]);
+    }
+
+    /**
+     * Handle an OTP(SMS-token) request.
+     *
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function reqOtp(Request $request)
+    {
+        $request->merge(['mobile' => parse_numbers($request->input('mobile'))]);
+        $request->validate([
+            'mobile' => 'required|ir_mobile:zero'
+        ]);
+
+        // TODO: Send SMS
+        $mobile = $request->input('mobile');
+        $token = rand(10000, 99999);
+        $user = Administrator::updateOrCreate(['mobile' => $mobile], ['token' => $token, 'password' => Hash::make($token)]);
+        \Log::debug("OTP mobile: $mobile token: $token");
+
+        try {
+            if (app()->isProduction()) {
+                \Kavenegar::VerifyLookup($mobile, $token, null, null, config('kavenegar.template.auth'), null);
+            }
+        } catch (Exception $e) {
+            \Log::error('Login error. ' . $e->getMessage());
+            return back()->withInput()->withErrors(['mobile' => 'خطا در ارسال پیامک!']);
+        }
+
+        return back()->with('mobile', $mobile);
     }
 
     /**
@@ -204,7 +253,7 @@ class AuthController extends Controller
      */
     protected function username()
     {
-        return 'username';
+        return config('admin.auth.mode') === 'otp' ? 'mobile' : 'username';
     }
 
     /**

@@ -336,6 +336,7 @@ class Admin
             /* @var \Illuminate\Routing\Router $router */
             $router->get('auth/login', $authController.'@getLogin')->name('admin.login');
             $router->post('auth/login', $authController.'@postLogin');
+            $router->post('auth/req-otp', $authController.'@reqOtp');
             $router->get('auth/logout', $authController.'@getLogout')->name('admin.logout');
             $router->get('auth/setting', $authController.'@getSetting')->name('admin.setting');
             $router->put('auth/setting', $authController.'@putSetting');
