@@ -26,9 +26,9 @@ var $filter = $('#{{ $filter_id }}');
 
 $btn.unbind('click').click(function (e) {
     if ($filter.is(':visible')) {
-        $filter.addClass('hide');
+        $filter.slideUp();
     } else {
-        $filter.removeClass('hide');
+        $filter.slideDown();
     }
 });
 </script>
