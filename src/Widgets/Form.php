@@ -102,7 +102,7 @@ class Form implements Renderable
      *
      * @var array
      */
-    protected $buttons = ['reset', 'submit'];
+    protected $buttons = ['submit'];
 
     /**
      * Width for label and submit field.
