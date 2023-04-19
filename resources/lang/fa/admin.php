@@ -113,6 +113,7 @@ return [
         'roles'              => 'نقش ها',
         'permission'         => 'دسترسی ها',
         'menu'               => 'منو',
+        'administration'     => 'پیکربندی',
         'operation_log'      => 'گزارش عملیات',
     ],
     'grid_items_selected'    => '{n} مورد انتخاب شده',

@@ -9,7 +9,8 @@
 
         @if(in_array('submit', $buttons))
         <div class="btn-group pull-left">
-            <button type="submit" class="btn btn-primary" style="margin-right: 8px; padding: 6px 30px">
+            <button type="submit" class="btn btn-info" style="margin-right: 8px; padding: 6px 30px">
+                <i class="fa-regular fa-save"></i>
                 {{ trans('admin.submit') }}
             </button>
         </div>
@@ -26,7 +27,10 @@
 
         @if(in_array('reset', $buttons))
         <div class="btn-group pull-right">
-            <button type="reset" class="btn btn-warning">{{ trans('admin.reset') }}</button>
+            <button type="reset" class="btn btn-warning">
+                <i class="fa-regular fa-eraser"></i>
+                {{ trans('admin.reset') }}
+            </button>
         </div>
         @endif
     </div>
