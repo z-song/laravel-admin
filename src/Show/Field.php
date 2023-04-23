@@ -197,6 +197,10 @@ class Field implements Renderable
                 return $default;
             }
 
+            if ($value instanceof \UnitEnum) {
+                $value = $value->value;
+            }
+
             return Arr::get($values, $value, $default);
         });
     }
