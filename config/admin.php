@@ -63,6 +63,9 @@ return [
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
+
+        // Use as homepage of admin-panel
+        'dashboard' => null,
     ],
 
     /*

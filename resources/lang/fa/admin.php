@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'id'                    => '#',
     'online'                => 'آنلاین',
     'greeting'              => 'سلام،',
     'welcome'               => 'به پنل مدیریتی سامانه خوش آمدید.',
@@ -20,6 +21,7 @@ return [
     'remember_me'           => 'من را به خاطر بسپار',
     'user_setting'          => 'تنظیمات کاربر',
     'avatar'                => 'آواتار',
+    'value'                 => 'مقدار',
     'list'                  => 'لیست',
     'new'                   => 'جدید',
     'create'                => 'جدید',
@@ -71,13 +73,14 @@ return [
     'roles'                 => 'نقش ها',
     'permissions'           => 'دسترسی ها',
     'slug'                  => 'نامک',
-    'created_at'            => 'ساخته شده در',
-    'updated_at'            => 'ویرایش شده در',
+    'created_at'            => 'زمان ایجاد',
+    'updated_at'            => 'آخرین ویرایش',
     'alert'                 => 'هشدار',
     'parent_id'             => 'والد',
     'icon'                  => 'آیکون',
     'uri'                   => 'آدرس',
     'operation_log'         => 'لاگ عملیاتی',
+    'config'                => 'پیکربندی',
     'parent_select_error'   => 'انتخاب والد با خطا مواجه شد',
     'pagination'            => [
         'range' => 'نمایش از :first تا :last از کل :total',
