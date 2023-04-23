@@ -152,12 +152,6 @@ class UserController extends AdminController
             }
         });
 
-        $form->saved(function (Form $form) {
-            /** @var Administrator $model */
-            $model = $form->model();
-            $model->clearCaches();
-        });
-
         return $form;
     }
 

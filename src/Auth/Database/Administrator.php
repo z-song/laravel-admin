@@ -39,6 +39,14 @@ class Administrator extends Model implements AuthenticatableContract
         parent::__construct($attributes);
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::saved(function ($model) {
+            $model->clearCaches();
+        });
+    }
+
     protected function getGeneralCacheKey(): string
     {
         return sprintf('laravel-admin.admin.%d', $this->id);
