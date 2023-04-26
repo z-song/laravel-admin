@@ -135,6 +135,11 @@ body,
     }
 }
 
+.grid-table thead th {
+    white-space: nowrap;
+    background-color: #fafafa;
+}
+
 #totop {
     border-radius: 50%;
     border: none;
