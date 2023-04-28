@@ -1,23 +1,23 @@
-@if(isset($title))
-<div class="box-header grid-header with-border text-center no-padding">
-    <h3 class="box-title"> {{ $title }}</h3>
-</div>
+@if (isset($title))
+    <div class="box-header with-border text-center no-padding grid-header">
+        <h3 class="box-title"> {{ $title }}</h3>
+    </div>
 @endif
 <div class="box grid-box">
 
-    @if ( $grid->showTools() || $grid->showExportBtn() || $grid->showCreateBtn() )
-    <div class="box-header with-border">
-        <div class="pull-right">
-            {!! $grid->renderColumnSelector() !!}
-            {!! $grid->renderExportButton() !!}
-            {!! $grid->renderCreateButton() !!}
+    @if ($grid->showTools() || $grid->showExportBtn() || $grid->showCreateBtn())
+        <div class="box-header with-border">
+            <div class="pull-right">
+                {!! $grid->renderColumnSelector() !!}
+                {!! $grid->renderExportButton() !!}
+                {!! $grid->renderCreateButton() !!}
+            </div>
+            @if ($grid->showTools())
+                <div class="pull-left">
+                    {!! $grid->renderHeaderTools() !!}
+                </div>
+            @endif
         </div>
-        @if ( $grid->showTools() )
-        <div class="pull-left">
-            {!! $grid->renderHeaderTools() !!}
-        </div>
-        @endif
-    </div>
     @endif
 
     {!! $grid->renderFilter() !!}
@@ -29,8 +29,8 @@
         <table class="table table-hover grid-table" id="{{ $grid->tableID }}">
             <thead>
                 <tr>
-                    @foreach($grid->visibleColumns() as $column)
-                    <th {!! $column->formatHtmlAttributes() !!}>{!! $column->getLabel() !!}{!! $column->renderHeader() !!}</th>
+                    @foreach ($grid->visibleColumns() as $column)
+                        <th {!! $column->formatHtmlAttributes() !!}>{!! $column->getLabel() !!}{!! $column->renderHeader() !!}</th>
                     @endforeach
                 </tr>
             </thead>
@@ -41,18 +41,18 @@
 
             <tbody>
 
-                @if($grid->rows()->isEmpty() && $grid->showDefineEmptyPage())
+                @if ($grid->rows()->isEmpty() && $grid->showDefineEmptyPage())
                     @include('admin::grid.empty-grid')
                 @endif
 
-                @foreach($grid->rows() as $row)
-                <tr {!! $row->getRowAttributes() !!}>
-                    @foreach($grid->visibleColumnNames() as $name)
-                    <td {!! $row->getColumnAttributes($name) !!}>
-                        {!! $row->column($name) !!}
-                    </td>
-                    @endforeach
-                </tr>
+                @foreach ($grid->rows() as $row)
+                    <tr {!! $row->getRowAttributes() !!}>
+                        @foreach ($grid->visibleColumnNames() as $name)
+                            <td {!! $row->getColumnAttributes($name) !!}>
+                                {!! $row->column($name) !!}
+                            </td>
+                        @endforeach
+                    </tr>
                 @endforeach
             </tbody>
 
@@ -69,3 +69,17 @@
     </div>
     <!-- /.box-body -->
 </div>
+
+<script>
+    $(document).ready(function() {
+        $(".grid-box table > tbody > tr").on('click', function(e) {
+            if (e.target.tagName.toUpperCase() == 'A') return;
+
+            let dest = $(e.target).parents('tr').find('.row-action-show').attr('href');
+            $.pjax({
+                url: dest,
+                container: '#pjax-container'
+            });
+        });
+    });
+</script>
