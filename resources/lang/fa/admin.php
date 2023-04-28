@@ -90,6 +90,7 @@ return [
     'route'                 => 'مسیرها',
     'confirm'               => 'تایید',
     'cancel'                => 'لغو',
+    'ok'                    => 'متوجه شدم',
     'http'                  => [
         'method' => 'HTTP متد',
         'path'   => 'HTTP مسیر',

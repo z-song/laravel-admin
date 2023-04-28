@@ -239,6 +239,7 @@ EOT;
             'delete_confirm' => trans('admin.delete_confirm'),
             'confirm'        => trans('admin.confirm'),
             'cancel'         => trans('admin.cancel'),
+            'ok'             => trans('admin.ok'),
         ];
 
         $trans = array_merge($trans, $this->trans);
@@ -278,9 +279,9 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'success'});
             } else {
-                swal(data.message, '', 'error');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'error'});
             }
         }
     });

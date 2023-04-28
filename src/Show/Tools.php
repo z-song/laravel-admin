@@ -227,6 +227,7 @@ HTML;
             'confirm'        => trans('admin.confirm'),
             'cancel'         => trans('admin.cancel'),
             'delete'         => trans('admin.delete'),
+            'ok'             => trans('admin.ok'),
         ];
 
         $class = uniqid();
@@ -264,9 +265,9 @@ $('.{$class}-delete').unbind('click').click(function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'success'});
             } else {
-                swal(data.message, '', 'error');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'error'});
             }
         }
     });

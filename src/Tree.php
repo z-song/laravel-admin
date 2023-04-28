@@ -226,6 +226,7 @@ class Tree implements Renderable
             'delete_succeeded'  => str_replace("'", "\'", trans('admin.delete_succeeded')),
             'confirm'           => str_replace("'", "\'", trans('admin.confirm')),
             'cancel'            => str_replace("'", "\'", trans('admin.cancel')),
+            'ok'                => str_replace("'", "\'", trans('admin.ok')),
         ];
 
         $nestableOptions = json_encode($this->nestableOptions);
@@ -267,9 +268,9 @@ class Tree implements Renderable
                 var data = result.value;
                 if (typeof data === 'object') {
                     if (data.status) {
-                        swal(data.message, '', 'success');
+                        swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'success'});
                     } else {
-                        swal(data.message, '', 'error');
+                        swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'error'});
                     }
                 }
             });
