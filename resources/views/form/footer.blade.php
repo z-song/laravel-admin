@@ -9,7 +9,8 @@
 
         @if (in_array('submit', $buttons))
             <div class="btn-group pull-left">
-                <button type="submit" class="btn btn-primary" style="margin-right: 8px; padding: 6px 30px">
+                <button type="submit" class="btn btn-primary form-submit-btn"
+                    style="margin-right: 8px; padding: 6px 30px">
                     {{ trans('admin.submit') }}
                 </button>
             </div>
@@ -36,12 +37,21 @@
 
 <script>
     $(document).ready(function() {
-        $('.after-submit').on('ifToggled', function(elm) {
-            $(elm.target).parents('.box-footer').find('button[type=submit]').click();
+        $('.form-submit-btn').on('click', function(elm) {
+            $('.after-submit').iCheck('uncheck');
         });
 
+        // Set checkbox and then submit form
+        $('.after-submit').on('ifClicked', function(elm) {
+            // $(elm.target).parents('.box-footer').find('button[type=submit]').click();
+            $(elm.target).iCheck('check');
+            $(elm.target).parents('form').submit();
+        });
+
+        // Fix pjax conflicts
         $(document).on('pjax:start', function(e) {
-            $('.after-submit').unbind('ifToggled');
+            $('.after-submit').unbind('ifClicked');
+            $('.form-submit-btn').unbind('click');
         });
     })
 </script>
