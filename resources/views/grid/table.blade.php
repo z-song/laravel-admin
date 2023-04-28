@@ -1,5 +1,5 @@
 @if(isset($title))
-<div class="box-header with-border text-center no-padding">
+<div class="box-header grid-header with-border text-center no-padding">
     <h3 class="box-title"> {{ $title }}</h3>
 </div>
 @endif
