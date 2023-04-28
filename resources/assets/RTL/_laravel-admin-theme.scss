@@ -206,3 +206,23 @@ body,
 .fa-regular.form-control-feedback {
     top: 8px;
 }
+
+// Hide form-footer redirect checkboxes
+label.submit-redirect-btn {
+    span {
+        display: block;
+        text-align: center;
+    }
+
+    input {
+        display: none;
+        color: #fff !important;
+        position: absolute;
+    }
+
+    .icheckbox_flat-blue {
+        display: none;
+        color: #fff !important;
+        position: absolute;
+    }
+}
