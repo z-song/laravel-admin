@@ -77,12 +77,12 @@
 
             let dest = $(e.target).parents('tr').find('.row-action-show');
             if (dest.length > 0) {
-                dest = dest.attr('href');
-                $.pjax({
-                    url: dest,
-                    container: '#pjax-container'
-                });
+                dest.click();
             }
+        });
+
+        $(document).on('pjax:start', function(e) {
+            $(".grid-box table > tbody > tr").unbind('click');
         });
     });
 </script>
