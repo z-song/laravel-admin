@@ -161,6 +161,48 @@ body,
     }
 }
 
+#toast-container {
+    padding-top: 25px;
+
+    & > div {
+        box-shadow: 0px 3px 15px -4px #444;
+        opacity: 1;
+        border-radius: 30px;
+
+        &:hover {
+            box-shadow: 2px 2px 12px #777;
+        }
+    }
+}
+
+// Fix: Add hint to bootstrap table-responsive
+.table-responsive {
+    background: radial-gradient(
+            farthest-side at 0% 50%,
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0)
+        ),
+        radial-gradient(
+                farthest-side at 100% 50%,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0)
+            )
+            100% 0;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: 10px 100%;
+    margin-bottom: 15px;
+
+    & > .table {
+        background: linear-gradient(to right, white 30%, rgba(255, 255, 255, 0)),
+            linear-gradient(to left, white 30%, rgba(255, 255, 255, 0)) 100% 0;
+        background-size: 50px 100%;
+        background-repeat: no-repeat;
+        max-width: none;
+        margin-bottom: 0;
+    }
+}
+
 .fa-regular.form-control-feedback {
     top: 8px;
 }
