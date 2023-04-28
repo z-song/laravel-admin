@@ -75,11 +75,14 @@
         $(".grid-box table > tbody > tr").on('click', function(e) {
             if (e.target.tagName.toUpperCase() == 'A') return;
 
-            let dest = $(e.target).parents('tr').find('.row-action-show').attr('href');
-            $.pjax({
-                url: dest,
-                container: '#pjax-container'
-            });
+            let dest = $(e.target).parents('tr').find('.row-action-show');
+            if (dest.length > 0) {
+                dest = dest.attr('href');
+                $.pjax({
+                    url: dest,
+                    container: '#pjax-container'
+                });
+            }
         });
     });
 </script>
