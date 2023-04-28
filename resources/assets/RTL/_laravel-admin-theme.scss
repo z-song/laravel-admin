@@ -201,6 +201,11 @@ body,
         max-width: none;
         margin-bottom: 0;
     }
+
+    // Fix: table-hover color problem
+    .table-hover > tbody > tr:hover {
+        background-color: #b4b4b430;
+    }
 }
 
 .fa-regular.form-control-feedback {
