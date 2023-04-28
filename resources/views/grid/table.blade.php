@@ -81,6 +81,10 @@
             }
         });
 
+        $(".grid-box table > tbody > tr .row-action-show").each(function (index, elm) {
+            $(elm).parents('tr').css('cursor', 'pointer');
+        });
+
         $(document).on('pjax:start', function(e) {
             $(".grid-box table > tbody > tr").unbind('click');
         });
