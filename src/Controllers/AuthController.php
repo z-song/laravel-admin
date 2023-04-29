@@ -45,8 +45,8 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         // Prepare inputs
-        $request->merge(['mobile' => parse_numbers($request->input('mobile'))]);
         if (config('admin.auth.mode') === 'otp') {
+            $request->merge(['mobile' => parse_numbers($request->input('mobile'))]);
             $request->merge(['password' => parse_numbers($request->input('password'))]);
         }
 
