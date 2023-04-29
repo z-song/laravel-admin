@@ -73,7 +73,13 @@
 <script>
     $(document).ready(function() {
         $(".grid-box table > tbody > tr").on('click', function(e) {
-            if (e.target.tagName.toUpperCase() == 'A') return;
+            let tagName = e.target.tagName.toUpperCase();
+            if (tagName == 'A') return;
+            if ($(e.target).parentsUntil('tr').length > 0 &&
+                $(e.target).parentsUntil('tr').last()[0].tagName != 'HTML' &&
+                $(e.target).parentsUntil('tr').has('a').length > 0) {
+                return;
+            }
 
             let dest = $(e.target).parents('tr').find('.row-action-show');
             if (dest.length > 0) {
@@ -81,7 +87,7 @@
             }
         });
 
-        $(".grid-box table > tbody > tr .row-action-show").each(function (index, elm) {
+        $(".grid-box table > tbody > tr .row-action-show").each(function(index, elm) {
             $(elm).parents('tr').css('cursor', 'pointer');
         });
 
