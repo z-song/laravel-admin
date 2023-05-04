@@ -136,6 +136,13 @@ body,
     }
 }
 
+.well {
+    display: inline-block;
+    background-color: #00000024;
+    border-radius: 30px;
+    box-shadow: inset 0 3px 3px rgba(0,0,0,.05);
+}
+
 .grid-table thead th {
     white-space: nowrap;
     background-color: #fafafa;
