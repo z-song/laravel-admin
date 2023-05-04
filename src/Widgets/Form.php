@@ -76,6 +76,13 @@ class Form implements Renderable
     public $title;
 
     /**
+     * The id of form.
+     *
+     * @var string
+     */
+    public $formId;
+
+    /**
      * The description of form.
      *
      * @var string
@@ -216,8 +223,9 @@ class Form implements Renderable
      */
     protected function initFormAttributes()
     {
+        $this->formId = uniqid();
         $this->attributes = [
-            'id'             => 'widget-form-'.uniqid(),
+            'id'             => 'widget-form-'.$this->formId,
             'method'         => 'POST',
             'action'         => '',
             'class'          => 'form-horizontal',
