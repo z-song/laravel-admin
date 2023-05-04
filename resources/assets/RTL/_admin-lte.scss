@@ -18,3 +18,53 @@ body.modern-ui {
     box-shadow: 10px 10px 10px #00a65a1a;
   }
 }
+
+// Visited button identifier
+a.btn.btn-visitable:visited {
+    background-color: #81b5d4;
+    border-color: #367fa9;
+}
+
+// Disabled panel
+.panel.disabled {
+    opacity: 0.7;
+}
+
+// List logs
+ul.list-logs {
+    font-size: 12px;
+    & > li {
+        margin-bottom: 6px;
+    }
+}
+
+.list-group-item.active a {
+    color: #fff;
+
+    &:hover {
+        color: #ccc;
+    }
+}
+
+.btn-outline {
+    &.btn-primary {
+        background-color: transparent;
+        color: #0b74cd;
+        border-color: #0b74cd;
+
+        &:hover {
+            border-color: #0b74cd;
+            background-color: #0b74cd30;
+        }
+    }
+    &.btn-danger {
+        background-color: transparent;
+        color: #d73925;
+        border-color: #d73925;
+
+        &:hover {
+            border-color: #d73925;
+            background-color: #d7392530;
+        }
+    }
+}
