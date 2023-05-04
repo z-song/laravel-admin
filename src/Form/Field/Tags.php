@@ -18,6 +18,11 @@ class Tags extends Field
     /**
      * @var bool
      */
+    protected $isJson = false;
+
+    /**
+     * @var bool
+     */
     protected $keyAsValue = false;
 
     /**
@@ -66,7 +71,7 @@ class Tags extends Field
         }
 
         if (is_string($this->value)) {
-            $this->value = explode(',', $this->value);
+            $this->value = $this->isJson ? json_decode($this->value) : explode(',', $this->value);
         }
 
         $this->value = array_filter((array) $this->value, 'strlen');
@@ -88,6 +93,20 @@ class Tags extends Field
 
         $this->visibleColumn = $visibleColumn;
         $this->key = $key;
+
+        return $this;
+    }
+
+    /**
+     * Set data as JSON instead of comma-separated.
+     *
+     * @param bool $isJson
+     *
+     * @return $this
+     */
+    public function setAsJson(bool $isJson = true)
+    {
+        $this->isJson = $isJson;
 
         return $this;
     }
@@ -163,7 +182,7 @@ class Tags extends Field
         }
 
         if (is_array($value) && !Arr::isAssoc($value)) {
-            $value = implode(',', $value);
+            $value = $this->isJson ? json_encode($value) : implode(',', $value);
         }
 
         return $value;
