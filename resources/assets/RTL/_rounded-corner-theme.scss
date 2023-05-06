@@ -240,3 +240,7 @@ a.none-color {
 .nav-stacked > li.active > a:hover {
   border-radius: 25px;
 }
+
+body.modern-ui .box > :first-child {
+  border-radius: 25px 25px 0 0;
+}
