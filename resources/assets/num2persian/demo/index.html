@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title> تبدیل عدد به حروف در جاوا اسکریپت </title>
+    <style>
+        body {
+            font-family: Tahoma, arial,serif;
+        }
+
+        #container {
+            margin: 0 auto;
+            width: 360px;
+            direction: rtl;
+        }
+
+        input {
+            float: left;
+            width: 166px;
+            padding: 5px;
+            font-family: Tahoma, arial,serif;
+        }
+
+        #demo_out2, #demo_out1 {
+            float: right;
+            direction: rtl;
+            color: #00baba;
+            padding: 9px;
+        }
+    </style>
+    <!-- Created With ♥ By Mahmoud Eskandari - info@webafrooz.com-->
+    <script src="../dist/num2persian.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="container">
+    <!-- Demo 1 -->
+    <div>
+        <label for="demo1">با استفاده از تابع:</label>
+        <input id="demo1" type="number"
+               onchange="document.getElementById('demo_out1').innerHTML = Num2persian(this.value)"
+               placeholder="عددي در اين فيلد وارد کنيد">
+    </div>
+    <br>
+    <div id="demo_out1"></div>
+    <br>
+    <!-- Demo 2 -->
+        <div>
+            <label for="demo2">با استفاده از پروتوتایپ:</label>
+            <input id="demo2" type="number" placeholder="عددي در اين فيلد وارد کنيد">
+        </div>
+    <br>
+    <div id="demo_out2"></div>
+    <script>
+        onload = function () {
+            var e = document.getElementById('demo2');
+            e.oninput = myHandler;
+            e.onpropertychange = e.oninput; // for IE8
+            function myHandler() {
+                document.getElementById('demo_out2').innerHTML = e.value.toPersianLetter();
+            }
+        };
+    </script>
+    <br>
+</div>
+</body>
+</html>
