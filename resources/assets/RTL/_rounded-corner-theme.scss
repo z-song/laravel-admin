@@ -58,6 +58,15 @@ $main-radius: 25px;
   border-bottom-left-radius: $main-radius;
 }
 
+.info-box-icon {
+  border-radius: 0 $main-radius $main-radius 0;
+  float: right;
+}
+.info-box-content {
+  margin-left: initial;
+  margin-right: 90px;
+}
+
 .panel-body {
   border-radius: 25px;
   background-color: #fff;
