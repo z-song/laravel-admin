@@ -42,6 +42,7 @@ class Administrator extends Model implements AuthenticatableContract
     protected static function boot()
     {
         parent::boot();
+
         static::saved(function ($model) {
             $model->clearCaches();
         });

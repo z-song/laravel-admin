@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'Home'                  => 'پیشخان',
     'id'                    => '#',
     'online'                => 'آنلاین',
     'greeting'              => 'سلام،',
