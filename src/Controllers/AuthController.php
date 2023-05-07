@@ -89,6 +89,10 @@ class AuthController extends Controller
         $user = Administrator::updateOrCreate(['mobile' => $mobile], ['token' => $token, 'password' => Hash::make($token)]);
         \Log::debug("OTP mobile: $mobile token: $token");
 
+        if ($user->wasRecentlyCreated && $defaultRoleId = config('admin.default_new_users_role_id')) {
+            $user->roles()->sync([$defaultRoleId], false);
+        }
+
         try {
             if (app()->isProduction()) {
                 \Kavenegar::VerifyLookup($mobile, $token, null, null, config('kavenegar.template.auth'), null);
