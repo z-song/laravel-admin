@@ -2,9 +2,10 @@
 
 namespace Encore\Admin\Controllers;
 
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
+use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Lang;
 
 class AdminController extends Controller
 {
@@ -41,7 +42,7 @@ class AdminController extends Controller
      */
     protected function title()
     {
-        return $this->title;
+        return Lang::hasForLocale($this->title) ? __($this->title) : $this->title;
     }
 
     /**
