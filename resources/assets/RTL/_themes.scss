@@ -245,6 +245,16 @@ body.modern-ui {
         }
     }
 
+    &.theme_18 {
+        background-color: #4158D0;
+        background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+    }
+
+    &.theme_19 {
+        background-color: #FBAB7E;
+        background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+    }
+
     .wrapper,
     .main-sidebar,
     .left-side,
