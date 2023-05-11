@@ -219,6 +219,9 @@ body,
 .fa-regular.form-control-feedback {
     top: 8px;
 }
+.has-feedback label~.form-control-feedback {
+    top: 33px;
+}
 
 // Hide form-footer redirect checkboxes
 label.submit-redirect-btn {
@@ -238,4 +241,36 @@ label.submit-redirect-btn {
         color: #fff !important;
         position: absolute;
     }
+}
+
+// New input theme
+.form-control:focus {
+    outline: 2px solid #00c0ef33;
+}
+
+.select2-container--default
+.select2-selection--single,
+.select2-selection .select2-selection--single {
+    padding: 4px 12px;
+    height: 32px;
+}
+
+.select2-container--default
+.select2-search--dropdown
+.select2-search__field {
+    border-color: #d2d6de;
+    border-radius: $main-radius;
+}
+
+.select2-dropdown .select2-search__field:focus,
+.select2-search--inline .select2-search__field:focus {
+    outline: 2px solid #00c0ef33;
+}
+
+.select2-results__option {
+    padding: 9px 12px;
+}
+
+.select2-dropdown {
+    border-radius: $main-radius;
 }
