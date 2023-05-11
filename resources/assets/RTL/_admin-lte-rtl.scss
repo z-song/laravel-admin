@@ -263,25 +263,14 @@ body {
             border-right-color: #00a65a;
         }
     }
+
+    // Fix: table-hover color problem
+    .table-hover > tbody > tr:hover {
+        background-color: rgb(96 203 90 / 19%);
+    }
 }
 
 .skin-blue {
-    .main-header {
-        .navbar {
-            background-color: #3c8dbc;
-
-            .nav > li > a {
-                color: #fff;
-            }
-        }
-
-        .logo {
-            background-color: #367fa9;
-            color: #fff;
-            border-bottom: none;
-        }
-    }
-
     .sidebar-menu > li {
         & > a {
             border-left: none;
@@ -292,6 +281,11 @@ body {
         &.active > a {
             border-right-color: #3c8dbc;
         }
+    }
+
+    // Fix: table-hover color problem
+    .table-hover > tbody > tr:hover {
+        background-color: rgb(132 181 252 / 19%);
     }
 }
 
