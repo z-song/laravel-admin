@@ -98,6 +98,13 @@ body,
     }
 }
 
+.modern-ui .sidebar-menu>li.header {
+    background-color: transparent;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    padding-right: 20px;
+}
+
 .sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     @media (min-width: 768px) {
         box-shadow: -2px 2px 5px #ccc;

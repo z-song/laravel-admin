@@ -78,6 +78,7 @@ body {
         margin-right: 0;
         margin-left: 10px;
         max-height: 1em;
+        transition: transform .3s ease;
 
         &:before {
             content: "\f105";
@@ -266,7 +267,7 @@ body {
 
     // Fix: table-hover color problem
     .table-hover > tbody > tr:hover {
-        background-color: rgb(96 203 90 / 19%);
+        background-color: #00a65a1c;
     }
 }
 
