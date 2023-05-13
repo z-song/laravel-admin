@@ -33,7 +33,7 @@ class Footer implements Renderable
      *
      * @var array
      */
-    protected $checkboxes = ['continue_creating', 'view'];
+    protected $checkboxes = ['continue_creating'];
 
     /**
      * @var string
