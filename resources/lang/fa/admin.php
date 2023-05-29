@@ -29,7 +29,7 @@ return [
     'delete'                => 'حذف کردن',
     'remove'                => 'پاک کردن',
     'edit'                  => 'ویرایش کردن',
-    'view'                  => 'ثبت و نمایش',
+    'view'                  => 'نمایش',
     'continue_editing'      => 'ثبت و ویرایش',
     'continue_creating'     => 'ثبت و جدید',
     'detail'                => 'جزئیات',
