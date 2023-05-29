@@ -3,9 +3,20 @@
 namespace Encore\Admin\Auth\Database;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 trait HasPermissions
 {
+    protected function clearHasPermissionsCaches()
+    {
+        Cache::forget($this->getAllPermissionsCacheKey());
+    }
+
+    protected function getAllPermissionsCacheKey(): string
+    {
+        return $this->getGeneralCacheKey() . '.all-permissions';
+    }
+
     /**
      * Get all permissions of user.
      *
@@ -13,7 +24,9 @@ trait HasPermissions
      */
     public function allPermissions(): Collection
     {
-        return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->merge($this->permissions);
+        return Cache::remember($this->getAllPermissionsCacheKey(), now()->addHour(), function () {
+            return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->merge($this->permissions);
+        });
     }
 
     /**
@@ -39,6 +52,25 @@ trait HasPermissions
         }
 
         return $this->roles->pluck('permissions')->flatten()->pluck('slug')->contains($ability);
+    }
+
+    /**
+     * Check if user has any of permissions.
+     *
+     * @param array $abilities
+     * @param array $arguments
+     *
+     * @return bool
+     */
+    public function canAny(array $abilities, $arguments = []): bool
+    {
+        foreach ($abilities as $ability) {
+            if ($this->can($ability)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

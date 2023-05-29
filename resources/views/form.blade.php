@@ -1,4 +1,4 @@
-<div class="box box-info">
+<div class="box">
     <div class="box-header with-border">
         <h3 class="box-title">{{ $form->title() }}</h3>
 
@@ -42,7 +42,7 @@
         {!! $field->render() !!}
     @endforeach
 
-<!-- /.box-footer -->
+    <!-- /.box-footer -->
     {!! $form->close() !!}
 </div>
 

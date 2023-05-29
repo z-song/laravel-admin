@@ -44,7 +44,7 @@ Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {
     <div class="input-group input-group-sm ">
         <input type="text" name="title" class="form-control" placeholder="Search...">
         <span class="input-group-btn">
-            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa-solid fa-search"></i></button>
           </span>
     </div>
 </form>
@@ -70,21 +70,21 @@ class Links
 
 <li>
     <a href="#">
-      <i class="fa fa-envelope-o"></i>
+      <i class="fa-solid fa-envelope-o"></i>
       <span class="label label-success">4</span>
     </a>
 </li>
 
 <li>
     <a href="#">
-      <i class="fa fa-bell-o"></i>
+      <i class="fa-solid fa-bell-o"></i>
       <span class="label label-warning">7</span>
     </a>
 </li>
 
 <li>
     <a href="#">
-      <i class="fa fa-flag-o"></i>
+      <i class="fa-solid fa-flag-o"></i>
       <span class="label label-danger">9</span>
     </a>
 </li>
@@ -103,7 +103,7 @@ $navbar->right(new \App\Admin\Extensions\Nav\Links());
 ```html
 <li class="dropdown notifications-menu">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-  <i class="fa fa-bell-o"></i>
+  <i class="fa-solid fa-bell-o"></i>
   <span class="label label-warning">10</span>
 </a>
 <ul class="dropdown-menu">
@@ -113,29 +113,29 @@ $navbar->right(new \App\Admin\Extensions\Nav\Links());
     <ul class="menu">
       <li>
         <a href="#">
-          <i class="fa fa-users text-aqua"></i> 5 new members joined today
+          <i class="fa-solid fa-users text-aqua"></i> 5 new members joined today
         </a>
       </li>
       <li>
         <a href="#">
-          <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
+          <i class="fa-solid fa-warning text-yellow"></i> Very long description here that may not fit into the
           page and may cause design problems
         </a>
       </li>
       <li>
         <a href="#">
-          <i class="fa fa-users text-red"></i> 5 new members joined
+          <i class="fa-solid fa-users text-red"></i> 5 new members joined
         </a>
       </li>
 
       <li>
         <a href="#">
-          <i class="fa fa-shopping-cart text-green"></i> 25 sales made
+          <i class="fa-solid fa-shopping-cart text-green"></i> 25 sales made
         </a>
       </li>
       <li>
         <a href="#">
-          <i class="fa fa-user text-red"></i> You changed your username
+          <i class="fa-solid fa-user text-red"></i> You changed your username
         </a>
       </li>
     </ul>

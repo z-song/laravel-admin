@@ -40,7 +40,7 @@ class Box extends Widget implements Renderable
      * Box constructor.
      *
      * @param string $title
-     * @param string $content
+     * @param string|Renderable $content
      */
     public function __construct($title = '', $content = '', $footer = '')
     {
@@ -117,7 +117,7 @@ class Box extends Widget implements Renderable
     public function collapsable()
     {
         $this->tools[] =
-            '<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>';
+            '<button class="btn btn-box-tool" data-widget="collapse"><i class="fa-regular fa-minus"></i></button>';
 
         return $this;
     }
@@ -150,7 +150,7 @@ SCRIPT;
     public function removable()
     {
         $this->tools[] =
-            '<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>';
+            '<button class="btn btn-box-tool" data-widget="remove"><i class="fa-regular fa-times"></i></button>';
 
         return $this;
     }
@@ -158,7 +158,7 @@ SCRIPT;
     /**
      * Set box style.
      *
-     * @param string $styles
+     * @param string|array<string> $styles
      *
      * @return $this|Box
      */

@@ -27,10 +27,10 @@
 $grid->actions(function ($actions) {
     
     // append一个操作
-    $actions->append('<a href=""><i class="fa fa-eye"></i></a>');
+    $actions->append('<a href=""><i class="fa-solid fa-eye"></i></a>');
 
     // prepend一个操作
-    $actions->prepend('<a href=""><i class="fa fa-paper-plane"></i></a>');
+    $actions->prepend('<a href=""><i class="fa-solid fa-paper-plane"></i></a>');
 }
 ```
 
@@ -72,7 +72,7 @@ SCRIPT;
     {
         Admin::script($this->script());
 
-        return "<a class='btn btn-xs btn-success fa fa-check grid-check-row' data-id='{$this->id}'></a>";
+        return "<a class='btn btn-xs btn-success fa-solid fa-check grid-check-row' data-id='{$this->id}'></a>";
     }
     
     public function __toString()

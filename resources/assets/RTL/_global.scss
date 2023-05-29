@@ -1,0 +1,42 @@
+// English text
+.en {
+  font-family: Helvetica, Arial, serif;
+  direction: ltr;
+}
+
+// Required label
+.control-label.required:after {
+  content: "\2a";
+  color: #ff2700;
+}
+
+// no-wrap tables
+.table.table-no-wrap td {
+  white-space: nowrap;
+}
+
+.marquee {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  p {
+    display: inline-block;
+    margin: 0;
+    animation: marquee 45s linear infinite;
+
+    & > span {
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+  }
+}
+@keyframes marquee {
+  0% {
+    transform: translate(-100%, 0);
+  }
+  100% {
+    transform: translate(100%, 0);
+  }
+}

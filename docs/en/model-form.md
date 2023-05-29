@@ -75,7 +75,7 @@ $form->tools(function (Form\Tools $tools) {
     $tools->disableListButton();
 
     // Add a button, the argument can be a string, or an instance of the object that implements the Renderable or Htmlable interface
-    $tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
+    $tools->add('<a class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>&nbsp;&nbsp;delete</a>');
 });
 ```
 

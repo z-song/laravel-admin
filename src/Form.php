@@ -18,12 +18,12 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
+use ReflectionMethod;
 use Spatie\EloquentSortable\Sortable;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -484,6 +484,12 @@ class Form implements Renderable
                 method_exists($this->model, $column = Str::camel($column))) &&
                 !method_exists(Model::class, $column)
             ) {
+                // Prevent accessors conflict with relations
+                $methodName = method_exists($this->model, $column) ? $column : Str::camel($column);
+                if (!(new ReflectionMethod($this->model, $methodName))?->isPublic()) {
+                    continue;
+                }
+
                 $relation = call_user_func([$this->model, $column]);
 
                 if ($relation instanceof Relations\Relation) {
@@ -513,7 +519,7 @@ class Form implements Renderable
             return $data;
         }
 
-        /* @var Model $this ->model */
+        /* @var Model $this->model */
         $builder = $this->model();
 
         if ($this->isSoftDeletes) {
@@ -541,7 +547,7 @@ class Form implements Renderable
             $updates = $this->prepareUpdate($this->updates);
 
             foreach ($updates as $column => $value) {
-                /* @var Model $this ->model */
+                /* @var Model $this->model */
                 $this->model->setAttribute($column, $value);
             }
 
@@ -1263,7 +1269,7 @@ class Form implements Renderable
      * @param string $message
      * @param string $on
      *
-     * @return $this
+     * @return $this|void
      */
     public function confirm(string $message, $on = null)
     {
@@ -1311,7 +1317,7 @@ class Form implements Renderable
     /**
      * @param Closure|null $callback
      *
-     * @return Form\Tools
+     * @return Form\Tools|void
      */
     public function header(Closure $callback = null)
     {
@@ -1421,7 +1427,7 @@ class Form implements Renderable
      *
      * @param Closure $callback
      *
-     * @return \Encore\Admin\Form\Footer
+     * @return \Encore\Admin\Form\Footer|void
      */
     public function footer(Closure $callback = null)
     {
@@ -1489,7 +1495,7 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function column($width, \Closure $closure): self
+    public function column($width, Closure $closure): self
     {
         $width = $width < 1 ? round(12 * $width) : $width;
 

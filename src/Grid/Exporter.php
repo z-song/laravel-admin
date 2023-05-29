@@ -45,6 +45,9 @@ class Exporter
      */
     public function __construct(Grid $grid)
     {
+        ini_set('memory_limit', '900M');
+        ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
+
         $this->grid = $grid;
 
         $this->grid->model()->usePaginate(false);

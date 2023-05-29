@@ -6,6 +6,7 @@ use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Encore\Admin\Traits\ModelTree;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -67,7 +68,7 @@ class Menu extends Model
         $connection = config('admin.database.connection') ?: config('database.default');
         $orderColumn = DB::connection($connection)->getQueryGrammar()->wrap($this->orderColumn);
 
-        $byOrder = 'ROOT ASC,'.$orderColumn;
+        $byOrder = 'ROOT ASC,' . $orderColumn;
 
         $query = static::query();
 
@@ -75,7 +76,11 @@ class Menu extends Model
             $query->with('roles');
         }
 
-        return $query->selectRaw('*, '.$orderColumn.' ROOT')->orderByRaw($byOrder)->get()->toArray();
+        return Cache::remember(
+            'laravel-admin.menu.all-nodes',
+            now()->addHour(),
+            fn () => $query->selectRaw('*, ' . $orderColumn . ' ROOT')->orderByRaw($byOrder)->get()->toArray()
+        );
     }
 
     /**
@@ -99,6 +104,10 @@ class Menu extends Model
 
         static::deleting(function ($model) {
             $model->roles()->detach();
+        });
+
+        static::saved(function ($model) {
+            Cache::forget('laravel-admin.menu.all-nodes');
         });
     }
 }

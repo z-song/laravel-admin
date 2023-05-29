@@ -2,9 +2,11 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -42,6 +44,12 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
+        // Prepare inputs
+        if (config('admin.auth.mode') === 'otp') {
+            $request->merge(['mobile' => parse_numbers($request->input('mobile'))]);
+            $request->merge(['password' => parse_numbers($request->input('password'))]);
+        }
+
         $this->loginValidator($request->all())->validate();
 
         $credentials = $request->only([$this->username(), 'password']);
@@ -51,9 +59,50 @@ class AuthController extends Controller
             return $this->sendLoginResponse($request);
         }
 
-        return back()->withInput()->withErrors([
+        $sessionData = [];
+        if (config('admin.auth.mode') === 'otp') {
+            $sessionData['mobile'] = $request->input('mobile');
+        }
+
+        return back()->with($sessionData)->withInput()->withErrors([
             $this->username() => $this->getFailedLoginMessage(),
         ]);
+    }
+
+    /**
+     * Handle an OTP(SMS-token) request.
+     *
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function reqOtp(Request $request)
+    {
+        $request->merge(['mobile' => parse_numbers($request->input('mobile'))]);
+        $request->validate([
+            'mobile' => 'required|ir_mobile:zero'
+        ]);
+
+        // TODO: Send SMS
+        $mobile = $request->input('mobile');
+        $token = rand(10000, 99999);
+        $user = Administrator::updateOrCreate(['mobile' => $mobile], ['token' => $token, 'password' => Hash::make($token)]);
+        \Log::debug("OTP mobile: $mobile token: $token");
+
+        if ($user->wasRecentlyCreated && $defaultRoleId = config('admin.default_new_users_role_id')) {
+            $user->roles()->sync([$defaultRoleId], false);
+        }
+
+        try {
+            if (app()->isProduction()) {
+                \Kavenegar::VerifyLookup($mobile, $token, null, null, config('kavenegar.template.auth'), null);
+            }
+        } catch (Exception $e) {
+            \Log::error('Login error. ' . $e->getMessage());
+            return back()->withInput()->withErrors(['mobile' => 'خطا در ارسال پیامک!']);
+        }
+
+        return back()->with('mobile', $mobile);
     }
 
     /**
@@ -204,7 +253,7 @@ class AuthController extends Controller
      */
     protected function username()
     {
-        return 'username';
+        return config('admin.auth.mode') === 'otp' ? 'mobile' : 'username';
     }
 
     /**

@@ -1,0 +1,27 @@
+{
+  "name": "num2persian",
+  "description": "Number to Persian letter",
+  "main": "dist/num2persian-min.js",
+  "authors": [
+    "Mahmoud Eskandari"
+  ],
+  "license": "GPL-2.0",
+  "keywords": [
+    "number",
+    "to",
+    "letter",
+    "persian",
+    "digits",
+    "to",
+    "letters",
+    "iranian"
+  ],
+  "homepage": "https://github.com/mahmoud-eskandari/NumToPersian",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -26,10 +26,10 @@ If you have a custom action button, you can add the following:
 $grid->actions(function ($actions) {
     
     // append an action.
-    $actions->append('<a href=""><i class="fa fa-eye"></i></a>');
+    $actions->append('<a href=""><i class="fa-solid fa-eye"></i></a>');
 
     // prepend an action.
-    $actions->prepend('<a href=""><i class="fa fa-paper-plane"></i></a>');
+    $actions->prepend('<a href=""><i class="fa-solid fa-paper-plane"></i></a>');
 }
 ```
 
@@ -70,7 +70,7 @@ SCRIPT;
     {
         Admin::script($this->script());
 
-        return "<a class='btn btn-xs btn-success fa fa-check grid-check-row' data-id='{$this->id}'></a>";
+        return "<a class='btn btn-xs btn-success fa-solid fa-check grid-check-row' data-id='{$this->id}'></a>";
     }
     
     public function __toString()

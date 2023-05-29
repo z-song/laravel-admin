@@ -16,10 +16,12 @@ $.fn.editable.defaults.error = function (data) {
 };
 
 toastr.options = {
-    closeButton: true,
+    closeButton: false,
     progressBar: true,
     showMethod: 'slideDown',
-    timeOut: 4000
+    timeOut: 4000,
+    rtl: true,
+    positionClass: 'toast-top-center'
 };
 
 $.pjax.defaults.timeout = 5000;
@@ -66,6 +68,11 @@ $(document).on('pjax:complete', function (xhr) {
     }
     NProgress.done();
     $.admin.grid.selects = {};
+});
+
+$(document).on('pjax:start', function () {
+    // To close all open select2
+    $('body').trigger('mousedown');
 });
 
 $(document).click(function () {

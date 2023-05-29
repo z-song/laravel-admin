@@ -43,7 +43,7 @@
                         @if($options['allowDelete'])
                             <td class="form-group">
                                 <div>
-                                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
+                                    <div class="remove btn btn-warning btn-sm pull-right"><i class="fa-regular fa-trash"> </i>{{ trans('admin.remove') }}</div>
                                 </div>
                             </td>
                         @endif
@@ -59,7 +59,7 @@
 
                     <td class="form-group">
                         <div>
-                            <div class="remove btn btn-warning btn-sm pull-right"><i class="fa fa-trash">&nbsp;</i>{{ trans('admin.remove') }}</div>
+                            <div class="remove btn btn-warning btn-sm pull-right"><i class="fa-regular fa-trash"> </i>{{ trans('admin.remove') }}</div>
                         </div>
                     </td>
                 </tr>
@@ -68,7 +68,7 @@
             @if($options['allowCreate'])
                 <div class="form-group">
                     <div class="{{$viewClass['field']}}">
-                        <div class="add btn btn-success btn-sm"><i class="fa fa-save"></i>&nbsp;{{ trans('admin.new') }}</div>
+                        <div class="add btn btn-success btn-sm"><i class="fa-regular fa-add"></i> {{ trans('admin.new') }}</div>
                     </div>
                 </div>
             @endif

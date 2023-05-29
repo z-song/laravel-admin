@@ -4,7 +4,7 @@ namespace Encore\Admin\Grid\Displayers;
 
 class Suffix extends AbstractDisplayer
 {
-    public function display($suffix = null, $delimiter = '&nbsp;')
+    public function display($suffix = null, $delimiter = '')
     {
         if ($suffix instanceof \Closure) {
             $suffix = $suffix->call($this->row, $this->getValue());

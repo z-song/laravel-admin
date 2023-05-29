@@ -42,7 +42,7 @@ ul.image {
     padding-right: 15px;
 }
 
-.image .iradio_minimal-blue,.image .icheckbox_minimal-blue {
+.image .iradio_minimal-blue,.image .icheckbox_flat-blue {
     position: absolute;
     bottom: 5px;
     right: 1px;

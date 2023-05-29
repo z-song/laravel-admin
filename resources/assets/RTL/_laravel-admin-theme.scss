@@ -1,0 +1,278 @@
+body,
+.login-page,
+.register-page {
+    background-color: #ecf0f4;
+}
+
+.login-page,
+.register-page {
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .login-box {
+        margin: 0;
+
+        h1 {
+            font-weight: bolder;
+        }
+        .login-box-msg {
+            text-align: initial;
+        }
+    }
+}
+
+.main-header .logo {
+    font-family: inherit;
+}
+
+.main-header #navbar-search-input.form-control {
+    border-radius: 17px;
+    background-color: #fff;
+    box-shadow: 1px 1px 5px rgba(119, 119, 119, 0.35);
+}
+
+.content-header > h1 {
+    font-weight: bolder;
+}
+
+section.content {
+    @media (min-width: 992px) {
+        padding: 30px;
+    }
+}
+
+.main-footer {
+    background: none;
+    border: none;
+}
+
+.login-box-body,
+.register-box-body,
+.box,
+.small-box,
+.info-box,
+.panel {
+    box-shadow: 10px 10px 10px rgba($color: #000000, $alpha: 0.1);
+    border-radius: 7px;
+
+    .panel-heading {
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+
+    .panel-footer {
+        border-bottom-right-radius: 7px;
+        border-bottom-left-radius: 7px;
+    }
+}
+
+.box {
+    border-top-color: transparent;
+}
+
+.info-box-icon {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+.box-footer {
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    background-color: transparent;
+}
+
+.sidebar-menu .treeview-menu {
+    padding-left: 0;
+
+    & > li {
+        padding-left: 0;
+
+        & > a {
+            padding: 10px 15px 10px 5px;
+            min-width: 100%;
+        }
+    }
+}
+
+.modern-ui .sidebar-menu>li.header {
+    background-color: transparent;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    padding-right: 20px;
+}
+
+.sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
+    @media (min-width: 768px) {
+        box-shadow: -2px 2px 5px #ccc;
+    }
+}
+
+.small-box {
+    overflow: hidden;
+}
+
+.small-box > .small-box-footer {
+    background: none;
+}
+
+.iconpicker .iconpicker-item {
+    width: 28px;
+    height: 28px;
+    font-size: 28px;
+    padding: 13px;
+}
+
+.btn > svg {
+    margin-left: 5px;
+}
+
+.btn {
+    font-weight: 700;
+}
+
+.btn.btn-outline {
+    color: #495057;
+    border-color: rgb(206, 212, 218);
+
+    &:hover {
+        border-color: #3c8dbb;
+    }
+}
+
+.well {
+    display: inline-block;
+    background-color: #00000024;
+    border-radius: 30px;
+    box-shadow: inset 0 3px 3px rgba(0,0,0,.05);
+}
+
+.grid-table thead th {
+    white-space: nowrap;
+    background-color: #fafafa;
+}
+
+#totop {
+    border-radius: 50%;
+    border: none;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+    box-shadow: 0 0 5px #c2c9cf;
+    color: #969fa7;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+
+    &:hover {
+        box-shadow: inset 0px 3px 5px rgba(0, 0, 0, 0.2), 0 0 5px #c2c9cf;
+    }
+
+    &:active {
+        box-shadow: inset 0px 5px 7px rgba(0, 0, 0, 0.3), 0 0 5px #c2c9cf;
+    }
+}
+
+#toast-container {
+    padding-top: 25px;
+
+    & > div {
+        box-shadow: 0px 3px 15px -4px #444;
+        opacity: 1;
+        border-radius: 30px;
+
+        &:hover {
+            box-shadow: 2px 2px 12px #777;
+        }
+    }
+}
+
+// Fix: Add hint to bootstrap table-responsive
+.table-responsive {
+    background: radial-gradient(
+            farthest-side at 0% 50%,
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0)
+        ),
+        radial-gradient(
+                farthest-side at 100% 50%,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0)
+            )
+            100% 0;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: 10px 100%;
+    margin-bottom: 15px;
+
+    & > .table {
+        background: linear-gradient(to right, white 30%, rgba(255, 255, 255, 0)),
+            linear-gradient(to left, white 30%, rgba(255, 255, 255, 0)) 100% 0;
+        background-size: 50px 100%;
+        background-repeat: no-repeat;
+        max-width: none;
+        margin-bottom: 0;
+    }
+}
+
+.fa-regular.form-control-feedback {
+    top: 8px;
+}
+.has-feedback label~.form-control-feedback {
+    top: 33px;
+}
+
+// Hide form-footer redirect checkboxes
+label.submit-redirect-btn {
+    span {
+        display: block;
+        text-align: center;
+    }
+
+    input {
+        display: none;
+        color: #fff !important;
+        position: absolute;
+    }
+
+    .icheckbox_flat-blue {
+        display: none;
+        color: #fff !important;
+        position: absolute;
+    }
+}
+
+// New input theme
+.form-control:focus {
+    outline: 2px solid #00c0ef33;
+}
+
+.select2-container--default
+.select2-selection--single,
+.select2-selection .select2-selection--single {
+    padding: 4px 12px;
+    height: 32px;
+}
+
+.select2-container--default
+.select2-search--dropdown
+.select2-search__field {
+    border-color: #d2d6de;
+    border-radius: $main-radius;
+}
+
+.select2-dropdown .select2-search__field:focus,
+.select2-search--inline .select2-search__field:focus {
+    outline: 2px solid #00c0ef33;
+}
+
+.select2-results__option {
+    padding: 9px 12px;
+}
+
+.select2-dropdown {
+    border-radius: $main-radius;
+}

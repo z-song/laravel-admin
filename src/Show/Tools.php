@@ -190,8 +190,8 @@ class Tools implements Renderable
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="{$list}">
-        <i class="fa fa-list"></i><span class="hidden-xs"> {$list}</span>
+    <a href="{$this->getListPath()}" class="btn btn-sm btn-outline" title="{$list}">
+        <i class="fa-regular fa-list"></i><span class="hidden-xs"> {$list}</span>
     </a>
 </div>
 HTML;
@@ -209,7 +209,7 @@ HTML;
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
     <a href="{$this->getEditPath()}" class="btn btn-sm btn-primary" title="{$edit}">
-        <i class="fa fa-edit"></i><span class="hidden-xs"> {$edit}</span>
+        <i class="fa-regular fa-edit"></i><span class="hidden-xs"> {$edit}</span>
     </a>
 </div>
 HTML;
@@ -227,6 +227,7 @@ HTML;
             'confirm'        => trans('admin.confirm'),
             'cancel'         => trans('admin.cancel'),
             'delete'         => trans('admin.delete'),
+            'ok'             => trans('admin.ok'),
         ];
 
         $class = uniqid();
@@ -264,9 +265,9 @@ $('.{$class}-delete').unbind('click').click(function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'success'});
             } else {
-                swal(data.message, '', 'error');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'error'});
             }
         }
     });
@@ -278,7 +279,7 @@ SCRIPT;
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
     <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$trans['delete']}">
-        <i class="fa fa-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
+        <i class="fa-regular fa-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
     </a>
 </div>
 HTML;

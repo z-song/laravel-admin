@@ -120,7 +120,7 @@ $('{$this->getElementClass()}').on('click', function() {
         url: '{$this->resource}/release',
         data: {
             _token:LA.token,
-            ids: selectedRows(),
+            ids: $.admin.grid.selected().join(),
             action: {$this->action}
         },
         success: function () {

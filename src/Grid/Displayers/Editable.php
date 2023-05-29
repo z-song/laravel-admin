@@ -25,7 +25,7 @@ class Editable extends AbstractDisplayer
      * @var array
      */
     protected $options = [
-        'emptytext'  => '<i class="fa fa-pencil"></i>',
+        'emptytext'  => '<i class="fa-regular fa-pencil"></i>',
     ];
 
     /**
@@ -64,6 +64,13 @@ class Editable extends AbstractDisplayer
      * Textarea type editable.
      */
     public function textarea()
+    {
+    }
+
+    /**
+     * Number type editable
+     */
+    public function number()
     {
     }
 
@@ -217,7 +224,16 @@ STR;
             return "$name='$attribute'";
         })->implode(' ');
 
-        $html = $this->type === 'select' ? '' : $this->value;
+        switch ($this->type) {
+            case 'select':
+                $html = '';
+                break;
+            case 'number':
+                $html = number_format($this->value);
+                break;
+            default:
+                $html = $this->value;
+        }
 
         return "<a $attributes>{$html}</a>";
     }

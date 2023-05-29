@@ -81,7 +81,7 @@ class Tree implements Renderable
      *
      * @param Model|null $model
      */
-    public function __construct(Model $model = null, \Closure $callback = null)
+    public function __construct(Model $model = null, Closure $callback = null)
     {
         $this->model = $model;
 
@@ -90,7 +90,7 @@ class Tree implements Renderable
 
         $this->setupTools();
 
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             call_user_func($callback, $this);
         }
 
@@ -129,7 +129,7 @@ class Tree implements Renderable
      *
      * @return $this
      */
-    public function branch(\Closure $branchCallback)
+    public function branch(Closure $branchCallback)
     {
         $this->branchCallback = $branchCallback;
 
@@ -139,9 +139,9 @@ class Tree implements Renderable
     /**
      * Set query callback this tree.
      *
-     * @return Model
+     * @return Tree
      */
-    public function query(\Closure $callback)
+    public function query(Closure $callback)
     {
         $this->queryCallback = $callback;
 
@@ -226,6 +226,7 @@ class Tree implements Renderable
             'delete_succeeded'  => str_replace("'", "\'", trans('admin.delete_succeeded')),
             'confirm'           => str_replace("'", "\'", trans('admin.confirm')),
             'cancel'            => str_replace("'", "\'", trans('admin.cancel')),
+            'ok'                => str_replace("'", "\'", trans('admin.ok')),
         ];
 
         $nestableOptions = json_encode($this->nestableOptions);
@@ -267,9 +268,9 @@ class Tree implements Renderable
                 var data = result.value;
                 if (typeof data === 'object') {
                     if (data.status) {
-                        swal(data.message, '', 'success');
+                        swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'success'});
                     } else {
-                        swal(data.message, '', 'error');
+                        swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'error'});
                     }
                 }
             });

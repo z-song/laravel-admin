@@ -3,7 +3,7 @@
     <div class="col-sm-8" >
         <div class="input-group input-group-sm">
             <div class="input-group-addon">
-                <i class="fa fa-calendar"></i>
+                <i class="fa-regular fa-calendar"></i>
             </div>
             <input type="text"
                    class="form-control"

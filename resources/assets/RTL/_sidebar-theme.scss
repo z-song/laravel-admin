@@ -1,0 +1,179 @@
+$sidebar-item-radius: 20px;
+
+body.modern-ui {
+    .main-header {
+        backdrop-filter: blur(10px);
+    }
+
+    .main-header > nav.navbar {
+        background: transparent;
+
+        .navbar-nav.nav > li > a,
+        a.sidebar-toggle,
+        a {
+            color: #444;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 3em;
+
+            &:hover {
+                background-color: rgba($color: #000000, $alpha: 0.1);
+                color: inherit;
+            }
+        }
+    }
+
+    .navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+        max-height: 250px;
+        overflow-y: auto;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 30px 30px;
+        background-color: #ffffffcc;
+
+        & > li > a {
+            margin: 0;
+        }
+
+        & > li.active > a {
+            color: #fff;
+        }
+    }
+
+    .main-header .logo {
+        background-color: transparent;
+        color: #444;
+        text-shadow: 2px 2px 5px #ccc;
+
+        &:hover {
+            background-color: inherit;
+            color: #000;
+            text-shadow: 2px 2px 10px;
+        }
+    }
+
+    .wrapper,
+    .main-sidebar,
+    .left-side {
+        background-color: #ecf0f4;
+    }
+
+    .sidebar {
+        .sidebar-form {
+            border-radius: 50px;
+            border: 1px solid #cbcccd;
+
+            input {
+                border-radius: 0 50px 50px 0;
+                background-color: #fff;
+            }
+            .btn {
+                border-radius: 50px 0 0 50px;
+                background-color: #fff;
+            }
+        }
+        a {
+            color: #444;
+        }
+        .user-panel > .info,
+        .user-panel > .info > a {
+            color: #333;
+        }
+    }
+
+    .sidebar-menu > li:hover > a,
+    .sidebar-menu > li.active > a {
+        color: inherit;
+        background: #cfd4d9;
+        border-radius: 50px 0 0 50px;
+    }
+
+    .sidebar-menu li.treeview {
+        & > .treeview-menu {
+            background: #cfd4d9;
+            border-radius: 0 0 0 $sidebar-item-radius;
+            margin: 0;
+
+            & > li:last-child > a {
+                border-radius: 0 0 0 $sidebar-item-radius;
+            }
+
+            & > li.active > a,
+            & > li > a:hover {
+                background-color: #8997a5;
+            }
+        }
+
+        &.active > a {
+            border-radius: $sidebar-item-radius 0 0 0;
+        }
+    }
+
+    @media (max-width: 767px) {
+        &.fixed {
+            &.sidebar-open {
+                .main-header > nav.navbar {
+                    a.sidebar-toggle {
+                        color: #fff;
+                    }
+                }
+            }
+
+            .content-wrapper {
+                padding-top: 100px;
+            }
+        }
+    }
+}
+
+.main-sidebar {
+    .user-panel {
+        .image {
+            float: none !important;
+            text-align: center;
+
+            & > img.img-circle {
+                max-width: 160px;
+                border: 5px solid #fff;
+                box-shadow: 0 0 5px #ccc;
+            }
+        }
+        .info {
+            float: none !important;
+            position: initial;
+            padding: 15px;
+            text-align: center;
+
+            & > a {
+                padding-right: 0;
+                margin-right: -5px;
+            }
+        }
+    }
+
+    .sidebar-menu {
+        overflow: visible;
+
+        & > li {
+            margin: 0.8em 0;
+
+            &.header:first-child {
+                display: none;
+            }
+        }
+    }
+}
+
+body.sidebar-mini .main-sidebar .user-panel .image > img.img-circle {
+    border-width: 2px;
+}
+
+///////// FIX SlimScroll requirement /////////////
+aside.main-sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    direction: ltr;
+
+    & > section.sidebar {
+        direction: rtl;
+    }
+}

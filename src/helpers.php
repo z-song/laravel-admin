@@ -72,7 +72,7 @@ if (!function_exists('admin_toastr')) {
      * @param string $type
      * @param array  $options
      */
-    function admin_toastr($message = '', $type = 'success', $options = [])
+    function admin_toastr($message = '', $type = 'success', $options = ['positionClass' => 'toast-top-center'])
     {
         $toastr = new MessageBag(get_defined_vars());
 
@@ -325,5 +325,22 @@ if (!function_exists('admin_get_route')) {
     function admin_get_route(string $name): string
     {
         return config('admin.route.prefix').'.'.$name;
+    }
+}
+
+if (!function_exists('parse_numbers')) {
+    /**
+     * Convert Persian and Arabic numbers of given text to English
+     *
+     * @param string $text
+     * @return string
+     */
+    function parse_numbers(string $text): string
+    {
+        $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        $arabic = ['٩', '٨', '٧', '٦', '٥', '٤', '٣', '٢', '١', '٠'];
+        $num = range(0, 9);
+        $convertedPersianNumbers = str_replace($persian, $num, $text);
+        return str_replace($arabic, $num, $convertedPersianNumbers);
     }
 }

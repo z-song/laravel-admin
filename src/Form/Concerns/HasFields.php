@@ -25,7 +25,9 @@ use Illuminate\Support\Arr;
  * @method Field\Mobile         mobile($column, $label = '')
  * @method Field\Slider         slider($column, $label = '')
  * @method Field\File           file($column, $label = '')
+ * @method Field\FilePond       filepond($column, $label = '')
  * @method Field\Image          image($column, $label = '')
+ * @method Field\JalaliDate     jalali($column, $label = '')
  * @method Field\Date           date($column, $label = '')
  * @method Field\Datetime       datetime($column, $label = '')
  * @method Field\Time           time($column, $label = '')
@@ -74,6 +76,7 @@ trait HasFields
         'checkboxCard'      => Field\CheckboxCard::class,
         'color'             => Field\Color::class,
         'currency'          => Field\Currency::class,
+        'jalali'            => Field\JalaliDate::class,
         'date'              => Field\Date::class,
         'dateRange'         => Field\DateRange::class,
         'DateMultiple'      => Field\DateMultiple::class,
@@ -86,6 +89,7 @@ trait HasFields
         'embeds'            => Field\Embeds::class,
         'email'             => Field\Email::class,
         'file'              => Field\File::class,
+        'filepond'          => Field\FilePond::class,
         'hidden'            => Field\Hidden::class,
         'id'                => Field\Id::class,
         'image'             => Field\Image::class,

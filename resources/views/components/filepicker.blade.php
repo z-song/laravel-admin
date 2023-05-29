@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="loading text-center">
-                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <i class="fa-regular fa-spinner fa-pulse fa-3x fa-fw"></i>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -57,7 +57,7 @@ modal.on('show.bs.modal', function (e) {
             modal.find('.modal-body').html(data);
             modal.find('input.select').iCheck({
                 radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
+                checkboxClass:'icheckbox_flat-blue'
             });
             modal.find('.box-header:first').hide();
 
@@ -101,7 +101,7 @@ modal.on('show.bs.modal', function (e) {
             modal.find('.modal-body').html(data);
             modal.find('input.select').iCheck({
                 radioClass:'iradio_minimal-blue',
-                checkboxClass:'icheckbox_minimal-blue'
+                checkboxClass:'icheckbox_flat-blue'
             });
             modal.find('.box-header:first').hide();
 

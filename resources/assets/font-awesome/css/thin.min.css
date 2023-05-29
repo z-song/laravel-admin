@@ -1,0 +1,6 @@
+/*!
+ * Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license (Commercial License)
+ * Copyright 2022 Fonticons, Inc.
+ */
+:host,:root{--fa-font-thin:normal 100 1em/1 "Font Awesome 6 Pro"}@font-face{font-family:"Font Awesome 6 Pro";font-style:normal;font-weight:100;font-display:block;src:url(../webfonts/fa-thin-100.woff2) format("woff2"),url(../webfonts/fa-thin-100.ttf) format("truetype")}.fa-thin,.fat{font-family:"Font Awesome 6 Pro";font-weight:100}

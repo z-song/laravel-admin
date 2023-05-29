@@ -27,6 +27,11 @@ trait HasAssets
     /**
      * @var array
      */
+    public static $appendCss = [];
+
+    /**
+     * @var array
+     */
     public static $js = [];
 
     /**
@@ -62,7 +67,8 @@ trait HasAssets
      */
     public static $baseCss = [
         'vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css',
-        'vendor/laravel-admin/font-awesome/css/font-awesome.min.css',
+        'vendor/laravel-admin/font-awesome/css/all.min.css',
+        'vendor/laravel-admin/font-awesome/css/v4-shims.min.css',
         'vendor/laravel-admin/laravel-admin/laravel-admin.css',
         'vendor/laravel-admin/nprogress/nprogress.css',
         'vendor/laravel-admin/sweetalert2/dist/sweetalert2.css',
@@ -78,7 +84,7 @@ trait HasAssets
      */
     public static $baseJs = [
         'vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js',
-        'vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',
+        // 'vendor/laravel-admin/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',
         'vendor/laravel-admin/AdminLTE/dist/js/app.min.js',
         'vendor/laravel-admin/jquery-pjax/jquery.pjax.js',
         'vendor/laravel-admin/nprogress/nprogress.js',
@@ -92,7 +98,7 @@ trait HasAssets
     /**
      * @var string
      */
-    public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js';
+    public static $jQuery = 'vendor/laravel-admin/AdminLTE/plugins/jQuery/jquery-3.6.1.min.js';
 
     /**
      * @var array
@@ -102,21 +108,25 @@ trait HasAssets
     /**
      * Add css or get all css.
      *
-     * @param null $css
+     * @param null|string|array<string> $css
      * @param bool $minify
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function css($css = null, $minify = true)
+    public static function css($css = null, $minify = true, $appendCss = false)
     {
         static::ignoreMinify($css, $minify);
 
         if (!is_null($css)) {
-            return self::$css = array_merge(self::$css, (array) $css);
+            if ($appendCss) {
+                return self::$appendCss = array_merge(self::$appendCss, (array) $css);
+            } else {
+                return self::$css = array_merge(self::$css, (array) $css);
+            }
         }
 
         if (!$css = static::getMinifiedCss()) {
-            $css = array_merge(static::$css, static::baseCss());
+            $css = array_merge(static::$css, static::baseCss(), static::$appendCss);
         }
 
         $css = array_filter(array_unique($css));
@@ -142,13 +152,17 @@ trait HasAssets
 
         array_unshift(static::$baseCss, "vendor/laravel-admin/AdminLTE/dist/css/skins/{$skin}.min.css");
 
+        if (config('admin.rtl', false)) {
+            static::$baseCss[] = 'vendor/laravel-admin/RTL/all.min.css';
+        }
+
         return static::$baseCss;
     }
 
     /**
      * Add js or get all js.
      *
-     * @param null $js
+     * @param null|string|array<string> $js
      * @param bool $minify
      *
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View

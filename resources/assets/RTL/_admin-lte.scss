@@ -1,0 +1,130 @@
+body.modern-ui {
+  .box {
+    border-top: none;
+  }
+  .box-info {
+    box-shadow: 10px 10px 10px #00c0ef1a;
+  }
+  .box-primary {
+    box-shadow: 10px 10px 10px #3c8dbc1a;
+  }
+  .box-warning {
+    box-shadow: 10px 10px 10px #f39c121a;
+  }
+  .box-danger {
+    box-shadow: 10px 10px 10px #dd4b391a;
+  }
+  .box-success {
+    box-shadow: 10px 10px 10px #00a65a1a;
+  }
+}
+
+// Visited button identifier
+a.btn.btn-visitable:visited {
+  background-color: #81b5d4;
+  border-color: #367fa9;
+}
+
+// Disabled panel
+.panel.disabled {
+  opacity: 0.7;
+}
+
+// List logs
+ul.list-logs {
+  font-size: 12px;
+  & > li {
+    margin-bottom: 6px;
+  }
+}
+
+.list-group-item.active a {
+  color: #fff;
+
+  &:hover {
+    color: #ccc;
+  }
+}
+
+.btn-outline {
+  &.btn {
+    box-shadow: none;
+  }
+  &.btn-primary {
+    $primary-color: #0b74cd;
+    background-color: transparent;
+    color: $primary-color;
+    border-color: $primary-color;
+
+    &:hover {
+      border-color: $primary-color;
+      background-color: rgba($primary-color, 0.3);
+    }
+    &:active {
+      color: $primary-color;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+  &.btn-danger {
+    background-color: transparent;
+    color: #d73925;
+    border-color: #d73925;
+
+    &:hover {
+      border-color: #d73925;
+      background-color: #d7392530;
+    }
+  }
+}
+
+.btn {
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+  &:not(.btn-xs, .btn-sm, .btn-lg) {
+    padding: 6px 16px;
+  }
+}
+
+.btn-primary {
+  background-color: rgb(32, 101, 209);
+  box-shadow: rgba(32, 101, 209, 0.24) 0px 8px 16px 0px;
+
+  &:hover {
+    background-color: rgb(16, 57, 150);
+    box-shadow: none;
+  }
+
+  &:active {
+    box-shadow: rgba(145, 158, 171, 0.2) 0px 5px 5px -3px,
+      rgba(145, 158, 171, 0.14) 0px 8px 10px 1px,
+      rgba(145, 158, 171, 0.12) 0px 3px 14px 2px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &.active.focus,
+  &.active:focus,
+  &.active:hover,
+  &:active.focus,
+  &:active:focus,
+  &:active:hover {
+    background-color: rgb(16, 57, 150);
+    outline: none;
+  }
+}
+
+// Fix btn-group wrapping problem in tables
+.table .btn-group {
+  white-space: nowrap;
+  .btn {
+    display: inline-block;
+    float: none;
+  }
+}

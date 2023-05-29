@@ -1,0 +1,139 @@
+/**
+ * Custom app related CSS
+ */
+ .page-range {
+    float: left;
+    margin-top: 7px;
+    font-weight: 100;
+}
+
+/**
+ * Customizing Grid
+ */
+.grid-row-delete {
+    margin-right: 7px;
+}
+
+/**
+ * Make Grid RTL
+ */
+.grid .box-header .pull-right {
+    float: left !important;
+}
+
+.noresize {
+    resize: none;
+}
+
+.vresize {
+    resize: vertical;
+}
+
+.hresize {
+    resize: horizontal;
+}
+
+li.select2-results__option,
+.select2-container .select2-selection--single .select2-selection__rendered,
+input.select2-search__field {
+    direction: rtl;
+    text-align: right;
+}
+
+.select2-container--default
+    .select2-selection--single
+    .select2-selection__clear {
+    float: left;
+}
+
+.select2-container .select2-search--inline {
+    float: right !important;
+}
+
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__clear {
+    float: left !important;
+}
+
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice {
+    float: right !important;
+    direction: rtl !important;
+    padding-right: 5px !important;
+}
+
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice__remove {
+    margin-left: 5px !important;
+    margin-right: 0 !important;
+}
+
+.grid-dropdown-actions.dropdown > ul.dropdown-menu {
+    left: auto;
+    right: -80px;
+}
+
+.dd-tree {
+    .dd-item {
+        & > button {
+            float: right;
+        }
+
+        ol.dd-list {
+            padding-left: 0;
+            padding-right: 30px;
+        }
+    }
+
+    .dd-handle {
+        strong {
+            margin: 0 10px;
+        }
+
+        .dd-nodrag {
+            display: inline-block;
+
+            &.pull-right {
+                float: left !important;
+            }
+        }
+    }
+}
+
+#totop {
+    right: auto;
+    left: 20px;
+}
+
+.modern-ui .sidebar .sidebar-form {
+    input[type="text"] {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 50px;
+        border-bottom-right-radius: 50px;
+    }
+    .btn {
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}
+
+#nprogress .spinner {
+    left: 15px;
+    right: initial;
+    padding: 10px;
+    border-radius: 50%;
+    backdrop-filter: blur(3px);
+    box-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.3);
+}
+
+.modern-ui.fixed {
+    .nprogress-custom-parent #nprogress .spinner, .nprogress-custom-parent #nprogress .bar {
+        position: fixed;
+    }
+}

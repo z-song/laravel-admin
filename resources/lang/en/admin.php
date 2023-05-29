@@ -2,10 +2,13 @@
 
 return [
     'online'                => 'Online',
+    'greeting'              => 'Hello,',
     'login'                 => 'Login',
+    'send-otp'              => 'Send SMS',
     'logout'                => 'Logout',
     'setting'               => 'Setting',
     'name'                  => 'Name',
+    'mobile'                => 'Mobile',
     'username'              => 'Username',
     'password'              => 'Password',
     'password_confirmation' => 'Password confirmation',
@@ -99,9 +102,11 @@ return [
         'filter_placeholder' => 'Filter',
     ],
     'grid_items_selected'    => '{n} items selected',
+    'grid_all_items_selected'=> 'All items including other pages',
 
     'menu_titles'            => [],
     'prev'                   => 'Prev',
     'next'                   => 'Next',
     'quick_create'           => 'Quick create',
+    'member_since'           => 'Member since admin',
 ];

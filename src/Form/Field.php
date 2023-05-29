@@ -1092,6 +1092,8 @@ class Field implements Renderable
      */
     public function required($isLabelAsterisked = true): self
     {
+        $this->rules('required');
+
         if ($isLabelAsterisked) {
             $this->setLabelClass(['asterisk']);
         }

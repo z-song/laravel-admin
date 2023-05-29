@@ -1,6 +1,6 @@
 <div class="dropdown pull-right column-selector">
-    <button type="button" class="btn btn-sm btn-instagram dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-table"></i>
+    <button type="button" class="btn btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+        <i class="fa-regular fa-table"></i>
         &nbsp;
         <span class="caret"></span>
     </button>
@@ -89,6 +89,6 @@ $('.column-select-all').on('click', function () {
 });
 
 $('.column-select-item').iCheck({
-    checkboxClass:'icheckbox_minimal-blue'
+    checkboxClass:'icheckbox_flat-blue'
 });
 </script>

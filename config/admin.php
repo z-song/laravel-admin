@@ -63,6 +63,9 @@ return [
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
+
+        // Use as homepage of admin-panel
+        'dashboard' => null,
     ],
 
     /*
@@ -123,7 +126,7 @@ return [
 
         'providers' => [
             'admin' => [
-                'driver' => 'eloquent',
+                'driver' => 'eloquent-cache',
                 'model'  => Encore\Admin\Auth\Database\Administrator::class,
             ],
         ],
@@ -134,9 +137,13 @@ return [
         // Redirect to the specified URI when user is not authorized.
         'redirect_to' => 'auth/login',
 
+        // Authentication mode otp, user-pass
+        'mode' => null,
+
         // The URIs that should be excluded from authorization.
         'excepts' => [
             'auth/login',
+            'auth/req-otp',
             'auth/logout',
         ],
     ],
@@ -243,6 +250,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default role-id to assign to new users
+    |--------------------------------------------------------------------------
+    |
+    | Useful when using OTP login model and you want to new-users have a default role.
+    |
+    */
+    'default_new_users_role_id' => null,
+
+    /*
+    |--------------------------------------------------------------------------
     | User default avatar
     |--------------------------------------------------------------------------
     |
@@ -275,7 +292,19 @@ return [
     |    "skin-red", "skin-red-light", "skin-black", "skin-black-light".
     |
     */
-    'skin' => env('ADMIN_SKIN', 'skin-blue-light'),
+    'skin' => env('ADMIN_SKIN', 'skin-green'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Direction (is RTL)
+    |--------------------------------------------------------------------------
+    |
+    | This value define is loading RTL version required?
+    |
+    | RTL: Right-to-left
+    |
+    */
+    'rtl' => env('ADMIN_RTL', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -380,6 +409,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Custom footer. Partial view-file.
+    |--------------------------------------------------------------------------
+    */
+    'footer_view' => '',
+
+    /*
+    |--------------------------------------------------------------------------
     | The global Grid action display class.
     |--------------------------------------------------------------------------
     */
@@ -407,4 +443,35 @@ return [
     'extensions' => [
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Change site theme
+    |--------------------------------------------------------------------------
+    |
+    | Here are the list of all the themes of the site.
+    |
+    */
+    'site_themes' => [
+        'theme_0' => 'ساده',
+        'theme_fast_simple' => 'سریع - ساده',
+        'theme_1' => 'سبز',
+        'theme_2' => 'آبی',
+        'theme_3' => 'سبز - بنفش',
+        'theme_4' => 'پویا',
+        'theme_5' => 'آبی راه',
+        'theme_6' => 'نارنجی راه',
+        'theme_7' => 'باربری',
+        'theme_8' => 'قالب 8',
+        'theme_9' => 'قالب 9',
+        'theme_10' => 'سبز راه',
+        'theme_11' => 'صورتی راه',
+        'theme_13' => 'دفترچه',
+        'theme_14' => 'آبی راه سفید',
+        'theme_17' => 'لوزی - کرم',
+        'theme_18' => 'بنفش',
+        'theme_19' => 'نارنجی',
+    ],
+    'default_site_theme' => env('DEFAULT_SITE_THEME', 'theme_0'),
+    'change_theme_way' => env('CHANGE_THEME_WAY', 'selectable'), // auto or selectable [by user]
 ];

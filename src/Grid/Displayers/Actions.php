@@ -198,7 +198,7 @@ class Actions extends AbstractDisplayer
     {
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getRouteKey()}" class="{$this->grid->getGridRowName()}-view">
-    <i class="fa fa-eye"></i>
+    <i class="fa-regular fa-eye"></i>
 </a>
 EOT;
     }
@@ -212,7 +212,7 @@ EOT;
     {
         return <<<EOT
 <a href="{$this->getResource()}/{$this->getRouteKey()}/edit" class="{$this->grid->getGridRowName()}-edit">
-    <i class="fa fa-edit"></i>
+    <i class="fa-regular fa-edit"></i>
 </a>
 EOT;
     }
@@ -228,7 +228,7 @@ EOT;
 
         return <<<EOT
 <a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
-    <i class="fa fa-trash"></i>
+    <i class="fa-regular fa-trash"></i>
 </a>
 EOT;
     }
@@ -239,6 +239,7 @@ EOT;
             'delete_confirm' => trans('admin.delete_confirm'),
             'confirm'        => trans('admin.confirm'),
             'cancel'         => trans('admin.cancel'),
+            'ok'             => trans('admin.ok'),
         ];
 
         $trans = array_merge($trans, $this->trans);
@@ -278,9 +279,9 @@ $('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'success'});
             } else {
-                swal(data.message, '', 'error');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'error'});
             }
         }
     });

@@ -136,9 +136,23 @@ class Panel implements Renderable
     }
 
     /**
+     * Disable list, edit and delete tools
+     *
+     * @return void
+     */
+    public function disableTools()
+    {
+        $tools = $this->data['tools'];
+
+        $tools->disableDelete();
+        $tools->disableEdit();
+        $tools->disableList();
+    }
+
+    /**
      * Fill fields to panel.
      *
-     * @param []Field $fields
+     * @param Field[]|\Illuminate\Support\Collection $fields
      *
      * @return $this
      */

@@ -39,7 +39,7 @@ SCRIPT;
 
         return <<<HTML
 <a href="javascript:void(0);" class="grid-column-copyable text-muted" data-content="{$content}" title="Copied!" data-placement="bottom">
-    <i class="fa fa-copy"></i>
+    <i class="fa-regular fa-copy"></i>
 </a>&nbsp;{$this->getValue()}
 HTML;
     }

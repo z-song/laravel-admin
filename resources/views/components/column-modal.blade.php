@@ -1,5 +1,5 @@
 <span data-toggle="modal" data-target="#grid-modal-{{ $name }}" data-key="{{ $key }}">
-   <a href="javascript:void(0)"><i class="fa fa-clone"></i>&nbsp;&nbsp;{{ $value }}</a>
+   <a href="javascript:void(0)"><i class="fa-regular fa-clone"></i>&nbsp;&nbsp;{{ $value }}</a>
 </span>
 
 <div class="modal grid-modal fade" id="grid-modal-{{ $name }}" tabindex="-1" role="dialog">
@@ -37,7 +37,7 @@
     var load = function (url) {
 
         modalBody.html("<div class='loading text-center' style='height:200px;'>\
-                <i class='fa fa-spinner fa-pulse fa-3x fa-fw' style='margin-top: 80px;'></i>\
+                <i class='fa-regular fa-spinner fa-pulse fa-3x fa-fw' style='margin-top: 80px;'></i>\
             </div>");
 
         $.get(url, function (data) {

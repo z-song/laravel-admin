@@ -2,8 +2,10 @@
 
 namespace Encore\Admin\Controllers;
 
+use Encore\Admin\Layout\Row;
 use Encore\Admin\Layout\Content;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Lang;
 
 class AdminController extends Controller
 {
@@ -29,13 +31,18 @@ class AdminController extends Controller
     ];
 
     /**
+     * ID of editing element
+     */
+    protected $editingId;
+
+    /**
      * Get content title.
      *
      * @return string
      */
     protected function title()
     {
-        return $this->title;
+        return Lang::hasForLocale($this->title) ? __($this->title) : $this->title;
     }
 
     /**
@@ -47,10 +54,11 @@ class AdminController extends Controller
      */
     public function index(Content $content)
     {
+        $grid = $this->grid();
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
-            ->body($this->grid());
+            ->body($grid);
     }
 
     /**
@@ -63,10 +71,14 @@ class AdminController extends Controller
      */
     public function show($id, Content $content)
     {
+        $routeParameters = request()->route()->parameters();
+        $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
+        $this->editingId = $id;
+        $detail = $this->detail($id);
         return $content
             ->title($this->title())
             ->description($this->description['show'] ?? trans('admin.show'))
-            ->body($this->detail($id));
+            ->body($detail);
     }
 
     /**
@@ -79,10 +91,16 @@ class AdminController extends Controller
      */
     public function edit($id, Content $content)
     {
+        $routeParameters = request()->route()->parameters();
+        $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
+        $this->editingId = $id;
         return $content
             ->title($this->title())
             ->description($this->description['edit'] ?? trans('admin.edit'))
-            ->body($this->form()->edit($id));
+            ->row(function (Row $row) use (&$id) {
+                $row->column(2, '');
+                $row->column(8, $this->form()->edit($id));
+            });
     }
 
     /**
@@ -97,6 +115,9 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['create'] ?? trans('admin.create'))
-            ->body($this->form());
+            ->row(function (Row $row) {
+                $row->column(2, '');
+                $row->column(8, $this->form());
+            });
     }
 }

@@ -76,6 +76,13 @@ class Form implements Renderable
     public $title;
 
     /**
+     * The id of form.
+     *
+     * @var string
+     */
+    public $formId;
+
+    /**
      * The description of form.
      *
      * @var string
@@ -102,7 +109,7 @@ class Form implements Renderable
      *
      * @var array
      */
-    protected $buttons = ['reset', 'submit'];
+    protected $buttons = ['submit'];
 
     /**
      * Width for label and submit field.
@@ -170,7 +177,7 @@ class Form implements Renderable
     }
 
     /**
-     * @return array
+     * @return Form
      */
     public function confirm($message)
     {
@@ -216,8 +223,9 @@ class Form implements Renderable
      */
     protected function initFormAttributes()
     {
+        $this->formId = uniqid();
         $this->attributes = [
-            'id'             => 'widget-form-'.uniqid(),
+            'id'             => 'widget-form-'.$this->formId,
             'method'         => 'POST',
             'action'         => '',
             'class'          => 'form-horizontal',
@@ -391,7 +399,7 @@ class Form implements Renderable
     /**
      * Get all fields of form.
      *
-     * @return Field[]
+     * @return \Illuminate\Support\Collection
      */
     public function fields()
     {
@@ -613,7 +621,7 @@ SCRIPT;
      * @param string $method
      * @param array  $arguments
      *
-     * @return Field|$this
+     * @return Field|Form
      */
     public function __call($method, $arguments)
     {

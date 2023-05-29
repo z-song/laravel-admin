@@ -1,0 +1,253 @@
+.login-box-body,
+.register-box-body,
+.box,
+.small-box,
+.info-box,
+.panel {
+  border-radius: $main-radius;
+}
+
+.login-box-body .panel-heading,
+.register-box-body .panel-heading,
+.box .panel-heading,
+.small-box .panel-heading,
+.info-box .panel-heading,
+.panel .panel-heading {
+  border-top-left-radius: $main-radius;
+  border-top-right-radius: $main-radius;
+}
+
+.panel-heading {
+  border-bottom: none;
+}
+
+.panel > .list-group,
+.panel > .panel-collapse > .list-group {
+  border-radius: $main-radius;
+  padding: 4px;
+}
+
+.list-group.rounded,
+.panel-heading + .list-group {
+  .list-group-item:first-child {
+    border-top: 0;
+    border-top-right-radius: $main-radius;
+    border-top-left-radius: $main-radius;
+  }
+}
+
+.list-group.rounded,
+.panel > .list-group:last-child,
+.panel > .panel-collapse > .list-group:last-child {
+  .list-group-item:last-child {
+    border-bottom: 0;
+    border-bottom-right-radius: $main-radius;
+    border-bottom-left-radius: $main-radius;
+  }
+}
+
+.login-box-body .panel-footer,
+.register-box-body .panel-footer,
+.box .panel-footer,
+.small-box .panel-footer,
+.info-box .panel-footer,
+.panel .panel-footer {
+  border-bottom-right-radius: $main-radius;
+  border-bottom-left-radius: $main-radius;
+}
+
+.info-box-icon {
+  border-radius: 0 $main-radius $main-radius 0;
+  float: right;
+}
+.info-box-content {
+  margin-left: initial;
+  margin-right: 90px;
+}
+
+.panel-body {
+  border-radius: 25px;
+  background-color: #fff;
+  margin: 4px;
+}
+
+.panel-footer {
+  background-color: inherit;
+  border-top: none;
+}
+
+.box-header {
+  padding: 10px 15px;
+}
+
+.box-footer {
+  border-bottom-right-radius: $main-radius;
+  border-bottom-left-radius: $main-radius;
+}
+
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-bottom-left-radius: $main-radius;
+  border-top-left-radius: $main-radius;
+}
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  border-bottom-right-radius: $main-radius;
+  border-top-right-radius: $main-radius;
+}
+select.input-sm {
+  border-radius: $main-radius;
+}
+
+.input-group .form-control:first-child,
+.input-group-addon:first-child,
+.input-group-btn:first-child > .btn,
+.input-group-btn:first-child > .btn-group > .btn,
+.input-group-btn:first-child > .dropdown-toggle,
+.input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+.input-group-btn:last-child > .btn-group:not(:last-child) > .btn {
+  border-top-right-radius: $main-radius;
+  border-bottom-right-radius: $main-radius;
+}
+.input-group .form-control:last-child,
+.input-group-addon:last-child,
+.input-group-btn:last-child > .btn,
+.input-group-btn:last-child > .btn-group > .btn,
+.input-group-btn:last-child > .dropdown-toggle,
+.input-group-btn:first-child > .btn:not(:first-child),
+.input-group-btn:first-child > .btn-group:not(:first-child) > .btn {
+  border-top-left-radius: $main-radius;
+  border-bottom-left-radius: $main-radius;
+}
+.input-group .select2:last-child {
+  &.select2-container--default .select2-selection--single,
+  &.select2-selection .select2-selection--single,
+  &.select2-container--default.select2-container--focus
+    .select2-selection--multiple,
+  &.select2-container--default .select2-selection--multiple {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.input-group-btn button.btn.btn-outline {
+  background-color: #fff;
+  border-right: none;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: $main-radius;
+  border-bottom-right-radius: $main-radius;
+}
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-top-left-radius: $main-radius;
+  border-bottom-left-radius: $main-radius;
+}
+
+.bootstrap-switch {
+  border-radius: $main-radius;
+}
+
+.panel > .table-responsive {
+  border-bottom-left-radius: $main-radius;
+  border-bottom-right-radius: $main-radius;
+}
+
+.panel-info {
+  background-color: #d9edf7;
+}
+.panel-warning {
+  background-color: #fcf8e3;
+}
+.panel-danger {
+  background-color: #f2dede;
+}
+.panel-default {
+  background-color: #f5f5f5;
+}
+
+.small-box {
+  h3 {
+    margin: 5px 5px 10px 0;
+  }
+  p {
+    font-weight: bold;
+  }
+}
+
+.alert {
+  border-radius: $main-radius;
+  box-shadow: 10px 10px 10px rgb(0 0 0 / 10%);
+}
+
+.btn {
+  border-radius: 50px;
+}
+
+.form-control,
+textarea.form-control {
+  border-radius: $main-radius;
+}
+
+.select2-container--default .select2-selection--single,
+.select2-selection .select2-selection--single,
+.select2-container--default.select2-container--focus
+  .select2-selection--multiple,
+.select2-container--default .select2-selection--multiple {
+  border-radius: $main-radius;
+}
+
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice {
+  border-radius: $main-radius;
+}
+
+.swal2-popup {
+  border-radius: $main-radius;
+
+  .swal2-styled {
+    border-radius: $main-radius;
+
+    &.swal2-cancel,
+    &.swal2-confirm {
+      border-radius: $main-radius;
+    }
+  }
+}
+
+.label {
+  border-radius: $main-radius;
+  padding: 0.1em 0.7em 0.2em;
+  margin: 2px;
+}
+
+a.none-color {
+  color: inherit;
+}
+
+.nav.nav-tabs.rounded-box {
+  display: flex;
+  justify-content: center;
+  margin: 0 $main-radius;
+  border-radius: $main-radius $main-radius 0 0;
+  background-color: rgba($color: #fff, $alpha: 0.8);
+
+  & > li {
+    flex-grow: 1;
+
+    & > a {
+      border-radius: $main-radius $main-radius 0 0;
+    }
+  }
+}
+
+.nav-stacked > li.active > a,
+.nav-stacked > li.active > a:hover {
+  border-radius: 25px;
+}
+
+body.modern-ui .box > :first-child {
+  border-radius: 25px 25px 0 0;
+}

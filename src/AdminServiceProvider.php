@@ -2,12 +2,15 @@
 
 namespace Encore\Admin;
 
-use Encore\Admin\Layout\Content;
-use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Routing\Router;
+use Encore\Admin\Layout\Content;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminServiceProvider extends ServiceProvider
 {
@@ -82,14 +85,47 @@ class AdminServiceProvider extends ServiceProvider
 
         $this->registerPublishing();
 
+        Auth::provider('eloquent-cache', function ($app, array $config) {
+            return new CacheUserProvider($app['hash'], $config['model']);
+        });
+
         $this->compatibleBlade();
+
 
         Blade::directive('box', function ($title) {
             return "<?php \$box = new \Encore\Admin\Widgets\Box({$title}, '";
         });
-
         Blade::directive('endbox', function ($expression) {
             return "'); echo \$box->render(); ?>";
+        });
+
+        Blade::directive('can', function ($permission) {
+            return "<?php if (\Encore\Admin\Facades\Admin::user()->can({$permission})): ?>";
+        });
+        Blade::directive('endcan', function () {
+            return "<?php endif; ?>";
+        });
+
+        Blade::directive('canAny', function ($permissions) {
+            return "<?php if (\Encore\Admin\Facades\Admin::user()->canAny({$permissions})): ?>";
+        });
+        Blade::directive('endcanAny', function () {
+            return "<?php endif; ?>";
+        });
+
+        Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
+            /** @var Collection $this */
+            $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+            return new LengthAwarePaginator(
+                $this->forPage($page, $perPage),
+                $total ?: $this->count(),
+                $perPage,
+                $page,
+                [
+                    'path' => LengthAwarePaginator::resolveCurrentPath(),
+                    'pageName' => $pageName,
+                ]
+            );
         });
     }
 

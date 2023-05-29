@@ -19,7 +19,7 @@ class Tools implements Renderable
      *
      * @var array
      */
-    protected $tools = ['delete', 'view', 'list'];
+    protected $tools = ['list'];
 
     /**
      * Tools should be appends to default tools.
@@ -180,7 +180,7 @@ class Tools implements Renderable
 
         return <<<EOT
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default" title="$text"><i class="fa fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
+    <a href="{$this->getListPath()}" class="btn btn-sm btn-outline" title="$text"><i class="fa-regular fa-list"></i><span class="hidden-xs">&nbsp;$text</span></a>
 </div>
 EOT;
     }
@@ -196,8 +196,8 @@ EOT;
 
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary" title="{$view}">
-        <i class="fa fa-eye"></i><span class="hidden-xs"> {$view}</span>
+    <a href="{$this->getViewPath()}" class="btn btn-sm btn-outline" title="{$view}">
+        <i class="fa-regular fa-eye"></i><span class="hidden-xs"> {$view}</span>
     </a>
 </div>
 HTML;
@@ -215,6 +215,7 @@ HTML;
             'confirm'        => trans('admin.confirm'),
             'cancel'         => trans('admin.cancel'),
             'delete'         => trans('admin.delete'),
+            'ok'             => trans('admin.ok'),
         ];
 
         $class = uniqid();
@@ -252,9 +253,9 @@ $('.{$class}-delete').unbind('click').click(function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'success'});
             } else {
-                swal(data.message, '', 'error');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'error'});
             }
         }
     });
@@ -267,7 +268,7 @@ SCRIPT;
         return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
     <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$trans['delete']}">
-        <i class="fa fa-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
+        <i class="fa-regular fa-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
     </a>
 </div>
 HTML;

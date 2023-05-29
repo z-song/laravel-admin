@@ -1,10 +1,10 @@
 <div class="btn-group" style="margin-right: 5px" data-toggle="buttons">
-    <label class="btn btn-sm btn-dropbox {{ $btn_class }} {{ $expand ? 'active' : '' }}" title="{{ trans('admin.filter') }}">
-        <input type="checkbox"><i class="fa fa-filter"></i><span class="hidden-xs">&nbsp;&nbsp;{{ trans('admin.filter') }}</span>
+    <label class="btn btn-sm btn-outline {{ $btn_class }} {{ $expand ? 'active' : '' }}" title="{{ trans('admin.filter') }}">
+        <input type="checkbox"><i class="fa-regular fa-filter"></i><span class="hidden-xs">&nbsp;&nbsp;{{ trans('admin.filter') }}</span>
     </label>
 
     @if($scopes->isNotEmpty())
-    <button type="button" class="btn btn-sm btn-dropbox dropdown-toggle" data-toggle="dropdown">
+    <button type="button" class="btn btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
 
         <span>{{ $label }}</span>
         <span class="caret"></span>
@@ -26,9 +26,9 @@ var $filter = $('#{{ $filter_id }}');
 
 $btn.unbind('click').click(function (e) {
     if ($filter.is(':visible')) {
-        $filter.addClass('hide');
+        $filter.slideUp();
     } else {
-        $filter.removeClass('hide');
+        $filter.slideDown();
     }
 });
 </script>

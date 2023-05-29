@@ -18,6 +18,7 @@ class BatchDelete extends BatchAction
             'delete_confirm' => trans('admin.delete_confirm'),
             'confirm'        => trans('admin.confirm'),
             'cancel'         => trans('admin.cancel'),
+            'ok'             => trans('admin.ok'),
         ];
 
         return <<<EOT
@@ -53,9 +54,9 @@ $('{$this->getElementClass()}').on('click', function() {
         var data = result.value;
         if (typeof data === 'object') {
             if (data.status) {
-                swal(data.message, '', 'success');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'success'});
             } else {
-                swal(data.message, '', 'error');
+                swal({text: data.message, confirmButtonText: "{$trans['ok']}", type: 'error'});
             }
         }
     });

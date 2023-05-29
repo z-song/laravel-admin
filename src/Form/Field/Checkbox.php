@@ -120,7 +120,7 @@ class Checkbox extends MultipleSelect
      */
     public function render()
     {
-        $this->script = "$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_minimal-blue'});";
+        $this->script = "$('{$this->getElementClassSelector()}').iCheck({checkboxClass:'icheckbox_flat-blue'});";
 
         $this->addVariables([
             'checked'     => $this->checked,
@@ -133,7 +133,7 @@ class Checkbox extends MultipleSelect
             $checkAllClass = uniqid('check-all-');
 
             $this->script .= <<<SCRIPT
-$('.{$checkAllClass}').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
+$('.{$checkAllClass}').iCheck({checkboxClass:'icheckbox_flat-blue'}).on('ifChanged', function () {
     if (this.checked) {
         $('{$this->getElementClassSelector()}').iCheck('check');
     } else {

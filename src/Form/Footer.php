@@ -26,14 +26,14 @@ class Footer implements Renderable
      *
      * @var array
      */
-    protected $buttons = ['reset', 'submit'];
+    protected $buttons = ['submit'];
 
     /**
      * Available checkboxes.
      *
      * @var array
      */
-    protected $checkboxes = ['view', 'continue_editing', 'continue_creating'];
+    protected $checkboxes = ['continue_creating'];
 
     /**
      * @var string
@@ -173,7 +173,7 @@ class Footer implements Renderable
     {
         $script = <<<'EOT'
         
-$('.after-submit').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChecked', function () {
+$('.after-submit').iCheck({checkboxClass:'icheckbox_flat-blue'}).on('ifChecked', function () {
     $('.after-submit').not(this).iCheck('uncheck');
 });
 EOT;

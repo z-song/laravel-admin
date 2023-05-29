@@ -71,6 +71,15 @@ class Select extends Field
             $this->options = (array) $options;
         }
 
+        // Check options on rules, too
+        if (!empty($this->options) && !($this instanceof MultipleSelect)) {
+            if (!in_array('required', $this->rules, true)) {
+                $this->rules('nullable');
+            }
+
+            $this->rules('in:' . implode(',', array_keys($this->options)));
+        }
+
         return $this;
     }
 

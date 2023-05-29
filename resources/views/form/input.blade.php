@@ -1,15 +1,15 @@
-<div class="{{$viewClass['form-group']}} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
+<div class="{{ $viewClass['form-group'] }} {!! !$errors->has($errorKey) ? '' : 'has-error' !!}">
 
-    <label for="{{$id}}" class="{{$viewClass['label']}} control-label">{{$label}}</label>
+    <label for="{{ $id }}" class="{{ $viewClass['label'] }} control-label">{{ $label }}</label>
 
-    <div class="{{$viewClass['field']}}">
+    <div class="{{ $viewClass['field'] }}">
 
         @include('admin::form.error')
 
         <div class="input-group">
 
             @if ($prepend)
-            <span class="input-group-addon">{!! $prepend !!}</span>
+                <span class="input-group-addon">{!! $prepend !!}</span>
             @endif
 
             <input {!! $attributes !!} />
@@ -20,11 +20,23 @@
 
             @isset($btn)
                 <span class="input-group-btn">
-                  {!! $btn !!}
+                    {!! $btn !!}
                 </span>
             @endisset
 
         </div>
+
+        @if($number2persian ?? false)
+            <span class="help-block">
+                <span id="number2persian-box-{{ $id }}"></span>
+            </span>
+        @endif
+
+        @if($number2commaSeparated ?? false)
+            <span class="help-block">
+                <span id="number2comma-separated-box-{{ $id }}"></span>
+            </span>
+        @endif
 
         @include('admin::form.help-block')
 

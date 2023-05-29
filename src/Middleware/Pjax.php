@@ -3,10 +3,10 @@
 namespace Encore\Admin\Middleware;
 
 use Closure;
+use DOMDocument;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
 
 class Pjax
@@ -87,11 +87,12 @@ class Pjax
      */
     protected function filterResponse(Response $response, $container)
     {
-        $crawler = new Crawler($response->getContent());
+        $dom = new DOMDocument();
+        $dom->loadHTML($response->getContent(), LIBXML_NOERROR | LIBXML_SCHEMA_CREATE);
 
         $response->setContent(
-            $this->makeTitle($crawler).
-            $this->fetchContents($crawler, $container)
+            $this->makeTitle($dom) .
+                $this->fetchContents($dom, $container)
         );
 
         return $this;
@@ -100,34 +101,44 @@ class Pjax
     /**
      * Prepare an HTML title tag.
      *
-     * @param Crawler $crawler
+     * @param DOMDocument $dom
      *
      * @return string
      */
-    protected function makeTitle($crawler)
+    protected function makeTitle($dom)
     {
-        $pageTitle = $crawler->filter('head > title')->html();
+        $titleElm = $dom->getElementsByTagName('title');
 
-        return "<title>{$pageTitle}</title>";
+        //get and display what you need:
+        if ($titleElm->length) {
+            return "<title>{$titleElm->item(0)->nodeValue}</title>";
+        }
+
+        return '';
     }
 
     /**
      * Fetch the PJAX-specific HTML from the response.
      *
-     * @param Crawler $crawler
+     * @param DOMDocument $dom
      * @param string  $container
      *
      * @return string
      */
-    protected function fetchContents($crawler, $container)
+    protected function fetchContents($dom, $container)
     {
-        $content = $crawler->filter($container);
+        $element = $dom->getElementById(substr($container, 1));
+        $content = '';
 
-        if (!$content->count()) {
+        foreach (($element?->childNodes ?? []) as $node) {
+            $content .= $dom->saveHTML($node);
+        }
+
+        if (empty($content)) {
             abort(422);
         }
 
-        return $this->decodeUtf8HtmlEntities($content->html());
+        return $content;
     }
 
     /**

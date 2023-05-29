@@ -3,7 +3,7 @@
 namespace Encore\Admin\Grid\Column;
 
 use Carbon\Carbon;
-use Encore\Admin\Grid\Column;
+use Closure;
 use Encore\Admin\Grid\Displayers;
 use Encore\Admin\Grid\Model;
 use Illuminate\Support\Arr;
@@ -11,7 +11,7 @@ use Illuminate\Support\Arr;
 /**
  * Trait ExtendDisplay.
  *
- * @method $this editable()
+ * @method $this editable($type = '')
  * @method $this image($server = '', $width = 200, $height = 200)
  * @method $this label($style = 'success')
  * @method $this button($style = null)
@@ -26,10 +26,11 @@ use Illuminate\Support\Arr;
  * @method $this downloadable($server = '')
  * @method $this copyable()
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
- * @method $this prefix($prefix, $delimiter = '&nbsp;')
- * @method $this suffix($suffix, $delimiter = '&nbsp;')
+ * @method $this prefix($prefix, $delimiter = '')
+ * @method $this suffix($suffix, $delimiter = '')
  * @method $this secret($dotCount = 6)
  * @method $this limit($limit = 100, $end = '...')
+ * @method $this number($decimals = 0, $decimal_seperator = '.', $thousands_seperator = ',')
  */
 trait ExtendDisplay
 {
@@ -59,6 +60,7 @@ trait ExtendDisplay
         'suffix'        => Displayers\Suffix::class,
         'secret'        => Displayers\Secret::class,
         'limit'         => Displayers\Limit::class,
+        'number'        => Displayers\Number::class,
     ];
 
     /**
@@ -94,7 +96,7 @@ trait ExtendDisplay
 
             $url = request()->fullUrlWithQuery($query);
 
-            return "<a href=\"{$url}\"><i class=\"fa fa-search\"></i></a>";
+            return "<a href=\"{$url}\"><i class=\"fa-regular fa-search\"></i></a>";
         }, '&nbsp;&nbsp;');
 
         return $this;
@@ -234,7 +236,7 @@ trait ExtendDisplay
             $values = (array) $values;
 
             if (in_array($value, $values)) {
-                return '<i class="fa fa-refresh fa-spin text-primary"></i>';
+                return '<i class="fa-regular fa-refresh fa-spin text-primary"></i>';
             }
 
             return Arr::get($others, $value, $value);
@@ -260,7 +262,7 @@ trait ExtendDisplay
                 $fa = $default;
             }
 
-            return "<i class=\"fa fa-{$fa}\"></i>";
+            return "<i class=\"fa-regular fa-{$fa}\"></i>";
         });
     }
 
@@ -295,7 +297,32 @@ trait ExtendDisplay
         return $this->display(function ($value) use ($map, $default) {
             $bool = empty($map) ? boolval($value) : Arr::get($map, $value, $default);
 
-            return $bool ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
+            return $bool ? '<i class="fa-regular fa-check text-green"></i>' : '<i class="fa-regular fa-close text-red"></i>';
+        });
+    }
+
+    /**
+     * Display column as Jalali/Persian date.
+     * Installing composer morilog/jalali is required
+     *
+     * @param string $format
+     *
+     * @return $this
+     */
+    public function jalali($format = '%Y-%m-%d H:i')
+    {
+        return $this->display(function ($v) use ($format) {
+            if (empty($v)) {
+                return "";
+            } else {
+
+                $jdate = \Morilog\Jalali\Jalalian::forge($v)->format($format);
+                if (request(\Encore\Admin\Grid\Exporter::$queryName)) {
+                    return $jdate;
+                } else {
+                    return "<span dir='ltr'>" . $jdate . "</span>";
+                }
+            }
         });
     }
 

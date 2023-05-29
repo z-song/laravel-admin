@@ -205,7 +205,7 @@
         $('.table-fixed-right tbody tr').eq(index).removeClass('active');
     });
 
-    $('.{{ $rowName }}-checkbox').iCheck({checkboxClass:'icheckbox_minimal-blue'}).on('ifChanged', function () {
+    $('.{{ $rowName }}-checkbox').iCheck({checkboxClass:'icheckbox_flat-blue'}).on('ifChanged', function () {
 
         var id = $(this).data('id');
         var index = $(this).closest('tr').index();

@@ -135,7 +135,8 @@ abstract class RowAction extends GridAction
     public function render()
     {
         if ($href = $this->href()) {
-            return "<a href='{$href}'>{$this->name()}</a>";
+            $className = strtolower(basename(str_replace('\\', '/', static::class)));
+            return "<a class='row-action-{$className}' href='{$href}'>{$this->name()}</a>";
         }
 
         $this->addScript();

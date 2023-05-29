@@ -50,7 +50,7 @@ abstract class Widget extends Fluent
      * @param string $key
      * @param string $value
      *
-     * @return string
+     * @return string|void
      */
     protected function attributeElement($key, $value)
     {
