@@ -20,9 +20,7 @@ trait HasResourceActions
      */
     public function update($id)
     {
-        $routeParameters = request()->route()->parameters();
-        $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
-        $this->editingId = $id;
+        $id = $this->getIdFromRoute();
         return $this->form()->update($id);
     }
 
@@ -45,9 +43,16 @@ trait HasResourceActions
      */
     public function destroy($id)
     {
+        $id = $this->getIdFromRoute();
+        return $this->form()->destroy($id);
+    }
+
+    protected function getIdFromRoute()
+    {
         $routeParameters = request()->route()->parameters();
         $id = is_null($this->routeParamName) ? end($routeParameters) : request()->route($this->routeParamName);
         $this->editingId = $id;
-        return $this->form()->destroy($id);
+
+        return $id;
     }
 }
