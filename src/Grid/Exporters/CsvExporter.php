@@ -178,7 +178,7 @@ class CsvExporter extends AbstractExporter
 
                 // Write rows
                 foreach ($current as $index => $record) {
-                    fputcsv($handle, $this->getVisiableFields($record, $original[$index]));
+                    fputcsv($handle, $this->getVisiableFields($record, $original[$index], $record));
                 }
             });
             fclose($handle);
@@ -221,10 +221,11 @@ class CsvExporter extends AbstractExporter
     /**
      * @param array $value
      * @param array $original
+     * @param array $record
      *
      * @return array
      */
-    public function getVisiableFields(array $value, array $original): array
+    public function getVisiableFields(array $value, array $original, array $record): array
     {
         $fields = [];
 
@@ -232,7 +233,8 @@ class CsvExporter extends AbstractExporter
             $fields[] = $this->getColumnValue(
                 $column,
                 data_get($value, $column),
-                data_get($original, $column)
+                data_get($original, $column),
+                $record
             );
         }
 
@@ -243,10 +245,11 @@ class CsvExporter extends AbstractExporter
      * @param string $column
      * @param mixed  $value
      * @param mixed  $original
+     * @param array  $record
      *
      * @return mixed
      */
-    protected function getColumnValue(string $column, $value, $original)
+    protected function getColumnValue(string $column, $value, $original, $record)
     {
         if (!empty($this->columnUseOriginalValue)
             && in_array($column, $this->columnUseOriginalValue)) {
@@ -254,7 +257,7 @@ class CsvExporter extends AbstractExporter
         }
 
         if (isset($this->columnCallbacks[$column])) {
-            return $this->columnCallbacks[$column]($value, $original);
+            return $this->columnCallbacks[$column]($value, $original, $record);
         }
 
         return $value;
