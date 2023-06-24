@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="renderer" content="webkit">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ Admin::title() }} @if($header) | {{ $header }}@endif</title>
+    <meta 名字="renderer" content="webkit">
+    <meta 名字="csrf-token" content="{{ csrf_token() }}">
+    <标题>{{ Admin::title() }} @if($header) | {{ $header }}@endif</标题>
     <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" 名字="viewport">
 
     @if(!is_null($favicon = Admin::favicon()))
     <link rel="shortcut icon" href="{{$favicon}}">
@@ -24,7 +24,7 @@
 
 </head>
 
-<body class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
+<内容 class="hold-transition {{config('admin.skin')}} {{join(' ', config('admin.layout'))}}">
 
 @if($alert = config('admin.top_alert'))
     <div style="text-align: center;padding: 5px;font-size: 12px;background-color: #ffffd5;color: #ff0000;">
@@ -51,16 +51,16 @@
 
 </div>
 
-<button id="totop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up"></i></button>
+<button id="totop" 标题="Go to top" style="display: 无;"><i class="fa fa-chevron-up"></i></button>
 
 <script>
     function LA() {}
     LA.token = "{{ csrf_token() }}";
-    LA.user = @json($_user_);
+    LA.user = @json($_user_ ?? '_user_');
 </script>
 
 <!-- REQUIRED JS SCRIPTS -->
 {!! Admin::js() !!}
 
-</body>
+</内容>
 </html>
