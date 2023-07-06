@@ -488,14 +488,14 @@ class HasMany extends Field
          * {count} is increment number of current sub form count.
          */
         $script = <<<EOT
-var index = 0;
+
 $('#has-many-{$this->column}').off('click', '.add').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
 
-    index++;
+    var index = $('.has-many-{$this->column}-form').length;
 
-    var template = tpl.html().replace(/{$defaultKey}/g, index);
+    var template = tpl.html().replace(/{$defaultKey}/g, index + 1);
     $('.has-many-{$this->column}-forms').append(template);
     {$templateScript}
     return false;
@@ -588,14 +588,13 @@ EOT;
          * {count} is increment number of current sub form count.
          */
         $script = <<<EOT
-var index = 0;
 $('#has-many-{$this->column}').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
 
-    index++;
+    var index = $('.has-many-{$this->column}-form').length;
 
-    var template = tpl.html().replace(/{$defaultKey}/g, index);
+    var template = tpl.html().replace(/{$defaultKey}/g, index + 1);
     $('.has-many-{$this->column}-forms').append(template);
     {$templateScript}
     return false;
