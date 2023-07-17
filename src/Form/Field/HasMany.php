@@ -587,6 +587,7 @@ EOT;
          *
          * {count} is increment number of current sub form count.
          */
+        $this->column = $this->formatId($this->column);
         $script = <<<EOT
 var index = 0;
 $('#has-many-{$this->column}').on('click', '.add', function () {
