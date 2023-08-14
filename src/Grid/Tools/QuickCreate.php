@@ -1,6 +1,6 @@
 <?php
 
-namespace Encore\Admin\Grid\Tools;
+namespace App\Overrides;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
@@ -232,38 +232,38 @@ class QuickCreate implements Renderable
     protected function script()
     {
         $url = $this->parent->resource();
-
         $script = <<<SCRIPT
 
 ;(function () {
 
     $('.quick-create .create').click(function () {
-        $('.quick-create .create-form').show();
+        $(this).siblings('.create-form').show()
         $(this).hide();
     });
-    
+
     $('.quick-create .cancel').click(function () {
-        $('.quick-create .create-form').hide();
+        $(this).closest('.create-form').hide();
         $('.quick-create .create').show();
     });
-    
-    $('.quick-create .create-form').submit(function (e) {
+
+    $('#{$this->parent->tableID} .quick-create .create-form').submit(function (e) {
+        console.log('{$this->parent->tableID}')
         $(':submit', e.target).button('loading');
         e.preventDefault();
-    
+
         $.ajax({
             url: '{$url}',
             type: 'POST',
             data: $(this).serialize(),
             success: function(data, textStatus, jqXHR) {
                 console.info(data);
-                
+
                 if (data.status == true) {
                     $.admin.toastr.success(data.message, '', {positionClass:"toast-top-center"});
                     $.admin.reload();
                     return;
                 }
-                
+
                 if (typeof data.validation !== 'undefined') {
                     $.admin.toastr.warning(data.message, '', {positionClass:"toast-top-center"})
                 }
@@ -276,7 +276,7 @@ class QuickCreate implements Renderable
                 }
             }
         });
-        
+
         return false;
     });
 
