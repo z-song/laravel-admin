@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Overrides;
+namespace Encore\Admin\Grid\Tools;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;
