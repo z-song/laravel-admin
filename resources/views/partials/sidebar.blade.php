@@ -19,7 +19,7 @@
         <!-- search form (Optional) -->
         <form class="sidebar-form" style="overflow: initial;" onsubmit="return false;">
             <div class="input-group">
-                <input type="text" autocomplete="off" class="form-control autocomplete" placeholder="{{ __('admin.sidebar_search') }}">
+                <input type="text" autocomplete="off" class="form-control autocomplete" placeholder="{{ trans('admin.sidebar_search') }}">
               <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
