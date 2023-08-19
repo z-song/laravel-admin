@@ -33,6 +33,7 @@ return [
     'collapse'              => 'Collapse',
     'filter'                => 'Filter',
     'search'                => 'Search',
+    'sidebar_search'        => 'Search...',
     'close'                 => 'Close',
     'show'                  => 'Show',
     'entries'               => 'entries',
