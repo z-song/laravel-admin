@@ -14,27 +14,32 @@ class AdminTablesSeeder extends Seeder
      */
     public function run()
     {
+        $administratorModel = config('admin.database.users_model');
+        $roleModel = config('admin.database.roles_model');
+        $permissionModel = config('admin.database.permissions_model');
+        $menuModel = config('admin.database.menu_model');
+
         // create a user.
-        Administrator::truncate();
-        Administrator::create([
+        $administratorModel::truncate();
+        $administratorModel::create([
             'username' => 'admin',
             'password' => Hash::make('admin'),
             'name'     => 'Administrator',
         ]);
 
         // create a role.
-        Role::truncate();
-        Role::create([
+        $roleModel::truncate();
+        $roleModel::create([
             'name' => 'Administrator',
             'slug' => 'administrator',
         ]);
 
         // add role to user.
-        Administrator::first()->roles()->save(Role::first());
+        $administratorModel::first()->roles()->save($roleModel::first());
 
         //create a permission
-        Permission::truncate();
-        Permission::insert([
+        $permissionModel::truncate();
+        $permissionModel::insert([
             [
                 'name'        => 'All permission',
                 'slug'        => '*',
@@ -67,63 +72,73 @@ class AdminTablesSeeder extends Seeder
             ],
         ]);
 
-        Role::first()->permissions()->save(Permission::first());
+        $roleModel::first()->permissions()->save($permissionModel::first());
 
         // add default menus.
-        Menu::truncate();
-        Menu::insert([
-            [
-                'parent_id' => 0,
-                'order'     => 1,
-                'title'     => 'Dashboard',
-                'icon'      => 'fa-bar-chart',
-                'uri'       => '/',
-            ],
-            [
-                'parent_id' => 0,
-                'order'     => 2,
-                'title'     => 'Admin',
-                'icon'      => 'fa-tasks',
-                'uri'       => '',
-            ],
-            [
-                'parent_id' => 2,
-                'order'     => 3,
-                'title'     => 'Users',
-                'icon'      => 'fa-users',
-                'uri'       => 'auth/users',
-            ],
-            [
-                'parent_id' => 2,
-                'order'     => 4,
-                'title'     => 'Roles',
-                'icon'      => 'fa-user',
-                'uri'       => 'auth/roles',
-            ],
-            [
-                'parent_id' => 2,
-                'order'     => 5,
-                'title'     => 'Permission',
-                'icon'      => 'fa-ban',
-                'uri'       => 'auth/permissions',
-            ],
-            [
-                'parent_id' => 2,
-                'order'     => 6,
-                'title'     => 'Menu',
-                'icon'      => 'fa-bars',
-                'uri'       => 'auth/menu',
-            ],
-            [
-                'parent_id' => 2,
-                'order'     => 7,
-                'title'     => 'Operation log',
-                'icon'      => 'fa-history',
-                'uri'       => 'auth/logs',
-            ],
+        $menuModel::truncate();
+
+        $menu[0] = $menuModel::create([
+            'order'     => 1,
+            'title'     => 'Dashboard',
+            'icon'      => 'fa-bar-chart',
+            'uri'       => '/',
         ]);
+        $menu[0]->save();
+
+        $menu[1] = $menuModel::create([
+            'order'     => 2,
+            'title'     => 'Admin',
+            'icon'      => 'fa-tasks',
+            'uri'       => '',
+        ]);
+        $menu[1]->parent()->associate($menu[0]);
+        $menu[1]->save();
+
+        $menu[2] = $menuModel::create([
+            'order'     => 3,
+            'title'     => 'Users',
+            'icon'      => 'fa-users',
+            'uri'       => 'auth/users',
+        ]);
+        $menu[2]->save();
+
+        $menu[3] = $menuModel::create([
+            'order'     => 4,
+            'title'     => 'Roles',
+            'icon'      => 'fa-user',
+            'uri'       => 'auth/roles',
+        ]);
+        $menu[3]->parent()->associate($menu[2]);
+        $menu[3]->save();
+
+        $menu[4] = $menuModel::create([
+            'order'     => 5,
+            'title'     => 'Permission',
+            'icon'      => 'fa-ban',
+            'uri'       => 'auth/permissions',
+        ]);
+        $menu[4]->parent()->associate($menu[2]);
+        $menu[4]->save();
+
+        $menu[5] = $menuModel::create([
+            'order'     => 6,
+            'title'     => 'Menu',
+            'icon'      => 'fa-bars',
+            'uri'       => 'auth/menu',
+        ]);
+        $menu[5]->parent()->associate($menu[2]);
+        $menu[5]->save();
+
+        $menu[6] = $menuModel::create([
+            'order'     => 7,
+            'title'     => 'Operation log',
+            'icon'      => 'fa-history',
+            'uri'       => 'auth/logs',
+        ]);
+        $menu[6]->parent()->associate($menu[2]);
+        $menu[6]->save();
 
         // add role to menu.
-        Menu::find(2)->roles()->save(Role::first());
+        $menu[2]->roles()->save($roleModel::first());
     }
 }
