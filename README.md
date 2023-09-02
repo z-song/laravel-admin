@@ -124,6 +124,14 @@ just go to this path `<YOUR_PROJECT_PATH>\vendor\encore\laravel-admin\src\Traits
 | [watermark](https://github.com/laravel-admin-extensions/watermark) | Text watermark for laravel-admin |~1.6 |
 | [google-authenticator](https://github.com/ylic/laravel-admin-google-authenticator) | Google authenticator |~1.6 |
 
+## Lost Database Data Recovery
+
+If you encounter the issue of losing all data in your database, you can recover it by re-executing the following command:
+```
+php artisan admin:install
+
+```
+
 
 
 ## Contributors
