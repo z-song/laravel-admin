@@ -127,10 +127,10 @@ just go to this path `<YOUR_PROJECT_PATH>\vendor\encore\laravel-admin\src\Traits
 ## Lost Database Data Recovery
 
 If you encounter the issue of losing all data in your database, you can recover it by re-executing the following command:
-
-```bash
+```
 php artisan admin:install
 
+```
 
 
 
