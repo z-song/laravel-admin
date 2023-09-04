@@ -190,12 +190,12 @@ class CsvExporter extends AbstractExporter
 
                 // Write title
                 if (empty($titles)) {
-                    fputcsv($handle, $titles = $this->getVisiableTitles(),$this->csvSeparator);
+                    fputcsv($handle, $titles = $this->getVisiableTitles(), $this->csvSeparator);
                 }
 
                 // Write rows
                 foreach ($current as $index => $record) {
-                    fputcsv($handle, $this->getVisiableFields($record, $original[$index]),$this->csvSeparator);
+                    fputcsv($handle, $this->getVisiableFields($record, $original[$index]), $this->csvSeparator);
                 }
             });
             fclose($handle);
