@@ -46,6 +46,23 @@ class CsvExporter extends AbstractExporter
      */
     protected $columnUseOriginalValue;
 
+
+    protected $csvSeparator;
+
+    /**
+     * @param string $csvSeparator
+     *
+     * @return $this
+     */
+    public function separator(string $csvSeparator = ';'): self
+    {
+        $this->csvSeparator = $csvSeparator;
+
+        return $this;
+    }
+
+
+
     /**
      * @param string $filename
      *
@@ -173,12 +190,12 @@ class CsvExporter extends AbstractExporter
 
                 // Write title
                 if (empty($titles)) {
-                    fputcsv($handle, $titles = $this->getVisiableTitles());
+                    fputcsv($handle, $titles = $this->getVisiableTitles(),$this->csvSeparator);
                 }
 
                 // Write rows
                 foreach ($current as $index => $record) {
-                    fputcsv($handle, $this->getVisiableFields($record, $original[$index]));
+                    fputcsv($handle, $this->getVisiableFields($record, $original[$index]),$this->csvSeparator);
                 }
             });
             fclose($handle);
@@ -202,7 +219,7 @@ class CsvExporter extends AbstractExporter
                     $columnTitle = $this->titleCallbacks[$columnName]($columnTitle);
                 }
 
-                return [$columnName => $columnTitle];
+                return [$columnName => html_entity_decode(htmlspecialchars_decode($columnTitle))];
             });
 
         if ($this->onlyColumns) {
@@ -231,8 +248,8 @@ class CsvExporter extends AbstractExporter
         foreach ($this->visibleColumns as $column) {
             $fields[] = $this->getColumnValue(
                 $column,
-                data_get($value, $column),
-                data_get($original, $column)
+                html_entity_decode(htmlspecialchars_decode(data_get($value, $column))),
+                html_entity_decode(htmlspecialchars_decode(data_get($original, $column)))
             );
         }
 
