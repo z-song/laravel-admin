@@ -489,6 +489,11 @@ class HasMany extends Field
          */
         $script = <<<EOT
 var index = 0;
+var old_new_inputs = $('#has-many-{$this->column} input._remove_[name^="{$this->column}[new_"]');
+if (old_new_inputs.length) {
+    var old_new_input_key_index = old_new_inputs.last().attr('name').match(/\[new_(\d+)\]/);
+    index += old_new_input_key_index ? old_new_input_key_index[1] : 0;
+}
 $('#has-many-{$this->column}').off('click', '.add').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
@@ -544,6 +549,11 @@ $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i
 });
 
 var index = 0;
+var old_new_inputs = $('#has-many-{$this->column} input._remove_[name^="{$this->column}[new_"]');
+if (old_new_inputs.length) {
+    var old_new_input_key_index = old_new_inputs.last().attr('name').match(/\[new_(\d+)\]/);
+    index += old_new_input_key_index ? old_new_input_key_index[1] : 0;
+}
 $('#has-many-{$this->column} > .header').off('click', '.add').on('click', '.add', function(){
     index++;
     var navTabHtml = $('#has-many-{$this->column} > template.nav-tab-tpl').html().replace(/{$defaultKey}/g, index);
@@ -589,6 +599,11 @@ EOT;
          */
         $script = <<<EOT
 var index = 0;
+var old_new_inputs = $('#has-many-{$this->column} input._remove_[name^="{$this->column}[new_"]');
+if (old_new_inputs.length) {
+    var old_new_input_key_index = old_new_inputs.last().attr('name').match(/\[new_(\d+)\]/);
+    index += old_new_input_key_index ? old_new_input_key_index[1] : 0;
+}
 $('#has-many-{$this->column}').on('click', '.add', function () {
 
     var tpl = $('template.{$this->column}-tpl');
