@@ -78,7 +78,7 @@ class HasMany extends Field
     /**
      * Create a new HasMany field instance.
      *
-     * @param $relationName
+     * @param       $relationName
      * @param array $arguments
      */
     public function __construct($relationName, $arguments = [])
@@ -270,7 +270,6 @@ class HasMany extends Field
          * in the HasMany relation, has many data/field set, $set is field set in the below
          */
         foreach ($input[$this->column] as $index => $set) {
-
             /*
              * foreach the field set to find the corresponding $column
              */
