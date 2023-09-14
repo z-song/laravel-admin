@@ -488,7 +488,7 @@ class HasMany extends Field
          */
         $script = <<<EOT
 var index = 0;
-var old_new_inputs = $('#has-many-{$this->column} input._remove_[name^="{$this->column}[new_"]');
+var old_new_inputs = $('#has-many-{$this->column} input.{$removeClass}[name^="{$this->column}[new_"]');
 if (old_new_inputs.length) {
     var old_new_input_key_index = old_new_inputs.last().attr('name').match(/\[new_(\d+)\]/);
     index += old_new_input_key_index ? old_new_input_key_index[1] : 0;
@@ -548,7 +548,7 @@ $('#has-many-{$this->column} > .nav').off('click', 'i.close-tab').on('click', 'i
 });
 
 var index = 0;
-var old_new_inputs = $('#has-many-{$this->column} input._remove_[name^="{$this->column}[new_"]');
+var old_new_inputs = $('#has-many-{$this->column} input.{$removeClass}[name^="{$this->column}[new_"]');
 if (old_new_inputs.length) {
     var old_new_input_key_index = old_new_inputs.last().attr('name').match(/\[new_(\d+)\]/);
     index += old_new_input_key_index ? old_new_input_key_index[1] : 0;
@@ -598,7 +598,7 @@ EOT;
          */
         $script = <<<EOT
 var index = 0;
-var old_new_inputs = $('#has-many-{$this->column} input._remove_[name^="{$this->column}[new_"]');
+var old_new_inputs = $('#has-many-{$this->column} input.{$removeClass}[name^="{$this->column}[new_"]');
 if (old_new_inputs.length) {
     var old_new_input_key_index = old_new_inputs.last().attr('name').match(/\[new_(\d+)\]/);
     index += old_new_input_key_index ? old_new_input_key_index[1] : 0;
