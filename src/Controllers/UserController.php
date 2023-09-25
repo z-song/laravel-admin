@@ -47,6 +47,11 @@ class UserController extends AdminController
             });
         });
 
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+            $filter->ilike('username', __('Nome ou e-mail do professor'));
+        });
+
         return $grid;
     }
 
