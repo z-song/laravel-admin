@@ -237,10 +237,9 @@ class CsvExporter extends AbstractExporter
         }
         $tmp = $fields;
         $fields = [];
-        foreach($tmp as $field) {
+        foreach ($tmp as $field) {
             $fields[] = strip_tags($field);
         }
-
         return $fields;
     }
     
