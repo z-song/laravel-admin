@@ -235,10 +235,15 @@ class CsvExporter extends AbstractExporter
                 data_get($original, $column)
             );
         }
+        $tmp = $fields;
+        $fields = [];
+        foreach($tmp as $field) {
+            $fields[] = strip_tags($field);
+        }
 
         return $fields;
     }
-
+    
     /**
      * @param string $column
      * @param mixed  $value
