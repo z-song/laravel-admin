@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Console;
 
+use Doctrine\DBAL\Types\Type;
 use Illuminate\Database\Eloquent\Model;
 
 class ResourceGenerator
@@ -87,9 +88,8 @@ class ResourceGenerator
             if (in_array($name, $reservedColumns)) {
                 continue;
             }
-            $type = $column->getType()->getName();
+            $type = Type::getTypeRegistry()->lookupName($column->getType());
             $default = $column->getDefault();
-
             $defaultValue = '';
 
             // set column fieldType and defaultValue
@@ -219,12 +219,12 @@ class ResourceGenerator
             );
         }
 
-        $table = $this->model->getConnection()->getTablePrefix().$this->model->getTable();
+        $table = $this->model->getConnection()->getTablePrefix() . $this->model->getTable();
         /** @var \Doctrine\DBAL\Schema\MySqlSchemaManager $schema */
         $schema = $this->model->getConnection()->getDoctrineSchemaManager($table);
 
         // custom mapping the types that doctrine/dbal does not support
-        $databasePlatform = $schema->getDatabasePlatform();
+        $databasePlatform = $this->model->getConnection()->getDoctrineConnection()->getDatabasePlatform();
 
         foreach ($this->doctrineTypeMapping as $doctrineType => $dbTypes) {
             foreach ($dbTypes as $dbType) {
