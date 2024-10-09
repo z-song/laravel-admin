@@ -17,7 +17,7 @@ class Copyable extends AbstractDisplayer
 $('#{$this->grid->tableID}').on('click','.grid-column-copyable',(function (e) {
     var content = $(this).data('content');
     
-    var temp = $('<input>');
+    var temp = $('<textarea>');
     
     $("body").append(temp);
     temp.val(content).select();
