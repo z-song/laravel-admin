@@ -459,6 +459,9 @@ abstract class AbstractFilter
      */
     protected function buildCondition()
     {
+        if ($this->ignore) {
+            return;
+        }
         $column = explode('.', $this->column);
 
         if (count($column) == 1) {

@@ -5,7 +5,7 @@
 首先确保安装好了`laravel`，并且数据库连接设置正确。
 
 ```
-composer require encore/laravel-admin "1.5.*"
+composer require lmkhang10/laravel-admin "1.0.*"
 ```
 
 然后运行下面的命令来发布资源：

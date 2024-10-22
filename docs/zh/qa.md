@@ -4,13 +4,13 @@
 
 如果有需要自己修改view，但是不方便直接修改`laravel-admin`的情况，可以用下面的办法解决
 
-复制`vendor/encore/laravel-admin/views`到项目的`resources/views/admin`，然后在`app/Admin/bootstrap.php`文件中加入代码：
+复制`vendor/lmkhang10/laravel-admin/views`到项目的`resources/views/admin`，然后在`app/Admin/bootstrap.php`文件中加入代码：
 
 ```php
 app('view')->prependNamespace('admin', resource_path('views/admin'));
 ```
 
-这样就用`resources/views/admin`下的视图覆盖了`laravel-admin`的视图，要注意的问题是，更新`laravel-admin`的时候，如果遇到视图方面的问题，需要重新复制`vendor/encore/laravel-admin/views`到项目的`resources/views/admin`中，注意备份原来已经修改过的视图。
+这样就用`resources/views/admin`下的视图覆盖了`laravel-admin`的视图，要注意的问题是，更新`laravel-admin`的时候，如果遇到视图方面的问题，需要重新复制`vendor/lmkhang10/laravel-admin/views`到项目的`resources/views/admin`中，注意备份原来已经修改过的视图。
 
 ## 设置语言
 
