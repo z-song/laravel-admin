@@ -8,7 +8,6 @@
 <p align="center">
 <a href="https://laravel-admin.org/docs">Documentation</a> |
 <a href="https://laravel-admin.org/docs/zh">中文文档</a> |
-<a href="https://demo.laravel-admin.org">Demo</a> |
 <a href="https://github.com/z-song/demo.laravel-admin.org">Demo source code</a> |
 <a href="#extensions">Extensions</a>
 </p>
