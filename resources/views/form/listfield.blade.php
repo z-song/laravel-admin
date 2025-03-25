@@ -25,7 +25,7 @@
                     <td>
                         <div class="form-group {{ $errors->has($itemErrorKey) ? 'has-error' : '' }}">
                             <div class="col-sm-12">
-                                <input name="{{ $column }}[values][]" value="{{ old("{$column}.values.{$k}", $v) }}" class="form-control" />
+                                <input name="{{ $name }}[values][]" value="{{ old("{$column}.values.{$k}", $v) }}" class="form-control" />
                                 @if($errors->has($itemErrorKey))
                                     @foreach($errors->get($itemErrorKey) as $message)
                                         <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {{$message}}</label><br/>
@@ -60,7 +60,7 @@
             <td>
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <input name="{{ $column }}[values][]" class="form-control" />
+                        <input name="{{ $name }}[values][]" class="form-control" />
                     </div>
                 </div>
             </td>

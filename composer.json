@@ -15,7 +15,7 @@
         "php": ">=7.0.0",
         "symfony/dom-crawler": "~3.1|~4.0|~5.0",
         "laravel/framework": ">=5.5",
-        "doctrine/dbal": "2.*|3.*"
+        "doctrine/dbal": "2.*|3.*|^4.0"
     },
     "require-dev": {
         "laravel/laravel": ">=5.5",
