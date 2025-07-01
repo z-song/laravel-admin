@@ -1,0 +1,302 @@
+/**
+ * AdminLTE 4 + Bootstrap 5 Integration CSS
+ * Laravel-admin UI Modernization
+ * 
+ * This file integrates AdminLTE 4 with Bootstrap 5 for modern UI
+ */
+
+/* Import Bootstrap 5 */
+@import 'bootstrap/dist/css/bootstrap.css';
+
+/* Import AdminLTE 4 */
+@import 'admin-lte/dist/css/adminlte.css';
+
+/* Import Font Awesome 6 */
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+/* Import existing modern components */
+@import './base/variables.css';
+@import './components/responsive-grid.css';
+@import './components/responsive-navigation.css';
+@import './components/accessibility.css';
+
+/* Import theme system */
+@import './themes/dark.css';
+@import './themes/theme-colors.css';
+
+/* AdminLTE 4 Theme Integration */
+:root {
+  /* Custom AdminLTE 4 Variables */
+  --bs-primary: #007bff;
+  --bs-secondary: #6c757d;
+  --bs-success: #28a745;
+  --bs-info: #17a2b8;
+  --bs-warning: #ffc107;
+  --bs-danger: #dc3545;
+  --bs-light: #f8f9fa;
+  --bs-dark: #343a40;
+  
+  /* AdminLTE 4 Specific Variables */
+  --app-sidebar-bg: var(--bs-dark);
+  --app-sidebar-color: rgba(255, 255, 255, 0.8);
+  --app-header-bg: var(--bs-white);
+  --app-header-color: var(--bs-dark);
+  --app-main-bg: #f4f6f9;
+  
+  /* Dark Mode Variables */
+  --app-dark-bg: #1a1a1a;
+  --app-dark-sidebar-bg: #2d3748;
+  --app-dark-header-bg: #2d3748;
+  --app-dark-main-bg: #1a202c;
+}
+
+/* App Layout Structure */
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background-color: var(--app-header-bg);
+  color: var(--app-header-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 1030;
+}
+
+.app-sidebar {
+  background-color: var(--app-sidebar-bg);
+  color: var(--app-sidebar-color);
+  width: 250px;
+  min-height: calc(100vh - 57px);
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.app-main {
+  background-color: var(--app-main-bg);
+  flex: 1;
+  padding: 1rem;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.app-footer {
+  background-color: var(--app-header-bg);
+  border-top: 1px solid var(--bs-border-color);
+  padding: 1rem;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Sidebar Navigation */
+.nav-sidebar {
+  padding: 0.5rem 0;
+}
+
+.nav-sidebar .nav-item {
+  margin-bottom: 0.25rem;
+}
+
+.nav-sidebar .nav-link {
+  color: var(--app-sidebar-color);
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  margin: 0 0.5rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.nav-sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--bs-white);
+}
+
+.nav-sidebar .nav-link.active {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+}
+
+.nav-sidebar .nav-link i {
+  width: 1.5rem;
+  text-align: center;
+  margin-right: 0.5rem;
+}
+
+/* Treeview Menu */
+.nav-treeview {
+  padding-left: 1rem;
+}
+
+.nav-treeview .nav-link {
+  padding-left: 2.5rem;
+  font-size: 0.875rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .app-sidebar {
+    position: fixed;
+    z-index: 1040;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .app-sidebar.show {
+    transform: translateX(0);
+  }
+  
+  .app-main,
+  .app-footer {
+    margin-left: 0;
+  }
+}
+
+/* Sidebar Toggle */
+.sidebar-toggle {
+  border: none;
+  background: none;
+  font-size: 1.25rem;
+  color: var(--app-header-color);
+  padding: 0.5rem;
+}
+
+/* Content Header */
+.content-header {
+  background: transparent;
+  padding: 1rem 0 0 0;
+  margin-bottom: 1rem;
+}
+
+.content-header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--bs-dark);
+}
+
+/* Card Enhancements */
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.375rem;
+}
+
+.card-header {
+  background-color: var(--bs-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  font-weight: 600;
+}
+
+/* Button Enhancements */
+.btn {
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Form Enhancements */
+.form-control {
+  border-radius: 0.375rem;
+  border: 1px solid var(--bs-border-color);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Table Enhancements */
+.table {
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.table th {
+  background-color: var(--bs-light);
+  border-bottom: 2px solid var(--bs-border-color);
+  font-weight: 600;
+}
+
+/* Dark Mode Support */
+[data-bs-theme="dark"] {
+  --app-sidebar-bg: var(--app-dark-sidebar-bg);
+  --app-header-bg: var(--app-dark-header-bg);
+  --app-main-bg: var(--app-dark-main-bg);
+  --app-header-color: var(--bs-white);
+}
+
+[data-bs-theme="dark"] .app-wrapper {
+  background-color: var(--app-dark-bg);
+  color: var(--bs-white);
+}
+
+[data-bs-theme="dark"] .content-header h1 {
+  color: var(--bs-white);
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Loading States */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Focus Indicators for Accessibility */
+.btn:focus,
+.nav-link:focus,
+.form-control:focus {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .app-sidebar {
+    border-right: 2px solid var(--bs-border-color);
+  }
+  
+  .nav-sidebar .nav-link {
+    border: 1px solid transparent;
+  }
+  
+  .nav-sidebar .nav-link:hover,
+  .nav-sidebar .nav-link.active {
+    border-color: var(--bs-white);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

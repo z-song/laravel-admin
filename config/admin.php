@@ -63,6 +63,71 @@ return [
         'namespace' => 'App\\Admin\\Controllers',
 
         'middleware' => ['web', 'admin'],
+
+        // Laravel 11 API integration support
+        'api' => [
+            'enable' => env('ADMIN_API_ENABLE', false),
+            'prefix' => env('ADMIN_API_PREFIX', 'admin-api'),
+            'middleware' => ['api', 'admin.auth:sanctum'],
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Laravel-admin UI Framework Configuration
+    |--------------------------------------------------------------------------
+    |
+    | UI framework and theme configuration for AdminLTE 4 + Bootstrap 5.
+    | Includes asset management, theming, and modern build tools.
+    |
+    */
+    
+    // UI Framework Settings
+    'ui_framework' => env('ADMIN_UI_FRAMEWORK', 'adminlte4'), // adminlte4, adminlte3, custom
+    
+    // Theme Configuration
+    'theme' => env('ADMIN_THEME', 'light'), // light, dark, auto
+    'theme_color' => env('ADMIN_THEME_COLOR', 'blue'), // blue, green, red, purple, etc.
+    
+    // Layout Configuration
+    'layout' => [
+        'sidebar_mini' => env('ADMIN_SIDEBAR_MINI', false),
+        'sidebar_collapse' => env('ADMIN_SIDEBAR_COLLAPSE', false),
+        'navbar_fixed' => env('ADMIN_NAVBAR_FIXED', true),
+        'footer_fixed' => env('ADMIN_FOOTER_FIXED', false),
+        'sidebar_dark' => env('ADMIN_SIDEBAR_DARK', true),
+    ],
+    
+    // Vite Integration (AdminLTE 4 + Bootstrap 5)
+    'vite' => [
+        'enabled' => env('ADMIN_VITE_ENABLED', true),
+        'hot_reload' => env('ADMIN_VITE_HOT_RELOAD', env('APP_DEBUG', false)),
+        'build_path' => env('ADMIN_VITE_BUILD_PATH', 'build'),
+        'manifest' => env('ADMIN_VITE_MANIFEST', 'manifest.json'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Laravel-admin asset settings (Legacy Support)
+    |--------------------------------------------------------------------------
+    |
+    | Asset management configuration for legacy support and CDN fallbacks.
+    | Maintains backward compatibility with existing installations.
+    |
+    */
+    'assets' => [
+        // Legacy asset fallback (maintains backward compatibility)
+        'legacy_fallback' => env('ADMIN_LEGACY_FALLBACK', true),
+        
+        // Asset versioning for cache busting
+        'version' => env('ADMIN_ASSET_VERSION', '2.0.0'),
+        
+        // CDN configuration for external libraries
+        'cdn' => [
+            'enable' => env('ADMIN_CDN_ENABLE', false),
+            'jquery' => 'https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js',
+            'bootstrap' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
+        ],
     ],
 
     /*
@@ -406,5 +471,123 @@ return [
     */
     'extensions' => [
 
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Laravel 11 Real-time Features (Laravel Reverb)
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for Laravel Reverb WebSocket server integration.
+    | Enable real-time features like live notifications, data updates,
+    | and collaborative editing in admin panels.
+    |
+    */
+    'reverb' => [
+        'enabled' => env('ADMIN_REVERB_ENABLED', false),
+        'app_id' => env('REVERB_APP_ID'),
+        'key' => env('REVERB_APP_KEY'),
+        'secret' => env('REVERB_APP_SECRET'),
+        'host' => env('REVERB_HOST', '127.0.0.1'),
+        'port' => env('REVERB_PORT', 8080),
+        'scheme' => env('REVERB_SCHEME', 'http'),
+        
+        // Real-time features configuration
+        'features' => [
+            'notifications' => env('ADMIN_REALTIME_NOTIFICATIONS', true),
+            'grid_updates' => env('ADMIN_REALTIME_GRID_UPDATES', true),
+            'user_presence' => env('ADMIN_REALTIME_USER_PRESENCE', true),
+            'operation_log' => env('ADMIN_REALTIME_OPERATION_LOG', true),
+        ],
+        
+        // Channel configuration
+        'channels' => [
+            'admin_notifications' => 'admin.notifications',
+            'admin_operations' => 'admin.operations.{user_id}',
+            'admin_presence' => 'admin.presence',
+            'grid_updates' => 'admin.grid.{model}',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Laravel 11 Performance Optimization
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for Laravel 11 performance features including
+    | caching strategies, queue integration, and optimization settings.
+    |
+    */
+    'performance' => [
+        // Cache configuration for admin data
+        'cache' => [
+            'enabled' => env('ADMIN_CACHE_ENABLED', true),
+            'driver' => env('ADMIN_CACHE_DRIVER', 'redis'),
+            'prefix' => env('ADMIN_CACHE_PREFIX', 'admin'),
+            'ttl' => env('ADMIN_CACHE_TTL', 3600), // 1 hour
+            
+            // Specific cache settings
+            'menu_cache' => env('ADMIN_MENU_CACHE', true),
+            'permission_cache' => env('ADMIN_PERMISSION_CACHE', true),
+            'role_cache' => env('ADMIN_ROLE_CACHE', true),
+        ],
+        
+        // Queue configuration for background processing
+        'queue' => [
+            'enabled' => env('ADMIN_QUEUE_ENABLED', false),
+            'connection' => env('ADMIN_QUEUE_CONNECTION', 'redis'),
+            'queue' => env('ADMIN_QUEUE_NAME', 'admin'),
+            
+            // Operations that should be queued
+            'operations' => [
+                'export' => true,
+                'import' => true,
+                'bulk_operations' => true,
+                'file_processing' => true,
+            ],
+        ],
+        
+        // Database optimization
+        'database' => [
+            'eager_loading' => env('ADMIN_EAGER_LOADING', true),
+            'chunk_size' => env('ADMIN_CHUNK_SIZE', 1000),
+            'query_cache' => env('ADMIN_QUERY_CACHE', true),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Laravel 11 API Integration
+    |--------------------------------------------------------------------------
+    |
+    | Enhanced API configuration with Laravel 11 features including
+    | Sanctum integration, rate limiting, and API versioning.
+    |
+    */
+    'api' => [
+        'enabled' => env('ADMIN_API_ENABLED', false),
+        'prefix' => env('ADMIN_API_PREFIX', 'admin-api'),
+        'version' => env('ADMIN_API_VERSION', 'v1'),
+        
+        // Authentication
+        'auth' => [
+            'driver' => env('ADMIN_API_AUTH_DRIVER', 'sanctum'),
+            'token_expiry' => env('ADMIN_API_TOKEN_EXPIRY', 1440), // 24 hours
+        ],
+        
+        // Rate limiting (Laravel 11 per-second rate limiting)
+        'rate_limiting' => [
+            'enabled' => env('ADMIN_API_RATE_LIMIT_ENABLED', true),
+            'per_minute' => env('ADMIN_API_RATE_LIMIT_PER_MINUTE', 60),
+            'per_second' => env('ADMIN_API_RATE_LIMIT_PER_SECOND', 2),
+        ],
+        
+        // API features
+        'features' => [
+            'crud_operations' => env('ADMIN_API_CRUD', true),
+            'file_upload' => env('ADMIN_API_FILE_UPLOAD', true),
+            'batch_operations' => env('ADMIN_API_BATCH_OPS', true),
+            'search' => env('ADMIN_API_SEARCH', true),
+        ],
     ],
 ];

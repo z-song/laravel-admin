@@ -5,17 +5,31 @@ namespace Encore\Admin\Auth\Database;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class Permission extends Model
 {
     use DefaultDatetimeFormat;
+    use HasFactory;
 
     /**
      * @var array
      */
     protected $fillable = ['name', 'slug', 'http_method', 'http_path'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'http_method' => 'array', // Laravel 11: Auto-cast comma-separated to array
+    ];
 
     /**
      * @var array
@@ -90,15 +104,16 @@ class Permission extends Model
     }
 
     /**
-     * filter \r.
+     * Laravel 11 Modern Attribute: Clean HTTP path
      *
-     * @param string $path
-     *
-     * @return mixed
+     * @return Attribute
      */
-    public function getHttpPathAttribute($path)
+    protected function httpPath(): Attribute
     {
-        return str_replace("\r\n", "\n", $path);
+        return Attribute::make(
+            get: fn($value) => str_replace("\r\n", "\n", $value),
+            set: fn($value) => str_replace("\r\n", "\n", $value)
+        );
     }
 
     /**
@@ -129,27 +144,63 @@ class Permission extends Model
     }
 
     /**
-     * @param $method
+     * Laravel 11 Modern Attribute: HTTP methods handling
+     * Now using built-in array casting instead of manual conversion
+     *
+     * @return Attribute
      */
-    public function setHttpMethodAttribute($method)
+    protected function httpMethod(): Attribute
     {
-        if (is_array($method)) {
-            $this->attributes['http_method'] = implode(',', $method);
-        }
+        return Attribute::make(
+            get: function ($value) {
+                if (is_string($value)) {
+                    return array_filter(explode(',', $value));
+                }
+                return $value ?: [];
+            },
+            set: function ($value) {
+                if (is_array($value)) {
+                    return implode(',', array_filter($value));
+                }
+                return $value;
+            }
+        );
     }
 
     /**
-     * @param $method
+     * Laravel 11 Modern Attribute: Display name for permission
      *
-     * @return array
+     * @return Attribute
      */
-    public function getHttpMethodAttribute($method)
+    protected function displayName(): Attribute
     {
-        if (is_string($method)) {
-            return array_filter(explode(',', $method));
-        }
+        return Attribute::make(
+            get: fn() => ucwords(str_replace(['-', '_'], ' ', $this->name))
+        );
+    }
 
-        return $method;
+    /**
+     * Laravel 11 Modern Attribute: Check if this is a wildcard permission
+     *
+     * @return Attribute
+     */
+    protected function isWildcard(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => str_contains($this->http_path, '*') || empty($this->http_path)
+        );
+    }
+
+    /**
+     * Laravel 11 Modern Attribute: Count of roles with this permission
+     *
+     * @return Attribute
+     */
+    protected function rolesCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->roles()->count()
+        );
     }
 
     /**

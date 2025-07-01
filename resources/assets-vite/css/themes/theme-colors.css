@@ -1,0 +1,273 @@
+/**
+ * AdminLTE 4 Theme Colors
+ * Laravel-admin UI Modernization
+ * 
+ * Color scheme variations for AdminLTE 4 themes
+ */
+
+/* Base Theme Color Variables */
+:root {
+  /* Blue Theme (Default) */
+  --theme-blue-primary: #007bff;
+  --theme-blue-secondary: #6c757d;
+  --theme-blue-accent: #17a2b8;
+  
+  /* Green Theme */
+  --theme-green-primary: #28a745;
+  --theme-green-secondary: #6c757d;
+  --theme-green-accent: #20c997;
+  
+  /* Red Theme */
+  --theme-red-primary: #dc3545;
+  --theme-red-secondary: #6c757d;
+  --theme-red-accent: #fd7e14;
+  
+  /* Purple Theme */
+  --theme-purple-primary: #6f42c1;
+  --theme-purple-secondary: #6c757d;
+  --theme-purple-accent: #e83e8c;
+  
+  /* Orange Theme */
+  --theme-orange-primary: #fd7e14;
+  --theme-orange-secondary: #6c757d;
+  --theme-orange-accent: #ffc107;
+  
+  /* Teal Theme */
+  --theme-teal-primary: #20c997;
+  --theme-teal-secondary: #6c757d;
+  --theme-teal-accent: #17a2b8;
+  
+  /* Dark Theme */
+  --theme-dark-primary: #343a40;
+  --theme-dark-secondary: #6c757d;
+  --theme-dark-accent: #495057;
+  
+  /* Light Theme */
+  --theme-light-primary: #f8f9fa;
+  --theme-light-secondary: #e9ecef;
+  --theme-light-accent: #dee2e6;
+}
+
+/* Blue Theme */
+[data-admin-theme-color="blue"] {
+  --bs-primary: var(--theme-blue-primary);
+  --bs-primary-rgb: 0, 123, 255;
+  --app-sidebar-bg: var(--theme-blue-primary);
+  --app-accent-color: var(--theme-blue-accent);
+}
+
+[data-admin-theme-color="blue"] .nav-sidebar .nav-link.active {
+  background-color: var(--theme-blue-accent);
+}
+
+[data-admin-theme-color="blue"] .btn-primary {
+  background-color: var(--theme-blue-primary);
+  border-color: var(--theme-blue-primary);
+}
+
+/* Green Theme */
+[data-admin-theme-color="green"] {
+  --bs-primary: var(--theme-green-primary);
+  --bs-primary-rgb: 40, 167, 69;
+  --app-sidebar-bg: var(--theme-green-primary);
+  --app-accent-color: var(--theme-green-accent);
+}
+
+[data-admin-theme-color="green"] .nav-sidebar .nav-link.active {
+  background-color: var(--theme-green-accent);
+}
+
+[data-admin-theme-color="green"] .btn-primary {
+  background-color: var(--theme-green-primary);
+  border-color: var(--theme-green-primary);
+}
+
+[data-admin-theme-color="green"] .app-header {
+  border-bottom-color: var(--theme-green-primary);
+}
+
+/* Red Theme */
+[data-admin-theme-color="red"] {
+  --bs-primary: var(--theme-red-primary);
+  --bs-primary-rgb: 220, 53, 69;
+  --app-sidebar-bg: var(--theme-red-primary);
+  --app-accent-color: var(--theme-red-accent);
+}
+
+[data-admin-theme-color="red"] .nav-sidebar .nav-link.active {
+  background-color: var(--theme-red-accent);
+}
+
+[data-admin-theme-color="red"] .btn-primary {
+  background-color: var(--theme-red-primary);
+  border-color: var(--theme-red-primary);
+}
+
+/* Purple Theme */
+[data-admin-theme-color="purple"] {
+  --bs-primary: var(--theme-purple-primary);
+  --bs-primary-rgb: 111, 66, 193;
+  --app-sidebar-bg: var(--theme-purple-primary);
+  --app-accent-color: var(--theme-purple-accent);
+}
+
+[data-admin-theme-color="purple"] .nav-sidebar .nav-link.active {
+  background-color: var(--theme-purple-accent);
+}
+
+[data-admin-theme-color="purple"] .btn-primary {
+  background-color: var(--theme-purple-primary);
+  border-color: var(--theme-purple-primary);
+}
+
+/* Orange Theme */
+[data-admin-theme-color="orange"] {
+  --bs-primary: var(--theme-orange-primary);
+  --bs-primary-rgb: 253, 126, 20;
+  --app-sidebar-bg: var(--theme-orange-primary);
+  --app-accent-color: var(--theme-orange-accent);
+}
+
+[data-admin-theme-color="orange"] .nav-sidebar .nav-link.active {
+  background-color: var(--theme-orange-accent);
+}
+
+[data-admin-theme-color="orange"] .btn-primary {
+  background-color: var(--theme-orange-primary);
+  border-color: var(--theme-orange-primary);
+}
+
+/* Teal Theme */
+[data-admin-theme-color="teal"] {
+  --bs-primary: var(--theme-teal-primary);
+  --bs-primary-rgb: 32, 201, 151;
+  --app-sidebar-bg: var(--theme-teal-primary);
+  --app-accent-color: var(--theme-teal-accent);
+}
+
+[data-admin-theme-color="teal"] .nav-sidebar .nav-link.active {
+  background-color: var(--theme-teal-accent);
+}
+
+[data-admin-theme-color="teal"] .btn-primary {
+  background-color: var(--theme-teal-primary);
+  border-color: var(--theme-teal-primary);
+}
+
+/* Dark Theme Colors */
+[data-admin-theme-color="dark"] {
+  --bs-primary: var(--theme-dark-primary);
+  --bs-primary-rgb: 52, 58, 64;
+  --app-sidebar-bg: var(--theme-dark-primary);
+  --app-accent-color: var(--theme-dark-accent);
+}
+
+[data-admin-theme-color="dark"] .app-header {
+  background-color: var(--theme-dark-primary);
+  color: var(--bs-white);
+}
+
+[data-admin-theme-color="dark"] .nav-sidebar .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+[data-admin-theme-color="dark"] .nav-sidebar .nav-link.active {
+  background-color: var(--theme-dark-accent);
+  color: var(--bs-white);
+}
+
+/* Light Theme Colors */
+[data-admin-theme-color="light"] {
+  --bs-primary: var(--theme-light-primary);
+  --bs-primary-rgb: 248, 249, 250;
+  --app-sidebar-bg: var(--theme-light-primary);
+  --app-accent-color: var(--theme-light-accent);
+}
+
+[data-admin-theme-color="light"] .app-sidebar {
+  border-right: 1px solid var(--theme-light-accent);
+}
+
+[data-admin-theme-color="light"] .nav-sidebar .nav-link {
+  color: var(--bs-dark);
+}
+
+[data-admin-theme-color="light"] .nav-sidebar .nav-link:hover {
+  background-color: var(--theme-light-accent);
+}
+
+[data-admin-theme-color="light"] .nav-sidebar .nav-link.active {
+  background-color: var(--theme-light-accent);
+  color: var(--bs-dark);
+}
+
+/* Theme Color Transitions */
+.app-wrapper,
+.app-header,
+.app-sidebar,
+.nav-sidebar .nav-link,
+.btn {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Theme Color Utilities */
+.text-theme-primary {
+  color: var(--bs-primary) !important;
+}
+
+.bg-theme-primary {
+  background-color: var(--bs-primary) !important;
+}
+
+.border-theme-primary {
+  border-color: var(--bs-primary) !important;
+}
+
+.text-theme-accent {
+  color: var(--app-accent-color) !important;
+}
+
+.bg-theme-accent {
+  background-color: var(--app-accent-color) !important;
+}
+
+.border-theme-accent {
+  border-color: var(--app-accent-color) !important;
+}
+
+/* Custom Color Scheme Support */
+[data-admin-theme-color="custom"] {
+  --bs-primary: var(--custom-primary, #007bff);
+  --bs-primary-rgb: var(--custom-primary-rgb, 0, 123, 255);
+  --app-sidebar-bg: var(--custom-sidebar-bg, var(--bs-primary));
+  --app-accent-color: var(--custom-accent, #17a2b8);
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --bs-primary: #0056b3;
+    --app-sidebar-bg: #000000;
+    --app-accent-color: #ffffff;
+  }
+  
+  .nav-sidebar .nav-link {
+    border: 1px solid transparent;
+  }
+  
+  .nav-sidebar .nav-link:hover,
+  .nav-sidebar .nav-link.active {
+    border-color: var(--bs-white);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .app-wrapper,
+  .app-header,
+  .app-sidebar,
+  .nav-sidebar .nav-link,
+  .btn {
+    transition: none !important;
+  }
+}

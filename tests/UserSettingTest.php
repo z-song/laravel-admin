@@ -14,16 +14,17 @@ class UserSettingTest extends TestCase
 
     public function testVisitSettingPage()
     {
-        $this->visit('admin/auth/setting')
-            ->see('User setting')
-            ->see('Username')
-            ->see('Name')
-            ->see('Avatar')
-            ->see('Password')
-            ->see('Password confirmation');
+        $response = $this->get('admin/auth/setting');
 
-        $this->seeElement('input[value=Administrator]')
-            ->seeInElement('.box-body', 'administrator');
+        $response->assertStatus(200)
+            ->assertSee('User setting')
+            ->assertSee('Username')
+            ->assertSee('Name')
+            ->assertSee('Avatar')
+            ->assertSee('Password')
+            ->assertSee('Password confirmation')
+            ->assertSee('value="Administrator"', false)
+            ->assertSee('administrator');
     }
 
     public function testUpdateName()
@@ -32,21 +33,28 @@ class UserSettingTest extends TestCase
             'name' => 'tester',
         ];
 
-        $this->visit('admin/auth/setting')
-            ->submitForm('Submit', $data)
-            ->seePageIs('admin/auth/setting');
+        $response = $this->put('admin/auth/setting', $data);
 
-        $this->seeInDatabase('admin_users', ['name' => $data['name']]);
+        $response->assertRedirect('admin/auth/setting');
+
+        $this->assertDatabaseHas('admin_users', ['name' => $data['name']]);
     }
 
     public function testUpdateAvatar()
     {
         File::cleanDirectory(public_path('uploads/images'));
 
-        $this->visit('admin/auth/setting')
-            ->attach(__DIR__.'/assets/test.jpg', 'avatar')
-            ->press('Submit')
-            ->seePageIs('admin/auth/setting');
+        $response = $this->call('PUT', 'admin/auth/setting', [], [], [
+            'avatar' => new \Illuminate\Http\UploadedFile(
+                __DIR__.'/assets/test.jpg',
+                'test.jpg',
+                'image/jpeg',
+                null,
+                true
+            )
+        ]);
+
+        $response->assertRedirect('admin/auth/setting');
 
         $avatar = Administrator::first()->avatar;
 
@@ -60,10 +68,10 @@ class UserSettingTest extends TestCase
             'password_confirmation' => '123',
         ];
 
-        $this->visit('admin/auth/setting')
-            ->submitForm('Submit', $data)
-            ->seePageIs('admin/auth/setting')
-            ->see('The Password confirmation does not match.');
+        $response = $this->put('admin/auth/setting', $data);
+
+        $response->assertRedirect('admin/auth/setting')
+            ->assertSessionHasErrors(['password']);
     }
 
     public function testUpdatePassword()
@@ -73,24 +81,22 @@ class UserSettingTest extends TestCase
             'password_confirmation' => '123456',
         ];
 
-        $this->visit('admin/auth/setting')
-            ->submitForm('Submit', $data)
-            ->seePageIs('admin/auth/setting');
+        $response = $this->put('admin/auth/setting', $data);
+
+        $response->assertRedirect('admin/auth/setting');
 
         $this->assertTrue(app('hash')->check($data['password'], Administrator::first()->makeVisible('password')->password));
 
-        $this->visit('admin/auth/logout')
-            ->seePageIs('admin/auth/login')
-            ->dontSeeIsAuthenticated('admin');
+        // Test logout
+        $response = $this->get('admin/auth/logout');
+        $response->assertRedirect('admin/auth/login');
+        $this->assertGuest('admin');
 
+        // Test login with new password
         $credentials = ['username' => 'admin', 'password' => '123456'];
 
-        $this->visit('admin/auth/login')
-            ->see('login')
-            ->submitForm('Login', $credentials)
-            ->see('dashboard')
-            ->seeCredentials($credentials, 'admin')
-            ->seeIsAuthenticated('admin')
-            ->seePageIs('admin');
+        $response = $this->post('admin/auth/login', $credentials);
+        $response->assertRedirect('admin');
+        $this->assertAuthenticatedAs(Administrator::first(), 'admin');
     }
 }

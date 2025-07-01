@@ -4,6 +4,7 @@ namespace Encore\Admin\Middleware;
 
 use Closure;
 use Encore\Admin\Facades\Admin;
+use Illuminate\Http\Request;
 
 class Authenticate
 {
@@ -15,10 +16,11 @@ class Authenticate
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        \config(['auth.defaults.guard' => 'admin']);
-
+        // Removed dynamic config modification for Laravel 11 compatibility
+        // Guard should be specified explicitly in Admin::guard() calls
+        
         $redirectTo = admin_base_path(config('admin.auth.redirect_to', 'auth/login'));
 
         if (Admin::guard()->guest() && !$this->shouldPassThrough($request)) {
@@ -35,7 +37,7 @@ class Authenticate
      *
      * @return bool
      */
-    protected function shouldPassThrough($request)
+    protected function shouldPassThrough(Request $request): bool
     {
         // 下面的路由不验证登陆
         $excepts = config('admin.auth.excepts', []);

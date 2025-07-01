@@ -10,6 +10,8 @@ class Session
     {
         $path = '/'.trim(config('admin.route.prefix'), '/');
 
+        // Note: Runtime config modification for session path
+        // This is kept for admin-specific session handling
         config(['session.path' => $path]);
 
         if ($domain = config('admin.route.domain')) {

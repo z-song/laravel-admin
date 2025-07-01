@@ -17,8 +17,10 @@ class UsersTest extends TestCase
 
     public function testUsersIndexPage()
     {
-        $this->visit('admin/auth/users')
-            ->see('Administrator');
+        $response = $this->get('admin/auth/users');
+        
+        $response->assertStatus(200)
+            ->assertSee('Administrator');
     }
 
     public function testCreateUser()
@@ -31,43 +33,48 @@ class UsersTest extends TestCase
         ];
 
         // create user
-        $this->visit('admin/auth/users/create')
-            ->see('Create')
-            ->submitForm('Submit', $user)
-            ->seePageIs('admin/auth/users')
-            ->seeInDatabase(config('admin.database.users_table'), ['username' => 'Test']);
+        $response = $this->get('admin/auth/users/create');
+        $response->assertStatus(200)->assertSee('Create');
+        
+        $response = $this->post('admin/auth/users', $user);
+        $response->assertRedirect('admin/auth/users');
+        $this->assertDatabaseHas(config('admin.database.users_table'), ['username' => 'Test']);
 
         // assign role to user
-        $this->visit('admin/auth/users/2/edit')
-            ->see('Edit')
-            ->submitForm('Submit', ['roles' => [1]])
-            ->seePageIs('admin/auth/users')
-            ->seeInDatabase(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 1]);
+        $response = $this->get('admin/auth/users/2/edit');
+        $response->assertStatus(200)->assertSee('Edit');
+        
+        $response = $this->put('admin/auth/users/2', ['roles' => [1]]);
+        $response->assertRedirect('admin/auth/users');
+        $this->assertDatabaseHas(config('admin.database.role_users_table'), ['user_id' => 2, 'role_id' => 1]);
 
-        $this->visit('admin/auth/logout')
-            ->dontSeeIsAuthenticated('admin')
-            ->seePageIs('admin/auth/login')
-            ->submitForm('Login', ['username' => $user['username'], 'password' => $user['password']])
-            ->see('dashboard')
-            ->seeIsAuthenticated('admin')
-            ->seePageIs('admin');
+        // logout and login with new user
+        $response = $this->get('admin/auth/logout');
+        $response->assertRedirect('admin/auth/login');
+        $this->assertGuest('admin');
+        
+        $response = $this->post('admin/auth/login', ['username' => $user['username'], 'password' => $user['password']]);
+        $response->assertRedirect('admin');
+        $this->assertAuthenticated('admin');
 
         $this->assertTrue($this->app['auth']->guard('admin')->getUser()->isAdministrator());
 
-        $this->see('<span>Users</span>')
-            ->see('<span>Roles</span>')
-            ->see('<span>Permission</span>')
-            ->see('<span>Operation log</span>')
-            ->see('<span>Menu</span>');
+        $response = $this->get('admin');
+        $response->assertSee('<span>Users</span>', false)
+            ->assertSee('<span>Roles</span>', false)
+            ->assertSee('<span>Permission</span>', false)
+            ->assertSee('<span>Operation log</span>', false)
+            ->assertSee('<span>Menu</span>', false);
     }
 
     public function testUpdateUser()
     {
-        $this->visit('admin/auth/users/'.$this->user->id.'/edit')
-            ->see('Create')
-            ->submitForm('Submit', ['name' => 'test', 'roles' => [1]])
-            ->seePageIs('admin/auth/users')
-            ->seeInDatabase(config('admin.database.users_table'), ['name' => 'test']);
+        $response = $this->get('admin/auth/users/'.$this->user->id.'/edit');
+        $response->assertStatus(200)->assertSee('Create');
+        
+        $response = $this->put('admin/auth/users/'.$this->user->id, ['name' => 'test', 'roles' => [1]]);
+        $response->assertRedirect('admin/auth/users');
+        $this->assertDatabaseHas(config('admin.database.users_table'), ['name' => 'test']);
     }
 
     public function testResetPassword()
@@ -80,16 +87,18 @@ class UsersTest extends TestCase
             'roles'                 => [1],
         ];
 
-        $this->visit('admin/auth/users/'.$this->user->id.'/edit')
-            ->see('Create')
-            ->submitForm('Submit', $data)
-            ->seePageIs('admin/auth/users')
-            ->visit('admin/auth/logout')
-            ->dontSeeIsAuthenticated('admin')
-            ->seePageIs('admin/auth/login')
-            ->submitForm('Login', ['username' => $this->user->username, 'password' => $password])
-            ->see('dashboard')
-            ->seeIsAuthenticated('admin')
-            ->seePageIs('admin');
+        $response = $this->get('admin/auth/users/'.$this->user->id.'/edit');
+        $response->assertStatus(200)->assertSee('Create');
+        
+        $response = $this->put('admin/auth/users/'.$this->user->id, $data);
+        $response->assertRedirect('admin/auth/users');
+        
+        $response = $this->get('admin/auth/logout');
+        $response->assertRedirect('admin/auth/login');
+        $this->assertGuest('admin');
+        
+        $response = $this->post('admin/auth/login', ['username' => $this->user->username, 'password' => $password]);
+        $response->assertRedirect('admin');
+        $this->assertAuthenticated('admin');
     }
 }

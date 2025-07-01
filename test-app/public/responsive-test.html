@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laravel-admin Responsive Test</title>
+    <link rel="stylesheet" href="../resources/assets-vite/css/components/responsive-grid.css">
+    <link rel="stylesheet" href="../resources/assets-vite/css/components/responsive-table.css">
+    <link rel="stylesheet" href="../resources/assets-vite/css/components/responsive-navigation.css">
+    <link rel="stylesheet" href="../resources/assets-vite/css/components/responsive-forms.css">
+    <link rel="stylesheet" href="../resources/assets-vite/css/components/touch-interface.css">
+    <link rel="stylesheet" href="../resources/assets-vite/css/components/accessibility.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .demo-section { margin: 30px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .demo-title { font-size: 24px; margin-bottom: 15px; color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Laravel-admin Responsive Design Test</h1>
+    
+    <div class="demo-section">
+        <h2 class="demo-title">Responsive Grid System</h2>
+        <div class="admin-grid-container">
+            <div class="admin-grid-row">
+                <div class="admin-grid-col-xs-12 admin-grid-col-md-6 admin-grid-col-lg-4">
+                    <div style="background: #f0f0f0; padding: 15px; text-align: center; border-radius: 5px;">
+                        Column 1
+                    </div>
+                </div>
+                <div class="admin-grid-col-xs-12 admin-grid-col-md-6 admin-grid-col-lg-4">
+                    <div style="background: #e0e0e0; padding: 15px; text-align: center; border-radius: 5px;">
+                        Column 2
+                    </div>
+                </div>
+                <div class="admin-grid-col-xs-12 admin-grid-col-md-12 admin-grid-col-lg-4">
+                    <div style="background: #d0d0d0; padding: 15px; text-align: center; border-radius: 5px;">
+                        Column 3
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2 class="demo-title">Responsive Table</h2>
+        <div class="admin-table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Name">John Doe</td>
+                        <td data-label="Email">john@example.com</td>
+                        <td data-label="Role">Admin</td>
+                        <td data-label="Actions">
+                            <button class="admin-btn admin-btn-primary admin-touch-target">Edit</button>
+                            <button class="admin-btn admin-btn-danger admin-touch-target">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="Name">Jane Smith</td>
+                        <td data-label="Email">jane@example.com</td>
+                        <td data-label="Role">User</td>
+                        <td data-label="Actions">
+                            <button class="admin-btn admin-btn-primary admin-touch-target">Edit</button>
+                            <button class="admin-btn admin-btn-danger admin-touch-target">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2 class="demo-title">Mobile Navigation</h2>
+        <nav class="admin-mobile-nav">
+            <button class="admin-mobile-menu-toggle" aria-label="Toggle menu">
+                <span class="admin-hamburger-line"></span>
+                <span class="admin-hamburger-line"></span>
+                <span class="admin-hamburger-line"></span>
+            </button>
+            <ul class="admin-mobile-menu">
+                <li><a href="#" class="admin-mobile-menu-item">Dashboard</a></li>
+                <li><a href="#" class="admin-mobile-menu-item">Users</a></li>
+                <li><a href="#" class="admin-mobile-menu-item">Settings</a></li>
+                <li><a href="#" class="admin-mobile-menu-item">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="demo-section">
+        <h2 class="demo-title">Responsive Forms</h2>
+        <form class="admin-form">
+            <div class="admin-form-group">
+                <label for="name" class="admin-form-label">Name</label>
+                <input type="text" id="name" class="admin-form-control" placeholder="Enter your name">
+            </div>
+            <div class="admin-form-group">
+                <label for="email" class="admin-form-label">Email</label>
+                <input type="email" id="email" class="admin-form-control" placeholder="Enter your email">
+            </div>
+            <div class="admin-form-group">
+                <label for="message" class="admin-form-label">Message</label>
+                <textarea id="message" class="admin-form-control" rows="4" placeholder="Enter your message"></textarea>
+            </div>
+            <button type="submit" class="admin-btn admin-btn-primary admin-touch-target">Submit</button>
+        </form>
+    </div>
+
+    <div class="demo-section">
+        <h2 class="demo-title">Accessibility Features</h2>
+        <div class="admin-accessibility-demo">
+            <button class="admin-btn admin-btn-primary admin-focus-visible">Focus Visible Button</button>
+            <button class="admin-btn admin-btn-secondary admin-high-contrast">High Contrast Button</button>
+            <div class="admin-sr-only">This text is only visible to screen readers</div>
+            <p tabindex="0" class="admin-keyboard-focus">This paragraph can be focused with keyboard</p>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.admin-mobile-menu-toggle')?.addEventListener('click', function() {
+            const menu = document.querySelector('.admin-mobile-menu');
+            menu.classList.toggle('admin-mobile-menu-open');
+        });
+
+        // Touch feedback simulation
+        document.querySelectorAll('.admin-touch-target').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.classList.add('admin-touch-active');
+            });
+            element.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.classList.remove('admin-touch-active');
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

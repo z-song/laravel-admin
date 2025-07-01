@@ -1,0 +1,66 @@
+{
+  "name": "laravel-admin",
+  "version": "2.0.0-vite",
+  "description": "Laravel-admin with modern Vite build system and Laravel 11 compatibility",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:analyze": "vite build --mode analyze",
+    "clean": "rm -rf public/vendor/laravel-admin/build",
+    "lint:js": "eslint resources/assets-vite/js --ext .js",
+    "lint:css": "stylelint resources/assets-vite/css/**/*.css",
+    "format": "prettier --write resources/assets-vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "laravel",
+    "admin",
+    "vite",
+    "laravel-11",
+    "bootstrap",
+    "adminlte"
+  ],
+  "author": "Laravel-admin Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^5.0.0",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.1",
+    "eslint": "^8.0.0",
+    "laravel-vite-plugin": "^1.0.0",
+    "postcss": "^8.4.32",
+    "prettier": "^3.1.0",
+    "stylelint": "^15.11.0",
+    "stylelint-config-standard": "^34.0.0",
+    "terser": "^5.24.0",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "modern-normalize": "^2.0.0",
+    "bootstrap": "^5.3.2",
+    "@popperjs/core": "^2.11.8",
+    "admin-lte": "^4.0.0-beta.2",
+    "@fortawesome/fontawesome-free": "^6.5.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead",
+    "not IE 11"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/z-song/laravel-admin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/z-song/laravel-admin/issues"
+  },
+  "homepage": "https://laravel-admin.org"
+}

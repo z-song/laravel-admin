@@ -1,0 +1,6 @@
+[
+  {
+    "type": "sqlite",
+    "path": "/Users/spyder/personal/laravel-admin2/test-app/database/database.sqlite"
+  }
+]

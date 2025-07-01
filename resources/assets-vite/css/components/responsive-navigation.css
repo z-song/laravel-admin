@@ -1,0 +1,392 @@
+/**
+ * Laravel-admin Responsive Navigation System
+ * Mobile-first navigation with touch-friendly interface
+ */
+
+/* Mobile navigation variables */
+:root {
+  --admin-nav-mobile-height: 3.5rem;
+  --admin-nav-mobile-z-index: 1030;
+  --admin-sidebar-width: 250px;
+  --admin-sidebar-collapsed-width: 50px;
+  --admin-nav-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Mobile-first navigation bar */
+.admin-navbar-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background-color: var(--admin-primary-color, #3c8dbc);
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--admin-nav-mobile-height);
+  z-index: var(--admin-nav-mobile-z-index);
+  box-shadow: var(--admin-box-shadow, 0 2px 4px rgba(0,0,0,0.1));
+}
+
+.admin-navbar-brand {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-navbar-brand:hover {
+  color: white;
+  text-decoration: none;
+}
+
+/* Mobile menu toggle button */
+.admin-mobile-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: var(--admin-border-radius, 4px);
+  transition: var(--admin-nav-transition);
+  touch-action: manipulation;
+}
+
+.admin-mobile-menu-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-mobile-menu-toggle:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Hamburger icon */
+.admin-hamburger {
+  width: 24px;
+  height: 18px;
+  position: relative;
+  transform: rotate(0deg);
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.admin-hamburger span {
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: white;
+  border-radius: 2px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: 0.25s ease-in-out;
+}
+
+.admin-hamburger span:nth-child(1) {
+  top: 0px;
+}
+
+.admin-hamburger span:nth-child(2) {
+  top: 8px;
+}
+
+.admin-hamburger span:nth-child(3) {
+  top: 16px;
+}
+
+/* Hamburger animation for open state */
+.admin-hamburger.open span:nth-child(1) {
+  top: 8px;
+  transform: rotate(135deg);
+}
+
+.admin-hamburger.open span:nth-child(2) {
+  opacity: 0;
+  left: -24px;
+}
+
+.admin-hamburger.open span:nth-child(3) {
+  top: 8px;
+  transform: rotate(-135deg);
+}
+
+/* Mobile sidebar */
+.admin-sidebar-mobile {
+  position: fixed;
+  top: var(--admin-nav-mobile-height);
+  left: 0;
+  width: var(--admin-sidebar-width);
+  height: calc(100vh - var(--admin-nav-mobile-height));
+  background-color: var(--admin-sidebar-bg, #222d32);
+  transform: translateX(-100%);
+  transition: var(--admin-nav-transition);
+  z-index: calc(var(--admin-nav-mobile-z-index) - 1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-sidebar-mobile.open {
+  transform: translateX(0);
+}
+
+/* Mobile sidebar overlay */
+.admin-sidebar-overlay {
+  position: fixed;
+  top: var(--admin-nav-mobile-height);
+  left: 0;
+  width: 100%;
+  height: calc(100vh - var(--admin-nav-mobile-height));
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  z-index: calc(var(--admin-nav-mobile-z-index) - 2);
+}
+
+.admin-sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile navigation menu */
+.admin-nav-mobile {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.admin-nav-mobile .admin-nav-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-nav-mobile .admin-nav-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  color: #b8c7ce;
+  text-decoration: none;
+  transition: var(--admin-nav-transition);
+  touch-action: manipulation;
+  min-height: 48px; /* Touch target size */
+}
+
+.admin-nav-mobile .admin-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.admin-nav-mobile .admin-nav-link.active {
+  background-color: var(--admin-primary-color, #3c8dbc);
+  color: white;
+}
+
+.admin-nav-mobile .admin-nav-icon {
+  width: 20px;
+  margin-right: 1rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.admin-nav-mobile .admin-nav-text {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+/* Submenu for mobile */
+.admin-nav-mobile .admin-nav-submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.admin-nav-mobile .admin-nav-item.open .admin-nav-submenu {
+  max-height: 500px; /* Adjust based on content */
+}
+
+.admin-nav-mobile .admin-nav-submenu .admin-nav-link {
+  padding-left: 3rem;
+  font-size: 0.85rem;
+}
+
+.admin-nav-mobile .admin-nav-toggle {
+  margin-left: auto;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.admin-nav-mobile .admin-nav-item.open .admin-nav-toggle {
+  transform: rotate(180deg);
+}
+
+/* Content area for mobile */
+.admin-content-mobile {
+  margin-top: var(--admin-nav-mobile-height);
+  padding: 1rem;
+  transition: var(--admin-nav-transition);
+}
+
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+  .admin-navbar-mobile {
+    display: none;
+  }
+  
+  .admin-sidebar-mobile {
+    position: static;
+    transform: none;
+    width: var(--admin-sidebar-width);
+    height: 100vh;
+    top: 0;
+  }
+  
+  .admin-sidebar-overlay {
+    display: none;
+  }
+  
+  .admin-content-mobile {
+    margin-top: 0;
+    margin-left: var(--admin-sidebar-width);
+  }
+}
+
+/* Desktop navigation improvements */
+@media (min-width: 992px) {
+  .admin-sidebar-desktop {
+    width: var(--admin-sidebar-width);
+    transition: var(--admin-nav-transition);
+  }
+  
+  .admin-sidebar-desktop.collapsed {
+    width: var(--admin-sidebar-collapsed-width);
+  }
+  
+  .admin-sidebar-desktop.collapsed .admin-nav-text {
+    display: none;
+  }
+  
+  .admin-sidebar-desktop.collapsed .admin-nav-submenu {
+    display: none;
+  }
+  
+  .admin-content-desktop {
+    margin-left: var(--admin-sidebar-width);
+    transition: var(--admin-nav-transition);
+  }
+  
+  .admin-content-desktop.sidebar-collapsed {
+    margin-left: var(--admin-sidebar-collapsed-width);
+  }
+}
+
+/* Touch-friendly elements */
+@media (hover: none) and (pointer: coarse) {
+  .admin-nav-link {
+    min-height: 48px;
+    padding: 1rem;
+  }
+  
+  .admin-mobile-menu-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .btn {
+    min-height: 44px;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar-mobile,
+  .admin-sidebar-overlay,
+  .admin-nav-mobile .admin-nav-link,
+  .admin-hamburger,
+  .admin-hamburger span {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .admin-navbar-mobile {
+    border-bottom: 2px solid;
+  }
+  
+  .admin-nav-mobile .admin-nav-item {
+    border-bottom: 1px solid;
+  }
+  
+  .admin-nav-mobile .admin-nav-link:focus {
+    outline: 3px solid;
+    outline-offset: -3px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .admin-sidebar-mobile {
+    background-color: #1a1a1a;
+  }
+  
+  .admin-nav-mobile .admin-nav-link {
+    color: #e0e0e0;
+  }
+  
+  .admin-nav-mobile .admin-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Breadcrumb navigation */
+.admin-breadcrumb-mobile {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  list-style: none;
+  background-color: var(--admin-breadcrumb-bg, #f8f9fa);
+  border-radius: var(--admin-border-radius, 0.375rem);
+}
+
+.admin-breadcrumb-mobile .admin-breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.admin-breadcrumb-mobile .admin-breadcrumb-item + .admin-breadcrumb-item::before {
+  content: "/";
+  margin: 0 0.5rem;
+  color: var(--admin-breadcrumb-divider-color, #6c757d);
+}
+
+.admin-breadcrumb-mobile .admin-breadcrumb-item.active {
+  color: var(--admin-breadcrumb-active-color, #6c757d);
+}
+
+@media (max-width: 575.98px) {
+  .admin-breadcrumb-mobile {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .admin-breadcrumb-mobile .admin-breadcrumb-item + .admin-breadcrumb-item::before {
+    margin: 0 0.25rem;
+  }
+}

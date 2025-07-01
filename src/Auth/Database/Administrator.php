@@ -7,6 +7,8 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -19,8 +21,20 @@ class Administrator extends Model implements AuthenticatableContract
     use Authenticatable;
     use HasPermissions;
     use DefaultDatetimeFormat;
+    use HasFactory;
 
     protected $fillable = ['username', 'password', 'name', 'avatar'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'email_verified_at' => 'datetime',
+    ];
 
     /**
      * Create a new Eloquent model instance.
@@ -39,27 +53,53 @@ class Administrator extends Model implements AuthenticatableContract
     }
 
     /**
-     * Get avatar attribute.
+     * Laravel 11 Modern Attribute: Avatar handling with automatic URL resolution
      *
-     * @param string $avatar
-     *
-     * @return string
+     * @return Attribute
      */
-    public function getAvatarAttribute($avatar)
+    protected function avatar(): Attribute
     {
-        if ($avatar && url()->isValidUrl($avatar)) {
-            return $avatar;
-        }
+        return Attribute::make(
+            get: function ($value) {
+                if ($value && url()->isValidUrl($value)) {
+                    return $value;
+                }
 
-        $disk = config('admin.upload.disk');
+                $disk = config('admin.upload.disk');
 
-        if ($avatar && array_key_exists($disk, config('filesystems.disks'))) {
-            return Storage::disk(config('admin.upload.disk'))->url($avatar);
-        }
+                if ($value && array_key_exists($disk, config('filesystems.disks'))) {
+                    return Storage::disk(config('admin.upload.disk'))->url($value);
+                }
 
-        $default = config('admin.default_avatar') ?: '/vendor/laravel-admin/AdminLTE/dist/img/user2-160x160.jpg';
+                $default = config('admin.default_avatar') ?: '/vendor/laravel-admin/AdminLTE/dist/img/user2-160x160.jpg';
 
-        return admin_asset($default);
+                return admin_asset($default);
+            }
+        );
+    }
+
+    /**
+     * Laravel 11 Modern Attribute: Full name attribute
+     *
+     * @return Attribute
+     */
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->name ?: $this->username
+        );
+    }
+
+    /**
+     * Laravel 11 Modern Attribute: Check if user is super admin
+     *
+     * @return Attribute
+     */
+    protected function isSuperAdmin(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->roles->contains('slug', 'administrator')
+        );
     }
 
     /**

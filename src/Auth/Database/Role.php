@@ -5,12 +5,25 @@ namespace Encore\Admin\Auth\Database;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Role extends Model
 {
     use DefaultDatetimeFormat;
+    use HasFactory;
 
     protected $fillable = ['name', 'slug'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     /**
      * Create a new Eloquent model instance.
@@ -92,6 +105,54 @@ class Role extends Model
     public function cannot(string $permission): bool
     {
         return !$this->can($permission);
+    }
+
+    /**
+     * Laravel 11 Modern Attribute: Display name for the role
+     *
+     * @return Attribute
+     */
+    protected function displayName(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => ucwords(str_replace(['-', '_'], ' ', $this->name))
+        );
+    }
+
+    /**
+     * Laravel 11 Modern Attribute: Check if this is a super admin role
+     *
+     * @return Attribute
+     */
+    protected function isSuperAdmin(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => in_array($this->slug, ['administrator', 'super-admin', 'admin'])
+        );
+    }
+
+    /**
+     * Laravel 11 Modern Attribute: Count of users with this role
+     *
+     * @return Attribute
+     */
+    protected function usersCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->administrators()->count()
+        );
+    }
+
+    /**
+     * Laravel 11 Modern Attribute: Count of permissions for this role
+     *
+     * @return Attribute
+     */
+    protected function permissionsCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->permissions()->count()
+        );
     }
 
     /**

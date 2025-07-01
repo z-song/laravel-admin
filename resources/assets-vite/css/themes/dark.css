@@ -1,0 +1,332 @@
+/**
+ * AdminLTE 4 Dark Theme
+ * Laravel-admin UI Modernization
+ * 
+ * Dark theme specific styles for AdminLTE 4
+ */
+
+/* Dark Theme CSS Custom Properties */
+[data-bs-theme="dark"] {
+  /* Bootstrap 5 Dark Theme Variables Override */
+  --bs-body-bg: #1a202c;
+  --bs-body-color: #e2e8f0;
+  --bs-emphasis-color: #f7fafc;
+  --bs-secondary-color: #a0aec0;
+  --bs-tertiary-color: #718096;
+  
+  /* Surface Colors */
+  --bs-light: #2d3748;
+  --bs-dark: #1a202c;
+  --bs-gray-100: #2d3748;
+  --bs-gray-200: #4a5568;
+  --bs-gray-300: #718096;
+  --bs-gray-400: #a0aec0;
+  --bs-gray-500: #cbd5e0;
+  --bs-gray-600: #e2e8f0;
+  --bs-gray-700: #edf2f7;
+  --bs-gray-800: #f7fafc;
+  --bs-gray-900: #ffffff;
+  
+  /* Border Colors */
+  --bs-border-color: #4a5568;
+  --bs-border-color-translucent: rgba(255, 255, 255, 0.175);
+  
+  /* AdminLTE 4 Specific Dark Variables */
+  --app-dark-bg: #1a202c;
+  --app-dark-sidebar-bg: #2d3748;
+  --app-dark-header-bg: #2d3748;
+  --app-dark-main-bg: #1a202c;
+  --app-dark-card-bg: #2d3748;
+  --app-dark-border: #4a5568;
+  
+  /* Text Colors */
+  --app-dark-text-primary: #f7fafc;
+  --app-dark-text-secondary: #e2e8f0;
+  --app-dark-text-muted: #a0aec0;
+  
+  /* Component Colors */
+  --app-dark-input-bg: #2d3748;
+  --app-dark-input-border: #4a5568;
+  --app-dark-dropdown-bg: #2d3748;
+  --app-dark-modal-bg: #2d3748;
+}
+
+/* Dark Theme Layout Components */
+[data-bs-theme="dark"] .app-wrapper {
+  background-color: var(--app-dark-bg);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .app-header {
+  background-color: var(--app-dark-header-bg);
+  border-bottom: 1px solid var(--app-dark-border);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .app-sidebar {
+  background-color: var(--app-dark-sidebar-bg);
+  border-right: 1px solid var(--app-dark-border);
+}
+
+[data-bs-theme="dark"] .app-main {
+  background-color: var(--app-dark-main-bg);
+}
+
+[data-bs-theme="dark"] .app-footer {
+  background-color: var(--app-dark-header-bg);
+  border-top: 1px solid var(--app-dark-border);
+  color: var(--app-dark-text-secondary);
+}
+
+/* Dark Theme Navigation */
+[data-bs-theme="dark"] .nav-sidebar .nav-link {
+  color: var(--app-dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .nav-sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .nav-sidebar .nav-link.active {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+}
+
+/* Dark Theme Cards and Components */
+[data-bs-theme="dark"] .card {
+  background-color: var(--app-dark-card-bg);
+  border-color: var(--app-dark-border);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .card-header {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-bottom-color: var(--app-dark-border);
+}
+
+[data-bs-theme="dark"] .card-footer {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-top-color: var(--app-dark-border);
+}
+
+/* Dark Theme Forms */
+[data-bs-theme="dark"] .form-control {
+  background-color: var(--app-dark-input-bg);
+  border-color: var(--app-dark-input-border);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .form-control:focus {
+  background-color: var(--app-dark-input-bg);
+  border-color: var(--bs-primary);
+  color: var(--app-dark-text-primary);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+  color: var(--app-dark-text-muted);
+}
+
+[data-bs-theme="dark"] .form-select {
+  background-color: var(--app-dark-input-bg);
+  border-color: var(--app-dark-input-border);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .input-group-text {
+  background-color: var(--app-dark-input-bg);
+  border-color: var(--app-dark-input-border);
+  color: var(--app-dark-text-secondary);
+}
+
+/* Dark Theme Tables */
+[data-bs-theme="dark"] .table {
+  color: var(--app-dark-text-primary);
+  border-color: var(--app-dark-border);
+}
+
+[data-bs-theme="dark"] .table th {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--app-dark-border);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .table td {
+  border-color: var(--app-dark-border);
+}
+
+[data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > td {
+  background-color: rgba(255, 255, 255, 0.025);
+}
+
+[data-bs-theme="dark"] .table-hover > tbody > tr:hover > td {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Dark Theme Dropdowns */
+[data-bs-theme="dark"] .dropdown-menu {
+  background-color: var(--app-dark-dropdown-bg);
+  border-color: var(--app-dark-border);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+[data-bs-theme="dark"] .dropdown-item {
+  color: var(--app-dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-item:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .dropdown-divider {
+  border-color: var(--app-dark-border);
+}
+
+[data-bs-theme="dark"] .dropdown-header {
+  color: var(--app-dark-text-muted);
+}
+
+/* Dark Theme Modals */
+[data-bs-theme="dark"] .modal-content {
+  background-color: var(--app-dark-modal-bg);
+  border-color: var(--app-dark-border);
+}
+
+[data-bs-theme="dark"] .modal-header {
+  border-bottom-color: var(--app-dark-border);
+}
+
+[data-bs-theme="dark"] .modal-footer {
+  border-top-color: var(--app-dark-border);
+}
+
+/* Dark Theme Alerts */
+[data-bs-theme="dark"] .alert-light {
+  background-color: var(--app-dark-card-bg);
+  border-color: var(--app-dark-border);
+  color: var(--app-dark-text-primary);
+}
+
+/* Dark Theme Buttons */
+[data-bs-theme="dark"] .btn-outline-secondary {
+  color: var(--app-dark-text-secondary);
+  border-color: var(--app-dark-border);
+}
+
+[data-bs-theme="dark"] .btn-outline-secondary:hover {
+  background-color: var(--app-dark-text-secondary);
+  border-color: var(--app-dark-text-secondary);
+  color: var(--app-dark-bg);
+}
+
+/* Dark Theme Pagination */
+[data-bs-theme="dark"] .page-link {
+  background-color: var(--app-dark-card-bg);
+  border-color: var(--app-dark-border);
+  color: var(--app-dark-text-secondary);
+}
+
+[data-bs-theme="dark"] .page-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--app-dark-border);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .page-item.active .page-link {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* Dark Theme Breadcrumb */
+[data-bs-theme="dark"] .breadcrumb {
+  background-color: transparent;
+}
+
+[data-bs-theme="dark"] .breadcrumb-item + .breadcrumb-item::before {
+  color: var(--app-dark-text-muted);
+}
+
+[data-bs-theme="dark"] .breadcrumb-item.active {
+  color: var(--app-dark-text-muted);
+}
+
+/* Dark Theme Code */
+[data-bs-theme="dark"] code {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] pre {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--app-dark-border);
+  color: var(--app-dark-text-primary);
+}
+
+/* Dark Theme Progress */
+[data-bs-theme="dark"] .progress {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dark Theme List Groups */
+[data-bs-theme="dark"] .list-group-item {
+  background-color: var(--app-dark-card-bg);
+  border-color: var(--app-dark-border);
+  color: var(--app-dark-text-primary);
+}
+
+[data-bs-theme="dark"] .list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Dark Theme Tooltips */
+[data-bs-theme="dark"] .tooltip .tooltip-inner {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: var(--bs-white);
+}
+
+/* Dark Theme Scrollbars (Webkit) */
+[data-bs-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--app-dark-bg);
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--app-dark-border);
+  border-radius: 4px;
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--app-dark-text-muted);
+}
+
+/* Dark Theme Syntax Highlighting */
+[data-bs-theme="dark"] .hljs {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  color: var(--app-dark-text-primary) !important;
+}
+
+/* Dark Theme Selection */
+[data-bs-theme="dark"] ::selection {
+  background-color: rgba(13, 110, 253, 0.3);
+  color: var(--app-dark-text-primary);
+}
+
+/* Dark Theme Focus Outlines */
+[data-bs-theme="dark"] *:focus {
+  outline-color: var(--bs-primary);
+}
+
+/* Dark Theme Print Styles */
+@media print {
+  [data-bs-theme="dark"] * {
+    background-color: white !important;
+    color: black !important;
+  }
+}

@@ -4,51 +4,62 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
     protected $baseUrl = 'http://localhost:8000';
 
     /**
-     * Boots the application.
+     * Get package providers.
      *
-     * @return \Illuminate\Foundation\Application
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return array
      */
-    public function createApplication()
+    protected function getPackageProviders($app)
     {
-        $app = require __DIR__.'/../vendor/laravel/laravel/bootstrap/app.php';
+        return [
+            'Encore\Admin\AdminServiceProvider',
+        ];
+    }
 
-        $app->booting(function () {
-            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('Admin', \Encore\Admin\Facades\Admin::class);
-        });
+    /**
+     * Get package aliases.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return array
+     */
+    protected function getPackageAliases($app)
+    {
+        return [
+            'Admin' => 'Encore\Admin\Facades\Admin',
+        ];
+    }
 
-        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+    /**
+     * Define environment setup.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return void
+     */
+    protected function defineEnvironment($app)
+    {
+        $adminConfig = require __DIR__.'/config/admin.php';
 
-        $app->register('Encore\Admin\AdminServiceProvider');
+        $app['config']->set('database.default', env('DB_CONNECTION', 'sqlite'));
+        $app['config']->set('database.connections.sqlite.database', ':memory:');
+        $app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
+        $app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
+        $app['config']->set('admin', $adminConfig);
 
-        return $app;
+        foreach (Arr::dot(Arr::get($adminConfig, 'auth'), 'auth.') as $key => $value) {
+            $app['config']->set($key, $value);
+        }
     }
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $adminConfig = require __DIR__.'/config/admin.php';
-
-        $this->app['config']->set('database.default', env('DB_CONNECTION', 'mysql'));
-        $this->app['config']->set('database.connections.mysql.host', env('MYSQL_HOST', 'localhost'));
-        $this->app['config']->set('database.connections.mysql.database', env('MYSQL_DATABASE', 'laravel_admin_test'));
-        $this->app['config']->set('database.connections.mysql.username', env('MYSQL_USER', 'root'));
-        $this->app['config']->set('database.connections.mysql.password', env('MYSQL_PASSWORD', ''));
-        $this->app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
-        $this->app['config']->set('filesystems', require __DIR__.'/config/filesystems.php');
-        $this->app['config']->set('admin', $adminConfig);
-
-        foreach (Arr::dot(Arr::get($adminConfig, 'auth'), 'auth.') as $key => $value) {
-            $this->app['config']->set($key, $value);
-        }
 
         $this->artisan('vendor:publish', ['--provider' => 'Encore\Admin\AdminServiceProvider']);
 
@@ -64,11 +75,7 @@ class TestCase extends BaseTestCase
 
         require __DIR__.'/routes.php';
 
-        require __DIR__.'/seeds/factory.php';
-
-//        \Encore\Admin\Admin::$css = [];
-//        \Encore\Admin\Admin::$js = [];
-//        \Encore\Admin\Admin::$script = [];
+        // Laravel 11の新しいFactory構文を使用
     }
 
     protected function tearDown(): void

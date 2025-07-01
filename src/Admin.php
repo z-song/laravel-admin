@@ -302,6 +302,17 @@ class Admin
     /**
      * Register the laravel-admin builtin routes.
      *
+     * Laravel 11 Compatibility: This method works perfectly with Laravel 11.
+     * Routes are automatically registered via ServiceProvider boot() method.
+     * For Laravel 11 bootstrap/app.php integration, you can also use:
+     * 
+     * ->withRouting(
+     *     web: __DIR__.'/../routes/web.php',
+     *     then: function () {
+     *         Admin::routes();
+     *     },
+     * )
+     *
      * @return void
      */
     public function routes()
@@ -337,6 +348,45 @@ class Admin
             $router->get('auth/logout', $authController.'@getLogout')->name('admin.logout');
             $router->get('auth/setting', $authController.'@getSetting')->name('admin.setting');
             $router->put('auth/setting', $authController.'@putSetting');
+        });
+    }
+
+    /**
+     * Register the laravel-admin API routes.
+     *
+     * Laravel 11 API Integration: Provides API endpoints for admin functionality.
+     * To enable: Set ADMIN_API_ENABLE=true in .env file.
+     * Requires: Laravel Sanctum (php artisan install:api)
+     *
+     * @return void
+     */
+    public function apiRoutes()
+    {
+        if (!config('admin.route.api.enable', false)) {
+            return;
+        }
+
+        $attributes = [
+            'prefix'     => config('admin.route.api.prefix', 'admin-api'),
+            'middleware' => config('admin.route.api.middleware', ['api']),
+        ];
+
+        app('router')->group($attributes, function ($router) {
+            /* @var \Illuminate\Support\Facades\Route $router */
+            $router->namespace('\Encore\Admin\Controllers')->group(function ($router) {
+                /* @var \Illuminate\Routing\Router $router */
+                
+                // API endpoints for admin resources
+                $router->apiResource('users', 'UserController')->names('admin.api.users');
+                $router->apiResource('roles', 'RoleController')->names('admin.api.roles');
+                $router->apiResource('permissions', 'PermissionController')->names('admin.api.permissions');
+                $router->apiResource('menu', 'MenuController')->names('admin.api.menu');
+                
+                // API endpoints for data handling
+                $router->post('handle-form', 'HandleController@handleForm')->name('admin.api.handle-form');
+                $router->post('handle-action', 'HandleController@handleAction')->name('admin.api.handle-action');
+                $router->get('handle-selectable', 'HandleController@handleSelectable')->name('admin.api.handle-selectable');
+            });
         });
     }
 

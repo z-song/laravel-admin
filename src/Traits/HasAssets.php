@@ -2,6 +2,8 @@
 
 namespace Encore\Admin\Traits;
 
+use Illuminate\Support\Facades\Vite;
+
 trait HasAssets
 {
     /**
@@ -48,6 +50,30 @@ trait HasAssets
      * @var array
      */
     public static $manifestData = [];
+
+    /**
+     * @var bool
+     */
+    public static $viteEnabled = null;
+
+    /**
+     * @var array
+     */
+    public static $viteAssets = [
+        'css' => ['resources/assets-vite/css/adminlte4.css'],
+        'js' => ['resources/assets-vite/js/adminlte4.js'],
+    ];
+
+    /**
+     * Check if Vite assets should be used
+     *
+     * @return bool
+     */
+    public static function useVite()
+    {
+        return config('admin.assets.use_vite', false) && 
+               file_exists(public_path(config('admin.assets.vite_build_path', 'build') . '/manifest.json'));
+    }
 
     /**
      * @var array
@@ -398,5 +424,229 @@ trait HasAssets
         }
 
         return trim($render);
+    }
+
+    /**
+     * Check if Vite assets should be used
+     *
+     * @return bool
+     */
+    public static function isViteEnabled()
+    {
+        if (static::$viteEnabled === null) {
+            static::$viteEnabled = config('admin.vite.enabled', true) && 
+                                   config('admin.ui_framework') === 'adminlte4';
+        }
+
+        return static::$viteEnabled;
+    }
+
+    /**
+     * Get Vite CSS assets
+     *
+     * @return string
+     */
+    public static function viteCSS()
+    {
+        if (!static::isViteEnabled()) {
+            return '';
+        }
+
+        try {
+            return Vite::useBuildDirectory(config('admin.vite.build_path', 'build'))
+                       ->withEntryPoints(static::$viteAssets['css'])
+                       ->toHtml();
+        } catch (\Exception $e) {
+            // Fallback to legacy assets if Vite fails
+            return '';
+        }
+    }
+
+    /**
+     * Get Vite JS assets
+     *
+     * @return string
+     */
+    public static function viteJS()
+    {
+        if (!static::isViteEnabled()) {
+            return '';
+        }
+
+        try {
+            return Vite::useBuildDirectory(config('admin.vite.build_path', 'build'))
+                       ->withEntryPoints(static::$viteAssets['js'])
+                       ->toHtml();
+        } catch (\Exception $e) {
+            // Fallback to legacy assets if Vite fails
+            return '';
+        }
+    }
+
+    /**
+     * Initialize AdminLTE 4 JavaScript
+     *
+     * @return string
+     */
+    public static function adminLTE4Init()
+    {
+        $config = [
+            'framework' => config('admin.ui_framework', 'adminlte4'),
+            'theme' => config('admin.theme', 'light'),
+            'themeColor' => config('admin.theme_color', 'blue'),
+            'layout' => config('admin.layout', []),
+            'viteEnabled' => static::isViteEnabled(),
+            'locale' => config('app.locale', 'en'),
+        ];
+
+        $script = "
+        // AdminLTE 4 + Bootstrap 5 Initialization
+        window.AdminConfig = " . json_encode($config) . ";
+        
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set theme attributes
+            document.documentElement.setAttribute('data-bs-theme', AdminConfig.theme);
+            document.body.setAttribute('data-admin-theme-color', AdminConfig.themeColor);
+            
+            // Initialize layout options
+            if (AdminConfig.layout.sidebar_mini) {
+                document.body.classList.add('sidebar-mini');
+            }
+            if (AdminConfig.layout.sidebar_collapse) {
+                document.body.classList.add('sidebar-collapse');
+            }
+            if (AdminConfig.layout.navbar_fixed) {
+                document.body.classList.add('navbar-fixed');
+            }
+            if (AdminConfig.layout.footer_fixed) {
+                document.body.classList.add('footer-fixed');
+            }
+            
+            // Initialize Bootstrap components if available
+            if (typeof bootstrap !== 'undefined') {
+                // Initialize tooltips
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+                
+                // Initialize popovers
+                const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"popover\"]'));
+                popoverTriggerList.map(function (popoverTriggerEl) {
+                    return new bootstrap.Popover(popoverTriggerEl);
+                });
+            }
+            
+            // Back to top button functionality
+            const backToTop = document.getElementById('totop');
+            if (backToTop) {
+                window.addEventListener('scroll', function() {
+                    if (window.pageYOffset > 300) {
+                        backToTop.style.display = 'block';
+                    } else {
+                        backToTop.style.display = 'none';
+                    }
+                });
+                
+                backToTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // Theme persistence
+            const savedTheme = localStorage.getItem('admin-theme');
+            if (savedTheme && savedTheme !== AdminConfig.theme) {
+                document.documentElement.setAttribute('data-bs-theme', savedTheme);
+                AdminConfig.theme = savedTheme;
+            }
+        });
+        
+        // Theme toggle functionality
+        window.toggleTheme = function() {
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('admin-theme', newTheme);
+            AdminConfig.theme = newTheme;
+            
+            // Update toggle button icon
+            const toggleIcon = document.querySelector('.dark-mode-toggle i');
+            if (toggleIcon) {
+                toggleIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+            
+            // Dispatch theme change event
+            window.dispatchEvent(new CustomEvent('admin:theme-changed', {
+                detail: { theme: newTheme }
+            }));
+        };
+        
+        // Legacy jQuery compatibility
+        if (typeof $ !== 'undefined') {
+            // Ensure jQuery events work with Bootstrap 5
+            $(document).ready(function() {
+                // Legacy AdminLTE compatibility
+                if (typeof AdminLTE !== 'undefined') {
+                    console.warn('AdminLTE 2/3 detected. Consider upgrading to AdminLTE 4 for better compatibility.');
+                }
+                
+                // Legacy event handlers
+                $('.sidebar-toggle').on('click', function(e) {
+                    e.preventDefault();
+                    if (typeof window.AdminLTE4Layout !== 'undefined') {
+                        // Use new AdminLTE 4 layout if available
+                        const layout = new window.AdminLTE4Layout();
+                        layout.toggleSidebar();
+                    }
+                });
+            });
+        }";
+
+        return $script;
+    }
+
+    /**
+     * Get Bootstrap 5 compatibility script
+     *
+     * @return string
+     */
+    public static function bootstrap5Compatibility()
+    {
+        return "
+        // Bootstrap 5 Compatibility Layer
+        (function() {
+            // Update data attributes for Bootstrap 5
+            document.addEventListener('DOMContentLoaded', function() {
+                // Convert old data-toggle to data-bs-toggle
+                const elementsWithToggle = document.querySelectorAll('[data-toggle]');
+                elementsWithToggle.forEach(function(el) {
+                    const toggleValue = el.getAttribute('data-toggle');
+                    el.setAttribute('data-bs-toggle', toggleValue);
+                    el.removeAttribute('data-toggle');
+                });
+                
+                // Convert old data-target to data-bs-target
+                const elementsWithTarget = document.querySelectorAll('[data-target]');
+                elementsWithTarget.forEach(function(el) {
+                    const targetValue = el.getAttribute('data-target');
+                    el.setAttribute('data-bs-target', targetValue);
+                    el.removeAttribute('data-target');
+                });
+                
+                // Convert old data-dismiss to data-bs-dismiss
+                const elementsWithDismiss = document.querySelectorAll('[data-dismiss]');
+                elementsWithDismiss.forEach(function(el) {
+                    const dismissValue = el.getAttribute('data-dismiss');
+                    el.setAttribute('data-bs-dismiss', dismissValue);
+                    el.removeAttribute('data-dismiss');
+                });
+            });
+        })();";
     }
 }

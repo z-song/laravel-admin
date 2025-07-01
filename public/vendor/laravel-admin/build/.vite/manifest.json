@@ -1,0 +1,59 @@
+{
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
+    "file": "ttf/fa-brands-400-D1LuMI3I.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2": {
+    "file": "woff2/fa-brands-400-D_cYUPeE.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf": {
+    "file": "ttf/fa-regular-400-DZaxPHgR.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2": {
+    "file": "woff2/fa-regular-400-BjRzuEpd.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf": {
+    "file": "ttf/fa-solid-900-D0aA9rwL.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2": {
+    "file": "woff2/fa-solid-900-CTAAxXor.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf": {
+    "file": "ttf/fa-v4compatibility-CCth-dXg.ttf",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf"
+  },
+  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2": {
+    "file": "woff2/fa-v4compatibility-C9RhG_FT.woff2",
+    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
+  },
+  "resources/assets-vite/css/adminlte4.css": {
+    "file": "css/adminlte4-BqdepnSa.css",
+    "src": "resources/assets-vite/css/adminlte4.css",
+    "isEntry": true
+  },
+  "resources/assets-vite/css/app.css": {
+    "file": "css/app-Cz-J4JAA.css",
+    "src": "resources/assets-vite/css/app.css",
+    "isEntry": true
+  },
+  "resources/assets-vite/js/adminlte4.js": {
+    "file": "js/adminlte4-rg7-0Ox1.js",
+    "name": "adminlte4",
+    "src": "resources/assets-vite/js/adminlte4.js",
+    "isEntry": true
+  },
+  "resources/assets-vite/js/app.js": {
+    "file": "js/app-DeT8Uarv.js",
+    "name": "app",
+    "src": "resources/assets-vite/js/app.js",
+    "isEntry": true,
+    "css": [
+      "css/app-Cz-J4JAA.css"
+    ]
+  }
+}

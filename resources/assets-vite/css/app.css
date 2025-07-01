@@ -1,0 +1,160 @@
+/**
+ * Laravel-admin Vite CSS Entry Point
+ * 
+ * Modern CSS compilation for Laravel-admin with Laravel 11 Vite integration
+ * This file serves as the main entry point for all admin CSS when Vite is enabled.
+ */
+
+/* Import modern CSS features */
+@import './base/variables.css';
+@import './base/reset.css';
+
+/* Core admin styles - modernized versions */
+@import './components/responsive-grid.css';
+@import './components/responsive-table.css';
+@import './components/responsive-navigation.css';
+@import './components/responsive-forms.css';
+@import './components/touch-interface.css';
+@import './components/accessibility.css';
+
+/* Legacy compatibility handled by adminlte4.css */
+
+/* Modern admin theme */
+:root {
+  --admin-primary-color: #3c8dbc;
+  --admin-secondary-color: #6c757d;
+  --admin-success-color: #28a745;
+  --admin-info-color: #17a2b8;
+  --admin-warning-color: #ffc107;
+  --admin-danger-color: #dc3545;
+  --admin-light-color: #f8f9fa;
+  --admin-dark-color: #343a40;
+  
+  --admin-font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --admin-font-size-base: 14px;
+  --admin-line-height-base: 1.42857143;
+  
+  --admin-border-radius: 4px;
+  --admin-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  --admin-transition-base: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Modern layout improvements */
+.content-wrapper {
+  transition: var(--admin-transition-base);
+}
+
+/* Improved form styling */
+.form-control {
+  border-radius: var(--admin-border-radius);
+  box-shadow: var(--admin-box-shadow);
+  transition: var(--admin-transition-base);
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(60, 141, 188, 0.25);
+  border-color: var(--admin-primary-color);
+}
+
+/* Enhanced button styling */
+.btn {
+  border-radius: var(--admin-border-radius);
+  transition: var(--admin-transition-base);
+}
+
+/* Modern table styling */
+.table {
+  box-shadow: var(--admin-box-shadow);
+  border-radius: var(--admin-border-radius);
+  overflow: hidden;
+}
+
+/* Dark mode support preparation */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --admin-primary-color: #4dabf7;
+    --admin-light-color: #212529;
+    --admin-dark-color: #f8f9fa;
+  }
+}
+
+/* Print optimizations */
+@media print {
+  .sidebar,
+  .main-header,
+  .main-footer {
+    display: none !important;
+  }
+  
+  .content-wrapper {
+    margin-left: 0 !important;
+  }
+}
+
+/* Accessibility improvements */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Focus management for better keyboard navigation */
+*:focus {
+  outline: 2px solid var(--admin-primary-color);
+  outline-offset: 2px;
+}
+
+/* Modern grid system enhancement */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.col {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+/* Performance optimizations */
+.content {
+  contain: layout style paint;
+}
+
+/* Loading state improvements */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Modern scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--admin-light-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--admin-secondary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--admin-primary-color);
+}

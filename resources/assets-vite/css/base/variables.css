@@ -1,0 +1,209 @@
+/**
+ * CSS Custom Properties (Variables) for Laravel-admin
+ * 
+ * Modern CSS variables for consistent theming and easy customization
+ * Compatible with both Bootstrap 3 (legacy) and Bootstrap 5 (modern)
+ */
+
+:root {
+  /* Primary Colors */
+  --admin-primary: #3c8dbc;
+  --admin-primary-rgb: 60, 141, 188;
+  --admin-primary-dark: #357ca5;
+  --admin-primary-light: #5ba7d4;
+
+  /* Secondary Colors */
+  --admin-secondary: #6c757d;
+  --admin-secondary-rgb: 108, 117, 125;
+
+  /* Status Colors */
+  --admin-success: #28a745;
+  --admin-success-rgb: 40, 167, 69;
+  --admin-info: #17a2b8;
+  --admin-info-rgb: 23, 162, 184;
+  --admin-warning: #ffc107;
+  --admin-warning-rgb: 255, 193, 7;
+  --admin-danger: #dc3545;
+  --admin-danger-rgb: 220, 53, 69;
+
+  /* Neutral Colors */
+  --admin-light: #f8f9fa;
+  --admin-light-rgb: 248, 249, 250;
+  --admin-dark: #343a40;
+  --admin-dark-rgb: 52, 58, 64;
+  --admin-white: #ffffff;
+  --admin-black: #000000;
+
+  /* Background Colors */
+  --admin-bg-body: #ecf0f5;
+  --admin-bg-content: #ffffff;
+  --admin-bg-sidebar: #222d32;
+  --admin-bg-header: #3c8dbc;
+
+  /* Text Colors */
+  --admin-text-primary: #333333;
+  --admin-text-secondary: #666666;
+  --admin-text-muted: #999999;
+  --admin-text-inverse: #ffffff;
+
+  /* Border Colors */
+  --admin-border-color: #d2d6de;
+  --admin-border-color-dark: #adb5bd;
+  --admin-border-color-light: #e9ecef;
+
+  /* Typography */
+  --admin-font-family-sans-serif: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --admin-font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --admin-font-size-base: 14px;
+  --admin-font-size-lg: 18px;
+  --admin-font-size-sm: 12px;
+  --admin-font-size-xs: 11px;
+
+  --admin-font-weight-light: 300;
+  --admin-font-weight-normal: 400;
+  --admin-font-weight-bold: 600;
+
+  --admin-line-height-base: 1.42857143;
+  --admin-line-height-sm: 1.25;
+  --admin-line-height-lg: 1.5;
+
+  /* Spacing */
+  --admin-spacer: 1rem;
+  --admin-spacer-xs: calc(var(--admin-spacer) * 0.25);
+  --admin-spacer-sm: calc(var(--admin-spacer) * 0.5);
+  --admin-spacer-lg: calc(var(--admin-spacer) * 1.5);
+  --admin-spacer-xl: calc(var(--admin-spacer) * 3);
+
+  /* Border Radius */
+  --admin-border-radius: 4px;
+  --admin-border-radius-sm: 2px;
+  --admin-border-radius-lg: 6px;
+  --admin-border-radius-xl: 8px;
+  --admin-border-radius-pill: 50rem;
+
+  /* Shadows */
+  --admin-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --admin-box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --admin-box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  --admin-box-shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+
+  /* Transitions */
+  --admin-transition-base: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --admin-transition-fade: opacity 0.15s linear;
+  --admin-transition-collapse: height 0.35s ease;
+
+  /* Z-Index Scale */
+  --admin-zindex-dropdown: 1000;
+  --admin-zindex-sticky: 1020;
+  --admin-zindex-fixed: 1030;
+  --admin-zindex-modal-backdrop: 1040;
+  --admin-zindex-modal: 1050;
+  --admin-zindex-popover: 1060;
+  --admin-zindex-tooltip: 1070;
+
+  /* Layout Dimensions */
+  --admin-sidebar-width: 230px;
+  --admin-sidebar-mini-width: 50px;
+  --admin-header-height: 50px;
+  --admin-footer-height: 60px;
+
+  /* Form Controls */
+  --admin-input-bg: #ffffff;
+  --admin-input-border-color: #d2d6de;
+  --admin-input-border-width: 1px;
+  --admin-input-border-radius: var(--admin-border-radius);
+  --admin-input-focus-border-color: var(--admin-primary);
+  --admin-input-focus-box-shadow: 0 0 0 0.2rem rgba(var(--admin-primary-rgb), 0.25);
+
+  /* Buttons */
+  --admin-btn-padding-y: 6px;
+  --admin-btn-padding-x: 12px;
+  --admin-btn-font-size: var(--admin-font-size-base);
+  --admin-btn-line-height: var(--admin-line-height-base);
+  --admin-btn-border-width: 1px;
+  --admin-btn-border-radius: var(--admin-border-radius);
+
+  /* Tables */
+  --admin-table-bg: transparent;
+  --admin-table-border-color: var(--admin-border-color);
+  --admin-table-hover-bg: rgba(0, 0, 0, 0.075);
+  --admin-table-striped-bg: rgba(0, 0, 0, 0.05);
+
+  /* Cards/Boxes */
+  --admin-card-spacer-y: 15px;
+  --admin-card-spacer-x: 15px;
+  --admin-card-border-width: 1px;
+  --admin-card-border-color: var(--admin-border-color);
+  --admin-card-border-radius: var(--admin-border-radius);
+  --admin-card-bg: var(--admin-white);
+
+  /* Navbar/Header */
+  --admin-navbar-padding-y: 8px;
+  --admin-navbar-padding-x: 15px;
+  --admin-navbar-brand-font-size: 18px;
+
+  /* Sidebar */
+  --admin-sidebar-bg: var(--admin-bg-sidebar);
+  --admin-sidebar-color: #b8c7ce;
+  --admin-sidebar-hover-bg: #1e282c;
+  --admin-sidebar-active-bg: var(--admin-primary);
+  --admin-sidebar-active-color: var(--admin-white);
+
+  /* Content */
+  --admin-content-padding: 15px;
+  --admin-content-bg: var(--admin-bg-body);
+}
+
+/* Dark theme variables */
+[data-theme="dark"] {
+  --admin-bg-body: #1a1a1a;
+  --admin-bg-content: #2d2d2d;
+  --admin-bg-sidebar: #1e1e1e;
+  --admin-bg-header: #2d2d2d;
+
+  --admin-text-primary: #ffffff;
+  --admin-text-secondary: #cccccc;
+  --admin-text-muted: #999999;
+  --admin-text-inverse: #000000;
+
+  --admin-border-color: #404040;
+  --admin-border-color-dark: #555555;
+  --admin-border-color-light: #333333;
+
+  --admin-input-bg: #404040;
+  --admin-input-border-color: #555555;
+
+  --admin-card-bg: #2d2d2d;
+  --admin-card-border-color: #404040;
+
+  --admin-table-hover-bg: rgba(255, 255, 255, 0.075);
+  --admin-table-striped-bg: rgba(255, 255, 255, 0.05);
+}
+
+/* High contrast theme variables */
+[data-theme="high-contrast"] {
+  --admin-primary: #0066cc;
+  --admin-success: #00aa00;
+  --admin-danger: #cc0000;
+  --admin-warning: #ff6600;
+  --admin-info: #0099cc;
+
+  --admin-text-primary: #000000;
+  --admin-bg-content: #ffffff;
+  --admin-border-color: #000000;
+  --admin-input-border-color: #000000;
+  --admin-card-border-color: #000000;
+}
+
+/* Print theme variables */
+@media print {
+  :root {
+    --admin-bg-body: #ffffff;
+    --admin-bg-content: #ffffff;
+    --admin-text-primary: #000000;
+    --admin-text-secondary: #000000;
+    --admin-border-color: #000000;
+    --admin-box-shadow: none;
+  }
+}

@@ -19,11 +19,11 @@ class Permission
      *
      * @param \Illuminate\Http\Request $request
      * @param \Closure                 $next
-     * @param array                    $args
+     * @param string                   ...$args
      *
      * @return mixed
      */
-    public function handle(Request $request, \Closure $next, ...$args)
+    public function handle(Request $request, \Closure $next, string ...$args)
     {
         if (config('admin.check_route_permission') === false) {
             return $next($request);

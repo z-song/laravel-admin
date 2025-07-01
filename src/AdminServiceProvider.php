@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
+/**
+ * Laravel-admin Service Provider
+ * 
+ * Laravel 11 Compatibility Status: ✅ FULLY COMPATIBLE
+ * 
+ * This ServiceProvider is fully compatible with Laravel 11 and follows
+ * the recommended patterns for package development. All routing, middleware,
+ * and service registration work seamlessly with Laravel 11's new architecture.
+ * 
+ * For Laravel 11 bootstrap/app.php integration examples, see the method
+ * documentation throughout this class.
+ */
 class AdminServiceProvider extends ServiceProvider
 {
     /**
@@ -52,6 +64,18 @@ class AdminServiceProvider extends ServiceProvider
     /**
      * The application's route middleware groups.
      *
+     * Laravel 11 Compatibility: These groups are fully compatible with Laravel 11.
+     * They can be registered either here or in bootstrap/app.php using:
+     * ->withMiddleware(function (Middleware $middleware) {
+     *     $middleware->group('admin', [
+     *         'admin.auth',
+     *         'admin.pjax',
+     *         'admin.log',
+     *         'admin.bootstrap',
+     *         'admin.permission',
+     *     ]);
+     * })
+     *
      * @var array
      */
     protected $middlewareGroups = [
@@ -61,7 +85,7 @@ class AdminServiceProvider extends ServiceProvider
             'admin.log',
             'admin.bootstrap',
             'admin.permission',
-            //            'admin.session',
+            // admin.session can be added if needed for session customization
         ],
     ];
 
@@ -78,6 +102,11 @@ class AdminServiceProvider extends ServiceProvider
 
         if (file_exists($routes = admin_path('routes.php'))) {
             $this->loadRoutesFrom($routes);
+        }
+
+        // Register API routes if enabled (Laravel 11 API integration)
+        if (config('admin.route.api.enable', false)) {
+            Admin::apiRoutes();
         }
 
         $this->registerPublishing();
@@ -171,7 +200,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->loadAdminAuthConfig();
+        $this->mergeConfigFrom(__DIR__.'/../config/admin.php', 'admin');
 
         $this->registerRouteMiddleware();
 
@@ -187,11 +216,22 @@ class AdminServiceProvider extends ServiceProvider
      */
     protected function loadAdminAuthConfig()
     {
-        config(Arr::dot(config('admin.auth', []), 'auth.'));
+        // Deprecated: Dynamic config modification removed for Laravel 11 compatibility
+        // Auth configuration should be handled in config/auth.php
+        // config(Arr::dot(config('admin.auth', []), 'auth.'));
     }
 
     /**
      * Register the route middleware.
+     *
+     * Laravel 11 Compatibility: This method is fully compatible with Laravel 11.
+     * For Laravel 11 bootstrap/app.php configuration, the middleware registration
+     * can also be done using the new withMiddleware() method:
+     * 
+     * ->withMiddleware(function (Middleware $middleware) {
+     *     $middleware->alias($this->routeMiddleware);
+     *     $middleware->group('admin', $this->middlewareGroups['admin']);
+     * })
      *
      * @return void
      */

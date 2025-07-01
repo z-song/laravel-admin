@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(php:*)",
+      "Bash(composer:*)",
+      "Bash(mkdir:*)",
+      "Bash(pkill:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(npm install)",
+      "Bash(echo:*)",
+      "Bash(npm run build:*)",
+      "Bash(rg:*)"
+    ],
+    "deny": []
+  }
+}

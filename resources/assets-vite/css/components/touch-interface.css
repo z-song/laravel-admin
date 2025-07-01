@@ -1,0 +1,484 @@
+/**
+ * Laravel-admin Touch Interface System
+ * Advanced touch gestures and interactions for mobile devices
+ */
+
+/* Touch interaction variables */
+:root {
+  --admin-touch-target-size: 44px;
+  --admin-touch-target-size-small: 32px;
+  --admin-touch-spacing: 8px;
+  --admin-swipe-threshold: 50px;
+  --admin-pinch-zoom-min: 0.5;
+  --admin-pinch-zoom-max: 3;
+  --admin-touch-feedback-duration: 150ms;
+  --admin-touch-ripple-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Base touch styles */
+.admin-touch-target {
+  min-width: var(--admin-touch-target-size);
+  min-height: var(--admin-touch-target-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.admin-touch-target-small {
+  min-width: var(--admin-touch-target-size-small);
+  min-height: var(--admin-touch-target-size-small);
+}
+
+/* Touch feedback effects */
+.admin-touch-feedback {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-touch-feedback::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: var(--admin-touch-ripple-color);
+  transform: translate(-50%, -50%);
+  transition: width var(--admin-touch-feedback-duration) ease-out, 
+              height var(--admin-touch-feedback-duration) ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.admin-touch-feedback:active::before {
+  width: 200%;
+  height: 200%;
+}
+
+/* Swipe gesture support */
+.admin-swipeable {
+  touch-action: pan-y;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-swipeable-horizontal {
+  touch-action: pan-x;
+}
+
+.admin-swipeable-vertical {
+  touch-action: pan-y;
+}
+
+.admin-swipeable-none {
+  touch-action: none;
+}
+
+.admin-swipe-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: var(--admin-primary-color, #007bff);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.admin-swipe-indicator.left {
+  left: 0;
+}
+
+.admin-swipe-indicator.right {
+  right: 0;
+}
+
+.admin-swipeable.swiping .admin-swipe-indicator {
+  opacity: 0.7;
+}
+
+/* Drag and drop support */
+.admin-draggable {
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.admin-draggable:active,
+.admin-draggable.dragging {
+  cursor: grabbing;
+  z-index: 1000;
+  opacity: 0.8;
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.admin-drop-zone {
+  position: relative;
+  border: 2px dashed transparent;
+  border-radius: var(--admin-border-radius, 4px);
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.admin-drop-zone.drag-over {
+  border-color: var(--admin-primary-color, #007bff);
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.admin-drop-zone::after {
+  content: attr(data-drop-message);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.875rem;
+  color: var(--admin-text-muted, #6c757d);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+.admin-drop-zone.drag-over::after {
+  opacity: 1;
+}
+
+/* Pull-to-refresh */
+.admin-pull-to-refresh {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-pull-refresh-indicator {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--admin-primary-color, #007bff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
+}
+
+.admin-pull-to-refresh.pulling .admin-pull-refresh-indicator {
+  transform: translateX(-50%) translateY(70px);
+  opacity: 1;
+}
+
+.admin-pull-to-refresh.refreshing .admin-pull-refresh-indicator {
+  animation: admin-spin 1s linear infinite;
+}
+
+@keyframes admin-spin {
+  from { transform: translateX(-50%) translateY(70px) rotate(0deg); }
+  to { transform: translateX(-50%) translateY(70px) rotate(360deg); }
+}
+
+/* Pinch zoom support */
+.admin-pinch-zoom {
+  touch-action: none;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-zoom-content {
+  transition: transform 0.3s ease-out;
+  transform-origin: center center;
+}
+
+.admin-zoom-controls {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.admin-zoom-btn {
+  width: var(--admin-touch-target-size);
+  height: var(--admin-touch-target-size);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.admin-zoom-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.admin-zoom-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Long press support */
+.admin-long-press {
+  position: relative;
+}
+
+.admin-long-press-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--admin-primary-color, #007bff);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform var(--admin-touch-feedback-duration) ease-out,
+              opacity var(--admin-touch-feedback-duration) ease-out;
+  pointer-events: none;
+}
+
+.admin-long-press.pressing .admin-long-press-indicator {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0.7;
+}
+
+.admin-long-press-menu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: var(--admin-border-radius, 4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+  pointer-events: none;
+}
+
+.admin-long-press-menu.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.admin-long-press-menu .admin-menu-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.admin-long-press-menu .admin-menu-item:hover {
+  background-color: #f8f9fa;
+}
+
+.admin-long-press-menu .admin-menu-item:last-child {
+  border-bottom: none;
+}
+
+/* Scroll momentum and overscroll */
+.admin-scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.admin-scroll-horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.admin-scroll-vertical {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Touch-friendly sliders */
+.admin-touch-slider {
+  position: relative;
+  height: var(--admin-touch-target-size);
+  background: #e9ecef;
+  border-radius: calc(var(--admin-touch-target-size) / 2);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.admin-touch-slider-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  background: var(--admin-primary-color, #007bff);
+  border-radius: 2px;
+  transform: translateY(-50%);
+  transition: width 0.2s ease-out;
+}
+
+.admin-touch-slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border: 2px solid var(--admin-primary-color, #007bff);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-touch-slider-thumb:active,
+.admin-touch-slider-thumb.dragging {
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  cursor: grabbing;
+}
+
+/* Touch-friendly cards */
+.admin-touch-card {
+  position: relative;
+  background: white;
+  border-radius: var(--admin-border-radius, 4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.admin-touch-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.admin-touch-card-actions {
+  position: absolute;
+  top: 0;
+  right: -100%;
+  height: 100%;
+  display: flex;
+  background: #dc3545;
+  transition: right 0.3s ease-out;
+}
+
+.admin-touch-card.swiped-left .admin-touch-card-actions {
+  right: 0;
+}
+
+.admin-touch-card-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  color: white;
+  background: inherit;
+  border: none;
+  cursor: pointer;
+  min-width: 80px;
+  font-size: 0.875rem;
+}
+
+.admin-touch-card-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Haptic feedback simulation */
+.admin-haptic {
+  animation: admin-haptic-feedback 0.1s ease-out;
+}
+
+@keyframes admin-haptic-feedback {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Touch accessibility */
+.admin-touch-accessible {
+  outline: none;
+}
+
+.admin-touch-accessible:focus {
+  outline: 2px solid var(--admin-primary-color, #007bff);
+  outline-offset: 2px;
+}
+
+/* Dark mode touch elements */
+@media (prefers-color-scheme: dark) {
+  .admin-drop-zone {
+    border-color: #444;
+  }
+  
+  .admin-drop-zone.drag-over {
+    border-color: var(--admin-primary-color, #4dabf7);
+    background-color: rgba(77, 171, 247, 0.1);
+  }
+  
+  .admin-long-press-menu {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: white;
+  }
+  
+  .admin-long-press-menu .admin-menu-item:hover {
+    background-color: #4a5568;
+  }
+  
+  .admin-touch-card {
+    background: #2d3748;
+    color: white;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .admin-touch-feedback::before,
+  .admin-draggable,
+  .admin-touch-slider-thumb,
+  .admin-touch-card,
+  .admin-long-press-indicator,
+  .admin-long-press-menu {
+    transition: none;
+  }
+  
+  .admin-pull-to-refresh.refreshing .admin-pull-refresh-indicator {
+    animation: none;
+  }
+  
+  .admin-haptic {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .admin-touch-target {
+    border: 2px solid;
+  }
+  
+  .admin-drop-zone {
+    border-width: 3px;
+  }
+  
+  .admin-touch-slider-thumb {
+    border-width: 3px;
+  }
+}

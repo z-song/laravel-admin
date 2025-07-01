@@ -1,0 +1,65 @@
+{
+    "name": "laravel-vite-plugin",
+    "version": "1.3.0",
+    "description": "Laravel plugin for Vite.",
+    "keywords": [
+        "laravel",
+        "vite",
+        "vite-plugin"
+    ],
+    "homepage": "https://github.com/laravel/vite-plugin",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/laravel/vite-plugin"
+    },
+    "license": "MIT",
+    "author": "Laravel",
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "./inertia-helpers": {
+            "types": "./inertia-helpers/index.d.ts",
+            "default": "./inertia-helpers/index.js"
+        }
+    },
+    "types": "./dist/index.d.ts",
+    "files": [
+        "/dist",
+        "/inertia-helpers"
+    ],
+    "bin": {
+        "clean-orphaned-assets": "bin/clean.js"
+    },
+    "scripts": {
+        "build": "npm run build-plugin && npm run build-inertia-helpers",
+        "build-plugin": "rm -rf dist && npm run build-plugin-types && npm run build-plugin-esm && cp src/dev-server-index.html dist/",
+        "build-plugin-types": "tsc --emitDeclarationOnly",
+        "build-plugin-esm": "esbuild src/index.ts --platform=node --format=esm --outfile=dist/index.js",
+        "build-inertia-helpers": "rm -rf inertia-helpers && tsc --project tsconfig.inertia-helpers.json",
+        "lint": "eslint --ext .ts ./src ./tests",
+        "test": "vitest run"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.9",
+        "@typescript-eslint/eslint-plugin": "^5.21.0",
+        "@typescript-eslint/parser": "^5.21.0",
+        "esbuild": "0.16.10",
+        "eslint": "^8.14.0",
+        "typescript": "^4.6.4",
+        "vite": "^6.0.0",
+        "vitest": "^0.34.4"
+    },
+    "peerDependencies": {
+        "vite": "^5.0.0 || ^6.0.0"
+    },
+    "engines": {
+        "node": "^18.0.0 || ^20.0.0 || >=22.0.0"
+    },
+    "dependencies": {
+        "picocolors": "^1.0.0",
+        "vite-plugin-full-reload": "^1.1.0"
+    }
+}

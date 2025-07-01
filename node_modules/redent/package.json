@@ -1,0 +1,47 @@
+{
+	"name": "redent",
+	"version": "4.0.0",
+	"description": "Strip redundant indentation and indent the string",
+	"license": "MIT",
+	"repository": "sindresorhus/redent",
+	"funding": "https://github.com/sponsors/sindresorhus",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "https://sindresorhus.com"
+	},
+	"type": "module",
+	"exports": "./index.js",
+	"engines": {
+		"node": ">=12"
+	},
+	"scripts": {
+		"test": "xo && ava && tsd"
+	},
+	"files": [
+		"index.js",
+		"index.d.ts"
+	],
+	"keywords": [
+		"string",
+		"strip",
+		"trim",
+		"indent",
+		"indentation",
+		"add",
+		"reindent",
+		"normalize",
+		"remove",
+		"whitespace",
+		"space"
+	],
+	"dependencies": {
+		"indent-string": "^5.0.0",
+		"strip-indent": "^4.0.0"
+	},
+	"devDependencies": {
+		"ava": "^3.15.0",
+		"tsd": "^0.14.0",
+		"xo": "^0.39.1"
+	}
+}

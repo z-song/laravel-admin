@@ -1,0 +1,53 @@
+.compact-mode {
+  .app-header {
+    max-height: $lte-app-header-height-compact;
+
+    .nav-link {
+      max-height: $nav-link-height-compact;
+    }
+  }
+
+  .nav-link {
+    --bs-nav-link-padding-y: .25rem;
+    --bs-nav-link-padding-x: .5rem;
+  }
+
+  &.sidebar-mini.sidebar-collapse {
+    .app-sidebar:not(:hover) {
+      min-width: $lte-sidebar-mini-width-compact;
+      max-width: $lte-sidebar-mini-width-compact;
+
+      .sidebar-menu {
+        .nav-link {
+          width: $lte-sidebar-mini-width-compact - $lte-sidebar-padding-x * 2 !important;
+        }
+      }
+    }
+  }
+
+  .logo-xs,
+  .logo-xl {
+    max-height: $lte-app-header-height-compact;
+  }
+
+  .brand-image {
+    width: $nav-link-height-compact;
+    height: $nav-link-height-compact;
+  }
+
+  .sidebar-brand {
+    height: $lte-app-header-height-compact;
+  }
+
+  .app-footer {
+    padding: $lte-app-footer-padding-compact;
+  }
+
+  .sidebar-wrapper {
+    .nav-icon {
+      min-width: 1.1rem;
+      max-width: 1.1rem;
+    }
+  }
+}
+
