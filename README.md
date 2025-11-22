@@ -1,7 +1,4 @@
 <p align="center">
-<a href="https://laravel-admin.org/">
-<img src="https://laravel-admin.org/images/logo002.png" alt="laravel-admin">
-</a>
 
 <p align="center">⛵<code>laravel-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
 
@@ -63,7 +60,7 @@ Installation
 First, install laravel 5.5, and make sure that the database connection settings are correct.
 
 ```
-composer require encore/laravel-admin
+composer require oyjq2025/laravel-admin
 ```
 
 Then run these commands to publish assets and config：
