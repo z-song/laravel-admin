@@ -18,11 +18,11 @@
         "doctrine/dbal": "2.*|3.*"
     },
     "require-dev": {
-        "laravel/laravel": ">=5.5",
-        "fzaninotto/faker": "~1.4",
-        "intervention/image": "~2.3",
-        "laravel/browser-kit-testing": "^6.0",
-        "spatie/phpunit-watcher": "^1.22.0"
+        "laravel/laravel": ">=5.5"
+        #"fzaninotto/faker": "~1.4",
+        #"intervention/image": "~2.3",
+        #"laravel/browser-kit-testing": "^6.0",
+        #"spatie/phpunit-watcher": "^1.22.0"
     },
     "autoload": {
         "psr-4": {
