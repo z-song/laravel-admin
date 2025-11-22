@@ -3,7 +3,7 @@
     "description": "laravel admin",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "form"],
-    "homepage": "https://github.com/z-song/laravel-admin",
+    "homepage": "https://github.com/oyjq/laravel-admin-mine-2.0",
     "license": "MIT",
     "authors": [
         {
@@ -13,8 +13,7 @@
     "require": {
         "php": ">=7.0.0",
         "symfony/dom-crawler": "~3.1|~4.0|~5.0",
-        "laravel/framework": ">=5.5",
-        "doctrine/dbal": "2.*|3.*"
+        "laravel/framework": ">=5.5"
     },
     "require-dev": {
         "laravel/laravel": ">=5.5"
