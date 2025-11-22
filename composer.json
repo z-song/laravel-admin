@@ -7,8 +7,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "zsong",
-            "email": "zosong@126.com"
+            "name": "jq"
         }
     ],
     "require": {
