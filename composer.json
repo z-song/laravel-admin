@@ -1,6 +1,6 @@
 {
-    "name": "encore/laravel-admin",
-    "description": "laravel admin",
+    "name": "klaara/laravel-admin",
+    "description": "laravel admin (maintained fork of encore/laravel-admin for Laravel 10, 11 and 12)",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "form"],
     "homepage": "https://github.com/z-song/laravel-admin",
@@ -12,10 +12,12 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
-        "symfony/dom-crawler": "~3.1|~4.0|~5.0",
-        "laravel/framework": ">=5.5",
-        "doctrine/dbal": "2.*|3.*"
+        "php": ">=8.1",
+        "symfony/dom-crawler": "^6.0|^7.0",
+        "laravel/framework": "^10.0|^11.0|^12.0"
+    },
+    "conflict": {
+        "encore/laravel-admin": "*"
     },
     "require-dev": {
         "laravel/laravel": ">=5.5",
@@ -26,7 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Encore\\Admin\\": "src/"
+            "Klaara\\Admin\\": "src/"
         },
         "files": [
             "src/helpers.php"
@@ -45,16 +47,17 @@
         "test": "./vendor/bin/phpunit"
     },
     "suggest": {
+        "doctrine/dbal": "Only needed on a Laravel version without Schema::getColumns() (used by admin:make to read table columns).",
         "intervention/image": "Required to handling and manipulation upload images (~2.3).",
         "spatie/eloquent-sortable": "Required to built orderable gird."
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Encore\\Admin\\AdminServiceProvider"
+                "Klaara\\Admin\\AdminServiceProvider"
             ],
             "aliases": {
-                "Admin": "Encore\\Admin\\Facades\\Admin"
+                "Admin": "Klaara\\Admin\\Facades\\Admin"
             }
         }
     }

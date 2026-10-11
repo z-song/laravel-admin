@@ -230,7 +230,7 @@ class Builder
      *
      * @return string
      */
-    public function getResource(int $slice = null): string
+    public function getResource(?int $slice = null): string
     {
         if ($this->mode === self::MODE_CREATE) {
             return $this->form->resource(-1);

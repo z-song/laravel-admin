@@ -19,7 +19,7 @@ trait HasHeader
      *
      * @return $this|Closure
      */
-    public function header(Closure $closure = null)
+    public function header(?Closure $closure = null)
     {
         if (!$closure) {
             return $this->header;

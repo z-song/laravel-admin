@@ -21,7 +21,7 @@ abstract class AbstractExporter implements ExporterInterface
      *
      * @param $grid
      */
-    public function __construct(Grid $grid = null)
+    public function __construct(?Grid $grid = null)
     {
         if ($grid) {
             $this->setGrid($grid);

@@ -27,7 +27,7 @@ trait HasHooks
      *
      * @param Closure $callback
      */
-    public static function init(Closure $callback = null)
+    public static function init(?Closure $callback = null)
     {
         static::$initCallbacks[] = $callback;
     }

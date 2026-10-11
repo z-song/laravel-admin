@@ -83,12 +83,12 @@ class ResourceGenerator
         $output = '';
 
         foreach ($this->getTableColumns() as $column) {
-            $name = $column->getName();
+            $name = $column['name'];
             if (in_array($name, $reservedColumns)) {
                 continue;
             }
-            $type = $column->getType()->getName();
-            $default = $column->getDefault();
+            $type = $column['type'];
+            $default = $column['default'];
 
             $defaultValue = '';
 
@@ -166,7 +166,7 @@ class ResourceGenerator
         $output = '';
 
         foreach ($this->getTableColumns() as $column) {
-            $name = $column->getName();
+            $name = $column['name'];
 
             // set column label
             $label = $this->formatLabel($name);
@@ -184,7 +184,7 @@ class ResourceGenerator
         $output = '';
 
         foreach ($this->getTableColumns() as $column) {
-            $name = $column->getName();
+            $name = $column['name'];
             $label = $this->formatLabel($name);
 
             $output .= sprintf($this->formats['grid_column'], $name, $label);
@@ -205,13 +205,78 @@ class ResourceGenerator
     }
 
     /**
-     * Get columns of a giving model.
+     * @return array[]
+     */
+    protected function getTableColumns()
+    {
+        $schema = $this->model->getConnection()->getSchemaBuilder();
+
+        if (!method_exists($schema, 'getColumns')) {
+            return $this->getTableColumnsFromDoctrine();
+        }
+
+        $columns = [];
+
+        foreach ($schema->getColumns($this->model->getTable()) as $column) {
+            $default = $column['default'];
+
+            if (is_string($default)) {
+                $default = preg_replace("/^'(.*)'(::[\w\s]+)?$/s", '$1', $default);
+            }
+
+            $columns[] = [
+                'name'    => $column['name'],
+                'type'    => $this->normalizeColumnType($column['type_name']),
+                'default' => $default,
+            ];
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Map a database type name (from Schema::getColumns()) to the doctrine/dbal type names that generateForm() switches on.
+     *
+     * @param string $typeName
+     *
+     * @return string
+     */
+    protected function normalizeColumnType($typeName)
+    {
+        $typeName = strtolower((string) $typeName);
+
+        $map = [
+            'boolean'  => ['bool', 'boolean', 'tinyint'],
+            'integer'  => ['int', 'integer', 'mediumint', 'int4', 'serial'],
+            'bigint'   => ['bigint', 'int8', 'bigserial'],
+            'smallint' => ['smallint', 'int2', 'year'],
+            'datetime' => ['datetime', 'datetime2', 'timestamp', 'timestamptz'],
+            'date'     => ['date'],
+            'time'     => ['time', 'timetz'],
+            'decimal'  => ['decimal', 'numeric'],
+            'float'    => ['float', 'double', 'double precision', 'float4', 'float8', 'real'],
+            'text'     => ['text', 'tinytext', 'mediumtext', 'longtext'],
+            'blob'     => ['blob', 'tinyblob', 'mediumblob', 'longblob', 'bytea'],
+            'json'     => ['json', 'jsonb'],
+        ];
+
+        foreach ($map as $type => $names) {
+            if (in_array($typeName, $names, true)) {
+                return $type;
+            }
+        }
+
+        return 'string';
+    }
+
+    /**
+     * Get columns of a giving model through doctrine/dbal (only for Laravel versions without Schema::getColumns()).
      *
      * @throws \Exception
      *
-     * @return \Doctrine\DBAL\Schema\Column[]
+     * @return array[]
      */
-    protected function getTableColumns()
+    protected function getTableColumnsFromDoctrine()
     {
         if (!$this->model->getConnection()->isDoctrineAvailable()) {
             throw new \Exception(
@@ -237,7 +302,17 @@ class ResourceGenerator
             list($database, $table) = explode('.', $table);
         }
 
-        return $schema->listTableColumns($table, $database);
+        $columns = [];
+
+        foreach ($schema->listTableColumns($table, $database) as $column) {
+            $columns[] = [
+                'name'    => $column->getName(),
+                'type'    => $column->getType()->getName(),
+                'default' => $column->getDefault(),
+            ];
+        }
+
+        return $columns;
     }
 
     /**

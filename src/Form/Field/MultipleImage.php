@@ -27,7 +27,7 @@ class MultipleImage extends MultipleFile
      *
      * @return mixed|string
      */
-    protected function prepareForeach(UploadedFile $image = null)
+    protected function prepareForeach(?UploadedFile $image = null)
     {
         $this->name = $this->getStoreName($image);
 

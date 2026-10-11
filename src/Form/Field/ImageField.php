@@ -104,7 +104,7 @@ trait ImageField
      *
      * @return $this
      */
-    public function thumbnail($name, int $width = null, int $height = null)
+    public function thumbnail($name, ?int $width = null, ?int $height = null)
     {
         if (func_num_args() == 1 && is_array($name)) {
             foreach ($name as $key => $size) {

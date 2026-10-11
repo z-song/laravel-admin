@@ -101,7 +101,7 @@ class Show implements Renderable
      *
      * @param \Closure $callback
      */
-    public static function init(\Closure $callback = null)
+    public static function init(?\Closure $callback = null)
     {
         static::$initCallback = $callback;
     }

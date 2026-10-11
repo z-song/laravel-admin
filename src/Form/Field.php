@@ -495,7 +495,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function setForm(Form $form = null)
+    public function setForm(?Form $form = null)
     {
         $this->form = $form;
 
@@ -867,7 +867,7 @@ class Field implements Renderable
      *
      * @return mixed
      */
-    public function data(array $data = null)
+    public function data(?array $data = null)
     {
         if ($data === null) {
             return $this->data;

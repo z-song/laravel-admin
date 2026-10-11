@@ -106,7 +106,7 @@ class Admin
      *
      * @return \Encore\Admin\Tree
      */
-    public function tree($model, Closure $callable = null)
+    public function tree($model, ?Closure $callable = null)
     {
         return new Tree($this->getModel($model), $callable);
     }
@@ -133,7 +133,7 @@ class Admin
      *
      * @deprecated since v1.6.1
      */
-    public function content(Closure $callable = null)
+    public function content(?Closure $callable = null)
     {
         return new Content($callable);
     }
@@ -264,7 +264,7 @@ class Admin
      *
      * @return Navbar
      */
-    public function navbar(Closure $builder = null)
+    public function navbar(?Closure $builder = null)
     {
         if (is_null($builder)) {
             return $this->getNavbar();
